@@ -10,12 +10,19 @@
     "build": "webpack --mode production",
     "analyze": "webpack --mode production --env analyzer=default",
     "start": "webpack-dev-server --mode development --open --hot",
+    "sb": "start-storybook -p 6006",
+    "sb:build": "build-storybook",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "core-js": "3.18.0",
     "solid-js": "1.1.5"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "6.3.8",
+    "@storybook/addon-essentials": "6.3.8",
+    "@storybook/addon-links": "6.3.8",
+    "@storybook/html": "6.3.8",
     "babel-loader": "8.2.2",
     "babel-plugin-polyfill-corejs3": "0.2.4",
     "babel-preset-solid": "1.1.5",

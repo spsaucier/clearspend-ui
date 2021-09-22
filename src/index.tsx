@@ -1,11 +1,13 @@
 import { render } from 'solid-js/web';
 
+import { Button } from '_common/components/Button';
+
 function App() {
   console.log('test');
 
   return (
     <div>
-      Capital UI
+      <Button onClick={console.log}>Test</Button>
     </div>
   );
 }

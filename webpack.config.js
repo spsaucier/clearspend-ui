@@ -1,9 +1,9 @@
-const path = require('path')
+const path = require('path');
 
 const webpack = require('webpack');
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = (env, options) => {
   return {
@@ -27,7 +27,7 @@ module.exports = (env, options) => {
     },
     resolve: {
       modules: ['node_modules', path.join(__dirname, 'src')],
-      extensions: ['.tsx', '.ts', '.js', '.json']
+      extensions: ['.tsx', '.ts', '.js', '.json'],
     },
     module: {
       rules: [
@@ -40,7 +40,7 @@ module.exports = (env, options) => {
               options: {
                 exclude: [/node_modules[\\/]core-js/],
                 presets: ['solid'],
-                plugins: [['polyfill-corejs3', {method: 'usage-global'}]],
+                plugins: [['polyfill-corejs3', { method: 'usage-global' }]],
               },
             },
             {
@@ -50,14 +50,14 @@ module.exports = (env, options) => {
               },
             },
           ],
-        }
-      ]
+        },
+      ],
     },
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.ids.HashedModuleIdsPlugin(),
-      new HtmlWebpackPlugin({template: './public/index.html'}),
+      new HtmlWebpackPlugin({ template: './public/index.html' }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),
     ].filter(Boolean),
   };
-}
+};
