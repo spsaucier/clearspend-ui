@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "incremental": true,
+    "allowJs": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "preserveConstEnums": true,
+    "noErrorTruncation": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmitOnError": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "importsNotUsedAsValues": "error",
+    "importHelpers": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
