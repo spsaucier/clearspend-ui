@@ -7,7 +7,7 @@ export interface ButtonProps {
   onClick?: () => void;
 }
 
-export const Button: Component<ButtonProps> = (props) => {
+export const Button: Component<Readonly<ButtonProps>> = (props) => {
   return (
     <button
       type="button"
