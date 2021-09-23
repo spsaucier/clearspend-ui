@@ -22,10 +22,7 @@ module.exports = (env, options) => {
       splitChunks: {
         chunks: 'all',
       },
-      minimizer: [
-        `...`,
-        new CssMinimizerPlugin(),
-      ],
+      minimizer: [`...`, new CssMinimizerPlugin()],
     },
     devtool: !isProd ? 'eval-source-map' : false,
     devServer: {

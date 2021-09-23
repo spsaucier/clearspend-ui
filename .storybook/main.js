@@ -4,13 +4,8 @@ module.exports = {
   core: {
     builder: 'webpack5',
   },
-  stories: [
-    '../src/**/*.stories.tsx',
-  ],
-  addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-  ],
+  stories: ['../src/**/*.stories.tsx'],
+  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
   babel: async (options) => ({
     ...options,
     presets: [...options.presets, 'solid'],
@@ -23,7 +18,7 @@ module.exports = {
       module: {
         ...config.module,
         rules: [
-          ...config.module.rules.filter(rule => rule.test?.toString() !== '/\\.css$/'),
+          ...config.module.rules.filter((rule) => rule.test?.toString() !== '/\\.css$/'),
           {
             test: /\.css$/,
             exclude: /node_modules/,
@@ -55,10 +50,7 @@ module.exports = {
           },
         ],
       },
-      plugins: [
-        ...config.plugins,
-        new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
-      ],
+      plugins: [...config.plugins, new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' })],
     };
   },
 };

@@ -9,12 +9,7 @@ export interface ButtonProps {
 
 export const Button: Component<Readonly<ButtonProps>> = (props) => {
   return (
-    <button
-      type="button"
-      disabled={props.disabled}
-      class={css.root}
-      onClick={props.onClick}
-    >
+    <button type="button" disabled={props.disabled} class={css.root} onClick={props.onClick}>
       {props.children}
     </button>
   );
