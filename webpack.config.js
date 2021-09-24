@@ -29,6 +29,9 @@ module.exports = (env, options) => {
       static: {
         directory: path.join(__dirname, 'public'),
       },
+      client: {
+        overlay: false,
+      },
       compress: true,
     },
     resolve: {
