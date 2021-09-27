@@ -19,7 +19,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "core-js": "3.18.0",
+    "core-js": "3.18.1",
+    "solid-create-form": "0.1.0",
     "solid-js": "1.1.5"
   },
   "devDependencies": {
@@ -31,9 +32,9 @@
     "@storybook/manager-webpack5": "6.3.8",
     "@typescript-eslint/eslint-plugin": "4.31.2",
     "@typescript-eslint/parser": "4.31.2",
-    "autoprefixer": "10.3.5",
+    "autoprefixer": "10.3.6",
     "babel-loader": "8.2.2",
-    "babel-plugin-polyfill-corejs3": "0.2.4",
+    "babel-plugin-polyfill-corejs3": "0.2.5",
     "babel-preset-solid": "1.1.5",
     "clean-webpack-plugin": "4.0.0",
     "css-loader": "6.3.0",
@@ -47,26 +48,25 @@
     "husky": "7.0.2",
     "lint-staged": "11.1.2",
     "mini-css-extract-plugin": "2.3.0",
-    "postcss": "8.3.7",
+    "postcss": "8.3.8",
     "postcss-loader": "6.1.1",
     "postcss-nesting": "8.0.1",
-    "prettier": "2.2.1",
+    "prettier": "2.4.1",
     "style-loader": "3.3.0",
     "stylelint": "13.13.1",
     "stylelint-order": "4.1.0",
     "ts-loader": "9.2.6",
     "typescript": "4.4.3",
-    "webpack": "5.53.0",
+    "webpack": "5.54.0",
     "webpack-bundle-analyzer": "4.4.2",
     "webpack-cli": "4.8.0",
-    "webpack-dev-server": "4.2.1"
+    "webpack-dev-server": "4.3.0"
   },
   "browserslist": [
     "Chrome >= 70",
-    "Safari >= 13",
-    "iOS >= 13",
-    "Firefox >= 60",
-    "Opera >= 62",
+    "Safari >= 13.1",
+    "iOS >= 13.4",
+    "Firefox >= 69",
     "Edge >= 79",
     "Samsung >= 12"
   ],

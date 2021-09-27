@@ -11,6 +11,7 @@ export interface CheckboxGroupProps {
 export interface CheckboxProps {
   value?: string;
   checked?: boolean;
+  // TODO indeterminate?: boolean; (css + createEffect)
   class?: string;
   disabled?: boolean;
   children?: JSX.Element;
