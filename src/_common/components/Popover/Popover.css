@@ -1,0 +1,86 @@
+@value v-default-gap: var(--pd-2);
+@value v-balloon-gap: var(--pd-10);
+
+.root {
+  position: absolute;
+  z-index: var(--z-index-dropdown);
+}
+
+.popover {
+  position: absolute;
+  display: flex;
+  width: 240px;
+  padding: var(--pd-16);
+  background: var(--tw-white);
+  border-radius: var(--radius-8);
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.balloon {
+  &::before {
+    content: '';
+    position: absolute;
+    display: flex;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-bottom-color: var(--tw-white);
+    pointer-events: none;
+  }
+}
+
+.top {
+  bottom: v-default-gap;
+
+  &::before {
+    top: 100%;
+    transform: rotate(180deg);
+  }
+
+  &.balloon {
+    bottom: v-balloon-gap;
+  }
+}
+
+.bottom {
+  top: v-default-gap;
+
+  &::before {
+    bottom: 100%;
+  }
+
+  &.balloon {
+    top: v-balloon-gap;
+  }
+}
+
+.left {
+  left: 0;
+
+  &::before {
+    left: var(--pd-16);
+  }
+}
+
+.center {
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+
+  &::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.right {
+  right: 0;
+
+  &::before {
+    right: var(--pd-16);
+  }
+}
+
+.top.center::before {
+  transform: translateX(-50%) rotate(180deg);
+}

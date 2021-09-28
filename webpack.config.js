@@ -64,6 +64,7 @@ module.exports = (env, options) => {
         {
           test: /\.css$/,
           exclude: /node_modules/,
+          sideEffects: true,
           use: [
             isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {

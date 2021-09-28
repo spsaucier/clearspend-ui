@@ -12,6 +12,8 @@ export interface ButtonProps {
   htmlType?: 'button' | 'submit';
   children?: JSX.Element;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 export function Button(props: Readonly<ButtonProps>) {
@@ -23,6 +25,8 @@ export function Button(props: Readonly<ButtonProps>) {
       disabled={merged.disabled}
       class={join(css.root, merged.class)}
       onClick={merged.onClick}
+      onMouseEnter={merged.onMouseEnter}
+      onMouseLeave={merged.onMouseLeave}
     >
       {props.children}
     </button>

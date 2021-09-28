@@ -1,3 +1,5 @@
+import '../src/index.css';
+
 import { createRoot } from 'solid-js';
 
 export const parameters = {

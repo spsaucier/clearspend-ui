@@ -49,7 +49,7 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: './*.module.css',
+            pattern: './*.css',
             group: 'index',
             position: 'after',
           },

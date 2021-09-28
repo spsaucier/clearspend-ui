@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "core-js": "3.18.1",
-    "solid-create-form": "0.1.0",
+    "solid-create-form": "0.2.0",
     "solid-js": "1.1.5"
   },
   "devDependencies": {

@@ -29,7 +29,7 @@ interface Props {
 }
 
 export function TestForm(props: Readonly<Props>) {
-  const [values, errors, isDirty, handlers, setErrors, submit, reset] = createForm<FormValues>({
+  const { values, errors, isDirty, handlers, setErrors, wrapSubmit, reset } = createForm<FormValues>({
     defaultValues: toFormData(props.data),
     rules: { input: [required] },
   });
@@ -47,7 +47,7 @@ export function TestForm(props: Readonly<Props>) {
   };
 
   return (
-    <Form onSubmit={submit(onSubmit)}>
+    <Form onSubmit={wrapSubmit(onSubmit)}>
       <FormItem label="Input" error={errors().input}>
         <Input placeholder="Input something..." value={values().input} onChange={handlers.input} />
       </FormItem>

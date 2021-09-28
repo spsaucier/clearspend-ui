@@ -3,6 +3,8 @@ import type { JSX } from 'solid-js';
 
 import { join } from '../../utils/join';
 
+import css from './Input.css';
+
 interface InputProps {
   name?: string;
   value?: string;
@@ -29,6 +31,7 @@ export function Input(props: Readonly<InputProps>) {
         type={merged.type}
         placeholder={merged.placeholder}
         disabled={merged.disabled}
+        class={css.input}
         onInput={onChange}
       />
     </div>

@@ -1,0 +1,145 @@
+:root {
+  /* COLOR */
+  --tw-dark: #000;
+  --tw-black: #111827;
+  --tw-gray-70: #4b5563;
+  --tw-gray-60: #6b7280;
+  --tw-gray-40: #d1d5db;
+  --tw-gray-30: #e5e7eb;
+  --tw-gray-20: #f3f4f6;
+  --tw-gray-10: #f9fafb;
+  --tw-white: #fff;
+  --tw-blue: #2563eb;
+  --tw-blue-dark: #1d4ed8;
+  --tw-blue-60: #60a5fa;
+  --tw-blue-20: #dbeafe;
+  --tw-blue-30: #bfdbfe;
+  --tw-blue-light: #eff6ff;
+  --tw-green: #059669;
+  --tw-green-dark: #047857;
+  --tw-green-60: #10b981;
+  --tw-green-20: #d1fae5;
+  --tw-green-light: #ecfdf5;
+  --tw-red: #dc2626;
+  --tw-red-dark: #b91c1c;
+  --tw-red-60: #ef4444;
+  --tw-red-20: #fee2e2;
+  --tw-red-light: #fef2f2;
+  --tw-amber: #d97706;
+  --tw-amber-dark: #b45309;
+  --tw-amber-50: #fbbf24;
+  --tw-amber-20: #fef3c7;
+  --tw-amber-light: #fffbeb;
+
+  /* PADDING & MARGIN */
+  --pd-2: 2px;
+  --pd-4: 4px;
+  --pd-8: 8px;
+  --pd-10: 10px;
+  --pd-12: 12px;
+  --pd-14: 14px;
+  --pd-16: 16px;
+  --pd-24: 24px;
+  --pd-32: 32px;
+  --pd-48: 48px;
+
+  /* FONT FAMILY */
+  --font-main: 'Inter';
+  --font-header: 'SpaceGrotesk';
+  --font-special: 'Recoleta';
+
+  /* FONT WEIGHT: */
+  --font-100: 100;
+  --font-400: 400;
+  --font-500: 500;
+  --font-600: 600;
+  --font-700: 700;
+
+  /* FONT SIZE: */
+  --text-10: 10px;
+  --text-12: 12px;
+  --text-14: 14px;
+  --text-16: 16px;
+  --text-20: 20px;
+  --text-24: 24px;
+  --text-28: 28px;
+  --text-32: 32px;
+
+  /* LINE HEIGHT: */
+  --line-16: 16px;
+  --line-20: 20px;
+  --line-24: 24px;
+  --line-28: 28px;
+  --line-32: 32px;
+  --line-36: 36px;
+  --line-40: 40px;
+
+  /* RADIUS */
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-20: 20px;
+
+  /* LETTER-SPACING */
+  --ls-2: 2px;
+  --ls-small: 0.01em;
+
+  /* Z-INDEX */
+  --z-index-page: 10;
+  --z-index-side: 100;
+  --z-index-modal: 1000;
+  --z-index-dropdown: 1050;
+  --z-index-notification: 1100;
+}
+
+:root,
+:root[theme='BLUE'] {
+  --tw-primary: var(--tw-blue);
+  --tw-primary-dark: var(--tw-blue-dark);
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400;
+  font-style: normal;
+  src: local(''), url('./fonts/Inter-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-weight: 500;
+  font-style: normal;
+  src: local(''), url('./fonts/Inter-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-weight: 600;
+  font-style: normal;
+  src: local(''), url('./fonts/Inter-Bold.woff2') format('woff2');
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: var(--tw-black);
+  font-family: var(--font-main);
+  font-size: var(--text-14);
+  line-height: var(--line-20);
+  background: var(--tw-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

@@ -16,7 +16,7 @@ interface LoginFormProps {
 export function LoginForm(props: Readonly<LoginFormProps>) {
   const [loading, submitAction] = wrapAction(props.onSubmit);
 
-  const [values, errors, isDirty, handlers, , submit] = createForm<FormValues>({
+  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { login: '', password: '' },
     rules: { login: [required], password: [required] },
   });
@@ -32,7 +32,7 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
   };
 
   return (
-    <Form onSubmit={submit(onSubmit)}>
+    <Form onSubmit={wrapSubmit(onSubmit)}>
       <FormItem label="Your email or mobile number" error={errors().login}>
         <Input
           name="login"
