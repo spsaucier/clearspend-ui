@@ -2,8 +2,8 @@ import type { JSX } from 'solid-js';
 
 import { Button } from '../Button';
 
-import { Popover, PopoverProps } from './Popover';
-import type { FuncProps } from './types';
+import { Popover } from './Popover';
+import type { PopoverFuncProps, PopoverProps } from './types';
 
 const WRAPPER_STYLES: JSX.CSSProperties = {
   position: 'absolute',
@@ -29,7 +29,7 @@ export default {
   },
   args: {
     content: 'Content...',
-    children: (props: FuncProps) => <Button {...props}>Click Me!</Button>,
+    children: (props: PopoverFuncProps) => <Button {...props}>Click Me!</Button>,
   },
 };
 

@@ -1,10 +1,10 @@
-import { JSX, mergeProps, createSignal, createMemo, createEffect, onCleanup } from 'solid-js';
+import { mergeProps, createSignal, createMemo, createEffect, onCleanup } from 'solid-js';
 import { Show, Portal } from 'solid-js/web';
 
 import { join } from '_common/utils/join';
 
 import { calcDialogStyle } from './utils';
-import type { VPos, HPos, PopoverPosition, FuncProps } from './types';
+import type { VPos, HPos, ControlledProps, PopoverProps } from './types';
 
 import css from './Popover.css';
 
@@ -23,43 +23,44 @@ function getPosStyle(position: [VPos, HPos]) {
   );
 }
 
-export interface PopoverProps {
-  open?: boolean;
-  trigger?: 'click' | 'hover';
-  balloon?: boolean;
-  position?: PopoverPosition;
-  content: JSX.Element;
-  class?: string;
-  onClickOutside?: () => void;
-  children: ((props: FuncProps) => JSX.Element) | JSX.Element;
-}
-
 export function Popover(props: Readonly<PopoverProps>) {
   let trigger: Element;
   let dialog: HTMLDivElement;
   let timeout: number;
 
-  const merged = mergeProps({ trigger: 'click', position: 'bottom-left' }, props);
+  const merged = mergeProps(
+    {
+      trigger: 'click',
+      position: 'bottom-left',
+      enterDelay: SHOW_DELAY,
+      leaveDelay: CLOSE_DELAY,
+    },
+    props,
+  );
+
+  if ('open' in merged && typeof merged.children === 'function')
+    throw new Error('Function cannot be used as children in controlled component');
+
   const position = createMemo(() => merged.position.split('-') as [VPos, HPos]);
 
   const [open, setOpen] = createSignal(false);
   const onClick = () => setOpen((prev) => !prev);
-  const opened = createMemo(() => open() || Boolean(merged.open));
+  const opened = createMemo(() => ('open' in merged ? merged.open : open()));
 
   const onMouseEnter = () => {
     window.clearTimeout(timeout);
-    timeout = window.setTimeout(() => setOpen(true), SHOW_DELAY);
+    timeout = window.setTimeout(() => setOpen(true), merged.enterDelay);
   };
 
   const onMouseLeave = () => {
     window.clearTimeout(timeout);
-    timeout = window.setTimeout(() => setOpen(false), CLOSE_DELAY);
+    timeout = window.setTimeout(() => setOpen(false), merged.leaveDelay);
   };
 
   const onDocClick = (event: MouseEvent) => {
     if (!dialog.contains(event.target as Node) && !trigger.contains(event.target as Node)) {
+      (merged as ControlledProps).onClickOutside?.();
       setOpen(false);
-      merged.onClickOutside?.();
     }
   };
 

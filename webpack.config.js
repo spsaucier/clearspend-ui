@@ -91,6 +91,13 @@ module.exports = (env, options) => {
             },
           ],
         },
+        {
+          test: /\.woff2/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'fonts/[hash][ext]',
+          },
+        },
       ],
     },
     plugins: [

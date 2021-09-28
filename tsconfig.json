@@ -18,18 +18,16 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true,
     "noEmitOnError": true,
     "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "importHelpers": true,
+    "types": [],
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

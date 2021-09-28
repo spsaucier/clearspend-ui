@@ -1,5 +1,6 @@
 @value v-default-gap: var(--pd-2);
 @value v-balloon-gap: var(--pd-10);
+@value v-arrow-size: 6px;
 
 .root {
   position: absolute;
@@ -24,7 +25,7 @@
     display: flex;
     width: 0;
     height: 0;
-    border: 8px solid transparent;
+    border: v-arrow-size solid transparent;
     border-bottom-color: var(--tw-white);
     pointer-events: none;
   }
