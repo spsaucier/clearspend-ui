@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import { keys } from '../../utils/keys';
 
-import type { PopoverPosition } from './types';
+import type { PopoverPosition, UncontrolledProps } from './types';
 
 interface ElementRect {
   width: number;
@@ -40,4 +40,23 @@ export function calcDialogStyle(pos: PopoverPosition, el?: Element): JSX.CSSProp
     default:
       return toPX({ top: bottom, left, width });
   }
+}
+
+export function getHoverProps(
+  props: Required<Pick<UncontrolledProps, 'enterDelay' | 'leaveDelay'>>,
+  setOpen: (open: boolean) => void,
+) {
+  let timeout: number;
+
+  const onMouseEnter = () => {
+    window.clearTimeout(timeout);
+    timeout = window.setTimeout(() => setOpen(true), props.enterDelay);
+  };
+
+  const onMouseLeave = () => {
+    window.clearTimeout(timeout);
+    timeout = window.setTimeout(() => setOpen(false), props.leaveDelay);
+  };
+
+  return { onMouseEnter, onMouseLeave };
 }

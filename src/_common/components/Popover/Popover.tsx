@@ -3,13 +3,17 @@ import { Show, Portal } from 'solid-js/web';
 
 import { join } from '_common/utils/join';
 
-import { calcDialogStyle } from './utils';
+import { calcDialogStyle, getHoverProps } from './utils';
 import type { VPos, HPos, ControlledProps, PopoverProps } from './types';
 
 import css from './Popover.css';
 
-const SHOW_DELAY = 300;
-const CLOSE_DELAY = 150;
+const DEFAULT_PROPS = {
+  trigger: 'click',
+  position: 'bottom-left',
+  enterDelay: 300,
+  leaveDelay: 150,
+};
 
 function getPosStyle(position: [VPos, HPos]) {
   const [vPos, hPos] = position;
@@ -26,17 +30,8 @@ function getPosStyle(position: [VPos, HPos]) {
 export function Popover(props: Readonly<PopoverProps>) {
   let trigger: Element;
   let dialog: HTMLDivElement;
-  let timeout: number;
 
-  const merged = mergeProps(
-    {
-      trigger: 'click',
-      position: 'bottom-left',
-      enterDelay: SHOW_DELAY,
-      leaveDelay: CLOSE_DELAY,
-    },
-    props,
-  );
+  const merged = mergeProps(DEFAULT_PROPS, props);
 
   if ('open' in merged && typeof merged.children === 'function')
     throw new Error('Function cannot be used as children in controlled component');
@@ -47,17 +42,7 @@ export function Popover(props: Readonly<PopoverProps>) {
   const onClick = () => setOpen((prev) => !prev);
   const opened = createMemo(() => ('open' in merged ? merged.open : open()));
 
-  const onMouseEnter = () => {
-    window.clearTimeout(timeout);
-    timeout = window.setTimeout(() => setOpen(true), merged.enterDelay);
-  };
-
-  const onMouseLeave = () => {
-    window.clearTimeout(timeout);
-    timeout = window.setTimeout(() => setOpen(false), merged.leaveDelay);
-  };
-
-  const onDocClick = (event: MouseEvent) => {
+  const onClickOutside = (event: MouseEvent) => {
     if (!dialog.contains(event.target as Node) && !trigger.contains(event.target as Node)) {
       (merged as ControlledProps).onClickOutside?.();
       setOpen(false);
@@ -66,17 +51,17 @@ export function Popover(props: Readonly<PopoverProps>) {
 
   createEffect(() => {
     opened() && merged.trigger === 'click'
-      ? document.body.addEventListener('click', onDocClick)
-      : document.body.removeEventListener('click', onDocClick);
+      ? document.body.addEventListener('click', onClickOutside)
+      : document.body.removeEventListener('click', onClickOutside);
   });
 
-  onCleanup(() => document.body.removeEventListener('click', onDocClick));
+  onCleanup(() => document.body.removeEventListener('click', onClickOutside));
 
   trigger = (
     typeof merged.children === 'function'
       ? merged.children({
           ...(merged.trigger === 'click' && { onClick }),
-          ...(merged.trigger === 'hover' && { onMouseEnter, onMouseLeave }),
+          ...(merged.trigger === 'hover' && getHoverProps(merged, setOpen)),
         })
       : merged.children
   ) as Element;
