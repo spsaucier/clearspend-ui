@@ -105,7 +105,7 @@
   font-display: swap;
   font-weight: 400;
   font-style: normal;
-  src: local(''), url('./fonts/Inter-Regular.woff2') format('woff2');
+  src: local(''), url('fonts/inter400.woff2') format('woff2');
 }
 
 @font-face {
@@ -113,7 +113,7 @@
   font-display: swap;
   font-weight: 500;
   font-style: normal;
-  src: local(''), url('./fonts/Inter-Medium.woff2') format('woff2');
+  src: local(''), url('fonts/inter500.woff2') format('woff2');
 }
 
 @font-face {
@@ -121,7 +121,7 @@
   font-display: swap;
   font-weight: 600;
   font-style: normal;
-  src: local(''), url('./fonts/Inter-Bold.woff2') format('woff2');
+  src: local(''), url('fonts/inter600.woff2') format('woff2');
 }
 
 *,

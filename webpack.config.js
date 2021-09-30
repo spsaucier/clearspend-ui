@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
@@ -95,7 +96,7 @@ module.exports = (env, options) => {
           test: /\.woff2/,
           type: 'asset/resource',
           generator: {
-            filename: 'fonts/[hash][ext]',
+            filename: 'fonts/[name].[hash:8][ext]',
           },
         },
       ],
@@ -104,6 +105,11 @@ module.exports = (env, options) => {
       new CleanWebpackPlugin(),
       new webpack.ids.HashedModuleIdsPlugin(),
       new HtmlWebpackPlugin({ template: './public/index.html' }),
+      new PreloadWebpackPlugin({
+        rel: 'preload',
+        include: 'initial',
+        fileWhitelist: [/inter400\..+?\.woff2$/],
+      }),
       new ForkTsCheckerWebpackPlugin({ eslint: { enabled: !isProd, files: './src/**/*.{ts,tsx}' } }),
       new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),
