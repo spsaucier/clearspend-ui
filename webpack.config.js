@@ -17,6 +17,7 @@ module.exports = (env, options) => {
     output: {
       filename: '[name].[contenthash:8].js',
       path: path.join(__dirname, 'dist'),
+      publicPath: '/',
     },
     optimization: {
       runtimeChunk: true,
@@ -34,6 +35,7 @@ module.exports = (env, options) => {
         overlay: false,
       },
       compress: true,
+      historyApiFallback: true,
     },
     resolve: {
       modules: ['node_modules', path.join(__dirname, 'src')],
