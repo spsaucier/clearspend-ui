@@ -114,7 +114,7 @@ module.exports = (env, options) => {
       new PreloadWebpackPlugin({
         rel: 'preload',
         include: 'initial',
-        fileWhitelist: [/inter400\..+?\.woff2$/],
+        fileWhitelist: [/inter400\..+?\.woff2$/, /inter600\..+?\.woff2$/],
       }),
       new ForkTsCheckerWebpackPlugin({ eslint: { enabled: !isProd, files: './src/**/*.{ts,tsx}' } }),
       new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),

@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 var(--pd-8);
+  font-size: var(--text-16);
+  font-weight: var(--font-600);
+  line-height: var(--line-24);
+}
+
+.message {
+  margin: 0;
+}
+
+.action {
+  margin-top: var(--pd-16);
+}

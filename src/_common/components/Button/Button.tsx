@@ -6,6 +6,8 @@ import { join } from '../../utils/join';
 import css from './Button.css';
 
 export interface ButtonProps {
+  type?: 'default' | 'primary' | 'positive' | 'danger' | 'ghost'; // TODO
+  size?: 'sm' | 'md' | 'lg';
   class?: string;
   loading?: boolean; // TODO
   disabled?: boolean;
@@ -17,7 +19,7 @@ export interface ButtonProps {
 }
 
 export function Button(props: Readonly<ButtonProps>) {
-  const merged = mergeProps({ htmlType: 'button' }, props);
+  const merged = mergeProps({ type: 'default', size: 'md', htmlType: 'button' }, props);
 
   return (
     <button

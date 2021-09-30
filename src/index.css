@@ -139,7 +139,7 @@ body {
   margin: 0;
   padding: 0;
   color: var(--tw-black);
-  font-family: var(--font-main);
+  font-family: var(--font-main), sans-serif;
   font-size: var(--text-14);
   line-height: var(--line-20);
   background: var(--tw-white);
