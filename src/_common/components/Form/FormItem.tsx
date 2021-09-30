@@ -3,7 +3,9 @@ import type { JSX } from 'solid-js';
 
 import { join } from '../../utils/join';
 
-interface FormItemProps {
+import css from './FormItem.css';
+
+export interface FormItemProps {
   label?: JSX.Element;
   extra?: JSX.Element;
   error?: JSX.Element;
@@ -13,7 +15,7 @@ interface FormItemProps {
 
 export function FormItem(props: Readonly<FormItemProps>) {
   return (
-    <div class={join(props.class)}>
+    <div class={join(css.root, props.class)}>
       {props.label && <label>{props.label}</label>}
       <div>{props.children}</div>
       <div>

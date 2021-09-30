@@ -1,5 +1,6 @@
 import { createResource, Show } from 'solid-js';
 
+import { Spin } from '_common/components/Spin';
 import { TestForm } from 'test/components/TestForm/TestForm';
 import type { TestData } from 'test/types';
 
@@ -28,7 +29,7 @@ export function Test() {
 
   return (
     <div>
-      <Show when={!!data()} fallback={<div>Loading...</div>}>
+      <Show when={!!data()} fallback={<Spin />}>
         <TestForm data={data()!} loading={data.loading} onSubmit={submit} />
       </Show>
     </div>

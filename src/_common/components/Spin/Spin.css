@@ -1,0 +1,35 @@
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -25;
+  }
+
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -62;
+  }
+}
+
+.root {
+  color: var(--tw-primary);
+  transform-origin: center center;
+  animation: rotate 2s linear infinite;
+}
+
+.circle {
+  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+  stroke-dasharray: 150, 200;
+  stroke-dashoffset: -10;
+}

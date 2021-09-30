@@ -5,7 +5,7 @@ import { join } from '../../utils/join';
 
 import css from './Input.css';
 
-interface InputProps {
+export interface InputProps {
   name?: string;
   value?: string;
   type?: 'text' | 'password';

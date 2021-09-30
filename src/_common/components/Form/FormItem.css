@@ -1,0 +1,5 @@
+.root {
+  & + .root {
+    margin-top: var(--pd-8);
+  }
+}
