@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js';
 
 import { Test } from 'test/Test';
 import { LoginForm } from 'app/components/LoginForm';
+import { Icon } from '_common/components/Icon';
 import { Popover } from '_common/components/Popover';
 import { Tooltip } from '_common/components/Tooltip';
 import { Button } from '_common/components/Button';
@@ -22,6 +23,11 @@ export function App() {
 
   return (
     <div>
+      <div>
+        <Icon name="confirm" />
+        <Icon name="confirm" size="sm" />
+        <Icon name="confirm" size="xs" />
+      </div>
       <div>
         <Popover content={<div>Some content...</div>}>
           {(triggerProps) => <Button {...triggerProps}>Button</Button>}

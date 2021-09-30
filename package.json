@@ -24,6 +24,7 @@
     "solid-js": "1.1.5"
   },
   "devDependencies": {
+    "@prettier/plugin-xml": "1.1.0",
     "@storybook/addon-actions": "6.3.8",
     "@storybook/addon-essentials": "6.3.8",
     "@storybook/addon-links": "6.3.8",
@@ -74,6 +75,6 @@
   "lint-staged": {
     "src/**/*.{ts,tsx}": "eslint --cache --fix",
     "src/**/*.css": "stylelint --fix",
-    "*.{js,ts,tsx,json,css,html}": "prettier --write"
+    "*.{js,ts,tsx,json,css,html,svg}": "prettier --write"
   }
 }

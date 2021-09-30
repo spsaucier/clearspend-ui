@@ -1,0 +1,21 @@
+@value v-size-md: 24px;
+@value v-size-sm: 20px;
+@value v-size-xs: 16px;
+
+.root {
+  display: block;
+  width: v-size-md;
+  height: v-size-md;
+  overflow: hidden;
+  fill: currentColor;
+}
+
+.sm {
+  width: v-size-sm;
+  height: v-size-sm;
+}
+
+.xs {
+  width: v-size-xs;
+  height: v-size-xs;
+}

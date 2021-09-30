@@ -55,6 +55,10 @@ module.exports = {
               },
             ],
           },
+          {
+            test: /icons\/[a-z-]+\.svg$/,
+            type: 'asset/source',
+          },
         ],
       },
       plugins: [...config.plugins, new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' })],

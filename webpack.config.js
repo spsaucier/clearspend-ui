@@ -99,6 +99,10 @@ module.exports = (env, options) => {
             filename: 'fonts/[name].[hash:8][ext]',
           },
         },
+        {
+          test: /icons\/[a-z-]+\.svg$/,
+          type: 'asset/source',
+        },
       ],
     },
     plugins: [
