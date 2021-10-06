@@ -12,16 +12,17 @@
 
   50% {
     stroke-dasharray: 89, 200;
-    stroke-dashoffset: -25;
+    stroke-dashoffset: -20;
   }
 
   100% {
     stroke-dasharray: 89, 200;
-    stroke-dashoffset: -62;
+    stroke-dashoffset: -50;
   }
 }
 
 .root {
+  display: block;
   color: var(--tw-primary);
   transform-origin: center center;
   animation: rotate 2s linear infinite;

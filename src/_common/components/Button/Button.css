@@ -1,4 +1,87 @@
+@value v-size-lg: 48px;
+@value v-size-md: 36px;
+@value v-size-sm: 24px;
+@value v-small-icon: 20px;
+
 .root {
   display: inline-flex;
+  height: v-size-md;
+  padding: 0 var(--pd-12);
+  align-items: center;
+  justify-content: center;
   font: inherit;
+  font-family: var(--font-header);
+  font-weight: var(--font-600);
+  vertical-align: middle;
+  background: var(--tw-gray-20);
+  border: 0;
+  border-radius: var(--radius-12);
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background: var(--tw-gray-10);
+  }
+
+  & > svg + span,
+  & > span + svg {
+    margin-left: var(--pd-4);
+  }
+}
+
+.icon-only {
+  width: v-size-md;
+  padding: 0;
+}
+
+.lg {
+  height: v-size-lg;
+
+  &.icon-only {
+    width: v-size-lg;
+  }
+}
+
+.sm {
+  height: v-size-sm;
+  padding: 0 var(--pd-8);
+  font-size: var(--text-12);
+  border-radius: var(--radius-8);
+
+  &.icon-only {
+    width: v-size-sm;
+    padding: 0;
+  }
+}
+
+.loading {
+  pointer-events: none;
+}
+
+.spin,
+.icon {
+  color: inherit;
+
+  @nest .sm & {
+    width: v-small-icon;
+    height: v-small-icon;
+  }
+}
+
+.child {
+  visibility: visible;
+}
+
+.absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.no-icon {
+  position: relative;
+
+  & .child {
+    visibility: hidden;
+  }
 }

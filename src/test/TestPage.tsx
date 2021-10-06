@@ -22,6 +22,56 @@ export default function TestPage() {
         <Icon name="confirm" size="xs" />
       </div>
       <div>
+        <Button size="lg" icon="company" />
+        <Button size="lg" loading icon="company" />
+
+        <Button size="lg">Button</Button>
+        <Button size="lg" loading>
+          Button
+        </Button>
+
+        <Button size="lg" icon="company">
+          Button
+        </Button>
+        <Button size="lg" loading icon="company">
+          Button
+        </Button>
+        <Button size="lg" icon={{ name: 'company', pos: 'right' }}>
+          Button
+        </Button>
+        <Button size="lg" loading icon={{ name: 'company', pos: 'right' }}>
+          Button
+        </Button>
+      </div>
+      <div>
+        <Button icon="company" />
+        <Button loading icon="company" />
+        <Button icon="company">Button</Button>
+        <Button loading icon="company">
+          Button
+        </Button>
+        <Button icon={{ name: 'company', pos: 'right' }}>Button</Button>
+        <Button loading icon={{ name: 'company', pos: 'right' }}>
+          Button
+        </Button>
+      </div>
+      <div>
+        <Button size="sm" icon="company" />
+        <Button size="sm" loading icon="company" />
+        <Button size="sm" icon="company">
+          Button
+        </Button>
+        <Button size="sm" loading icon="company">
+          Button
+        </Button>
+        <Button size="sm" icon={{ name: 'company', pos: 'right' }}>
+          Button
+        </Button>
+        <Button size="sm" loading icon={{ name: 'company', pos: 'right' }}>
+          Button
+        </Button>
+      </div>
+      <div>
         <Popover content={<div>Some content...</div>}>
           {(triggerProps) => <Button {...triggerProps}>Button</Button>}
         </Popover>
