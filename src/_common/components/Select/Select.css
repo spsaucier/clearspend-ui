@@ -1,0 +1,31 @@
+@value v-height: 36px;
+
+.root {
+  height: v-height;
+  padding: var(--pd-8) var(--pd-12);
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-8);
+  transition: border 0.3s;
+
+  &:hover {
+    border-color: var(--tw-primary);
+  }
+}
+
+.disabled {
+  color: var(--tw-gray-60);
+  pointer-events: none;
+}
+
+.popup {
+  width: 100%;
+  padding: 0;
+}
+
+.list {
+  display: block;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}

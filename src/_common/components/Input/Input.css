@@ -1,3 +1,23 @@
+@value v-height: 36px;
+
+.root {
+  height: v-height;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-8);
+  transition: border 0.3s;
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--tw-primary);
+  }
+}
+
 .input {
+  width: 100%;
+  margin: -1px 0 0 -1px;
+  padding: var(--pd-8) var(--pd-12);
   font: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
 }

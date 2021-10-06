@@ -24,7 +24,7 @@ export function Input(props: Readonly<InputProps>) {
   };
 
   return (
-    <div class={join(merged.class)}>
+    <div class={join(css.root, merged.class)}>
       <input
         name={merged.name}
         value={merged.value}

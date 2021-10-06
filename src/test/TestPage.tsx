@@ -4,6 +4,7 @@ import { Icon } from '_common/components/Icon';
 import { Popover } from '_common/components/Popover';
 import { Tooltip } from '_common/components/Tooltip';
 import { Button } from '_common/components/Button';
+import { Select, Option } from '_common/components/Select';
 
 import { Test } from './Test';
 
@@ -13,6 +14,8 @@ export default function TestPage() {
 
   const [open1, setOpen1] = createSignal(false);
   const onClick1 = () => setOpen1((prev) => !prev);
+
+  const [select, setSelect] = createSignal('');
 
   return (
     <div>
@@ -71,6 +74,19 @@ export default function TestPage() {
           Button
         </Button>
       </div>
+      <br />
+      <br />
+      <div>
+        <Select value={select()} onChange={setSelect}>
+          <Option value="one">One</Option>
+          <Option value="two">Two</Option>
+          <Option value="other" disabled>
+            Other
+          </Option>
+        </Select>
+      </div>
+      <br />
+      <br />
       <div>
         <Popover content={<div>Some content...</div>}>
           {(triggerProps) => <Button {...triggerProps}>Button</Button>}

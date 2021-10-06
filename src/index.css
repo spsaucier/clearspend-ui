@@ -143,6 +143,7 @@ html {
 
 body {
   box-sizing: border-box;
+  min-height: 100vh;
   margin: 0;
   padding: 0;
   color: var(--tw-black);
