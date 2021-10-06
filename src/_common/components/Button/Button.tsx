@@ -45,10 +45,11 @@ export function Button(props: Readonly<ButtonProps>) {
       disabled={merged.disabled}
       class={join(css.root, merged.class)}
       classList={{
-        [css.sm as string]: merged.size === 'sm',
-        [css.lg as string]: merged.size === 'lg',
-        [css.iconOnly as string]: Boolean(icon()) && !merged.children,
-        [css.loading as string]: merged.loading,
+        [css.sm!]: merged.size === 'sm',
+        [css.lg!]: merged.size === 'lg',
+        [css.iconOnly!]: Boolean(icon()) && !merged.children,
+        [css.loading!]: merged.loading,
+        [css.primary!]: merged.type === 'primary',
       }}
       onClick={merged.onClick}
       onMouseEnter={merged.onMouseEnter}
@@ -56,7 +57,7 @@ export function Button(props: Readonly<ButtonProps>) {
     >
       {icon()?.pos === 'left' && (!merged.loading ? iconEl : spinEl)}
       {props.children && (
-        <span classList={{ [css.noIcon as string]: !icon() && merged.loading }}>
+        <span classList={{ [css.noIcon!]: !icon() && merged.loading }}>
           <span class={css.child}>{props.children}</span>
           {!icon() && merged.loading && <span class={css.absolute}>{spinEl}</span>}
         </span>

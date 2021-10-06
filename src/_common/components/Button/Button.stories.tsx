@@ -11,6 +11,10 @@ export default {
       options: ['sm', 'md', 'lg'],
       control: { type: 'radio' },
     },
+    type: {
+      options: ['default', 'primary'],
+      control: { type: 'radio' },
+    },
     icon: {
       options: [...keys(IconName)].sort(),
       control: { type: 'select' },
@@ -22,6 +26,7 @@ export default {
   },
   args: {
     size: 'md',
+    type: 'default',
     children: 'Button',
     loading: false,
     disabled: false,
