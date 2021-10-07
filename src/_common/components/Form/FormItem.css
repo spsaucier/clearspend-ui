@@ -3,3 +3,22 @@
     margin-top: var(--pd-8);
   }
 }
+
+.label {
+  display: block;
+  margin-bottom: var(--pd-4);
+  font-size: var(--text-12);
+  font-weight: var(--font-500);
+  line-height: var(--line-16);
+}
+
+.description {
+  margin-top: var(--pd-4);
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.error {
+  color: var(--tw-red);
+}

@@ -16,11 +16,13 @@ export interface FormItemProps {
 export function FormItem(props: Readonly<FormItemProps>) {
   return (
     <div class={join(css.root, props.class)}>
-      {props.label && <label>{props.label}</label>}
+      {props.label && <label class={css.label}>{props.label}</label>}
       <div>{props.children}</div>
-      <div>
+      <div class={css.description}>
         <Switch fallback="\xa0">
-          <Match when={props.error}>{props.error}</Match>
+          <Match when={props.error}>
+            <div class={css.error}>{props.error}</div>
+          </Match>
           <Match when={props.extra}>{props.extra}</Match>
         </Switch>
       </div>
