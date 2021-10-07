@@ -5,6 +5,7 @@
   border: 1px solid var(--tw-gray-30);
   border-radius: var(--radius-8);
   transition: border 0.3s;
+  overflow: hidden;
 
   &:hover,
   &:focus-within {
@@ -20,4 +21,12 @@
   background: transparent;
   border: 0;
   outline: 0;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: inherit;
+    box-shadow: 0 0 0 1000px transparent inset;
+  }
 }

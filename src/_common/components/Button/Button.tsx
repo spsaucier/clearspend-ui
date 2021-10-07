@@ -19,6 +19,7 @@ export interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   icon?: IconType | Readonly<IconProps>;
   class?: string;
+  wide?: boolean;
   loading?: boolean;
   disabled?: boolean;
   htmlType?: 'button' | 'submit';
@@ -45,6 +46,7 @@ export function Button(props: Readonly<ButtonProps>) {
       disabled={merged.disabled}
       class={join(css.root, merged.class)}
       classList={{
+        [css.wide!]: merged.wide,
         [css.sm!]: merged.size === 'sm',
         [css.lg!]: merged.size === 'lg',
         [css.iconOnly!]: Boolean(icon()) && !merged.children,

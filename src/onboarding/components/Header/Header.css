@@ -1,0 +1,8 @@
+.root {
+  margin: 0 0 var(--pd-16);
+  font-family: var(--font-special);
+  font-size: var(--text-28);
+  font-weight: var(--font-600);
+  line-height: var(--line-36);
+  letter-spacing: var(--ls-small);
+}

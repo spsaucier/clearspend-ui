@@ -105,6 +105,14 @@ module.exports = (env, options) => {
           test: /icons\/[a-z-]+\.svg$/,
           type: 'asset/source',
         },
+        {
+          test: /\.svg$/,
+          exclude: /icons\/[a-z-]+\.svg$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'static/[hash:8][ext]',
+          },
+        },
       ],
     },
     plugins: [

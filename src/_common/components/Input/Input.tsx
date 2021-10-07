@@ -8,7 +8,8 @@ import css from './Input.css';
 export interface InputProps {
   name?: string;
   value?: string;
-  type?: 'text' | 'password';
+  type?: 'text' | 'password' | 'email' | 'tel';
+  autocomplete?: string;
   placeholder?: string;
   error?: boolean; // TODO
   disabled?: boolean;
@@ -29,6 +30,7 @@ export function Input(props: Readonly<InputProps>) {
         name={merged.name}
         value={merged.value}
         type={merged.type}
+        autocomplete={merged.autocomplete}
         placeholder={merged.placeholder}
         disabled={merged.disabled}
         class={css.input}
