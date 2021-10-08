@@ -1,3 +1,5 @@
+import { onMount } from 'solid-js';
+
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
@@ -19,6 +21,9 @@ interface PasswordFormProps {
 
 // TODO: Add password strong checking
 export function PasswordForm(props: Readonly<PasswordFormProps>) {
+  let input!: HTMLInputElement;
+  onMount(() => input.focus());
+
   const [loading, create] = wrapAction(props.onCreateAccount);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
@@ -45,9 +50,11 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Password" error={errors().password}>
           <Input
+            ref={input}
             name="new-password"
             type="password"
             value={values().password}
+            autoComplete="off"
             error={Boolean(errors().password)}
             onChange={handlers.password}
           />
@@ -57,6 +64,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
             name="confirm-password"
             type="password"
             value={values().confirm}
+            autoComplete="off"
             error={Boolean(errors().confirm)}
             onChange={handlers.confirm}
           />

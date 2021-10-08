@@ -1,7 +1,7 @@
-import { JSXElement, Show } from 'solid-js';
+import { JSXElement, Show, onMount } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
-import { Input } from '_common/components/Input';
+import { InputCode } from '_common/components/InputCode';
 import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 
@@ -28,6 +28,9 @@ interface VerifyFormProps {
 }
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
+  let input: HTMLInputElement | undefined;
+  onMount(() => input?.focus());
+
   const [secondsLeft, restartTimer] = createTimer(RESEND_TIMEOUT_IN_SEC);
 
   const [loading, confirm] = wrapAction(props.onConfirm);
@@ -54,12 +57,13 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       <Description>{props.description}</Description>
       <Form>
         <FormItem label="Enter confirmation code">
-          <Input
+          <InputCode
+            ref={(el) => {
+              input = el;
+            }}
             name="code"
-            type="tel"
             value={values().code}
             error={Boolean(errors().code)}
-            autocomplete="off"
             disabled={loading()}
             onChange={onChange}
           />

@@ -1,8 +1,9 @@
 @value v-height: 36px;
+@value v-border: 1px;
 
 .root {
   height: v-height;
-  border: 1px solid var(--tw-gray-30);
+  border: v-border solid var(--tw-gray-30);
   border-radius: var(--radius-8);
   transition: border 0.3s;
   overflow: hidden;
@@ -13,14 +14,24 @@
   }
 }
 
+.disabled {
+  &:hover {
+    border-color: var(--tw-gray-30);
+  }
+}
+
 .input {
-  width: 100%;
+  width: calc(100% + (v-border * 2));
   margin: -1px 0 0 -1px;
   padding: var(--pd-8) var(--pd-12);
   font: inherit;
   background: transparent;
   border: 0;
   outline: 0;
+
+  &:disabled {
+    color: var(--tw-gray-60);
+  }
 
   &:-webkit-autofill,
   &:-webkit-autofill:hover,

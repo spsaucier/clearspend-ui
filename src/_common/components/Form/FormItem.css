@@ -1,7 +1,5 @@
 .root {
-  & + .root {
-    margin-top: var(--pd-8);
-  }
+  margin: 0 0 var(--pd-4);
 }
 
 .label {

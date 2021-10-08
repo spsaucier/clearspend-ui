@@ -29,7 +29,7 @@ function getPosStyle(position: [VPos, HPos]) {
 
 export function Popover(props: Readonly<PopoverProps>) {
   let trigger: Element;
-  let dialog: HTMLDivElement;
+  let dialog!: HTMLDivElement;
 
   const merged = mergeProps(DEFAULT_PROPS, props);
 
@@ -74,9 +74,7 @@ export function Popover(props: Readonly<PopoverProps>) {
           <div class={css.root} style={calcDialogStyle(merged.position, trigger)}>
             <div
               role="dialog"
-              ref={(el) => {
-                dialog = el;
-              }}
+              ref={dialog}
               class={join(css.popover, merged.balloon && css.balloon, getPosStyle(position()), merged.class)}
             >
               {merged.content}

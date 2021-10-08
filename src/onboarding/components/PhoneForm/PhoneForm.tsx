@@ -1,3 +1,5 @@
+import { onMount } from 'solid-js';
+
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
@@ -16,6 +18,9 @@ interface PhoneFormProps {
 }
 
 export function PhoneForm(props: Readonly<PhoneFormProps>) {
+  let input!: HTMLInputElement;
+  onMount(() => input.focus());
+
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { phone: '' },
     rules: { phone: [minLength] }, // TODO: add rules
@@ -30,6 +35,7 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Enter mobile phone number" error={errors().phone}>
           <Input
+            ref={input}
             name="phone"
             type="tel"
             value={values().phone}

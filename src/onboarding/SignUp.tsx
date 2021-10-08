@@ -15,7 +15,6 @@ import { PasswordForm } from './components/PasswordForm';
 
 import css from './SignUp.css';
 
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 const confirm = async () => wait(2000);
 
 export default function SignUp() {

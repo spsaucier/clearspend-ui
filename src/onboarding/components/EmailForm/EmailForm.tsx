@@ -1,3 +1,5 @@
+import { onMount } from 'solid-js';
+
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
@@ -15,6 +17,9 @@ interface EmailFormProps {
 }
 
 export function EmailForm(props: Readonly<EmailFormProps>) {
+  let input!: HTMLInputElement;
+  onMount(() => input.focus());
+
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { email: '' },
     rules: { email: [required] },
@@ -29,6 +34,7 @@ export function EmailForm(props: Readonly<EmailFormProps>) {
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Work email" error={errors().email}>
           <Input
+            ref={input}
             name="email"
             type="email"
             value={values().email}

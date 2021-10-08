@@ -1,3 +1,5 @@
+import { onMount } from 'solid-js';
+
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
@@ -16,6 +18,9 @@ interface StartFormProps {
 }
 
 export function StartForm(props: Readonly<StartFormProps>) {
+  let input!: HTMLInputElement;
+  onMount(() => input.focus());
+
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { firstName: '', lastName: '' },
     rules: { firstName: [required], lastName: [required] },
@@ -30,6 +35,7 @@ export function StartForm(props: Readonly<StartFormProps>) {
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="First name" error={errors().firstName}>
           <Input
+            ref={input}
             name="first-name"
             value={values().firstName}
             error={Boolean(errors().firstName)}
