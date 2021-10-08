@@ -1,7 +1,7 @@
 import { Routes, Route, Link } from 'solid-app-router';
 
 import { TestPage } from 'test';
-import { SignUp } from 'onboarding';
+import { SignUp } from 'signup';
 
 import { Login } from './pages/Login';
 
