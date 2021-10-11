@@ -2,6 +2,7 @@
 /* eslint-disable no-console, @typescript-eslint/no-magic-numbers */
 
 import { Switch, Match, createSignal } from 'solid-js';
+import { useNavigate } from 'solid-app-router';
 
 import twLogo from 'app/assets/tw-logo.svg';
 import { wait } from '_common/utils/wait';
@@ -18,12 +19,14 @@ import css from './SignUp.css';
 const confirm = async () => wait(2000);
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const [step, setStep] = createSignal(0);
   const next = () => setStep((prev) => prev + 1);
 
   const create = async () => {
     await confirm();
-    setStep(0);
+    navigate('/onboarding');
   };
 
   return (

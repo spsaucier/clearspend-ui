@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  margin-top: 0;
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.side {
+  flex-shrink: 0;
+
+  @media (min-width: 768px) {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--tw-gray-30);
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  @media (min-width: 768px) {
+    min-height: 100vh;
+  }
+}
