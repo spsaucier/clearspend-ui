@@ -9,6 +9,7 @@ import twLogo from 'app/assets/tw-logo.svg';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
+import { TeamForm } from './components/TeamForm';
 
 import css from './Onboarding.css';
 
@@ -43,7 +44,7 @@ export default function Onboarding() {
         </Match>
         <Match when={location.pathname === '/onboarding/kyc'}>
           <Page title="Tell us about your team" contentClass={css.content}>
-            TODO
+            <TeamForm />
           </Page>
         </Match>
         <Match when={location.pathname === '/onboarding/account'}>

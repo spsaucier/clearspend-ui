@@ -2,6 +2,7 @@ import { createMemo, JSXElement } from 'solid-js';
 
 import { join } from '../../utils/join';
 import { useBool } from '../../utils/useBool';
+import { Icon } from '../Icon';
 import { Popover } from '../Popover';
 
 import { SelectContext } from './context';
@@ -34,8 +35,18 @@ export function Select(props: Readonly<SelectProps>) {
         </ul>
       }
     >
-      <div class={join(css.root, props.class)} classList={{ [css.disabled!]: props.disabled }} onClick={() => toggle()}>
-        {selected() || props.placeholder || '\xa0'}
+      <div
+        class={join(css.root, props.class)}
+        classList={{
+          [css.open!]: open(),
+          [css.disabled!]: props.disabled,
+        }}
+        onClick={() => toggle()}
+      >
+        {/* TODO: Add keyboard navigation support */}
+        <input readonly class={css.input} />
+        <div class={css.value}>{selected() || <span class={css.placeholder}>{props.placeholder}</span>}</div>
+        <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
       </div>
     </Popover>
   );

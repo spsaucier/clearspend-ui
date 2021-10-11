@@ -15,7 +15,8 @@ export interface IconProps {
 }
 
 export interface ButtonProps {
-  type?: 'default' | 'primary' | 'positive' | 'danger' | 'ghost'; // TODO
+  type?: 'default' | 'primary';
+  ghost?: boolean;
   size?: 'sm' | 'md' | 'lg';
   icon?: IconType | Readonly<IconProps>;
   class?: string;
@@ -44,14 +45,18 @@ export function Button(props: Readonly<ButtonProps>) {
     <button
       type={merged.htmlType}
       disabled={merged.disabled}
-      class={join(css.root, merged.class)}
+      class={join(
+        css.root,
+        merged.type === 'primary' && (!merged.ghost ? css.primary : css.primaryGhost),
+        merged.class,
+      )}
       classList={{
         [css.wide!]: merged.wide,
         [css.sm!]: merged.size === 'sm',
         [css.lg!]: merged.size === 'lg',
+        [css.ghost!]: merged.ghost,
         [css.iconOnly!]: Boolean(icon()) && !merged.children,
         [css.loading!]: merged.loading,
-        [css.primary!]: merged.type === 'primary',
       }}
       onClick={merged.onClick}
       onMouseEnter={merged.onMouseEnter}

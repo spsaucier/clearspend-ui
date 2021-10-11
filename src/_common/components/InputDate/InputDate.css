@@ -1,0 +1,8 @@
+.popup {
+  padding: 0;
+}
+
+.calendar {
+  width: 100%;
+  padding: var(--pd-24);
+}

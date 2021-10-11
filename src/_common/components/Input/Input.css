@@ -2,6 +2,7 @@
 @value v-border: 1px;
 
 .root {
+  display: flex;
   height: v-height;
   border: v-border solid var(--tw-gray-30);
   border-radius: var(--radius-8);
@@ -39,5 +40,16 @@
     transition: background-color 5000s ease-in-out 0s;
     -webkit-text-fill-color: inherit;
     box-shadow: 0 0 0 1000px transparent inset;
+  }
+}
+
+.suffix {
+  display: flex;
+  padding: 0 var(--pd-8);
+  align-items: center;
+  flex-shrink: 0;
+
+  & > svg {
+    color: var(--tw-gray-60);
   }
 }

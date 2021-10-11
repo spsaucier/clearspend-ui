@@ -1,14 +1,50 @@
 @value v-height: 36px;
 
 .root {
+  display: flex;
   height: v-height;
-  padding: var(--pd-8) var(--pd-12);
+  align-items: center;
   border: 1px solid var(--tw-gray-30);
   border-radius: var(--radius-8);
   transition: border 0.3s;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     border-color: var(--tw-primary);
+  }
+}
+
+.open {
+  border-color: var(--tw-primary);
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.value {
+  width: 100%;
+  padding: var(--pd-8) var(--pd-12);
+}
+
+.placeholder {
+  color: var(--tw-gray-60);
+}
+
+.chevron {
+  margin: 0 var(--pd-8);
+  flex-shrink: 0;
+  color: var(--tw-gray-60);
+  transition: transform 0.3s;
+  transform: rotate(0deg);
+  transform-origin: center;
+  will-change: auto;
+
+  @nest .open & {
+    transform: rotate(180deg);
   }
 }
 

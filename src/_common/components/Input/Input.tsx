@@ -1,5 +1,5 @@
 import { mergeProps } from 'solid-js';
-import type { JSX } from 'solid-js';
+import type { JSX, JSXElement } from 'solid-js';
 
 import { join } from '../../utils/join';
 
@@ -14,12 +14,15 @@ export interface InputProps {
   inputMode?: 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
   autoComplete?: string;
   placeholder?: string;
+  suffix?: JSXElement;
   error?: boolean; // TODO
   disabled?: boolean;
   class?: string;
   onChange?: (value: string, event: InputEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
   onPaste?: (event: ClipboardEvent) => void;
+  onFocusIn?: (event: FocusEvent) => void;
+  onFocusOut?: (event: FocusEvent) => void;
 }
 
 export function Input(props: Readonly<InputProps>) {
@@ -45,7 +48,10 @@ export function Input(props: Readonly<InputProps>) {
         onInput={onChange}
         onKeyDown={merged.onKeyDown}
         onPaste={merged.onPaste}
+        onFocusIn={merged.onFocusIn}
+        onFocusOut={merged.onFocusOut}
       />
+      {merged.suffix && <div class={css.suffix}>{merged.suffix}</div>}
     </div>
   );
 }

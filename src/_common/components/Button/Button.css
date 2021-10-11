@@ -53,7 +53,6 @@
 .sm {
   height: v-size-sm;
   padding: 0 var(--pd-8);
-  font-size: var(--text-12);
   border-radius: var(--radius-8);
 
   &.icon-only {
@@ -95,11 +94,29 @@
   }
 }
 
+.ghost {
+  padding-right: 0;
+  padding-left: 0;
+  background: transparent;
+
+  &:hover {
+    background: transparent;
+  }
+}
+
 .primary {
   color: var(--tw-gray-20);
   background: var(--tw-primary);
 
   &:hover {
     background: var(--tw-primary-dark);
+  }
+}
+
+.primary-ghost {
+  color: var(--tw-primary);
+
+  &:hover {
+    color: var(--tw-primary-dark);
   }
 }
