@@ -1,0 +1,4 @@
+/* NOTE: sync with constants in _common/api/media/provider */
+
+@custom-media --bp-medium (min-width: 768px);
+@custom-media --bp-large (min-width: 1024px);

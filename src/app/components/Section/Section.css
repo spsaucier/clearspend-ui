@@ -3,7 +3,7 @@
   width: 100%;
   flex-direction: column;
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     flex-direction: row;
   }
 }
@@ -12,7 +12,7 @@
   flex-grow: 1;
   flex-shrink: 0;
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     width: 240px;
     max-width: 320px;
   }
@@ -38,7 +38,7 @@
   font-size: var(--text-14);
   line-height: var(--line-20);
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     min-width: 340px;
     margin-left: var(--pd-48);
     flex-grow: 1;

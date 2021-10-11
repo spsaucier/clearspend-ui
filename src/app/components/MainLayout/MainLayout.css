@@ -5,7 +5,7 @@
   margin-top: 0;
   flex-direction: column;
 
-  @media (min-width: 768px) {
+  @media (--bp-medium) {
     flex-direction: row;
   }
 }
@@ -13,7 +13,7 @@
 .side {
   flex-shrink: 0;
 
-  @media (min-width: 768px) {
+  @media (--bp-medium) {
     position: sticky;
     top: 0;
     height: 100vh;
@@ -26,7 +26,7 @@
   flex-direction: column;
   flex-grow: 1;
 
-  @media (min-width: 768px) {
+  @media (--bp-medium) {
     min-height: 100vh;
   }
 }

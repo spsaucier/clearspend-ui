@@ -3,7 +3,15 @@
 }
 
 .wrapper {
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     max-width: 260px;
+  }
+}
+
+.next {
+  width: 100%;
+
+  @media (--bp-medium) {
+    width: auto;
   }
 }

@@ -1,7 +1,8 @@
-import { Switch, Match } from 'solid-js';
+import { Show, Switch, Match } from 'solid-js';
 import { useLocation } from 'solid-app-router';
 
 import { Icon } from '_common/components/Icon';
+import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import twLogo from 'app/assets/tw-logo.svg';
@@ -13,6 +14,7 @@ import css from './Onboarding.css';
 
 export default function Onboarding() {
   const location = useLocation();
+  const media = useMediaContext();
 
   return (
     <MainLayout
@@ -21,9 +23,11 @@ export default function Onboarding() {
           <header class={css.header}>
             <img src={twLogo} alt="Company logo" width={123} height={24} />
           </header>
-          <div class={css.steps}>
-            <SideSteps />
-          </div>
+          <Show when={media.medium}>
+            <div class={css.steps}>
+              <SideSteps />
+            </div>
+          </Show>
           <footer class={css.footer}>
             <Icon name="user" />
             <span class={css.user}>Ann Kim</span>

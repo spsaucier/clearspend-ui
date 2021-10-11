@@ -3,7 +3,7 @@
   padding: var(--pd-48) var(--pd-24);
   background: var(--tw-gray-10);
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     padding: var(--pd-48);
   }
 }
@@ -11,7 +11,7 @@
 .header {
   padding-bottom: var(--pd-24);
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     padding-bottom: 80px;
   }
 }

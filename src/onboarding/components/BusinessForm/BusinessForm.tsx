@@ -52,7 +52,7 @@ export function BusinessForm() {
             <Input />
           </FormItem>
         </div>
-        <Button type="primary" onClick={() => navigate('/onboarding/kyc')}>
+        <Button type="primary" class={css.next} onClick={() => navigate('/onboarding/kyc')}>
           Next
         </Button>
       </Section>

@@ -6,7 +6,7 @@
   border: 1px solid var(--tw-gray-20);
   border-radius: var(--radius-20);
 
-  @media (min-width: 1024px) {
+  @media (--bp-large) {
     max-width: 450px;
     padding: var(--pd-48);
   }
