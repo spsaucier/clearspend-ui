@@ -9,6 +9,7 @@ interface SectionProps {
   title: JSXElement;
   description?: JSXElement;
   class?: string;
+  contentClass?: string;
   children: JSXElement;
 }
 
@@ -19,7 +20,7 @@ export function Section(props: Readonly<SectionProps>) {
         <h3 class={css.title}>{props.title}</h3>
         <p class={css.description}>{props.description}</p>
       </header>
-      <div class={css.content}>{props.children}</div>
+      <div class={join(css.content, props.contentClass)}>{props.children}</div>
     </section>
   );
 }

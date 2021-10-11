@@ -21,7 +21,7 @@
   "dependencies": {
     "core-js": "3.18.1",
     "solid-app-router": "0.1.7",
-    "solid-create-form": "0.2.1",
+    "solid-create-form": "0.3.0",
     "solid-js": "1.1.5"
   },
   "devDependencies": {

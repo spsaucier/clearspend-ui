@@ -8,12 +8,8 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Header } from '../Header';
 import { Description } from '../Description';
 
-import { minLength, getConfirmRule } from './rules';
-
-interface FormValues {
-  password: string;
-  confirm: string;
-}
+import type { FormValues } from './types';
+import { minLength, samePassword } from './rules';
 
 interface PasswordFormProps {
   onCreateAccount: (password: string) => Promise<unknown>;
@@ -28,17 +24,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { password: '', confirm: '' },
-    rules: {
-      password: [minLength],
-      confirm: [
-        getConfirmRule(() => {
-          // for some reason ESLint show error if use value directly, without constant
-          // TODO: Update solid-create-form to get all form values in rules
-          const pass: string = values().password;
-          return pass;
-        }),
-      ],
-    },
+    rules: { password: [minLength], confirm: [samePassword] },
   });
 
   const onSubmit = (data: Readonly<FormValues>) => create(data.password);

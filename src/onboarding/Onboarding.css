@@ -35,7 +35,3 @@
     padding: var(--pd-16) var(--pd-48) var(--pd-24);
   }
 }
-
-.section {
-  margin-bottom: var(--pd-24);
-}

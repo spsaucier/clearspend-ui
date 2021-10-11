@@ -1,3 +1,5 @@
+import type { FormValues } from './types';
+
 export const PASSWORD_MIN_LENGTH = 8;
 
 export function minLength(value: string): boolean | string {
@@ -5,8 +7,6 @@ export function minLength(value: string): boolean | string {
   return pass.length >= PASSWORD_MIN_LENGTH || `Password must be at least ${PASSWORD_MIN_LENGTH} characters long.`;
 }
 
-export function getConfirmRule(password: () => string) {
-  return (value: string): boolean | string => {
-    return value === password() || 'Passwords do not match. Please try again.';
-  };
+export function samePassword(value: string, values: FormValues): boolean | string {
+  return value === values.password || 'Passwords do not match. Please try again.';
 }

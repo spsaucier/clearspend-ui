@@ -1,0 +1,29 @@
+.root {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  padding: var(--pd-16) var(--pd-32);
+  align-items: center;
+  color: var(--tw-gray-60);
+  font-family: var(--font-header);
+  font-weight: var(--font-600);
+  border-right: 4px solid transparent;
+}
+
+.active {
+  background: var(--tw-gray-20);
+  border-right-color: var(--tw-primary);
+  pointer-events: none;
+}
+
+.step {
+  margin-right: var(--pd-12);
+  font-family: var(--font-special);
+  font-size: var(--text-16);
+  font-weight: var(--font-600);
+  line-height: var(--line-28);
+}

@@ -1,20 +1,29 @@
+import { Switch, Match } from 'solid-js';
+import { useLocation } from 'solid-app-router';
+
 import { Icon } from '_common/components/Icon';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
-import { Section } from 'app/components/Section';
 import twLogo from 'app/assets/tw-logo.svg';
+
+import { SideSteps } from './components/SideSteps';
+import { BusinessForm } from './components/BusinessForm';
 
 import css from './Onboarding.css';
 
 export default function Onboarding() {
+  const location = useLocation();
+
   return (
     <MainLayout
       side={
         <div class={css.sidebar}>
           <header class={css.header}>
-            <img src={twLogo} alt="Company logo" />
+            <img src={twLogo} alt="Company logo" width={123} height={24} />
           </header>
-          <div class={css.steps}>TODO</div>
+          <div class={css.steps}>
+            <SideSteps />
+          </div>
           <footer class={css.footer}>
             <Icon name="user" />
             <span class={css.user}>Ann Kim</span>
@@ -22,14 +31,28 @@ export default function Onboarding() {
         </div>
       }
     >
-      <Page title="Tell us about your business" contentClass={css.content}>
-        <Section title="Business details" class={css.section}>
-          TODO
-        </Section>
-        <Section title="Business address" class={css.section}>
-          TODO
-        </Section>
-      </Page>
+      <Switch>
+        <Match when={location.pathname === '/onboarding/kyb'}>
+          <Page title="Tell us about your business" contentClass={css.content}>
+            <BusinessForm />
+          </Page>
+        </Match>
+        <Match when={location.pathname === '/onboarding/kyc'}>
+          <Page title="Tell us about your team" contentClass={css.content}>
+            TODO
+          </Page>
+        </Match>
+        <Match when={location.pathname === '/onboarding/account'}>
+          <Page title="Link your bank account" contentClass={css.content}>
+            TODO
+          </Page>
+        </Match>
+        <Match when={location.pathname === '/onboarding/money'}>
+          <Page title="Transfer money" contentClass={css.content}>
+            TODO
+          </Page>
+        </Match>
+      </Switch>
     </MainLayout>
   );
 }
