@@ -2,8 +2,10 @@ import { onMount } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
+import { validEmail } from '_common/components/Form/rules/patterns';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
@@ -13,19 +15,23 @@ interface FormValues {
 }
 
 interface EmailFormProps {
-  onNext: (email: string) => void;
+  onNext: (email: string) => Promise<unknown>;
 }
 
 export function EmailForm(props: Readonly<EmailFormProps>) {
   let input!: HTMLInputElement;
   onMount(() => input.focus());
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
+  const [loading, next] = wrapAction(props.onNext);
+
+  const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
     defaultValues: { email: '' },
-    rules: { email: [required] },
+    rules: { email: [required, validEmail] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) => props.onNext(data.email);
+  const onSubmit = (data: Readonly<FormValues>) => {
+    next(data.email).catch(() => setErrors({ email: 'Something going wrong' }));
+  };
 
   return (
     <div>
@@ -42,7 +48,7 @@ export function EmailForm(props: Readonly<EmailFormProps>) {
             onChange={handlers.email}
           />
         </FormItem>
-        <Button wide type="primary" htmlType="submit">
+        <Button wide type="primary" htmlType="submit" loading={loading()}>
           Next
         </Button>
       </Form>

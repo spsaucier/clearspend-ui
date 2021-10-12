@@ -24,7 +24,6 @@ interface VerifyFormProps {
   description: JSXElement;
   onResend: () => Promise<unknown>;
   onConfirm: (code: string) => Promise<unknown>;
-  onNext: () => void;
 }
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
@@ -45,9 +44,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
     handlers.code(code);
 
     if (code.length === VALID_LENGTH) {
-      confirm(code)
-        .then(() => props.onNext())
-        .catch(() => setErrors({ code: 'Invalid code.' }));
+      confirm(code).catch(() => setErrors({ code: 'Invalid code.' }));
     }
   };
 

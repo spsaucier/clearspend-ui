@@ -1,8 +1,10 @@
 import { onMount } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
+import { validPhone } from '_common/components/Form/rules/patterns';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
@@ -14,19 +16,23 @@ interface FormValues {
 }
 
 interface PhoneFormProps {
-  onNext: (phone: string) => void;
+  onNext: (phone: string) => Promise<unknown>;
 }
 
 export function PhoneForm(props: Readonly<PhoneFormProps>) {
   let input!: HTMLInputElement;
   onMount(() => input.focus());
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
+  const [loading, next] = wrapAction(props.onNext);
+
+  const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
     defaultValues: { phone: '' },
-    rules: { phone: [minLength] }, // TODO: add rules
+    rules: { phone: [minLength, validPhone] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) => props.onNext(data.phone);
+  const onSubmit = (data: Readonly<FormValues>) => {
+    next(data.phone.replace(/[^+\d]/g, '')).catch(() => setErrors({ phone: 'Something going wrong' }));
+  };
 
   return (
     <div>
@@ -43,7 +49,7 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
             onChange={handlers.phone}
           />
         </FormItem>
-        <Button wide type="primary" htmlType="submit">
+        <Button wide type="primary" htmlType="submit" loading={loading()}>
           Next
         </Button>
       </Form>

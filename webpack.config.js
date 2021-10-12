@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
@@ -8,6 +9,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const DEV_ENV = '.env.dev';
+if (fs.existsSync(DEV_ENV)) require('dotenv').config({ path: DEV_ENV });
 
 module.exports = (env, options) => {
   const isProd = options.mode === 'production';
@@ -36,6 +40,13 @@ module.exports = (env, options) => {
       },
       compress: true,
       historyApiFallback: true,
+      proxy: {
+        '/api': {
+          target: process.env.DEV_API || '',
+          changeOrigin: true,
+          logLevel: 'debug',
+        },
+      },
     },
     resolve: {
       modules: ['node_modules', path.join(__dirname, 'src')],

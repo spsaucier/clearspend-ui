@@ -8,6 +8,7 @@ dist/
 .eslintcache
 .stylelintcache
 tsconfig.tsbuildinfo
+.env.dev
 
 .DS_Store
 Thumbs.db

@@ -1,11 +1,15 @@
 // TODO: update code and remove comment after integrate with API
-/* eslint-disable no-console, @typescript-eslint/no-magic-numbers */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 
-import { Switch, Match, createSignal } from 'solid-js';
+import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import twLogo from 'app/assets/tw-logo.svg';
+import type { UUIDString } from 'app/types';
 import { wait } from '_common/utils/wait';
+import { getNoop } from '_common/utils/getNoop';
+import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
+import { IdentifierType } from 'onboarding/types';
 
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
@@ -19,53 +23,80 @@ import css from './SignUp.css';
 const confirm = async () => wait(2000);
 
 export default function SignUp() {
+  let uid: UUIDString;
   const navigate = useNavigate();
 
   const [step, setStep] = createSignal(0);
   const next = () => setStep((prev) => prev + 1);
 
-  const create = async () => {
-    await confirm();
+  let onSignup: (email: string) => Promise<unknown> = getNoop(true);
+
+  const onNameUpdate = (firstName: string, lastName: string) => {
+    onSignup = async (email: string) => {
+      const resp = await signup({ email, firstName, lastName });
+      uid = resp.businessProspectId;
+      next();
+    };
+    next();
+  };
+
+  const onEmailConfirm = async (otp: string) => {
+    await confirmOTP(uid, { identifierType: IdentifierType.EMAIL, otp });
+    next();
+  };
+
+  const onPhoneUpdate = async (phone: string) => {
+    await setPhone(uid, phone);
+    next();
+  };
+
+  const onPhoneConfirm = async (otp: string) => {
+    await confirmOTP(uid, { identifierType: IdentifierType.PHONE, otp });
+    next();
+  };
+
+  const onPasswordUpdate = async (password: string) => {
+    await setPassword(uid, password);
     navigate('/onboarding/kyb');
   };
 
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={twLogo} alt="Company logo" />
+        <img src={twLogo} alt="Company logo" width={123} height={24} />
       </header>
       <div class={css.content}>
         <Box>
           <Switch>
             <Match when={step() === 0}>
-              <StartForm onNext={next} />
+              <StartForm onNext={onNameUpdate} />
             </Match>
             <Match when={step() === 1}>
-              <EmailForm onNext={next} />
+              <EmailForm onNext={onSignup} />
             </Match>
             <Match when={step() === 2}>
               <VerifyForm
                 header="Verify your email"
                 description="We have sent a confirmation code to j.smith@company.com"
+                // TODO: need API
                 onResend={confirm}
-                onConfirm={confirm}
-                onNext={next}
+                onConfirm={onEmailConfirm}
               />
             </Match>
             <Match when={step() === 3}>
-              <PhoneForm onNext={next} />
+              <PhoneForm onNext={onPhoneUpdate} />
             </Match>
             <Match when={step() === 4}>
               <VerifyForm
                 header="Verify your phone number"
                 description="We have sent a confirmation code to (555) 555-5555"
+                // TODO: need API
                 onResend={confirm}
-                onConfirm={confirm}
-                onNext={next}
+                onConfirm={onPhoneConfirm}
               />
             </Match>
             <Match when={step() === 5}>
-              <PasswordForm onCreateAccount={create} />
+              <PasswordForm onCreateAccount={onPasswordUpdate} />
             </Match>
           </Switch>
         </Box>

@@ -14,7 +14,10 @@ export function wrapAction<T, P extends any[], A extends ((...args: P) => Promis
           setState(false);
           return data;
         })
-        .catch(() => setState(false)) as Promise<T>;
+        .catch((error: unknown) => {
+          setState(false);
+          throw error;
+        });
     }) as A);
 
   return [state, handler] as const;

@@ -127,6 +127,7 @@
 
 @font-face {
   font-family: 'SpaceGrotesk';
+  font-display: swap;
   font-weight: 600;
   font-style: normal;
   src: local(''), url('fonts/space-grotesk-600.woff2') format('woff2');
@@ -134,6 +135,7 @@
 
 @font-face {
   font-family: 'Recoleta';
+  font-display: swap;
   font-weight: 600;
   font-style: normal;
   src: local(''), url('fonts/recoleta-600.woff2') format('woff2');
