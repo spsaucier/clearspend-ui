@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  padding: var(--pd-16);
+  align-items: flex-start;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-10);
+}
+
+.icon {
+  margin-right: var(--pd-8);
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  font-weight: var(--font-500);
+}
+
+.type {
+  margin-left: var(--pd-4);
+  flex-shrink: 0;
+}
+
+.number {
+  margin-top: var(--pd-8);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}

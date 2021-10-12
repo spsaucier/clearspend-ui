@@ -5,11 +5,13 @@ import { Form, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
+import { useMediaContext } from '_common/api/media/context';
 
 import css from './BusinessForm.css';
 
 export function BusinessForm() {
   const navigate = useNavigate();
+  const media = useMediaContext();
 
   return (
     <Form>
@@ -52,7 +54,7 @@ export function BusinessForm() {
             <Input />
           </FormItem>
         </div>
-        <Button type="primary" class={css.next} onClick={() => navigate('/onboarding/kyc')}>
+        <Button type="primary" wide={media.small} onClick={() => navigate('/onboarding/kyc')}>
           Next
         </Button>
       </Section>

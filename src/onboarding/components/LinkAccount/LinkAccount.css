@@ -1,0 +1,9 @@
+.wrapper {
+  @media (--bp-large) {
+    max-width: 394px;
+  }
+}
+
+.verify {
+  margin-bottom: var(--pd-24);
+}

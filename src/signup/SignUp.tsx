@@ -26,7 +26,7 @@ export default function SignUp() {
 
   const create = async () => {
     await confirm();
-    navigate('/onboarding');
+    navigate('/onboarding/kyb');
   };
 
   return (

@@ -10,6 +10,8 @@ import twLogo from 'app/assets/tw-logo.svg';
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
+import { LinkAccount } from './components/LinkAccount';
+import { TransferMoney } from './components/TransferMoney';
 
 import css from './Onboarding.css';
 
@@ -49,12 +51,12 @@ export default function Onboarding() {
         </Match>
         <Match when={location.pathname === '/onboarding/account'}>
           <Page title="Link your bank account" contentClass={css.content}>
-            TODO
+            <LinkAccount />
           </Page>
         </Match>
         <Match when={location.pathname === '/onboarding/money'}>
           <Page title="Transfer money" contentClass={css.content}>
-            TODO
+            <TransferMoney />
           </Page>
         </Match>
       </Switch>

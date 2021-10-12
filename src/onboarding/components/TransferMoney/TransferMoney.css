@@ -7,3 +7,7 @@
     max-width: 260px;
   }
 }
+
+.button {
+  margin-top: var(--pd-24);
+}

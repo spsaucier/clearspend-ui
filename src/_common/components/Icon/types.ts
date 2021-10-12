@@ -18,6 +18,7 @@ export enum IconName {
   filters = 'filters',
   freeze = 'freeze',
   'more-horizontal' = 'more-horizontal',
+  'payment-bank' = 'payment-bank',
   photo = 'photo',
   'settings' = 'settings',
   'table-columns' = 'table-columns',

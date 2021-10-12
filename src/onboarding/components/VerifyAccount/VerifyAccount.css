@@ -1,0 +1,18 @@
+.root {
+  padding: var(--pd-16);
+  background: var(--tw-blue-light);
+  border: 1px solid var(--tw-blue-20);
+  border-radius: var(--radius-8);
+}
+
+.title {
+  margin: 0 0 var(--pd-4);
+  font-family: var(--font-header);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.text {
+  margin: 0 0 var(--pd-24);
+  color: var(--tw-gray-60);
+}

@@ -1,0 +1,1 @@
+export { VerifyAccount } from './VerifyAccount';

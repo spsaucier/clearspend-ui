@@ -6,11 +6,13 @@ import { Input } from '_common/components/Input';
 import { InputDate } from '_common/components/InputDate';
 import { Select } from '_common/components/Select';
 import { Button } from '_common/components/Button';
+import { useMediaContext } from '_common/api/media/context';
 
 import css from './TeamForm.css';
 
 export function TeamForm() {
   const navigate = useNavigate();
+  const media = useMediaContext();
 
   return (
     <Form>
@@ -55,7 +57,7 @@ export function TeamForm() {
           <Button size="sm" icon="add" type="primary" ghost class={css.add}>
             Add another owner
           </Button>
-          <Button type="primary" class={css.next} onClick={() => navigate('/onboarding/account')}>
+          <Button type="primary" wide={media.small} onClick={() => navigate('/onboarding/account')}>
             Next
           </Button>
         </div>
