@@ -12,7 +12,7 @@ export interface SelectProps {
   disabled?: boolean;
   class?: string;
   placeholder?: string;
-  error?: boolean; // TODO
+  error?: boolean;
   children: JSXElement;
   onChange?: (value: string) => void;
 }

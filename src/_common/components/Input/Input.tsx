@@ -15,7 +15,7 @@ export interface InputProps {
   autoComplete?: string;
   placeholder?: string;
   suffix?: JSXElement;
-  error?: boolean; // TODO
+  error?: boolean;
   disabled?: boolean;
   class?: string;
   onChange?: (value: string, event: InputEvent) => void;
@@ -33,7 +33,10 @@ export function Input(props: Readonly<InputProps>) {
   };
 
   return (
-    <div class={join(css.root, merged.class)} classList={{ [css.disabled!]: merged.disabled }}>
+    <div
+      class={join(css.root, merged.class)}
+      classList={{ [css.error!]: merged.error, [css.disabled!]: merged.disabled }}
+    >
       <input
         ref={props.ref}
         name={merged.name}

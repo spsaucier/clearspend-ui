@@ -15,6 +15,10 @@
   }
 }
 
+.error:not(.disabled) {
+  border-color: var(--tw-red);
+}
+
 .disabled {
   &:hover {
     border-color: var(--tw-gray-30);

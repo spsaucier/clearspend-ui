@@ -12,7 +12,7 @@ export interface InputCodeProps {
   ref?: (el: HTMLInputElement) => void;
   name?: string;
   value: string;
-  error?: boolean; // TODO
+  error?: boolean;
   disabled?: boolean;
   class?: string;
   onChange: (value: string) => void;
@@ -76,6 +76,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
             maxLength={1}
             inputMode="numeric"
             autoComplete="off"
+            error={props.error}
             disabled={props.disabled}
             class={css.input}
             onChange={onChange(idx)}

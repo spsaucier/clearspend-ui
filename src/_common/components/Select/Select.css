@@ -48,6 +48,10 @@
   }
 }
 
+.error:not(.disabled) {
+  border-color: var(--tw-red);
+}
+
 .disabled {
   color: var(--tw-gray-60);
   pointer-events: none;

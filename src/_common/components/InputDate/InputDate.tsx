@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, createMemo } from 'solid-js';
 
 import { Input } from '../Input';
 import { Icon } from '../Icon';
@@ -11,7 +11,8 @@ const FOCUS_OUT_DELAY = 200;
 export interface InputDateProps {
   name?: string;
   class?: string;
-  value?: Date;
+  value?: Date | number;
+  error?: boolean;
   onChange?: (date: Date | null) => void;
 }
 
@@ -26,6 +27,13 @@ export function InputDate(props: Readonly<InputDateProps>) {
     console.log(value);
   };
 
+  const value = createMemo(() => {
+    const date = props.value;
+    if (typeof date === 'number') return new Date(date);
+    if (date instanceof Date) return date;
+    return undefined;
+  });
+
   return (
     <Popover
       open={open()}
@@ -39,8 +47,10 @@ export function InputDate(props: Readonly<InputDateProps>) {
     >
       <Input
         name={props.name}
+        value={value()?.toLocaleDateString()}
         suffix={<Icon name="calendar" />}
         class={props.class}
+        error={props.error}
         onFocusIn={() => setOpen(true)}
         onFocusOut={() => {
           clearFocusTimeout();

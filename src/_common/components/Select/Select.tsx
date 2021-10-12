@@ -45,6 +45,7 @@ export function Select(props: Readonly<SelectProps>) {
         class={join(css.root, props.class)}
         classList={{
           [css.open!]: open(),
+          [css.error!]: props.error,
           [css.disabled!]: props.disabled,
         }}
         onClick={() => {
