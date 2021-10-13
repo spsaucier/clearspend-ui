@@ -1,7 +1,7 @@
 import { useNavigate } from 'solid-app-router';
 
 import { Section } from 'app/components/Section';
-import { Form, FormItem } from '_common/components/Form';
+import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputDate } from '_common/components/InputDate';
 import { Select } from '_common/components/Select';
@@ -10,9 +10,19 @@ import { useMediaContext } from '_common/api/media/context';
 
 import css from './TeamForm.css';
 
+interface FormValues {
+  birthdate: ReadonlyDate | undefined;
+}
+
 export function TeamForm() {
   const navigate = useNavigate();
   const media = useMediaContext();
+
+  const { values, errors, handlers } = createForm<FormValues>({
+    defaultValues: {
+      birthdate: undefined,
+    },
+  });
 
   return (
     <Form>
@@ -28,8 +38,13 @@ export function TeamForm() {
           <FormItem label="Last name">
             <Input name="last-name" />
           </FormItem>
-          <FormItem label="Date of birth">
-            <InputDate name="birthdate" />
+          <FormItem label="Date of birth" error={errors().birthdate}>
+            <InputDate
+              name="birthdate"
+              value={values().birthdate}
+              error={Boolean(errors().birthdate)}
+              onChange={handlers.birthdate}
+            />
           </FormItem>
           <FormItem label="Social security number">
             <Input name="ssn" />

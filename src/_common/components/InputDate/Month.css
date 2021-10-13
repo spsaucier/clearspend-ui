@@ -1,0 +1,81 @@
+@value v-month-width: 268px;
+@value v-day-width: 28px;
+@value v-gap: calc((v-month-width - (v-day-width * 7)) / 6);
+
+.root {
+  width: v-month-width;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--pd-24);
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--tw-gray-30);
+}
+
+.nav {
+  display: flex;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.weekdays {
+  display: flex;
+  width: 100%;
+  gap: v-gap;
+}
+
+.weekday {
+  display: flex;
+  width: v-day-width;
+  margin-bottom: var(--pd-16);
+  justify-content: center;
+  font-weight: var(--font-500);
+}
+
+.days {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: v-gap;
+}
+
+.empty {
+  pointer-events: none;
+}
+
+.day {
+  display: flex;
+  width: v-day-width;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-header);
+  font-size: var(--text-12);
+  font-weight: var(--font-600);
+  line-height: var(--line-16);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-4);
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tw-blue-light);
+    border-color: var(--tw-blue-20);
+  }
+}
+
+.active {
+  background: var(--tw-blue-light);
+  border-color: var(--tw-blue-20);
+  pointer-events: none;
+}

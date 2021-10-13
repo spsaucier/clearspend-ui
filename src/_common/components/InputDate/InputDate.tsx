@@ -1,19 +1,25 @@
-import { createSignal, createMemo } from 'solid-js';
+import { Accessor, createSignal, createMemo } from 'solid-js';
 
 import { Input } from '../Input';
 import { Icon } from '../Icon';
 import { Popover } from '../Popover';
 
+import { Month } from './Month';
+
 import css from './InputDate.css';
 
 const FOCUS_OUT_DELAY = 200;
+const DATE_REGEXP = /^([\d]{1,2})[/\s-]([\d]{1,2})[/\s-]([\d]{4})$/i;
+const DATE_MATCH_LENGTH = 4;
+
+const toInt = (value: string) => parseInt(value, 10);
 
 export interface InputDateProps {
   name?: string;
   class?: string;
-  value?: Date | number;
+  value?: ReadonlyDate | number;
   error?: boolean;
-  onChange?: (date: Date | null) => void;
+  onChange?: (date: ReadonlyDate | undefined) => void;
 }
 
 export function InputDate(props: Readonly<InputDateProps>) {
@@ -23,16 +29,32 @@ export function InputDate(props: Readonly<InputDateProps>) {
   const clearFocusTimeout = () => clearTimeout(focusTimeout);
 
   const onChange = (value: string) => {
-    // eslint-disable-next-line no-console
-    console.log(value);
+    if (open()) setOpen(false);
+
+    const input = value.trim();
+    if (!input) props.onChange?.(undefined);
+
+    const match = input.match(DATE_REGEXP);
+
+    if (match?.length === DATE_MATCH_LENGTH) {
+      props.onChange?.(new Date(toInt(match[3]!), toInt(match[1]!) - 1, toInt(match[2]!), 0, 0, 0, 0));
+    }
   };
 
-  const value = createMemo(() => {
+  const onSelect = (date: ReadonlyDate) => {
+    props.onChange?.(date);
+    setOpen(false);
+  };
+
+  const value: Accessor<ReadonlyDate | undefined> = createMemo(() => {
     const date = props.value;
     if (typeof date === 'number') return new Date(date);
     if (date instanceof Date) return date;
     return undefined;
   });
+
+  // TODO: Use i18n?
+  const strValue = createMemo(() => value()?.toLocaleDateString('en-US'));
 
   return (
     <Popover
@@ -41,16 +63,18 @@ export function InputDate(props: Readonly<InputDateProps>) {
       onClickOutside={() => setOpen(false)}
       content={
         <div class={css.calendar} onClick={clearFocusTimeout}>
-          TODO
+          <Month value={value()} onSelect={onSelect} />
         </div>
       }
     >
       <Input
         name={props.name}
-        value={value()?.toLocaleDateString()}
+        value={strValue()}
         suffix={<Icon name="calendar" />}
         class={props.class}
         error={props.error}
+        autoComplete="off"
+        placeholder="M/D/YYYY"
         onFocusIn={() => setOpen(true)}
         onFocusOut={() => {
           clearFocusTimeout();

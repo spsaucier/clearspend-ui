@@ -9,6 +9,8 @@ export enum IconName {
   card = 'card',
   'card-add-new' = 'card-add-new',
   'chevron-down' = 'chevron-down',
+  'chevron-left' = 'chevron-left',
+  'chevron-right' = 'chevron-right',
   company = 'company',
   confirm = 'confirm',
   'confirm-circle' = 'confirm-circle',
