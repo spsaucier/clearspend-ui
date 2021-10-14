@@ -2,7 +2,7 @@ import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 
-import type { BusinessType, CreateBusinessInfo } from '../../types';
+import type { BusinessType, UpdateBusinessInfo } from '../../types';
 
 import type { FormValues } from './types';
 
@@ -32,7 +32,7 @@ export function getFormOptions(): FormOptions<FormValues> {
   };
 }
 
-export function convertFormData(data: Readonly<FormValues>): Readonly<CreateBusinessInfo> {
+export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusinessInfo> {
   return {
     legalName: data.name,
     businessType: data.type as BusinessType,

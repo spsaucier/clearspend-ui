@@ -10,7 +10,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { BUSINESS_TYPES, USA_STATES } from '../../constants/usa';
-import type { CreateBusinessInfo } from '../../types';
+import type { UpdateBusinessInfo } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -18,7 +18,7 @@ import type { FormValues } from './types';
 import css from './BusinessForm.css';
 
 interface BusinessFormProps {
-  onNext: (data: Readonly<CreateBusinessInfo>) => Promise<unknown>;
+  onNext: (data: Readonly<UpdateBusinessInfo>) => Promise<unknown>;
 }
 
 export function BusinessForm(props: Readonly<BusinessFormProps>) {
@@ -73,7 +73,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             error={errors().line1}
           >
             <Input
-              name="business-address"
+              name="address-line-1"
               value={values().line1}
               autoComplete="off"
               error={Boolean(errors().line1)}
@@ -82,7 +82,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           </FormItem>
           <FormItem label="Apartment, unit, floor etc..." error={errors().line2}>
             <Input
-              name="business-unit"
+              name="address-line-2"
               value={values().line2}
               autoComplete="off"
               error={Boolean(errors().line2)}
@@ -94,6 +94,8 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           </FormItem>
           <FormItem label="State" error={errors().state}>
             <Select
+              up
+              name="state"
               placeholder="Choose state"
               value={values().state}
               error={Boolean(errors().state)}

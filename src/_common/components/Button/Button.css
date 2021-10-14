@@ -102,6 +102,10 @@
   &:hover {
     background: transparent;
   }
+
+  &:disabled {
+    background: transparent;
+  }
 }
 
 .primary {
@@ -116,7 +120,7 @@
 .primary-ghost {
   color: var(--tw-primary);
 
-  &:hover {
+  &:hover:not(:disabled) {
     color: var(--tw-primary-dark);
   }
 }

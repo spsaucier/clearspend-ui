@@ -10,6 +10,7 @@ export interface OptionProps {
 export interface SelectProps {
   name?: string;
   value?: string;
+  up?: boolean; // TODO: Choose automatically
   disabled?: boolean;
   class?: string;
   placeholder?: string;

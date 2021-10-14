@@ -36,6 +36,7 @@ export function Select(props: Readonly<SelectProps>) {
     <Popover
       open={open()}
       class={css.popup}
+      position={props.up ? 'top-left' : 'bottom-left'}
       onClickOutside={() => setOpen(false)}
       content={
         <ul class={css.list}>

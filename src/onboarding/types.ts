@@ -1,6 +1,6 @@
 import type { UUIDString } from 'app/types';
 
-export interface CreateBusinessAccount {
+export interface UpdateBusinessAccount {
   email: string;
   firstName: string;
   lastName: string;
@@ -40,7 +40,8 @@ export interface Address {
   country: 'USA';
 }
 
-export interface CreateBusinessInfo {
+// TODO: Update names
+export interface UpdateBusinessInfo {
   legalName: string;
   businessType: BusinessType;
   employerIdentificationNumber: string;
@@ -48,7 +49,17 @@ export interface CreateBusinessInfo {
   address: Readonly<Address>;
 }
 
-export interface CreateBusinessInfoResp {
+export interface UpdateBusinessInfoResp {
   businessId: UUIDString;
   businessOwnerId: UUIDString;
+}
+
+// TODO: Update names
+export interface UpdateBusinessOwner {
+  firstName: string;
+  lastName: string;
+  birthdate: string;
+  taxNumber: string;
+  email: string;
+  address: Readonly<Address>;
 }

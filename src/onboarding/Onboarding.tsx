@@ -12,14 +12,17 @@ import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
 import { LinkAccount } from './components/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
-import { setBusinessInfo } from './services/onboarding';
+import { setBusinessInfo, setBusinessOwner } from './services/onboarding';
 import {
   readBusinessProspectID,
   removeBusinessProspectID,
   saveBusinessOwnerID,
+  readBusinessOwnerID,
+  removeBusinessOwnerID,
   saveBusinessID,
 } from './utils/storeBusinessIDs';
-import type { CreateBusinessInfo } from './types';
+import { navigateOnError } from './utils/navigateOnError';
+import type { UpdateBusinessInfo, UpdateBusinessOwner } from './types';
 
 import css from './Onboarding.css';
 
@@ -28,12 +31,20 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
-  const onUpdateKYB = async (data: Readonly<CreateBusinessInfo>) => {
+  navigateOnError('/signup', removeBusinessProspectID);
+
+  const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
     const resp = await setBusinessInfo(readBusinessProspectID(), data);
     saveBusinessOwnerID(resp.businessOwnerId);
     saveBusinessID(resp.businessId);
     removeBusinessProspectID();
     navigate('/onboarding/kyc');
+  };
+
+  const onUpdateKYC = async (data: Readonly<UpdateBusinessOwner>) => {
+    await setBusinessOwner(readBusinessOwnerID(), data);
+    removeBusinessOwnerID();
+    navigate('/onboarding/account');
   };
 
   return (
@@ -63,7 +74,7 @@ export default function Onboarding() {
         </Match>
         <Match when={location.pathname === '/onboarding/kyc'}>
           <Page title="Tell us about your team" contentClass={css.content}>
-            <TeamForm />
+            <TeamForm onNext={onUpdateKYC} />
           </Page>
         </Match>
         <Match when={location.pathname === '/onboarding/account'}>
