@@ -1,35 +1,67 @@
-import { useNavigate } from 'solid-app-router';
+import { For } from 'solid-js';
 
 import { Section } from 'app/components/Section';
-import { Form, FormItem } from '_common/components/Form';
+import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
+import { keys } from '_common/utils/keys';
 import { useMediaContext } from '_common/api/media/context';
+import { wrapAction } from '_common/utils/wrapAction';
+
+import { BUSINESS_TYPES, USA_STATES } from '../../constants/usa';
+import type { CreateBusinessInfo } from '../../types';
+
+import { getFormOptions, convertFormData } from './utils';
+import type { FormValues } from './types';
 
 import css from './BusinessForm.css';
 
-export function BusinessForm() {
-  const navigate = useNavigate();
+interface BusinessFormProps {
+  onNext: (data: Readonly<CreateBusinessInfo>) => Promise<unknown>;
+}
+
+export function BusinessForm(props: Readonly<BusinessFormProps>) {
   const media = useMediaContext();
+  const [loading, next] = wrapAction(props.onNext);
+
+  const { values, handlers, errors, wrapSubmit } = createForm<FormValues>(getFormOptions());
+
+  const onSubmit = (data: Readonly<FormValues>) => {
+    next(convertFormData(data)).catch(() => {
+      // TODO: How to show general errors?
+    });
+  };
 
   return (
-    <Form>
+    <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section title="Business details" class={css.section}>
         <div class={css.wrapper}>
-          <FormItem label="Legal entity name">
-            <Input />
+          <FormItem label="Legal entity name" error={errors().name}>
+            <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
           </FormItem>
-          <FormItem label="Legal entity type">
-            <Select placeholder="Choose entity type">
-              <Option value="corporation">Corporation</Option>
+          <FormItem label="Legal entity type" error={errors().type}>
+            <Select
+              name="business-type"
+              placeholder="Choose entity type"
+              value={values().type}
+              error={Boolean(errors().type)}
+              onChange={handlers.type}
+            >
+              <For each={keys(BUSINESS_TYPES)}>{(type) => <Option value={type}>{BUSINESS_TYPES[type]}</Option>}</For>
             </Select>
           </FormItem>
-          <FormItem label="Business EIN">
-            <Input />
+          <FormItem label="Business EIN" error={errors().ein}>
+            <Input name="business-ein" value={values().ein} error={Boolean(errors().ein)} onChange={handlers.ein} />
           </FormItem>
-          <FormItem label="Corporate phone number">
-            <Input type="tel" />
+          <FormItem label="Corporate phone number" error={errors().phone}>
+            <Input
+              type="tel"
+              name="corporate-phone-number"
+              value={values().phone}
+              error={Boolean(errors().phone)}
+              onChange={handlers.phone}
+            />
           </FormItem>
         </div>
       </Section>
@@ -38,23 +70,43 @@ export function BusinessForm() {
           <FormItem
             label="Business physical address"
             extra="No P.O. boxes or virtual addresses. U.S. addresses only. We will not send mail to this address."
+            error={errors().line1}
           >
-            <Input />
+            <Input
+              name="business-address"
+              value={values().line1}
+              autoComplete="off"
+              error={Boolean(errors().line1)}
+              onChange={handlers.line1}
+            />
           </FormItem>
-          <FormItem label="Apartment, unit, floor etc...">
-            <Input />
+          <FormItem label="Apartment, unit, floor etc..." error={errors().line2}>
+            <Input
+              name="business-unit"
+              value={values().line2}
+              autoComplete="off"
+              error={Boolean(errors().line2)}
+              onChange={handlers.line2}
+            />
           </FormItem>
-          <FormItem label="City">
-            <Input />
+          <FormItem label="City" error={errors().city}>
+            <Input name="city" value={values().city} error={Boolean(errors().city)} onChange={handlers.city} />
           </FormItem>
-          <FormItem label="State">
-            <Select placeholder="Choose state">{/* TODO */}</Select>
+          <FormItem label="State" error={errors().state}>
+            <Select
+              placeholder="Choose state"
+              value={values().state}
+              error={Boolean(errors().state)}
+              onChange={handlers.state}
+            >
+              <For each={USA_STATES}>{(state) => <Option value={state}>{state}</Option>}</For>
+            </Select>
           </FormItem>
-          <FormItem label="Zip code">
-            <Input />
+          <FormItem label="Zip code" error={errors().zip}>
+            <Input name="zip-code" value={values().zip} error={Boolean(errors().zip)} onChange={handlers.zip} />
           </FormItem>
         </div>
-        <Button type="primary" wide={media.small} onClick={() => navigate('/onboarding/kyc')}>
+        <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
           Next
         </Button>
       </Section>

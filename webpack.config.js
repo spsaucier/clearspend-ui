@@ -130,6 +130,9 @@ module.exports = (env, options) => {
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.ids.HashedModuleIdsPlugin(),
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(options.mode),
+      }),
       new HtmlWebpackPlugin({ template: './public/index.html' }),
       new PreloadWebpackPlugin({
         rel: 'preload',

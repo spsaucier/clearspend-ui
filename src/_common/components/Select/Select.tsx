@@ -11,9 +11,11 @@ import css from './Select.css';
 
 const FOCUS_OUT_DELAY = 200;
 
-function getSelected(value: string, elements: JSXElement) {
-  // TODO: check is array and fix typings
-  return (elements as unknown as readonly HTMLElement[]).find((el) => el.dataset.value === value)?.innerText;
+function getSelected(value: string, elements: JSXElement): string | undefined {
+  const items = typeof elements === 'function' ? elements() : elements;
+  return Array.isArray(items)
+    ? (items as HTMLElement[]).find((el) => el.dataset.value === value)?.innerText
+    : undefined;
 }
 
 export function Select(props: Readonly<SelectProps>) {
@@ -57,6 +59,7 @@ export function Select(props: Readonly<SelectProps>) {
         <input
           ref={input}
           readonly
+          name={props.name}
           class={css.input}
           onFocusIn={() => setOpen(true)}
           onFocusOut={() => {

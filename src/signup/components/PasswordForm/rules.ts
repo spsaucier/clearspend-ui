@@ -1,6 +1,6 @@
 import type { FormValues } from './types';
 
-export const PASSWORD_MIN_LENGTH = 8;
+export const PASSWORD_MIN_LENGTH = 10;
 
 export function minLength(value: string): boolean | string {
   const pass = value.trim();

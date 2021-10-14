@@ -5,10 +5,10 @@ import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import twLogo from 'app/assets/tw-logo.svg';
-import type { UUIDString } from 'app/types';
 import { wait } from '_common/utils/wait';
 import { getNoop } from '_common/utils/getNoop';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
+import { saveBusinessProspectID, readBusinessProspectID } from 'onboarding/utils/storeBusinessIDs';
 import { IdentifierType } from 'onboarding/types';
 
 import { Box } from './components/Box';
@@ -23,7 +23,6 @@ import css from './SignUp.css';
 const confirm = async () => wait(2000);
 
 export default function SignUp() {
-  let uid: UUIDString;
   const navigate = useNavigate();
 
   const [step, setStep] = createSignal(0);
@@ -34,29 +33,29 @@ export default function SignUp() {
   const onNameUpdate = (firstName: string, lastName: string) => {
     onSignup = async (email: string) => {
       const resp = await signup({ email, firstName, lastName });
-      uid = resp.businessProspectId;
+      saveBusinessProspectID(resp.businessProspectId);
       next();
     };
     next();
   };
 
   const onEmailConfirm = async (otp: string) => {
-    await confirmOTP(uid, { identifierType: IdentifierType.EMAIL, otp });
+    await confirmOTP(readBusinessProspectID(), { identifierType: IdentifierType.EMAIL, otp });
     next();
   };
 
   const onPhoneUpdate = async (phone: string) => {
-    await setPhone(uid, phone);
+    await setPhone(readBusinessProspectID(), phone);
     next();
   };
 
   const onPhoneConfirm = async (otp: string) => {
-    await confirmOTP(uid, { identifierType: IdentifierType.PHONE, otp });
+    await confirmOTP(readBusinessProspectID(), { identifierType: IdentifierType.PHONE, otp });
     next();
   };
 
   const onPasswordUpdate = async (password: string) => {
-    await setPassword(uid, password);
+    await setPassword(readBusinessProspectID(), password);
     navigate('/onboarding/kyb');
   };
 

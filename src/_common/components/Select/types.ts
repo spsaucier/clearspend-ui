@@ -8,6 +8,7 @@ export interface OptionProps {
 }
 
 export interface SelectProps {
+  name?: string;
   value?: string;
   disabled?: boolean;
   class?: string;
