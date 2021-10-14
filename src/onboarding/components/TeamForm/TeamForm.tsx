@@ -10,8 +10,6 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { USA_STATES } from '../../constants/usa';
-import { readBusinessOwnerID } from '../../utils/storeBusinessIDs';
-import { navigateOnError } from '../../utils/navigateOnError';
 import type { UpdateBusinessOwner } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
@@ -26,8 +24,6 @@ interface TeamFormProps {
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
   const [loading, next] = wrapAction(props.onNext);
-
-  navigateOnError('/onboarding/kyb', readBusinessOwnerID);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
 

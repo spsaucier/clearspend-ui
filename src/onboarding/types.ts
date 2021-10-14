@@ -1,5 +1,12 @@
 import type { UUIDString } from 'app/types';
 
+export enum OnboardingStep {
+  kyb,
+  kyc,
+  account,
+  money,
+}
+
 export interface UpdateBusinessAccount {
   email: string;
   firstName: string;

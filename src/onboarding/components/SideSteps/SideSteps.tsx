@@ -1,24 +1,27 @@
 import { For } from 'solid-js';
-import { useLocation } from 'solid-app-router';
+
+import { OnboardingStep } from '../../types';
 
 import css from './SideSteps.css';
 
 const STEPS = [
-  { step: 1, title: 'Business details', url: '/onboarding/kyb' },
-  { step: 2, title: 'Business leadership', url: '/onboarding/kyc' },
-  { step: 3, title: 'Add bank account', url: '/onboarding/account' },
-  { step: 4, title: 'Transfer money', url: '/onboarding/money' },
+  { step: OnboardingStep.kyb, title: 'Business details' },
+  { step: OnboardingStep.kyc, title: 'Business leadership' },
+  { step: OnboardingStep.account, title: 'Add bank account' },
+  { step: OnboardingStep.money, title: 'Transfer money' },
 ];
 
-export function SideSteps() {
-  const location = useLocation();
+interface SideStepsProps {
+  step: OnboardingStep;
+}
 
+export function SideSteps(props: Readonly<SideStepsProps>) {
   return (
     <ul class={css.root}>
       <For each={STEPS}>
         {(step) => (
-          <li class={css.item} classList={{ [css.active!]: step.url === location.pathname }}>
-            <span class={css.step}>{step.step}</span>
+          <li class={css.item} classList={{ [css.active!]: step.step === props.step }}>
+            <span class={css.step}>{step.step + 1}</span>
             {step.title}
           </li>
         )}

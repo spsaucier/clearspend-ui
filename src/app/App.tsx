@@ -10,10 +10,7 @@ export function App() {
     <div>
       <Routes>
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/onboarding/kyb" element={<Onboarding />} />
-        <Route path="/onboarding/kyc" element={<Onboarding />} />
-        <Route path="/onboarding/account" element={<Onboarding />} />
-        <Route path="/onboarding/money" element={<Onboarding />} />
+        <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </div>

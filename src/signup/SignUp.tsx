@@ -1,6 +1,3 @@
-// TODO: update code and remove comment after integrate with API
-/* eslint-disable @typescript-eslint/no-magic-numbers */
-
 import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
@@ -20,12 +17,23 @@ import { PasswordForm } from './components/PasswordForm';
 
 import css from './SignUp.css';
 
+enum Step {
+  name,
+  email,
+  emailConfirm,
+  phone,
+  phoneConfirm,
+  password,
+}
+
+// TODO:
+// eslint-disable-next-line @typescript-eslint/no-magic-numbers
 const confirm = async () => wait(2000);
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const [step, setStep] = createSignal(0);
+  const [step, setStep] = createSignal<Step>(Step.name);
   const next = () => setStep((prev) => prev + 1);
 
   let onSignup: (email: string) => Promise<unknown> = getNoop(true);
@@ -56,7 +64,7 @@ export default function SignUp() {
 
   const onPasswordUpdate = async (password: string) => {
     await setPassword(readBusinessProspectID(), password);
-    navigate('/onboarding/kyb');
+    navigate('/onboarding');
   };
 
   return (
@@ -67,13 +75,13 @@ export default function SignUp() {
       <div class={css.content}>
         <Box>
           <Switch>
-            <Match when={step() === 0}>
+            <Match when={step() === Step.name}>
               <StartForm onNext={onNameUpdate} />
             </Match>
-            <Match when={step() === 1}>
+            <Match when={step() === Step.email}>
               <EmailForm onNext={onSignup} />
             </Match>
-            <Match when={step() === 2}>
+            <Match when={step() === Step.emailConfirm}>
               <VerifyForm
                 header="Verify your email"
                 description="We have sent a confirmation code to j.smith@company.com"
@@ -82,10 +90,10 @@ export default function SignUp() {
                 onConfirm={onEmailConfirm}
               />
             </Match>
-            <Match when={step() === 3}>
+            <Match when={step() === Step.phone}>
               <PhoneForm onNext={onPhoneUpdate} />
             </Match>
-            <Match when={step() === 4}>
+            <Match when={step() === Step.phoneConfirm}>
               <VerifyForm
                 header="Verify your phone number"
                 description="We have sent a confirmation code to (555) 555-5555"
@@ -94,7 +102,7 @@ export default function SignUp() {
                 onConfirm={onPhoneConfirm}
               />
             </Match>
-            <Match when={step() === 5}>
+            <Match when={step() === Step.password}>
               <PasswordForm onCreateAccount={onPasswordUpdate} />
             </Match>
           </Switch>

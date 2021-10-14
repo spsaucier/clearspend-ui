@@ -1,5 +1,4 @@
-import { Show, Switch, Match } from 'solid-js';
-import { useLocation, useNavigate } from 'solid-app-router';
+import { createSignal, Show, Switch, Match } from 'solid-js';
 
 import { Icon } from '_common/components/Icon';
 import { useMediaContext } from '_common/api/media/context';
@@ -21,30 +20,28 @@ import {
   removeBusinessOwnerID,
   saveBusinessID,
 } from './utils/storeBusinessIDs';
-import { navigateOnError } from './utils/navigateOnError';
-import type { UpdateBusinessInfo, UpdateBusinessOwner } from './types';
+import { OnboardingStep, UpdateBusinessInfo, UpdateBusinessOwner } from './types';
 
 import css from './Onboarding.css';
 
 export default function Onboarding() {
-  const location = useLocation();
-  const navigate = useNavigate();
   const media = useMediaContext();
 
-  navigateOnError('/signup', removeBusinessProspectID);
+  // TODO: Check init
+  const [step, setStep] = createSignal<OnboardingStep>(OnboardingStep.kyb);
 
   const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
     const resp = await setBusinessInfo(readBusinessProspectID(), data);
     saveBusinessOwnerID(resp.businessOwnerId);
     saveBusinessID(resp.businessId);
     removeBusinessProspectID();
-    navigate('/onboarding/kyc');
+    setStep(OnboardingStep.kyc);
   };
 
   const onUpdateKYC = async (data: Readonly<UpdateBusinessOwner>) => {
     await setBusinessOwner(readBusinessOwnerID(), data);
     removeBusinessOwnerID();
-    navigate('/onboarding/account');
+    setStep(OnboardingStep.account);
   };
 
   return (
@@ -56,7 +53,7 @@ export default function Onboarding() {
           </header>
           <Show when={media.medium}>
             <div class={css.steps}>
-              <SideSteps />
+              <SideSteps step={step()} />
             </div>
           </Show>
           <footer class={css.footer}>
@@ -67,22 +64,22 @@ export default function Onboarding() {
       }
     >
       <Switch>
-        <Match when={location.pathname === '/onboarding/kyb'}>
+        <Match when={step() === OnboardingStep.kyb}>
           <Page title="Tell us about your business" contentClass={css.content}>
             <BusinessForm onNext={onUpdateKYB} />
           </Page>
         </Match>
-        <Match when={location.pathname === '/onboarding/kyc'}>
+        <Match when={step() === OnboardingStep.kyc}>
           <Page title="Tell us about your team" contentClass={css.content}>
             <TeamForm onNext={onUpdateKYC} />
           </Page>
         </Match>
-        <Match when={location.pathname === '/onboarding/account'}>
+        <Match when={step() === OnboardingStep.account}>
           <Page title="Link your bank account" contentClass={css.content}>
             <LinkAccount />
           </Page>
         </Match>
-        <Match when={location.pathname === '/onboarding/money'}>
+        <Match when={step() === OnboardingStep.money}>
           <Page title="Transfer money" contentClass={css.content}>
             <TransferMoney />
           </Page>
