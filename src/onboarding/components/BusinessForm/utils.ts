@@ -37,7 +37,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusi
     legalName: data.name,
     businessType: data.type as BusinessType,
     employerIdentificationNumber: data.ein,
-    phoneNumber: data.phone,
+    businessPhone: data.phone,
     address: {
       streetLine1: data.line1,
       streetLine2: data.line2,

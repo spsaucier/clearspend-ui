@@ -5,6 +5,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import twLogo from 'app/assets/tw-logo.svg';
+import { readSignupName } from 'signup/storage';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -19,13 +20,14 @@ import {
   readBusinessOwnerID,
   removeBusinessOwnerID,
   saveBusinessID,
-} from './utils/storeBusinessIDs';
+} from './storage';
 import { OnboardingStep, UpdateBusinessInfo, UpdateBusinessOwner } from './types';
 
 import css from './Onboarding.css';
 
 export default function Onboarding() {
   const media = useMediaContext();
+  const name = readSignupName();
 
   // TODO: Check init
   const [step, setStep] = createSignal<OnboardingStep>(OnboardingStep.kyb);
@@ -57,8 +59,10 @@ export default function Onboarding() {
             </div>
           </Show>
           <footer class={css.footer}>
-            <Icon name="user" />
-            <span class={css.user}>Ann Kim</span>
+            <Show when={Boolean(name)}>
+              <Icon name="user" />
+              <span class={css.user}>{`${name!.firstName} ${name!.lastName}`}</span>
+            </Show>
           </footer>
         </div>
       }

@@ -23,7 +23,8 @@
     "date-func": "0.0.3",
     "solid-app-router": "0.1.9",
     "solid-create-form": "0.3.0",
-    "solid-js": "1.1.6"
+    "solid-js": "1.1.6",
+    "solid-use-script": "0.0.1"
   },
   "devDependencies": {
     "@prettier/plugin-xml": "1.1.0",

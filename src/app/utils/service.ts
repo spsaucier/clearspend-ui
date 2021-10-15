@@ -15,8 +15,8 @@ function errorHandler(error: unknown) {
   return Promise.reject(error);
 }
 
-async function get<T = unknown>(url: string) {
-  return fetch<T>('GET', prefixUrl(url)).catch(errorHandler);
+async function get<T = unknown>(url: string, options?: FetchOptions) {
+  return fetch<T>('GET', prefixUrl(url), undefined, options).catch(errorHandler);
 }
 
 async function post<T = unknown>(url: string, params?: object, options?: FetchOptions) {

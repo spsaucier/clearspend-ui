@@ -39,8 +39,8 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusi
   return {
     firstName: data.firstName,
     lastName: data.lastName,
-    birthdate: dateToString(data.birthdate!),
-    taxNumber: data.ssn,
+    dateOfBirth: dateToString(data.birthdate!),
+    taxIdentificationNumber: data.ssn,
     email: data.email,
     // TODO
     address: {

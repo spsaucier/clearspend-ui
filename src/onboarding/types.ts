@@ -47,12 +47,11 @@ export interface Address {
   country: 'USA';
 }
 
-// TODO: Update names
 export interface UpdateBusinessInfo {
   legalName: string;
   businessType: BusinessType;
   employerIdentificationNumber: string;
-  phoneNumber: string;
+  businessPhone: string;
   address: Readonly<Address>;
 }
 
@@ -61,12 +60,11 @@ export interface UpdateBusinessInfoResp {
   businessOwnerId: UUIDString;
 }
 
-// TODO: Update names
 export interface UpdateBusinessOwner {
   firstName: string;
   lastName: string;
-  birthdate: string;
-  taxNumber: string;
+  dateOfBirth: string;
+  taxIdentificationNumber: string;
   email: string;
   address: Readonly<Address>;
 }

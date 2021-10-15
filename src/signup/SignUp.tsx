@@ -5,7 +5,7 @@ import twLogo from 'app/assets/tw-logo.svg';
 import { wait } from '_common/utils/wait';
 import { getNoop } from '_common/utils/getNoop';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
-import { saveBusinessProspectID, readBusinessProspectID } from 'onboarding/utils/storeBusinessIDs';
+import { saveBusinessProspectID, readBusinessProspectID } from 'onboarding/storage';
 import { IdentifierType } from 'onboarding/types';
 
 import { Box } from './components/Box';
@@ -14,6 +14,7 @@ import { EmailForm } from './components/EmailForm';
 import { PhoneForm } from './components/PhoneForm';
 import { VerifyForm } from './components/VerifyForm';
 import { PasswordForm } from './components/PasswordForm';
+import { saveSignupName } from './storage';
 
 import css from './SignUp.css';
 
@@ -39,6 +40,8 @@ export default function SignUp() {
   let onSignup: (email: string) => Promise<unknown> = getNoop(true);
 
   const onNameUpdate = (firstName: string, lastName: string) => {
+    saveSignupName({ firstName, lastName });
+
     onSignup = async (email: string) => {
       const resp = await signup({ email, firstName, lastName });
       saveBusinessProspectID(resp.businessProspectId);

@@ -1,9 +1,9 @@
 import type { UUIDString } from 'app/types';
 import { storage } from '_common/api/storage';
 
-const PROSPECT_ID_KEY = 'bpid';
-const OWNER_ID_KEY = 'boid';
-const BUSINESS_ID_KEY = 'bid';
+const PROSPECT_ID_KEY = 'ob_prospect_id';
+const OWNER_ID_KEY = 'ob_owner_id';
+const BUSINESS_ID_KEY = 'ob_business_id';
 
 function read(name: string) {
   const id = storage.get<UUIDString>(name);
