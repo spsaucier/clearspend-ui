@@ -1,55 +1,74 @@
-import { Switch, Match } from 'solid-js';
-import { useNavigate } from 'solid-app-router';
+import { createSignal, createEffect, Show } from 'solid-js';
 import { useScript } from 'solid-use-script';
 
-import { useMediaContext } from '_common/api/media/context';
-import { Spin } from '_common/components/Spin';
-import { Button } from '_common/components/Button';
 import { Section } from 'app/components/Section';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { VerifyAccount } from '../VerifyAccount';
 import { readBusinessID } from '../../storage';
-import { getAccounts, getLinkToken } from '../../services/accounts';
+import { getLinkToken } from '../../services/accounts';
 
 import css from './LinkAccount.css';
 
 const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
 
-/* eslint-disable no-console */
-export function LinkAccount() {
-  const navigate = useNavigate();
-  const media = useMediaContext();
+interface LinkAccountProps {
+  onNext: (metadata: Readonly<PlaidMetadata>) => Promise<unknown>;
+}
 
-  getAccounts(readBusinessID())
-    .then(console.log)
-    .catch((err: unknown) => console.log({ err }));
+export function LinkAccount(props: Readonly<LinkAccountProps>) {
+  let handler: PlaidLink | undefined;
+  const [loadingNext, next] = wrapAction(props.onNext);
+
+  const [token, setToken] = createSignal<string>();
+  const [loadingScript, scriptError] = useScript(PLAID_SCRIPT);
+  const [loading, setLoading] = createSignal(true);
 
   getLinkToken(readBusinessID())
-    .then(console.log)
-    .catch((err: unknown) => console.log({ err }));
+    .then(setToken)
+    .catch(() => {
+      /* TODO */
+    });
 
-  const [loading, error] = useScript(PLAID_SCRIPT);
+  createEffect(() => {
+    const linkToken = token();
+    if (!linkToken || loadingScript()) return;
+
+    let data: PlaidMetadata | undefined;
+
+    handler = Plaid.create({
+      token: linkToken,
+      receivedRedirectUri: null,
+      onSuccess: (_, metadata) => {
+        data = metadata;
+      },
+      onLoad: () => setLoading(false),
+      onEvent: (eventName) => {
+        if (eventName === 'HANDOFF' && data) {
+          next(data).catch(() => {
+            /* TODO */
+          });
+        }
+      },
+    });
+  });
 
   return (
     <Section
       title="Connect your account"
       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec tempor."
     >
-      <Switch
-        fallback={
-          <div class={css.wrapper}>
-            <VerifyAccount class={css.verify} />
-            <Button type="primary" wide={media.small} onClick={() => navigate('/onboarding/money')}>
-              Next
-            </Button>
-          </div>
-        }
-      >
-        <Match when={loading()}>
-          <Spin />
-        </Match>
-        <Match when={error()}>Failed to load API.</Match>
-      </Switch>
+      <Show when={!scriptError()} fallback="Failed to load API">
+        <div class={css.wrapper}>
+          <VerifyAccount
+            loading={loadingScript() || loading() || loadingNext()}
+            class={css.verify}
+            onVerifyClick={() => {
+              handler?.open();
+            }}
+          />
+        </div>
+      </Show>
     </Section>
   );
 }

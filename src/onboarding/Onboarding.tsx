@@ -1,4 +1,4 @@
-import { createSignal, Show, Switch, Match } from 'solid-js';
+import { createSignal, batch, Show, Switch, Match } from 'solid-js';
 
 import { Icon } from '_common/components/Icon';
 import { useMediaContext } from '_common/api/media/context';
@@ -11,9 +11,11 @@ import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
 import { LinkAccount } from './components/LinkAccount';
-import { TransferMoney } from './components/TransferMoney';
+import { TransferMoney, AccountsData } from './components/TransferMoney';
 import { setBusinessInfo, setBusinessOwner } from './services/onboarding';
+import { getBusinessAccounts, deposit } from './services/accounts';
 import {
+  readBusinessID,
   readBusinessProspectID,
   removeBusinessProspectID,
   saveBusinessOwnerID,
@@ -31,6 +33,7 @@ export default function Onboarding() {
 
   // TODO: Check init
   const [step, setStep] = createSignal<OnboardingStep>(OnboardingStep.kyb);
+  const [accounts, setAccounts] = createSignal<AccountsData>();
 
   const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
     const resp = await setBusinessInfo(readBusinessProspectID(), data);
@@ -44,6 +47,18 @@ export default function Onboarding() {
     await setBusinessOwner(readBusinessOwnerID(), data);
     removeBusinessOwnerID();
     setStep(OnboardingStep.account);
+  };
+
+  const onGotVerifyToken = async (data: Readonly<PlaidMetadata>) => {
+    const innerAccounts = await getBusinessAccounts(readBusinessID(), data.public_token);
+    batch(() => {
+      setAccounts({ plaid: data.accounts, inner: innerAccounts });
+      setStep(OnboardingStep.money);
+    });
+  };
+
+  const onDeposit = async (accountId: string, amount: number) => {
+    await deposit(readBusinessID(), accountId, amount);
   };
 
   return (
@@ -80,12 +95,14 @@ export default function Onboarding() {
         </Match>
         <Match when={step() === OnboardingStep.account}>
           <Page title="Link your bank account" contentClass={css.content}>
-            <LinkAccount />
+            <LinkAccount onNext={onGotVerifyToken} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.money}>
           <Page title="Transfer money" contentClass={css.content}>
-            <TransferMoney />
+            <Show when={accounts()}>
+              <TransferMoney data={accounts()!} onDeposit={onDeposit} />
+            </Show>
           </Page>
         </Match>
       </Switch>

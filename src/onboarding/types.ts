@@ -68,3 +68,9 @@ export interface UpdateBusinessOwner {
   email: string;
   address: Readonly<Address>;
 }
+
+export interface BusinessBankAccount {
+  routingNumber: string;
+  accountNumber: string;
+  accessToken: string;
+}

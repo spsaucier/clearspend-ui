@@ -1,5 +1,11 @@
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
 
+function parse<T = unknown>(body: string, type: string | null): T {
+  if (type?.includes('application/json')) return JSON.parse(body) as T;
+  if (type?.includes('text/plain')) return body as unknown as T;
+  return null as unknown as T;
+}
+
 export function fetch<T = unknown>(
   method: FetchMethod,
   url: string,
@@ -20,7 +26,10 @@ export function fetch<T = unknown>(
         return resp
           .text()
           .then((body: string) => {
-            const result: FetchResponse<T> = { ...response, data: (body ? JSON.parse(body) : null) as T };
+            const result: FetchResponse<T> = {
+              ...response,
+              data: parse(body, resp.headers.get('content-type')),
+            };
             resp.ok ? resolve(result) : reject(result);
           })
           .catch((error: unknown) => {

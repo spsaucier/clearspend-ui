@@ -45,6 +45,7 @@ module.exports = (env, options) => {
           target: process.env.DEV_API || '',
           changeOrigin: true,
           logLevel: 'debug',
+          pathRewrite: { '^/api': '' },
         },
       },
     },
