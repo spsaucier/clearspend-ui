@@ -1,5 +1,6 @@
 import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
+import { Text } from 'solid-i18n';
 
 import twLogo from 'app/assets/tw-logo.svg';
 import { wait } from '_common/utils/wait';
@@ -34,6 +35,7 @@ const confirm = async () => wait(2000);
 export default function SignUp() {
   const navigate = useNavigate();
 
+  const [shared, setShared] = createSignal<string>('');
   const [step, setStep] = createSignal<Step>(Step.name);
   const next = () => setStep((prev) => prev + 1);
 
@@ -43,6 +45,7 @@ export default function SignUp() {
     saveSignupName({ firstName, lastName });
 
     onSignup = async (email: string) => {
+      setShared(email);
       const resp = await signup({ email, firstName, lastName });
       saveBusinessProspectID(resp.businessProspectId);
       next();
@@ -56,6 +59,7 @@ export default function SignUp() {
   };
 
   const onPhoneUpdate = async (phone: string) => {
+    setShared(phone);
     await setPhone(readBusinessProspectID(), phone);
     next();
   };
@@ -87,7 +91,13 @@ export default function SignUp() {
             <Match when={step() === Step.emailConfirm}>
               <VerifyForm
                 header="Verify your email"
-                description="We have sent a confirmation code to j.smith@company.com"
+                description={
+                  <Text
+                    message="We have sent a confirmation code to <b>{email}</b>"
+                    b={(text) => <strong>{text}</strong>}
+                    email={shared()}
+                  />
+                }
                 // TODO: need API
                 onResend={confirm}
                 onConfirm={onEmailConfirm}
@@ -99,7 +109,13 @@ export default function SignUp() {
             <Match when={step() === Step.phoneConfirm}>
               <VerifyForm
                 header="Verify your phone number"
-                description="We have sent a confirmation code to (555) 555-5555"
+                description={
+                  <Text
+                    message="We have sent a confirmation code to <b>{phone}</b>"
+                    b={(text) => <strong>{text}</strong>}
+                    phone={shared()}
+                  />
+                }
                 // TODO: need API
                 onResend={confirm}
                 onConfirm={onPhoneConfirm}

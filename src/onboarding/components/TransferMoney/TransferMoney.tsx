@@ -1,6 +1,8 @@
 import { createSignal, For } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { useMediaContext } from '_common/api/media/context';
+import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Button } from '_common/components/Button';
@@ -10,6 +12,8 @@ import { wrapAction } from '_common/utils/wrapAction';
 
 import { BankAccount } from '../BankAccount';
 import type { BusinessBankAccount } from '../../types';
+
+import { DEPOSIT_MIN_AMOUNT } from './rules';
 
 import css from './TransferMoney.css';
 
@@ -47,7 +51,12 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section
         title="Add balance"
-        description="To have an active account, you need a minimum balance of $100.00."
+        description={
+          <Text
+            message="To have an active account, you need a minimum balance of {amount}."
+            amount={formatCurrency(DEPOSIT_MIN_AMOUNT)}
+          />
+        }
         class={css.section}
       >
         <div class={css.wrapper}>

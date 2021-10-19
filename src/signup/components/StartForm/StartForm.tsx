@@ -1,4 +1,6 @@
 import { onMount } from 'solid-js';
+import { Link } from 'solid-app-router';
+import { Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
@@ -31,7 +33,12 @@ export function StartForm(props: Readonly<StartFormProps>) {
   return (
     <div>
       <Header>Get started</Header>
-      <Description>Already have an account? Log in here</Description>
+      <Description>
+        <Text
+          message="Already have an account? <link>Log in here</link>"
+          link={(text) => <Link href="/login">{text}</Link>}
+        />
+      </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="First name" error={errors().firstName}>
           <Input

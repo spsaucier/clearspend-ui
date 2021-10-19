@@ -1,4 +1,5 @@
 import { onMount } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
@@ -9,7 +10,7 @@ import { Header } from '../Header';
 import { Description } from '../Description';
 
 import type { FormValues } from './types';
-import { minLength, samePassword } from './rules';
+import { minLength, samePassword, PASSWORD_MIN_LENGTH } from './rules';
 
 interface PasswordFormProps {
   onCreateAccount: (password: string) => Promise<unknown>;
@@ -32,7 +33,12 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
   return (
     <div>
       <Header>Create a password</Header>
-      <Description>Your password must be at least 8 characters long.</Description>
+      <Description>
+        <Text
+          message="Your password must be at least {count} {count, plural, one {character} other {characters}} long."
+          count={PASSWORD_MIN_LENGTH}
+        />
+      </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Password" error={errors().password}>
           <Input

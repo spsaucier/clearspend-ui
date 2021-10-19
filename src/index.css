@@ -164,3 +164,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+a {
+  color: var(--tw-primary);
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--tw-primary-dark);
+    text-decoration: underline;
+  }
+}
