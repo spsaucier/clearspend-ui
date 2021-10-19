@@ -40,6 +40,7 @@ export function Input(props: Readonly<InputProps>) {
       <input
         ref={props.ref}
         name={merged.name}
+        data-name={merged.name}
         value={merged.value || ''}
         maxLength={merged.maxLength}
         type={merged.type}

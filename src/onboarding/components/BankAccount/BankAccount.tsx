@@ -16,7 +16,7 @@ export function BankAccount(props: Readonly<BankAccountProps>) {
     <div
       class={join(css.root, props.class)}
       classList={{ [css.selected!]: props.selected }}
-      onClick={() => props.onSelect(props.data.id)}
+      onClick={() => props.onSelect(props.data.mask)}
     >
       <Icon name="payment-bank" class={css.icon} />
       <div>

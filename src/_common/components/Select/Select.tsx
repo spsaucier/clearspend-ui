@@ -1,4 +1,4 @@
-import { createSignal, createMemo, JSXElement } from 'solid-js';
+import { JSX, createSignal, createMemo, JSXElement } from 'solid-js';
 
 import { join } from '../../utils/join';
 import { Icon } from '../Icon';
@@ -27,8 +27,13 @@ export function Select(props: Readonly<SelectProps>) {
 
   const selected = createMemo(() => props.value && getSelected(props.value, props.children));
 
+  const onInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
+    props.onChange?.(event.currentTarget.value);
+  };
+
   const onChange = (value: string) => {
-    props.onChange?.(value);
+    input.value = value;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
     setOpen(false);
   };
 
@@ -61,12 +66,18 @@ export function Select(props: Readonly<SelectProps>) {
           ref={input}
           readonly
           name={props.name}
+          data-name={props.name}
+          value={props.value}
           class={css.input}
-          onFocusIn={() => setOpen(true)}
+          onFocusIn={() => {
+            clearFocusTimeout();
+            setOpen(true);
+          }}
           onFocusOut={() => {
             clearFocusTimeout();
             focusTimeout = setTimeout(() => setOpen(false), FOCUS_OUT_DELAY);
           }}
+          onInput={onInput}
         />
         <div class={css.value}>{selected() || <span class={css.placeholder}>{props.placeholder}</span>}</div>
         <Icon name="chevron-down" size="sm" class={join(css.chevron)} />

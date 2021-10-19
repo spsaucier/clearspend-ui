@@ -69,8 +69,14 @@ export interface UpdateBusinessOwner {
   address: Readonly<Address>;
 }
 
-export interface BusinessBankAccount {
-  routingNumber: string;
-  accountNumber: string;
-  accessToken: string;
+// export interface BusinessBankAccount {
+//   routingNumber: string;
+//   accountNumber: string;
+//   accessToken: string;
+// }
+
+export interface LinkedBankAccounts {
+  accountLastFour: string;
+  businessBankAccountId: UUIDString;
+  name: null;
 }

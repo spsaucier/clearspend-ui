@@ -1,4 +1,5 @@
 import { createSignal, batch, Show, Switch, Match } from 'solid-js';
+import { useNavigate } from 'solid-app-router';
 
 import { Icon } from '_common/components/Icon';
 import { useMediaContext } from '_common/api/media/context';
@@ -29,6 +30,7 @@ import css from './Onboarding.css';
 
 export default function Onboarding() {
   const media = useMediaContext();
+  const navigate = useNavigate();
   const name = readSignupName();
 
   // TODO: Check init
@@ -59,6 +61,7 @@ export default function Onboarding() {
 
   const onDeposit = async (accountId: string, amount: number) => {
     await deposit(readBusinessID(), accountId, amount);
+    navigate('/');
   };
 
   return (

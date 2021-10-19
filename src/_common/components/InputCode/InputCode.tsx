@@ -67,7 +67,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
   };
 
   return (
-    <div class={join(css.root, props.class)}>
+    <div data-name={props.name} class={join(css.root, props.class)}>
       <Index each={times(CODE_LENGTH)}>
         {(_: unknown, idx: number) => (
           <Input

@@ -4,6 +4,7 @@ import { SignUp } from 'signup';
 import { Onboarding } from 'onboarding';
 
 import { Login } from './pages/Login';
+import { Main } from './pages/Main';
 
 export function App() {
   return (
@@ -12,6 +13,7 @@ export function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Main />} />
       </Routes>
     </div>
   );

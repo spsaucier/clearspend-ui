@@ -11,7 +11,7 @@ import { Section } from 'app/components/Section';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { BankAccount } from '../BankAccount';
-import type { BusinessBankAccount } from '../../types';
+import type { LinkedBankAccounts } from '../../types';
 
 import { DEPOSIT_MIN_AMOUNT } from './rules';
 
@@ -19,7 +19,7 @@ import css from './TransferMoney.css';
 
 export interface AccountsData {
   plaid: PlaidMetadata['accounts'];
-  inner: readonly Readonly<BusinessBankAccount>[];
+  inner: readonly Readonly<LinkedBankAccounts>[];
 }
 
 interface FormValues {
@@ -42,7 +42,11 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    deposit(selected()!, parseInt(data.amount, 10)).catch(() => {
+    const mask = selected();
+    const bankId = props.data.inner.find((item) => item.accountLastFour === mask)?.businessBankAccountId;
+    if (!bankId) return;
+
+    deposit(bankId, parseInt(data.amount, 10)).catch(() => {
       /* TODO */
     });
   };
@@ -74,10 +78,10 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
         <div class={css.wrapper}>
           <For each={props.data.plaid}>
             {(item) => (
-              <BankAccount data={item} selected={selected() === item.id} class={css.account} onSelect={setSelected} />
+              <BankAccount data={item} selected={selected() === item.mask} class={css.account} onSelect={setSelected} />
             )}
           </For>
-          <Button type="primary" ghost icon="add" size="sm" class={css.button}>
+          <Button type="primary" ghost icon="add" size="sm" disabled class={css.button}>
             Add New Bank Account
           </Button>
         </div>
