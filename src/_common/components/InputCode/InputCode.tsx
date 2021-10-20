@@ -9,7 +9,7 @@ import css from './InputCode.css';
 const CODE_LENGTH = 6;
 
 export interface InputCodeProps {
-  ref?: (el: HTMLInputElement) => void;
+  ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
   name?: string;
   value: string;
   error?: boolean;

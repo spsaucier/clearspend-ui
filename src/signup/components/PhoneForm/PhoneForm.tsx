@@ -4,12 +4,11 @@ import { Form, FormItem, createForm } from '_common/components/Form';
 import { validPhone } from '_common/components/Form/rules/patterns';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
+import { cleanPhone, formatPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
-
-import { minLength } from './rules';
 
 interface FormValues {
   phone: string;
@@ -27,11 +26,11 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
 
   const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
     defaultValues: { phone: '' },
-    rules: { phone: [minLength, validPhone] },
+    rules: { phone: [(val) => validPhone(cleanPhone(val))] },
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(data.phone.replace(/[^+\d]/g, '')).catch(() => setErrors({ phone: 'Something going wrong' }));
+    next(cleanPhone(data.phone)).catch(() => setErrors({ phone: 'Something going wrong' }));
   };
 
   return (
@@ -44,6 +43,7 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
             ref={input}
             name="phone"
             type="tel"
+            formatter={formatPhone}
             value={values().phone}
             error={Boolean(errors().phone)}
             onChange={handlers.phone}

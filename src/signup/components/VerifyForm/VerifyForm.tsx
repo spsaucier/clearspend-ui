@@ -27,8 +27,8 @@ interface VerifyFormProps {
 }
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
-  let input: HTMLInputElement | undefined;
-  onMount(() => input?.focus());
+  let input!: HTMLInputElement;
+  onMount(() => input.focus());
 
   const [secondsLeft, restartTimer] = createTimer(RESEND_TIMEOUT_IN_SEC);
 
@@ -55,9 +55,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       <Form>
         <FormItem label="Enter confirmation code">
           <InputCode
-            ref={(el) => {
-              input = el;
-            }}
+            ref={input}
             name="code"
             value={values().code}
             error={Boolean(errors().code)}

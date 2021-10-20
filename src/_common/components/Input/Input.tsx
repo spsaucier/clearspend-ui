@@ -12,6 +12,7 @@ export interface InputProps {
   maxLength?: number;
   type?: 'text' | 'password' | 'email' | 'tel';
   inputMode?: 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
+  formatter?: (value: string) => string;
   autoComplete?: string;
   placeholder?: string;
   suffix?: JSXElement;
@@ -26,10 +27,21 @@ export interface InputProps {
 }
 
 export function Input(props: Readonly<InputProps>) {
+  let input!: HTMLInputElement;
   const merged = mergeProps({ type: 'text' }, props);
 
+  const setInputRef = (element: HTMLInputElement) => {
+    if (typeof merged.ref === 'function') merged.ref(element);
+    input = element;
+  };
+
   const onChange: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
-    merged.onChange?.(event.currentTarget.value, event);
+    let text = event.currentTarget.value;
+    if (typeof merged.formatter === 'function') {
+      text = merged.formatter(text);
+      input.value = text;
+    }
+    merged.onChange?.(text, event);
   };
 
   return (
@@ -38,7 +50,7 @@ export function Input(props: Readonly<InputProps>) {
       classList={{ [css.error!]: merged.error, [css.disabled!]: merged.disabled }}
     >
       <input
-        ref={props.ref}
+        ref={setInputRef}
         name={merged.name}
         data-name={merged.name}
         value={merged.value || ''}

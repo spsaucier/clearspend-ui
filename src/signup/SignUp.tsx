@@ -3,8 +3,8 @@ import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import twLogo from 'app/assets/tw-logo.svg';
-import { wait } from '_common/utils/wait';
 import { getNoop } from '_common/utils/getNoop';
+import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { saveBusinessProspectID, readBusinessProspectID } from 'onboarding/storage';
 import { IdentifierType } from 'onboarding/types';
@@ -27,10 +27,6 @@ enum Step {
   phoneConfirm,
   password,
 }
-
-// TODO:
-// eslint-disable-next-line @typescript-eslint/no-magic-numbers
-const confirm = async () => wait(2000);
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -99,7 +95,7 @@ export default function SignUp() {
                   />
                 }
                 // TODO: need API
-                onResend={confirm}
+                onResend={Promise.resolve}
                 onConfirm={onEmailConfirm}
               />
             </Match>
@@ -113,11 +109,11 @@ export default function SignUp() {
                   <Text
                     message="We have sent a confirmation code to <b>{phone}</b>"
                     b={(text) => <strong>{text}</strong>}
-                    phone={shared()}
+                    phone={formatPhone(shared())}
                   />
                 }
                 // TODO: need API
-                onResend={confirm}
+                onResend={Promise.resolve}
                 onConfirm={onPhoneConfirm}
               />
             </Match>

@@ -1,5 +1,14 @@
 import { i18n } from './index';
 
-export function formatCurrency(value: number): string {
-  return i18n.formatNumber(value, { style: 'currency', currency: 'USD' });
+interface FormatCurrencyOptions {
+  fractions: number;
+}
+
+export function formatCurrency(value: number, options?: Readonly<Partial<FormatCurrencyOptions>>): string {
+  return i18n.formatNumber(value, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: options?.fractions,
+    maximumFractionDigits: options?.fractions,
+  });
 }

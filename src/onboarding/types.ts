@@ -69,6 +69,10 @@ export interface UpdateBusinessOwner {
   address: Readonly<Address>;
 }
 
+export interface LinkToken {
+  linkToken: string;
+}
+
 // export interface BusinessBankAccount {
 //   routingNumber: string;
 //   accountNumber: string;
