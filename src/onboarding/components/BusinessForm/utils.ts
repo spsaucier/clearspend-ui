@@ -1,6 +1,7 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validPhone, validZipCode } from '_common/components/Form/rules/patterns';
+import { cleanPhone } from '_common/formatters/phone';
 
 import type { BusinessType, UpdateBusinessInfo } from '../../types';
 
@@ -23,7 +24,7 @@ export function getFormOptions(): FormOptions<FormValues> {
       name: [required],
       type: [required],
       ein: [required],
-      phone: [required, validPhone],
+      phone: [(val) => validPhone(cleanPhone(val))],
       line1: [required],
       city: [required],
       state: [required],
@@ -37,7 +38,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusi
     legalName: data.name,
     businessType: data.type as BusinessType,
     employerIdentificationNumber: data.ein,
-    businessPhone: data.phone,
+    businessPhone: cleanPhone(data.phone),
     address: {
       streetLine1: data.line1,
       streetLine2: data.line2,

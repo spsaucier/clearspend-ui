@@ -1,40 +1,66 @@
-import { JSX, createSignal, createMemo, JSXElement } from 'solid-js';
+import { createSignal, createMemo, batch } from 'solid-js';
 
-import { join } from '../../utils/join';
 import { Icon } from '../Icon';
+import { Input } from '../Input';
 import { Popover } from '../Popover';
+import { join } from '../../utils/join';
 
 import { SelectContext } from './context';
+import { getOptions, getSelected, isMatch } from './utils';
 import type { SelectProps } from './types';
 
 import css from './Select.css';
 
 const FOCUS_OUT_DELAY = 200;
 
-function getSelected(value: string, elements: JSXElement): string | undefined {
-  const items = typeof elements === 'function' ? elements() : elements;
-  return Array.isArray(items)
-    ? (items as HTMLElement[]).find((el) => el.dataset.value === value)?.innerText
-    : undefined;
-}
-
 export function Select(props: Readonly<SelectProps>) {
   let input!: HTMLInputElement;
   const [open, setOpen] = createSignal(false);
+  const [search, setSearch] = createSignal('');
 
   let focusTimeout: number;
   const clearFocusTimeout = () => clearTimeout(focusTimeout);
 
   const selected = createMemo(() => props.value && getSelected(props.value, props.children));
 
-  const onInput: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
-    props.onChange?.(event.currentTarget.value);
+  const options = () => {
+    const text = search().toLowerCase();
+    const items = getOptions(props.children);
+    return !text ? items : items.filter(isMatch(text));
+  };
+
+  const onSearch = (value: string) => {
+    setSearch(value);
+    if (!value) {
+      props.onChange?.('');
+      return;
+    }
+    const exact = options().find((el) => el.innerText === value);
+    if (exact) props.onChange?.(exact.dataset.value!);
   };
 
   const onChange = (value: string) => {
-    input.value = value;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    setOpen(false);
+    batch(() => {
+      setSearch('');
+      setOpen(false);
+    });
+    props.onChange?.(value);
+  };
+
+  const onFocusIn = () => {
+    clearFocusTimeout();
+    setOpen(true);
+  };
+
+  const onFocusOut = () => {
+    clearFocusTimeout();
+    focusTimeout = setTimeout(() => {
+      setOpen(false);
+      if (search() && !options().length) {
+        setSearch('');
+        input.value = selected() || '';
+      }
+    }, FOCUS_OUT_DELAY);
   };
 
   return (
@@ -42,44 +68,27 @@ export function Select(props: Readonly<SelectProps>) {
       open={open()}
       class={css.popup}
       position={props.up ? 'top-left' : 'bottom-left'}
-      onClickOutside={() => setOpen(false)}
+      // onClickOutside={() => setOpen(false)}
       content={
         <ul class={css.list}>
-          <SelectContext.Provider value={{ value: props.value, onChange }}>{props.children}</SelectContext.Provider>
+          <SelectContext.Provider value={{ value: props.value, onChange }}>{options()}</SelectContext.Provider>
         </ul>
       }
     >
-      <div
-        class={join(css.root, props.class)}
-        classList={{
-          [css.open!]: open(),
-          [css.error!]: props.error,
-          [css.disabled!]: props.disabled,
-        }}
-        onClick={() => {
-          setOpen(true);
-          input.focus();
-        }}
-      >
-        {/* TODO: Add keyboard navigation support */}
-        <input
+      <div class={join(css.root, props.class)} data-open={open()}>
+        <Input
           ref={input}
-          readonly
           name={props.name}
-          data-name={props.name}
-          value={props.value}
-          class={css.input}
-          onFocusIn={() => {
-            clearFocusTimeout();
-            setOpen(true);
-          }}
-          onFocusOut={() => {
-            clearFocusTimeout();
-            focusTimeout = setTimeout(() => setOpen(false), FOCUS_OUT_DELAY);
-          }}
-          onInput={onInput}
+          value={selected()}
+          error={props.error}
+          placeholder={props.placeholder}
+          autoComplete="off"
+          disabled={props.disabled}
+          inputClass={css.input}
+          onChange={onSearch}
+          onFocusIn={onFocusIn}
+          onFocusOut={onFocusOut}
         />
-        <div class={css.value}>{selected() || <span class={css.placeholder}>{props.placeholder}</span>}</div>
         <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
       </div>
     </Popover>

@@ -19,6 +19,7 @@ export interface InputProps {
   error?: boolean;
   disabled?: boolean;
   class?: string;
+  inputClass?: string;
   onChange?: (value: string, event: InputEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
   onPaste?: (event: ClipboardEvent) => void;
@@ -60,7 +61,7 @@ export function Input(props: Readonly<InputProps>) {
         autocomplete={merged.autoComplete}
         placeholder={merged.placeholder}
         disabled={merged.disabled}
-        class={css.input}
+        class={join(css.input, merged.inputClass)}
         onInput={onChange}
         onKeyDown={merged.onKeyDown}
         onPaste={merged.onPaste}

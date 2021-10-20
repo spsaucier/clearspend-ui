@@ -7,6 +7,7 @@ import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { keys } from '_common/utils/keys';
 import { useMediaContext } from '_common/api/media/context';
+import { formatPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { BUSINESS_TYPES, USA_STATES } from '../../constants/usa';
@@ -59,6 +60,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               type="tel"
               name="corporate-phone-number"
               value={values().phone}
+              formatter={formatPhone}
               error={Boolean(errors().phone)}
               onChange={handlers.phone}
             />
