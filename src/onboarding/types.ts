@@ -73,14 +73,9 @@ export interface LinkToken {
   linkToken: string;
 }
 
-// export interface BusinessBankAccount {
-//   routingNumber: string;
-//   accountNumber: string;
-//   accessToken: string;
-// }
-
 export interface LinkedBankAccounts {
-  accountLastFour: string;
+  accountNumber: string;
   businessBankAccountId: UUIDString;
+  routingNumber: string;
   name: null;
 }

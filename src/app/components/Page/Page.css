@@ -20,6 +20,26 @@
   z-index: var(--z-index-page);
 }
 
+.header-main {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--pd-24);
+
+  @media (--bp-medium) {
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--pd-8) var(--pd-12);
+}
+
 .title {
   margin: 0;
   font-family: var(--font-special);

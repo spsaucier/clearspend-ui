@@ -1,0 +1,6 @@
+.actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--pd-8) var(--pd-12);
+}

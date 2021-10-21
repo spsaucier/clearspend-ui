@@ -27,6 +27,12 @@
   line-height: var(--line-16);
 }
 
+.primary {
+  color: var(--tw-primary);
+  background-color: var(--tw-blue-light);
+  border-color: var(--tw-blue-20);
+}
+
 .label {
   font-weight: var(--font-500);
 }

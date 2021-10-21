@@ -1,6 +1,40 @@
 .root {
+  display: flex;
   min-height: 100%;
-  padding: var(--pd-32) var(--pd-48);
+  padding: var(--pd-32) var(--pd-16);
+  flex-direction: column;
   flex-grow: 1;
+  gap: var(--pd-24);
   background: var(--tw-gray-10);
+
+  @media (--bp-medium) {
+    padding: var(--pd-32) var(--pd-48);
+  }
+
+  @media (--bp-large) {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}
+
+.card {
+  padding: var(--pd-24);
+  background: var(--tw-white);
+  border-radius: var(--radius-20);
+}
+
+.card-title {
+  margin: 0 0 var(--pd-8);
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  line-height: var(--line-28);
+}
+
+.card-message {
+  margin: 0;
+  color: var(--tw-gray-60);
+}
+
+.card-action {
+  margin-top: var(--pd-24);
 }

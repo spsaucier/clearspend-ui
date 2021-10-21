@@ -6,6 +6,8 @@ import css from './Page.css';
 
 interface PageProps {
   title: JSXElement;
+  extra?: JSXElement;
+  actions?: JSXElement;
   stickyHeader?: boolean;
   class?: string;
   contentClass?: string;
@@ -18,7 +20,13 @@ export function Page(props: Readonly<PageProps>) {
   return (
     <div class={join(css.root, props.class)}>
       <header class={css.header} classList={{ [css.stickyHeader!]: props.stickyHeader }}>
-        <h1 class={css.title}>{props.title}</h1>
+        <div class={css.headerMain}>
+          <div class={css.titleWrap}>
+            <h1 class={css.title}>{props.title}</h1>
+            {props.extra}
+          </div>
+          {props.actions}
+        </div>
       </header>
       <div class={join(css.content, props.contentClass)}>{props.children}</div>
     </div>

@@ -7,6 +7,9 @@ import { Button } from '_common/components/Button';
 
 import { MainMenu } from '../MainMenu';
 
+import testLogo from './assets/test.png';
+import testSmLogo from './assets/test-sm.png';
+
 import css from './Sidebar.css';
 
 export function Sidebar() {
@@ -15,7 +18,11 @@ export function Sidebar() {
 
   return (
     <div class={css.root}>
-      <div class={css.header}>LOGO</div>
+      <div class={css.header}>
+        <Show when={media.small} fallback={<img src={testLogo} alt="Company logo" class={css.logo} />}>
+          <img src={testSmLogo} alt="Company logo" class={css.logo} />
+        </Show>
+      </div>
       <Show when={media.small}>
         <Popover
           open={menuOpen()}

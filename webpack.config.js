@@ -119,7 +119,7 @@ module.exports = (env, options) => {
           type: 'asset/source',
         },
         {
-          test: /\.svg$/,
+          test: /\.(svg|png)$/,
           exclude: /icons\/[a-z-]+\.svg$/,
           type: 'asset/resource',
           generator: {

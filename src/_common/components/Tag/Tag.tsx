@@ -6,6 +6,7 @@ import css from './Tag.css';
 
 export interface TagProps {
   label?: string;
+  type?: 'default' | 'primary';
   size?: 'md' | 'sm' | 'xs';
   class?: string;
   children?: JSXElement;
@@ -18,6 +19,7 @@ export function Tag(props: Readonly<TagProps>) {
       classList={{
         [css.sm!]: props.size === 'sm',
         [css.xs!]: props.size === 'xs',
+        [css.primary!]: props.type === 'primary',
       }}
     >
       <Show when={props.label}>

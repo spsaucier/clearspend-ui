@@ -4,6 +4,10 @@ export default {
   title: 'Common/Tag',
   component: Tag,
   argTypes: {
+    type: {
+      options: ['default', 'primary'],
+      control: { type: 'radio' },
+    },
     size: {
       options: ['md', 'sm', 'xs'],
       control: { type: 'radio' },
@@ -12,6 +16,7 @@ export default {
     children: { control: { type: 'text' } },
   },
   args: {
+    type: 'default',
     size: 'md',
     label: 'Label',
     children: 'Text...',

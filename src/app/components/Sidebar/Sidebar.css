@@ -27,6 +27,17 @@
   }
 }
 
+/* TODO */
+.logo {
+  height: 24px;
+
+  @media (--bp-medium) {
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+  }
+}
+
 .menu-button {
   width: auto;
   height: auto;

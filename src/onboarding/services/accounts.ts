@@ -12,8 +12,12 @@ export async function getLinkToken(bid: UUIDString) {
 }
 
 export async function getBusinessAccounts(bid: UUIDString, publicToken: string) {
-  await service.get(`/business-bank-accounts/link-token/${publicToken}/accounts`, getHeaders(bid));
-  return (await service.get<readonly Readonly<LinkedBankAccounts>[]>('/business-bank-accounts', getHeaders(bid))).data;
+  return (
+    await service.get<readonly Readonly<LinkedBankAccounts>[]>(
+      `/business-bank-accounts/link-token/${publicToken}/accounts`,
+      getHeaders(bid),
+    )
+  ).data;
 }
 
 export async function deposit(bid: UUIDString, accountId: string, amount: number) {

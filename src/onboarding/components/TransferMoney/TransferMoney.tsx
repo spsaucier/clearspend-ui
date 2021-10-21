@@ -17,6 +17,8 @@ import { DEPOSIT_MIN_AMOUNT, validAmount } from './rules';
 
 import css from './TransferMoney.css';
 
+const NUM_MASK_LENGTH = 4;
+
 export interface AccountsData {
   plaid: PlaidMetadata['accounts'];
   inner: readonly Readonly<LinkedBankAccounts>[];
@@ -43,7 +45,11 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
 
   const onSubmit = (data: Readonly<FormValues>) => {
     const mask = selected();
-    const bankId = props.data.inner.find((item) => item.accountLastFour === mask)?.businessBankAccountId;
+
+    const bankId = props.data.inner.find(
+      (item) => item.accountNumber.slice(-NUM_MASK_LENGTH) === mask,
+    )?.businessBankAccountId;
+
     if (!bankId) return;
 
     deposit(bankId, parseAmount(data.amount)).catch(() => {
