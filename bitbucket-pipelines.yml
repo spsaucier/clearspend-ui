@@ -3,9 +3,6 @@
 #  This template allows you to validate your NodeJS code.
 #  The workflow allows running tests and code linting on the default branch.
 
-options:
-  docker: true
-
 pipelines:
   branches:
     '{develop,master}':
@@ -23,4 +20,14 @@ pipelines:
           - docker build -t $DOCKER_IMAGE_NAME:${BITBUCKET_COMMIT} .
           - docker tag $DOCKER_IMAGE_NAME:${BITBUCKET_COMMIT} $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
           - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
-
+    - step:
+        name: Deploy image to GKE
+        image: google/cloud-sdk:latest
+        runs-on:
+          - 'self.hosted'
+        script:
+          - echo "$GKE_DEPLOY_KEY" | base64 -d > ~/.gcloud-api-key.json
+          - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+          - gcloud config set project $GCLOUD_PROJECT_ID
+          - gcloud container clusters get-credentials $GCLOUD_CLUSTER --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
+          - kubectl rollout restart deployment capital-core
