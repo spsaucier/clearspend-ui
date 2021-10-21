@@ -23,12 +23,15 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
 
   const [loading, create] = wrapAction(props.onCreateAccount);
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
+  const { values, errors, setErrors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { password: '', confirm: '' },
     rules: { password: [minLength], confirm: [samePassword] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) => create(data.password);
+  const onSubmit = (data: Readonly<FormValues>) =>
+    create(data.password).catch(() => {
+      setErrors({ password: 'Something going wrong' });
+    });
 
   return (
     <div>

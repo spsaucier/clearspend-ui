@@ -10,7 +10,7 @@
 
 .account {
   &:not(:last-of-type) {
-    margin-bottom: var(--pd-8);
+    margin-bottom: var(--pd-24);
   }
 }
 
