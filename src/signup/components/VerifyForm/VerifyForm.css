@@ -1,9 +1,6 @@
 .note {
+  margin-bottom: var(--pd-8);
   font-size: var(--text-12);
   line-height: var(--line-16);
   text-align: center;
-}
-
-.timer {
-  white-space: nowrap;
 }

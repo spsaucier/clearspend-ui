@@ -1,4 +1,4 @@
-import { JSXElement, Show, onMount } from 'solid-js';
+import { JSXElement, onMount } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { InputCode } from '_common/components/InputCode';
@@ -44,7 +44,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
     handlers.code(code);
 
     if (code.length === VALID_LENGTH) {
-      confirm(code).catch(() => setErrors({ code: 'Invalid code.' }));
+      confirm(code).catch(() => setErrors({ code: 'Invalid code or something going wrong' }));
     }
   };
 
@@ -53,7 +53,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       <Header>{props.header}</Header>
       <Description>{props.description}</Description>
       <Form>
-        <FormItem label="Enter confirmation code">
+        <FormItem label="Enter confirmation code" error={errors().code}>
           <InputCode
             ref={input}
             name="code"
@@ -63,18 +63,11 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
             onChange={onChange}
           />
         </FormItem>
-        <Show
-          when={secondsLeft() === 0 || loading()}
-          fallback={
-            <Description class={css.note}>
-              Didn't receive the code? <strong class={css.timer}>Resending code in {secondsLeft()} seconds.</strong>
-            </Description>
-          }
-        >
-          <Button wide loading={resending() || loading()} onClick={resend}>
-            Resend confirmation code
-          </Button>
-        </Show>
+        <Description class={css.note}>Didn't receive the code?</Description>
+        <Button wide loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
+          Resend confirmation code
+          {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
+        </Button>
       </Form>
     </div>
   );

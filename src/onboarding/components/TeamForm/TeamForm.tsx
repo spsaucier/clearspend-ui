@@ -30,6 +30,8 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const onSubmit = (data: Readonly<FormValues>) => {
     next(convertFormData(data)).catch(() => {
       // TODO: How to show general errors?
+      // eslint-disable-next-line no-alert
+      alert('Something going wrong');
     });
   };
 
