@@ -30,4 +30,4 @@ pipelines:
           - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
           - gcloud config set project $GCLOUD_PROJECT_ID
           - gcloud container clusters get-credentials $GCLOUD_CLUSTER --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
-          - kubectl rollout restart deployment capital-core
+          - kubectl rollout restart deployment capital-ui
