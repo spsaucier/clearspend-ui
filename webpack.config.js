@@ -79,7 +79,6 @@ module.exports = (env, options) => {
         {
           test: /\.css$/,
           exclude: /node_modules/,
-          sideEffects: true,
           use: [
             isProd ? MiniCssExtractPlugin.loader : 'style-loader',
             {
@@ -141,7 +140,10 @@ module.exports = (env, options) => {
         fileWhitelist: [/inter-400\..+?\.woff2$/, /inter-600\..+?\.woff2$/],
       }),
       new ForkTsCheckerWebpackPlugin({ eslint: { enabled: !isProd, files: './src/**/*.{ts,tsx}' } }),
-      new MiniCssExtractPlugin({ filename: '[name].[contenthash:8].css' }),
+      new MiniCssExtractPlugin({
+        filename: '[name].[contenthash:8].css',
+        experimentalUseImportModule: true,
+      }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),
     ].filter(Boolean),
   };

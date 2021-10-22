@@ -67,7 +67,7 @@
 
 .spin,
 .icon {
-  color: inherit !important;
+  color: inherit;
 
   @nest .sm & {
     width: v-small-icon;
