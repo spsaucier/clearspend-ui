@@ -1,6 +1,6 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
-import { validPhone, validZipCode } from '_common/components/Form/rules/patterns';
+import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
 import { cleanPhone } from '_common/formatters/phone';
 
 import type { BusinessType, UpdateBusinessInfo } from '../../types';
@@ -23,7 +23,7 @@ export function getFormOptions(): FormOptions<FormValues> {
     rules: {
       name: [required],
       type: [required],
-      ein: [required],
+      ein: [required, validEIN],
       phone: [(val) => validPhone(cleanPhone(val))],
       line1: [required],
       city: [required],

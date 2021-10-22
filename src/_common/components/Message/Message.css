@@ -1,0 +1,45 @@
+.root {
+  display: flex;
+  width: 340px;
+  max-width: 100%;
+  padding: var(--pd-12) var(--pd-10);
+  gap: var(--pd-8);
+  background: var(--tw-white);
+  border-radius: var(--radius-8);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.error {
+  color: var(--tw-red);
+}
+
+.success {
+  color: var(--tw-green);
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-header);
+  font-size: var(--text-16);
+  line-height: var(--line-24);
+}
+
+.message {
+  margin-top: var(--pd-4);
+}
+
+.close {
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: var(--tw-gray-10);
+  }
+}

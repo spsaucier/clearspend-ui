@@ -5,7 +5,7 @@ import { Tag } from '_common/components/Tag';
 import { readSignupName } from 'signup/storage';
 
 import { Page } from '../../components/Page';
-import { Landing } from '../../components/Landing';
+import { Landing } from '../../containers/Landing';
 
 import css from './Dashboard.css';
 

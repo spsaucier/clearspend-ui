@@ -1,6 +1,7 @@
 import { For } from 'solid-js';
 
 import { Section } from 'app/components/Section';
+import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputDate } from '_common/components/InputDate';
@@ -23,15 +24,14 @@ interface TeamFormProps {
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
+  const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
 
   const onSubmit = (data: Readonly<FormValues>) => {
     next(convertFormData(data)).catch(() => {
-      // TODO: How to show general errors?
-      // eslint-disable-next-line no-alert
-      alert('Something going wrong');
+      messages.error({ title: 'Something going wrong' });
     });
   };
 
