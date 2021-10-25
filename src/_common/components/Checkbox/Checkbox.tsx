@@ -25,7 +25,7 @@ export function Checkbox(props: Readonly<CheckboxProps>) {
 
   return (
     <label class={join(props.class)}>
-      <input type="checkbox" checked={checked()} disabled={disabled()} class={props.class} onChange={onChange} />
+      <input type="checkbox" checked={checked()} disabled={disabled()} onChange={onChange} />
       {props.children}
     </label>
   );

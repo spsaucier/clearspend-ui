@@ -8,12 +8,6 @@
   }
 }
 
-.account {
-  &:not(:last-of-type) {
-    margin-bottom: var(--pd-24);
-  }
-}
-
 .button {
   margin-top: var(--pd-24);
 }

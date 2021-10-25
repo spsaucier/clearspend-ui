@@ -1,20 +1,28 @@
 .root {
+  gap: var(--pd-24);
+}
+
+.item {
+  width: 100%;
+}
+
+.content {
   display: flex;
+  width: 100%;
   padding: var(--pd-16);
   align-items: flex-start;
   border: 1px solid var(--tw-gray-30);
   border-radius: var(--radius-10);
   transition: background-color 0.3s, border-color 0.3s;
-  cursor: pointer;
 
   &:hover:not(.selected) {
     border-color: var(--tw-primary);
   }
-}
 
-.selected {
-  background-color: var(--tw-blue-light);
-  border-color: var(--tw-primary);
+  @nest .item > input:checked + & {
+    background-color: var(--tw-blue-light);
+    border-color: var(--tw-primary);
+  }
 }
 
 .icon {
