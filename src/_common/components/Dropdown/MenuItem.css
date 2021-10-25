@@ -1,0 +1,14 @@
+.root {
+  display: block;
+  padding: var(--pd-8) var(--pd-12);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tw-gray-10);
+  }
+}
+
+.disabled {
+  color: var(--tw-gray-60);
+  pointer-events: none;
+}

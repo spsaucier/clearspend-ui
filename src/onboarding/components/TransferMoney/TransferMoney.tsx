@@ -72,6 +72,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
         <div class={css.wrapper}>
           <FormItem label="Amount" error={errors().amount}>
             <Input
+              name="amount"
               placeholder={formatCurrency(0)}
               value={values().amount}
               formatter={formatAmount}
@@ -82,6 +83,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
         </div>
       </Section>
       <Section title="Select account" class={css.section}>
+        {/* TODO: make as radio input */}
         <div class={css.wrapper}>
           <For each={props.data.plaid}>
             {(item) => (

@@ -56,7 +56,7 @@ export function Select(props: Readonly<SelectProps>) {
     clearFocusTimeout();
     focusTimeout = setTimeout(() => {
       setOpen(false);
-      if (search() && !options().length) {
+      if (search()) {
         setSearch('');
         input.value = selected() || '';
       }
@@ -75,7 +75,7 @@ export function Select(props: Readonly<SelectProps>) {
         </ul>
       }
     >
-      <div class={join(css.root, props.class)} data-open={open()}>
+      <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>
         <Input
           ref={input}
           name={props.name}
@@ -89,6 +89,11 @@ export function Select(props: Readonly<SelectProps>) {
           onFocusIn={onFocusIn}
           onFocusOut={onFocusOut}
         />
+        <span class={css.value}>
+          {typeof props.valueRender === 'function' && Boolean(props.value)
+            ? props.valueRender(props.value!, selected()!)
+            : selected()}
+        </span>
         <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
       </div>
     </Popover>

@@ -1,0 +1,5 @@
+.root {
+  height: 1px;
+  margin: 0 var(--pd-4);
+  background: var(--tw-gray-30);
+}

@@ -1,6 +1,7 @@
 .root {
-  display: block;
+  display: flex;
   padding: var(--pd-8) var(--pd-12);
+  align-items: center;
   cursor: default;
 
   &:hover {
@@ -9,11 +10,19 @@
 }
 
 .active {
-  background: var(--tw-gray-10);
   pointer-events: none;
 }
 
 .disabled {
   color: var(--tw-gray-60);
   pointer-events: none;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.icon {
+  margin-left: var(--pd-8);
+  flex-shrink: 0;
 }

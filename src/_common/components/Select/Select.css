@@ -6,6 +6,25 @@
 
 .input {
   padding-right: var(--pd-40);
+  opacity: 0;
+
+  @nest .root[data-view='input'] & {
+    opacity: 1;
+  }
+}
+
+.value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  padding: var(--pd-8) var(--pd-40) var(--pd-8) var(--pd-12);
+  pointer-events: none;
+
+  @nest .root[data-view='input'] & {
+    visibility: hidden;
+  }
 }
 
 .chevron {

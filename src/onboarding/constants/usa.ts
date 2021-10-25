@@ -10,6 +10,7 @@ export const BUSINESS_TYPES: Readonly<Record<BusinessType, string>> = {
   [BusinessType.T_501_C_3]: '501(c)(3)',
 };
 
+// TODO: Use codes https://www23.statcan.gc.ca/imdb/p3VD.pl?Function=getVD&TVD=53971
 export const USA_STATES: readonly string[] = [
   'Alabama',
   'Alaska',

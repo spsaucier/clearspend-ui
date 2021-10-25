@@ -1,0 +1,19 @@
+.root {
+  width: 240px;
+}
+
+.value {
+  display: flex;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.amount {
+  color: var(--tw-primary);
+}

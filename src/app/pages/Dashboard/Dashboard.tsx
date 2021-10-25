@@ -1,6 +1,7 @@
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
+import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { Tag } from '_common/components/Tag';
 import { readSignupName } from 'signup/storage';
 
@@ -25,9 +26,20 @@ export function Dashboard() {
           <Button type="primary" size="lg" icon="add">
             Add balance
           </Button>
-          <Button size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
-            Add new
-          </Button>
+          <Dropdown
+            position="bottom-right"
+            menu={
+              <>
+                <MenuItem>Card</MenuItem>
+                <MenuItem>Employee</MenuItem>
+                <MenuItem>Allocation</MenuItem>
+              </>
+            }
+          >
+            <Button size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
+              Add new
+            </Button>
+          </Dropdown>
         </div>
       }
     >
