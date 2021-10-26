@@ -4,3 +4,7 @@
   flex-shrink: 0;
   gap: var(--pd-8) var(--pd-12);
 }
+
+.content {
+  padding: 0;
+}

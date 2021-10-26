@@ -1,4 +1,5 @@
 import { Text } from 'solid-i18n';
+import { useNavigate } from 'solid-app-router';
 
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
@@ -10,12 +11,14 @@ import { Landing } from '../../containers/Landing';
 
 import css from './Dashboard.css';
 
-export function Dashboard() {
+export default function Dashboard() {
   const name = readSignupName();
+  const navigate = useNavigate();
 
   return (
     <Page
       title={<Text message="Welcome, {name}" name={name?.firstName || ''} />}
+      contentClass={css.content}
       extra={
         <Tag type="primary">
           North Valley Enterprises | <strong>$100.00</strong>
@@ -31,7 +34,7 @@ export function Dashboard() {
             menu={
               <>
                 <MenuItem>Card</MenuItem>
-                <MenuItem>Employee</MenuItem>
+                <MenuItem onClick={() => navigate('/employees/edit')}>Employee</MenuItem>
                 <MenuItem>Allocation</MenuItem>
               </>
             }

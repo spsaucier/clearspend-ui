@@ -1,0 +1,22 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0 var(--pd-24);
+
+  @media (--bp-medium) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.name {
+  @media (--bp-medium) {
+    min-width: 258px;
+  }
+}
+
+.email {
+  @media (--bp-medium) {
+    max-width: 400px;
+  }
+}

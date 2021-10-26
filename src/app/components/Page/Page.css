@@ -48,8 +48,20 @@
   line-height: var(--line-36);
 }
 
+.footer {
+  position: sticky;
+  bottom: 0;
+  order: 1;
+  z-index: var(--z-index-side);
+}
+
 .content {
   display: flex;
+  padding: 0 var(--pd-24) var(--pd-24);
   flex-direction: column;
   flex-grow: 1;
+
+  @media (--bp-medium) {
+    padding: var(--pd-16) var(--pd-48) var(--pd-24);
+  }
 }

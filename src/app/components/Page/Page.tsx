@@ -2,6 +2,8 @@ import { JSXElement, onMount } from 'solid-js';
 
 import { join } from '_common/utils/join';
 
+import { PageContext, IPageContext } from './context';
+
 import css from './Page.css';
 
 interface PageProps {
@@ -15,6 +17,8 @@ interface PageProps {
 }
 
 export function Page(props: Readonly<PageProps>) {
+  const context: IPageContext = { current: undefined };
+
   onMount(() => window.scrollTo(0, 0));
 
   return (
@@ -28,7 +32,15 @@ export function Page(props: Readonly<PageProps>) {
           {props.actions}
         </div>
       </header>
-      <div class={join(css.content, props.contentClass)}>{props.children}</div>
+      <div
+        class={css.footer}
+        ref={(el) => {
+          context.current = el;
+        }}
+      />
+      <div class={join(css.content, props.contentClass)}>
+        <PageContext.Provider value={context}>{props.children}</PageContext.Provider>
+      </div>
     </div>
   );
 }

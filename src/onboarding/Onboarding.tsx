@@ -87,22 +87,22 @@ export default function Onboarding() {
     >
       <Switch>
         <Match when={step() === OnboardingStep.kyb}>
-          <Page title="Tell us about your business" contentClass={css.content}>
+          <Page title="Tell us about your business">
             <BusinessForm onNext={onUpdateKYB} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.kyc}>
-          <Page title="Tell us about your team" contentClass={css.content}>
+          <Page title="Tell us about your team">
             <TeamForm onNext={onUpdateKYC} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.account}>
-          <Page title="Link your bank account" contentClass={css.content}>
+          <Page title="Link your bank account">
             <LinkAccount onNext={onGotVerifyToken} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.money}>
-          <Page title="Transfer money" contentClass={css.content}>
+          <Page title="Transfer money">
             <Show when={accounts()}>
               <TransferMoney data={accounts()!} onDeposit={onDeposit} />
             </Show>
