@@ -97,7 +97,9 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             disabled
             error={Boolean(errors().owner)}
             onChange={handlers.owner}
-          ></Select>
+          >
+            {undefined}
+          </Select>
         </FormItem>
       </Section>
       <Show when={isDirty()}>
