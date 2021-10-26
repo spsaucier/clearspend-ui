@@ -33,7 +33,6 @@
   color: var(--tw-black);
   background-color: var(--tw-gray-20);
   border-right-color: var(--tw-primary);
-  pointer-events: none;
 }
 
 .title {

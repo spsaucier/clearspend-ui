@@ -36,6 +36,7 @@
 
   &:disabled {
     color: var(--tw-gray-60);
+    background-color: var(--tw-gray-10);
   }
 
   &:-webkit-autofill,

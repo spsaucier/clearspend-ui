@@ -35,7 +35,7 @@ export default function Dashboard() {
               <>
                 <MenuItem>Card</MenuItem>
                 <MenuItem onClick={() => navigate('/employees/edit')}>Employee</MenuItem>
-                <MenuItem>Allocation</MenuItem>
+                <MenuItem onClick={() => navigate('/allocations/edit')}>Allocation</MenuItem>
               </>
             }
           >

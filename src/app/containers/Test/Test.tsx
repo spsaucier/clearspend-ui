@@ -5,14 +5,11 @@ import { Button } from '_common/components/Button';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import { BankAccounts } from 'onboarding/components/BankAccounts';
 
-import { AllocationSelect } from '../../components/AllocationSelect';
-
 export function Test() {
   const [loading, setLoading] = createSignal(false);
-  const [allocation, setAllocation] = createSignal('1');
 
   return (
-    <Page title="Test" extra={<AllocationSelect value={allocation()} onChange={setAllocation} />}>
+    <Page title="Test">
       <div style={{ padding: '16px 48px' }}>
         <Button
           type="primary"
