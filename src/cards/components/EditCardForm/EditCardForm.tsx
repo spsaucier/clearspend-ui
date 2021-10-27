@@ -1,8 +1,8 @@
-import { Show } from 'solid-js';
+import { Show, For } from 'solid-js';
 
-import { Form, FormItem, createForm } from '_common/components/Form';
+import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
-import { Select } from '_common/components/Select';
+import { Select, Option } from '_common/components/Select';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import type { UUIDString } from 'app/types';
 import { useMessages } from 'app/containers/Messages/context';
@@ -10,6 +10,7 @@ import { Section } from 'app/components/Section';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import type { Allocation } from 'allocations/types';
+import type { User } from 'employees/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import type { IssueCard, CardType } from '../../types';
@@ -23,6 +24,7 @@ interface FormValues {
 }
 
 interface EditCardFormProps {
+  users: readonly Readonly<User>[];
   allocations: readonly Readonly<Allocation>[];
   onSave: (params: Readonly<IssueCard>) => Promise<unknown>;
 }
@@ -30,19 +32,19 @@ interface EditCardFormProps {
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const messages = useMessages();
 
-  const { values, errors, handlers, isDirty, reset } = createForm<FormValues>({
+  const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
     defaultValues: { allocation: '', employee: '', type: '' as CardType },
     rules: { allocation: [required], employee: [required], type: [required] },
   });
 
   const onSubmit = async () => {
-    // TODO
+    if (hasErrors(trigger())) return;
     const data = values();
     await props
       .onSave({
         // TODO
-        bin: '',
-        programId: '' as UUIDString,
+        bin: '401288',
+        programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
         allocationId: data.allocation as UUIDString,
         userId: data.employee as UUIDString,
         currency: 'USD',
@@ -77,7 +79,9 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             error={Boolean(errors().employee)}
             onChange={handlers.employee}
           >
-            {undefined}
+            <For each={props.users}>
+              {(item) => <Option value={item.userId}>{`${item.firstName} ${item.lastName}`}</Option>}
+            </For>
           </Select>
         </FormItem>
       </Section>

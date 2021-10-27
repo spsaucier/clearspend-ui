@@ -1,6 +1,6 @@
 import { Show } from 'solid-js';
 
-import { Form, FormItem, createForm } from '_common/components/Form';
+import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
 import { Select } from '_common/components/Select';
@@ -29,13 +29,13 @@ interface EditAllocationFormProps {
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const messages = useMessages();
 
-  const { values, errors, isDirty, handlers, reset } = createForm<FormValues>({
+  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { name: '', parent: '', amount: '', owner: '' },
     rules: { name: [required] },
   });
 
   const onSubmit = async () => {
-    // TODO
+    if (hasErrors(trigger())) return;
     const data = values();
     await props.onSave(data.name, data.parent).catch(() => {
       messages.error({ title: 'Something going wrong' });

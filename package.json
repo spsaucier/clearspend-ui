@@ -21,7 +21,7 @@
     "core-js": "3.19.0",
     "date-func": "0.0.3",
     "solid-app-router": "0.1.11",
-    "solid-create-form": "0.3.0",
+    "solid-create-form": "1.0.0",
     "solid-i18n": "0.0.1",
     "solid-js": "1.2.0",
     "solid-transition-group": "0.0.8",

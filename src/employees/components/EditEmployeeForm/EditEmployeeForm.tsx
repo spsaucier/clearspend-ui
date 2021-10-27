@@ -1,6 +1,6 @@
 import { Show } from 'solid-js';
 
-import { Form, FormItem, createForm } from '_common/components/Form';
+import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail } from '_common/components/Form/rules/patterns';
 import { Input } from '_common/components/Input';
@@ -22,13 +22,13 @@ interface EditEmployeeFormProps {
 export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
   const messages = useMessages();
 
-  const { values, errors, isDirty, handlers, reset } = createForm<FormValues>({
+  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { firstName: '', lastName: '', email: '' },
     rules: { firstName: [required], lastName: [required], email: [required, validEmail] },
   });
 
   const onSubmit = async () => {
-    // TODO
+    if (hasErrors(trigger())) return;
     const data = values();
     await props.onSave(data.firstName, data.lastName, data.email).catch(() => {
       messages.error({ title: 'Something going wrong' });
