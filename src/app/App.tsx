@@ -11,9 +11,9 @@ export function App() {
   return (
     <div>
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/*all" element={<Main />} />
       </Routes>
       <Messages />

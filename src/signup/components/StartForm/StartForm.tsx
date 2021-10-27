@@ -35,7 +35,7 @@ export function StartForm(props: Readonly<StartFormProps>) {
       <Header>Get started</Header>
       <Description>
         <Text
-          message="Already have an account? <link>Log in here</link>"
+          message="Already have an account? <link>Log in here</link>."
           link={(text) => <Link href="/login">{text}</Link>}
         />
       </Description>

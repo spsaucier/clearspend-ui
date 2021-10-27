@@ -4,6 +4,8 @@ import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 
+import { useMessages } from '../../containers/Messages/context';
+
 interface FormValues {
   login: string;
   password: string;
@@ -14,26 +16,23 @@ interface LoginFormProps {
 }
 
 export function LoginForm(props: Readonly<LoginFormProps>) {
-  const [loading, submitAction] = wrapAction(props.onSubmit);
+  const messages = useMessages();
+  const [loading, submit] = wrapAction(props.onSubmit);
 
-  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>({
+  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { login: '', password: '' },
     rules: { login: [required], password: [required] },
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    submitAction(data.login, data.password)
-      .then(() => {
-        // TODO
-      })
-      .catch(() => {
-        // TODO
-      });
+    submit(data.login, data.password).catch(() => {
+      messages.error({ title: 'Something going wrong' });
+    });
   };
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
-      <FormItem label="Your email or mobile number" error={errors().login}>
+      <FormItem label="Your email" error={errors().login}>
         <Input
           name="login"
           placeholder="Enter your Email or Mobile Number"
@@ -52,7 +51,7 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
           onChange={handlers.password}
         />
       </FormItem>
-      <Button htmlType="submit" loading={loading()} disabled={!isDirty()}>
+      <Button wide type="primary" htmlType="submit" loading={loading()}>
         Login
       </Button>
     </Form>

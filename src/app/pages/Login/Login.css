@@ -1,0 +1,23 @@
+.root {
+  min-height: 100vh;
+  padding: var(--pd-48) var(--pd-24);
+  background: var(--tw-gray-10);
+
+  @media (--bp-large) {
+    padding: var(--pd-48);
+  }
+}
+
+.header {
+  padding-bottom: var(--pd-24);
+
+  @media (--bp-large) {
+    padding-bottom: 80px;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
