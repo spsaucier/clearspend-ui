@@ -1,4 +1,4 @@
-import type { UUIDString } from 'app/types';
+import type { UUIDString, Address } from 'app/types';
 
 export enum OnboardingStep {
   kyb,
@@ -36,15 +36,6 @@ export enum BusinessType {
   B_CORP = 'B_CORP',
   SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
   T_501_C_3 = '_501_C_3',
-}
-
-export interface Address {
-  streetLine1: string;
-  streetLine2?: string;
-  locality: string;
-  region: string;
-  postalCode: string;
-  country: 'USA';
 }
 
 export interface UpdateBusinessInfo {

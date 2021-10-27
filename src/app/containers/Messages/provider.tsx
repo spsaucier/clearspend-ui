@@ -17,15 +17,17 @@ interface MessagesProviderProps {
 export function MessagesProvider(props: Readonly<MessagesProviderProps>) {
   const [messages, setMessages] = createSignal<MessageProps[]>([]);
 
-  const remove = (message: Readonly<MessageProps>) => {
+  const remove = (message: Readonly<MessageProps & { timeout?: number }>) => {
+    clearTimeout(message.timeout);
     setMessages((items) => items.filter((item) => !isSameMessages(item, message)));
   };
 
   const add = (type: MessageProps['type'], options: Readonly<MessageOptions>) => {
-    const message: Readonly<MessageProps> = { ...options, type, onClose: () => remove(message) };
+    const message: MessageProps & { timeout?: number } = { ...options, type, onClose: () => remove(message) };
+
     if (!messages().some((item) => isSameMessages(item, message))) {
       setMessages((items) => [...items, message]);
-      setTimeout(() => remove(message), REMOVE_DELAY);
+      message.timeout = setTimeout(() => remove(message), REMOVE_DELAY);
     }
   };
 

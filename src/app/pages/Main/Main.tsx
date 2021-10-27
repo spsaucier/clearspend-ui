@@ -1,5 +1,6 @@
 import { Routes, Route } from 'solid-app-router';
 
+import { Employees } from 'employees';
 import { EditEmployee } from 'employees/pages/EditEmployee';
 import { Allocations } from 'allocations';
 import { EditAllocation } from 'allocations/pages/EditAllocation';
@@ -16,6 +17,7 @@ export default function Main() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
 
+        <Route path="/employees" element={<Employees />} />
         <Route path="/employees/edit" element={<EditEmployee />} />
         <Route path="/employees/edit/:id" element={<EditEmployee />} />
 
