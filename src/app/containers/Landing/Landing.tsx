@@ -14,7 +14,7 @@ export function Landing() {
         <p class={css.cardMessage}>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent imperdiet fermentum vulputate.
         </p>
-        <Button type="primary" size="lg" icon="card" class={css.cardAction}>
+        <Button type="primary" size="lg" icon="card" class={css.cardAction} onClick={() => navigate('/cards/edit')}>
           Issue a card
         </Button>
       </div>

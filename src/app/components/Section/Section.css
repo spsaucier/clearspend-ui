@@ -10,12 +10,14 @@
 
 .header {
   margin-bottom: var(--pd-24);
-  flex-grow: 1;
   flex-shrink: 0;
 
   @media (--bp-large) {
     width: 240px;
-    max-width: 320px;
+  }
+
+  @media (--bp-wide) {
+    width: 320px;
   }
 }
 

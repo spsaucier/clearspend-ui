@@ -1,0 +1,107 @@
+import { Show } from 'solid-js';
+
+import { Form, FormItem, createForm } from '_common/components/Form';
+import { required } from '_common/components/Form/rules/required';
+import { Select } from '_common/components/Select';
+import { RadioGroup, Radio } from '_common/components/Radio';
+import type { UUIDString } from 'app/types';
+import { useMessages } from 'app/containers/Messages/context';
+import { Section } from 'app/components/Section';
+import { PageActions } from 'app/components/Page';
+import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import type { Allocation } from 'allocations/types';
+
+import { CardTypeSelect } from '../CardTypeSelect';
+import type { IssueCard, CardType } from '../../types';
+
+import css from './EditCardForm.css';
+
+interface FormValues {
+  allocation: string;
+  employee: string;
+  type: CardType;
+}
+
+interface EditCardFormProps {
+  allocations: readonly Readonly<Allocation>[];
+  onSave: (params: Readonly<IssueCard>) => Promise<unknown>;
+}
+
+export function EditCardForm(props: Readonly<EditCardFormProps>) {
+  const messages = useMessages();
+
+  const { values, errors, handlers, isDirty, reset } = createForm<FormValues>({
+    defaultValues: { allocation: '', employee: '', type: '' as CardType },
+    rules: { allocation: [required], employee: [required], type: [required] },
+  });
+
+  const onSubmit = async () => {
+    // TODO
+    const data = values();
+    await props
+      .onSave({
+        // TODO
+        bin: '',
+        programId: '' as UUIDString,
+        allocationId: data.allocation as UUIDString,
+        userId: data.employee as UUIDString,
+        currency: 'USD',
+        cardType: data.type,
+      })
+      .catch(() => {
+        messages.error({ title: 'Something going wrong' });
+      });
+  };
+
+  return (
+    <Form class={css.form}>
+      <Section title="Company info">
+        <FormItem
+          label="Allocation"
+          extra="Choose the allocation that will fund your new card. "
+          error={errors().allocation}
+          class={css.field}
+        >
+          <AllocationSelect
+            items={props.allocations}
+            value={values().allocation}
+            placeholder="Select allocation"
+            error={Boolean(errors().allocation)}
+            onChange={handlers.allocation}
+          />
+        </FormItem>
+        <FormItem label="Employee" error={errors().employee} class={css.field}>
+          <Select
+            value={values().employee}
+            placeholder="Search by employee name"
+            error={Boolean(errors().employee)}
+            onChange={handlers.employee}
+          >
+            {undefined}
+          </Select>
+        </FormItem>
+      </Section>
+      <Section
+        title="Card info"
+        description="Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet."
+      >
+        <FormItem label="Card type(s)" error={errors().type}>
+          <CardTypeSelect value={values().type} class={css.types} onChange={handlers.type} />
+        </FormItem>
+        <FormItem
+          label="Employee name on card"
+          extra="If you select no, then the card will display the name of the company."
+          class={css.field}
+        >
+          <RadioGroup name="name-on-card" disabled class={css.radio}>
+            <Radio value="yes">Yes</Radio>
+            <Radio value="no">No</Radio>
+          </RadioGroup>
+        </FormItem>
+      </Section>
+      <Show when={isDirty()}>
+        <PageActions action="Create Card" onCancel={reset} onSave={onSubmit} />
+      </Show>
+    </Form>
+  );
+}

@@ -1,0 +1,46 @@
+.root {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--pd-16) var(--pd-24);
+}
+
+.item {
+  width: 290px;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  padding: var(--pd-16);
+  flex-direction: column;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-10);
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover:not(.selected) {
+    border-color: var(--tw-primary);
+  }
+
+  @nest .item > input:checked + & {
+    background-color: var(--tw-blue-light);
+    border-color: var(--tw-primary);
+  }
+}
+
+.type {
+  margin-top: var(--pd-10);
+}
+
+.note {
+  margin-top: var(--pd-4);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.description {
+  margin-top: var(--pd-8);
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
