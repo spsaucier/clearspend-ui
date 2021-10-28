@@ -1,22 +1,22 @@
 import { Text } from 'solid-i18n';
-import { Link } from 'solid-app-router';
+import { Link, useNavigate } from 'solid-app-router';
 
-import { wait } from '_common/utils/wait';
 import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 import twLogo from 'app/assets/tw-logo.svg';
 
 import { LoginForm } from '../../components/LoginForm';
+import { login } from '../../services/auth';
 
 import css from './Login.css';
 
 export default function Login() {
-  const submit = async (data: unknown) => {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    await wait(2000);
-    // eslint-disable-next-line no-console
-    console.log(data);
+  const navigate = useNavigate();
+
+  const submit = async (username: string, password: string) => {
+    await login(username, password);
+    navigate('/');
   };
 
   return (
