@@ -29,12 +29,15 @@
 }
 
 .type {
-  margin-top: var(--pd-10);
+  font-size: var(--text-16);
+  font-weight: var(--font-500);
+  line-height: var(--line-24);
 }
 
 .note {
-  margin-top: var(--pd-4);
+  margin-bottom: var(--pd-8);
   font-size: var(--text-12);
+  font-weight: var(--font-500);
   line-height: var(--line-16);
 }
 

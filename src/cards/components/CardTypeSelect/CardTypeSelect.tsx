@@ -25,22 +25,22 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
     >
       <Radio value={CardType.VIRTUAL} class={css.item}>
         <div class={css.content}>
-          <img src={virtual} alt="Virtual card" width={230} height={146} />
           <div class={css.type}>Virtual card</div>
           <div class={css.note}>Available immediately</div>
-        </div>
-        <div class={css.description}>
-          Virtual cards can be accessed through the ClearSpend mobile app or added to the Apple or Android wallet.
+          <img src={virtual} alt="Virtual card" width={230} height={146} />
+          <div class={css.description}>
+            Virtual cards can be accessed through the ClearSpend mobile app or added to the Apple or Android wallet.
+          </div>
         </div>
       </Radio>
       <Radio value={CardType.PLASTIC} class={css.item}>
         <div class={css.content}>
-          <img src={plastic} alt="Physical card" width={230} height={146} />
           <div class={css.type}>Physical card</div>
           <div class={css.note}>Arrives in 1-2 weeks</div>
-        </div>
-        <div class={css.description}>
-          Physical cards will arrive in the mail. They have a chip and support contactless payment.
+          <img src={plastic} alt="Physical card" width={230} height={146} />
+          <div class={css.description}>
+            Physical cards will arrive in the mail. They have a chip and support contactless payment.
+          </div>
         </div>
       </Radio>
     </RadioGroup>

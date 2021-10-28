@@ -1,0 +1,34 @@
+.tag {
+  display: flex;
+  align-items: center;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  display: flex;
+  padding: var(--pd-10) var(--pd-8);
+  align-items: center;
+  gap: var(--pd-12);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.num {
+  width: 16px;
+}
+
+.title {
+  flex-grow: 1;
+  color: var(--tw-primary);
+  font-weight: var(--font-500);
+}
+
+.amount {
+  font-weight: var(--font-500);
+  text-align: right;
+}

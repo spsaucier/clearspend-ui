@@ -1,0 +1,1 @@
+export { SpendingByWidget } from './SpendingByWidget';

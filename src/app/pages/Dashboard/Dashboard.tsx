@@ -7,7 +7,8 @@ import { Tag } from '_common/components/Tag';
 import { readSignupName } from 'signup/storage';
 
 import { Page } from '../../components/Page';
-import { Landing } from '../../containers/Landing';
+// import { Landing } from '../../containers/Landing';
+import { Overview } from '../../containers/Overview';
 
 import css from './Dashboard.css';
 
@@ -46,7 +47,8 @@ export default function Dashboard() {
         </div>
       }
     >
-      <Landing />
+      <Overview />
+      {/*<Landing />*/}
     </Page>
   );
 }

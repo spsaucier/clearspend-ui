@@ -1,4 +1,4 @@
-import type { UUIDString } from 'app/types';
+import type { UUIDString } from 'app/types/common';
 
 export enum CardType {
   PLASTIC = 'PLASTIC',

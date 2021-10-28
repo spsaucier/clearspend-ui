@@ -1,4 +1,4 @@
-import type { UUIDString, Address } from 'app/types';
+import type { UUIDString, Address } from 'app/types/common';
 
 export interface CreateUser {
   firstName: string;

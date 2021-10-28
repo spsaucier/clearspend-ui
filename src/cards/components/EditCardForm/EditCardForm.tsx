@@ -4,7 +4,7 @@ import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Select, Option } from '_common/components/Select';
 import { RadioGroup, Radio } from '_common/components/Radio';
-import type { UUIDString } from 'app/types';
+import type { UUIDString } from 'app/types/common';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { PageActions } from 'app/components/Page';

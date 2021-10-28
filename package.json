@@ -20,6 +20,7 @@
   "dependencies": {
     "core-js": "3.19.0",
     "date-func": "0.0.3",
+    "micro-charts": "7.2.0",
     "solid-app-router": "0.1.11",
     "solid-create-form": "1.0.0",
     "solid-i18n": "0.0.1",

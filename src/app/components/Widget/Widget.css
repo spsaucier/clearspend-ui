@@ -1,0 +1,26 @@
+.root {
+  display: block;
+}
+
+.header {
+  margin: var(--pd-4) 0 var(--pd-16);
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--pd-8);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-header);
+  font-size: var(--text-12);
+  line-height: var(--line-24);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.sub {
+  margin-top: var(--pd-4);
+}

@@ -1,0 +1,11 @@
+.info {
+  display: flex;
+  align-items: center;
+  color: var(--tw-gray-60);
+}
+
+.total {
+  color: var(--tw-primary);
+  font-size: var(--text-16);
+  line-height: var(--line-24);
+}

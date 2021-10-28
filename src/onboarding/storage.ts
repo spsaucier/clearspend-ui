@@ -1,4 +1,4 @@
-import type { UUIDString } from 'app/types';
+import type { UUIDString } from 'app/types/common';
 import { storage } from '_common/api/storage';
 
 const PROSPECT_ID_KEY = 'ob_prospect_id';

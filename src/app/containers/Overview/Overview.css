@@ -1,0 +1,35 @@
+.root {
+  display: block;
+  padding: var(--pd-16) var(--pd-24);
+
+  @media (--bp-medium) {
+    padding: var(--pd-16) var(--pd-48);
+  }
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pd-32);
+
+  @media (--bp-large) {
+    flex-direction: row;
+  }
+
+  & > *:nth-child(1) {
+    @media (--bp-large) {
+      flex-grow: 1;
+    }
+  }
+
+  & > *:nth-child(2) {
+    @media (--bp-large) {
+      width: 340px;
+      flex-shrink: 0;
+    }
+
+    @media (--bp-wide) {
+      width: 390px;
+    }
+  }
+}

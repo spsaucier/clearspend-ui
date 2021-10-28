@@ -3,9 +3,9 @@ import { Routes, Route } from 'solid-app-router';
 import { SignUp } from 'signup';
 import { Onboarding } from 'onboarding';
 
+import { Main } from './containers/Main';
 import { Messages } from './containers/Messages';
 import { Login } from './pages/Login';
-import { Main } from './pages/Main';
 
 export function App() {
   return (

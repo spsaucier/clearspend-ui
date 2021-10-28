@@ -1,5 +1,5 @@
 import { service } from 'app/utils/service';
-import type { UUIDString } from 'app/types';
+import type { UUIDString } from 'app/types/common';
 
 import type {
   UpdateBusinessAccount,

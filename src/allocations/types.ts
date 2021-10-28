@@ -1,4 +1,4 @@
-import type { UUIDString, Amount } from 'app/types';
+import type { UUIDString, Amount } from 'app/types/common';
 
 export enum AccountType {
   BUSINESS = 'BUSINESS',
