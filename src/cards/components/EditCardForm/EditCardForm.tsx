@@ -17,10 +17,14 @@ import type { IssueCard, CardType } from '../../types';
 
 import css from './EditCardForm.css';
 
+function validTypes(value: readonly CardType[]): boolean | string {
+  return !!value.length || 'Required field';
+}
+
 interface FormValues {
   allocation: string;
   employee: string;
-  type: CardType;
+  types: CardType[];
 }
 
 interface EditCardFormProps {
@@ -33,8 +37,8 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const messages = useMessages();
 
   const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
-    defaultValues: { allocation: '', employee: '', type: '' as CardType },
-    rules: { allocation: [required], employee: [required], type: [required] },
+    defaultValues: { allocation: '', employee: '', types: [] },
+    rules: { allocation: [required], employee: [required], types: [validTypes] },
   });
 
   const onSubmit = async () => {
@@ -43,12 +47,12 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     await props
       .onSave({
         // TODO
-        bin: '401288',
         programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
         allocationId: data.allocation as UUIDString,
         userId: data.employee as UUIDString,
         currency: 'USD',
-        cardType: data.type,
+        cardType: data.types,
+        isPersonal: true,
       })
       .catch(() => {
         messages.error({ title: 'Something going wrong' });
@@ -87,10 +91,12 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
       </Section>
       <Section
         title="Card info"
-        description="Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet."
+        description={
+          'Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet.'
+        }
       >
-        <FormItem label="Card type(s)" error={errors().type}>
-          <CardTypeSelect value={values().type} class={css.types} onChange={handlers.type} />
+        <FormItem label="Card type(s)" error={errors().types}>
+          <CardTypeSelect value={values().types} class={css.types} onChange={handlers.types} />
         </FormItem>
         <FormItem
           label="Employee name on card"

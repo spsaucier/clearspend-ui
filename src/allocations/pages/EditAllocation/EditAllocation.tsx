@@ -6,14 +6,15 @@ import { useMessages } from 'app/containers/Messages/context';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
 import { getAllocations, saveAllocation } from '../../services';
+import type { CreateAllocation } from '../../types';
 
 export default function EditAllocation() {
   const messages = useMessages();
   const navigate = useNavigate();
   const [data] = createResource(getAllocations, { initialValue: [] });
 
-  const onSave = async (name: string, parent: string) => {
-    await saveAllocation(name, parent);
+  const onSave = async (allocation: CreateAllocation) => {
+    await saveAllocation(allocation);
     messages.success({ title: 'Changes successfully saved.' });
     navigate('/allocations');
   };

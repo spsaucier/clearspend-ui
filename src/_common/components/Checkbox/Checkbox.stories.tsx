@@ -11,6 +11,8 @@ export default {
     onChange: { action: 'changed', table: { disable: true } },
   },
   args: {
+    checked: false,
+    disabled: false,
     children: 'Checkbox',
   },
 };

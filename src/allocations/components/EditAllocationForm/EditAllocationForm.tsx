@@ -8,9 +8,10 @@ import { formatAmount } from '_common/formatters/amount';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
+import type { UUIDString } from 'app/types/common';
 
 import { AllocationSelect } from '../AllocationSelect';
-import type { Allocation } from '../../types';
+import type { Allocation, CreateAllocation } from '../../types';
 
 import css from './EditAllocationForm.css';
 
@@ -23,7 +24,7 @@ interface FormValues {
 
 interface EditAllocationFormProps {
   allocations: readonly Readonly<Allocation>[];
-  onSave: (name: string, parent: string) => Promise<unknown>;
+  onSave: (data: Readonly<CreateAllocation>) => Promise<unknown>;
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
@@ -37,9 +38,16 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const onSubmit = async () => {
     if (hasErrors(trigger())) return;
     const data = values();
-    await props.onSave(data.name, data.parent).catch(() => {
-      messages.error({ title: 'Something going wrong' });
-    });
+    await props
+      .onSave({
+        programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
+        name: data.name,
+        amount: { currency: 'USD', amount: 0 },
+        parentAllocationId: (data.parent || undefined) as UUIDString,
+      })
+      .catch(() => {
+        messages.error({ title: 'Something going wrong' });
+      });
   };
 
   return (
@@ -81,7 +89,6 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             placeholder="$ Enter the amount"
             value={values().amount}
             formatter={formatAmount}
-            disabled
             error={Boolean(errors().amount)}
             onChange={handlers.amount}
           />

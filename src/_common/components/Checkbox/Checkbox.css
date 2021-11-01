@@ -1,0 +1,38 @@
+.root {
+  display: flex;
+  align-items: center;
+  line-height: var(--line-24);
+  vertical-align: middle;
+}
+
+.input {
+  display: none;
+}
+
+.control {
+  @nest .input:checked + & {
+    background-color: var(--tw-primary);
+    border-color: var(--tw-primary);
+
+    &::after {
+      opacity: 1;
+    }
+  }
+
+  @nest .input:disabled + & {
+    background-color: var(--tw-gray-20);
+    border-color: var(--tw-gray-30);
+  }
+
+  @nest .input:checked:disabled + & {
+    background-color: var(--tw-gray-30);
+  }
+}
+
+.label {
+  margin-left: var(--pd-4);
+
+  @nest .input:disabled + .control + & {
+    color: var(--tw-gray-60);
+  }
+}

@@ -29,13 +29,28 @@
 }
 
 .type {
+  display: flex;
+  margin: var(--pd-8) 0 var(--pd-4);
+  align-items: center;
   font-size: var(--text-16);
   font-weight: var(--font-500);
   line-height: var(--line-24);
 }
 
+.control {
+  margin: 0 var(--pd-8) 0 0;
+
+  @nest .item > input:checked + .content & {
+    background-color: var(--tw-primary);
+    border-color: var(--tw-primary);
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
 .note {
-  margin-bottom: var(--pd-8);
   font-size: var(--text-12);
   font-weight: var(--font-500);
   line-height: var(--line-16);

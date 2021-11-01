@@ -1,8 +1,10 @@
 import type { JSX } from 'solid-js';
 
 export interface CheckboxGroupProps {
+  name?: string;
   value?: string[];
   class?: string;
+  empty?: boolean;
   disabled?: boolean;
   children: JSX.Element;
   onChange?: (value: string[]) => void;

@@ -22,3 +22,10 @@ export interface Allocation {
   account: Readonly<Account>;
   parentAllocationId?: UUIDString;
 }
+
+export interface CreateAllocation {
+  programId: UUIDString;
+  name: string;
+  amount: Readonly<Amount>;
+  parentAllocationId?: UUIDString;
+}

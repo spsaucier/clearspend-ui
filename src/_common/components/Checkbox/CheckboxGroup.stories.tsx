@@ -9,6 +9,9 @@ export default {
     disabled: { control: { type: 'boolean' } },
     onChange: { action: 'changed', table: { disable: true } },
   },
+  args: {
+    disabled: false,
+  },
 };
 
 export const Default = (args: CheckboxGroupProps) => (

@@ -6,10 +6,10 @@ export enum CardType {
 }
 
 export interface IssueCard {
-  bin: string;
   programId: UUIDString;
   allocationId: UUIDString;
   userId: UUIDString;
   currency: 'USD';
-  cardType: CardType;
+  cardType: readonly CardType[];
+  isPersonal: boolean;
 }

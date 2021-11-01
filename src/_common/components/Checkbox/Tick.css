@@ -1,0 +1,27 @@
+.root {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  margin: var(--pd-4);
+  align-items: center;
+  justify-content: center;
+  background: var(--tw-white);
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-4);
+  transition: background-color 0.3s, border 0.3s;
+
+  &::after {
+    content: '';
+    width: 8px;
+    height: 5px;
+    margin-top: -2px;
+    background: transparent;
+    border: 2px solid var(--tw-white);
+    border-top: 0;
+    border-right: 0;
+    transition: opacity 0.3s;
+    transform: rotate(-45deg);
+    transform-origin: center;
+    opacity: 0;
+  }
+}
