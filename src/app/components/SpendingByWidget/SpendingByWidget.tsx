@@ -2,6 +2,7 @@ import { For } from 'solid-js';
 
 import { Tag } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
+import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
 import { Widget } from '../Widget';
@@ -26,12 +27,23 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
       title="Spending by"
       class={props.class}
       extra={
-        <Tag size="sm">
-          <span class={css.tag}>
-            <span>Allocation</span>
-            <Icon size="sm" name="chevron-down" />
-          </span>
-        </Tag>
+        <Dropdown
+          menu={
+            <>
+              <MenuItem>Allocation</MenuItem>
+              <MenuItem>Employee</MenuItem>
+              <MenuItem>Merchant</MenuItem>
+              <MenuItem>Merchant category</MenuItem>
+            </>
+          }
+        >
+          <Tag size="sm">
+            <span class={css.tag}>
+              <span>Allocation</span>
+              <Icon size="sm" name="chevron-down" />
+            </span>
+          </Tag>
+        </Dropdown>
       }
     >
       <ol class={css.list}>

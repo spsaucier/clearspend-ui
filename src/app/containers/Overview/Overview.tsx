@@ -1,6 +1,7 @@
 import { createSignal, Show, Index } from 'solid-js';
 
 import { times } from '_common/utils/times';
+import type { ILineChartData } from '_common/components/Charts';
 import { TabList, Tab } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import { TransactionCompact } from 'transactions/components/TransactionCompact';
@@ -8,6 +9,8 @@ import { TransactionsTable } from 'transactions/containers/TransactionsTable';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
+
+import { getLineData } from './mock';
 
 import css from './Overview.css';
 
@@ -21,11 +24,19 @@ enum TimePeriod {
 
 export function Overview() {
   const media = useMediaContext();
+
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
+  const [data, setData] = createSignal<readonly ILineChartData[]>(getLineData());
 
   return (
     <div class={css.root}>
-      <TabList value={period()} onChange={(val) => setPeriod(val as TimePeriod)}>
+      <TabList
+        value={period()}
+        onChange={(val) => {
+          setPeriod(val as TimePeriod);
+          setData(getLineData());
+        }}
+      >
         <Tab value={TimePeriod.week}>This Week</Tab>
         <Tab value={TimePeriod.month}>This Month</Tab>
         <Tab value={TimePeriod.quarter}>This Quarter</Tab>
@@ -33,7 +44,7 @@ export function Overview() {
         <Tab value={TimePeriod.today}>Today</Tab>
       </TabList>
       <div class={css.top}>
-        <SpendWidget />
+        <SpendWidget data={data()} />
         <SpendingByWidget />
       </div>
       <div>

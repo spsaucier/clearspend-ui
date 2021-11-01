@@ -1,6 +1,7 @@
 .tag {
   display: flex;
   align-items: center;
+  cursor: default;
 }
 
 .list {

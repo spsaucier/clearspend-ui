@@ -1,4 +1,4 @@
-import { onMount } from 'solid-js';
+import { createEffect } from 'solid-js';
 import { createLineChart } from 'micro-charts';
 import type { ILineChartData } from 'micro-charts/lib/linechart/types';
 
@@ -12,7 +12,7 @@ interface LineChartProps {
 export function LineChart(props: Readonly<LineChartProps>) {
   let canvas!: HTMLCanvasElement;
 
-  onMount(() => {
+  createEffect(() => {
     createLineChart(canvas, props.data, {
       top: 100,
       bottom: 0,

@@ -1,29 +1,17 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
-import { LineChart } from '_common/components/Charts/LineChart';
+import { LineChart, ILineChartData } from '_common/components/Charts';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
 import { Widget } from '../Widget';
 
 import css from './SpendWidget.css';
 
-function random() {
-  return (Math.round(Math.random() * 100) % 99) + 1;
+interface SpendWidgetProps {
+  data: readonly Readonly<ILineChartData>[];
 }
 
-function getRandomData(count: number = 10) {
-  return Array.from(new Array(count)).map(() => random());
-}
-
-function getData(count: number) {
-  return getRandomData(count).map((value, i) => ({
-    id: i.toString(),
-    value,
-    label: 'Jun 15',
-  }));
-}
-
-export function SpendWidget() {
+export function SpendWidget(props: Readonly<SpendWidgetProps>) {
   return (
     <Widget
       title="Spend"
@@ -35,7 +23,7 @@ export function SpendWidget() {
         </span>
       }
     >
-      <LineChart height={192} data={getData(10)} />
+      <LineChart height={192} data={props.data} />
     </Widget>
   );
 }
