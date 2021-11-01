@@ -33,19 +33,12 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <FormItem label="Your email" error={errors().login}>
-        <Input
-          name="login"
-          placeholder="Enter your Email or Mobile Number"
-          value={values().login}
-          error={Boolean(errors().login)}
-          onChange={handlers.login}
-        />
+        <Input name="login" value={values().login} error={Boolean(errors().login)} onChange={handlers.login} />
       </FormItem>
       <FormItem label="Password" error={errors().password}>
         <Input
           name="password"
           type="password"
-          placeholder="Enter your Password"
           value={values().password}
           error={Boolean(errors().password)}
           onChange={handlers.password}
