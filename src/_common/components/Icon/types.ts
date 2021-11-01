@@ -25,6 +25,7 @@ export enum IconName {
   'more-vertical' = 'more-vertical',
   'payment-bank' = 'payment-bank',
   photo = 'photo',
+  receipt = 'receipt',
   'settings' = 'settings',
   'table-columns' = 'table-columns',
   transaction = 'transaction',

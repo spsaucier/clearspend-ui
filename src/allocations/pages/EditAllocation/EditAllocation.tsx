@@ -16,7 +16,7 @@ export default function EditAllocation() {
   const onSave = async (allocation: CreateAllocation) => {
     await saveAllocation(allocation);
     messages.success({ title: 'Changes successfully saved.' });
-    navigate('/allocations');
+    navigate('/'); // '/allocations'
   };
 
   const allocations = createMemo(() => (!data.error ? data() : []));

@@ -17,7 +17,7 @@
 
 .sm {
   height: v-size-sm;
-  padding: var(--pd-2) var(--pd-4);
+  padding: var(--pd-2) var(--pd-8);
 }
 
 .xs {
@@ -31,6 +31,18 @@
   color: var(--tw-primary);
   background-color: var(--tw-blue-light);
   border-color: var(--tw-blue-20);
+}
+
+.success {
+  color: var(--tw-green);
+  background-color: var(--tw-green-light);
+  border-color: var(--tw-green-20);
+}
+
+.danger {
+  color: var(--tw-red);
+  background-color: var(--tw-red-light);
+  border-color: var(--tw-red-20);
 }
 
 .label {

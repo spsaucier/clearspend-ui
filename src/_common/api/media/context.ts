@@ -4,6 +4,7 @@ export interface IMediaContext {
   small: boolean;
   medium: boolean;
   large: boolean;
+  wide: boolean;
 }
 
 export const MediaContext = createContext<Readonly<IMediaContext>>();

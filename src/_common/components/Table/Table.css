@@ -1,0 +1,23 @@
+.root {
+  width: 100%;
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+  text-align: left;
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+.head {
+  border-bottom: 1px solid var(--tw-gray-30);
+}
+
+.th {
+  padding: var(--pd-14) var(--pd-12);
+  font-family: var(--font-header);
+}
+
+.td {
+  padding: var(--pd-16) var(--pd-12);
+  vertical-align: top;
+}

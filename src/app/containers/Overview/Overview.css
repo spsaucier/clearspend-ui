@@ -33,3 +33,16 @@
     }
   }
 }
+
+.transaction-title {
+  margin: var(--pd-32) 0 var(--pd-16);
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  line-height: var(--line-28);
+}
+
+.transaction-compact {
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--tw-gray-30);
+  }
+}

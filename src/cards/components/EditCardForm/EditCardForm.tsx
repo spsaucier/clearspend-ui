@@ -25,6 +25,7 @@ interface FormValues {
   allocation: string;
   employee: string;
   types: CardType[];
+  personal: boolean;
 }
 
 interface EditCardFormProps {
@@ -37,7 +38,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const messages = useMessages();
 
   const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
-    defaultValues: { allocation: '', employee: '', types: [] },
+    defaultValues: { allocation: '', employee: '', types: [], personal: false },
     rules: { allocation: [required], employee: [required], types: [validTypes] },
   });
 
@@ -52,7 +53,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         userId: data.employee as UUIDString,
         currency: 'USD',
         cardType: data.types,
-        isPersonal: true,
+        isPersonal: data.personal,
       })
       .catch(() => {
         messages.error({ title: 'Something going wrong' });

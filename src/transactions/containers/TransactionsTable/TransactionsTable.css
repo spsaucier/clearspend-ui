@@ -1,0 +1,52 @@
+.cell {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.date {
+  font-weight: var(--font-500);
+}
+
+.card {
+  color: var(--tw-primary);
+}
+
+.merchant,
+.amount-cell {
+  display: flex;
+  gap: var(--pd-10);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  margin-top: -4px;
+  background: var(--tw-gray-30);
+  border-radius: var(--radius-8);
+}
+
+.status {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  margin-top: -4px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-green);
+  background: var(--tw-green-light);
+  border: 1px solid var(--tw-green-20);
+  border-radius: var(--radius-8);
+}
+
+.amount {
+  font-weight: var(--font-600);
+}
+
+.receipt {
+  margin-top: -4px;
+}
+
+.sub {
+  margin-top: var(--pd-2);
+  color: var(--tw-gray-60);
+}

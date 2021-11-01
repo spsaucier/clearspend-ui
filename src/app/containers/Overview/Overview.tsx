@@ -1,6 +1,10 @@
-import { createSignal } from 'solid-js';
+import { createSignal, Show, Index } from 'solid-js';
 
+import { times } from '_common/utils/times';
 import { TabList, Tab } from '_common/components/Tabs';
+import { useMediaContext } from '_common/api/media/context';
+import { TransactionCompact } from 'transactions/components/TransactionCompact';
+import { TransactionsTable } from 'transactions/containers/TransactionsTable';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -16,6 +20,7 @@ enum TimePeriod {
 }
 
 export function Overview() {
+  const media = useMediaContext();
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
   return (
@@ -30,6 +35,20 @@ export function Overview() {
       <div class={css.top}>
         <SpendWidget />
         <SpendingByWidget />
+      </div>
+      <div>
+        <h3 class={css.transactionTitle}>Recent Transactions</h3>
+        <Show
+          when={media.large}
+          fallback={
+            <>
+              {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
+              <Index each={times(10)}>{() => <TransactionCompact class={css.transactionCompact} />}</Index>
+            </>
+          }
+        >
+          <TransactionsTable />
+        </Show>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { IMediaContext, MediaContext } from './context';
 // NOTE: sync with values in media.css
 const BP_MEDIUM = 768;
 const BP_LARGE = 1024;
+const BP_WIDE = 1200;
 
 const UPDATE_TIMEOUT = 100;
 
@@ -15,7 +16,7 @@ function match(width: number): boolean {
 
 function getState(): Readonly<IMediaContext> {
   const medium = match(BP_MEDIUM);
-  return { small: !medium, medium, large: match(BP_LARGE) };
+  return { small: !medium, medium, large: match(BP_LARGE), wide: match(BP_WIDE) };
 }
 
 interface MediaProviderProps {

@@ -25,7 +25,7 @@ export default function EditCard() {
   const onSave = async (params: Readonly<IssueCard>) => {
     await saveCard(params);
     messages.success({ title: 'Changes successfully saved.' });
-    navigate('/cards');
+    navigate('/'); // '/cards'
   };
 
   return (
