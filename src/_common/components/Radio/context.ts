@@ -6,7 +6,7 @@ export const GroupContext = createContext<Omit<RadioGroupProps, 'class' | 'child
 
 export function useGroupContext() {
   const context = useContext(GroupContext);
-  if (!context) throw new Error();
+  if (!context) throw new ReferenceError('GroupContext');
 
   return context;
 }

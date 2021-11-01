@@ -11,7 +11,7 @@ export const BusinessContext = createContext<Readonly<IBusinessContext>>();
 
 export function useBusiness() {
   const context = useContext(BusinessContext);
-  if (!context) throw new Error('BusinessContext');
+  if (!context) throw new ReferenceError('BusinessContext');
 
   return context;
 }

@@ -14,7 +14,7 @@ export const MessagesContext = createContext<Readonly<IMessagesContext>>();
 
 export function useMessages() {
   const context = useContext(MessagesContext);
-  if (!context) throw new Error();
+  if (!context) throw new ReferenceError('MessagesContext');
 
   return context;
 }

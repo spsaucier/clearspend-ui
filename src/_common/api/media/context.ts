@@ -10,7 +10,7 @@ export const MediaContext = createContext<Readonly<IMediaContext>>();
 
 export function useMediaContext(): Readonly<IMediaContext> {
   const context = useContext(MediaContext);
-  if (!context) throw new Error();
+  if (!context) throw new ReferenceError('MediaContext');
 
   return context;
 }

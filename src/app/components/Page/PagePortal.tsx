@@ -9,7 +9,7 @@ interface FooterPortalProps {
 
 export function PagePortal(props: Readonly<FooterPortalProps>) {
   const context = useContext(PageContext);
-  if (!context.current) throw new Error('PageContext');
+  if (!context.current) throw new ReferenceError('PageContext');
 
   return <Portal mount={context.current}>{props.children}</Portal>;
 }

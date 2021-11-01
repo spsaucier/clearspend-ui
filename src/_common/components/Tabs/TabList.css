@@ -1,0 +1,20 @@
+.root {
+  position: relative;
+  display: flex;
+  margin-bottom: var(--pd-24);
+  gap: var(--pd-8) var(--pd-24);
+  border-bottom: 1px solid var(--tw-gray-30);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff);
+  }
+}
