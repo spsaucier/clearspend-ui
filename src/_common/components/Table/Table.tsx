@@ -11,7 +11,7 @@ export interface TableColumn<T extends {}> {
   render?: (row: T) => JSXElement;
 }
 
-interface TableProps<T extends {}> {
+export interface TableProps<T extends {}> {
   columns: readonly Readonly<TableColumn<T>>[];
   data: readonly T[];
   class?: string;

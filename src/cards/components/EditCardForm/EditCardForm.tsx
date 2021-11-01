@@ -3,7 +3,7 @@ import { Show, For } from 'solid-js';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Select, Option } from '_common/components/Select';
-import { RadioGroup, Radio } from '_common/components/Radio';
+import { Switch } from '_common/components/Switch';
 import type { UUIDString } from 'app/types/common';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
@@ -99,15 +99,10 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         <FormItem label="Card type(s)" error={errors().types}>
           <CardTypeSelect value={values().types} class={css.types} onChange={handlers.types} />
         </FormItem>
-        <FormItem
-          label="Employee name on card"
-          extra="If you select no, then the card will display the name of the company."
-          class={css.field}
-        >
-          <RadioGroup name="name-on-card" disabled class={css.radio}>
-            <Radio value="yes">Yes</Radio>
-            <Radio value="no">No</Radio>
-          </RadioGroup>
+        <FormItem extra="If you select no, then the card will display the name of the company." class={css.field}>
+          <Switch name="name-on-card" value={values().personal} onChange={handlers.personal}>
+            Employee name on card
+          </Switch>
         </FormItem>
       </Section>
       <Show when={isDirty()}>

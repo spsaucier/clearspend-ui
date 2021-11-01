@@ -1,0 +1,56 @@
+.root {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.input {
+  display: none;
+}
+
+.control {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  background: var(--tw-gray-20);
+  border-radius: var(--radius-20);
+  transition: background 0.3s;
+
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: var(--tw-gray-60);
+    border-radius: 50%;
+    transition: background 0.3s, transform 0.3s;
+    transform: translate3d(4px, 4px, 0);
+  }
+
+  @nest .input:checked + & {
+    background-color: var(--tw-primary);
+
+    &::after {
+      background-color: var(--tw-white);
+      transform: translate3d(18px, 4px, 0);
+    }
+  }
+
+  @nest .input:disabled + & {
+    background-color: var(--tw-gray-20);
+
+    &::after {
+      background-color: var(--tw-white);
+    }
+  }
+}
+
+.label {
+  margin-left: var(--pd-8);
+
+  @nest .input:disabled + .control + & {
+    color: var(--tw-gray-60);
+  }
+}

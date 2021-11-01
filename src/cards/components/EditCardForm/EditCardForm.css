@@ -10,7 +10,6 @@
   }
 }
 
-.types,
-.radio {
+.types {
   margin: var(--pd-8) 0;
 }
