@@ -35,19 +35,11 @@ export default function Main() {
   });
 
   return (
-    <Switch>
-      <Match when={status().error}>
-        <Fault onReload={refetch} />
-      </Match>
-      <Match when={status().loading && !business()}>
-        <div class={css.loading}>
-          <Spin />
-        </div>
-      </Match>
-      <Match when={!!business()}>
+    <Switch
+      fallback={
         <BusinessContext.Provider value={{ business, refetch }}>
           <Switch>
-            <Match when={!(business().status as unknown) || business().status === BusinessStatus.ONBOARDING}>
+            <Match when={!(business() as unknown) || business().status === BusinessStatus.ONBOARDING}>
               <Onboarding />
             </Match>
             <Match when={business().status === BusinessStatus.ACTIVE}>
@@ -61,6 +53,15 @@ export default function Main() {
             </Match>
           </Switch>
         </BusinessContext.Provider>
+      }
+    >
+      <Match when={status().error}>
+        <Fault onReload={refetch} />
+      </Match>
+      <Match when={status().loading && !business()}>
+        <div class={css.loading}>
+          <Spin />
+        </div>
       </Match>
     </Switch>
   );

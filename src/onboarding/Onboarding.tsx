@@ -7,7 +7,7 @@ import { Page } from 'app/components/Page';
 import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { ownerStore } from 'app/stores/owner';
-import { OnboardingStep } from 'app/types/businesses';
+import { OnboardingStep, Businesses } from 'app/types/businesses';
 import twLogo from 'app/assets/tw-logo.svg';
 import { formatName } from 'employees/utils/formatName';
 
@@ -29,10 +29,10 @@ export default function Onboarding() {
 
   const { business, refetch } = useBusiness();
 
-  const [step, setStep] = createSignal<OnboardingStep>(business().onboardingStep);
+  const [step, setStep] = createSignal<OnboardingStep | undefined>((business() as Businesses | null)?.onboardingStep);
   const [accounts, setAccounts] = createSignal<readonly Readonly<LinkedBankAccounts>[]>([]);
 
-  if (business().onboardingStep === OnboardingStep.TRANSFER_MONEY) {
+  if ((business() as Businesses | null)?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
     getBankAccounts()
       .then((data) => setAccounts(data))
       .catch(() => messages.error({ title: 'Something going wrong' }));
