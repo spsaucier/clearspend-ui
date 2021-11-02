@@ -2,10 +2,10 @@ import { createSignal, createEffect, Show } from 'solid-js';
 import { useScript } from 'solid-use-script';
 
 import { Section } from 'app/components/Section';
+import { useMessages } from 'app/containers/Messages/context';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { VerifyAccount } from '../VerifyAccount';
-import { readBusinessID } from '../../storage';
 import { getLinkToken } from '../../services/accounts';
 
 import css from './LinkAccount.css';
@@ -13,40 +13,43 @@ import css from './LinkAccount.css';
 const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
 
 interface LinkAccountProps {
-  onNext: (metadata: Readonly<PlaidMetadata>) => Promise<unknown>;
+  onNext: (token: string) => Promise<unknown>;
 }
 
 export function LinkAccount(props: Readonly<LinkAccountProps>) {
   let handler: PlaidLink | undefined;
-  const [loadingNext, next] = wrapAction(props.onNext);
 
+  const messages = useMessages();
+  const [processing, next] = wrapAction(props.onNext);
+
+  const [loading, scriptError] = useScript(PLAID_SCRIPT);
   const [token, setToken] = createSignal<string>();
-  const [loadingScript, scriptError] = useScript(PLAID_SCRIPT);
-  const [loading, setLoading] = createSignal(true);
+  const [init, setInit] = createSignal(true);
 
-  getLinkToken(readBusinessID())
+  getLinkToken()
     .then(setToken)
     .catch(() => {
       /* TODO */
     });
 
   createEffect(() => {
-    const linkToken = token();
-    if (!linkToken || loadingScript()) return;
-
+    if (!token() || loading()) return;
     let data: PlaidMetadata | undefined;
 
     handler = Plaid.create({
-      token: linkToken,
+      token: token()!,
       receivedRedirectUri: null,
       onSuccess: (_, metadata) => {
         data = metadata;
       },
-      onLoad: () => setLoading(false),
+      onLoad: () => {
+        setInit(false);
+        handler?.open();
+      },
       onEvent: (eventName) => {
         if (eventName === 'HANDOFF' && data) {
-          next(data).catch(() => {
-            /* TODO */
+          next(data.public_token).catch(() => {
+            messages.error({ title: 'Something going wrong' });
           });
         }
       },
@@ -61,7 +64,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
       <Show when={!scriptError()} fallback="Failed to load API">
         <div class={css.wrapper}>
           <VerifyAccount
-            loading={loadingScript() || loading() || loadingNext()}
+            loading={loading() || init() || processing()}
             class={css.verify}
             onVerifyClick={() => {
               handler?.open();

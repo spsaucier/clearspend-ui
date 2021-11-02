@@ -3,11 +3,11 @@ import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import twLogo from 'app/assets/tw-logo.svg';
-import { getNoop } from '_common/utils/getNoop';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
-import { saveBusinessProspectID, readBusinessProspectID } from 'onboarding/storage';
-import { IdentifierType } from 'onboarding/types';
+import { saveBusinessProspectID } from 'onboarding/storage';
+import { ProspectStatus, IdentifierType } from 'onboarding/types';
+import { ownerStore } from 'app/stores/owner';
 
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
@@ -15,58 +15,86 @@ import { EmailForm } from './components/EmailForm';
 import { PhoneForm } from './components/PhoneForm';
 import { VerifyForm } from './components/VerifyForm';
 import { PasswordForm } from './components/PasswordForm';
-import { saveSignupName } from './storage';
+import { useSignup, SignupStore } from './store';
 
 import css from './SignUp.css';
 
 enum Step {
   name,
   email,
-  emailConfirm,
+  emailOtp,
   phone,
-  phoneConfirm,
+  phoneOtp,
   password,
+}
+
+function getInitStep(store: SignupStore): Step {
+  const { first, last } = store;
+  return !!first && !!last ? Step.email : Step.name;
 }
 
 export default function SignUp() {
   const navigate = useNavigate();
 
-  const [shared, setShared] = createSignal<string>('');
-  const [step, setStep] = createSignal<Step>(Step.name);
+  const { store, setName, setEmail, setTel, cleanup } = useSignup();
+  const [step, setStep] = createSignal<Step>(getInitStep(store));
   const next = () => setStep((prev) => prev + 1);
 
-  let onSignup: (email: string) => Promise<unknown> = getNoop(true);
-
   const onNameUpdate = (firstName: string, lastName: string) => {
-    saveSignupName({ firstName, lastName });
-
-    onSignup = async (email: string) => {
-      setShared(email);
-      const resp = await signup({ email, firstName, lastName });
-      saveBusinessProspectID(resp.businessProspectId);
-      next();
-    };
+    setName(firstName, lastName);
     next();
   };
 
+  const onSignup = async (email: string) => {
+    const { first, last } = store;
+
+    if (!first || !last) {
+      setStep(Step.name);
+      return;
+    }
+
+    const resp = await signup({ email, firstName: first, lastName: last });
+
+    setEmail(email, resp.businessProspectId);
+    saveBusinessProspectID(resp.businessProspectId); // TODO: remove
+
+    switch (resp.businessProspectStatus) {
+      case ProspectStatus.COMPLETED:
+        cleanup();
+        navigate('/login');
+        break;
+      case ProspectStatus.EMAIL_VERIFIED:
+        setStep(Step.phone);
+        break;
+      case ProspectStatus.MOBILE_VERIFIED:
+        setStep(Step.password);
+        break;
+      case ProspectStatus.NEW:
+      default:
+        setStep(Step.emailOtp);
+    }
+  };
+
   const onEmailConfirm = async (otp: string) => {
-    await confirmOTP(readBusinessProspectID(), { identifierType: IdentifierType.EMAIL, otp });
+    await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
     next();
   };
 
   const onPhoneUpdate = async (phone: string) => {
-    setShared(phone);
-    await setPhone(readBusinessProspectID(), phone);
+    await setPhone(store.pid!, phone);
+    setTel(phone);
     next();
   };
 
   const onPhoneConfirm = async (otp: string) => {
-    await confirmOTP(readBusinessProspectID(), { identifierType: IdentifierType.PHONE, otp });
+    await confirmOTP(store.pid!, { identifierType: IdentifierType.PHONE, otp });
     next();
   };
 
   const onPasswordUpdate = async (password: string) => {
-    await setPassword(readBusinessProspectID(), password);
+    await setPassword(store.pid!, password);
+    await ownerStore.login(store.email!, password);
+    cleanup();
     navigate('/onboarding');
   };
 
@@ -84,14 +112,14 @@ export default function SignUp() {
             <Match when={step() === Step.email}>
               <EmailForm onNext={onSignup} />
             </Match>
-            <Match when={step() === Step.emailConfirm}>
+            <Match when={step() === Step.emailOtp}>
               <VerifyForm
                 header="Verify your email"
                 description={
                   <Text
                     message="We have sent a confirmation code to <b>{email}</b>"
                     b={(text) => <strong>{text}</strong>}
-                    email={shared()}
+                    email={store.email!}
                   />
                 }
                 // TODO: need API
@@ -102,14 +130,14 @@ export default function SignUp() {
             <Match when={step() === Step.phone}>
               <PhoneForm onNext={onPhoneUpdate} />
             </Match>
-            <Match when={step() === Step.phoneConfirm}>
+            <Match when={step() === Step.phoneOtp}>
               <VerifyForm
                 header="Verify your phone number"
                 description={
                   <Text
                     message="We have sent a confirmation code to <b>{phone}</b>"
                     b={(text) => <strong>{text}</strong>}
-                    phone={formatPhone(shared())}
+                    phone={formatPhone(store.phone!)}
                   />
                 }
                 // TODO: need API

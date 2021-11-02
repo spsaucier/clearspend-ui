@@ -1,21 +1,25 @@
+import { onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { Link, useNavigate } from 'solid-app-router';
 
 import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
+import { SignUp } from 'signup';
 import twLogo from 'app/assets/tw-logo.svg';
 
 import { LoginForm } from '../../components/LoginForm';
-import { login } from '../../services/auth';
+import { ownerStore } from '../../stores/owner';
 
 import css from './Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
 
+  onMount(() => SignUp.preload());
+
   const submit = async (username: string, password: string) => {
-    await login(username, password);
+    await ownerStore.login(username, password);
     navigate('/');
   };
 

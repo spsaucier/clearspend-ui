@@ -1,10 +1,11 @@
-import { createContext, useContext, Resource } from 'solid-js';
+import { createContext, useContext, Accessor } from 'solid-js';
 
 import type { Businesses } from '../../types/businesses';
 
 interface IBusinessContext {
-  business: Resource<Readonly<Businesses>>;
-  refetch: () => void;
+  business: Accessor<Readonly<Businesses>>;
+  // mutate: (business: Readonly<Businesses> | null) => void;
+  refetch: () => Promise<unknown>;
 }
 
 export const BusinessContext = createContext<Readonly<IBusinessContext>>();

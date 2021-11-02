@@ -1,3 +1,7 @@
+export enum AppEvent {
+  Logout = 'logout',
+}
+
 export type UUIDString = string & { __isUUIDString: true };
 
 export interface Amount {

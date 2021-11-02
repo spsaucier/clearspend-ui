@@ -24,7 +24,7 @@ export function lazy<T extends {}>(loader: () => Promise<{ default: Component<T>
       <ErrorBoundary
         fallback={(error: ChunkError) => {
           // eslint-disable-next-line no-console
-          if (process.env.NODE_ENV === 'development') console.log({ error });
+          console.log({ error });
           return <Fault onReload={ERRORS.some(isMatched(error)) ? onReload : undefined} />;
         }}
       >

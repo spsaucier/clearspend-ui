@@ -1,5 +1,6 @@
 import { createSignal } from 'solid-js';
 
+import type { UUIDString } from 'app/types/common';
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
 import { RadioGroup, Radio } from '_common/components/Radio';
@@ -35,8 +36,18 @@ export function Test() {
         <br />
         <BankAccounts
           accounts={[
-            { id: '1', mask: '0000', name: 'Some name', subtype: 'type', type: 'type' },
-            { id: '2', mask: '1111', name: 'Some other name', subtype: 'type', type: 'type' },
+            {
+              businessBankAccountId: '1' as UUIDString,
+              accountNumber: '1234567812340000',
+              routingNumber: '',
+              name: 'Some name',
+            },
+            {
+              businessBankAccountId: '2' as UUIDString,
+              accountNumber: '1234567812341111',
+              routingNumber: '',
+              name: 'Some other name',
+            },
           ]}
         />
       </div>

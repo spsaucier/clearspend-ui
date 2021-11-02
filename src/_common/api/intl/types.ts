@@ -4,5 +4,8 @@ export enum NumberFormat {
 
 export enum DateFormat {
   default = 'default', // Sep 1, 2020
+  date = 'date', // 9/1/2020
+  simple = 'simple', // Sep 1
+  month = 'month', // Sep 2020
   time = 'time', // 12:00 AM
 }

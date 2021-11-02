@@ -1,27 +1,29 @@
-import { For } from 'solid-js';
+import { mergeProps, For } from 'solid-js';
 
-import { OnboardingStep } from '../../types';
+import { OnboardingStep } from 'app/types/businesses';
 
 import css from './SideSteps.css';
 
 const STEPS = [
-  { step: OnboardingStep.kyb, title: 'Business details' },
-  { step: OnboardingStep.kyc, title: 'Business leadership' },
-  { step: OnboardingStep.account, title: 'Add bank account' },
-  { step: OnboardingStep.money, title: 'Transfer money' },
+  { step: 'NONE', title: 'Business details' },
+  { step: OnboardingStep.BUSINESS_OWNERS, title: 'Business leadership' },
+  { step: OnboardingStep.LINK_ACCOUNT, title: 'Add bank account' },
+  { step: OnboardingStep.TRANSFER_MONEY, title: 'Transfer money' },
 ];
 
 interface SideStepsProps {
-  step: OnboardingStep;
+  step: OnboardingStep | undefined;
 }
 
 export function SideSteps(props: Readonly<SideStepsProps>) {
+  const merged = mergeProps({ step: 'NONE' }, props);
+
   return (
     <ul class={css.root}>
       <For each={STEPS}>
-        {(step) => (
-          <li class={css.item} classList={{ [css.active!]: step.step === props.step }}>
-            <span class={css.step}>{step.step + 1}</span>
+        {(step, idx) => (
+          <li class={css.item} classList={{ [css.active!]: step.step === merged.step }}>
+            <span class={css.step}>{idx() + 1}</span>
             {step.title}
           </li>
         )}

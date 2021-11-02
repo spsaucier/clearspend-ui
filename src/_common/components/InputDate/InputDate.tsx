@@ -1,5 +1,7 @@
 import { Accessor, createSignal, createMemo } from 'solid-js';
+import { useI18n } from 'solid-i18n';
 
+import { DateFormat } from '../../api/intl/types';
 import { Input } from '../Input';
 import { Icon } from '../Icon';
 import { Popover } from '../Popover';
@@ -23,6 +25,7 @@ export interface InputDateProps {
 }
 
 export function InputDate(props: Readonly<InputDateProps>) {
+  const i18n = useI18n();
   const [open, setOpen] = createSignal(false);
 
   let focusTimeout: number;
@@ -53,8 +56,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
     return undefined;
   });
 
-  // TODO: Use i18n?
-  const strValue = createMemo(() => value()?.toLocaleDateString('en-US'));
+  const strValue = createMemo(() => value() && i18n.formatDateTime(value() as Date, DateFormat.date));
 
   return (
     <Popover
@@ -74,7 +76,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
         class={props.class}
         error={props.error}
         autoComplete="off"
-        placeholder="M/D/YYYY"
+        placeholder="MM/DD/YYYY"
         onFocusIn={() => setOpen(true)}
         onFocusOut={() => {
           clearFocusTimeout();

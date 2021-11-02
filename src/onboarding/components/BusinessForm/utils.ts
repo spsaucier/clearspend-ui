@@ -2,8 +2,9 @@ import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
 import { cleanPhone } from '_common/formatters/phone';
+import type { BusinessType } from 'app/types/businesses';
 
-import type { BusinessType, UpdateBusinessInfo } from '../../types';
+import type { UpdateBusinessInfo } from '../../types';
 
 import type { FormValues } from './types';
 

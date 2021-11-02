@@ -1,4 +1,5 @@
 import { createSignal, createMemo, Accessor, For } from 'solid-js';
+import { DateTime } from 'solid-i18n';
 
 import {
   daysInMonth,
@@ -10,6 +11,7 @@ import {
   dateToString,
   isSameDates,
 } from '_common/api/dates';
+import { DateFormat } from '_common/api/intl/types';
 import { times } from '_common/utils/times';
 import { join } from '_common/utils/join';
 
@@ -33,9 +35,6 @@ interface MonthProps {
 export function Month(props: Readonly<MonthProps>) {
   const [month, setMonth] = createSignal(props.value || new Date());
 
-  // TODO: Use i18n?
-  const title = createMemo(() => month().toLocaleDateString('en-US', { year: 'numeric', month: 'short' }));
-
   const shift: Accessor<readonly unknown[]> = createMemo(() => times(getWeekday(startOfMonth(month()))));
 
   const dates: Accessor<readonly Readonly<Day>[]> = createMemo(() => {
@@ -55,7 +54,9 @@ export function Month(props: Readonly<MonthProps>) {
         <button class={css.nav} onClick={() => changeMonth(true)}>
           <Icon name="chevron-left" />
         </button>
-        <span>{title()}</span>
+        <span>
+          <DateTime date={month() as Date} preset={DateFormat.month} />
+        </span>
         <button class={css.nav} onClick={() => changeMonth()}>
           <Icon name="chevron-right" />
         </button>

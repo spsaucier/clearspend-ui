@@ -18,20 +18,13 @@ import { DEPOSIT_MIN_AMOUNT, validAmount } from './rules';
 
 import css from './TransferMoney.css';
 
-const NUM_MASK_LENGTH = 4;
-
-export interface AccountsData {
-  plaid: PlaidMetadata['accounts'];
-  inner: readonly Readonly<LinkedBankAccounts>[];
-}
-
 interface FormValues {
   amount: string;
   account: string;
 }
 
 interface TransferMoneyProps {
-  data: Readonly<AccountsData>;
+  accounts: readonly Readonly<LinkedBankAccounts>[];
   onDeposit: (accountId: string, amount: number) => Promise<unknown>;
 }
 
@@ -46,13 +39,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    const bankId = props.data.inner.find(
-      (item) => item.accountNumber.slice(-NUM_MASK_LENGTH) === data.account,
-    )?.businessBankAccountId;
-
-    if (!bankId) return;
-
-    deposit(bankId, parseAmount(data.amount)).catch(() => {
+    deposit(data.account, parseAmount(data.amount)).catch(() => {
       messages.error({ title: 'Something going wrong' });
     });
   };
@@ -85,7 +72,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
       <Section title="Select account" class={css.section}>
         <div class={css.wrapper}>
           <FormItem error={errors().account}>
-            <BankAccounts accounts={props.data.plaid} value={values().account} onChange={handlers.account} />
+            <BankAccounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
           </FormItem>
           <Button type="primary" ghost icon="add" size="sm" disabled class={css.button}>
             Add New Bank Account

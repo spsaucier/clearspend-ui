@@ -1,6 +1,9 @@
 import { fetch } from '_common/api/fetch';
 import { isFetchError } from '_common/api/fetch/isFetchError';
 import { FetchOptions, HttpStatus } from '_common/api/fetch/types';
+import { events } from '_common/api/events';
+
+import { AppEvent } from '../types/common';
 
 function prefixUrl(url: string): string {
   return `/api${url}`;
@@ -8,7 +11,7 @@ function prefixUrl(url: string): string {
 
 function errorHandler(error: unknown) {
   if (isFetchError(error) && error.status === HttpStatus.AccessDenied) {
-    // TODO: Emit logout event
+    events.emit(AppEvent.Logout);
     // eslint-disable-next-line prefer-promise-reject-errors
     return Promise.reject(null);
   }

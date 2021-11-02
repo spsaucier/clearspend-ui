@@ -1,35 +1,30 @@
 import { service } from 'app/utils/service';
-import type { UUIDString } from 'app/types/common';
 
 import type { LinkToken, LinkedBankAccounts } from '../types';
 
-function getHeaders(bid: UUIDString) {
-  return { headers: { businessId: bid } };
+export async function getLinkToken() {
+  return (await service.get<LinkToken>('/business-bank-accounts/link-token')).data.linkToken;
 }
 
-export async function getLinkToken(bid: UUIDString) {
-  return (await service.get<LinkToken>('/business-bank-accounts/link-token', getHeaders(bid))).data.linkToken;
-}
-
-export async function getBusinessAccounts(bid: UUIDString, publicToken: string) {
+export async function linkBankAccounts(publicToken: string) {
   return (
     await service.get<readonly Readonly<LinkedBankAccounts>[]>(
       `/business-bank-accounts/link-token/${publicToken}/accounts`,
-      getHeaders(bid),
     )
   ).data;
 }
 
-export async function deposit(bid: UUIDString, accountId: string, amount: number) {
-  return service.post(
-    `/business-bank-accounts/${accountId}/transactions`,
-    {
-      bankAccountTransactType: 'DEPOSIT',
-      amount: {
-        currency: 'USD',
-        amount: amount,
-      },
+export async function getBankAccounts() {
+  return (await service.get<readonly Readonly<LinkedBankAccounts>[]>('/business-bank-accounts')).data;
+}
+
+export async function deposit(accountId: string, amount: number) {
+  return service.post(`/business-bank-accounts/${accountId}/transactions`, {
+    bankAccountTransactType: 'DEPOSIT',
+    amount: {
+      currency: 'USD',
+      amount: amount,
     },
-    getHeaders(bid),
-  );
+    isOnboarding: true,
+  });
 }

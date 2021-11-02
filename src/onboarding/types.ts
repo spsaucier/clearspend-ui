@@ -1,11 +1,5 @@
 import type { UUIDString, Address } from 'app/types/common';
-
-export enum OnboardingStep {
-  kyb,
-  kyc,
-  account,
-  money,
-}
+import type { BusinessType, Businesses } from 'app/types/businesses';
 
 export interface UpdateBusinessAccount {
   email: string;
@@ -13,9 +7,16 @@ export interface UpdateBusinessAccount {
   lastName: string;
 }
 
+export enum ProspectStatus {
+  NEW = 'NEW',
+  EMAIL_VERIFIED = 'EMAIL_VERIFIED',
+  MOBILE_VERIFIED = 'MOBILE_VERIFIED',
+  COMPLETED = 'COMPLETED',
+}
+
 export interface BusinessAccount {
   businessProspectId: UUIDString;
-  otp: string; // TODO: Hope it's only for demo
+  businessProspectStatus: ProspectStatus;
 }
 
 export enum IdentifierType {
@@ -28,16 +29,6 @@ export interface ConfirmOTP {
   otp: string;
 }
 
-export enum BusinessType {
-  LLC = 'LLC',
-  LLP = 'LLP',
-  S_CORP = 'S_CORP',
-  C_CORP = 'C_CORP',
-  B_CORP = 'B_CORP',
-  SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
-  T_501_C_3 = '_501_C_3',
-}
-
 export interface UpdateBusinessInfo {
   legalName: string;
   businessType: BusinessType;
@@ -47,7 +38,7 @@ export interface UpdateBusinessInfo {
 }
 
 export interface UpdateBusinessInfoResp {
-  businessId: UUIDString;
+  business: Readonly<Businesses>;
   businessOwnerId: UUIDString;
 }
 
@@ -58,6 +49,7 @@ export interface UpdateBusinessOwner {
   taxIdentificationNumber: string;
   email: string;
   address: Readonly<Address>;
+  isOnboarding?: boolean;
 }
 
 export interface LinkToken {
@@ -68,5 +60,5 @@ export interface LinkedBankAccounts {
   accountNumber: string;
   businessBankAccountId: UUIDString;
   routingNumber: string;
-  name: null;
+  name: string;
 }
