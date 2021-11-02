@@ -31,3 +31,7 @@ pipelines:
           - gcloud config set project $GCLOUD_PROJECT_ID
           - gcloud container clusters get-credentials $GCLOUD_CLUSTER --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
           - kubectl rollout restart deployment capital-ui
+definitions:
+  services:
+    docker:
+      memory: 2048
