@@ -4,6 +4,7 @@ import { useNavigate } from 'solid-app-router';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { Tag } from '_common/components/Tag';
+import { ownerStore } from 'app/stores/owner';
 
 import { Page } from '../../components/Page';
 // import { Landing } from '../../containers/Landing';
@@ -16,7 +17,7 @@ export default function Dashboard() {
 
   return (
     <Page
-      title={<Text message="Welcome, {name}" name={'TODO'} />}
+      title={<Text message="Welcome, {name}" name={ownerStore.data.firstName} />}
       contentClass={css.content}
       extra={
         <Tag type="primary">

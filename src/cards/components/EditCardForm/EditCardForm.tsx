@@ -10,6 +10,7 @@ import { Section } from 'app/components/Section';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import type { Allocation } from 'allocations/types';
+import { formatName } from 'employees/utils/formatName';
 import type { User } from 'employees/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
@@ -84,9 +85,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             error={Boolean(errors().employee)}
             onChange={handlers.employee}
           >
-            <For each={props.users}>
-              {(item) => <Option value={item.userId}>{`${item.firstName} ${item.lastName}`}</Option>}
-            </For>
+            <For each={props.users}>{(item) => <Option value={item.userId}>{formatName(item)}</Option>}</For>
           </Select>
         </FormItem>
       </Section>

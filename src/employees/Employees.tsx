@@ -8,6 +8,7 @@ import { ownerStore } from 'app/stores/owner';
 import { AppEvent } from 'app/types/common';
 
 import { getUsers } from './services';
+import { formatName } from './utils/formatName';
 
 export default function Employees() {
   const [data] = createResource(getUsers, { initialValue: [] });
@@ -17,7 +18,7 @@ export default function Employees() {
   return (
     <Page title="Employees">
       <ul>
-        <For each={data()}>{(item) => <li>{`(${item.type}) ${item.firstName} ${item.lastName}`}</li>}</For>
+        <For each={data()}>{(item) => <li>{`(${item.type}) ${formatName(item)}`}</li>}</For>
       </ul>
       <Button
         type="primary"

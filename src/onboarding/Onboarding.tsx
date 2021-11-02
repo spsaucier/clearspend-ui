@@ -9,6 +9,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { ownerStore } from 'app/stores/owner';
 import { OnboardingStep } from 'app/types/businesses';
 import twLogo from 'app/assets/tw-logo.svg';
+import { formatName } from 'employees/utils/formatName';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -76,7 +77,7 @@ export default function Onboarding() {
           </Show>
           <footer class={css.footer}>
             <Icon name="user" />
-            <span class={css.user}>{`${ownerStore.data.firstName} ${ownerStore.data.lastName}`}</span>
+            <span class={css.user}>{formatName(ownerStore.data)}</span>
           </footer>
         </div>
       }
