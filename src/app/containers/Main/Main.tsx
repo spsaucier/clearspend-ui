@@ -10,13 +10,17 @@ import { Onboarding } from 'onboarding';
 
 import { getBusiness } from '../../services/businesses';
 import { ownerStore } from '../../stores/owner';
-import { BusinessStatus } from '../../types/businesses';
+import { BusinessStatus, Businesses } from '../../types/businesses';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
 import { BusinessContext } from './context';
 
 import css from './Main.css';
+
+function isStatus(business: Readonly<Businesses> | null, status: BusinessStatus): boolean {
+  return business?.status === status;
+}
 
 export default function Main() {
   const navigate = useNavigate();
@@ -37,18 +41,18 @@ export default function Main() {
   return (
     <Switch
       fallback={
-        <BusinessContext.Provider value={{ business, refetch }}>
+        <BusinessContext.Provider value={{ business, refetch, mutate }}>
           <Switch>
-            <Match when={!(business() as unknown) || business().status === BusinessStatus.ONBOARDING}>
+            <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>
               <Onboarding />
             </Match>
-            <Match when={business().status === BusinessStatus.ACTIVE}>
+            <Match when={isStatus(business(), BusinessStatus.ACTIVE)}>
               <MainRoutes />
             </Match>
-            <Match when={business().status === BusinessStatus.SUSPENDED}>
+            <Match when={isStatus(business(), BusinessStatus.SUSPENDED)}>
               <div>SUSPENDED</div>
             </Match>
-            <Match when={business().status === BusinessStatus.CLOSED}>
+            <Match when={isStatus(business(), BusinessStatus.CLOSED)}>
               <div>CLOSED</div>
             </Match>
           </Switch>

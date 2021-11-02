@@ -1,6 +1,7 @@
 import { createSignal } from 'solid-js';
 
 import { storage } from '_common/api/storage';
+import type { UUIDString } from 'app/types/common';
 
 import { login, logout } from '../services/auth';
 import type { BusinessOwner } from '../types/businesses';
@@ -12,6 +13,11 @@ const [owner, setOwner] = createSignal<BusinessOwner | null>(storage.get(STORAGE
 export const ownerStore = {
   get data() {
     return owner()!;
+  },
+  setUserId: (userId: UUIDString) => {
+    setOwner((prev) => {
+      return prev && { ...prev, userId };
+    });
   },
   login: async (username: string, password: string) => {
     const data = await login(username, password);

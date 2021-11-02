@@ -5,7 +5,6 @@ import { Text } from 'solid-i18n';
 import twLogo from 'app/assets/tw-logo.svg';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
-import { saveBusinessProspectID } from 'onboarding/storage';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { ownerStore } from 'app/stores/owner';
 
@@ -56,7 +55,6 @@ export default function SignUp() {
     const resp = await signup({ email, firstName: first, lastName: last });
 
     setEmail(email, resp.businessProspectId);
-    saveBusinessProspectID(resp.businessProspectId); // TODO: remove
 
     switch (resp.businessProspectStatus) {
       case ProspectStatus.COMPLETED:

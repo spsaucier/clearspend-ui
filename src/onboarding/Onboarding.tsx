@@ -1,13 +1,13 @@
-import { createSignal, batch, Show, Switch, Match } from 'solid-js';
+import { useContext, createSignal, batch, Show, Switch, Match } from 'solid-js';
 
 import { Icon } from '_common/components/Icon';
 import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
-import { useBusiness } from 'app/containers/Main/context';
+import { BusinessContext } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { ownerStore } from 'app/stores/owner';
-import { OnboardingStep, Businesses } from 'app/types/businesses';
+import { OnboardingStep } from 'app/types/businesses';
 import twLogo from 'app/assets/tw-logo.svg';
 import { formatName } from 'employees/utils/formatName';
 
@@ -18,7 +18,6 @@ import { LinkAccount } from './components/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
 import { setBusinessInfo, setBusinessOwner } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, deposit } from './services/accounts';
-import { readBusinessProspectID } from './storage';
 import type { UpdateBusinessInfo, UpdateBusinessOwner, LinkedBankAccounts } from './types';
 
 import css from './Onboarding.css';
@@ -27,21 +26,21 @@ export default function Onboarding() {
   const media = useMediaContext();
   const messages = useMessages();
 
-  const { business, refetch } = useBusiness();
+  const { business, refetch, mutate } = useContext(BusinessContext)!;
 
-  const [step, setStep] = createSignal<OnboardingStep | undefined>((business() as Businesses | null)?.onboardingStep);
+  const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep);
   const [accounts, setAccounts] = createSignal<readonly Readonly<LinkedBankAccounts>[]>([]);
 
-  if ((business() as Businesses | null)?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
+  if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
     getBankAccounts()
       .then((data) => setAccounts(data))
       .catch(() => messages.error({ title: 'Something going wrong' }));
   }
 
   const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
-    await setBusinessInfo(readBusinessProspectID(), data);
-    // TODO
-    // removeBusinessProspectID();
+    const resp = await setBusinessInfo(ownerStore.data.userId, data);
+    mutate(resp.business);
+    ownerStore.setUserId(resp.businessOwnerId);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
