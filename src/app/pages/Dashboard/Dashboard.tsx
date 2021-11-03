@@ -1,4 +1,4 @@
-import { createSignal, createResource, createMemo, Show } from 'solid-js';
+import { createSignal, createResource, createMemo } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
@@ -27,15 +27,14 @@ export default function Dashboard() {
       title={<Text message="Welcome, {name}" name={ownerStore.data.firstName} />}
       contentClass={css.content}
       extra={
-        <Show when={!!allocations().length}>
-          <AllocationSelect
-            all
-            items={allocations()}
-            value={allocation()}
-            class={css.allocations}
-            onChange={setAllocation}
-          />
-        </Show>
+        <AllocationSelect
+          all
+          items={allocations()}
+          value={allocation()}
+          class={css.allocations}
+          disabled={!allocations().length}
+          onChange={setAllocation}
+        />
         // <Tag type="primary">
         //   North Valley Enterprises | <strong>$100.00</strong>
         // </Tag>

@@ -39,6 +39,7 @@ module.exports = (env, options) => {
         overlay: false,
       },
       compress: true,
+      https: true,
       historyApiFallback: true,
       proxy: {
         '/api': {

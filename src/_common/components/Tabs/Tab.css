@@ -1,4 +1,5 @@
 .root {
+  margin: 0;
   padding: 0 0 var(--pd-12);
   font-family: var(--font-header);
   font-size: inherit;

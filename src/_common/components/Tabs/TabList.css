@@ -1,12 +1,7 @@
 .root {
   position: relative;
-  display: flex;
   margin-bottom: var(--pd-24);
-  gap: var(--pd-8) var(--pd-24);
   border-bottom: 1px solid var(--tw-gray-30);
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
 
   &::after {
     content: '';
@@ -17,4 +12,14 @@
     height: 100%;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff);
   }
+}
+
+.wrapper {
+  display: inline-grid;
+  max-width: 100%;
+  grid-auto-flow: column;
+  grid-gap: var(--pd-24);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }

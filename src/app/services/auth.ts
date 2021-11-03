@@ -3,7 +3,10 @@ import { service } from 'app/utils/service';
 import type { BusinessOwner } from '../types/businesses';
 
 export async function login(username: string, password: string) {
-  return (await service.post<Readonly<BusinessOwner>>('/authentication/login', { username, password })).data;
+  const data = (await service.post<Readonly<BusinessOwner> | null>('/authentication/login', { username, password }))
+    .data;
+  if (!data) throw new Error();
+  return data;
 }
 
 export async function logout() {

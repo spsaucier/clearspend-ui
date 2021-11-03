@@ -12,7 +12,9 @@ export function TabList(props: Readonly<TabsProps>) {
 
   return (
     <div class={join(css.root, local.class)}>
-      <TabsContext.Provider value={context}>{local.children}</TabsContext.Provider>
+      <div class={css.wrapper}>
+        <TabsContext.Provider value={context}>{local.children}</TabsContext.Provider>
+      </div>
     </div>
   );
 }
