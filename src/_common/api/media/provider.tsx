@@ -1,14 +1,13 @@
-import { JSXElement, onMount, onCleanup } from 'solid-js';
+import type { JSXElement } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import { IMediaContext, MediaContext } from './context';
+import { useWindowResize } from './useWindowResize';
 
 // NOTE: sync with values in media.css
 const BP_MEDIUM = 768;
 const BP_LARGE = 1024;
 const BP_WIDE = 1200;
-
-const UPDATE_TIMEOUT = 100;
 
 function match(width: number): boolean {
   return window.matchMedia(`(min-width: ${width}px)`).matches;
@@ -25,22 +24,7 @@ interface MediaProviderProps {
 
 export function MediaProvider(props: Readonly<MediaProviderProps>) {
   const [store, setStore] = createStore(getState());
-
-  onMount(() => {
-    let timeout: number;
-
-    function onResize() {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => setStore(getState()), UPDATE_TIMEOUT);
-    }
-
-    window.addEventListener('resize', onResize);
-
-    onCleanup(() => {
-      clearTimeout(timeout);
-      window.removeEventListener('resize', onResize);
-    });
-  });
+  useWindowResize(() => setStore(getState()));
 
   return <MediaContext.Provider value={store}>{props.children}</MediaContext.Provider>;
 }
