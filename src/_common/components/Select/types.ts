@@ -14,6 +14,7 @@ export interface SelectProps {
   up?: boolean; // TODO: Choose automatically
   disabled?: boolean;
   class?: string;
+  popupClass?: string;
   placeholder?: string;
   error?: boolean;
   children: JSXElement;

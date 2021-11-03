@@ -4,6 +4,7 @@ import type { JSX } from 'solid-js';
 import { Icon, IconName } from '../Icon';
 import { Spin } from '../Spin';
 import { join } from '../../utils/join';
+import { isString } from '../../utils/isString';
 
 import css from './Button.css';
 
@@ -35,7 +36,7 @@ export function Button(props: Readonly<ButtonProps>) {
 
   const icon: Accessor<Readonly<IconProps> | undefined> = createMemo(() => {
     if (!merged.icon) return undefined;
-    return typeof merged.icon === 'string' ? { name: merged.icon, pos: 'left' } : merged.icon;
+    return isString(merged.icon) ? { name: merged.icon, pos: 'left' } : merged.icon;
   });
 
   const iconEl = icon() && <Icon name={icon()!.name} class={css.icon} />;

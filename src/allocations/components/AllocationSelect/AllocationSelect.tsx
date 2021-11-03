@@ -1,16 +1,22 @@
-import { For } from 'solid-js';
+import { For, Show } from 'solid-js';
 
 import { Select, Option } from '_common/components/Select';
-// import { Divider } from '_common/components/Divider';
-import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { Divider } from '_common/components/Divider';
 
 import type { Allocation } from '../../types';
 
+import { AllocationView } from './AllocationView';
+
 import css from './AllocationSelect.css';
+
+function getTotalAmount(items: readonly Readonly<Allocation>[]): number {
+  return items.reduce<number>((sum, item) => sum + item.account.ledgerBalance.amount, 0);
+}
 
 interface AllocationSelectProps {
   items: readonly Readonly<Allocation>[];
   value?: string;
+  all?: boolean;
   disabled?: boolean;
   class?: string;
   placeholder?: string;
@@ -20,15 +26,11 @@ interface AllocationSelectProps {
 
 export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
   const renderValue = (id: string) => {
-    const allocation = props.items.find((item) => item.allocationId === id)!;
+    if (!id && !props.all) return '';
+    if (!id) return <AllocationView name="All allocations" amount={getTotalAmount(props.items)} />;
 
-    return (
-      <span class={css.value}>
-        <span class={css.name}>{allocation.name}</span>
-        <span>&nbsp;|&nbsp;</span>
-        <strong class={css.amount}>{formatCurrency(allocation.account.ledgerBalance.amount)}</strong>
-      </span>
-    );
+    const found = props.items.find((item) => item.allocationId === id)!;
+    return <AllocationView name={found.name} amount={found.account.ledgerBalance.amount} />;
   };
 
   return (
@@ -39,11 +41,14 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
       error={props.error}
       valueRender={renderValue}
       class={props.class}
+      popupClass={css.popup}
       onChange={props.onChange}
     >
       <For each={props.items}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
-      {/*<Divider />*/}
-      {/*<Option value="ALL">All allocations</Option>*/}
+      <Show when={props.all}>
+        <Divider />
+        <Option value="">All allocations</Option>
+      </Show>
     </Select>
   );
 }

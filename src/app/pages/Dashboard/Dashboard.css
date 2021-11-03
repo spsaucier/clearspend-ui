@@ -1,3 +1,7 @@
+.allocations {
+  width: 240px;
+}
+
 .actions {
   display: flex;
   align-items: center;

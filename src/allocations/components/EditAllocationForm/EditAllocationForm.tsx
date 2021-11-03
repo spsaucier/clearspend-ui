@@ -4,7 +4,7 @@ import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
 import { Select } from '_common/components/Select';
-import { formatAmount } from '_common/formatters/amount';
+import { formatAmount, parseAmount } from '_common/formatters/amount';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
@@ -42,7 +42,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
       .onSave({
         programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
         name: data.name,
-        amount: { currency: 'USD', amount: 0 },
+        amount: { currency: 'USD', amount: parseAmount(data.amount) },
         parentAllocationId: (data.parent || undefined) as UUIDString,
       })
       .catch(() => {

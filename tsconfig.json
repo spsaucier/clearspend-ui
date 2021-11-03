@@ -4,6 +4,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "target": "es2017",
+    "lib": ["ES2019", "DOM"],
     "incremental": true,
     "allowJs": false,
     "strict": true,

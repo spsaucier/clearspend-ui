@@ -36,6 +36,7 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const { store, setName, setEmail, setTel, cleanup } = useSignup();
+
   const [step, setStep] = createSignal<Step>(getInitStep(store));
   const next = () => setStep((prev) => prev + 1);
 
@@ -73,6 +74,8 @@ export default function SignUp() {
     }
   };
 
+  const onEmailCodeResend = async () => onSignup(store.email!);
+
   const onEmailConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
     next();
@@ -83,6 +86,8 @@ export default function SignUp() {
     setTel(phone);
     next();
   };
+
+  const onPhoneCodeResend = async () => onPhoneUpdate(store.phone!);
 
   const onPhoneConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.PHONE, otp });
@@ -113,15 +118,8 @@ export default function SignUp() {
             <Match when={step() === Step.emailOtp}>
               <VerifyForm
                 header="Verify your email"
-                description={
-                  <Text
-                    message="We have sent a confirmation code to <b>{email}</b>"
-                    b={(text) => <strong>{text}</strong>}
-                    email={store.email!}
-                  />
-                }
-                // TODO: need API
-                onResend={Promise.resolve}
+                description={<Text message="We have sent a confirmation code to <b>{email}</b>" email={store.email!} />}
+                onResend={onEmailCodeResend}
                 onConfirm={onEmailConfirm}
               />
             </Match>
@@ -134,12 +132,10 @@ export default function SignUp() {
                 description={
                   <Text
                     message="We have sent a confirmation code to <b>{phone}</b>"
-                    b={(text) => <strong>{text}</strong>}
                     phone={formatPhone(store.phone!)}
                   />
                 }
-                // TODO: need API
-                onResend={Promise.resolve}
+                onResend={onPhoneCodeResend}
                 onConfirm={onPhoneConfirm}
               />
             </Match>

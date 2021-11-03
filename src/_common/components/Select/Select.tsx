@@ -4,6 +4,7 @@ import { Icon } from '../Icon';
 import { Input } from '../Input';
 import { Popover } from '../Popover';
 import { join } from '../../utils/join';
+import { isString } from '../../utils/isString';
 
 import { SelectContext } from './context';
 import { getOptions, getSelected, isMatch } from './utils';
@@ -21,7 +22,7 @@ export function Select(props: Readonly<SelectProps>) {
   let focusTimeout: number;
   const clearFocusTimeout = () => clearTimeout(focusTimeout);
 
-  const selected = createMemo(() => props.value && getSelected(props.value, props.children));
+  const selected = createMemo(() => (isString(props.value) ? getSelected(props.value, props.children) : undefined));
 
   const options = () => {
     const text = search().toLowerCase();
@@ -66,9 +67,8 @@ export function Select(props: Readonly<SelectProps>) {
   return (
     <Popover
       open={open()}
-      class={css.popup}
+      class={join(css.popup, props.popupClass)}
       position={props.up ? 'top-left' : 'bottom-left'}
-      // onClickOutside={() => setOpen(false)}
       content={
         <ul class={css.list}>
           <SelectContext.Provider value={{ value: props.value, onChange }}>{options()}</SelectContext.Provider>
@@ -90,8 +90,8 @@ export function Select(props: Readonly<SelectProps>) {
           onFocusOut={onFocusOut}
         />
         <span class={css.value}>
-          {typeof props.valueRender === 'function' && Boolean(props.value)
-            ? props.valueRender(props.value!, selected()!)
+          {typeof props.valueRender === 'function' && isString(props.value)
+            ? props.valueRender(props.value, selected()!)
             : selected()}
         </span>
         <Icon name="chevron-down" size="sm" class={join(css.chevron)} />

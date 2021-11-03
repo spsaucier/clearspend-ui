@@ -2,7 +2,18 @@ import type { JSXElement } from 'solid-js';
 
 export function getOptions(elements: JSXElement): readonly HTMLElement[] {
   const items = typeof elements === 'function' ? elements() : elements;
-  return Array.isArray(items) ? items.filter((el): el is HTMLElement => el instanceof HTMLElement) : [];
+  if (!Array.isArray(items)) return [];
+
+  return items.reduce<HTMLElement[]>((all, item) => {
+    let el = typeof item === 'function' ? item() : item;
+    if (!Array.isArray(el)) el = [el];
+
+    el.forEach((child) => {
+      if (child instanceof HTMLElement) all.push(child);
+    });
+
+    return all;
+  }, []);
 }
 
 export function isMatch(search: string) {
