@@ -1,6 +1,7 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { PieChart } from '_common/components/Charts';
 
 import { Widget } from '../Widget';
 import { TagSelect, TagOption } from '../TagSelect';
@@ -35,17 +36,31 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
       class={props.class}
       extra={<TagSelect value={type()} options={OPTIONS} onChange={setType} />}
     >
-      <ol class={css.list}>
-        <For each={MOCK}>
-          {(item, idx) => (
-            <li class={css.item}>
-              <span class={css.num}>{idx() + 1}.</span>
-              <span class={css.title}>{item.name}</span>
-              <span class={css.amount}>{formatCurrency(item.amount)}</span>
-            </li>
-          )}
-        </For>
-      </ol>
+      <div class={css.content}>
+        <ol class={css.list}>
+          <For each={MOCK}>
+            {(item, idx) => (
+              <li class={css.item}>
+                <span class={css.num}>{idx() + 1}.</span>
+                <span class={css.title}>{item.name}</span>
+                <span class={css.amount}>{formatCurrency(item.amount)}</span>
+              </li>
+            )}
+          </For>
+        </ol>
+        <Show when={type() === 'mca'}>
+          <PieChart
+            size={160}
+            data={[
+              { id: '1', percent: 45, color: '#2563EB' },
+              { id: '2', percent: 19, color: '#3B82F6' },
+              { id: '3', percent: 16, color: '#60A5FA' },
+              { id: '4', percent: 11, color: '#93C5FD' },
+              { id: '5', percent: 9, color: '#BFDBFE' },
+            ]}
+          />
+        </Show>
+      </div>
     </Widget>
   );
 }

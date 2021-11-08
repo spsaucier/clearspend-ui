@@ -1,14 +1,22 @@
+.content {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: var(--pd-16);
+}
+
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .item {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   padding: var(--pd-10) var(--pd-8);
   align-items: center;
-  gap: var(--pd-12);
+  grid-gap: var(--pd-12);
   font-size: var(--text-12);
   line-height: var(--line-16);
 }
@@ -21,6 +29,9 @@
   flex-grow: 1;
   color: var(--tw-primary);
   font-weight: var(--font-500);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .amount {
