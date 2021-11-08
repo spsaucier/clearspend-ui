@@ -1,0 +1,16 @@
+.tag {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  margin-left: var(--pd-8);
+  flex-shrink: 0;
+}

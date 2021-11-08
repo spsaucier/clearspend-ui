@@ -1,11 +1,14 @@
 import { JSXElement, useContext } from 'solid-js';
 
+import { join } from '../../utils/join';
+
 import { DropdownContext } from './context';
 
 import css from './MenuItem.css';
 
 interface MenuItemProps {
   disabled?: boolean;
+  class?: string;
   children: JSXElement;
   onClick?: () => void;
 }
@@ -19,7 +22,7 @@ export function MenuItem(props: Readonly<MenuItemProps>) {
   };
 
   return (
-    <li class={css.root} classList={{ [css.disabled!]: props.disabled }} onClick={onClick}>
+    <li class={join(css.root, props.class)} classList={{ [css.disabled!]: props.disabled }} onClick={onClick}>
       {props.children}
     </li>
   );

@@ -1,13 +1,18 @@
-import { For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 
-import { Tag } from '_common/components/Tag';
-import { Icon } from '_common/components/Icon';
-import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
 import { Widget } from '../Widget';
+import { TagSelect, TagOption } from '../TagSelect';
 
 import css from './SpendingByWidget.css';
+
+const OPTIONS: readonly Readonly<TagOption>[] = [
+  { key: 'alc', text: 'Allocation' },
+  { key: 'emp', text: 'Employee' },
+  { key: 'mer', text: 'Merchant' },
+  { key: 'mca', text: 'Merchant category' },
+];
 
 const MOCK = [
   { name: 'North Valley Enterprises', amount: 500 },
@@ -22,29 +27,13 @@ interface SpendingByWidgetProps {
 }
 
 export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
+  const [type, setType] = createSignal<string>(OPTIONS[0]!.key);
+
   return (
     <Widget
       title="Spending by"
       class={props.class}
-      extra={
-        <Dropdown
-          menu={
-            <>
-              <MenuItem>Allocation</MenuItem>
-              <MenuItem>Employee</MenuItem>
-              <MenuItem>Merchant</MenuItem>
-              <MenuItem>Merchant category</MenuItem>
-            </>
-          }
-        >
-          <Tag size="sm">
-            <span class={css.tag}>
-              <span>Allocation</span>
-              <Icon size="sm" name="chevron-down" />
-            </span>
-          </Tag>
-        </Dropdown>
-      }
+      extra={<TagSelect value={type()} options={OPTIONS} onChange={setType} />}
     >
       <ol class={css.list}>
         <For each={MOCK}>

@@ -14,7 +14,10 @@ export default function EditEmployee() {
 
   const onSave = async (firstName: string, lastName: string, email: string) => {
     await saveUser({ firstName, lastName, email });
-    messages.success({ title: 'Changes successfully saved.' });
+    messages.success({
+      title: 'Success',
+      message: 'The new employee has been successfully added to your organization.',
+    });
     navigate('/'); // '/employees'
   };
 
