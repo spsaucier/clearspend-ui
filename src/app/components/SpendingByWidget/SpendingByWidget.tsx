@@ -58,6 +58,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
               { id: '4', percent: 11, color: '#93C5FD' },
               { id: '5', percent: 9, color: '#BFDBFE' },
             ]}
+            class={css.chart}
           />
         </Show>
       </div>
