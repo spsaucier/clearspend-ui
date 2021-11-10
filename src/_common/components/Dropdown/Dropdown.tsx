@@ -9,6 +9,7 @@ import { DropdownContext } from './context';
 import css from './Dropdown.css';
 
 export interface DropdownProps {
+  id?: string;
   menu: JSXElement;
   position?: PopoverPosition;
   class?: string;
@@ -20,6 +21,7 @@ export function Dropdown(props: Readonly<DropdownProps>) {
 
   return (
     <Popover
+      id={props.id}
       open={open()}
       position={props.position}
       class={css.popup}

@@ -41,20 +41,27 @@ export default function Dashboard() {
       }
       actions={
         <div class={css.actions}>
-          <Button type="primary" size="lg" icon="add">
+          <Button id="add-balance-button" type="primary" size="lg" icon="add">
             Add balance
           </Button>
           <Dropdown
+            id="add-new-dropdown"
             position="bottom-right"
             menu={
               <>
-                <MenuItem onClick={() => navigate('/employees/edit')}>Employee</MenuItem>
-                <MenuItem onClick={() => navigate('/allocations/edit')}>Allocation</MenuItem>
-                <MenuItem onClick={() => navigate('/cards/edit')}>Card</MenuItem>
+                <MenuItem name="employee" onClick={() => navigate('/employees/edit')}>
+                  Employee
+                </MenuItem>
+                <MenuItem name="allocation" onClick={() => navigate('/allocations/edit')}>
+                  Allocation
+                </MenuItem>
+                <MenuItem name="card" onClick={() => navigate('/cards/edit')}>
+                  Card
+                </MenuItem>
               </>
             }
           >
-            <Button size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
+            <Button id="add-new-button" size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
               Add new
             </Button>
           </Dropdown>

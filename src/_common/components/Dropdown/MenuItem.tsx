@@ -7,6 +7,7 @@ import { DropdownContext } from './context';
 import css from './MenuItem.css';
 
 interface MenuItemProps {
+  name?: string;
   disabled?: boolean;
   class?: string;
   children: JSXElement;
@@ -22,7 +23,12 @@ export function MenuItem(props: Readonly<MenuItemProps>) {
   };
 
   return (
-    <li class={join(css.root, props.class)} classList={{ [css.disabled!]: props.disabled }} onClick={onClick}>
+    <li
+      data-name={props.name}
+      class={join(css.root, props.class)}
+      classList={{ [css.disabled!]: props.disabled }}
+      onClick={onClick}
+    >
       {props.children}
     </li>
   );

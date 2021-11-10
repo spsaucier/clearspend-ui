@@ -80,6 +80,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         </FormItem>
         <FormItem label="Employee" error={errors().employee} class={css.field}>
           <Select
+            name="employee"
             value={values().employee}
             placeholder="Search by employee name"
             error={Boolean(errors().employee)}

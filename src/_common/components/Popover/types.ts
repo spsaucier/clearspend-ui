@@ -12,6 +12,7 @@ export interface PopoverFuncProps {
 }
 
 interface BaseProps {
+  id?: string;
   balloon?: boolean;
   position?: PopoverPosition;
   content: JSXElement;

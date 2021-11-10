@@ -16,6 +16,7 @@ export interface IconProps {
 }
 
 export interface ButtonProps {
+  id?: string;
   type?: 'default' | 'primary';
   ghost?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -44,6 +45,7 @@ export function Button(props: Readonly<ButtonProps>) {
 
   return (
     <button
+      id={merged.id}
       type={merged.htmlType}
       disabled={merged.disabled}
       class={join(

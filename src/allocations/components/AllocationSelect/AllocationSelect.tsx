@@ -35,6 +35,7 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
 
   return (
     <Select
+      name="allocation"
       value={props.value}
       disabled={props.disabled}
       placeholder={props.placeholder}
