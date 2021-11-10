@@ -17,9 +17,11 @@ import { join } from '_common/utils/join';
 
 import { Icon } from '../Icon';
 
+import { getWeekdayNames } from './utils';
+
 import css from './Month.css';
 
-const WEEK_DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+const WEEKDAY_CHARACTERS = 2;
 
 interface Day {
   id: string;
@@ -34,6 +36,8 @@ interface MonthProps {
 
 export function Month(props: Readonly<MonthProps>) {
   const [month, setMonth] = createSignal(props.value || new Date());
+
+  const names = getWeekdayNames().map((name) => name.slice(0, WEEKDAY_CHARACTERS));
 
   const shift: Accessor<readonly unknown[]> = createMemo(() => times(getWeekday(startOfMonth(month()))));
 
@@ -62,7 +66,7 @@ export function Month(props: Readonly<MonthProps>) {
         </button>
       </div>
       <div class={css.weekdays}>
-        <For each={WEEK_DAY_NAMES}>{(name) => <div class={css.weekday}>{name}</div>}</For>
+        <For each={names}>{(name) => <div class={css.weekday}>{name}</div>}</For>
       </div>
       <div class={css.days}>
         <For each={shift()}>{() => <div class={join(css.day, css.empty)}>&nbsp;</div>}</For>

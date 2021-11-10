@@ -6,14 +6,14 @@ import { useTabsContext } from './context';
 
 import css from './Tab.css';
 
-interface TabProps {
-  value: string;
+interface TabProps<T = string> {
+  value: T;
   class?: string;
   children: JSXElement;
 }
 
-export function Tab(props: Readonly<TabProps>) {
-  const context = useTabsContext();
+export function Tab<T = string>(props: Readonly<TabProps<T>>) {
+  const context = useTabsContext<T>();
 
   const onClick = () => context.onChange?.(props.value);
 

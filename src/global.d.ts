@@ -6,6 +6,8 @@ declare const process: {
   env: Readonly<ProcessEnv>;
 };
 
+declare type DateString = string & { __isDateString: true };
+
 declare module '*.css' {
   const classes: Readonly<Record<string, string>>;
   export default classes;

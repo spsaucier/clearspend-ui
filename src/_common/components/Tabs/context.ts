@@ -4,8 +4,8 @@ import type { TabsProps } from './types';
 
 export const TabsContext = createContext<Pick<TabsProps, 'value' | 'onChange'>>();
 
-export function useTabsContext() {
+export function useTabsContext<T = string>() {
   const context = useContext(TabsContext);
   if (!context) throw new ReferenceError('TabsContext');
-  return context;
+  return context as Pick<TabsProps<T>, 'value' | 'onChange'>;
 }
