@@ -1,4 +1,5 @@
-import type { UUIDString, Address } from 'app/types/common';
+import type { UUIDString, Address, SignAmount } from 'app/types/common';
+import type { Card } from 'cards/types';
 
 export interface CreateUser {
   firstName: string;
@@ -16,11 +17,26 @@ export interface CreateUserResp {
 
 export enum UserType {
   EMPLOYEE = 'EMPLOYEE',
+  BUSINESS_OWNER = 'BUSINESS_OWNER',
 }
 
-export interface User {
+export interface BaseUser {
   userId: UUIDString;
   type: UserType;
   firstName: string;
   lastName: string;
+}
+
+export interface User extends BaseUser {
+  businessId: UUIDString;
+  address: Readonly<Address> | null;
+  email: string;
+  phone: string;
+}
+
+export interface UserCard {
+  card: Readonly<Card>;
+  ledgerBalance: Readonly<SignAmount>;
+  availableBalance: Readonly<SignAmount>;
+  allocationName: string;
 }

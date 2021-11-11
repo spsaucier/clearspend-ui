@@ -1,5 +1,5 @@
-import type { User } from '../types';
+import type { BaseUser } from '../types';
 
-export function formatName(user: Readonly<User>): string {
+export function formatName(user: Readonly<BaseUser>): string {
   return [user.firstName, user.lastName].join(' ');
 }

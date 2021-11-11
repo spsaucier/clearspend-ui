@@ -1,16 +1,18 @@
 import { createContext, useContext, Accessor } from 'solid-js';
 
-import type { Businesses, BusinessOwner } from '../../types/businesses';
+import type { User } from 'employees/types';
+
+import type { Businesses } from '../../types/businesses';
 
 interface InitContext {
-  owner: Accessor<Readonly<BusinessOwner>>;
+  owner: Accessor<Readonly<User>>;
   business: Accessor<Readonly<Businesses> | null>;
-  mutate: (business: [Readonly<BusinessOwner>, Readonly<Businesses>] | null) => void;
+  mutate: (business: [Readonly<User>, Readonly<Businesses>] | null) => void;
   refetch: () => Promise<unknown>;
 }
 
 interface ProvenContext extends InitContext {
-  owner: Accessor<Readonly<BusinessOwner>>;
+  owner: Accessor<Readonly<User>>;
   business: Accessor<Readonly<Businesses>>;
 }
 

@@ -1,0 +1,26 @@
+.data {
+  margin: var(--pd-12) 0;
+  font-weight: var(--font-500);
+}
+
+.cards {
+  padding: var(--pd-16) 0;
+}
+
+.cards-title {
+  margin: 0 0 var(--pd-8);
+  font-family: var(--font-header);
+  font-size: var(--text-12);
+  line-height: var(--line-24);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.cards-list {
+  display: grid;
+  grid-gap: var(--pd-8);
+}
+
+.edit {
+  margin-top: var(--pd-16);
+}

@@ -15,7 +15,7 @@ import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import type { Allocation } from 'allocations/types';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
-import type { User, CreateUserResp } from 'employees/types';
+import type { BaseUser, CreateUserResp } from 'employees/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import type { IssueCard, CardType } from '../../types';
@@ -34,7 +34,7 @@ interface FormValues {
 }
 
 interface EditCardFormProps {
-  users: readonly Readonly<User>[];
+  users: readonly Readonly<BaseUser>[];
   allocations: readonly Readonly<Allocation>[];
   onAddEmployee: (firstName: string, lastName: string, email: string) => Promise<Readonly<CreateUserResp>>;
   onSave: (params: Readonly<IssueCard>) => Promise<unknown>;

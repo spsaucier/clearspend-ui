@@ -1,0 +1,32 @@
+.root {
+  display: grid;
+  padding: var(--pd-16);
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pd-12);
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-10);
+}
+
+.icon {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-primary);
+  background: var(--tw-blue-light);
+  border: 1px solid var(--tw-blue-30);
+  border-radius: var(--radius-12);
+}
+
+.number {
+  color: var(--tw-primary);
+  font-weight: var(--font-500);
+  line-height: var(--line-24);
+}
+
+.allocation {
+  margin-top: var(--pd-8);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}

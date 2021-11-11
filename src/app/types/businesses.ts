@@ -1,5 +1,3 @@
-import type { User } from 'employees/types';
-
 import type { UUIDString, Address } from './common';
 
 export enum BusinessType {
@@ -43,10 +41,4 @@ export interface Businesses {
   legalName: string;
   onboardingStep: OnboardingStep;
   status: BusinessStatus;
-}
-
-export interface BusinessOwner extends User {
-  businessId: UUIDString;
-  email: string;
-  phone: string;
 }

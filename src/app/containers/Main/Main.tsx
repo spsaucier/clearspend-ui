@@ -6,10 +6,11 @@ import { Fault } from '_common/components/Fault';
 import { events } from '_common/api/events';
 import { getNoop } from '_common/utils/getNoop';
 import { useResource } from '_common/utils/useResource';
+import type { User } from 'employees/types';
 import { Onboarding } from 'onboarding';
 
 import { getOwner, getBusiness } from '../../services/businesses';
-import { BusinessStatus, Businesses, BusinessOwner } from '../../types/businesses';
+import { BusinessStatus, Businesses } from '../../types/businesses';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
@@ -57,9 +58,7 @@ export default function Main() {
         </div>
       </Match>
       <Match when={data()}>
-        <BusinessContext.Provider
-          value={{ business, owner: owner as Accessor<Readonly<BusinessOwner>>, refetch, mutate }}
-        >
+        <BusinessContext.Provider value={{ business, owner: owner as Accessor<Readonly<User>>, refetch, mutate }}>
           <Switch>
             <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>
               <Onboarding />
