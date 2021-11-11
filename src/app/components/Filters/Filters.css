@@ -1,0 +1,15 @@
+.root {
+  display: grid;
+  margin: var(--pd-16) 0;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: auto auto;
+  grid-gap: var(--pd-16);
+}
+
+.main {
+  display: inline-grid;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-gap: var(--pd-12);
+}

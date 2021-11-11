@@ -20,6 +20,8 @@
 }
 
 .disabled {
+  background-color: var(--tw-gray-10);
+
   &:hover {
     border-color: var(--tw-gray-30);
   }
@@ -36,7 +38,6 @@
 
   &:disabled {
     color: var(--tw-gray-60);
-    background-color: var(--tw-gray-10);
   }
 
   &:-webkit-autofill,
