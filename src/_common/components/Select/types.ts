@@ -15,6 +15,7 @@ export interface SelectProps {
   disabled?: boolean;
   class?: string;
   popupClass?: string;
+  popupRender?: (list: JSXElement) => JSXElement;
   placeholder?: string;
   error?: boolean;
   children: JSXElement;

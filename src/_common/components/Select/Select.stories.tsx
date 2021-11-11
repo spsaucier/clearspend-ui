@@ -51,3 +51,27 @@ export const CustomValueRender = (args: SelectProps) => {
     </div>
   );
 };
+
+export const CustomPopupRender = (args: SelectProps) => {
+  const [value, onChange] = createSignal<string>();
+
+  return (
+    <div>
+      <Select
+        {...args}
+        value={value()}
+        popupRender={(list) => (
+          <>
+            <div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>
+            {list}
+            <div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>
+          </>
+        )}
+        onChange={onChange}
+      >
+        <Option value="MKT">Marketing</Option>
+        <Option value="SAL">Sales</Option>
+      </Select>
+    </div>
+  );
+};

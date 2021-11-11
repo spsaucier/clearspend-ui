@@ -3,12 +3,12 @@
   top: 0;
   right: 0;
   display: flex;
-  padding: var(--pd-24);
   flex-direction: column;
   gap: var(--pd-16);
   z-index: var(--z-index-messages);
 }
 
 .message {
+  margin: var(--pd-12);
   transform: translate3d(0, 0, 0);
 }

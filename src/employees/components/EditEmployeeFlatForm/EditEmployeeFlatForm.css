@@ -1,0 +1,6 @@
+.root {
+  display: grid;
+  height: 100%;
+  grid-template-rows: 1fr auto;
+  grid-gap: var(--pd-16);
+}

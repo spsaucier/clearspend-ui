@@ -57,7 +57,7 @@ export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
           />
         </FormItem>
       </div>
-      <FormItem label="Company email address" error={errors().email} class={css.email}>
+      <FormItem label="Email address" error={errors().email} class={css.email}>
         <Input
           name="email"
           type="email"

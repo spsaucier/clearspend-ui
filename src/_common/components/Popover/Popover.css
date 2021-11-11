@@ -12,6 +12,7 @@
   display: flex;
   width: 240px;
   padding: var(--pd-16);
+  flex-direction: column;
   background: var(--tw-white);
   border-radius: var(--radius-8);
   transform: translate3d(0, 0, 0);

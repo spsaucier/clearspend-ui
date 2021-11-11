@@ -1,5 +1,6 @@
 export enum IconName {
   add = 'add',
+  'add-circle-outline' = 'add-circle-outline',
   allocations = 'allocations',
   approvals = 'approvals',
   'arrow-left' = 'arrow-left',

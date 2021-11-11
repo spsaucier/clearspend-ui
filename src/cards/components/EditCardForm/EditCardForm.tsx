@@ -1,17 +1,21 @@
 import { Show, For } from 'solid-js';
 
+import { useBool } from '_common/utils/useBool';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Select, Option } from '_common/components/Select';
+import { Icon } from '_common/components/Icon';
 import { Switch } from '_common/components/Switch';
+import { Drawer } from '_common/components/Drawer';
 import type { UUIDString } from 'app/types/common';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import type { Allocation } from 'allocations/types';
+import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
-import type { User } from 'employees/types';
+import type { User, CreateUserResp } from 'employees/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import type { IssueCard, CardType } from '../../types';
@@ -32,16 +36,24 @@ interface FormValues {
 interface EditCardFormProps {
   users: readonly Readonly<User>[];
   allocations: readonly Readonly<Allocation>[];
+  onAddEmployee: (firstName: string, lastName: string, email: string) => Promise<Readonly<CreateUserResp>>;
   onSave: (params: Readonly<IssueCard>) => Promise<unknown>;
 }
 
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const messages = useMessages();
+  const [showEmployee, toggleShowEmployee] = useBool();
 
   const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
     defaultValues: { allocation: '', employee: '', types: [], personal: false },
     rules: { allocation: [required], employee: [required], types: [validTypes] },
   });
+
+  const onAddEmployee = async (firstName: string, lastName: string, email: string) => {
+    const resp = await props.onAddEmployee(firstName, lastName, email);
+    handlers.employee(resp.userId);
+    toggleShowEmployee();
+  };
 
   const onSubmit = async () => {
     if (hasErrors(trigger())) return;
@@ -79,10 +91,20 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           />
         </FormItem>
         <FormItem label="Employee" error={errors().employee} class={css.field}>
+          {/* TODO: implement search by API */}
           <Select
             name="employee"
             value={values().employee}
             placeholder="Search by employee name"
+            popupRender={(list) => (
+              <>
+                {list}
+                <button id="add-employee" class={css.addEmployee} onClick={toggleShowEmployee}>
+                  <Icon name="add-circle-outline" size="sm" class={css.addEmployeeIcon} />
+                  Add New Employee
+                </button>
+              </>
+            )}
             error={Boolean(errors().employee)}
             onChange={handlers.employee}
           >
@@ -105,6 +127,9 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           </Switch>
         </FormItem>
       </Section>
+      <Drawer open={showEmployee()} title="New Employee" onClose={toggleShowEmployee}>
+        <EditEmployeeFlatForm onSave={onAddEmployee} />
+      </Drawer>
       <Show when={isDirty()}>
         <PageActions action="Create Card" onCancel={reset} onSave={onSubmit} />
       </Show>

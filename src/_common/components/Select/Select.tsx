@@ -64,16 +64,18 @@ export function Select(props: Readonly<SelectProps>) {
     }, FOCUS_OUT_DELAY);
   };
 
+  const renderList = () => (
+    <ul class={css.list}>
+      <SelectContext.Provider value={{ value: props.value, onChange }}>{options()}</SelectContext.Provider>
+    </ul>
+  );
+
   return (
     <Popover
       open={open()}
       class={join(css.popup, props.popupClass)}
       position={props.up ? 'top-left' : 'bottom-left'}
-      content={
-        <ul class={css.list}>
-          <SelectContext.Provider value={{ value: props.value, onChange }}>{options()}</SelectContext.Provider>
-        </ul>
-      }
+      content={props.popupRender ? props.popupRender(renderList()) : renderList()}
     >
       <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>
         <Input

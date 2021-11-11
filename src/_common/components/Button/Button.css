@@ -116,6 +116,11 @@
   &:hover {
     background: var(--tw-primary-dark);
   }
+
+  &:disabled {
+    color: var(--tw-gray-40);
+    background: var(--tw-gray-20);
+  }
 }
 
 .primary-ghost {

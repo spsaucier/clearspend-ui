@@ -16,10 +16,10 @@ export function useResource<T, P extends unknown>(
 ) {
   const [params, setParams] = createSignal<P>(cloneObject(initParams));
 
-  const [state, setState] = createSignal<DataState<T>>({
+  const [state, setState] = createSignal<DataState<T | null>>({
     loading: true,
     error: null,
-    data: null as unknown as T,
+    data: null,
   });
 
   const reload = () => {
@@ -30,12 +30,12 @@ export function useResource<T, P extends unknown>(
         setState({ loading: false, error: null, data });
       })
       .catch((error: unknown) => {
-        setState({ loading: false, error, data: null as unknown as T });
+        setState({ loading: false, error, data: null });
       });
   };
 
   const mutate = (data: T | null) => {
-    setState((prev) => ({ ...prev, data: data as T }));
+    setState((prev) => ({ ...prev, data: data }));
   };
 
   createEffect(() => {

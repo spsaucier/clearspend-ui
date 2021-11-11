@@ -13,3 +13,24 @@
 .types {
   margin: var(--pd-8) 0;
 }
+
+.add-employee {
+  display: flex;
+  margin: 0;
+  padding: var(--pd-8) var(--pd-12);
+  align-items: center;
+  font: inherit;
+  vertical-align: middle;
+  background: transparent;
+  border: 0;
+  cursor: default;
+
+  &:hover {
+    background: var(--tw-gray-10);
+  }
+}
+
+.add-employee-icon {
+  margin-right: var(--pd-8);
+  color: var(--tw-primary);
+}
