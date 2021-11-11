@@ -5,18 +5,19 @@ import { useNavigate } from 'solid-app-router';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
-import { ownerStore } from 'app/stores/owner';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { getAllocations } from 'allocations/services';
 
 import { Page } from '../../components/Page';
 // import { Landing } from '../../containers/Landing';
 import { Overview } from '../../containers/Overview';
+import { useBusiness } from '../../containers/Main/context';
 
 import css from './Dashboard.css';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { owner } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>('');
   const [data] = createResource(getAllocations, { initialValue: [] });
@@ -24,7 +25,7 @@ export default function Dashboard() {
 
   return (
     <Page
-      title={<Text message="Welcome, {name}" name={ownerStore.data.firstName} />}
+      title={<Text message="Welcome, {name}" name={owner().firstName} />}
       contentClass={css.content}
       extra={
         <AllocationSelect

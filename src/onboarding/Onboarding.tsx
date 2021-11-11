@@ -7,7 +7,6 @@ import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import { BusinessContext } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
-import { ownerStore } from 'app/stores/owner';
 import { OnboardingStep } from 'app/types/businesses';
 import twLogo from 'app/assets/tw-logo.svg';
 import { formatName } from 'employees/utils/formatName';
@@ -28,7 +27,7 @@ export default function Onboarding() {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const { business, refetch, mutate } = useContext(BusinessContext)!;
+  const { business, owner, refetch, mutate } = useContext(BusinessContext)!;
 
   const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep);
   const [accounts, setAccounts] = createSignal<readonly Readonly<LinkedBankAccounts>[]>([]);
@@ -40,14 +39,13 @@ export default function Onboarding() {
   }
 
   const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
-    const resp = await setBusinessInfo(ownerStore.data.userId, data);
-    mutate(resp.business);
-    ownerStore.setUserId(resp.businessOwnerId);
+    const resp = await setBusinessInfo(owner().userId, data);
+    mutate([{ ...owner(), userId: resp.businessOwnerId }, resp.business]);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
   const onUpdateKYC = async (data: Readonly<UpdateBusinessOwner>) => {
-    await setBusinessOwner(ownerStore.data.userId, { ...data, isOnboarding: true });
+    await setBusinessOwner(owner().userId, { ...data, isOnboarding: true });
     setStep(OnboardingStep.LINK_ACCOUNT);
   };
 
@@ -79,7 +77,7 @@ export default function Onboarding() {
           </Show>
           <footer class={css.footer}>
             <Icon name="user" />
-            <span class={css.user}>{formatName(ownerStore.data)}</span>
+            <span class={css.user}>{formatName(owner())}</span>
           </footer>
         </div>
       }

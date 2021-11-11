@@ -6,7 +6,7 @@ import twLogo from 'app/assets/tw-logo.svg';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
-import { ownerStore } from 'app/stores/owner';
+import { login } from 'app/services/auth';
 
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
@@ -96,7 +96,7 @@ export default function SignUp() {
 
   const onPasswordUpdate = async (password: string) => {
     await setPassword(store.pid!, password);
-    await ownerStore.login(store.email!, password);
+    await login(store.email!, password);
     cleanup();
     navigate('/onboarding');
   };

@@ -9,7 +9,7 @@ import { SignUp } from 'signup';
 import twLogo from 'app/assets/tw-logo.svg';
 
 import { LoginForm } from '../../components/LoginForm';
-import { ownerStore } from '../../stores/owner';
+import { login } from '../../services/auth';
 
 import css from './Login.css';
 
@@ -19,7 +19,7 @@ export default function Login() {
   onMount(() => SignUp.preload());
 
   const submit = async (username: string, password: string) => {
-    await ownerStore.login(username, password);
+    await login(username, password);
     navigate('/');
   };
 
