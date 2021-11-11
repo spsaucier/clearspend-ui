@@ -41,7 +41,7 @@ export function EmployeeProfile(props: Readonly<EmployeeProfileProps>) {
                 <Match when={cardsStatus().loading && !cards()}>
                   <Loading />
                 </Match>
-                <Match when={cards()}>
+                <Match when={cards()?.length}>
                   <div class={css.cards}>
                     <h4 class={css.cardsTitle}>Cards</h4>
                     <div class={css.cardsList}>
