@@ -14,14 +14,22 @@ import { UUIDString, AppEvent } from 'app/types/common';
 
 import { EmployeesTable } from './components/EmployeesTable';
 import { EmployeeProfile } from './containers/EmployeeProfile';
-import { getUsers } from './services';
+import { searchUsers } from './services';
+import type { SearchUserRequest } from './types';
+
+const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
+  pageRequest: {
+    pageNumber: 0,
+    pageSize: 10,
+  },
+};
 
 export default function Employees() {
   const navigate = useNavigate();
 
   const [uid, setUID] = createSignal<UUIDString | null>(null);
 
-  const [users, status, , , reload] = useResource(getUsers, null);
+  const [users, status, , setParams, reload] = useResource(searchUsers, DEFAULT_ACTIVITY_PARAMS);
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
@@ -40,7 +48,9 @@ export default function Employees() {
         <Match when={status().loading && !users()}>
           <Loading />
         </Match>
-        <Match when={users()}>{(items) => <EmployeesTable items={items} onClick={setUID} />}</Match>
+        <Match when={users()}>
+          {(data) => <EmployeesTable data={data} onClick={setUID} onChangeParams={setParams} />}
+        </Match>
       </Switch>
       <Show when={process.env.NODE_ENV === 'development'}>
         <div style={{ 'margin-top': '24px' }}>

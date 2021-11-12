@@ -1,10 +1,22 @@
 import { service } from 'app/utils/service';
 import type { UUIDString } from 'app/types/common';
 
-import type { CreateUser, CreateUserResp, BaseUser, User, UserCard } from './types';
+import type {
+  CreateUser,
+  CreateUserResp,
+  BaseUser,
+  User,
+  UserCard,
+  SearchUserRequest,
+  SearchUserResponse,
+} from './types';
 
 export async function getUsers() {
   return (await service.get<readonly Readonly<BaseUser>[]>('/users/list')).data;
+}
+
+export async function searchUsers(params: Readonly<SearchUserRequest>) {
+  return (await service.post<SearchUserResponse>('/users/search', params)).data;
 }
 
 export async function getUser(userId: UUIDString) {

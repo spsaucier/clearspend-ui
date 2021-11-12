@@ -9,6 +9,7 @@ import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
 import { Filters } from 'app/components/Filters';
+import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { AccountActivity, AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
 
 import css from './TransactionsTable.css';
@@ -86,10 +87,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
   ];
 
-  const onChangePage = (page: number) => {
-    props.onChangeParams((prev) => ({ ...prev, pageRequest: { ...prev.pageRequest, pageNumber: page } }));
-  };
-
   return (
     <div>
       <Filters
@@ -98,7 +95,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             current={props.data.number}
             pageSize={props.data.size}
             total={props.data.totalElements}
-            onChange={onChangePage}
+            onChange={changeRequestPage(props.onChangeParams)}
           />
         }
       >

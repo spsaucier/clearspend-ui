@@ -1,3 +1,7 @@
+.search {
+  width: 320px;
+}
+
 .name {
   color: var(--tw-primary-content);
   cursor: pointer;
