@@ -31,14 +31,14 @@
 .title {
   flex-grow: 1;
   color: var(--tw-primary);
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
 .amount {
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
   text-align: right;
 }
 

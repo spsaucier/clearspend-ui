@@ -38,7 +38,7 @@
   width: v-day-width;
   margin-bottom: var(--pd-16);
   justify-content: center;
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
 }
 
 .days {
@@ -60,7 +60,7 @@
   justify-content: center;
   font-family: var(--font-header);
   font-size: var(--text-12);
-  font-weight: var(--font-600);
+  font-weight: var(--font-700);
   line-height: var(--line-16);
   background: transparent;
   border: 1px solid transparent;

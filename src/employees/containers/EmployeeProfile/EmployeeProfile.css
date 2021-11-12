@@ -1,6 +1,6 @@
 .data {
   margin: var(--pd-12) 0;
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
 }
 
 .cards {
@@ -9,8 +9,9 @@
 
 .cards-title {
   margin: 0 0 var(--pd-8);
-  font-family: var(--font-header);
+  font-family: inherit;
   font-size: var(--text-12);
+  font-weight: var(--font-400);
   line-height: var(--line-24);
   letter-spacing: var(--ls-2);
   text-transform: uppercase;

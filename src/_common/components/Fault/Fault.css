@@ -19,7 +19,7 @@
 
 .title {
   margin: 0 0 var(--pd-16);
-  font-family: var(--font-special);
+  font-family: var(--font-header);
   font-size: var(--text-28);
   line-height: var(--line-36);
   letter-spacing: var(--ls-small);

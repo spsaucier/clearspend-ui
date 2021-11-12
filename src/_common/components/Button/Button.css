@@ -11,8 +11,6 @@
   align-items: center;
   justify-content: center;
   font: inherit;
-  font-family: var(--font-header);
-  font-weight: var(--font-600);
   vertical-align: middle;
   background: var(--tw-gray-20);
   border: 0;

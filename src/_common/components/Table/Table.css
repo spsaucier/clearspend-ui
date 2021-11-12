@@ -14,7 +14,7 @@
 
 .th {
   padding: var(--pd-14) var(--pd-12);
-  font-family: var(--font-header);
+  font: inherit;
 }
 
 .td {

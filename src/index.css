@@ -1,13 +1,11 @@
 :root {
   /* COLOR */
-  --tw-dark: #000;
-  --tw-black: #111827;
-  --tw-gray-70: #4b5563;
-  --tw-gray-60: #6b7280;
-  --tw-gray-40: #d1d5db;
-  --tw-gray-30: #e5e7eb;
-  --tw-gray-20: #f3f4f6;
-  --tw-gray-10: #f9fafb;
+  --tw-black: #000;
+  --tw-gray-60: #616160;
+  --tw-gray-40: #92918f;
+  --tw-gray-30: #c2c2bf;
+  --tw-gray-20: #f3f2ef;
+  --tw-gray-10: #fbfbfa;
   --tw-white: #fff;
   --tw-blue: #2563eb;
   --tw-blue-dark: #1d4ed8;
@@ -45,15 +43,11 @@
   --pd-48: 48px;
 
   /* FONT FAMILY */
-  --font-main: 'Inter';
-  --font-header: 'SpaceGrotesk';
-  --font-special: 'Recoleta';
+  --font-main: 'Neue Montreal';
+  --font-header: 'Telegraf';
 
   /* FONT WEIGHT: */
-  --font-100: 100;
   --font-400: 400;
-  --font-500: 500;
-  --font-600: 600;
   --font-700: 700;
 
   /* FONT SIZE: */
@@ -102,43 +96,35 @@
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Neue Montreal';
   font-display: swap;
   font-weight: 400;
   font-style: normal;
-  src: local(''), url('fonts/inter-400.woff2') format('woff2');
+  src: local(''), url('fonts/neue-400.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Neue Montreal';
   font-display: swap;
-  font-weight: 500;
+  font-weight: 700;
   font-style: normal;
-  src: local(''), url('fonts/inter-500.woff2') format('woff2');
+  src: local(''), url('fonts/neue-700.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'Inter';
+  font-family: 'Telegraf';
   font-display: swap;
-  font-weight: 600;
+  font-weight: 400;
   font-style: normal;
-  src: local(''), url('fonts/inter-600.woff2') format('woff2');
+  src: local(''), url('fonts/telegraf-400.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: 'SpaceGrotesk';
+  font-family: 'Telegraf';
   font-display: swap;
-  font-weight: 600;
+  font-weight: 700;
   font-style: normal;
-  src: local(''), url('fonts/space-grotesk-600.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Recoleta';
-  font-display: swap;
-  font-weight: 600;
-  font-style: normal;
-  src: local(''), url('fonts/recoleta-600.woff2') format('woff2');
+  src: local(''), url('fonts/telegraf-700.woff2') format('woff2');
 }
 
 *,

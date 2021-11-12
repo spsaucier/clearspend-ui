@@ -14,7 +14,7 @@
 
 .title {
   margin: 0;
-  font-family: var(--font-header);
+  font: inherit;
   font-size: var(--text-12);
   line-height: var(--line-24);
   letter-spacing: var(--ls-2);

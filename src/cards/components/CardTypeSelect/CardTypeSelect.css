@@ -33,7 +33,7 @@
   margin: var(--pd-8) 0 var(--pd-4);
   align-items: center;
   font-size: var(--text-16);
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
   line-height: var(--line-24);
 }
 
@@ -52,7 +52,7 @@
 
 .note {
   font-size: var(--text-12);
-  font-weight: var(--font-500);
+  font-weight: var(--font-400);
   line-height: var(--line-16);
 }
 

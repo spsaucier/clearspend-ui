@@ -32,7 +32,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { name: '', parent: '', amount: '', owner: '' },
-    rules: { name: [required] },
+    rules: { name: [required], parent: [required] },
   });
 
   const onSubmit = async () => {

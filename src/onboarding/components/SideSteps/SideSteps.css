@@ -10,7 +10,7 @@
   align-items: center;
   color: var(--tw-gray-60);
   font-family: var(--font-header);
-  font-weight: var(--font-600);
+  font-weight: var(--font-700);
   border-right: 4px solid transparent;
 }
 
@@ -22,8 +22,8 @@
 
 .step {
   margin-right: var(--pd-12);
-  font-family: var(--font-special);
+  font-family: var(--font-header);
   font-size: var(--text-16);
-  font-weight: var(--font-600);
+  font-weight: var(--font-700);
   line-height: var(--line-28);
 }

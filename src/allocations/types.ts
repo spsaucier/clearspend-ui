@@ -12,5 +12,5 @@ export interface Allocation {
 export interface CreateAllocation {
   name: string;
   amount: Readonly<Amount>;
-  parentAllocationId?: UUIDString;
+  parentAllocationId: UUIDString;
 }
