@@ -1,0 +1,38 @@
+.root {
+  display: inline-grid;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  grid-auto-flow: column;
+  grid-gap: var(--pd-2);
+}
+
+.button {
+  width: 36px;
+  font-family: var(--font-main);
+  font-size: var(--text-12);
+  font-weight: var(--font-400);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-10);
+
+  &:disabled {
+    color: inherit;
+    background: transparent;
+  }
+}
+
+.active {
+  background: var(--tw-gray-10);
+  border-color: var(--tw-gray-20);
+  pointer-events: none;
+}
+
+.nav {
+  color: var(--tw-gray-60);
+
+  &:disabled {
+    color: var(--tw-gray-40);
+    background: transparent;
+  }
+}

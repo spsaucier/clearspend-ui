@@ -10,7 +10,6 @@ export interface Allocation {
 }
 
 export interface CreateAllocation {
-  programId: UUIDString;
   name: string;
   amount: Readonly<Amount>;
   parentAllocationId?: UUIDString;

@@ -1,4 +1,4 @@
-import type { UUIDString, SignAmount, PageRequest } from './common';
+import type { UUIDString, SignAmount, PageRequest, PageResponse } from './common';
 
 export interface CardDetails {
   cardBin: string | null;
@@ -39,6 +39,8 @@ export interface AccountActivity {
   type: ActivityType;
   amount: Readonly<SignAmount>;
 }
+
+export type AccountActivityResponse = Readonly<PageResponse<readonly Readonly<AccountActivity>[]>>;
 
 export enum ActivityOrderFields {
   DATE = 'DATE',

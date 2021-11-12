@@ -4,7 +4,8 @@ import type { UUIDString } from 'app/types/common';
 import type { Allocation, CreateAllocation } from './types';
 
 export async function getAllocations() {
-  return (await service.get<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
+  // TODO
+  return (await service.post<readonly Readonly<Allocation>[]>('/businesses/allocations', { name: '' })).data;
 }
 
 export async function saveAllocation(params: Readonly<CreateAllocation>) {

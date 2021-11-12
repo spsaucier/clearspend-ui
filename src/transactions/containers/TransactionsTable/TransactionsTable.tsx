@@ -1,16 +1,21 @@
-import { Show } from 'solid-js';
+import { Show, Setter } from 'solid-js';
 import { DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { DateFormat } from '_common/api/intl/types';
+import { Input } from '_common/components/Input';
+import { Button } from '_common/components/Button';
+import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
-import type { AccountActivity } from 'app/types/activity';
+import { Filters } from 'app/components/Filters';
+import type { AccountActivity, AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
 
 import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
-  items: readonly Readonly<AccountActivity>[];
+  data: AccountActivityResponse;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
@@ -81,9 +86,33 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
   ];
 
+  const onChangePage = (page: number) => {
+    props.onChangeParams((prev) => ({ ...prev, pageRequest: { ...prev.pageRequest, pageNumber: page } }));
+  };
+
   return (
     <div>
-      <Table columns={columns} data={props.items} tdClass={css.cell} />
+      <Filters
+        side={
+          <Pagination
+            current={props.data.number}
+            pageSize={props.data.size}
+            total={props.data.totalElements}
+            onChange={onChangePage}
+          />
+        }
+      >
+        <Input
+          disabled
+          placeholder="Search Transactions..."
+          suffix={<Icon name="search" size="sm" />}
+          class={css.search}
+        />
+        <Button disabled icon={{ name: 'filters', pos: 'right' }}>
+          More Filters
+        </Button>
+      </Filters>
+      <Table columns={columns} data={props.data.content} tdClass={css.cell} />
     </div>
   );
 }

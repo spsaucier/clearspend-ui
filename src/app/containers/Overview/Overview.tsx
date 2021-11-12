@@ -78,7 +78,7 @@ export function Overview() {
                     </For>
                   }
                 >
-                  <TransactionsTable items={resp.content} />
+                  <TransactionsTable data={resp} onChangeParams={setActivityParams} />
                 </Show>
               </Show>
             )}

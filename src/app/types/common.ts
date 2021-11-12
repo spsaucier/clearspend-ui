@@ -39,6 +39,15 @@ export interface PageRequest<T = unknown> {
   orderBy?: OrderBy<T>;
 }
 
+export interface Pageable {
+  offset: number;
+  sort: unknown;
+  paged: boolean;
+  pageNumber: number;
+  pageSize: number;
+  unpaged: boolean;
+}
+
 export interface PageResponse<T = {}> {
   totalElements: number;
   totalPages: number;
@@ -47,7 +56,7 @@ export interface PageResponse<T = {}> {
   number: number;
   sort: unknown;
   numberOfElements: number;
-  pageable: unknown;
+  pageable: Readonly<Pageable>;
   first: boolean;
   last: boolean;
   empty: boolean;

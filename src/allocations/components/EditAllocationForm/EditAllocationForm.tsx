@@ -40,7 +40,6 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
     const data = values();
     await props
       .onSave({
-        programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
         name: data.name,
         amount: { currency: 'USD', amount: parseAmount(data.amount) },
         parentAllocationId: (data.parent || undefined) as UUIDString,
