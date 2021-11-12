@@ -6,7 +6,7 @@ import css from './Tag.css';
 
 export interface TagProps {
   label?: string;
-  type?: 'default' | 'primary' | 'success' | 'danger';
+  type?: 'default' | 'success' | 'danger';
   size?: 'md' | 'sm' | 'xs';
   class?: string;
   children?: JSXElement;
@@ -19,7 +19,6 @@ export function Tag(props: Readonly<TagProps>) {
       classList={{
         [css.sm!]: props.size === 'sm',
         [css.xs!]: props.size === 'xs',
-        [css.primary!]: props.type === 'primary',
         [css.success!]: props.type === 'success',
         [css.danger!]: props.type === 'danger',
       }}

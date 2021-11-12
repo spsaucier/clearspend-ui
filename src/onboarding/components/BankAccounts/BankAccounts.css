@@ -16,12 +16,12 @@
   transition: background-color 0.3s, border-color 0.3s;
 
   &:hover:not(.selected) {
-    border-color: var(--tw-primary);
+    border-color: var(--tw-primary-border);
   }
 
   @nest .item > input:checked + & {
-    background-color: var(--tw-blue-light);
-    border-color: var(--tw-primary);
+    background-color: var(--tw-primary-light);
+    border-color: var(--tw-primary-border);
   }
 }
 

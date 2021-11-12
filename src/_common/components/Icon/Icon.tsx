@@ -31,8 +31,12 @@ export function Icon(props: Readonly<IconProps>) {
     });
   });
 
+  const classes = createMemo(() =>
+    join(css.root, props.size === 'sm' && css.sm, props.size === 'xs' && css.xs, props.class),
+  );
+
   return createMemo(() => {
-    if (!icon()) return null;
+    if (!icon()) return <span class={classes()} />;
 
     const el = template(icon()!.default, 0);
 
@@ -41,11 +45,7 @@ export function Icon(props: Readonly<IconProps>) {
       {
         viewBox: `0 0 ${SIZE} ${SIZE}`,
         'aria-label': `icon: ${props.name}`,
-        class: join(css.root, props.class),
-        classList: {
-          [css.sm as string]: props.size === 'sm',
-          [css.xs as string]: props.size === 'xs',
-        },
+        class: classes(),
         style: props.style,
       },
       true,

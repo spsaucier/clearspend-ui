@@ -23,7 +23,7 @@
 
 .root {
   display: block;
-  color: var(--tw-primary);
+  color: var(--tw-primary-content);
   transform-origin: center center;
   animation: rotate 2s linear infinite;
 }

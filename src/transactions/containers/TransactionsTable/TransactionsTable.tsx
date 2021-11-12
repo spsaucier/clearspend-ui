@@ -108,9 +108,10 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           suffix={<Icon name="search" size="sm" />}
           class={css.search}
         />
-        <Button disabled icon={{ name: 'filters', pos: 'right' }}>
+        <Button inverse icon={{ name: 'filters', pos: 'right' }}>
           More Filters
         </Button>
+        <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
       </Filters>
       <Table columns={columns} data={props.data.content} tdClass={css.cell} />
     </div>

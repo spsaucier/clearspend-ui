@@ -93,14 +93,9 @@
   }
 }
 
-.ghost {
-  padding-right: 0;
-  padding-left: 0;
-  background: transparent;
-
-  &:hover {
-    background: transparent;
-  }
+.inverse {
+  color: var(--tw-gray-60);
+  background-color: transparent;
 
   &:disabled {
     background: transparent;
@@ -108,23 +103,18 @@
 }
 
 .primary {
-  color: var(--tw-gray-20);
-  background: var(--tw-primary);
+  background-color: var(--tw-primary-bg);
 
-  &:hover {
-    background: var(--tw-primary-dark);
-  }
-
-  &:disabled {
-    color: var(--tw-gray-40);
-    background: var(--tw-gray-20);
+  &:hover:not(:disabled) {
+    background-color: var(--tw-primary-content);
   }
 }
 
-.primary-ghost {
-  color: var(--tw-primary);
+.primary-inverse {
+  color: var(--tw-primary-content);
+  background-color: transparent;
 
-  &:hover:not(:disabled) {
-    color: var(--tw-primary-dark);
+  &:disabled {
+    background: transparent;
   }
 }

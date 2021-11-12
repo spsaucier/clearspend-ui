@@ -12,7 +12,7 @@
 }
 
 .card {
-  color: var(--tw-primary);
+  color: var(--tw-primary-content);
 }
 
 .merchant,
@@ -36,8 +36,8 @@
   margin-top: -4px;
   align-items: center;
   justify-content: center;
-  color: var(--tw-green);
-  background: var(--tw-green-light);
+  color: var(--tw-green-70);
+  background: var(--tw-green-10);
   border: 1px solid var(--tw-green-20);
   border-radius: var(--radius-8);
 }

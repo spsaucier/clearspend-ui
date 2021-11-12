@@ -15,7 +15,7 @@ export default {
       options: ['default', 'primary'],
       control: { type: 'radio' },
     },
-    ghost: { control: { type: 'boolean' } },
+    inverse: { control: { type: 'boolean' } },
     icon: {
       options: [...keys(IconName)].sort(),
       control: { type: 'select' },
@@ -28,7 +28,7 @@ export default {
   args: {
     size: 'md',
     type: 'default',
-    ghost: false,
+    inverse: false,
     children: 'Button',
     loading: false,
     disabled: false,

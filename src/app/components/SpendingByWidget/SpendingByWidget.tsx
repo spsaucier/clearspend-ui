@@ -52,11 +52,11 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
           <PieChart
             size={160}
             data={[
-              { id: '1', percent: 45, color: '#2563EB' },
-              { id: '2', percent: 19, color: '#3B82F6' },
-              { id: '3', percent: 16, color: '#60A5FA' },
-              { id: '4', percent: 11, color: '#93C5FD' },
-              { id: '5', percent: 9, color: '#BFDBFE' },
+              { id: '1', percent: 45, color: '#5BEA83' },
+              { id: '2', percent: 19, color: '#7CEE9C' },
+              { id: '3', percent: 16, color: '#8CF0A8' },
+              { id: '4', percent: 11, color: '#9DF2B5' },
+              { id: '5', percent: 9, color: '#ADF5C1' },
             ]}
             class={css.chart}
           />

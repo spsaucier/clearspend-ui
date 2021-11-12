@@ -19,6 +19,7 @@ export enum IconName {
   'confirm-circle-filled' = 'confirm-circle-filled',
   'confirm-square-filled' = 'confirm-square-filled',
   dashboard = 'dashboard',
+  download = 'download',
   edit = 'edit',
   filters = 'filters',
   freeze = 'freeze',

@@ -19,12 +19,12 @@
   transition: background-color 0.3s, border-color 0.3s;
 
   &:hover:not(.selected) {
-    border-color: var(--tw-primary);
+    border-color: var(--tw-primary-border);
   }
 
   @nest .item > input:checked + & {
-    background-color: var(--tw-blue-light);
-    border-color: var(--tw-primary);
+    background-color: var(--tw-primary-light);
+    border-color: var(--tw-primary-border);
   }
 }
 
@@ -41,8 +41,8 @@
   margin: 0 var(--pd-8) 0 0;
 
   @nest .item > input:checked + .content & {
-    background-color: var(--tw-primary);
-    border-color: var(--tw-primary);
+    background-color: var(--tw-primary-bg);
+    border-color: var(--tw-primary-bg);
 
     &::after {
       opacity: 1;

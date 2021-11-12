@@ -30,7 +30,7 @@
   }
 
   @nest .input:checked + & {
-    background-color: var(--tw-primary);
+    background-color: var(--tw-primary-bg);
 
     &::after {
       background-color: var(--tw-white);

@@ -41,7 +41,7 @@
 .menu-button {
   width: auto;
   height: auto;
-  padding: var(--pd-24);
+  padding: 22px;
 }
 
 .menu-popup {

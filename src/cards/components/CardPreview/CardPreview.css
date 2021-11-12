@@ -13,14 +13,14 @@
   height: 32px;
   align-items: center;
   justify-content: center;
-  color: var(--tw-primary);
-  background: var(--tw-blue-light);
-  border: 1px solid var(--tw-blue-30);
+  color: var(--tw-primary-content);
+  background: var(--tw-primary-light);
+  border: 1px solid var(--tw-primary-border);
   border-radius: var(--radius-12);
 }
 
 .number {
-  color: var(--tw-primary);
+  color: var(--tw-primary-content);
   font-weight: var(--font-400);
   line-height: var(--line-24);
 }

@@ -11,12 +11,12 @@
 
   &:hover,
   &:focus-within {
-    border-color: var(--tw-primary);
+    border-color: var(--tw-primary-bg);
   }
 }
 
 .error:not(.disabled) {
-  border-color: var(--tw-red);
+  border-color: var(--tw-red-70);
 }
 
 .disabled {

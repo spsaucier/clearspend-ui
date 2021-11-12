@@ -74,7 +74,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
           <FormItem error={errors().account}>
             <BankAccounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
           </FormItem>
-          <Button type="primary" ghost icon="add" size="sm" disabled class={css.button}>
+          <Button type="primary" inverse icon="add" size="sm" disabled class={css.button}>
             Add New Bank Account
           </Button>
         </div>

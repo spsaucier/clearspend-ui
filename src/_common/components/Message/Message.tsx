@@ -34,7 +34,7 @@ export function Message(props: Readonly<MessageProps>) {
           <div class={css.message}>{props.message}</div>
         </Show>
       </div>
-      <Button icon="cancel" size="sm" ghost class={css.close} onClick={props.onClose} />
+      <Button icon="cancel" size="sm" inverse class={css.close} onClick={props.onClose} />
     </div>
   );
 }

@@ -11,7 +11,7 @@ export function AccessInfo() {
           It looks like you do not have permission to access any allocations. Please contact your account owner to be
           added to an active allocation.
         </p>
-        <Button ghost type="primary">
+        <Button inverse type="primary">
           Sign out
         </Button>
       </div>

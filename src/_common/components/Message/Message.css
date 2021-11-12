@@ -14,11 +14,11 @@
 }
 
 .error {
-  color: var(--tw-red);
+  color: var(--tw-red-70);
 }
 
 .success {
-  color: var(--tw-green);
+  color: var(--tw-green-70);
 }
 
 .content {

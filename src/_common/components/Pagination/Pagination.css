@@ -20,6 +20,11 @@
     color: inherit;
     background: transparent;
   }
+
+  &:hover:not(:disabled) {
+    background: var(--tw-primary-light);
+    border-color: var(--tw-primary-border);
+  }
 }
 
 .active {

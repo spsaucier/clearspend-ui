@@ -11,11 +11,11 @@
   transition: border 0.3s;
 
   &:hover {
-    border-bottom-color: var(--tw-primary);
+    border-bottom-color: var(--tw-black);
   }
 }
 
 .active {
-  border-bottom-color: var(--tw-primary);
+  border-bottom-color: var(--tw-black);
   pointer-events: none;
 }

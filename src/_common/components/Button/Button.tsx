@@ -18,7 +18,7 @@ export interface IconProps {
 export interface ButtonProps {
   id?: string;
   type?: 'default' | 'primary';
-  ghost?: boolean;
+  inverse?: boolean;
   size?: 'sm' | 'md' | 'lg';
   icon?: IconType | Readonly<IconProps>;
   class?: string;
@@ -50,14 +50,14 @@ export function Button(props: Readonly<ButtonProps>) {
       disabled={merged.disabled}
       class={join(
         css.root,
-        merged.type === 'primary' && (!merged.ghost ? css.primary : css.primaryGhost),
+        merged.type === 'primary' && (!merged.inverse ? css.primary : css.primaryInverse),
         merged.class,
       )}
       classList={{
         [css.wide!]: merged.wide,
         [css.sm!]: merged.size === 'sm',
         [css.lg!]: merged.size === 'lg',
-        [css.ghost!]: merged.ghost,
+        [css.inverse!]: merged.type === 'default' && merged.inverse,
         [css.iconOnly!]: Boolean(icon()) && !merged.children,
         [css.loading!]: merged.loading,
       }}

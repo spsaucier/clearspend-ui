@@ -32,8 +32,8 @@
   }
 
   @nest .input:checked + & {
-    background-color: var(--tw-primary);
-    border-color: var(--tw-primary);
+    background-color: var(--tw-primary-bg);
+    border-color: var(--tw-primary-bg);
 
     &::after {
       opacity: 1;

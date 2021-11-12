@@ -1,7 +1,7 @@
 .root {
   padding: var(--pd-16);
-  background: var(--tw-blue-light);
-  border: 1px solid var(--tw-blue-20);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
   border-radius: var(--radius-8);
 }
 

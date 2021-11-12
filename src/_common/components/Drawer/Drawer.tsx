@@ -23,7 +23,7 @@ export function Drawer(props: Readonly<DrawerProps>) {
             <section class={css.section}>
               <header class={css.header}>
                 <h3 class={css.title}>{props.title}</h3>
-                <Button ghost size="sm" icon="cancel" onClick={props.onClose} />
+                <Button inverse size="sm" icon="cancel" onClick={props.onClose} />
               </header>
               <div class={css.content}>{props.children}</div>
             </section>

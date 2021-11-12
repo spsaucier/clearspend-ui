@@ -30,7 +30,7 @@
 
 .title {
   flex-grow: 1;
-  color: var(--tw-primary);
+  color: var(--tw-primary-content);
   font-weight: var(--font-400);
   white-space: nowrap;
   text-overflow: ellipsis;

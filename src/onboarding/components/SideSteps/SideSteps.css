@@ -16,7 +16,7 @@
 
 .active {
   background: var(--tw-gray-20);
-  border-right-color: var(--tw-primary);
+  border-right-color: var(--tw-primary-bg);
   pointer-events: none;
 }
 

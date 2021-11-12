@@ -117,7 +117,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           </FormItem>
         </div>
         <div class={css.actions}>
-          <Button size="sm" icon="add" type="primary" disabled ghost class={css.add}>
+          <Button size="sm" icon="add" type="primary" disabled inverse class={css.add}>
             Add another owner
           </Button>
           <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>

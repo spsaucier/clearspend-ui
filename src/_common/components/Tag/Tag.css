@@ -27,21 +27,15 @@
   line-height: var(--line-16);
 }
 
-.primary {
-  color: var(--tw-primary);
-  background-color: var(--tw-blue-light);
-  border-color: var(--tw-blue-20);
-}
-
 .success {
-  color: var(--tw-green);
-  background-color: var(--tw-green-light);
+  color: var(--tw-green-70);
+  background-color: var(--tw-green-10);
   border-color: var(--tw-green-20);
 }
 
 .danger {
-  color: var(--tw-red);
-  background-color: var(--tw-red-light);
+  color: var(--tw-red-70);
+  background-color: var(--tw-red-10);
   border-color: var(--tw-red-20);
 }
 

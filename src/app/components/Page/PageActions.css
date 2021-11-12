@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: flex-end;
   background: var(--tw-gray-10);
-  border-top: 2px solid var(--tw-amber);
+  border-top: 2px solid var(--tw-amber-70);
 
   @media (--bp-medium) {
     padding: var(--pd-16) var(--pd-48);
