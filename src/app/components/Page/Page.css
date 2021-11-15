@@ -2,6 +2,22 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  @media (--bp-large) {
+    flex-direction: row;
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--tw-gray-30);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .header {
@@ -21,14 +37,13 @@
 }
 
 .header-main {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: var(--pd-24);
+  display: grid;
+  justify-items: flex-start;
+  grid-gap: var(--pd-24);
 
   @media (--bp-medium) {
     align-items: center;
-    flex-direction: row;
+    grid-auto-flow: column;
     justify-content: space-between;
   }
 }

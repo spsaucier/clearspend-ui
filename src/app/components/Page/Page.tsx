@@ -1,4 +1,4 @@
-import { JSXElement, onMount } from 'solid-js';
+import { JSXElement, onMount, Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
 
@@ -8,6 +8,7 @@ import css from './Page.css';
 
 interface PageProps {
   title: JSXElement;
+  side?: JSXElement;
   extra?: JSXElement;
   actions?: JSXElement;
   stickyHeader?: boolean;
@@ -23,23 +24,28 @@ export function Page(props: Readonly<PageProps>) {
 
   return (
     <div class={join(css.root, props.class)}>
-      <header class={css.header} classList={{ [css.stickyHeader!]: props.stickyHeader }}>
-        <div class={css.headerMain}>
-          <div class={css.titleWrap}>
-            <h1 class={css.title}>{props.title}</h1>
-            {props.extra}
+      <Show when={props.side}>
+        <div class={css.side}>{props.side}</div>
+      </Show>
+      <div class={css.wrapper}>
+        <header class={css.header} classList={{ [css.stickyHeader!]: props.stickyHeader }}>
+          <div class={css.headerMain}>
+            <div class={css.titleWrap}>
+              <h1 class={css.title}>{props.title}</h1>
+              {props.extra}
+            </div>
+            {props.actions}
           </div>
-          {props.actions}
+        </header>
+        <div
+          class={css.footer}
+          ref={(el) => {
+            context.current = el;
+          }}
+        />
+        <div class={join(css.content, props.contentClass)}>
+          <PageContext.Provider value={context}>{props.children}</PageContext.Provider>
         </div>
-      </header>
-      <div
-        class={css.footer}
-        ref={(el) => {
-          context.current = el;
-        }}
-      />
-      <div class={join(css.content, props.contentClass)}>
-        <PageContext.Provider value={context}>{props.children}</PageContext.Provider>
       </div>
     </div>
   );

@@ -20,7 +20,7 @@
   flex-shrink: 0;
 
   @media (--bp-medium) {
-    padding: var(--pd-40) var(--pd-32) var(--pd-24);
+    padding: var(--pd-32) var(--pd-32) var(--pd-24);
   }
 }
 

@@ -8,7 +8,7 @@ import { Page } from 'app/components/Page';
 import { BusinessContext } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { OnboardingStep } from 'app/types/businesses';
-import twLogo from 'app/assets/tw-logo.svg';
+import logo from 'app/assets/logo-name.svg';
 import { formatName } from 'employees/utils/formatName';
 
 import { SideSteps } from './components/SideSteps';
@@ -68,7 +68,7 @@ export default function Onboarding() {
       side={
         <div class={css.sidebar}>
           <header class={css.header}>
-            <img src={twLogo} alt="Company logo" width={123} height={24} />
+            <img src={logo} alt="Company logo" width={120} height={34} />
           </header>
           <Show when={media.medium}>
             <div class={css.steps}>

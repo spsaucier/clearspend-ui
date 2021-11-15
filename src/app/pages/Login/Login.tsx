@@ -6,8 +6,8 @@ import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 import { SignUp } from 'signup';
-import twLogo from 'app/assets/tw-logo.svg';
 
+import logo from '../../assets/logo-name.svg';
 import { LoginForm } from '../../components/LoginForm';
 import { login } from '../../services/auth';
 
@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={twLogo} alt="Company logo" width={123} height={24} />
+        <img src={logo} alt="Company logo" width={120} height={34} />
       </header>
       <div class={css.content}>
         <Box>

@@ -1,17 +1,27 @@
-import { createResource, For } from 'solid-js';
-
+import { Button } from '_common/components/Button';
 import { Page } from 'app/components/Page';
 
-import { getAllocations } from './services';
+import { AllocationsSide } from './components/AllocationsSide';
+
+import css from './Allocations.css';
 
 export default function Allocations() {
-  const [data] = createResource(getAllocations, { initialValue: [] });
-
   return (
-    <Page title="Allocations">
-      <ul>
-        <For each={data()}>{(item) => <li>{item.name}</li>}</For>
-      </ul>
+    <Page
+      title="$5,291.54"
+      actions={
+        <div class={css.actions}>
+          <Button type="primary" size="lg" icon="add">
+            Add Funds
+          </Button>
+          <Button icon="add" size="lg">
+            New Card
+          </Button>
+        </div>
+      }
+      side={<AllocationsSide />}
+    >
+      Content
     </Page>
   );
 }

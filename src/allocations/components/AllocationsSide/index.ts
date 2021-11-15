@@ -1,0 +1,1 @@
+export { AllocationsSide } from './AllocationsSide';

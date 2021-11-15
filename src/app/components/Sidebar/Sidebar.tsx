@@ -4,11 +4,10 @@ import { useMediaContext } from '_common/api/media/context';
 import { useBool } from '_common/utils/useBool';
 import { Popover } from '_common/components/Popover';
 import { Button } from '_common/components/Button';
+import smallLogo from 'app/assets/logo.svg';
+import fullLogo from 'app/assets/logo-name.svg';
 
 import { MainMenu } from '../MainMenu';
-
-import testLogo from './assets/test.png';
-import testSmLogo from './assets/test-sm.png';
 
 import css from './Sidebar.css';
 
@@ -19,8 +18,8 @@ export function Sidebar() {
   return (
     <div class={css.root}>
       <div class={css.header}>
-        <Show when={media.small} fallback={<img src={testLogo} alt="Company logo" class={css.logo} />}>
-          <img src={testSmLogo} alt="Company logo" class={css.logo} />
+        <Show when={media.small} fallback={<img src={smallLogo} alt="Company logo" class={css.logo} />}>
+          <img src={fullLogo} alt="Company logo" class={css.logo} />
         </Show>
       </div>
       <Show when={media.small}>

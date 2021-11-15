@@ -2,7 +2,7 @@ import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import twLogo from 'app/assets/tw-logo.svg';
+import logo from 'app/assets/logo-name.svg';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
@@ -104,7 +104,7 @@ export default function SignUp() {
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={twLogo} alt="Company logo" width={123} height={24} />
+        <img src={logo} alt="Company logo" width={120} height={34} />
       </header>
       <div class={css.content}>
         <Box>

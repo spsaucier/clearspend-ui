@@ -1,15 +1,7 @@
-.allocations {
-  width: 240px;
-}
-
 .actions {
   display: inline-grid;
   grid-auto-flow: column;
   align-items: center;
   flex-shrink: 0;
   grid-gap: var(--pd-8) var(--pd-12);
-}
-
-.content {
-  padding: 0;
 }
