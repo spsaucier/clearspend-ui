@@ -1,8 +1,10 @@
 import { createSignal, Show, Switch, Match } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
 
 import { events } from '_common/api/events';
 import { useResource } from '_common/utils/useResource';
+import { useMediaContext } from '_common/api/media/context';
 import { Button } from '_common/components/Button';
 import { Drawer } from '_common/components/Drawer';
 import { wrapAction } from '_common/utils/wrapAction';
@@ -12,6 +14,7 @@ import { Loading } from 'app/components/Loading';
 import { logout } from 'app/services/auth';
 import { UUIDString, AppEvent } from 'app/types/common';
 
+import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
 import { EmployeeProfile } from './containers/EmployeeProfile';
 import { searchUsers } from './services';
@@ -26,6 +29,7 @@ const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
 
 export default function Employees() {
   const navigate = useNavigate();
+  const media = useMediaContext();
 
   const [uid, setUID] = createSignal<UUIDString | null>(null);
 
@@ -49,7 +53,14 @@ export default function Employees() {
           <Loading />
         </Match>
         <Match when={users()}>
-          {(data) => <EmployeesTable data={data} onClick={setUID} onChangeParams={setParams} />}
+          {(data) => (
+            <Dynamic
+              component={media.large ? EmployeesTable : EmployeesList}
+              data={data}
+              onClick={setUID}
+              onChangeParams={setParams}
+            />
+          )}
         </Match>
       </Switch>
       <Show when={process.env.NODE_ENV === 'development'}>

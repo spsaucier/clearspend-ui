@@ -1,18 +1,27 @@
-.root {
-  display: flex;
+.search {
+  margin-bottom: var(--pd-24);
+
+  @media (--bp-medium) {
+    max-width: 320px;
+  }
+}
+
+.item {
+  display: grid;
   padding: var(--pd-24) 0;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: var(--pd-12);
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--tw-gray-30);
+  }
 }
 
 .icon {
   width: 24px;
   height: 24px;
-  margin-right: var(--pd-10);
   background: #2e6d48;
   border-radius: var(--radius-8);
-}
-
-.main {
-  flex-grow: 1;
 }
 
 .category {

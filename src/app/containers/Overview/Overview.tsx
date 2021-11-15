@@ -1,12 +1,13 @@
-import { createSignal, For, Match, Show, Switch } from 'solid-js';
+import { createSignal, Match, Show, Switch } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 
 import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import { useResource } from '_common/utils/useResource';
 import { NoTransactions } from 'transactions/components/NoTransactions';
-import { TransactionCompact } from 'transactions/components/TransactionCompact';
-import { TransactionsTable } from 'transactions/containers/TransactionsTable';
+import { TransactionsList } from 'transactions/components/TransactionsList';
+import { TransactionsTable } from 'transactions/components/TransactionsTable';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -70,16 +71,11 @@ export function Overview() {
           <Match when={activities()}>
             {(resp) => (
               <Show when={!!resp.content.length} fallback={<NoTransactions />}>
-                <Show
-                  when={media.large}
-                  fallback={
-                    <For each={resp.content}>
-                      {(item) => <TransactionCompact data={item} class={css.transactionCompact} />}
-                    </For>
-                  }
-                >
-                  <TransactionsTable data={resp} onChangeParams={setActivityParams} />
-                </Show>
+                <Dynamic
+                  component={media.large ? TransactionsTable : TransactionsList}
+                  data={resp}
+                  onChangeParams={setActivityParams}
+                />
               </Show>
             )}
           </Match>

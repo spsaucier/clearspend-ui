@@ -40,9 +40,3 @@
   font-size: var(--text-20);
   line-height: var(--line-28);
 }
-
-.transaction-compact {
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--tw-gray-30);
-  }
-}

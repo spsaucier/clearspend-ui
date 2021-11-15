@@ -1,1 +1,0 @@
-export { TransactionCompact } from './TransactionCompact';

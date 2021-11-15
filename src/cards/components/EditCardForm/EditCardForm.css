@@ -19,6 +19,7 @@
   margin: 0;
   padding: var(--pd-8) var(--pd-12);
   align-items: center;
+  color: var(--tw-black);
   font: inherit;
   vertical-align: middle;
   background: transparent;
