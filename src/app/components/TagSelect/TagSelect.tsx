@@ -35,11 +35,9 @@ export function TagSelect(props: Readonly<TagSelectProps>) {
         </For>
       }
     >
-      <Tag size="sm">
-        <span class={css.tag}>
-          <span>{value()?.text}</span>
-          <Icon size="sm" name="chevron-down" />
-        </span>
+      <Tag size="sm" class={css.tag}>
+        <span>{value()?.text}</span>
+        <Icon size="sm" name="chevron-down" />
       </Tag>
     </Dropdown>
   );

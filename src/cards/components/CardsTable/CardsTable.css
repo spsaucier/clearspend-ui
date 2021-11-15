@@ -1,0 +1,8 @@
+.search {
+  width: 320px;
+}
+
+.number,
+.name {
+  color: var(--tw-primary-content);
+}

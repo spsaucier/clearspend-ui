@@ -1,4 +1,4 @@
-import type { UUIDString, Address } from 'app/types/common';
+import type { UUIDString, Address, PageResponse } from 'app/types/common';
 
 export enum CardType {
   PLASTIC = 'PLASTIC',
@@ -47,3 +47,5 @@ export interface Card {
   lastFour: string;
   address: Readonly<Address>;
 }
+
+export type SearchCardResponse = Readonly<PageResponse<readonly Readonly<Card>[]>>;

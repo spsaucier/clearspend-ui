@@ -1,0 +1,62 @@
+[
+  {
+    "cardId": "4b922b55-324f-4fba-9d86-7615a9211d60",
+    "bin": "401288",
+    "programId": "033955d1-f18e-497e-9905-88ba71e90208",
+    "allocationId": "5c3d166d-0bb1-4d55-a67b-f1b634cd1a44",
+    "userId": "f5df88e0-2df5-4d54-9bde-39737613115e",
+    "accountId": "97721160-670d-41c6-9cbd-bf06ed1758a5",
+    "status": "OPEN",
+    "statusReason": "NONE",
+    "fundingType": "INDIVIDUAL",
+    "cardType": "VIRTUAL",
+    "issueDate": "2021-11-11T05:59:32.36838Z",
+    "expirationDate": "2024-11-11",
+    "activated": false,
+    "activationDate": null,
+    "cardLine3": "Test Test",
+    "cardLine4": "",
+    "type": "VIRTUAL",
+    "superseded": false,
+    "cardNumber": "5292471779391237",
+    "lastFour": "1237",
+    "address": {
+      "streetLine1": "",
+      "streetLine2": "",
+      "locality": null,
+      "region": null,
+      "postalCode": "",
+      "country": null
+    }
+  },
+  {
+    "cardId": "4b922b55-324f-4fba-9d86-7615a9211d61",
+    "bin": "401288",
+    "programId": "033955d1-f18e-497e-9905-88ba71e90208",
+    "allocationId": "5c3d166d-0bb1-4d55-a67b-f1b634cd1a44",
+    "userId": "f5df88e0-2df5-4d54-9bde-39737613115e",
+    "accountId": "97721160-670d-41c6-9cbd-bf06ed1758a5",
+    "status": "OPEN",
+    "statusReason": "NONE",
+    "fundingType": "INDIVIDUAL",
+    "cardType": "VIRTUAL",
+    "issueDate": "2021-11-11T05:59:32.36838Z",
+    "expirationDate": "2024-11-11",
+    "activated": false,
+    "activationDate": null,
+    "cardLine3": "Test Test",
+    "cardLine4": "",
+    "type": "VIRTUAL",
+    "superseded": false,
+    "cardNumber": "5292471779391238",
+    "lastFour": "1238",
+    "address": {
+      "streetLine1": "",
+      "streetLine2": "",
+      "locality": null,
+      "region": null,
+      "postalCode": "",
+      "country": null
+    }
+  }
+]

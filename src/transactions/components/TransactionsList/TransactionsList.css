@@ -43,11 +43,6 @@
   flex-direction: column;
 }
 
-.amount {
-  display: flex;
-  gap: var(--pd-4);
-}
-
 .time {
   margin: var(--pd-2) var(--pd-8) 0 0;
   color: var(--tw-gray-60);

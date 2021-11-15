@@ -44,6 +44,11 @@
 }
 
 .child {
+  display: inline-grid;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-gap: var(--pd-4);
+
   @nest .label + & {
     margin-left: var(--pd-4);
   }

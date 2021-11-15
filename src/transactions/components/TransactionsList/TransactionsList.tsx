@@ -34,10 +34,8 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
               </div>
               <div class={css.side}>
                 <Tag size="sm" type="success">
-                  <span class={css.amount}>
-                    <Icon name="confirm" size="sm" />
-                    {formatCurrency(item.amount.amount)}
-                  </span>
+                  <Icon name="confirm" size="sm" />
+                  {formatCurrency(item.amount.amount)}
                 </Tag>
                 <div class={css.time}>
                   <DateTime date={date()} preset={DateFormat.time} />
