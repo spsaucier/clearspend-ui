@@ -11,7 +11,6 @@ export interface SelectProps {
   name?: string;
   value?: string;
   valueRender?: (value: string, text: string) => JSXElement;
-  up?: boolean; // TODO: Choose automatically
   disabled?: boolean;
   class?: string;
   popupClass?: string;

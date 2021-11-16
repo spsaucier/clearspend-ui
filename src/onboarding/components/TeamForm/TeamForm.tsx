@@ -9,6 +9,7 @@ import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
+import { keys } from '_common/utils/keys';
 
 import { USA_STATES } from '../../constants/usa';
 import type { UpdateBusinessOwner } from '../../types';
@@ -102,14 +103,13 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           </FormItem>
           <FormItem label="State" error={errors().state}>
             <Select
-              up
               name="state"
               placeholder="Choose state"
               value={values().state}
               error={Boolean(errors().state)}
               onChange={handlers.state}
             >
-              <For each={USA_STATES}>{(state) => <Option value={state}>{state}</Option>}</For>
+              <For each={keys(USA_STATES)}>{(item) => <Option value={item}>{USA_STATES[item]!}</Option>}</For>
             </Select>
           </FormItem>
           <FormItem label="Zip code" error={errors().zip}>

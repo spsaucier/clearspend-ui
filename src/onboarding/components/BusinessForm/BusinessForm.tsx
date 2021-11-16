@@ -98,14 +98,13 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           </FormItem>
           <FormItem label="State" error={errors().state}>
             <Select
-              up
               name="state"
               placeholder="Choose state"
               value={values().state}
               error={Boolean(errors().state)}
               onChange={handlers.state}
             >
-              <For each={USA_STATES}>{(state) => <Option value={state}>{state}</Option>}</For>
+              <For each={keys(USA_STATES)}>{(item) => <Option value={item}>{USA_STATES[item]!}</Option>}</For>
             </Select>
           </FormItem>
           <FormItem label="Zip code" error={errors().zip}>

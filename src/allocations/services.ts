@@ -5,7 +5,7 @@ import type { Allocation, CreateAllocation } from './types';
 
 export async function getAllocations() {
   // TODO
-  return (await service.post<readonly Readonly<Allocation>[]>('/businesses/allocations', { name: '' })).data;
+  return (await service.post<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
 }
 
 export async function saveAllocation(params: Readonly<CreateAllocation>) {

@@ -29,6 +29,7 @@ export default {
   },
   args: {
     content: 'Content...',
+    balloon: false,
     children: (props: PopoverFuncProps) => <Button {...props}>Click Me!</Button>,
   },
 };
@@ -36,14 +37,14 @@ export default {
 export const Default = (args: PopoverProps) => (
   <div style={WRAPPER_STYLES}>
     <div style={ROW_STYLES}>
-      <Popover {...args} />
-      <Popover {...args} position="bottom-center" />
-      <Popover {...args} position="bottom-right" />
+      <Popover {...args} position="top-center" />
+      <Popover {...args} position="top-center" />
+      <Popover {...args} position="top-center" />
     </div>
     <div style={ROW_STYLES}>
-      <Popover {...args} position="top-left" />
-      <Popover {...args} position="top-center" />
-      <Popover {...args} position="top-right" />
+      <Popover {...args} position="bottom-center" />
+      <Popover {...args} position="bottom-center" />
+      <Popover {...args} position="bottom-center" />
     </div>
   </div>
 );

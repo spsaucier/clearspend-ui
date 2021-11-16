@@ -74,7 +74,7 @@ export function Select(props: Readonly<SelectProps>) {
     <Popover
       open={open()}
       class={join(css.popup, props.popupClass)}
-      position={props.up ? 'top-left' : 'bottom-left'}
+      position="bottom-left"
       content={props.popupRender ? props.popupRender(renderList()) : renderList()}
     >
       <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>

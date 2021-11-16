@@ -1,3 +1,5 @@
+import { useNavigate } from 'solid-app-router';
+
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import { Divider } from '_common/components/Divider';
@@ -6,6 +8,8 @@ import { Button } from '_common/components/Button';
 import css from './AllocationsSide.css';
 
 export function AllocationsSide() {
+  const navigate = useNavigate();
+
   return (
     <section class={css.root}>
       <header class={css.header}>
@@ -21,7 +25,7 @@ export function AllocationsSide() {
         <button class={css.item}>[Name]</button>
         <button class={css.item}>[Name]</button>
         <button class={css.item}>[Name]</button>
-        <Button wide type="primary" icon="add">
+        <Button wide type="primary" icon="add" onClick={() => navigate('/allocations/edit')}>
           New Allocation
         </Button>
       </div>
