@@ -9,7 +9,10 @@
 }
 
 .side {
+  position: sticky;
+  top: 0;
   display: flex;
+  height: 100vh;
   flex-direction: column;
   border-right: 1px solid var(--tw-gray-30);
 }
@@ -34,6 +37,11 @@
   position: sticky;
   top: 0;
   z-index: var(--z-index-page);
+}
+
+.breadcrumb {
+  margin-bottom: var(--pd-4);
+  color: var(--tw-gray-60);
 }
 
 .header-main {

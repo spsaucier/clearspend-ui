@@ -1,5 +1,5 @@
 .search {
-  margin-bottom: var(--pd-24);
+  margin: var(--pd-16) 0 var(--pd-24);
 
   @media (--bp-medium) {
     max-width: 320px;

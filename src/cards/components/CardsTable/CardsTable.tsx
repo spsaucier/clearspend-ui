@@ -14,6 +14,7 @@ import css from './CardsTable.css';
 
 interface CardsTableProps {
   data: SearchCardResponse;
+  hideColumns?: readonly string[];
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
@@ -73,7 +74,10 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
         </Button>
         <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
       </Filters>
-      <Table columns={columns} data={props.data.content} />
+      <Table
+        columns={columns.filter((col) => !props.hideColumns || !props.hideColumns.includes(col.name))}
+        data={props.data.content}
+      />
     </div>
   );
 }
