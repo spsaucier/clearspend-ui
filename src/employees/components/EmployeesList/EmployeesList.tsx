@@ -1,7 +1,8 @@
-import { Setter, For } from 'solid-js';
+import { For } from 'solid-js';
 
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
+import type { StoreSetter } from '_common/utils/store';
 
 import { formatName } from '../../utils/formatName';
 import type { User, SearchUserResponse, SearchUserRequest } from '../../types';
@@ -11,7 +12,7 @@ import css from './EmployeesList.css';
 interface EmployeesListProps {
   data: SearchUserResponse;
   onClick: (uid: User['userId']) => void;
-  onChangeParams: Setter<Readonly<SearchUserRequest>>;
+  onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeesList(props: Readonly<EmployeesListProps>) {

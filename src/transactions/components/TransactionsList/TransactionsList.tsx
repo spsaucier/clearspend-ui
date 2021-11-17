@@ -1,7 +1,8 @@
-import { For, createMemo, Setter } from 'solid-js';
+import { For, createMemo } from 'solid-js';
 import { DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
+import type { StoreSetter } from '_common/utils/store';
 import { DateFormat } from '_common/api/intl/types';
 import { Input } from '_common/components/Input';
 import { Tag } from '_common/components/Tag';
@@ -12,7 +13,7 @@ import css from './TransactionsList.css';
 
 interface TransactionsListProps {
   data: AccountActivityResponse;
-  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
+  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
 export function TransactionsList(props: Readonly<TransactionsListProps>) {

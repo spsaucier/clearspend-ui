@@ -4,7 +4,6 @@ import { Dynamic } from 'solid-js/web';
 import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
-import { useResource } from '_common/utils/useResource';
 import { NoTransactions } from 'transactions/components/NoTransactions';
 import { TransactionsList } from 'transactions/components/TransactionsList';
 import { TransactionsTable } from 'transactions/components/TransactionsTable';
@@ -13,7 +12,7 @@ import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { LoadingError } from '../../components/LoadingError';
 import { Loading } from '../../components/Loading';
-import { getAccountActivity } from '../../services/activity';
+import { useActivity } from '../../stores/activity';
 import type { AccountActivityRequest } from '../../types/activity';
 
 import { getLineData } from './mock';
@@ -35,15 +34,12 @@ export function Overview() {
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
   const [data, setData] = createSignal<readonly ILineChartData[]>(getLineData());
-  const [activities, aStatus, , setActivityParams, reloadActivities] = useResource(
-    getAccountActivity,
-    DEFAULT_ACTIVITY_PARAMS,
-  );
+  const activityStore = useActivity(DEFAULT_ACTIVITY_PARAMS);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
     setData(getLineData());
-    setActivityParams((prev) => ({ ...prev, ...toISO(getTimePeriod(value)) }));
+    activityStore.setParams((prev) => ({ ...prev, ...toISO(getTimePeriod(value)) }));
   };
 
   return (
@@ -62,19 +58,19 @@ export function Overview() {
       <div>
         <h3 class={css.transactionTitle}>Recent Transactions</h3>
         <Switch>
-          <Match when={aStatus().error}>
-            <LoadingError onReload={reloadActivities} />
+          <Match when={activityStore.error}>
+            <LoadingError onReload={activityStore.reload} />
           </Match>
-          <Match when={aStatus().loading && !activities()}>
+          <Match when={activityStore.loading && !activityStore.data}>
             <Loading />
           </Match>
-          <Match when={activities()}>
+          <Match when={activityStore.data}>
             {(resp) => (
               <Show when={!!resp.content.length} fallback={<NoTransactions />}>
                 <Dynamic
                   component={media.large ? TransactionsTable : TransactionsList}
                   data={resp}
-                  onChangeParams={setActivityParams}
+                  onChangeParams={activityStore.setParams}
                 />
               </Show>
             )}

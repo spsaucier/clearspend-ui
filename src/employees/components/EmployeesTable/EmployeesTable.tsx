@@ -1,10 +1,9 @@
-import type { Setter } from 'solid-js';
-
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
+import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 
@@ -16,7 +15,7 @@ import css from './EmployeesTable.css';
 interface EmployeesTableProps {
   data: SearchUserResponse;
   onClick: (uid: User['userId']) => void;
-  onChangeParams: Setter<Readonly<SearchUserRequest>>;
+  onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {

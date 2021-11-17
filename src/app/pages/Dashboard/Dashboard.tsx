@@ -33,7 +33,7 @@ export default function Dashboard() {
           items={allocations()}
           value={allocation()}
           class={css.allocations}
-          disabled={!allocations().length}
+          // disabled={!allocations().length}
           onChange={setAllocation}
         />
         // <Tag type="primary">

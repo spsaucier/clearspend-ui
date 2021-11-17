@@ -39,7 +39,7 @@ module.exports = (env, options) => {
         overlay: false,
       },
       compress: true,
-      https: true,
+      server: 'spdy',
       historyApiFallback: true,
       proxy: {
         '/api': {
