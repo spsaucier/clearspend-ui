@@ -34,7 +34,7 @@ export function Overview() {
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
   const [data, setData] = createSignal<readonly ILineChartData[]>(getLineData());
-  const activityStore = useActivity(DEFAULT_ACTIVITY_PARAMS);
+  const activityStore = useActivity({ params: DEFAULT_ACTIVITY_PARAMS });
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);

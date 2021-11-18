@@ -3,10 +3,10 @@ import type { Account } from 'app/types/accounts';
 
 export interface Allocation {
   allocationId: UUIDString;
-  programId: UUIDString;
   name: string;
   account: Readonly<Account>;
-  parentAllocationId?: UUIDString;
+  parentAllocationId: UUIDString | null;
+  childrenAllocationIds: readonly UUIDString[];
 }
 
 export interface CreateAllocation {

@@ -17,6 +17,11 @@ export interface Store<T, P> {
   setParams: StoreSetter<P>;
 }
 
+export interface Options<T, P> {
+  params?: P;
+  initValue?: T;
+}
+
 export function create<T, P>(fetcher: (params: P) => Promise<T>) {
   const [store, setStore] = createStore<Store<T, P>>({
     loading: true,
@@ -43,11 +48,19 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
     },
   });
 
-  function useStore(params: P) {
-    setStore((prev) => ({ ...prev, params: params as any }));
+  function useStore(options?: Readonly<Options<T, P>>) {
+    const init = () => {
+      setStore((prev) => ({
+        ...prev,
+        params: (options?.params as any) || null,
+        data: (options?.initValue as any) || null,
+      }));
+    };
+
+    init();
     store.reload().catch(getNoop());
 
-    onCleanup(() => setStore((prev) => ({ ...prev, params: params as any })));
+    onCleanup(() => init());
 
     return store;
   }

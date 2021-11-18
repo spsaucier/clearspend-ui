@@ -52,15 +52,6 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   return (
     <Form class={css.form}>
       <Section title="Allocation details">
-        <FormItem label="Label" error={errors().name} class={css.field}>
-          <Input
-            name="allocation-label"
-            value={values().name}
-            placeholder="Enter allocation label (e.g. Marketing Team)"
-            error={Boolean(errors().name)}
-            onChange={handlers.name}
-          />
-        </FormItem>
         <FormItem
           label="Parent allocation"
           extra="Choose the allocation that will fund your new allocation."
@@ -73,6 +64,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             placeholder="Select allocation"
             error={Boolean(errors().parent)}
             onChange={handlers.parent}
+          />
+        </FormItem>
+        <FormItem label="Label" error={errors().name} class={css.field}>
+          <Input
+            name="allocation-label"
+            value={values().name}
+            placeholder="Enter allocation label (e.g. Marketing Team)"
+            error={Boolean(errors().name)}
+            onChange={handlers.name}
           />
         </FormItem>
       </Section>

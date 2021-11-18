@@ -9,6 +9,10 @@
 }
 
 .message {
-  margin: var(--pd-12);
+  margin: var(--pd-12) var(--pd-24);
   transform: translate3d(0, 0, 0);
+
+  &:first-child {
+    margin-top: var(--pd-24);
+  }
 }

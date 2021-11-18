@@ -8,8 +8,7 @@ export async function getRootAllocation() {
 }
 
 export async function getAllocations() {
-  // TODO
-  return (await service.post<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
+  return (await service.get<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
 }
 
 export async function saveAllocation(params: Readonly<CreateAllocation>) {

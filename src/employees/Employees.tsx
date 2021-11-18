@@ -32,7 +32,7 @@ export default function Employees() {
 
   const [uid, setUID] = createSignal<UUIDString | null>(null);
 
-  const usersStore = useUsers(DEFAULT_ACTIVITY_PARAMS);
+  const usersStore = useUsers({ params: DEFAULT_ACTIVITY_PARAMS });
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (

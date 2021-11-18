@@ -1,4 +1,4 @@
-import { createSignal, createResource, createMemo } from 'solid-js';
+import { createSignal, createEffect } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
@@ -6,7 +6,7 @@ import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
-import { getAllocations } from 'allocations/services';
+import { useAllocations } from 'allocations/stores/allocations';
 
 import { Page } from '../../components/Page';
 // import { Landing } from '../../containers/Landing';
@@ -20,8 +20,12 @@ export default function Dashboard() {
   const { owner } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>('');
-  const [data] = createResource(getAllocations, { initialValue: [] });
-  const allocations = createMemo(() => (!data.error ? data() : []));
+  const allocations = useAllocations({ initValue: [] });
+
+  createEffect(() => {
+    const root = allocations.data!.find((item) => !item.parentAllocationId);
+    if (root) setAllocation(root.allocationId);
+  });
 
   return (
     <Page
@@ -29,11 +33,10 @@ export default function Dashboard() {
       contentClass={css.content}
       extra={
         <AllocationSelect
-          all
-          items={allocations()}
+          // TODO
+          items={allocations.data!}
           value={allocation()}
           class={css.allocations}
-          // disabled={!allocations().length}
           onChange={setAllocation}
         />
         // <Tag type="primary">

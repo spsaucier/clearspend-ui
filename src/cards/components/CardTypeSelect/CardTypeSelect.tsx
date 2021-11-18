@@ -25,7 +25,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
     >
       <Checkbox value={CardType.VIRTUAL} class={css.item}>
         <div class={css.content}>
-          <img src={virtual} alt="Virtual card" width={230} height={146} />
+          <img src={virtual} alt="Virtual card" width={232} height={146} />
           <div class={css.type}>
             <Tick class={css.control} />
             Virtual card
@@ -38,7 +38,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
       </Checkbox>
       <Checkbox value={CardType.PLASTIC} class={css.item}>
         <div class={css.content}>
-          <img src={plastic} alt="Physical card" width={230} height={146} />
+          <img src={plastic} alt="Physical card" width={232} height={146} />
           <div class={css.type}>
             <Tick class={css.control} />
             Physical card
