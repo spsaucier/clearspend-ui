@@ -1,0 +1,5 @@
+.field {
+  @media (--bp-large) {
+    max-width: 400px;
+  }
+}

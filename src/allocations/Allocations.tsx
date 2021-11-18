@@ -13,6 +13,7 @@ import { AllocationsSide } from './components/AllocationsSide';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
 import { CardControls } from './containers/CardControls';
+import { Settings } from './containers/Settings';
 import { getRootAllocation } from './services';
 
 import css from './Allocations.css';
@@ -85,7 +86,9 @@ export default function Allocations() {
               <Match when={tab() === Tabs.controls}>
                 <CardControls />
               </Match>
-              <Match when={tab() === Tabs.settings}>TODO</Match>
+              <Match when={tab() === Tabs.settings}>
+                <Settings />
+              </Match>
             </Switch>
           </Page>
         )}

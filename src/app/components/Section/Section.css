@@ -23,10 +23,9 @@
 
 .title {
   margin: 0 0 var(--pd-4);
-  color: var(--tw-black);
   font-family: var(--font-header);
   font-size: var(--text-20);
-  font-weight: var(--font-700);
+  font-weight: var(--font-400);
   line-height: var(--line-28);
 }
 
