@@ -1,0 +1,5 @@
+.content {
+  display: grid;
+  grid-gap: var(--pd-12);
+  max-width: 460px;
+}

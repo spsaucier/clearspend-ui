@@ -12,6 +12,7 @@ import { LoadingError } from 'app/components/LoadingError';
 import { AllocationsSide } from './components/AllocationsSide';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
+import { CardControls } from './containers/CardControls';
 import { getRootAllocation } from './services';
 
 import css from './Allocations.css';
@@ -81,6 +82,10 @@ export default function Allocations() {
               <Match when={tab() === Tabs.transactions}>
                 <Transactions />
               </Match>
+              <Match when={tab() === Tabs.controls}>
+                <CardControls />
+              </Match>
+              <Match when={tab() === Tabs.settings}>TODO</Match>
             </Switch>
           </Page>
         )}

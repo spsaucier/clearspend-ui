@@ -1,0 +1,23 @@
+.root {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pd-16);
+  padding: var(--pd-16);
+  align-items: flex-start;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-10);
+}
+
+.label {
+  margin: 0;
+  font: inherit;
+}
+
+.content {
+  display: none;
+  margin-top: var(--pd-16);
+}
+
+.visible {
+  display: block;
+}

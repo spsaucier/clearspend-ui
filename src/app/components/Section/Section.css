@@ -42,7 +42,6 @@
   line-height: var(--line-20);
 
   @media (--bp-large) {
-    min-width: 340px;
     margin-left: var(--pd-48);
     flex-grow: 1;
   }
