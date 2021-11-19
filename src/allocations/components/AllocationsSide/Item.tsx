@@ -28,9 +28,11 @@ export function Item(props: Readonly<ItemProps>) {
             <Icon name="company" class={css.icon} />
           </Show>
           <span class={css.name}>{props.data.name}</span>
+          {/*
           <Show when={!props.root && props.data.childrenAllocationIds.length}>
             <Icon name="chevron-down" />
           </Show>
+          */}
         </button>
       )}
     </Tooltip>
