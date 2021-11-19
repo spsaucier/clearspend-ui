@@ -3,10 +3,6 @@ import type { UUIDString } from 'app/types/common';
 
 import type { Allocation, CreateAllocation } from './types';
 
-export async function getRootAllocation() {
-  return (await service.get<Readonly<Allocation>>('/businesses/allocations')).data;
-}
-
 export async function getAllocations() {
   return (await service.get<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
 }

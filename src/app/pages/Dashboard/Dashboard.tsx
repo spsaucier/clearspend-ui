@@ -7,6 +7,7 @@ import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { useAllocations } from 'allocations/stores/allocations';
+import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 
 import { Page } from '../../components/Page';
 // import { Landing } from '../../containers/Landing';
@@ -23,7 +24,7 @@ export default function Dashboard() {
   const allocations = useAllocations({ initValue: [] });
 
   createEffect(() => {
-    const root = allocations.data!.find((item) => !item.parentAllocationId);
+    const root = getRootAllocation(allocations.data);
     if (root) setAllocation(root.allocationId);
   });
 

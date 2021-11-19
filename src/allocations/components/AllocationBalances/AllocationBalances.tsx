@@ -1,21 +1,26 @@
 import { For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { times } from '_common/utils/times';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { PieChart } from '_common/components/Charts';
 
+import type { Allocation } from '../../types';
+
 import css from './AllocationBalances.css';
 
-export function AllocationBalances() {
+interface AllocationBalancesProps {
+  current: Readonly<Allocation>;
+  items: readonly Readonly<Allocation>[];
+}
+
+export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
   return (
     <section>
       <header>
         <h3 class={css.title}>Balances</h3>
         <div class={css.info}>
-          {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
-          <strong class={css.total}>{formatCurrency(40802.93)}</strong>
-          <Text message="All {name} allocations" name="[Name]" />
+          <strong class={css.total}>{formatCurrency(props.current.account.ledgerBalance.amount)}</strong>
+          <Text message="All {name} allocations" name={props.current.name} />
         </div>
       </header>
       <div class={css.wrapper}>
@@ -32,16 +37,20 @@ export function AllocationBalances() {
           />
         </div>
         <div class={css.items}>
-          {/* eslint-disable-next-line @typescript-eslint/no-magic-numbers */}
-          <For each={times(6)}>
-            {() => (
+          <For each={props.items}>
+            {(item) => (
               <div class={css.item}>
                 <div class={css.header}>
                   <div class={css.point} />
-                  <h4 class={css.name}>[Name]</h4>
+                  <h4 class={css.name}>{item.name}</h4>
                 </div>
-                <strong class={css.amount}>[$999.99]</strong>
-                <div class={css.children}>[Names]</div>
+                <strong class={css.amount}>{formatCurrency(item.account.ledgerBalance.amount)}</strong>
+                <div class={css.children}>
+                  <Text
+                    message="{count, plural, =0 {No allocations} one {{count} allocation} other {{count} allocations}}"
+                    count={item.childrenAllocationIds.length}
+                  />
+                </div>
               </div>
             )}
           </For>

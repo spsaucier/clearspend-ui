@@ -1,0 +1,11 @@
+.parent {
+  &::after {
+    content: ' / ';
+  }
+}
+
+.current {
+  @nest .parent + & {
+    font-weight: var(--font-700);
+  }
+}

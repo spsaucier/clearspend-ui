@@ -1,0 +1,38 @@
+.item {
+  display: flex;
+  width: 100%;
+  margin: var(--pd-8) 0;
+  padding: var(--pd-8);
+  align-items: center;
+  color: var(--tw-gray-60);
+  font: inherit;
+  line-height: var(--line-24);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-10);
+  transition: background-color 0.3s;
+
+  &:hover {
+    color: var(--tw-black);
+    background-color: var(--tw-primary-light);
+  }
+}
+
+.active {
+  color: var(--tw-black);
+  background-color: var(--tw-gray-20);
+}
+
+.icon {
+  margin-right: var(--pd-8);
+  flex-shrink: 0;
+}
+
+.name {
+  display: block;
+  flex-grow: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

@@ -42,7 +42,7 @@
   z-index: var(--z-index-page);
 }
 
-.breadcrumb {
+.breadcrumbs {
   margin-bottom: var(--pd-4);
   color: var(--tw-gray-60);
 }

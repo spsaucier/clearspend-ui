@@ -22,7 +22,7 @@ export function Tooltip(props: Readonly<TooltipProps>) {
     <Popover
       balloon
       trigger="hover"
-      enterDelay={350}
+      enterDelay={800}
       leaveDelay={0}
       position={merged.position}
       content={merged.message}

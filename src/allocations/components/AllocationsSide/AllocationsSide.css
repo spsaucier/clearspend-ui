@@ -26,30 +26,6 @@
   padding: var(--pd-16) 0;
 }
 
-.item {
-  display: flex;
-  width: 100%;
-  margin: var(--pd-8) 0;
-  padding: var(--pd-10) var(--pd-8);
-  align-items: center;
-  gap: var(--pd-8);
-  color: var(--tw-gray-60);
-  font: inherit;
-  background: transparent;
-  border: 0;
-  border-radius: var(--radius-10);
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: var(--tw-gray-20);
-  }
-}
-
-.active {
-  color: var(--tw-black);
-  background-color: var(--tw-gray-20);
-}
-
 .divider {
   margin: 0;
 }

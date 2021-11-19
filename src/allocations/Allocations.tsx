@@ -1,20 +1,22 @@
-import { createSignal, Switch, Match } from 'solid-js';
+import { createSignal, createEffect, createMemo, Switch, Match, batch, untrack } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { useResource } from '_common/utils/useResource';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
 import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
+import type { UUIDString } from 'app/types/common';
 
 import { AllocationsSide } from './components/AllocationsSide';
+import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
 import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
-import { getRootAllocation } from './services';
+import { useAllocations } from './stores/allocations';
+import { getRootAllocation } from './utils/getRootAllocation';
 
 import css from './Allocations.css';
 
@@ -28,27 +30,38 @@ enum Tabs {
 export default function Allocations() {
   const [tab, setTab] = createSignal(Tabs.cards);
 
-  const [root, status, , , reload] = useResource(getRootAllocation, null);
+  const [id, setId] = createSignal<UUIDString>();
+  const allocations = useAllocations();
+
+  createEffect(() => {
+    if (untrack(id)) return;
+    const root = getRootAllocation(allocations.data);
+    if (root) setId(root.allocationId);
+  });
+
+  const onIdChange = (value: UUIDString) => {
+    batch(() => {
+      setId(value);
+      setTab(Tabs.cards);
+    });
+  };
+
+  const current = createMemo(() => allocations.data?.find((item) => item.allocationId === id()));
 
   return (
     <Switch>
-      <Match when={status().error}>
-        <LoadingError onReload={reload} />
+      <Match when={allocations.error}>
+        <LoadingError onReload={allocations.reload} />
       </Match>
-      <Match when={status().loading && !root()}>
+      <Match when={allocations.loading && !allocations.data}>
         <Loading />
       </Match>
-      <Match when={root()}>
+      <Match when={allocations.data && current()}>
         {(data) => (
           <Page
             title={formatCurrency(data.account.ledgerBalance.amount)}
             titleClass={css.title}
-            breadcrumb={
-              <span>
-                {data.name}
-                {/*[Name] / <strong>[Allocation]</strong>*/}
-              </span>
-            }
+            breadcrumbs={<Breadcrumbs current={data} items={allocations.data!} />}
             actions={
               <div class={css.actions}>
                 <Button type="primary" size="lg" icon="add">
@@ -59,7 +72,7 @@ export default function Allocations() {
                 </Button>
               </div>
             }
-            side={<AllocationsSide />}
+            side={<AllocationsSide currentID={data.allocationId} items={allocations.data!} onSelect={onIdChange} />}
             contentClass={css.content}
           >
             <TabList value={tab()} onChange={setTab}>
@@ -78,7 +91,7 @@ export default function Allocations() {
             </TabList>
             <Switch>
               <Match when={tab() === Tabs.cards}>
-                <Cards />
+                <Cards current={data} items={allocations.data!} />
               </Match>
               <Match when={tab() === Tabs.transactions}>
                 <Transactions />

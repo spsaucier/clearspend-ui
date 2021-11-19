@@ -10,7 +10,7 @@ interface PageProps {
   title: JSXElement;
   titleClass?: string;
   side?: JSXElement;
-  breadcrumb?: JSXElement;
+  breadcrumbs?: JSXElement;
   extra?: JSXElement;
   actions?: JSXElement;
   stickyHeader?: boolean;
@@ -31,8 +31,8 @@ export function Page(props: Readonly<PageProps>) {
       </Show>
       <div class={css.wrapper}>
         <header class={css.header} classList={{ [css.stickyHeader!]: props.stickyHeader }}>
-          <Show when={props.breadcrumb}>
-            <div class={css.breadcrumb}>{props.breadcrumb}</div>
+          <Show when={props.breadcrumbs}>
+            <div class={css.breadcrumbs}>{props.breadcrumbs}</div>
           </Show>
           <div class={css.headerMain}>
             <div class={css.titleWrap}>
