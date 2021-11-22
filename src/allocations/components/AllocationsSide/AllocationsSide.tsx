@@ -36,11 +36,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
     <section class={css.root}>
       <header class={css.header}>
         <h3 class={css.title}>Allocations</h3>
-        <InputSearch
-          delay={300}
-          placeholder={i18n.t({ message: 'Search Allocations...' }) as string}
-          onSearch={setSearch}
-        />
+        <InputSearch delay={300} placeholder={i18n.t('Search Allocations...') as string} onSearch={setSearch} />
       </header>
       <Show when={root()}>
         {(data) => (

@@ -30,7 +30,7 @@ export function CardControls() {
             // eslint-disable-next-line @typescript-eslint/no-magic-numbers
             extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
           >
-            <Input placeholder={i18n.t({ message: '$ Enter the amount' }) as string} />
+            <Input placeholder={i18n.t('$ Enter the amount') as string} />
           </FormItem>
         </SwitchBox>
         <SwitchBox checked={true} label={<Text message="Monthly limit" />}>
@@ -39,7 +39,7 @@ export function CardControls() {
             // eslint-disable-next-line @typescript-eslint/no-magic-numbers
             extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
           >
-            <Input placeholder={i18n.t({ message: '$ Enter the amount' }) as string} />
+            <Input placeholder={i18n.t('$ Enter the amount') as string} />
           </FormItem>
         </SwitchBox>
       </div>
