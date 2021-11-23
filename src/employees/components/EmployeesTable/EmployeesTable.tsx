@@ -1,3 +1,5 @@
+import { useI18n, Text } from 'solid-i18n';
+
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
@@ -19,10 +21,12 @@ interface EmployeesTableProps {
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
+  const i18n = useI18n();
+
   const columns: readonly Readonly<TableColumn<User>>[] = [
     {
       name: 'name',
-      title: 'Employee',
+      title: <Text message="Employee" />,
       render: (item) => (
         <span class={css.name} onClick={() => props.onClick(item.userId)}>
           {formatName(item)}
@@ -31,12 +35,12 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
     },
     {
       name: 'card',
-      title: 'Card Info',
+      title: <Text message="Card Info" />,
       render: () => <span>[card]</span>,
     },
     {
       name: 'email',
-      title: 'Email Address',
+      title: <Text message="Email Address" />,
       render: (item) => <span>{item.email}</span>,
     },
   ];
@@ -55,11 +59,13 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       >
         <Input
           disabled
-          placeholder="Search employees..."
+          placeholder={i18n.t('Search employees...') as string}
           suffix={<Icon name="search" size="sm" />}
           class={css.search}
         />
-        <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
+        <Button icon={{ name: 'download', pos: 'right' }}>
+          <Text message="Export" />
+        </Button>
       </Filters>
       <Table columns={columns} data={props.data.content} />
     </div>

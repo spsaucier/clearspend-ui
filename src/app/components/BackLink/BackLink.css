@@ -1,0 +1,14 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  color: var(--tw-gray-60);
+
+  &:hover {
+    color: var(--tw-primary-content);
+    text-decoration: none;
+  }
+}
+
+.icon {
+  margin-right: var(--pd-4);
+}

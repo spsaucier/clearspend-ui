@@ -74,6 +74,10 @@
   line-height: var(--line-36);
 }
 
+.subtitle {
+  margin-top: var(--pd-4);
+}
+
 .footer {
   position: sticky;
   bottom: 0;

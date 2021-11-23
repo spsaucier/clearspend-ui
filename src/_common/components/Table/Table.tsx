@@ -6,7 +6,7 @@ import css from './Table.css';
 
 export interface TableColumn<T extends {}> {
   name: string;
-  title?: string;
+  title?: JSXElement;
   class?: string;
   render?: (row: T) => JSXElement;
 }

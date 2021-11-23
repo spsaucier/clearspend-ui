@@ -27,14 +27,22 @@ export async function getUserCards(userId: UUIDString) {
   return (await service.get<readonly Readonly<UserCard>[]>('/users/cards', { headers: { userId } })).data;
 }
 
+// TODO
+function extendUserParams(params: Readonly<CreateUser>, pass = true) {
+  return {
+    ...params,
+    address: {},
+    phone: '+79999999999',
+    generatePassword: pass,
+  };
+}
+
+// TODO: save and edit should return User modal
+
 export async function saveUser(params: Readonly<CreateUser>) {
-  return (
-    await service.post<Readonly<CreateUserResp>>('/users', {
-      ...params,
-      // TODO
-      address: {},
-      phone: '+79999999999',
-      generatePassword: true,
-    })
-  ).data;
+  return (await service.post<Readonly<CreateUserResp>>('/users', extendUserParams(params))).data;
+}
+
+export async function editUser(userId: UUIDString, params: Readonly<CreateUser>) {
+  return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
 }

@@ -1,11 +1,11 @@
-import { createSignal, Show, Switch, Match } from 'solid-js';
+import { Show, Switch, Match } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
 
 import { events } from '_common/api/events';
 import { useMediaContext } from '_common/api/media/context';
 import { Button } from '_common/components/Button';
-import { Drawer } from '_common/components/Drawer';
+// import { Drawer } from '_common/components/Drawer';
 import { wrapAction } from '_common/utils/wrapAction';
 import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
@@ -15,7 +15,7 @@ import { UUIDString, AppEvent } from 'app/types/common';
 
 import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
-import { EmployeeProfile } from './containers/EmployeeProfile';
+// import { EmployeeProfile } from './containers/EmployeeProfile';
 import { useUsers } from './stores/employees';
 import type { SearchUserRequest } from './types';
 
@@ -30,7 +30,7 @@ export default function Employees() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
-  const [uid, setUID] = createSignal<UUIDString | null>(null);
+  // const [uid, setUID] = createSignal<UUIDString | null>(null);
 
   const usersStore = useUsers({ params: DEFAULT_ACTIVITY_PARAMS });
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
@@ -56,7 +56,7 @@ export default function Employees() {
             <Dynamic
               component={media.large ? EmployeesTable : EmployeesList}
               data={data}
-              onClick={setUID}
+              onClick={(id: UUIDString) => navigate(`/employees/view/${id}`)}
               onChangeParams={usersStore.setParams}
             />
           )}
@@ -69,9 +69,11 @@ export default function Employees() {
           </Button>
         </div>
       </Show>
+      {/*
       <Drawer open={Boolean(uid())} title="Employee Profile" onClose={() => setUID(null)}>
         <EmployeeProfile uid={uid()!} />
       </Drawer>
+      */}
     </Page>
   );
 }

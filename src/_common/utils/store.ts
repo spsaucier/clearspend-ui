@@ -53,7 +53,7 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
       setStore((prev) => ({
         ...prev,
         params: (options?.params as any) || null,
-        data: (options?.initValue as any) || null,
+        ...(!(prev.data as unknown) && { data: (options?.initValue as any) || null }),
       }));
     };
 

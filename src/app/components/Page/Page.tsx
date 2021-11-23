@@ -9,6 +9,7 @@ import css from './Page.css';
 interface PageProps {
   title: JSXElement;
   titleClass?: string;
+  subtitle?: JSXElement;
   side?: JSXElement;
   breadcrumbs?: JSXElement;
   extra?: JSXElement;
@@ -41,6 +42,9 @@ export function Page(props: Readonly<PageProps>) {
             </div>
             {props.actions}
           </div>
+          <Show when={props.subtitle}>
+            <div class={css.subtitle}>{props.subtitle}</div>
+          </Show>
         </header>
         <div
           class={css.footer}
