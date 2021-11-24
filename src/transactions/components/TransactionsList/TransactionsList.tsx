@@ -19,7 +19,12 @@ interface TransactionsListProps {
 export function TransactionsList(props: Readonly<TransactionsListProps>) {
   return (
     <div>
-      <Input disabled placeholder="Search employees..." suffix={<Icon name="search" size="sm" />} class={css.search} />
+      <Input
+        disabled
+        placeholder="Search Transactions..."
+        suffix={<Icon name="search" size="sm" />}
+        class={css.search}
+      />
       <For each={props.data.content}>
         {(item) => {
           const date = createMemo(() => new Date(item.activityTime));

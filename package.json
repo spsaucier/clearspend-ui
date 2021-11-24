@@ -54,8 +54,8 @@
     "fork-ts-checker-webpack-plugin": "6.4.0",
     "html-webpack-plugin": "5.5.0",
     "husky": "7.0.4",
-    "lint-staged": "12.1.2",
     "mini-css-extract-plugin": "2.4.5",
+    "nano-staged": "0.3.0",
     "postcss": "8.3.11",
     "postcss-custom-media": "8.0.0",
     "postcss-loader": "6.2.0",
@@ -79,7 +79,7 @@
     "Edge >= 79",
     "Samsung >= 12"
   ],
-  "lint-staged": {
+  "nano-staged": {
     "src/**/*.{ts,tsx}": "eslint --cache --fix",
     "src/**/*.css": "stylelint --fix",
     "*.{js,ts,tsx,json,css,html,svg}": "prettier --write"
