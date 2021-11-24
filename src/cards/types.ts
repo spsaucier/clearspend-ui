@@ -1,4 +1,5 @@
-import type { UUIDString, Address, PageResponse } from 'app/types/common';
+import type { UUIDString, Amount, Address, PageRequest, PageResponse } from 'app/types/common';
+import type { BaseUser } from 'employees/types';
 
 export enum CardType {
   PLASTIC = 'PLASTIC',
@@ -48,4 +49,25 @@ export interface Card {
   address: Readonly<Address>;
 }
 
-export type SearchCardResponse = Readonly<PageResponse<readonly Readonly<Card>[]>>;
+export interface SearchCardRequest {
+  pageRequest: Readonly<PageRequest>;
+  userId?: UUIDString;
+  allocationId?: UUIDString;
+  searchText?: string;
+}
+
+export interface SearchCardAllocation {
+  id: UUIDString;
+  name: string;
+}
+
+export interface SearchCard {
+  cardId: UUIDString;
+  cardNumber: string;
+  user: Readonly<BaseUser>;
+  allocation: Readonly<SearchCardAllocation>;
+  balance: Readonly<Amount>;
+  cardStatus: CardStatus;
+}
+
+export type SearchCardResponse = Readonly<PageResponse<readonly Readonly<SearchCard>[]>>;

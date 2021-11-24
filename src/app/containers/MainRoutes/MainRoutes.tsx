@@ -32,7 +32,6 @@ export function MainRoutes() {
         <Route path="/cards" element={<Cards />} />
         <Route path="/cards/view/:id" element={<CardView />} />
         <Route path="/cards/edit" element={<EditCard />} />
-        <Route path="/cards/edit/:id" element={<EditCard />} />
 
         <Route path="/test/access" element={<AccessInfo />} />
         <Route path="/test/test" element={<Test />} />

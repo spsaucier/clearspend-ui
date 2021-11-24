@@ -1,24 +1,24 @@
-import { createMemo } from 'solid-js';
-import { Dynamic, Switch, Match } from 'solid-js/web';
+import { Dynamic, Show, Switch, Match } from 'solid-js/web';
+import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
+import { Empty } from 'app/components/Empty';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { CardsList } from 'cards/components/CardsList';
 import { CardsTable } from 'cards/components/CardsTable';
-import CARDS from 'cards/cards.json';
-import type { SearchCardResponse } from 'cards/types';
+import { searchCards } from 'cards/services';
+import type { SearchCardRequest } from 'cards/types';
 
-import { getUserCards } from '../../services';
 import type { User } from '../../types';
 
-const DATA = {
-  number: 0,
-  size: 10,
-  totalElements: 0,
-  content: [] as SearchCardResponse['content'],
-} as SearchCardResponse;
+const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
+  pageRequest: {
+    pageNumber: 0,
+    pageSize: 10,
+  },
+};
 
 interface CardsProps {
   userId: User['userId'];
@@ -26,7 +26,7 @@ interface CardsProps {
 
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
-  const [cards, status, , , reload] = useResource(getUserCards, props.userId);
+  const [cards, status, , , reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
 
   return (
     <>
@@ -38,12 +38,11 @@ export function Cards(props: Readonly<CardsProps>) {
           <Loading />
         </Match>
         <Match when={cards()}>
-          {(items) => {
-            const data = createMemo(
-              () => ({ ...DATA, content: items.length ? items : CARDS } as unknown as SearchCardResponse),
-            );
-            return <Dynamic component={media.large ? CardsTable : CardsList} data={data()} hideColumns={['name']} />;
-          }}
+          {(data) => (
+            <Show when={data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
+              <Dynamic component={media.large ? CardsTable : CardsList} data={data} hideColumns={['name']} />
+            </Show>
+          )}
         </Match>
       </Switch>
     </>

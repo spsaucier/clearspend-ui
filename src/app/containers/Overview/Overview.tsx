@@ -1,10 +1,11 @@
 import { createSignal, Match, Show, Switch } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
+import { Text } from 'solid-i18n';
 
 import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
-import { NoTransactions } from 'transactions/components/NoTransactions';
+import { Empty } from 'app/components/Empty';
 import { TransactionsList } from 'transactions/components/TransactionsList';
 import { TransactionsTable } from 'transactions/components/TransactionsTable';
 
@@ -66,7 +67,10 @@ export function Overview() {
           </Match>
           <Match when={activityStore.data}>
             {(resp) => (
-              <Show when={!!resp.content.length} fallback={<NoTransactions />}>
+              <Show
+                when={!!resp.content.length}
+                fallback={<Empty message={<Text message="There are no transactions for the selected period." />} />}
+              >
                 <Dynamic
                   component={media.large ? TransactionsTable : TransactionsList}
                   data={resp}

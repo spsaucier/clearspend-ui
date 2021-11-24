@@ -1,3 +1,6 @@
+import { useNavigate } from 'solid-app-router';
+
+import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { getNoop } from '_common/utils/getNoop';
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
@@ -7,9 +10,11 @@ import { Table, TableColumn } from '_common/components/Table';
 import { Tag } from '_common/components/Tag';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import { formatName } from 'employees/utils/formatName';
 
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import type { Card, SearchCardResponse } from '../../types';
+import type { SearchCard, SearchCardResponse } from '../../types';
+import { CardStatus } from '../../types';
 
 import css from './CardsTable.css';
 
@@ -19,28 +24,31 @@ interface CardsTableProps {
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
-  const columns: readonly Readonly<TableColumn<Card>>[] = [
+  const navigate = useNavigate();
+
+  const columns: readonly Readonly<TableColumn<SearchCard>>[] = [
     {
       name: 'number',
       title: 'Card Number',
-      render: (item) => <span class={css.number}>{formatCardNumber(item.lastFour)}</span>,
+      render: (item) => <span class={css.number}>{formatCardNumber(item.cardNumber)}</span>,
+      onClick: (item) => navigate(`/cards/view/${item.cardId}`),
     },
     {
       name: 'name',
       title: 'Employee',
-      render: () => <span class={css.name}>[User Name]</span>,
+      render: (item) => <span class={css.name}>{formatName(item.user)}</span>,
     },
     {
       name: 'allocation',
       title: 'Allocation',
-      render: () => <span>[Allocation]</span>,
+      render: (item) => <span>{item.allocation.name}</span>,
     },
     {
       name: 'balance',
       title: 'Balance',
-      render: () => (
+      render: (item) => (
         <div>
-          <strong>[Balance]</strong>
+          <strong>{formatCurrency(item.balance.amount)}</strong>
           <div>[Limit]</div>
         </div>
       ),
@@ -48,10 +56,10 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     {
       name: 'status',
       title: 'Status',
-      render: () => (
-        <Tag type="success">
+      render: (item) => (
+        <Tag type={item.cardStatus === CardStatus.OPEN ? 'success' : 'danger'}>
           <Icon name="freeze" size="xs" />
-          <span>Active</span>
+          <span>{item.cardStatus.toLowerCase()}</span>
         </Tag>
       ),
     },
@@ -62,8 +70,8 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.number}
-            pageSize={props.data.size}
+            current={props.data.pageNumber}
+            pageSize={props.data.pageSize}
             total={props.data.totalElements}
             onChange={changeRequestPage(getNoop)}
           />

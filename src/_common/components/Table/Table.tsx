@@ -9,6 +9,7 @@ export interface TableColumn<T extends {}> {
   title?: JSXElement;
   class?: string;
   render?: (row: T) => JSXElement;
+  onClick?: (row: T) => void;
 }
 
 export interface TableProps<T extends {}> {
@@ -33,7 +34,7 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
               <For each={props.columns}>
                 {(column) => {
                   return (
-                    <td class={join(css.td, props.tdClass, column.class)}>
+                    <td class={join(css.td, props.tdClass, column.class)} onClick={() => column.onClick?.(row)}>
                       {typeof column.render === 'function'
                         ? column.render(row)
                         : // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access

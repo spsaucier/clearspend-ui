@@ -48,7 +48,7 @@ export interface Pageable {
   unpaged: boolean;
 }
 
-export interface PageResponse<T = {}> {
+export interface OutdatedPageResponse<T = {}> {
   totalElements: number;
   totalPages: number;
   size: number;
@@ -60,4 +60,11 @@ export interface PageResponse<T = {}> {
   first: boolean;
   last: boolean;
   empty: boolean;
+}
+
+export interface PageResponse<T = {}> {
+  pageNumber: number;
+  pageSize: number;
+  totalElements: number;
+  content: T;
 }

@@ -1,1 +1,0 @@
-export { NoTransactions } from './NoTransactions';
