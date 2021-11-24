@@ -6,11 +6,16 @@ import { PageContext, IPageContext } from './context';
 
 import css from './Page.css';
 
+function isExist(child?: JSXElement): boolean {
+  return Boolean(typeof child === 'function' ? child() : child);
+}
+
 interface PageProps {
   title: JSXElement;
   titleClass?: string;
   subtitle?: JSXElement;
   side?: JSXElement;
+  headerSide?: JSXElement;
   breadcrumbs?: JSXElement;
   extra?: JSXElement;
   actions?: JSXElement;
@@ -35,16 +40,23 @@ export function Page(props: Readonly<PageProps>) {
           <Show when={props.breadcrumbs}>
             <div class={css.breadcrumbs}>{props.breadcrumbs}</div>
           </Show>
-          <div class={css.headerMain}>
-            <div class={css.titleWrap}>
-              <h1 class={join(css.title, props.titleClass)}>{props.title}</h1>
-              {props.extra}
+          <div classList={{ [css.headerSideWrapper!]: isExist(props.headerSide) }}>
+            <Show when={props.headerSide}>
+              <div>{props.headerSide}</div>
+            </Show>
+            <div>
+              <div class={css.headerMain}>
+                <div class={css.titleWrap}>
+                  <h1 class={join(css.title, props.titleClass)}>{props.title}</h1>
+                  {props.extra}
+                </div>
+                {props.actions}
+              </div>
+              <Show when={props.subtitle}>
+                <div class={css.subtitle}>{props.subtitle}</div>
+              </Show>
             </div>
-            {props.actions}
           </div>
-          <Show when={props.subtitle}>
-            <div class={css.subtitle}>{props.subtitle}</div>
-          </Show>
         </header>
         <div
           class={css.footer}

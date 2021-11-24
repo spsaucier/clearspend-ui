@@ -1,5 +1,6 @@
 import { Icon } from '_common/components/Icon';
 
+import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { Card } from '../../types';
 
 import css from './CardPreview.css';
@@ -16,7 +17,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
       </div>
       <div>
         <div>
-          <span class={css.number}>••••{props.data.lastFour}</span>
+          <span class={css.number}>{formatCardNumber(props.data.lastFour)}</span>
         </div>
         <div class={css.allocation}>[allocation]</div>
       </div>

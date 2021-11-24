@@ -23,6 +23,7 @@ export async function getUser(userId: UUIDString) {
   return (await service.get<Readonly<User>>(`/users/${userId}`)).data;
 }
 
+// TODO does not work any more!
 export async function getUserCards(userId: UUIDString) {
   return (await service.get<readonly Readonly<UserCard>[]>('/users/cards', { headers: { userId } })).data;
 }

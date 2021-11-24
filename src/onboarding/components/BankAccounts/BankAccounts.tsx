@@ -3,6 +3,7 @@ import { For } from 'solid-js';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import { Icon } from '_common/components/Icon';
 import { Tag } from '_common/components/Tag';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import type { LinkedBankAccounts } from '../../types';
 
@@ -29,7 +30,7 @@ export function BankAccounts(props: Readonly<BankAccountsProps>) {
                   <span class={css.name}>{account.name}</span>
                   <Tag label="TODO" size="xs" class={css.type} />
                 </div>
-                <div class={css.number}>••••{account.accountNumber.slice(-NUM_MASK_LENGTH)}</div>
+                <div class={css.number}>{formatCardNumber(account.accountNumber.slice(-NUM_MASK_LENGTH))}</div>
               </div>
             </div>
           </Radio>

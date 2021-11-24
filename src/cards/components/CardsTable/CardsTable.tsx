@@ -8,6 +8,7 @@ import { Tag } from '_common/components/Tag';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 
+import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { Card, SearchCardResponse } from '../../types';
 
 import css from './CardsTable.css';
@@ -22,7 +23,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     {
       name: 'number',
       title: 'Card Number',
-      render: (item) => <span class={css.number}>•••• {item.lastFour}</span>,
+      render: (item) => <span class={css.number}>{formatCardNumber(item.lastFour)}</span>,
     },
     {
       name: 'name',

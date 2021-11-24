@@ -47,6 +47,15 @@
   color: var(--tw-gray-60);
 }
 
+.header-side-wrapper {
+  display: grid;
+  grid-gap: var(--pd-16) var(--pd-24);
+
+  @media (--bp-large) {
+    grid-template-columns: auto 1fr;
+  }
+}
+
 .header-main {
   display: grid;
   justify-items: flex-start;

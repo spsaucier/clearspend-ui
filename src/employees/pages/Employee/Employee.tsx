@@ -105,7 +105,7 @@ export default function Employee() {
                   <Transactions />
                 </Match>
                 <Match when={tab() === Tabs.cards}>
-                  <Cards />
+                  <Cards userId={data.userId} />
                 </Match>
                 <Match when={tab() === Tabs.settings}>
                   <Section title={<Text message="Employee Info" />}>

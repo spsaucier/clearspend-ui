@@ -3,6 +3,7 @@ import { For } from 'solid-js';
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 
+import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { SearchCardResponse } from '../../types';
 
 import css from './CardsList.css';
@@ -23,7 +24,7 @@ export function CardsList(props: Readonly<CardsListProps>) {
               <strong>[Money]</strong>
             </div>
             <div class={css.footer}>
-              <div>••••{item.lastFour}</div>
+              <div>{formatCardNumber(item.lastFour)}</div>
               <div>[Limit]</div>
             </div>
           </div>

@@ -1,0 +1,18 @@
+.text {
+  font-family: var(--font-main);
+  font-size: var(--text-14);
+  line-height: var(--line-20);
+}
+
+.type {
+  font-family: var(--font-main);
+  font-size: var(--text-16);
+  line-height: var(--line-24);
+}
+
+.amount {
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  font-weight: var(--font-700);
+  line-height: var(--line-28);
+}

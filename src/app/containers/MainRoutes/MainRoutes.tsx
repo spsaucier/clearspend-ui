@@ -6,6 +6,7 @@ import { EditEmployee } from 'employees/pages/EditEmployee';
 import { Allocations } from 'allocations';
 import { EditAllocation } from 'allocations/pages/EditAllocation';
 import { Cards } from 'cards';
+import { CardView } from 'cards/pages/CardView';
 import { EditCard } from 'cards/pages/EditCard';
 
 import { MainLayout } from '../../components/MainLayout';
@@ -29,6 +30,7 @@ export function MainRoutes() {
         <Route path="/allocations/edit/:id" element={<EditAllocation />} />
 
         <Route path="/cards" element={<Cards />} />
+        <Route path="/cards/view/:id" element={<CardView />} />
         <Route path="/cards/edit" element={<EditCard />} />
         <Route path="/cards/edit/:id" element={<EditCard />} />
 

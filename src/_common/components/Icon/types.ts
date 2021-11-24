@@ -23,6 +23,7 @@ export enum IconName {
   edit = 'edit',
   filters = 'filters',
   freeze = 'freeze',
+  information = 'information',
   'more-horizontal' = 'more-horizontal',
   'more-vertical' = 'more-vertical',
   'payment-bank' = 'payment-bank',
