@@ -1,7 +1,16 @@
-export function CardIcon() {
+import { CardType } from '../../types';
+
+interface CardIconProps {
+  type: CardType;
+}
+
+export function CardIcon(props: Readonly<CardIconProps>) {
   return (
     <svg width="24" height="15" fill="none" viewBox="0 0 24 15" xmlns="http://www.w3.org/2000/svg">
-      <path fill="#5bea83" d="M0 1c0-.6.4-1 1-1h22c.6 0 1 .4 1 1v13c0 .6-.4 1-1 1H1c-.6 0-1-.4-1-1V1z" />
+      <path
+        fill={props.type === CardType.PLASTIC ? '#5bea83' : '#f3f2ef'}
+        d="M0 1c0-.6.4-1 1-1h22c.6 0 1 .4 1 1v13c0 .6-.4 1-1 1H1c-.6 0-1-.4-1-1V1z"
+      />
       <path
         fill="#000"
         opacity="0.05"

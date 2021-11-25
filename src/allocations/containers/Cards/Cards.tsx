@@ -1,4 +1,4 @@
-import { createMemo, createSignal } from 'solid-js';
+import { createMemo, createSignal, createEffect, untrack } from 'solid-js';
 import { Show } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
@@ -39,9 +39,19 @@ export function Cards(props: Readonly<CardsProps>) {
     props.current.childrenAllocationIds.map((id) => props.items.find((item) => item.allocationId === id)!),
   );
 
-  const [cards, status, , setParams, reload] = useResource(searchCards, {
+  const [cards, status, params, setParams, reload] = useResource(searchCards, {
     ...DEFAULT_PARAMS,
     allocationId: props.current.allocationId,
+  });
+
+  createEffect(() => {
+    if (untrack(params).allocationId === props.current.allocationId) return;
+
+    setParams((prev) => ({
+      ...prev,
+      allocationId: props.current.allocationId,
+      searchText: '',
+    }));
   });
 
   const onSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
@@ -58,6 +68,7 @@ export function Cards(props: Readonly<CardsProps>) {
         table={media.wide}
         loading={status().loading}
         error={status().error}
+        search={params().searchText}
         data={cards()}
         hide={['allocation']}
         onReload={reload}

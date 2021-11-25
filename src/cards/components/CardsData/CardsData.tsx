@@ -10,6 +10,7 @@ import type { SearchCardResponse } from '../../types';
 interface CardsDataProps {
   loading: boolean;
   error: unknown;
+  search?: string;
   data: Readonly<SearchCardResponse> | null;
   table?: boolean;
   hide?: readonly string[];
@@ -24,6 +25,7 @@ export function CardsData(props: Readonly<CardsDataProps>) {
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
       <Dynamic
         component={props.table ? CardsTable : CardsList}
+        search={props.search}
         data={props.data!}
         hideColumns={props.hide}
         onSearch={props.onSearch}

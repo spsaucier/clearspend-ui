@@ -16,6 +16,7 @@ import type { UUIDString } from 'app/types/common';
 import { formatName } from 'employees/utils/formatName';
 
 import { CardIcon } from '../CardIcon';
+import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { SearchCard, SearchCardResponse } from '../../types';
 import { CardStatus } from '../../types';
@@ -23,6 +24,7 @@ import { CardStatus } from '../../types';
 import css from './CardsTable.css';
 
 interface CardsTableProps {
+  search?: string;
   data: SearchCardResponse;
   hideColumns?: readonly string[];
   onSearch: (value: string) => void;
@@ -40,10 +42,10 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       class: css.number,
       render: (item) => (
         <div class={css.card}>
-          <CardIcon />
+          <CardIcon type={item.cardType} />
           <div>
             {formatCardNumber(item.cardNumber)}
-            <span class={css.type}>[Card type]</span>
+            <CardType type={item.cardType} class={css.type} />
           </div>
         </div>
       ),
@@ -97,6 +99,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       >
         <InputSearch
           delay={400}
+          value={props.search}
           placeholder={i18n.t('Search cards...') as string}
           class={css.search}
           onSearch={props.onSearch}

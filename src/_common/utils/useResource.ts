@@ -1,4 +1,4 @@
-import { createSignal, createEffect, createMemo } from 'solid-js';
+import { createSignal, createEffect, onMount, createMemo, on } from 'solid-js';
 
 import { cloneObject } from './cloneObject';
 import { getNoop } from './getNoop';
@@ -11,10 +11,10 @@ export interface DataState<T> {
 
 export function useResource<T, P extends unknown>(
   fetcher: (params: P) => Promise<T>,
-  initParams: P,
+  initParams: P | undefined,
   fetchOnMount: boolean = true,
 ) {
-  const [params, setParams] = createSignal<P>(cloneObject(initParams));
+  const [params, setParams] = createSignal<P>(cloneObject(initParams as P));
 
   const [state, setState] = createSignal<DataState<T | null>>({
     loading: true,
@@ -38,9 +38,21 @@ export function useResource<T, P extends unknown>(
     setState((prev) => ({ ...prev, data: data }));
   };
 
-  createEffect(() => {
-    if (fetchOnMount) reload().catch(getNoop());
+  onMount(() => {
+    if (!fetchOnMount) return;
+    reload().catch(getNoop());
   });
+
+  createEffect(
+    on(
+      params,
+      (input) => {
+        reload().catch(getNoop());
+        return input;
+      },
+      { defer: true },
+    ),
+  );
 
   const data = createMemo(() => state().data);
 

@@ -1,4 +1,4 @@
-.items {
+.root {
   display: flex;
   margin: var(--pd-8) 0;
   flex-wrap: wrap;
@@ -14,7 +14,7 @@
   }
 }
 
-.item-title {
+.title {
   margin: 0;
   font: inherit;
   font-size: var(--text-12);
@@ -23,7 +23,7 @@
   text-transform: uppercase;
 }
 
-.item-value {
+.value {
   display: flex;
   margin-top: var(--pd-16);
   align-items: center;
@@ -31,8 +31,22 @@
   line-height: var(--line-28);
 }
 
-.item-note {
+.name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.chevron {
+  flex-shrink: 0;
+}
+
+.note {
   display: block;
   margin-top: var(--pd-10);
+  padding-right: var(--pd-24);
   color: var(--tw-gray-60);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

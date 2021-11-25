@@ -7,12 +7,14 @@ import { Empty } from 'app/components/Empty';
 import type { UUIDString } from 'app/types/common';
 
 import { CardIcon } from '../CardIcon';
+import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { SearchCardResponse } from '../../types';
 
 import css from './CardsList.css';
 
 interface CardsListProps {
+  search?: string;
   data: SearchCardResponse;
   onSearch: (value: string) => void;
   onCardClick: (id: UUIDString) => void;
@@ -25,6 +27,7 @@ export function CardsList(props: Readonly<CardsListProps>) {
     <div>
       <InputSearch
         delay={400}
+        value={props.search}
         placeholder={i18n.t('Search cards...') as string}
         class={css.search}
         onSearch={props.onSearch}
@@ -33,10 +36,10 @@ export function CardsList(props: Readonly<CardsListProps>) {
         <For each={props.data.content}>
           {(item) => (
             <div class={css.item} onClick={() => props.onCardClick(item.cardId)}>
-              <CardIcon />
+              <CardIcon type={item.cardType} />
               <div>
                 <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>
-                <div class={css.type}>[Card type]</div>
+                <CardType type={item.cardType} class={css.type} />
               </div>
               <div>
                 <strong>{formatCurrency(item.balance.amount)}</strong>

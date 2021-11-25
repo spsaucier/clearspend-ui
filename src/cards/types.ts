@@ -68,6 +68,7 @@ export interface SearchCard {
   allocation: Readonly<SearchCardAllocation>;
   balance: Readonly<Amount>;
   cardStatus: CardStatus;
+  cardType: CardType;
 }
 
 export type SearchCardResponse = PageResponse<readonly Readonly<SearchCard>[]>;
