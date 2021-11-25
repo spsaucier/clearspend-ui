@@ -1,9 +1,9 @@
-import { Switch, Match, For } from 'solid-js';
+import { Show, For } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
+import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
 import { CardPreview } from 'cards/components/CardPreview';
 
@@ -21,42 +21,27 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
   const [cards, cardsStatus, , , reloadCards] = useResource(getUserCards, props.uid);
 
   return (
-    <div>
-      <Switch>
-        <Match when={status().error}>
-          <LoadingError onReload={reload} />
-        </Match>
-        <Match when={status().loading && !user()}>
-          <Loading />
-        </Match>
-        <Match when={user()}>
-          {(data) => (
-            <>
-              <div class={css.data}>{formatName(data)}</div>
-              <div class={css.data}>{data.email}</div>
-              <Switch>
-                <Match when={cardsStatus().error}>
-                  <LoadingError onReload={reloadCards} />
-                </Match>
-                <Match when={cardsStatus().loading && !cards()}>
-                  <Loading />
-                </Match>
-                <Match when={cards()?.length}>
-                  <div class={css.cards}>
-                    <h4 class={css.cardsTitle}>Cards</h4>
-                    <div class={css.cardsList}>
-                      <For each={cards()!}>{(card) => <CardPreview data={card.card} />}</For>
-                    </div>
-                  </div>
-                </Match>
-              </Switch>
-              <Button wide type="primary" icon="edit" disabled class={css.edit}>
-                Edit Employee
-              </Button>
-            </>
-          )}
-        </Match>
-      </Switch>
+    <div class={css.root}>
+      <Data data={user()} loading={status().loading} error={status().error} onReload={reload}>
+        <div>
+          <h4 class={css.name}>{formatName(user()!)}</h4>
+          <div class={css.data}>{user()!.email}</div>
+          <div class={css.data}>{user()!.phone}</div>
+          <Data data={cards()} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
+            <Show when={cards()?.length}>
+              <div class={css.cards}>
+                <h4 class={css.cardsTitle}>Cards</h4>
+                <div class={css.cardsList}>
+                  <For each={cards()!}>{(card) => <CardPreview data={card.card} />}</For>
+                </div>
+              </div>
+            </Show>
+          </Data>
+        </div>
+        <Button wide type="primary">
+          <Text message="View full profile" />
+        </Button>
+      </Data>
     </div>
   );
 }

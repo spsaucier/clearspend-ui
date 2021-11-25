@@ -6,6 +6,7 @@ import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
 import { Drawer } from '_common/components/Drawer';
 import { CardsData } from 'cards/components/CardsData';
+import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { SearchCardRequest } from 'cards/types';
@@ -38,10 +39,12 @@ export function Cards(props: Readonly<CardsProps>) {
     props.current.childrenAllocationIds.map((id) => props.items.find((item) => item.allocationId === id)!),
   );
 
-  const [cards, status, , , reload] = useResource(searchCards, {
+  const [cards, status, , setParams, reload] = useResource(searchCards, {
     ...DEFAULT_PARAMS,
     allocationId: props.current.allocationId,
   });
+
+  const onSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
 
   return (
     <>
@@ -58,11 +61,12 @@ export function Cards(props: Readonly<CardsProps>) {
         data={cards()}
         hide={['allocation']}
         onReload={reload}
+        onSearch={onSearch}
         onCardClick={setCardID}
         onUserClick={setUserID}
       />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
-        TODO
+        <CardPreview cardID={cardID()!} />
       </Drawer>
       <Drawer open={Boolean(userID())} title={<Text message="Employee Profile" />} onClose={() => setUserID(null)}>
         <EmployeePreview uid={userID()!} />

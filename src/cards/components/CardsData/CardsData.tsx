@@ -1,9 +1,6 @@
-import { Switch, Match, Show, Dynamic } from 'solid-js/web';
-import { Text } from 'solid-i18n';
+import { Dynamic } from 'solid-js/web';
 
-import { Empty } from 'app/components/Empty';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
+import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
 
 import { CardsList } from '../CardsList';
@@ -16,6 +13,7 @@ interface CardsDataProps {
   data: Readonly<SearchCardResponse> | null;
   table?: boolean;
   hide?: readonly string[];
+  onSearch: (value: string) => void;
   onUserClick?: (id: UUIDString) => void;
   onCardClick: (id: UUIDString) => void;
   onReload: () => Promise<unknown>;
@@ -23,24 +21,15 @@ interface CardsDataProps {
 
 export function CardsData(props: Readonly<CardsDataProps>) {
   return (
-    <Switch>
-      <Match when={props.error}>
-        <LoadingError onReload={props.onReload} />
-      </Match>
-      <Match when={props.loading && !props.data}>
-        <Loading />
-      </Match>
-      <Match when={props.data}>
-        <Show when={props.data!.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
-          <Dynamic
-            component={props.table ? CardsTable : CardsList}
-            data={props.data!}
-            hideColumns={props.hide}
-            onUserClick={props.onUserClick}
-            onCardClick={props.onCardClick}
-          />
-        </Show>
-      </Match>
-    </Switch>
+    <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
+      <Dynamic
+        component={props.table ? CardsTable : CardsList}
+        data={props.data!}
+        hideColumns={props.hide}
+        onSearch={props.onSearch}
+        onUserClick={props.onUserClick}
+        onCardClick={props.onCardClick}
+      />
+    </Data>
   );
 }

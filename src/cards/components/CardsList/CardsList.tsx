@@ -1,11 +1,12 @@
-import { For } from 'solid-js';
+import { For, Show } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
-import { Input } from '_common/components/Input';
-import { Icon } from '_common/components/Icon';
-import { formatName } from 'employees/utils/formatName';
+import { InputSearch } from '_common/components/InputSearch';
+import { Empty } from 'app/components/Empty';
 import type { UUIDString } from 'app/types/common';
 
+import { CardIcon } from '../CardIcon';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { SearchCardResponse } from '../../types';
 
@@ -13,27 +14,38 @@ import css from './CardsList.css';
 
 interface CardsListProps {
   data: SearchCardResponse;
+  onSearch: (value: string) => void;
   onCardClick: (id: UUIDString) => void;
 }
 
 export function CardsList(props: Readonly<CardsListProps>) {
+  const i18n = useI18n();
+
   return (
     <div>
-      <Input disabled placeholder="Search cards..." suffix={<Icon name="search" size="sm" />} class={css.search} />
-      <For each={props.data.content}>
-        {(item) => (
-          <div class={css.item} onClick={() => props.onCardClick(item.cardId)}>
-            <div class={css.header}>
-              <div class={css.name}>{formatName(item.user)}</div>
-              <strong>{formatCurrency(item.balance.amount)}</strong>
+      <InputSearch
+        delay={400}
+        placeholder={i18n.t('Search cards...') as string}
+        class={css.search}
+        onSearch={props.onSearch}
+      />
+      <Show when={props.data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
+        <For each={props.data.content}>
+          {(item) => (
+            <div class={css.item} onClick={() => props.onCardClick(item.cardId)}>
+              <CardIcon />
+              <div>
+                <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>
+                <div class={css.type}>[Card type]</div>
+              </div>
+              <div>
+                <strong>{formatCurrency(item.balance.amount)}</strong>
+                <div class={css.limit}>[Limit]</div>
+              </div>
             </div>
-            <div class={css.footer}>
-              <div>{formatCardNumber(item.cardNumber)}</div>
-              <div>[Limit]</div>
-            </div>
-          </div>
-        )}
-      </For>
+          )}
+        </For>
+      </Show>
     </div>
   );
 }

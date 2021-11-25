@@ -7,7 +7,10 @@
 }
 
 .item {
+  display: grid;
   padding: var(--pd-24) 0;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: var(--pd-10);
   font-size: var(--text-12);
   line-height: var(--line-16);
 
@@ -16,22 +19,12 @@
   }
 }
 
-.header {
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: var(--pd-12);
-  justify-content: space-between;
-}
-
 .name {
   color: var(--tw-primary-content);
 }
 
-.footer {
-  display: grid;
+.type,
+.limit {
   margin-top: var(--pd-2);
-  grid-auto-flow: column;
-  grid-gap: var(--pd-12);
-  justify-content: space-between;
   color: var(--tw-gray-60);
 }

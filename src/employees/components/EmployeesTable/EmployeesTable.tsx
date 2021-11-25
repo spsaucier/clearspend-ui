@@ -27,11 +27,9 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
     {
       name: 'name',
       title: <Text message="Employee" />,
-      render: (item) => (
-        <span class={css.name} onClick={() => props.onClick(item.userId)}>
-          {formatName(item)}
-        </span>
-      ),
+      class: css.name,
+      render: (item) => formatName(item),
+      onClick: (item) => props.onClick(item.userId),
     },
     {
       name: 'card',

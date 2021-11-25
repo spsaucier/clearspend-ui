@@ -5,6 +5,7 @@ import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
 import { Drawer } from '_common/components/Drawer';
 import { CardsData } from 'cards/components/CardsData';
+import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
 import type { SearchCardRequest } from 'cards/types';
 import type { UUIDString } from 'app/types/common';
@@ -26,7 +27,9 @@ export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
 
   const [cardID, setCardID] = createSignal<UUIDString | null>(null);
-  const [cards, status, , , reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
+  const [cards, status, , setParams, reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
+
+  const onSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
 
   return (
     <>
@@ -37,10 +40,11 @@ export function Cards(props: Readonly<CardsProps>) {
         data={cards()}
         hide={['name']}
         onReload={reload}
+        onSearch={onSearch}
         onCardClick={setCardID}
       />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
-        TODO
+        <CardPreview cardID={cardID()!} />
       </Drawer>
     </>
   );
