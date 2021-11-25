@@ -13,7 +13,7 @@ import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
 import type { IssueCard } from '../../types';
 
-export default function EditCard() {
+export default function CardEdit() {
   const messages = useMessages();
   const navigate = useNavigate();
 

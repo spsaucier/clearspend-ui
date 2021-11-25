@@ -8,7 +8,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
 import { saveUser } from '../../services';
 
-export default function EditEmployee() {
+export default function EmployeeEdit() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();

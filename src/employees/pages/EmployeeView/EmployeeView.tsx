@@ -20,7 +20,7 @@ import { Cards } from '../../containers/Cards';
 import { getUser, editUser } from '../../services';
 import { formatName } from '../../utils/formatName';
 
-import css from './Employee.css';
+import css from './EmployeeView.css';
 
 enum Tabs {
   transactions,
@@ -28,7 +28,7 @@ enum Tabs {
   settings,
 }
 
-export default function Employee() {
+export default function EmployeeView() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();

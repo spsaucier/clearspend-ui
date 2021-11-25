@@ -8,7 +8,7 @@ import { saveAllocation } from '../../services';
 import { useAllocations } from '../../stores/allocations';
 import type { CreateAllocation } from '../../types';
 
-export default function EditAllocation() {
+export default function AllocationEdit() {
   const messages = useMessages();
   const navigate = useNavigate();
 
