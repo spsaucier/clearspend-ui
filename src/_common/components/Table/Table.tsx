@@ -24,13 +24,13 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
     <table class={join(css.root, props.class)}>
       <thead class={css.head}>
         <tr>
-          <For each={props.columns}>{(column) => <th class={join(css.th, column.class)}>{column.title}</th>}</For>
+          <For each={props.columns}>{(column) => <th class={join(css.th)}>{column.title}</th>}</For>
         </tr>
       </thead>
       <tbody>
         <For each={props.data}>
           {(row: T) => (
-            <tr>
+            <tr class={css.row}>
               <For each={props.columns}>
                 {(column) => {
                   return (

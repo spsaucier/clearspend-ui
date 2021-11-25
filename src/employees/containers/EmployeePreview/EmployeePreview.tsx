@@ -10,13 +10,13 @@ import { CardPreview } from 'cards/components/CardPreview';
 import { getUser, getUserCards } from '../../services';
 import { formatName } from '../../utils/formatName';
 
-import css from './EmployeeProfile.css';
+import css from './EmployeePreview.css';
 
-interface EmployeeProfileProps {
+interface EmployeePreviewProps {
   uid: UUIDString;
 }
 
-export function EmployeeProfile(props: Readonly<EmployeeProfileProps>) {
+export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
   const [user, status, , , reload] = useResource(getUser, props.uid);
   const [cards, cardsStatus, , , reloadCards] = useResource(getUserCards, props.uid);
 

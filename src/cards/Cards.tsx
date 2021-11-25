@@ -1,16 +1,15 @@
-import { Switch, Match, Show, Dynamic } from 'solid-js/web';
+import { createSignal } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { useMediaContext } from '_common/api/media/context';
 import { Button } from '_common/components/Button';
+import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
-import { Empty } from 'app/components/Empty';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
+import type { UUIDString } from 'app/types/common';
+import { EmployeePreview } from 'employees/containers/EmployeePreview';
 
-import { CardsList } from './components/CardsList';
-import { CardsTable } from './components/CardsTable';
+import { CardsData } from './components/CardsData';
 import { useCards } from './stores/cards';
 import type { SearchCardRequest } from './types';
 
@@ -25,6 +24,7 @@ export default function Cards() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
+  const [uid, setUID] = createSignal<UUIDString | null>(null);
   const cardsStore = useCards({ params: DEFAULT_PARAMS });
 
   return (
@@ -36,21 +36,18 @@ export default function Cards() {
         </Button>
       }
     >
-      <Switch>
-        <Match when={cardsStore.error}>
-          <LoadingError onReload={cardsStore.reload} />
-        </Match>
-        <Match when={cardsStore.loading && !cardsStore.data}>
-          <Loading />
-        </Match>
-        <Match when={cardsStore.data}>
-          {(data) => (
-            <Show when={data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
-              <Dynamic component={media.large ? CardsTable : CardsList} data={data} />
-            </Show>
-          )}
-        </Match>
-      </Switch>
+      <CardsData
+        table={media.large}
+        loading={cardsStore.loading}
+        error={cardsStore.error}
+        data={cardsStore.data}
+        onReload={cardsStore.reload}
+        onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
+        onUserClick={setUID}
+      />
+      <Drawer open={Boolean(uid())} title={<Text message="Employee Profile" />} onClose={() => setUID(null)}>
+        <EmployeePreview uid={uid()!} />
+      </Drawer>
     </Page>
   );
 }

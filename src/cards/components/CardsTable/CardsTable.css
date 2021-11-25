@@ -5,4 +5,5 @@
 .number,
 .name {
   color: var(--tw-primary-content);
+  cursor: pointer;
 }

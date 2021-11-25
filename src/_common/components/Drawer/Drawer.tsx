@@ -8,7 +8,7 @@ import css from './Drawer.css';
 
 interface DrawerProps {
   open: boolean;
-  title: string;
+  title: JSXElement;
   children: JSXElement;
   onClose: () => void;
 }

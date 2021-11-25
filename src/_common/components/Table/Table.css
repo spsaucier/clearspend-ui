@@ -17,6 +17,14 @@
   font: inherit;
 }
 
+.row {
+  transition: background-color 0.3s;
+
+  &:hover {
+    background: var(--tw-gray-10);
+  }
+}
+
 .td {
   padding: var(--pd-16) var(--pd-12);
   vertical-align: top;

@@ -1,5 +1,3 @@
-import { useNavigate } from 'solid-app-router';
-
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { getNoop } from '_common/utils/getNoop';
 import { Input } from '_common/components/Input';
@@ -10,6 +8,7 @@ import { Table, TableColumn } from '_common/components/Table';
 import { Tag } from '_common/components/Tag';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import type { UUIDString } from 'app/types/common';
 import { formatName } from 'employees/utils/formatName';
 
 import { formatCardNumber } from '../../utils/formatCardNumber';
@@ -21,22 +20,25 @@ import css from './CardsTable.css';
 interface CardsTableProps {
   data: SearchCardResponse;
   hideColumns?: readonly string[];
+  onUserClick?: (id: UUIDString) => void;
+  onCardClick: (id: UUIDString) => void;
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
-  const navigate = useNavigate();
-
   const columns: readonly Readonly<TableColumn<SearchCard>>[] = [
     {
       name: 'number',
       title: 'Card Number',
-      render: (item) => <span class={css.number}>{formatCardNumber(item.cardNumber)}</span>,
-      onClick: (item) => navigate(`/cards/view/${item.cardId}`),
+      class: css.number,
+      render: (item) => formatCardNumber(item.cardNumber),
+      onClick: (item) => props.onCardClick(item.cardId),
     },
     {
       name: 'name',
       title: 'Employee',
-      render: (item) => <span class={css.name}>{formatName(item.user)}</span>,
+      class: css.name,
+      render: (item) => formatName(item.user),
+      onClick: (item) => props.onUserClick?.(item.user.userId),
     },
     {
       name: 'allocation',

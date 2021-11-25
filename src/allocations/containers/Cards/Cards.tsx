@@ -1,16 +1,15 @@
-import { createMemo } from 'solid-js';
-import { Show, Switch, Match, Dynamic } from 'solid-js/web';
+import { createMemo, createSignal } from 'solid-js';
+import { Show } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
-import { Empty } from 'app/components/Empty';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
-import { CardsList } from 'cards/components/CardsList';
-import { CardsTable } from 'cards/components/CardsTable';
+import { Drawer } from '_common/components/Drawer';
+import { CardsData } from 'cards/components/CardsData';
 import { searchCards } from 'cards/services';
+import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { SearchCardRequest } from 'cards/types';
+import type { UUIDString } from 'app/types/common';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
 import type { Allocation } from '../../types';
@@ -32,6 +31,9 @@ interface CardsProps {
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
 
+  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
+  const [userID, setUserID] = createSignal<UUIDString | null>(null);
+
   const children = createMemo(() =>
     props.current.childrenAllocationIds.map((id) => props.items.find((item) => item.allocationId === id)!),
   );
@@ -49,21 +51,22 @@ export function Cards(props: Readonly<CardsProps>) {
           <Text message="Cards" />
         </h3>
       </Show>
-      <Switch>
-        <Match when={status().error}>
-          <LoadingError onReload={reload} />
-        </Match>
-        <Match when={status().loading && !cards()}>
-          <Loading />
-        </Match>
-        <Match when={cards()}>
-          {(data) => (
-            <Show when={data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
-              <Dynamic component={media.wide ? CardsTable : CardsList} data={data} hideColumns={['allocation']} />
-            </Show>
-          )}
-        </Match>
-      </Switch>
+      <CardsData
+        table={media.wide}
+        loading={status().loading}
+        error={status().error}
+        data={cards()}
+        hide={['allocation']}
+        onReload={reload}
+        onCardClick={setCardID}
+        onUserClick={setUserID}
+      />
+      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
+        TODO
+      </Drawer>
+      <Drawer open={Boolean(userID())} title={<Text message="Employee Profile" />} onClose={() => setUserID(null)}>
+        <EmployeePreview uid={userID()!} />
+      </Drawer>
     </>
   );
 }

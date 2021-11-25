@@ -1,15 +1,13 @@
-import { Dynamic, Show, Switch, Match } from 'solid-js/web';
+import { createSignal } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
-import { Empty } from 'app/components/Empty';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
-import { CardsList } from 'cards/components/CardsList';
-import { CardsTable } from 'cards/components/CardsTable';
+import { Drawer } from '_common/components/Drawer';
+import { CardsData } from 'cards/components/CardsData';
 import { searchCards } from 'cards/services';
 import type { SearchCardRequest } from 'cards/types';
+import type { UUIDString } from 'app/types/common';
 
 import type { User } from '../../types';
 
@@ -26,25 +24,24 @@ interface CardsProps {
 
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
+
+  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
   const [cards, status, , , reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
 
   return (
     <>
-      <Switch>
-        <Match when={status().error}>
-          <LoadingError onReload={reload} />
-        </Match>
-        <Match when={status().loading && !cards()}>
-          <Loading />
-        </Match>
-        <Match when={cards()}>
-          {(data) => (
-            <Show when={data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
-              <Dynamic component={media.large ? CardsTable : CardsList} data={data} hideColumns={['name']} />
-            </Show>
-          )}
-        </Match>
-      </Switch>
+      <CardsData
+        table={media.large}
+        loading={status().loading}
+        error={status().error}
+        data={cards()}
+        hide={['name']}
+        onReload={reload}
+        onCardClick={setCardID}
+      />
+      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
+        TODO
+      </Drawer>
     </>
   );
 }

@@ -70,4 +70,4 @@ export interface SearchCard {
   cardStatus: CardStatus;
 }
 
-export type SearchCardResponse = Readonly<PageResponse<readonly Readonly<SearchCard>[]>>;
+export type SearchCardResponse = PageResponse<readonly Readonly<SearchCard>[]>;
