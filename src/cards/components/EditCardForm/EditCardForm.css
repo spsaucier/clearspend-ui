@@ -10,6 +10,16 @@
   }
 }
 
+.switch-box {
+  @media (--bp-medium) {
+    max-width: 460px;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-16);
+  }
+}
+
 .types {
   margin: var(--pd-8) 0;
 }

@@ -1,15 +1,19 @@
-import { Show, For } from 'solid-js';
+import { createMemo, Show, For } from 'solid-js';
+import { Text } from 'solid-i18n';
 
+import { i18n } from '_common/api/intl';
+import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { useBool } from '_common/utils/useBool';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Select, Option } from '_common/components/Select';
+import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
-import { Switch } from '_common/components/Switch';
 import { Drawer } from '_common/components/Drawer';
 import type { UUIDString } from 'app/types/common';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
+import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import type { Allocation } from 'allocations/types';
@@ -23,7 +27,7 @@ import type { IssueCard, CardType } from '../../types';
 import css from './EditCardForm.css';
 
 function validTypes(value: readonly CardType[]): boolean | string {
-  return !!value.length || 'Required field';
+  return !!value.length || String(i18n.t('Required field'));
 }
 
 interface FormValues {
@@ -69,33 +73,45 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         isPersonal: data.personal,
       })
       .catch(() => {
-        messages.error({ title: 'Something going wrong' });
+        messages.error({ title: i18n.t('Something going wrong') });
       });
   };
 
+  const balance = createMemo(() => {
+    const id = values().allocation;
+    const allocation = Boolean(id) ? props.allocations.find((item) => item.allocationId === id) : undefined;
+    return allocation?.account.ledgerBalance.amount || 0;
+  });
+
+  const ownerName = createMemo(() => {
+    const id = values().employee;
+    const user = Boolean(id) && values().personal ? props.users.find((item) => item.userId === id) : undefined;
+    return user && formatName(user);
+  });
+
   return (
     <Form class={css.form}>
-      <Section title="Company info">
+      <Section title={<Text message="Company info" />}>
         <FormItem
-          label="Allocation"
-          extra="Choose the allocation that will fund your new card. "
+          label={<Text message="Allocation" />}
+          extra={<Text message="Choose the allocation that will fund your new card." />}
           error={errors().allocation}
           class={css.field}
         >
           <AllocationSelect
             items={props.allocations}
             value={values().allocation}
-            placeholder="Select allocation"
+            placeholder={String(i18n.t('Select allocation'))}
             error={Boolean(errors().allocation)}
             onChange={handlers.allocation}
           />
         </FormItem>
-        <FormItem label="Employee" error={errors().employee} class={css.field}>
+        <FormItem label={<Text message="Employee" />} error={errors().employee} class={css.field}>
           {/* TODO: implement search by API */}
           <Select
             name="employee"
             value={values().employee}
-            placeholder="Search by employee name"
+            placeholder={String(i18n.t('Search by employee name'))}
             popupRender={(list) => (
               <>
                 {list}
@@ -113,25 +129,61 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         </FormItem>
       </Section>
       <Section
-        title="Card info"
+        title={<Text message="Card info" />}
         description={
-          'Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet.'
+          <Text message="Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet." />
         }
       >
-        <FormItem label="Card type(s)" error={errors().types}>
-          <CardTypeSelect value={values().types} class={css.types} onChange={handlers.types} />
+        <FormItem label={<Text message="Card type(s)" />} error={errors().types}>
+          <CardTypeSelect
+            value={values().types}
+            balance={balance()}
+            name={ownerName()}
+            class={css.types}
+            onChange={handlers.types}
+          />
         </FormItem>
-        <FormItem extra="If you select no, then the card will display the name of the company." class={css.field}>
-          <Switch name="name-on-card" value={values().personal} onChange={handlers.personal}>
-            Employee name on card
-          </Switch>
-        </FormItem>
+        <SwitchBox
+          name="name-on-card"
+          checked={values().personal}
+          label={<Text message="Show employee name" />}
+          class={css.switchBox}
+          onChange={handlers.personal}
+        />
       </Section>
-      <Drawer open={showEmployee()} title="New Employee" onClose={toggleShowEmployee}>
+      <Section
+        title={<Text message="Spend Controls" />}
+        description={
+          <Text
+            message={
+              'Set limits for how much can be spent with this card for each transaction, ' +
+              'or over the course of a day or o month.'
+            }
+          />
+        }
+      >
+        <SwitchBox disabled checked={false} label={<Text message="Daily limit" />} class={css.switchBox}>
+          <FormItem
+            label={<Text message="Amount" />}
+            extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
+          >
+            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+          </FormItem>
+        </SwitchBox>
+        <SwitchBox disabled checked={false} label={<Text message="Monthly limit" />} class={css.switchBox}>
+          <FormItem
+            label={<Text message="Amount" />}
+            extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
+          >
+            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+          </FormItem>
+        </SwitchBox>
+      </Section>
+      <Drawer open={showEmployee()} title={<Text message="New Employee" />} onClose={toggleShowEmployee}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>
       <Show when={isDirty()}>
-        <PageActions action="Create Card" onCancel={reset} onSave={onSubmit} />
+        <PageActions action={<Text message="Create Card" />} onCancel={reset} onSave={onSubmit} />
       </Show>
     </Form>
   );

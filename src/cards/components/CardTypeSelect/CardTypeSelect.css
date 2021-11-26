@@ -28,6 +28,11 @@
   }
 }
 
+.card {
+  width: 232px;
+  height: auto;
+}
+
 .type {
   display: flex;
   margin: var(--pd-8) 0 var(--pd-4);
@@ -51,12 +56,14 @@
 }
 
 .note {
+  display: block;
   font-size: var(--text-12);
   font-weight: var(--font-400);
   line-height: var(--line-16);
 }
 
 .description {
+  display: block;
   margin-top: var(--pd-8);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
