@@ -1,4 +1,6 @@
-import { createSignal, createEffect, createMemo, Show, Switch, Match, batch, untrack } from 'solid-js';
+import { createSignal, createMemo } from 'solid-js';
+import { Show, Switch, Match } from 'solid-js/web';
+import { useParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { useNav } from '_common/api/router';
@@ -29,25 +31,21 @@ enum Tabs {
 
 export default function Allocations() {
   const navigate = useNav();
-  const [tab, setTab] = createSignal(Tabs.cards);
+  const params = useParams<{ id?: UUIDString }>();
 
-  const [id, setId] = createSignal<UUIDString>();
+  const [tab, setTab] = createSignal(Tabs.cards);
   const allocations = useAllocations();
 
-  createEffect(() => {
-    if (untrack(id)) return;
-    const root = getRootAllocation(allocations.data);
-    if (root) setId(root.allocationId);
-  });
-
-  const onIdChange = (value: UUIDString) => {
-    batch(() => {
-      setId(value);
-      setTab(Tabs.cards);
-    });
+  const onIdChange = (id: UUIDString) => {
+    setTab(Tabs.cards);
+    navigate(`/allocations/${id}`);
   };
 
-  const current = createMemo(() => allocations.data?.find((item) => item.allocationId === id()));
+  const current = createMemo(() => {
+    return params.id
+      ? allocations.data?.find((item) => item.allocationId === params.id)
+      : getRootAllocation(allocations.data);
+  });
 
   return (
     <Data data={allocations.data} loading={allocations.loading} error={allocations.error} onReload={allocations.reload}>
@@ -61,7 +59,11 @@ export default function Allocations() {
               <Button type="primary" size="lg" icon="add">
                 <Text message="Add Funds" />
               </Button>
-              <Button icon="add" size="lg" onClick={() => navigate('/cards/edit', { state: { allocationId: id() } })}>
+              <Button
+                icon="add"
+                size="lg"
+                onClick={() => navigate('/cards/edit', { state: { allocationId: current()?.allocationId } })}
+              >
                 <Text message="New Card" />
               </Button>
             </div>

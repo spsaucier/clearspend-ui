@@ -26,6 +26,7 @@ export function MainRoutes() {
         <Route path="/employees/view/:id" element={<EmployeeView />} />
 
         <Route path="/allocations" element={<Allocations />} />
+        <Route path="/allocations/:id" element={<Allocations />} />
         <Route path="/allocations/edit" element={<AllocationEdit />} />
 
         <Route path="/cards" element={<Cards />} />
