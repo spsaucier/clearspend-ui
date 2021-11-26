@@ -53,7 +53,7 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
             />
           </Data>
         </div>
-        <Button wide type="primary">
+        <Button wide type="primary" onClick={() => navigate(`/employees/view/${props.uid}`)}>
           <Text message="View full profile" />
         </Button>
       </Data>
