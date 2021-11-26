@@ -1,6 +1,6 @@
 import { Switch, Match } from 'solid-js';
-import { useNavigate } from 'solid-app-router';
 
+import { useNav, useLoc } from '_common/api/router';
 import { useResource } from '_common/utils/useResource';
 import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
@@ -15,7 +15,8 @@ import type { IssueCard } from '../../types';
 
 export default function CardEdit() {
   const messages = useMessages();
-  const navigate = useNavigate();
+  const navigate = useNav();
+  const location = useLoc();
 
   const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
   const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
@@ -36,7 +37,7 @@ export default function CardEdit() {
       title: 'Success',
       message: 'Changes successfully saved.',
     });
-    navigate('/'); // '/cards'
+    navigate(location.state?.prev || '/cards');
   };
 
   return (

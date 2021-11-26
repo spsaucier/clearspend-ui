@@ -1,7 +1,7 @@
 import { createSignal, createEffect } from 'solid-js';
 import { Text } from 'solid-i18n';
-import { useNavigate } from 'solid-app-router';
 
+import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
@@ -17,7 +17,7 @@ import { useBusiness } from '../../containers/Main/context';
 import css from './Dashboard.css';
 
 export default function Dashboard() {
-  const navigate = useNavigate();
+  const navigate = useNav();
   const { owner } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>('');

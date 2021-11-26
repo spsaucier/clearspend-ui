@@ -1,5 +1,4 @@
-import { useNavigate } from 'solid-app-router';
-
+import { useNav, useLoc } from '_common/api/router';
 import { Page } from 'app/components/Page';
 import { useMessages } from 'app/containers/Messages/context';
 
@@ -10,14 +9,15 @@ import type { CreateAllocation } from '../../types';
 
 export default function AllocationEdit() {
   const messages = useMessages();
-  const navigate = useNavigate();
+  const navigate = useNav();
+  const location = useLoc();
 
   const allocations = useAllocations({ initValue: [] });
 
   const onSave = async (allocation: CreateAllocation) => {
     await saveAllocation(allocation);
     messages.success({ title: 'Changes successfully saved.' });
-    navigate('/'); // '/allocations'
+    navigate(location.state?.prev || '/allocations');
   };
 
   return (

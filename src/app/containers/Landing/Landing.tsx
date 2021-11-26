@@ -1,11 +1,10 @@
-import { useNavigate } from 'solid-app-router';
-
+import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 
 import css from './Landing.css';
 
 export function Landing() {
-  const navigate = useNavigate();
+  const navigate = useNav();
 
   return (
     <div class={css.root}>

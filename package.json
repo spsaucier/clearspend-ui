@@ -21,7 +21,7 @@
     "core-js": "3.19.1",
     "date-func": "0.2.0",
     "micro-charts": "7.2.0",
-    "solid-app-router": "0.1.11",
+    "solid-app-router": "0.1.13",
     "solid-create-form": "1.0.0",
     "solid-i18n": "1.0.0",
     "solid-js": "1.2.5",
