@@ -31,10 +31,10 @@ export default function Cards() {
 
   return (
     <Page
-      title="Cards"
+      title={<Text message="Cards" />}
       actions={
         <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/edit')}>
-          New card
+          <Text message="New Card" />
         </Button>
       }
     >

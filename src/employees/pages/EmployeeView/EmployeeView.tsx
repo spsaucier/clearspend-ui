@@ -1,7 +1,8 @@
 import { createSignal, Show, Switch, Match } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
-import { useNavigate, useParams } from 'solid-app-router';
+import { useParams } from 'solid-app-router';
 
+import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useResource } from '_common/utils/useResource';
@@ -31,7 +32,7 @@ enum Tabs {
 export default function EmployeeView() {
   const i18n = useI18n();
   const messages = useMessages();
-  const navigate = useNavigate();
+  const navigate = useNav();
 
   const params = useParams<{ id: UUIDString }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
@@ -73,9 +74,14 @@ export default function EmployeeView() {
         </Show>
       }
       actions={
-        // TODO: user id
-        <Button type="primary" size="lg" icon="add" disabled={!user()} onClick={() => navigate('/cards/edit')}>
-          New card
+        <Button
+          type="primary"
+          size="lg"
+          icon="add"
+          disabled={!user()}
+          onClick={() => navigate('/cards/edit', { state: { userId: user()?.userId } })}
+        >
+          <Text message="New Card" />
         </Button>
       }
     >

@@ -38,6 +38,8 @@ interface FormValues {
 }
 
 interface EditCardFormProps {
+  userId?: UUIDString;
+  allocationId?: UUIDString;
   users: readonly Readonly<BaseUser>[];
   allocations: readonly Readonly<Allocation>[];
   onAddEmployee: (firstName: string, lastName: string, email: string) => Promise<Readonly<CreateUserResp>>;
@@ -49,7 +51,12 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const [showEmployee, toggleShowEmployee] = useBool();
 
   const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
-    defaultValues: { allocation: '', employee: '', types: [], personal: false },
+    defaultValues: {
+      allocation: props.allocationId || '',
+      employee: props.userId || '',
+      types: [],
+      personal: false,
+    },
     rules: { allocation: [required], employee: [required], types: [validTypes] },
   });
 

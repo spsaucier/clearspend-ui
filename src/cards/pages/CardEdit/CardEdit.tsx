@@ -1,4 +1,5 @@
 import { Switch, Match } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
 import { useResource } from '_common/utils/useResource';
@@ -8,15 +9,17 @@ import { Loading } from 'app/components/Loading';
 import { useMessages } from 'app/containers/Messages/context';
 import { getAllocations } from 'allocations/services';
 import { getUsers, saveUser } from 'employees/services';
+import type { UUIDString } from 'app/types/common';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
 import type { IssueCard } from '../../types';
 
 export default function CardEdit() {
+  const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
-  const location = useLoc();
+  const location = useLoc<{ userId: UUIDString; allocationId: UUIDString }>();
 
   const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
   const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
@@ -25,23 +28,23 @@ export default function CardEdit() {
     const resp = await saveUser({ firstName, lastName, email });
     await reloadUsers();
     messages.success({
-      title: 'Success',
-      message: 'The new employee has been successfully added to your organization.',
+      title: i18n.t('Success'),
+      message: i18n.t('The new employee has been successfully added to your organization.'),
     });
     return resp;
   };
 
-  const onSave = async (params: Readonly<IssueCard>) => {
-    await saveCard(params);
+  const onSave = async (data: Readonly<IssueCard>) => {
+    await saveCard(data);
     messages.success({
-      title: 'Success',
-      message: 'Changes successfully saved.',
+      title: i18n.t('Success'),
+      message: i18n.t('Changes successfully saved.'),
     });
     navigate(location.state?.prev || '/cards');
   };
 
   return (
-    <Page title="New Card">
+    <Page title={<Text message="New Card" />}>
       <Switch>
         <Match when={aStatus().error}>
           <LoadingError onReload={reloadAllocations} />
@@ -53,7 +56,14 @@ export default function CardEdit() {
           <Loading />
         </Match>
         <Match when={allocations() && users()}>
-          <EditCardForm users={users()!} allocations={allocations()!} onAddEmployee={onAddEmployee} onSave={onSave} />
+          <EditCardForm
+            userId={location.state?.userId}
+            allocationId={location.state?.allocationId}
+            users={users()!}
+            allocations={allocations()!}
+            onAddEmployee={onAddEmployee}
+            onSave={onSave}
+          />
         </Match>
       </Switch>
     </Page>

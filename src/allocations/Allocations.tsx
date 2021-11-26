@@ -1,7 +1,7 @@
 import { createSignal, createEffect, createMemo, Show, Switch, Match, batch, untrack } from 'solid-js';
-import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
+import { useNav } from '_common/api/router';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
@@ -28,7 +28,7 @@ enum Tabs {
 }
 
 export default function Allocations() {
-  const navigate = useNavigate();
+  const navigate = useNav();
   const [tab, setTab] = createSignal(Tabs.cards);
 
   const [id, setId] = createSignal<UUIDString>();
@@ -61,7 +61,7 @@ export default function Allocations() {
               <Button type="primary" size="lg" icon="add">
                 <Text message="Add Funds" />
               </Button>
-              <Button icon="add" size="lg" onClick={() => navigate('/cards/edit')}>
+              <Button icon="add" size="lg" onClick={() => navigate('/cards/edit', { state: { allocationId: id() } })}>
                 <Text message="New Card" />
               </Button>
             </div>
