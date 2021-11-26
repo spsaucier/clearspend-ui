@@ -1,15 +1,7 @@
 import { service } from 'app/utils/service';
 import type { UUIDString } from 'app/types/common';
 
-import type {
-  CreateUser,
-  CreateUserResp,
-  BaseUser,
-  User,
-  UserCard,
-  SearchUserRequest,
-  SearchUserResponse,
-} from './types';
+import type { CreateUser, CreateUserResp, BaseUser, User, SearchUserRequest, SearchUserResponse } from './types';
 
 export async function getUsers() {
   return (await service.get<readonly Readonly<BaseUser>[]>('/users/list')).data;
@@ -21,11 +13,6 @@ export async function searchUsers(params: Readonly<SearchUserRequest>) {
 
 export async function getUser(userId: UUIDString) {
   return (await service.get<Readonly<User>>(`/users/${userId}`)).data;
-}
-
-// TODO does not work any more!
-export async function getUserCards(userId: UUIDString) {
-  return (await service.get<readonly Readonly<UserCard>[]>('/users/cards', { headers: { userId } })).data;
 }
 
 // TODO

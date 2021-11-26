@@ -13,6 +13,7 @@
   grid-gap: var(--pd-10);
   font-size: var(--text-12);
   line-height: var(--line-16);
+  cursor: pointer;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--tw-gray-30);
@@ -21,6 +22,11 @@
 
 .name {
   color: var(--tw-primary-content);
+  transition: color 0.3s;
+
+  @nest .item:hover & {
+    color: var(--tw-primary-bg);
+  }
 }
 
 .type,
