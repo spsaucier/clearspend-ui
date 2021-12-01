@@ -21,9 +21,9 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
       <Input disabled placeholder="Search employees..." suffix={<Icon name="search" size="sm" />} class={css.search} />
       <For each={props.data.content}>
         {(item) => (
-          <div class={css.item} onClick={() => props.onClick(item.userId)}>
+          <div class={css.item} onClick={() => props.onClick(item.userData.userId)}>
             <div>
-              <div class={css.name}>{formatName(item)}</div>
+              <div class={css.name}>{formatName(item.userData)}</div>
               <div>{item.email}</div>
             </div>
             <div>[card]</div>

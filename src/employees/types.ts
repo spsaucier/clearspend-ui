@@ -1,4 +1,4 @@
-import type { UUIDString, Address, SignAmount, PageRequest, OutdatedPageResponse } from 'app/types/common';
+import type { UUIDString, Address, SignAmount, PageRequest, PageResponse } from 'app/types/common';
 import type { Card } from 'cards/types';
 
 export interface CreateUser {
@@ -45,4 +45,10 @@ export interface SearchUserRequest {
   pageRequest: Readonly<PageRequest<string>>; // TODO string to enum
 }
 
-export type SearchUserResponse = Readonly<OutdatedPageResponse<readonly Readonly<User>[]>>;
+export interface SearchUser {
+  userData: Readonly<BaseUser>;
+  email: string;
+  cardInfoList: readonly string[];
+}
+
+export type SearchUserResponse = Readonly<PageResponse<readonly Readonly<SearchUser>[]>>;

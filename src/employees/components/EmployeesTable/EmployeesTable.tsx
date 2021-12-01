@@ -8,28 +8,29 @@ import { Table, TableColumn } from '_common/components/Table';
 import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import type { UUIDString } from 'app/types/common';
 
 import { formatName } from '../../utils/formatName';
-import type { User, SearchUserResponse, SearchUserRequest } from '../../types';
+import type { SearchUser, SearchUserResponse, SearchUserRequest } from '../../types';
 
 import css from './EmployeesTable.css';
 
 interface EmployeesTableProps {
   data: SearchUserResponse;
-  onClick: (uid: User['userId']) => void;
+  onClick: (uid: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const i18n = useI18n();
 
-  const columns: readonly Readonly<TableColumn<User>>[] = [
+  const columns: readonly Readonly<TableColumn<SearchUser>>[] = [
     {
       name: 'name',
       title: <Text message="Employee" />,
       class: css.name,
-      render: (item) => formatName(item),
-      onClick: (item) => props.onClick(item.userId),
+      render: (item) => formatName(item.userData),
+      onClick: (item) => props.onClick(item.userData.userId),
     },
     {
       name: 'card',
@@ -48,8 +49,8 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.number}
-            pageSize={props.data.size}
+            current={props.data.pageNumber}
+            pageSize={props.data.pageSize}
             total={props.data.totalElements}
             onChange={changeRequestPage(props.onChangeParams)}
           />
