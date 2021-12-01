@@ -93,7 +93,7 @@ export default function CardView() {
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
-            <Transactions />
+            <Transactions cardId={card()!.cardId} />
           </Match>
           <Match when={tab() === Tabs.controls}>
             <CardControls />

@@ -50,6 +50,10 @@
   margin-top: -4px;
 }
 
+.receipt-empty {
+  color: var(--tw-gray-40);
+}
+
 .sub {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);

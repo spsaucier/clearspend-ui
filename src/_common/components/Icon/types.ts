@@ -29,6 +29,7 @@ export enum IconName {
   'payment-bank' = 'payment-bank',
   photo = 'photo',
   receipt = 'receipt',
+  'receipt-unavailable' = 'receipt-unavailable',
   search = 'search',
   settings = 'settings',
   'table-columns' = 'table-columns',

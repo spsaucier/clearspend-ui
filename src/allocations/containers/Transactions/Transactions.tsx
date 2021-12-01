@@ -1,29 +1,38 @@
-import { Show } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
-import { Text } from 'solid-i18n';
-
-import { getNoop } from '_common/utils/getNoop';
 import { useMediaContext } from '_common/api/media/context';
-import { Empty } from 'app/components/Empty';
-import { TransactionsList } from 'transactions/components/TransactionsList';
-import { TransactionsTable } from 'transactions/components/TransactionsTable';
-import type { AccountActivityResponse } from 'app/types/activity';
+import { useResource } from '_common/utils/useResource';
+import { getAccountActivity } from 'app/services/activity';
+import { TransactionsData } from 'transactions/components/TransactionsData';
+import type { AccountActivityRequest } from 'app/types/activity';
+import type { UUIDString } from 'app/types/common';
 
-import data from './mock.json';
+const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
+  pageRequest: {
+    pageNumber: 0,
+    pageSize: 10,
+  },
+};
 
-export function Transactions() {
+interface TransactionsProps {
+  allocationId: UUIDString;
+}
+
+export function Transactions(props: Readonly<TransactionsProps>) {
   const media = useMediaContext();
 
+  const [cards, status, params, setParams, reload] = useResource(getAccountActivity, {
+    ...DEFAULT_ACTIVITY_PARAMS,
+    allocationId: props.allocationId,
+  });
+
   return (
-    <Show
-      when={!!data.content.length}
-      fallback={<Empty message={<Text message="There are no transactions for the selected period." />} />}
-    >
-      <Dynamic
-        component={media.wide ? TransactionsTable : TransactionsList}
-        data={data as unknown as AccountActivityResponse}
-        onChangeParams={getNoop()}
-      />
-    </Show>
+    <TransactionsData
+      table={media.wide}
+      loading={status().loading}
+      error={status().error}
+      search={params().searchText}
+      data={cards()}
+      onReload={reload}
+      onChangeParams={setParams}
+    />
   );
 }

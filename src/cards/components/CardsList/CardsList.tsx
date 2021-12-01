@@ -4,6 +4,7 @@ import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { InputSearch } from '_common/components/InputSearch';
+import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
 import type { StoreSetter } from '_common/utils/store';
 import type { UUIDString } from 'app/types/common';
@@ -25,8 +26,6 @@ interface CardsListProps {
 export function CardsList(props: Readonly<CardsListProps>) {
   const i18n = useI18n();
 
-  const onSearch = (searchText: string) => props.onChangeParams((prev) => ({ ...prev, searchText }));
-
   return (
     <div>
       <InputSearch
@@ -34,7 +33,7 @@ export function CardsList(props: Readonly<CardsListProps>) {
         value={props.search}
         placeholder={i18n.t('Search cards...') as string}
         class={css.search}
-        onSearch={onSearch}
+        onSearch={changeRequestSearch(props.onChangeParams)}
       />
       <Show when={props.data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
         <For each={props.data.content}>

@@ -10,6 +10,7 @@ import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { Tag } from '_common/components/Tag';
+import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
@@ -86,8 +87,6 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
   ];
 
-  const onSearch = (searchText: string) => props.onChangeParams((prev) => ({ ...prev, searchText }));
-
   return (
     <div>
       <Filters
@@ -105,7 +104,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           value={props.search}
           placeholder={i18n.t('Search cards...') as string}
           class={css.search}
-          onSearch={onSearch}
+          onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <Button inverse icon={{ name: 'filters', pos: 'right' }}>
           <Text message="Filters" />

@@ -1,30 +1,39 @@
 import { Show } from 'solid-js';
-import { DateTime } from 'solid-i18n';
+import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { join } from '_common/utils/join';
 import type { StoreSetter } from '_common/utils/store';
 import { DateFormat } from '_common/api/intl/types';
-import { Input } from '_common/components/Input';
+import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
 import { Filters } from 'app/components/Filters';
+import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import type { AccountActivity, AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
+import type { UUIDString } from 'app/types/common';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
+  search?: string;
   data: AccountActivityResponse;
+  onCardClick?: (id: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
+  const i18n = useI18n();
+
   const columns: readonly Readonly<TableColumn<AccountActivity>>[] = [
     {
       name: 'date',
-      title: 'Date & Time',
+      title: <Text message="Date & Time" />,
       render: (item) => {
         const date = new Date(item.activityTime);
         return (
@@ -41,19 +50,21 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'card',
-      title: 'Card',
+      title: <Text message="Card" />,
       render: (item) => (
         <div>
-          <div class={css.card}>{item.card.cardBin || '--'}</div>
+          <div class={css.card}>{item.card.cardNumber ? formatCardNumber(item.card.cardNumber) : '--'}</div>
+          {/*
           <Show when={item.card.cardOwner}>
             <div class={css.sub}>{item.card.cardOwner}</div>
           </Show>
+          */}
         </div>
       ),
     },
     {
       name: 'merchant',
-      title: 'Merchant',
+      title: <Text message="Merchant" />,
       render: (item) => (
         <div class={css.merchant}>
           <div class={css.icon} />
@@ -68,7 +79,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'amount',
-      title: 'Amount',
+      title: <Text message="Amount" />,
       render: (item) => (
         <div class={css.amountCell}>
           <div class={css.status}>
@@ -83,8 +94,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'receipt',
-      title: 'Receipt',
-      render: () => <Icon name="receipt" class={css.receipt} />,
+      title: <Text message="Receipt" />,
+      render: (item) => (
+        <Icon
+          name={item.receipt.receiptId ? 'receipt' : 'receipt-unavailable'}
+          class={join(css.receipt, !item.receipt.receiptId && css.receiptEmpty)}
+        />
+      ),
     },
   ];
 
@@ -93,25 +109,31 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.number}
-            pageSize={props.data.size}
+            current={props.data.pageNumber}
+            pageSize={props.data.pageSize}
             total={props.data.totalElements}
             onChange={changeRequestPage(props.onChangeParams)}
           />
         }
       >
-        <Input
-          disabled
-          placeholder="Search Transactions..."
-          suffix={<Icon name="search" size="sm" />}
+        <InputSearch
+          delay={400}
+          value={props.search}
+          placeholder={String(i18n.t('Search Transactions...'))}
           class={css.search}
+          onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <Button inverse icon={{ name: 'filters', pos: 'right' }}>
           More Filters
         </Button>
         <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
       </Filters>
-      <Table columns={columns} data={props.data.content} tdClass={css.cell} />
+      <Show
+        when={props.data.content.length}
+        fallback={<Empty message={<Text message="There are no transactions" />} />}
+      >
+        <Table columns={columns} data={props.data.content} tdClass={css.cell} />
+      </Show>
     </div>
   );
 }

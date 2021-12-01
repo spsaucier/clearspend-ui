@@ -90,7 +90,7 @@ export default function Allocations() {
               <Cards current={current()!} items={allocations.data!} />
             </Match>
             <Match when={tab() === Tabs.transactions}>
-              <Transactions />
+              <Transactions allocationId={current()!.allocationId} />
             </Match>
             <Match when={tab() === Tabs.controls}>
               <CardControls />

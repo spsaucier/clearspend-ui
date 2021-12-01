@@ -93,34 +93,30 @@ export default function EmployeeView() {
           <Loading />
         </Match>
         <Match when={user()}>
-          {(data) => (
-            <>
-              <TabList value={tab()} onChange={setTab}>
-                <Tab value={Tabs.transactions}>
-                  <Text message="Transactions" />
-                </Tab>
-                <Tab value={Tabs.cards}>
-                  <Text message="Cards" />
-                </Tab>
-                <Tab value={Tabs.settings}>
-                  <Text message="Edit" />
-                </Tab>
-              </TabList>
-              <Switch>
-                <Match when={tab() === Tabs.transactions}>
-                  <Transactions />
-                </Match>
-                <Match when={tab() === Tabs.cards}>
-                  <Cards userId={data.userId} />
-                </Match>
-                <Match when={tab() === Tabs.settings}>
-                  <Section title={<Text message="Employee Info" />}>
-                    <EditEmployeeForm user={data} onSave={onEdit} />
-                  </Section>
-                </Match>
-              </Switch>
-            </>
-          )}
+          <TabList value={tab()} onChange={setTab}>
+            <Tab value={Tabs.transactions}>
+              <Text message="Transactions" />
+            </Tab>
+            <Tab value={Tabs.cards}>
+              <Text message="Cards" />
+            </Tab>
+            <Tab value={Tabs.settings}>
+              <Text message="Edit" />
+            </Tab>
+          </TabList>
+          <Switch>
+            <Match when={tab() === Tabs.transactions}>
+              <Transactions userId={user()!.userId} />
+            </Match>
+            <Match when={tab() === Tabs.cards}>
+              <Cards userId={user()!.userId} />
+            </Match>
+            <Match when={tab() === Tabs.settings}>
+              <Section title={<Text message="Employee Info" />}>
+                <EditEmployeeForm user={user()!} onSave={onEdit} />
+              </Section>
+            </Match>
+          </Switch>
         </Match>
       </Switch>
     </Page>

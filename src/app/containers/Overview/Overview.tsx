@@ -1,13 +1,9 @@
-import { createSignal, Match, Show, Switch } from 'solid-js';
-import { Dynamic } from 'solid-js/web';
-import { Text } from 'solid-i18n';
+import { createSignal, Match, Switch } from 'solid-js';
 
 import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
-import { Empty } from 'app/components/Empty';
-import { TransactionsList } from 'transactions/components/TransactionsList';
-import { TransactionsTable } from 'transactions/components/TransactionsTable';
+import { TransactionsData } from 'transactions/components/TransactionsData';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -66,18 +62,15 @@ export function Overview() {
             <Loading />
           </Match>
           <Match when={activityStore.data}>
-            {(resp) => (
-              <Show
-                when={!!resp.content.length}
-                fallback={<Empty message={<Text message="There are no transactions for the selected period." />} />}
-              >
-                <Dynamic
-                  component={media.large ? TransactionsTable : TransactionsList}
-                  data={resp}
-                  onChangeParams={activityStore.setParams}
-                />
-              </Show>
-            )}
+            <TransactionsData
+              table={media.large}
+              loading={activityStore.loading}
+              error={activityStore.error}
+              search={activityStore.params.searchText}
+              data={activityStore.data}
+              onReload={activityStore.reload}
+              onChangeParams={activityStore.setParams}
+            />
           </Match>
         </Switch>
       </div>

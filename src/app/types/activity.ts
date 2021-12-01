@@ -1,8 +1,8 @@
-import type { UUIDString, SignAmount, PageRequest, OutdatedPageResponse } from './common';
+import type { UUIDString, SignAmount, PageRequest, PageResponse } from './common';
 
 export interface CardDetails {
-  cardBin: string | null;
-  cardOwner: string;
+  cardId: UUIDString;
+  cardNumber: string;
 }
 
 export enum MerchantType {
@@ -13,8 +13,10 @@ export enum MerchantType {
 }
 
 export interface Merchant {
-  name: string | null;
-  type: MerchantType | null;
+  name: string;
+  type: MerchantType;
+  merchantNumber: string;
+  merchantCategoryCode: number;
 }
 
 export enum ActivityType {
@@ -31,16 +33,22 @@ export enum ActivityType {
   NETWORK_SERVICE_FEE = 'NETWORK_SERVICE_FEE',
 }
 
-export interface AccountActivity {
-  activityTime: DateString;
-  accountName: string | null;
-  card: Readonly<CardDetails>;
-  merchant: Readonly<Merchant>;
-  type: ActivityType;
-  amount: Readonly<SignAmount>;
+export interface ReceiptDetails {
+  receiptId: UUIDString;
 }
 
-export type AccountActivityResponse = Readonly<OutdatedPageResponse<readonly Readonly<AccountActivity>[]>>;
+export interface AccountActivity {
+  accountActivityId?: UUIDString;
+  activityTime: DateString;
+  accountName: string | null;
+  card: Readonly<Partial<CardDetails>>;
+  merchant: Readonly<Partial<Merchant>>;
+  type: ActivityType;
+  amount: Readonly<SignAmount>;
+  receipt: Readonly<Partial<ReceiptDetails>>;
+}
+
+export type AccountActivityResponse = Readonly<PageResponse<readonly Readonly<AccountActivity>[]>>;
 
 export enum ActivityOrderFields {
   DATE = 'DATE',
@@ -49,9 +57,11 @@ export enum ActivityOrderFields {
 
 export interface AccountActivityRequest {
   allocationId?: UUIDString;
-  accountId?: UUIDString;
+  userId?: UUIDString;
+  cardId?: UUIDString;
+  searchText?: string;
   type?: ActivityType;
-  from: DateString;
-  to: DateString;
+  from?: DateString;
+  to?: DateString;
   pageRequest: Readonly<PageRequest<ActivityOrderFields>>;
 }
