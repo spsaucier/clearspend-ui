@@ -6,6 +6,7 @@ import type { StoreSetter } from '_common/utils/store';
 
 import { formatName } from '../../utils/formatName';
 import type { User, SearchUserResponse, SearchUserRequest } from '../../types';
+import { EmployeeCards } from '../EmployeeCards';
 
 import css from './EmployeesList.css';
 
@@ -26,7 +27,9 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
               <div class={css.name}>{formatName(item.userData)}</div>
               <div>{item.email}</div>
             </div>
-            <div>[card]</div>
+            <div class={css.card}>
+              <EmployeeCards data={item.cardInfoList} />
+            </div>
           </div>
         )}
       </For>

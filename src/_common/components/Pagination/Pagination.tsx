@@ -58,7 +58,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
       <li>
         <Button
           icon="chevron-right"
-          disabled={props.current === pages().length - 1}
+          disabled={!pages().length || props.current === pages().length - 1}
           class={join(css.button, css.nav)}
           onClick={() => props.onChange(props.current + 1)}
         />

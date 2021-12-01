@@ -15,6 +15,7 @@
   color: var(--tw-gray-60);
   font-size: var(--text-12);
   line-height: var(--line-16);
+  cursor: pointer;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--tw-gray-30);
@@ -24,4 +25,8 @@
 .name {
   margin-bottom: var(--pd-2);
   color: var(--tw-primary-content);
+}
+
+.card {
+  text-align: right;
 }

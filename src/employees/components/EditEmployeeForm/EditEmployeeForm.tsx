@@ -73,7 +73,7 @@ export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
         <PageActions
           action={
             <Show when={props.user} fallback={<Text message="Create Employee" />}>
-              <Text message="Edit Employee" />
+              <Text message="Update Employee" />
             </Show>
           }
           onCancel={reset}

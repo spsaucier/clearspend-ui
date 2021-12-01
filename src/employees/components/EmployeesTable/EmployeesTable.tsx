@@ -12,12 +12,14 @@ import type { UUIDString } from 'app/types/common';
 
 import { formatName } from '../../utils/formatName';
 import type { SearchUser, SearchUserResponse, SearchUserRequest } from '../../types';
+import { EmployeeCards } from '../EmployeeCards';
 
 import css from './EmployeesTable.css';
 
 interface EmployeesTableProps {
   data: SearchUserResponse;
   onClick: (uid: UUIDString) => void;
+  onCardClick: (id: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
@@ -35,7 +37,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
     {
       name: 'card',
       title: <Text message="Card Info" />,
-      render: () => <span>[card]</span>,
+      render: (item) => <EmployeeCards data={item.cardInfoList} onCardClick={props.onCardClick} />,
     },
     {
       name: 'email',

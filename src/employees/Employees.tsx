@@ -1,16 +1,18 @@
-import { Show, Switch, Match } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
+import { Text } from 'solid-i18n';
 
 import { events } from '_common/api/events';
 import { useMediaContext } from '_common/api/media/context';
+import { Drawer } from '_common/components/Drawer';
 import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 import { Page } from 'app/components/Page';
-import { LoadingError } from 'app/components/LoadingError';
-import { Loading } from 'app/components/Loading';
+import { Data } from 'app/components/Data';
 import { logout } from 'app/services/auth';
 import { UUIDString, AppEvent } from 'app/types/common';
+import { CardPreview } from 'cards/containers/CardPreview';
 
 import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
@@ -28,36 +30,32 @@ export default function Employees() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
+  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
+
   const usersStore = useUsers({ params: DEFAULT_ACTIVITY_PARAMS });
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
     <Page
-      title="Employees"
+      title={<Text message="Employees" />}
       actions={
         <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/edit')}>
-          New employee
+          <Text message="New employee" />
         </Button>
       }
     >
-      <Switch>
-        <Match when={usersStore.error}>
-          <LoadingError onReload={usersStore.reload} />
-        </Match>
-        <Match when={usersStore.loading && !usersStore.data}>
-          <Loading />
-        </Match>
-        <Match when={usersStore.data}>
-          {(data) => (
-            <Dynamic
-              component={media.large ? EmployeesTable : EmployeesList}
-              data={data}
-              onClick={(id: UUIDString) => navigate(`/employees/view/${id}`)}
-              onChangeParams={usersStore.setParams}
-            />
-          )}
-        </Match>
-      </Switch>
+      <Data data={usersStore.data} loading={usersStore.loading} error={usersStore.error} onReload={usersStore.reload}>
+        <Dynamic
+          component={media.large ? EmployeesTable : EmployeesList}
+          data={usersStore.data!}
+          onClick={(id: UUIDString) => navigate(`/employees/view/${id}`)}
+          onCardClick={setCardID}
+          onChangeParams={usersStore.setParams}
+        />
+      </Data>
+      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
+        <CardPreview cardID={cardID()!} />
+      </Drawer>
       <Show when={process.env.NODE_ENV === 'development'}>
         <div style={{ 'margin-top': '24px' }}>
           <Button type="primary" loading={loading()} onClick={logoutAction}>
