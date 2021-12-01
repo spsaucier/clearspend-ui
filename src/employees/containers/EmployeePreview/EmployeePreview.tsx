@@ -1,6 +1,7 @@
 import { Text } from 'solid-i18n';
 
 import { useNav } from '_common/api/router';
+import { formatPhone } from '_common/formatters/phone';
 import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
 import { Data } from 'app/components/Data';
@@ -19,7 +20,6 @@ const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
     pageNumber: 0,
     pageSize: 10,
   },
-  searchText: '',
 };
 
 interface EmployeePreviewProps {
@@ -35,21 +35,19 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
     userId: props.uid,
   });
 
-  const onCardSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
-
   return (
     <div class={css.root}>
       <Data data={user()} loading={status().loading} error={status().error} onReload={reload}>
         <div>
           <h4 class={css.name}>{formatName(user()!)}</h4>
           <div class={css.data}>{user()!.email}</div>
-          <div class={css.data}>{user()!.phone}</div>
+          <div class={css.data}>{formatPhone(user()!.phone)}</div>
           <Data data={cards()} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
             <CardsList
               data={cards()!}
               search={params().searchText}
-              onSearch={onCardSearch}
               onCardClick={(id: UUIDString) => navigate(`/cards/view/${id}`)}
+              onChangeParams={setParams}
             />
           </Data>
         </div>

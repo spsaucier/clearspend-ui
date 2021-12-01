@@ -27,8 +27,6 @@ export default function Cards() {
   const [uid, setUID] = createSignal<UUIDString | null>(null);
   const cardsStore = useCards({ params: DEFAULT_PARAMS });
 
-  const onSearch = (searchText: string) => cardsStore.setParams((prev) => ({ ...prev, searchText }));
-
   return (
     <Page
       title={<Text message="Cards" />}
@@ -44,9 +42,9 @@ export default function Cards() {
         error={cardsStore.error}
         data={cardsStore.data}
         onReload={cardsStore.reload}
-        onSearch={onSearch}
         onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
         onUserClick={setUID}
+        onChangeParams={cardsStore.setParams}
       />
       <Drawer open={Boolean(uid())} title={<Text message="Employee Profile" />} onClose={() => setUID(null)}>
         <EmployeePreview uid={uid()!} />

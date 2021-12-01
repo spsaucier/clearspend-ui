@@ -29,8 +29,6 @@ export function Cards(props: Readonly<CardsProps>) {
   const [cardID, setCardID] = createSignal<UUIDString | null>(null);
   const [cards, status, , setParams, reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
 
-  const onSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
-
   return (
     <>
       <CardsData
@@ -40,8 +38,8 @@ export function Cards(props: Readonly<CardsProps>) {
         data={cards()}
         hide={['name']}
         onReload={reload}
-        onSearch={onSearch}
         onCardClick={setCardID}
+        onChangeParams={setParams}
       />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
         <CardPreview cardID={cardID()!} />

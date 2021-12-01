@@ -1,8 +1,9 @@
 import { Show } from 'solid-js';
+import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
-import { getNoop } from '_common/utils/getNoop';
+import type { StoreSetter } from '_common/utils/store';
 import { InputSearch } from '_common/components/InputSearch';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
@@ -18,7 +19,7 @@ import { formatName } from 'employees/utils/formatName';
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import type { SearchCard, SearchCardResponse } from '../../types';
+import type { SearchCard, SearchCardResponse, SearchCardRequest } from '../../types';
 import { CardStatus } from '../../types';
 
 import css from './CardsTable.css';
@@ -27,9 +28,9 @@ interface CardsTableProps {
   search?: string;
   data: SearchCardResponse;
   hideColumns?: readonly string[];
-  onSearch: (value: string) => void;
   onUserClick?: (id: UUIDString) => void;
   onCardClick: (id: UUIDString) => void;
+  onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
@@ -85,6 +86,8 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
   ];
 
+  const onSearch = (searchText: string) => props.onChangeParams((prev) => ({ ...prev, searchText }));
+
   return (
     <div>
       <Filters
@@ -93,7 +96,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
             current={props.data.pageNumber}
             pageSize={props.data.pageSize}
             total={props.data.totalElements}
-            onChange={changeRequestPage(getNoop)}
+            onChange={changeRequestPage(props.onChangeParams)}
           />
         }
       >
@@ -102,7 +105,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           value={props.search}
           placeholder={i18n.t('Search cards...') as string}
           class={css.search}
-          onSearch={props.onSearch}
+          onSearch={onSearch}
         />
         <Button inverse icon={{ name: 'filters', pos: 'right' }}>
           <Text message="Filters" />

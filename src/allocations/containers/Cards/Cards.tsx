@@ -54,8 +54,6 @@ export function Cards(props: Readonly<CardsProps>) {
     }));
   });
 
-  const onSearch = (searchText: string) => setParams((prev) => ({ ...prev, searchText }));
-
   return (
     <>
       <Show when={children().length}>
@@ -72,9 +70,9 @@ export function Cards(props: Readonly<CardsProps>) {
         data={cards()}
         hide={['allocation']}
         onReload={reload}
-        onSearch={onSearch}
         onCardClick={setCardID}
         onUserClick={setUserID}
+        onChangeParams={setParams}
       />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
         <CardPreview cardID={cardID()!} />

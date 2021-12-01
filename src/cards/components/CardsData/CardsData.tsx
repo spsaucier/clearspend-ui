@@ -1,11 +1,13 @@
+import type { Setter } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
+import type { StoreSetter } from '_common/utils/store';
 import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
 
 import { CardsList } from '../CardsList';
 import { CardsTable } from '../CardsTable';
-import type { SearchCardResponse } from '../../types';
+import type { SearchCardResponse, SearchCardRequest } from '../../types';
 
 interface CardsDataProps {
   loading: boolean;
@@ -14,10 +16,10 @@ interface CardsDataProps {
   data: Readonly<SearchCardResponse> | null;
   table?: boolean;
   hide?: readonly string[];
-  onSearch: (value: string) => void;
   onUserClick?: (id: UUIDString) => void;
   onCardClick: (id: UUIDString) => void;
   onReload: () => Promise<unknown>;
+  onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsData(props: Readonly<CardsDataProps>) {
@@ -28,9 +30,9 @@ export function CardsData(props: Readonly<CardsDataProps>) {
         search={props.search}
         data={props.data!}
         hideColumns={props.hide}
-        onSearch={props.onSearch}
         onUserClick={props.onUserClick}
         onCardClick={props.onCardClick}
+        onChangeParams={props.onChangeParams}
       />
     </Data>
   );
