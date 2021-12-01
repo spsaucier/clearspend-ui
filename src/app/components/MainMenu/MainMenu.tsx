@@ -13,19 +13,31 @@ interface MainMenuProps {
 export function MainMenu(props: Readonly<MainMenuProps>) {
   return (
     <nav class={join(css.root, props.class)}>
-      <NavLink end href="/" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
+      <NavLink title="Dashboard" end href="/" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
         <Icon name="dashboard" />
         <span class={css.title}>Dashboard</span>
       </NavLink>
-      <NavLink href="/allocations" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
+      <NavLink
+        title="Allocations"
+        href="/allocations"
+        class={css.item}
+        activeClass={css.active}
+        onClick={props.onItemClick}
+      >
         <Icon name="allocations" />
         <span class={css.title}>Allocations</span>
       </NavLink>
-      <NavLink href="/cards" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
+      <NavLink title="Cards" href="/cards" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
         <Icon name="card" />
         <span class={css.title}>Cards</span>
       </NavLink>
-      <NavLink href="/employees" class={css.item} activeClass={css.active} onClick={props.onItemClick}>
+      <NavLink
+        title="Employees"
+        href="/employees"
+        class={css.item}
+        activeClass={css.active}
+        onClick={props.onItemClick}
+      >
         <Icon name="user" />
         <span class={css.title}>Employees</span>
       </NavLink>

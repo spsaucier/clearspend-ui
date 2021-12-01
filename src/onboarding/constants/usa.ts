@@ -1,7 +1,7 @@
 import { BusinessType } from 'app/types/businesses';
 
 export const BUSINESS_TYPES: Readonly<Record<BusinessType, string>> = {
-  [BusinessType.LLC]: 'Limited Liability Companies',
+  [BusinessType.LLC]: 'Limited Liability Company',
   [BusinessType.LLP]: 'Limited Liability Partnership',
   [BusinessType.S_CORP]: 'S Corporation',
   [BusinessType.C_CORP]: 'C Corporation',

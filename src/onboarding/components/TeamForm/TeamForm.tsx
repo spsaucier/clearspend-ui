@@ -39,8 +39,8 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section
-        title="Principle owner"
-        description="Provide the details for the principle owner of your business. You can add multiple owners."
+        title="Principal owner"
+        description="Provide the details for the principal owner of your business. You can add multiple owners."
         class={css.section}
       >
         <div class={css.wrapper}>

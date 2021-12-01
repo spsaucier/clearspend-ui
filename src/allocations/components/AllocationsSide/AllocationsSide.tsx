@@ -46,7 +46,12 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
               fallback={
                 <For each={found()}>
                   {(item) => (
-                    <Item data={item} active={props.currentID === item.allocationId} onClick={props.onSelect} />
+                    <Item
+                      root={!item.parentAllocationId}
+                      data={item}
+                      active={props.currentID === item.allocationId}
+                      onClick={props.onSelect}
+                    />
                   )}
                 </For>
               }
