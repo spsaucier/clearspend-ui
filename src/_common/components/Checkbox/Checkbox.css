@@ -6,7 +6,13 @@
 }
 
 .input {
-  display: none;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+
+  &:focus + span {
+    outline: 2px solid var(--tw-gray-30);
+  }
 }
 
 .control {
