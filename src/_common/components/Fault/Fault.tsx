@@ -20,7 +20,7 @@ export function Fault(props: Readonly<FaultProps>) {
         <h3 class={css.title}>Loading failed</h3>
         <p class={css.message}>Whatever happened, it was probably our fault.</p>
         <Show when={typeof props.onReload === 'function'}>
-          <Button inverse type="primary" loading={loading()} class={css.action} onClick={reload}>
+          <Button view="ghost" type="primary" loading={loading()} class={css.action} onClick={reload}>
             Reload
           </Button>
         </Show>

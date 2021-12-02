@@ -123,7 +123,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <Button inverse icon={{ name: 'filters', pos: 'right' }}>
+        <Button view="ghost" icon={{ name: 'filters', pos: 'right' }}>
           More Filters
         </Button>
         <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>

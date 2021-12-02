@@ -17,8 +17,8 @@ export interface IconProps {
 
 export interface ButtonProps {
   id?: string;
-  type?: 'default' | 'primary';
-  inverse?: boolean;
+  type?: 'default' | 'primary' | 'danger';
+  view?: 'default' | 'second' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   icon?: IconType | Readonly<IconProps>;
   class?: string;
@@ -33,7 +33,7 @@ export interface ButtonProps {
 }
 
 export function Button(props: Readonly<ButtonProps>) {
-  const merged = mergeProps({ type: 'default', size: 'md', htmlType: 'button' }, props);
+  const merged = mergeProps({ type: 'default', view: 'default', size: 'md', htmlType: 'button' }, props);
 
   const icon: Accessor<Readonly<IconProps> | undefined> = createMemo(() => {
     if (!merged.icon) return undefined;
@@ -48,16 +48,22 @@ export function Button(props: Readonly<ButtonProps>) {
       id={merged.id}
       type={merged.htmlType}
       disabled={merged.disabled}
-      class={join(
-        css.root,
-        merged.type === 'primary' && (!merged.inverse ? css.primary : css.primaryInverse),
-        merged.class,
-      )}
+      class={join(css.root, merged.class)}
       classList={{
         [css.wide!]: merged.wide,
         [css.sm!]: merged.size === 'sm',
         [css.lg!]: merged.size === 'lg',
-        [css.inverse!]: merged.type === 'default' && merged.inverse,
+
+        [css.ghost!]: merged.type === 'default' && merged.view === 'ghost',
+
+        [css.primary!]: merged.type === 'primary' && merged.view === 'default',
+        [css.primarySecond!]: merged.type === 'primary' && merged.view === 'second',
+        [css.primaryGhost!]: merged.type === 'primary' && merged.view === 'ghost',
+
+        [css.danger!]: merged.type === 'danger' && merged.view === 'default',
+        [css.dangerSecond!]: merged.type === 'danger' && merged.view === 'second',
+        [css.dangerGhost!]: merged.type === 'danger' && merged.view === 'ghost',
+
         [css.iconOnly!]: Boolean(icon()) && !merged.children,
         [css.loading!]: merged.loading,
       }}

@@ -15,7 +15,7 @@ export function LoadingError(props: Readonly<LoadingErrorProps>) {
   return (
     <div class={join(css.root, props.class)}>
       <h3 class={css.title}>Loading failed</h3>
-      <Button inverse type="primary" loading={loading()} onClick={reload}>
+      <Button view="ghost" type="primary" loading={loading()} onClick={reload}>
         Reload
       </Button>
     </div>

@@ -106,7 +106,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <Button inverse icon={{ name: 'filters', pos: 'right' }}>
+        <Button view="ghost" icon={{ name: 'filters', pos: 'right' }}>
           <Text message="Filters" />
         </Button>
         <Button icon={{ name: 'download', pos: 'right' }}>

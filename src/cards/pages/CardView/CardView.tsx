@@ -55,7 +55,7 @@ export default function CardView() {
         </Show>
       }
       actions={
-        <Button size="lg" icon="freeze">
+        <Button size="lg" icon="freeze" type="danger" view="second">
           <Text message="Freeze card" />
         </Button>
       }

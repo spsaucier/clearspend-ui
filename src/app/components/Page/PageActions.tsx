@@ -20,7 +20,7 @@ export function PageActions(props: Readonly<PageActionsProps>) {
     <PagePortal>
       <div class={css.root}>
         <div class={css.actions}>
-          <Button inverse disabled={loading()} onClick={props.onCancel}>
+          <Button view="ghost" disabled={loading()} onClick={props.onCancel}>
             Cancel
           </Button>
           <Button type="primary" icon={{ name: 'confirm', pos: 'right' }} loading={loading()} onClick={action}>

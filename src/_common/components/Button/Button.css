@@ -94,7 +94,7 @@
   }
 }
 
-.inverse {
+.ghost {
   color: var(--tw-gray-60);
   background-color: transparent;
 
@@ -115,8 +115,46 @@
   }
 }
 
-.primary-inverse {
+.primary-second {
   color: var(--tw-primary-content);
+
+  &:hover:not(:disabled) {
+    background-color: var(--tw-gray-10);
+  }
+}
+
+.primary-ghost {
+  color: var(--tw-primary-content);
+  background-color: transparent;
+
+  &:hover {
+    background-color: var(--tw-gray-10);
+  }
+
+  &:disabled {
+    background-color: transparent;
+  }
+}
+
+.danger {
+  color: var(--tw-white);
+  background-color: var(--tw-red-70);
+
+  &:hover:not(:disabled) {
+    background-color: var(--tw-red-80);
+  }
+}
+
+.danger-second {
+  color: var(--tw-red-80);
+
+  &:hover:not(:disabled) {
+    background-color: var(--tw-gray-10);
+  }
+}
+
+.danger-ghost {
+  color: var(--tw-red-80);
   background-color: transparent;
 
   &:hover {

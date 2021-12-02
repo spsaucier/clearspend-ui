@@ -30,7 +30,7 @@ export function Sidebar() {
           content={<MainMenu onItemClick={toggleMenu} />}
           onClickOutside={toggleMenu}
         >
-          <Button inverse icon="more-vertical" class={css.menuButton} onClick={toggleMenu} />
+          <Button view="ghost" icon="more-vertical" class={css.menuButton} onClick={toggleMenu} />
         </Popover>
       </Show>
       <Show when={media.medium}>

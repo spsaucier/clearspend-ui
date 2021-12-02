@@ -12,7 +12,11 @@ export default {
       control: { type: 'radio' },
     },
     type: {
-      options: ['default', 'primary'],
+      options: ['default', 'primary', 'danger'],
+      control: { type: 'radio' },
+    },
+    view: {
+      options: ['default', 'second', 'ghost'],
       control: { type: 'radio' },
     },
     inverse: { control: { type: 'boolean' } },
@@ -28,7 +32,7 @@ export default {
   args: {
     size: 'md',
     type: 'default',
-    inverse: false,
+    view: 'default',
     children: 'Button',
     loading: false,
     disabled: false,
