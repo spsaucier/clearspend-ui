@@ -1,0 +1,12 @@
+.root {
+  width: 310px;
+}
+
+.icon {
+  color: var(--tw-primary-content);
+}
+
+.header {
+  margin-bottom: var(--pd-4);
+  font-weight: var(--font-700);
+}

@@ -7,6 +7,8 @@ import { formatName } from 'employees/utils/formatName';
 import type { Allocation } from 'allocations/types';
 import type { User } from 'employees/types';
 
+import { BalanceInfo } from '../BalanceInfo';
+
 import css from './CardInfo.css';
 
 interface CardInfoProps {
@@ -24,7 +26,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
         </h4>
         <div class={css.value}>
           <strong>{formatCurrency(props.allocation.account.ledgerBalance.amount)}</strong>
-          <Icon name="information" />
+          <BalanceInfo />
         </div>
         <Text message="Monthly limit: {amount}" amount={formatCurrency(0)} class={css.note!} />
       </div>
