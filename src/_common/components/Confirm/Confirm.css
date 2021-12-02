@@ -1,0 +1,11 @@
+.root {
+  width: 320px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.footer {
+  display: flex;
+  margin-top: var(--pd-16);
+  justify-content: flex-end;
+  grid-gap: var(--pd-8);
+}
