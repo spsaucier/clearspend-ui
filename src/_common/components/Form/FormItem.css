@@ -8,6 +8,7 @@
   font-size: var(--text-12);
   font-weight: var(--font-400);
   line-height: var(--line-16);
+  cursor: pointer;
 }
 
 .description {

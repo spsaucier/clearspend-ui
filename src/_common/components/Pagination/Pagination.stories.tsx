@@ -7,8 +7,8 @@ export default {
     current: {
       control: { type: 'number', min: 0, max: 9 },
     },
-    pageSize: { table: { disable: true } },
-    total: { table: { disable: true } },
+    pageSize: { type: 'number', min: 1, max: 100 },
+    total: { type: 'number', min: 0, max: 1000 },
     onChange: { action: 'change', table: { disable: true } },
   },
   args: {

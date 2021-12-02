@@ -38,6 +38,7 @@
 
   &:disabled {
     color: var(--tw-gray-60);
+    cursor: not-allowed;
   }
 
   &:-webkit-autofill,

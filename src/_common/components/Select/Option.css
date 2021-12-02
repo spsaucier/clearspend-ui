@@ -3,7 +3,7 @@
   padding: var(--pd-8) var(--pd-12);
   align-items: center;
   white-space: nowrap;
-  cursor: default;
+  cursor: pointer;
 
   &:hover {
     background: var(--tw-primary-light);
@@ -12,6 +12,7 @@
 
 .active {
   pointer-events: none;
+  cursor: default;
 }
 
 .disabled {

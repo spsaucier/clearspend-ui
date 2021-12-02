@@ -2,9 +2,9 @@ import { onMount } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { validPhone } from '_common/components/Form/rules/patterns';
-import { Input } from '_common/components/Input';
+import { InputPhone } from '_common/components/InputPhone';
 import { Button } from '_common/components/Button';
-import { cleanPhone, formatPhone } from '_common/formatters/phone';
+import { cleanPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
@@ -39,11 +39,9 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
       <Description>Your phone number will only be used for security.</Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Enter mobile phone number" error={errors().phone}>
-          <Input
+          <InputPhone
             ref={input}
             name="phone"
-            type="tel"
-            formatter={formatPhone}
             value={values().phone}
             error={Boolean(errors().phone)}
             onChange={handlers.phone}

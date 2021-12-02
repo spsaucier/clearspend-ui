@@ -6,7 +6,13 @@
 }
 
 .input {
-  display: none;
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+
+  &:focus + span {
+    outline: 2px solid var(--tw-gray-30);
+  }
 }
 
 .dot {
@@ -20,6 +26,7 @@
   border: 1px solid var(--tw-gray-30);
   border-radius: 50%;
   transition: background-color 0.3s, border 0.3s;
+  cursor: pointer;
 
   &::after {
     content: '';
@@ -43,13 +50,16 @@
   @nest .input:disabled + & {
     background-color: var(--tw-gray-20);
     border-color: var(--tw-gray-30);
+    cursor: not-allowed;
   }
 }
 
 .label {
   margin-left: var(--pd-4);
+  cursor: pointer;
 
   @nest .input:disabled + .dot + & {
     color: var(--tw-gray-60);
+    cursor: not-allowed;
   }
 }

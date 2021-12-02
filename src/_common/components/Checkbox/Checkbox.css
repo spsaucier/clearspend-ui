@@ -10,6 +10,8 @@
 }
 
 .control {
+  cursor: pointer;
+
   @nest .input:checked + & {
     background-color: var(--tw-primary-bg);
     border-color: var(--tw-primary-bg);
@@ -22,6 +24,7 @@
   @nest .input:disabled + & {
     background-color: var(--tw-gray-20);
     border-color: var(--tw-gray-30);
+    cursor: not-allowed;
   }
 
   @nest .input:checked:disabled + & {
@@ -31,8 +34,10 @@
 
 .label {
   margin-left: var(--pd-4);
+  cursor: pointer;
 
   @nest .input:disabled + .control + & {
     color: var(--tw-gray-60);
+    cursor: not-allowed;
   }
 }

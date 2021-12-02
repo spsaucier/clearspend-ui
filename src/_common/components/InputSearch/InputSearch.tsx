@@ -4,7 +4,7 @@ import { Input } from '../Input';
 import type { InputProps } from '../Input';
 import { Icon } from '../Icon';
 
-interface InputSearchProps extends Omit<InputProps, 'suffix' | 'onChange'> {
+export interface InputSearchProps extends Omit<InputProps, 'suffix' | 'onChange'> {
   delay?: number;
   onSearch: (value: string) => void;
 }

@@ -4,11 +4,11 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
+import { InputPhone } from '_common/components/InputPhone';
 import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { keys } from '_common/utils/keys';
 import { useMediaContext } from '_common/api/media/context';
-import { formatPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { BUSINESS_TYPES, USA_STATES } from '../../constants/usa';
@@ -58,11 +58,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             <Input name="business-ein" value={values().ein} error={Boolean(errors().ein)} onChange={handlers.ein} />
           </FormItem>
           <FormItem label="Corporate phone number" error={errors().phone}>
-            <Input
-              type="tel"
+            <InputPhone
               name="corporate-phone-number"
               value={values().phone}
-              formatter={formatPhone}
               error={Boolean(errors().phone)}
               onChange={handlers.phone}
             />

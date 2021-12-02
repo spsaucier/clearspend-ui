@@ -19,7 +19,6 @@ export default {
       options: ['default', 'second', 'ghost'],
       control: { type: 'radio' },
     },
-    inverse: { control: { type: 'boolean' } },
     icon: {
       options: [...keys(IconName)].sort(),
       control: { type: 'select' },

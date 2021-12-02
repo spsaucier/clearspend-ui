@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 
 import { Button } from '../Button';
 
-import { Tooltip, TooltipProps, TooltipFuncProps } from './Tooltip';
+import { Tooltip, TooltipProps, TooltipFuncProps, DEFAULT_ENTER_DELAY, DEFAULT_LEAVE_DELAY } from './Tooltip';
 
 const WRAPPER_STYLES: JSX.CSSProperties = {
   position: 'absolute',
@@ -18,15 +18,22 @@ export default {
   component: Tooltip,
   argTypes: {
     children: { table: { disable: true } },
+    enterDelay: { control: { type: 'number' } },
+    leaveDelay: { control: { type: 'number' } },
   },
   args: {
     message: 'Tooltip text',
     children: (props: TooltipFuncProps) => <Button {...props}>Hover Me 😎</Button>,
+    enterDelay: DEFAULT_ENTER_DELAY,
+    leaveDelay: DEFAULT_LEAVE_DELAY,
   },
 };
 
 export const Default = (args: TooltipProps) => (
-  <div style={WRAPPER_STYLES}>
+  <>
     <Tooltip {...args} />
-  </div>
+    <div style={WRAPPER_STYLES}>
+      <Tooltip {...args} />
+    </div>
+  </>
 );

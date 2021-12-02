@@ -17,6 +17,7 @@
   border: 0;
   border-radius: var(--radius-12);
   transition: background-color 0.3s, color 0.3s;
+  cursor: pointer;
 
   &:hover {
     background: var(--tw-gray-30);
@@ -25,6 +26,7 @@
   &:disabled {
     color: var(--tw-gray-40);
     background: var(--tw-gray-20);
+    cursor: not-allowed;
   }
 
   & > svg + span,
