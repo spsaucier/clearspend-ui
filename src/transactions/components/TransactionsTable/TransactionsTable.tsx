@@ -53,7 +53,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       title: <Text message="Card" />,
       render: (item) => (
         <div>
-          <div class={css.card}>{item.card.cardNumber ? formatCardNumber(item.card.cardNumber) : '--'}</div>
+          <div class={css.card}>{item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}</div>
           {/*
           <Show when={item.card.cardOwner}>
             <div class={css.sub}>{item.card.cardOwner}</div>

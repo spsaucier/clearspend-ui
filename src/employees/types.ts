@@ -39,8 +39,10 @@ export interface SearchUserRequest {
 
 export interface CardInfo {
   cardId: UUIDString;
-  lastFour: string;
+  lastFour?: string;
   allocationName: string;
+  ownerFirstName: string;
+  ownerLastName: string;
 }
 
 export interface SearchUser {

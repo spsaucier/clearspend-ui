@@ -2,7 +2,10 @@ import type { UUIDString, SignAmount, PageRequest, PageResponse } from './common
 
 export interface CardDetails {
   cardId: UUIDString;
-  cardNumber: string;
+  lastFour?: string;
+  allocationName: string;
+  ownerFirstName: string;
+  ownerLastName: string;
 }
 
 export enum MerchantType {
@@ -41,7 +44,7 @@ export interface AccountActivity {
   accountActivityId?: UUIDString;
   activityTime: DateString;
   accountName: string | null;
-  card: Readonly<Partial<CardDetails>>;
+  card?: Readonly<Partial<CardDetails>>;
   merchant: Readonly<Partial<Merchant>>;
   type: ActivityType;
   amount: Readonly<SignAmount>;
