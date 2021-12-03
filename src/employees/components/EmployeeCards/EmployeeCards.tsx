@@ -21,7 +21,7 @@ export function EmployeeCards(props: Readonly<EmployeeCardsProps>) {
       <div class={css.card} onClick={() => props.onCardClick?.(card!.cardId)}>
         {formatCardNumber(card!.lastFour)}
       </div>
-      <Show when={rest.length}>
+      <Show when={rest.length} fallback={<span class={css.more}>{card!.allocationName}</span>}>
         <Text message="{count} more {count, plural, one {card} other {cards}}" count={rest.length} class={css.more!} />
       </Show>
     </Show>

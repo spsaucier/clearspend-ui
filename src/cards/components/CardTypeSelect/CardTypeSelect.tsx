@@ -13,6 +13,7 @@ interface CardTypeSelectProps {
   value: readonly CardType[];
   balance?: number;
   name?: string;
+  allocation?: string;
   class?: string;
   onChange?: (value: CardType[]) => void;
 }
@@ -30,7 +31,14 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
     >
       <Checkbox value={CardType.VIRTUAL} class={css.item}>
         <div class={css.content}>
-          <Card type={CardType.VIRTUAL} name={props.name} number="1234" balance={balance()} class={css.card} />
+          <Card
+            type={CardType.VIRTUAL}
+            name={props.name}
+            number="1234"
+            allocation={props.allocation}
+            balance={balance()}
+            class={css.card}
+          />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Virtual card" />
@@ -44,7 +52,14 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
       </Checkbox>
       <Checkbox value={CardType.PLASTIC} class={css.item}>
         <div class={css.content}>
-          <Card type={CardType.PLASTIC} name={props.name} number="1234" balance={balance()} class={css.card} />
+          <Card
+            type={CardType.PLASTIC}
+            name={props.name}
+            number="1234"
+            allocation={props.allocation}
+            balance={balance()}
+            class={css.card}
+          />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Physical card" />

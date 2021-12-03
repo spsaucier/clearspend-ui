@@ -84,10 +84,9 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
       });
   };
 
-  const balance = createMemo(() => {
+  const allocation = createMemo(() => {
     const id = values().allocation;
-    const allocation = Boolean(id) ? props.allocations.find((item) => item.allocationId === id) : undefined;
-    return allocation?.account.ledgerBalance.amount || 0;
+    return Boolean(id) ? props.allocations.find((item) => item.allocationId === id) : undefined;
   });
 
   const ownerName = createMemo(() => {
@@ -144,7 +143,8 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         <FormItem label={<Text message="Card type(s)" />} error={errors().types}>
           <CardTypeSelect
             value={values().types}
-            balance={balance()}
+            allocation={allocation()?.name}
+            balance={allocation()?.account.ledgerBalance.amount}
             name={ownerName()}
             class={css.types}
             onChange={handlers.types}

@@ -1,5 +1,4 @@
-import type { UUIDString, Address, SignAmount, PageRequest, PageResponse } from 'app/types/common';
-import type { Card } from 'cards/types';
+import type { UUIDString, Address, PageRequest, PageResponse } from 'app/types/common';
 
 export interface CreateUser {
   firstName: string;
@@ -34,13 +33,6 @@ export interface User extends BaseUser {
   phone: string;
 }
 
-export interface UserCard {
-  card: Readonly<Card>;
-  ledgerBalance: Readonly<SignAmount>;
-  availableBalance: Readonly<SignAmount>;
-  allocationName: string;
-}
-
 export interface SearchUserRequest {
   pageRequest: Readonly<PageRequest<string>>; // TODO string to enum
 }
@@ -48,6 +40,7 @@ export interface SearchUserRequest {
 export interface CardInfo {
   cardId: UUIDString;
   lastFour: string;
+  allocationName: string;
 }
 
 export interface SearchUser {

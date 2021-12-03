@@ -110,6 +110,7 @@ export default function CardView() {
           <Card
             type={card()!.type}
             name={user() ? formatName(user()!) : ''}
+            allocation={allocation()?.name}
             number={card()!.lastFour}
             balance={allocation()?.account.ledgerBalance.amount || 0}
           />
