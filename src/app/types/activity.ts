@@ -1,8 +1,8 @@
 import type { UUIDString, SignAmount, PageRequest, PageResponse } from './common';
 
-export interface CardDetails {
+export interface CardInfo {
   cardId: UUIDString;
-  lastFour?: string;
+  lastFour: string;
   allocationName: string;
   ownerFirstName: string;
   ownerLastName: string;
@@ -44,7 +44,7 @@ export interface AccountActivity {
   accountActivityId?: UUIDString;
   activityTime: DateString;
   accountName: string | null;
-  card?: Readonly<Partial<CardDetails>>;
+  card: Readonly<Partial<CardInfo>> | null;
   merchant: Readonly<Partial<Merchant>>;
   type: ActivityType;
   amount: Readonly<SignAmount>;

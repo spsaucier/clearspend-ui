@@ -17,6 +17,7 @@ import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import type { AccountActivity, AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
 import type { UUIDString } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import { formatName } from 'employees/utils/formatName';
 
 import css from './TransactionsTable.css';
 
@@ -54,11 +55,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => (
         <div>
           <div class={css.card}>{item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}</div>
-          {/*
-          <Show when={item.card.cardOwner}>
-            <div class={css.sub}>{item.card.cardOwner}</div>
+          <Show when={item.card}>
+            <div class={css.sub}>
+              {formatName({
+                firstName: item.card!.ownerFirstName!,
+                lastName: item.card!.ownerLastName!,
+              })}
+            </div>
           </Show>
-          */}
         </div>
       ),
     },

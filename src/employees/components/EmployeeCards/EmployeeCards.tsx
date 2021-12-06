@@ -2,9 +2,8 @@ import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import type { UUIDString } from 'app/types/common';
+import type { CardInfo } from 'app/types/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
-
-import type { CardInfo } from '../../types';
 
 import css from './EmployeeCards.css';
 

@@ -1,4 +1,5 @@
 import type { UUIDString, Address, PageRequest, PageResponse } from 'app/types/common';
+import type { CardInfo } from 'app/types/activity';
 
 export interface CreateUser {
   firstName: string;
@@ -35,14 +36,6 @@ export interface User extends BaseUser {
 
 export interface SearchUserRequest {
   pageRequest: Readonly<PageRequest<string>>; // TODO string to enum
-}
-
-export interface CardInfo {
-  cardId: UUIDString;
-  lastFour?: string;
-  allocationName: string;
-  ownerFirstName: string;
-  ownerLastName: string;
 }
 
 export interface SearchUser {
