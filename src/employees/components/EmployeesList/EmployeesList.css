@@ -27,6 +27,17 @@
   color: var(--tw-primary-content);
 }
 
-.card {
+.cards {
   text-align: right;
+}
+
+.card {
+  color: var(--tw-primary-content);
+}
+
+.more {
+  margin-top: var(--pd-2);
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
 }

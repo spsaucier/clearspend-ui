@@ -1,3 +1,4 @@
+import { Show, For } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { Input } from '_common/components/Input';
@@ -9,10 +10,10 @@ import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { UUIDString } from 'app/types/common';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import { formatName } from '../../utils/formatName';
 import type { SearchUser, SearchUserResponse, SearchUserRequest } from '../../types';
-import { EmployeeCards } from '../EmployeeCards';
 
 import css from './EmployeesTable.css';
 
@@ -35,9 +36,28 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       onClick: (item) => props.onClick(item.userData.userId),
     },
     {
-      name: 'card',
-      title: <Text message="Card Info" />,
-      render: (item) => <EmployeeCards data={item.cardInfoList} onCardClick={props.onCardClick} />,
+      name: 'cards',
+      title: <Text message="Cards" />,
+      render: (item) => (
+        <Show when={item.cardInfoList.length} fallback={<Text message="No cards" />}>
+          <For each={item.cardInfoList}>
+            {(card) => (
+              <div class={css.card} onClick={() => props.onCardClick(card.cardId)}>
+                {formatCardNumber(card.lastFour)}
+              </div>
+            )}
+          </For>
+        </Show>
+      ),
+    },
+    {
+      name: 'allocations',
+      title: <Text message="Allocations" />,
+      render: (item) => (
+        <Show when={item.cardInfoList.length} fallback={<Text message="No allocations" />}>
+          <For each={item.cardInfoList}>{(card) => <div class={css.allocation}>{card.allocationName}</div>}</For>
+        </Show>
+      ),
     },
     {
       name: 'email',

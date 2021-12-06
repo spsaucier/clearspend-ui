@@ -1,12 +1,13 @@
-import { For } from 'solid-js';
+import { For, Show } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import type { StoreSetter } from '_common/utils/store';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import { formatName } from '../../utils/formatName';
 import type { User, SearchUserResponse, SearchUserRequest } from '../../types';
-import { EmployeeCards } from '../EmployeeCards';
 
 import css from './EmployeesList.css';
 
@@ -21,17 +22,30 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
     <div>
       <Input disabled placeholder="Search employees..." suffix={<Icon name="search" size="sm" />} class={css.search} />
       <For each={props.data.content}>
-        {(item) => (
-          <div class={css.item} onClick={() => props.onClick(item.userData.userId)}>
-            <div>
-              <div class={css.name}>{formatName(item.userData)}</div>
-              <div>{item.email}</div>
+        {(item) => {
+          const [card, ...rest] = item.cardInfoList;
+
+          return (
+            <div class={css.item} onClick={() => props.onClick(item.userData.userId)}>
+              <div>
+                <div class={css.name}>{formatName(item.userData)}</div>
+                <div>{item.email}</div>
+              </div>
+              <div class={css.cards}>
+                <Show when={card} fallback={<Text message="No card" />}>
+                  <div class={css.card}>{formatCardNumber(card!.lastFour)}</div>
+                  <Show when={Boolean(rest.length)} fallback={<span class={css.more}>{card!.allocationName}</span>}>
+                    <Text
+                      message="{count} more {count, plural, one {card} other {cards}}"
+                      count={rest.length}
+                      class={css.more!}
+                    />
+                  </Show>
+                </Show>
+              </div>
             </div>
-            <div class={css.card}>
-              <EmployeeCards data={item.cardInfoList} />
-            </div>
-          </div>
-        )}
+          );
+        }}
       </For>
     </div>
   );

@@ -6,3 +6,18 @@
   color: var(--tw-primary-content);
   cursor: pointer;
 }
+
+.card {
+  color: var(--tw-primary-content);
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-2);
+  }
+}
+
+.allocation {
+  &:not(:last-child) {
+    margin-bottom: var(--pd-2);
+  }
+}
