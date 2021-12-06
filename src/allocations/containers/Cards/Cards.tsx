@@ -13,6 +13,7 @@ import type { SearchCardRequest } from 'cards/types';
 import type { UUIDString } from 'app/types/common';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
+import { allocationWithID } from '../../utils/allocationWithID';
 import type { Allocation } from '../../types';
 
 import css from './Cards.css';
@@ -36,7 +37,7 @@ export function Cards(props: Readonly<CardsProps>) {
   const [userID, setUserID] = createSignal<UUIDString | null>(null);
 
   const children = createMemo(() =>
-    props.current.childrenAllocationIds.map((id) => props.items.find((item) => item.allocationId === id)!),
+    props.current.childrenAllocationIds.map((id) => props.items.find(allocationWithID(id))!),
   );
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {

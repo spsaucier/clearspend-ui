@@ -13,7 +13,6 @@ import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
 import { AccessInfo } from '../../components/AccessInfo';
 import { Dashboard } from '../../pages/Dashboard';
-import { Test } from '../Test';
 
 export function MainRoutes() {
   return (
@@ -34,9 +33,6 @@ export function MainRoutes() {
         <Route path="/cards/view/:id" element={<CardView />} />
 
         <Route path="/test/access" element={<AccessInfo />} />
-
-        {/* TODO: Remove */}
-        <Route path="/test/test" element={<Test />} />
       </Routes>
     </MainLayout>
   );

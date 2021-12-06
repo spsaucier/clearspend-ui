@@ -16,6 +16,7 @@ import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import { allocationWithID } from 'allocations/utils/allocationWithID';
 import type { Allocation } from 'allocations/types';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
@@ -86,7 +87,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
 
   const allocation = createMemo(() => {
     const id = values().allocation;
-    return Boolean(id) ? props.allocations.find((item) => item.allocationId === id) : undefined;
+    return Boolean(id) ? props.allocations.find(allocationWithID(id)) : undefined;
   });
 
   const ownerName = createMemo(() => {

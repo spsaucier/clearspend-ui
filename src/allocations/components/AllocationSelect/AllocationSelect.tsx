@@ -2,6 +2,7 @@ import { For } from 'solid-js';
 
 import { Select, Option } from '_common/components/Select';
 
+import { allocationWithID } from '../../utils/allocationWithID';
 import type { Allocation } from '../../types';
 
 import { AllocationView } from './AllocationView';
@@ -26,7 +27,7 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
   const renderValue = (id: string) => {
     if (!id) return <AllocationView name="All allocations" amount={getTotalAmount(props.items)} />;
 
-    const found = props.items.find((item) => item.allocationId === id)!;
+    const found = props.items.find(allocationWithID(id))!;
     return <AllocationView name={found.name} amount={found.account.ledgerBalance.amount} />;
   };
 

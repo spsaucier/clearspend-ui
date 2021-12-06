@@ -19,6 +19,7 @@ import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
 import { useAllocations } from './stores/allocations';
 import { getRootAllocation } from './utils/getRootAllocation';
+import { allocationWithID } from './utils/allocationWithID';
 
 import css from './Allocations.css';
 
@@ -42,9 +43,7 @@ export default function Allocations() {
   };
 
   const current = createMemo(() => {
-    return params.id
-      ? allocations.data?.find((item) => item.allocationId === params.id)
-      : getRootAllocation(allocations.data);
+    return params.id ? allocations.data?.find(allocationWithID(params.id)) : getRootAllocation(allocations.data);
   });
 
   return (

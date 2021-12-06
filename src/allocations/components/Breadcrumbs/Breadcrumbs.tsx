@@ -1,5 +1,6 @@
 import { createMemo, Show } from 'solid-js';
 
+import { allocationWithID } from '../../utils/allocationWithID';
 import type { Allocation } from '../../types';
 
 import css from './Breadcrumbs.css';
@@ -12,7 +13,7 @@ interface BreadcrumbsProps {
 export function Breadcrumbs(props: Readonly<BreadcrumbsProps>) {
   const parent = createMemo(() => {
     const id = props.current.parentAllocationId;
-    return id && props.items.find((item) => item.allocationId === id);
+    return id && props.items.find(allocationWithID(id));
   });
 
   return (

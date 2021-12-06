@@ -1,8 +1,9 @@
 import { createI18n } from 'solid-i18n';
+import type { NumberOptions } from 'i18n-mini/lib/types';
 
 import { NumberFormat, DateFormat } from './types';
 
-const NUMBER_FORMATS: Readonly<Record<NumberFormat, Intl.NumberFormatOptions>> = {
+const NUMBER_FORMATS: Readonly<Record<NumberFormat, NumberOptions>> = {
   [NumberFormat.default]: { maximumFractionDigits: 2 },
 };
 
@@ -17,8 +18,6 @@ const DATE_FORMATS: Readonly<Record<DateFormat, Intl.DateTimeFormatOptions>> = {
 export const i18n = createI18n({
   language: 'en',
   presets: {
-    // TODO
-    // @ts-ignore
     number: NUMBER_FORMATS,
     dateTime: DATE_FORMATS,
   },

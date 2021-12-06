@@ -4,6 +4,7 @@ import { Text } from 'solid-i18n';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
+import { allocationWithID } from 'allocations/utils/allocationWithID';
 import type { Allocation } from 'allocations/types';
 import type { User } from 'employees/types';
 
@@ -40,7 +41,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
         </div>
         <Show when={props.allocation.parentAllocationId}>
           <span class={css.note}>
-            {props.allocations.find((item) => item.allocationId === props.allocation.parentAllocationId)?.name}
+            {props.allocations.find(allocationWithID(props.allocation.parentAllocationId))?.name}
           </span>
         </Show>
       </div>

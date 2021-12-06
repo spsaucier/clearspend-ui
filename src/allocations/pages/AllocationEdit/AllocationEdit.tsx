@@ -1,3 +1,5 @@
+import { useI18n, Text } from 'solid-i18n';
+
 import { useNav, useLoc } from '_common/api/router';
 import { Page } from 'app/components/Page';
 import { useMessages } from 'app/containers/Messages/context';
@@ -8,6 +10,7 @@ import { useAllocations } from '../../stores/allocations';
 import type { CreateAllocation } from '../../types';
 
 export default function AllocationEdit() {
+  const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
   const location = useLoc();
@@ -16,13 +19,12 @@ export default function AllocationEdit() {
 
   const onSave = async (allocation: CreateAllocation) => {
     await saveAllocation(allocation);
-    messages.success({ title: 'Changes successfully saved.' });
+    messages.success({ title: i18n.t('Changes successfully saved.') });
     navigate(location.state?.prev || '/allocations');
   };
 
   return (
-    <Page title="New Allocation">
-      {/* TODO !type */}
+    <Page title={<Text message="New Allocation" />}>
       <EditAllocationForm allocations={allocations.data!} onSave={onSave} />
     </Page>
   );

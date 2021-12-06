@@ -15,6 +15,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import type { UUIDString } from 'app/types/common';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
+import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 
@@ -48,8 +49,7 @@ export default function CardView() {
     if (data) setUserID(data.userId);
   });
 
-  // TODO withID()?
-  const allocation = createMemo(() => allocations.data?.find((item) => item.allocationId === card()?.allocationId));
+  const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)));
 
   return (
     <Page

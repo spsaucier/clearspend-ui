@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 
+.stats/
 node_modules/
 storybook-static/
 dist/

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
+const glob = require('glob');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -150,6 +151,9 @@ module.exports = (env, options) => {
       env.analyzer === 'statoscope' &&
         new StatoscopeWebpackPlugin({
           name: 'capital',
+          saveTo: '.stats/[name]-[hash].html',
+          saveStatsTo: '.stats/[name]-[hash].json',
+          additionalStats: glob.sync('.stats/*.json'),
         }),
     ].filter(Boolean),
   };
