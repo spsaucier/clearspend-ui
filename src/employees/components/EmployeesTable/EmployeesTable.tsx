@@ -10,12 +10,19 @@ import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { UUIDString } from 'app/types/common';
+import type { CardInfo } from 'app/types/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import { formatName } from '../../utils/formatName';
 import type { SearchUser, SearchUserResponse, SearchUserRequest } from '../../types';
 
 import css from './EmployeesTable.css';
+
+function getUniqueAllocations(items: readonly Readonly<CardInfo>[]): readonly Readonly<CardInfo>[] {
+  return items.filter(
+    (card, idx, self) => self.findIndex((item) => item.allocationName === card.allocationName) === idx,
+  );
+}
 
 interface EmployeesTableProps {
   data: SearchUserResponse;
@@ -55,7 +62,9 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       title: <Text message="Allocations" />,
       render: (item) => (
         <Show when={item.cardInfoList.length} fallback={<Text message="No allocations" />}>
-          <For each={item.cardInfoList}>{(card) => <div class={css.allocation}>{card.allocationName}</div>}</For>
+          <For each={getUniqueAllocations(item.cardInfoList)}>
+            {(card) => <div class={css.allocation}>{card.allocationName}</div>}
+          </For>
         </Show>
       ),
     },
