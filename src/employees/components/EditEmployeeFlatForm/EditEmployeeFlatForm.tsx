@@ -54,7 +54,7 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
             onChange={handlers.lastName}
           />
         </FormItem>
-        <FormItem label="Email address" error={errors().email}>
+        <FormItem label="Company email address" error={errors().email}>
           <Input
             name="email"
             type="email"

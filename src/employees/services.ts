@@ -15,13 +15,11 @@ export async function getUser(userId: UUIDString) {
   return (await service.get<Readonly<User>>(`/users/${userId}`)).data;
 }
 
-// TODO
 function extendUserParams(params: Readonly<CreateUser>, pass = true) {
   return {
-    ...params,
     address: {},
-    phone: '+79999999999',
     generatePassword: pass,
+    ...params,
   };
 }
 

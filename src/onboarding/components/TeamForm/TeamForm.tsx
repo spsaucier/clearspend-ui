@@ -1,17 +1,13 @@
-import { For } from 'solid-js';
-
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputDate } from '_common/components/InputDate';
-import { Select, Option } from '_common/components/Select';
+import { SelectState } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
-import { keys } from '_common/utils/keys';
 
-import { USA_STATES } from '../../constants/usa';
 import type { UpdateBusinessOwner } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
@@ -102,15 +98,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             <Input name="city" value={values().city} error={Boolean(errors().city)} onChange={handlers.city} />
           </FormItem>
           <FormItem label="State" error={errors().state}>
-            <Select
-              name="state"
-              placeholder="Choose state"
-              value={values().state}
-              error={Boolean(errors().state)}
-              onChange={handlers.state}
-            >
-              <For each={keys(USA_STATES)}>{(item) => <Option value={item}>{USA_STATES[item]!}</Option>}</For>
-            </Select>
+            <SelectState value={values().state} error={Boolean(errors().state)} onChange={handlers.state} />
           </FormItem>
           <FormItem label="Zip code" error={errors().zip}>
             <Input name="zip-code" value={values().zip} error={Boolean(errors().zip)} onChange={handlers.zip} />

@@ -4,6 +4,7 @@ import { Divider } from '../Divider';
 
 import { Select } from './Select';
 import { Option } from './Option';
+import { SelectState } from './SelectState';
 import type { SelectProps } from './types';
 
 export default {
@@ -72,6 +73,16 @@ export const CustomPopupRender = (args: SelectProps) => {
         <Option value="MKT">Marketing</Option>
         <Option value="SAL">Sales</Option>
       </Select>
+    </div>
+  );
+};
+
+export const SelectStateRender = (args: SelectProps) => {
+  const [value, onChange] = createSignal<string>();
+
+  return (
+    <div>
+      <SelectState {...args} value={value()} onChange={onChange} />
     </div>
   );
 };

@@ -14,6 +14,7 @@ import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
 import { Section } from 'app/components/Section';
 import type { UUIDString } from 'app/types/common';
+import type { FormValues } from 'employees/components/EditEmployeeForm/types';
 
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
 import { Transactions } from '../../containers/Transactions';
@@ -39,11 +40,11 @@ export default function EmployeeView() {
 
   const [user, status, , , reload, mutate] = useResource(getUser, params.id);
 
-  const onEdit = async (firstName: string, lastName: string, email: string) => {
-    const data = user()!;
-
-    await editUser(data.userId, { firstName, lastName, email });
-    mutate({ ...data, firstName, lastName, email });
+  const onEdit = async (data: FormValues) => {
+    const userData = user()!;
+    const { firstName, lastName, email, phone, ...address } = data;
+    await editUser(userData.userId, { firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
+    mutate({ ...userData, firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
 
     messages.success({
       title: i18n.t('Success'),
