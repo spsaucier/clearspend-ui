@@ -50,6 +50,17 @@
   }
 }
 
+.prefix {
+  display: flex;
+  padding-left: var(--pd-8);
+  align-items: center;
+  flex-shrink: 0;
+
+  & > svg {
+    color: var(--tw-gray-60);
+  }
+}
+
 .suffix {
   display: flex;
   padding: 0 var(--pd-8);

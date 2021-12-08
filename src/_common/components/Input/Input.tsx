@@ -15,6 +15,7 @@ export interface InputProps {
   formatter?: (value: string) => string;
   autoComplete?: string;
   placeholder?: string;
+  prefix?: JSXElement;
   suffix?: JSXElement;
   error?: boolean;
   disabled?: boolean;
@@ -50,6 +51,7 @@ export function Input(props: Readonly<InputProps>) {
       class={join(css.root, merged.class)}
       classList={{ [css.error!]: merged.error, [css.disabled!]: merged.disabled }}
     >
+      {merged.prefix && <div class={css.prefix}>{merged.prefix}</div>}
       <input
         ref={setInputRef}
         name={merged.name}
