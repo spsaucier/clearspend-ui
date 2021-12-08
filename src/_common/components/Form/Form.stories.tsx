@@ -1,4 +1,5 @@
 import { Text } from 'solid-i18n';
+import { createSignal } from 'solid-js';
 
 import { Input } from '../Input';
 import { Button } from '../Button';
@@ -8,25 +9,19 @@ import { Divider } from '../Divider';
 import { Select, SelectState, Option } from '../Select';
 import { InputPhone } from '../InputPhone';
 import { InputCode } from '../InputCode';
+import { InputDate } from '../InputDate';
 
 import { FormItem } from './FormItem';
 
 export default {
   title: 'Composite/Form',
   component: FormItem,
-  argTypes: {
-    label: { control: { type: 'text' } },
-    extra: { control: { type: 'text' } },
-    error: { control: { type: 'text' } },
-  },
-  args: {
-    label: 'Label',
-    extra: 'Description',
-    error: '',
-  },
 };
 
 export const KeyboardAccessibility = () => {
+  const [selectValue, setSelectValue] = createSignal('');
+  const [state, setState] = createSignal('');
+
   return (
     <div style={{ 'max-width': '400px' }}>
       <Text message="Use your keyboard to tab through and fill out this form." />
@@ -38,13 +33,21 @@ export const KeyboardAccessibility = () => {
         <InputCode value={''} onChange={() => {}} />
       </FormItem>
       <FormItem>
-        <SelectState />
+        <SelectState value={state()} onChange={setState} />
+      </FormItem>
+      <FormItem>
+        <InputDate />
       </FormItem>
       <FormItem>
         <InputPhone placeholder="Phone" />
       </FormItem>
       <FormItem>
-        <Select valueRender={(val, txt) => `${txt} (${val})`} placeholder="Choose allocation">
+        <Select
+          valueRender={(val, txt) => `${txt} (${val})`}
+          value={selectValue()}
+          onChange={setSelectValue}
+          placeholder="Choose allocation"
+        >
           <Option value="MKT">Marketing</Option>
           <Option value="SAL">Sales</Option>
           <Divider />

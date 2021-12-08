@@ -44,6 +44,7 @@ export function Select(props: Readonly<SelectProps>) {
     batch(() => {
       setSearch('');
       setOpen(false);
+      input.focus();
     });
     props.onChange?.(value);
   };
