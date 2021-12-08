@@ -1,4 +1,5 @@
 import { Show } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
@@ -28,6 +29,7 @@ interface EditAllocationFormProps {
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
+  const i18n = useI18n();
   const messages = useMessages();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
@@ -45,47 +47,50 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         parentAllocationId: (data.parent || undefined) as UUIDString,
       })
       .catch(() => {
-        messages.error({ title: 'Something going wrong' });
+        messages.error({ title: i18n.t('Something going wrong') });
       });
   };
 
   return (
     <Form class={css.form}>
-      <Section title="Allocation details">
+      <Section title={<Text message="Allocation details" />}>
         <FormItem
-          label="Parent allocation"
-          extra="Choose the allocation that will fund your new allocation."
+          label={<Text message="Parent allocation" />}
+          extra={<Text message="Choose the allocation that will fund your new allocation." />}
           error={errors().parent}
           class={css.field}
         >
           <AllocationSelect
             items={props.allocations}
             value={values().parent}
-            placeholder="Select allocation"
+            placeholder={String(i18n.t('Select allocation'))}
             error={Boolean(errors().parent)}
             onChange={handlers.parent}
           />
         </FormItem>
-        <FormItem label="Label" error={errors().name} class={css.field}>
+        <FormItem label={<Text message="Label" />} error={errors().name} class={css.field}>
           <Input
             name="allocation-label"
             value={values().name}
-            placeholder="Enter allocation label (e.g. Marketing Team)"
+            placeholder={String(i18n.t('Enter allocation label (e.g. Marketing Team)'))}
             error={Boolean(errors().name)}
             onChange={handlers.name}
           />
         </FormItem>
       </Section>
-      <Section title="Balance" description="Fund your allocation from the parent allocation.">
+      <Section
+        title={<Text message="Balance" />}
+        description={<Text message="Fund your allocation from the parent allocation." />}
+      >
         <FormItem
-          label="Amount"
-          extra="The amount can not exceed the balance of the parent allocation."
+          label={<Text message="Amount" />}
+          extra={<Text message="The amount can not exceed the balance of the parent allocation." />}
           error={errors().amount}
           class={css.field}
         >
           <Input
             name="amount"
-            placeholder="$ Enter the amount"
+            placeholder={String(i18n.t('$ Enter the amount'))}
             value={values().amount}
             formatter={formatAmount}
             error={Boolean(errors().amount)}
@@ -94,13 +99,20 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         </FormItem>
       </Section>
       <Section
-        title="Owner(s)"
-        description="Allocation owners can issue new cards, edit spend controls, and view spend."
+        title={<Text message="Owner(s)" />}
+        description={
+          <Text
+            message={
+              'Add additional allocation owners. ' +
+              'By default, owners of the parent allocation will be able to view this allocation.'
+            }
+          />
+        }
       >
-        <FormItem label="Allocation owner(s)" error={errors().owner} class={css.field}>
+        <FormItem label={<Text message="Allocation owner(s)" />} error={errors().owner} class={css.field}>
           <Select
             value={values().owner}
-            placeholder="Search by employee name"
+            placeholder={String(i18n.t('Search by employee name'))}
             disabled
             error={Boolean(errors().owner)}
             onChange={handlers.owner}
@@ -110,7 +122,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         </FormItem>
       </Section>
       <Show when={isDirty()}>
-        <PageActions action="Create Allocation" onCancel={reset} onSave={onSubmit} />
+        <PageActions action={<Text message="Create Allocation" />} onCancel={reset} onSave={onSubmit} />
       </Show>
     </Form>
   );

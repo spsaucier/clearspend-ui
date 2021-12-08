@@ -17,7 +17,14 @@ export function Settings() {
       </Section>
       <Section
         title={<Text message="Owner(s)" />}
-        description={<Text message="Allocation owners can issue new cards, edit spend controls, and view spend." />}
+        description={
+          <Text
+            message={
+              'Add additional allocation owners. ' +
+              'By default, owners of the parent allocation will be able to view this allocation.'
+            }
+          />
+        }
       >
         <FormItem label={<Text message="Allocation owner(s)" />} class={css.field}>
           <Select>{undefined}</Select>
