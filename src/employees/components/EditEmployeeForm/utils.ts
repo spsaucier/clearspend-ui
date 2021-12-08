@@ -24,7 +24,7 @@ export function getFormOptions(user?: Readonly<User>): FormOptions<FormValues> {
       firstName: [required],
       lastName: [required],
       email: [required, validEmail],
-      phone: [(val) => validPhone(cleanPhone(val))],
+      phone: [required, (val) => validPhone(cleanPhone(val))],
     },
   };
 }
