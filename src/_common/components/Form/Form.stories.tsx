@@ -21,6 +21,7 @@ export default {
 export const KeyboardAccessibility = () => {
   const [selectValue, setSelectValue] = createSignal('');
   const [state, setState] = createSignal('');
+  const [date, setDate] = createSignal<ReadonlyDate | undefined>();
 
   return (
     <div style={{ 'max-width': '400px' }}>
@@ -36,7 +37,7 @@ export const KeyboardAccessibility = () => {
         <SelectState value={state()} onChange={setState} />
       </FormItem>
       <FormItem>
-        <InputDate />
+        <InputDate value={date()} onChange={setDate} />
       </FormItem>
       <FormItem>
         <InputPhone placeholder="Phone" />

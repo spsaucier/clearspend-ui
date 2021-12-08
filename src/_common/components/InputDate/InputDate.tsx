@@ -1,4 +1,4 @@
-import { Accessor, createSignal, createMemo } from 'solid-js';
+import { Accessor, createSignal, createMemo, batch } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
 import { DateFormat } from '../../api/intl/types';
@@ -25,6 +25,7 @@ export interface InputDateProps {
 }
 
 export function InputDate(props: Readonly<InputDateProps>) {
+  let element!: HTMLInputElement;
   const i18n = useI18n();
   const [open, setOpen] = createSignal(false);
 
@@ -45,8 +46,11 @@ export function InputDate(props: Readonly<InputDateProps>) {
   };
 
   const onSelect = (date: ReadonlyDate) => {
-    props.onChange?.(date);
-    setOpen(false);
+    batch(() => {
+      props.onChange?.(date);
+      setOpen(false);
+      element.focus();
+    });
   };
 
   const value: Accessor<ReadonlyDate | undefined> = createMemo(() => {
@@ -70,6 +74,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
       }
     >
       <Input
+        ref={element}
         name={props.name}
         value={strValue()}
         suffix={<Icon name="calendar" />}
