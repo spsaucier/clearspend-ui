@@ -52,6 +52,11 @@ export interface UpdateBusinessOwner {
   isOnboarding?: boolean;
 }
 
+export interface UpdateBusinessOwnerResponse {
+  businessStatus: string;
+  ownerStatus: string;
+}
+
 export interface LinkToken {
   linkToken: string;
 }
@@ -61,4 +66,22 @@ export interface LinkedBankAccounts {
   businessBankAccountId: UUIDString;
   routingNumber: string;
   name: string;
+}
+
+export interface FormManualReview {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  taxIdentificationNumber: string;
+  email: string;
+  address: Readonly<Address>;
+  isOnboarding?: boolean;
+}
+
+export interface ExceptionDataMessage {
+  message: string;
+}
+
+export interface ExceptionData {
+  data: ExceptionDataMessage;
 }

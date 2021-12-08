@@ -8,6 +8,7 @@ import { getNoop } from '_common/utils/getNoop';
 import { useResource } from '_common/utils/useResource';
 import type { User } from 'employees/types';
 import { Onboarding } from 'onboarding';
+import { HardFail } from 'app/pages/HardFail';
 
 import { getOwner, getBusiness } from '../../services/businesses';
 import { BusinessStatus, Businesses } from '../../types/businesses';
@@ -70,7 +71,7 @@ export default function Main() {
               <div>SUSPENDED</div>
             </Match>
             <Match when={isStatus(business(), BusinessStatus.CLOSED)}>
-              <div>CLOSED</div>
+              <HardFail />
             </Match>
           </Switch>
         </BusinessContext.Provider>

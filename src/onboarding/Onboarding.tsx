@@ -8,17 +8,20 @@ import { Page } from 'app/components/Page';
 import { BusinessContext } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { OnboardingStep } from 'app/types/businesses';
-import logo from 'app/assets/logo-name.svg';
 import { formatName } from 'employees/utils/formatName';
+import { uploadForManualReview } from 'app/services/review';
+import logo from 'app/assets/logo-name.svg';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
 import { LinkAccount } from './components/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
-import { setBusinessInfo, setBusinessOwner } from './services/onboarding';
+import { getRequiredDocuments, setBusinessInfo, setBusinessOwner } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, deposit } from './services/accounts';
 import type { UpdateBusinessInfo, UpdateBusinessOwner, LinkedBankAccounts } from './types';
+import { Review, SoftFail } from './components/SoftFail';
+import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 
 import css from './Onboarding.css';
 
@@ -32,9 +35,29 @@ export default function Onboarding() {
   const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep);
   const [accounts, setAccounts] = createSignal<readonly Readonly<LinkedBankAccounts>[]>([]);
 
+  const [kybRequiredDocuments, setkybRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
+  const [kycRequiredDocuments, setkycRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();
+
   if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
     getBankAccounts()
       .then((data) => setAccounts(data))
+      .catch(() => messages.error({ title: 'Something going wrong' }));
+  }
+
+  if (step() === OnboardingStep.SOFT_FAIL) {
+    getRequiredDocuments()
+      .then((data) => {
+        setkybRequiredDocuments(data.kybRequiredDocuments);
+        setkycRequiredDocuments(data.kycRequiredDocuments);
+        if (
+          kybRequiredDocuments() &&
+          kybRequiredDocuments()!.length === 0 &&
+          kycRequiredDocuments() &&
+          kycRequiredDocuments()!.length === 0
+        ) {
+          setStep(OnboardingStep.REVIEW);
+        }
+      })
       .catch(() => messages.error({ title: 'Something going wrong' }));
   }
 
@@ -46,7 +69,25 @@ export default function Onboarding() {
 
   const onUpdateKYC = async (data: Readonly<UpdateBusinessOwner>) => {
     await setBusinessOwner(owner().userId, { ...data, isOnboarding: true });
-    setStep(OnboardingStep.LINK_ACCOUNT);
+    await getRequiredDocuments()
+      .then((responseData) => {
+        setkybRequiredDocuments(responseData.kybRequiredDocuments);
+        setkycRequiredDocuments(responseData.kycRequiredDocuments);
+      })
+      .catch(() => messages.error({ title: 'Something going wrong' }));
+    if (
+      (kybRequiredDocuments() && kybRequiredDocuments()!.length > 0) ||
+      (kycRequiredDocuments() && kycRequiredDocuments()!.length > 0)
+    ) {
+      setStep(OnboardingStep.SOFT_FAIL);
+    } else {
+      setStep(OnboardingStep.LINK_ACCOUNT);
+    }
+  };
+
+  const onSoftFail = async (data: Readonly<{}>) => {
+    await uploadForManualReview(data);
+    setStep(OnboardingStep.REVIEW);
   };
 
   const onGotVerifyToken = async (token: string) => {
@@ -91,6 +132,20 @@ export default function Onboarding() {
         <Match when={step() === OnboardingStep.BUSINESS_OWNERS}>
           <Page title="Tell us about your team">
             <TeamForm onNext={onUpdateKYC} />
+          </Page>
+        </Match>
+        <Match when={step() === OnboardingStep.SOFT_FAIL}>
+          <Page title="Additional info required">
+            <SoftFail
+              kybRequiredDocuments={kybRequiredDocuments()}
+              kycRequiredDocuments={kycRequiredDocuments()}
+              onNext={onSoftFail}
+            />
+          </Page>
+        </Match>
+        <Match when={step() === OnboardingStep.REVIEW}>
+          <Page title="Thank you">
+            <Review ownerEmail={owner().email} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.LINK_ACCOUNT}>

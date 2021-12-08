@@ -12,7 +12,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { BUSINESS_TYPES } from '../../constants/usa';
-import type { UpdateBusinessInfo } from '../../types';
+import type { ExceptionData, UpdateBusinessInfo } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -31,8 +31,8 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
   const { values, handlers, errors, wrapSubmit } = createForm<FormValues>(getFormOptions());
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(convertFormData(data)).catch(() => {
-      messages.error({ title: 'Something going wrong' });
+    next(convertFormData(data)).catch((e: ExceptionData) => {
+      messages.error({ title: 'Something went wrong.', message: e.data.message });
     });
   };
 

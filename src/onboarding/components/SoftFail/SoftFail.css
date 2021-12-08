@@ -1,0 +1,9 @@
+.section {
+  margin-bottom: var(--pd-24);
+}
+
+.wrapper {
+  @media (--bp-large) {
+    max-width: 360px;
+  }
+}

@@ -8,7 +8,7 @@ import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 
-import type { UpdateBusinessOwner } from '../../types';
+import type { ExceptionData, UpdateBusinessOwner } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -27,8 +27,8 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(convertFormData(data)).catch(() => {
-      messages.error({ title: 'Something going wrong' });
+    next(convertFormData(data)).catch((e: ExceptionData) => {
+      messages.error({ title: 'Something went wrong.', message: e.data.message });
     });
   };
 

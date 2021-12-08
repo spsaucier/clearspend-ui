@@ -13,22 +13,24 @@ export enum BusinessType {
 export enum OnboardingStep {
   BUSINESS_OWNERS = 'BUSINESS_OWNERS',
   LINK_ACCOUNT = 'LINK_ACCOUNT',
+  REVIEW = 'REVIEW',
+  SOFT_FAIL = 'SOFT_FAIL',
   TRANSFER_MONEY = 'TRANSFER_MONEY',
   // COMPLETE = 'COMPLETE',
 }
 
 export enum KnowBusinessStatus {
-  PENDING = 'PENDING',
-  REVIEW = 'REVIEW',
   FAIL = 'FAIL',
   PASS = 'PASS',
+  PENDING = 'PENDING',
+  REVIEW = 'REVIEW',
 }
 
 export enum BusinessStatus {
-  ONBOARDING = 'ONBOARDING',
   ACTIVE = 'ACTIVE',
-  SUSPENDED = 'SUSPENDED',
   CLOSED = 'CLOSED',
+  ONBOARDING = 'ONBOARDING',
+  SUSPENDED = 'SUSPENDED',
 }
 
 export interface Businesses {

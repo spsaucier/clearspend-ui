@@ -9,7 +9,7 @@ function parse<T = unknown>(body: string, type: string | null): T {
 export function fetch<T = unknown>(
   method: FetchMethod,
   url: string,
-  params?: object,
+  params?: object | FormData,
   options: Readonly<Partial<FetchOptions>> = {},
 ): Promise<FetchResponse<T>> {
   return new Promise((resolve, reject) => {
@@ -17,8 +17,9 @@ export function fetch<T = unknown>(
       .fetch(url, {
         method,
         cache: 'no-cache',
-        body: params ? JSON.stringify(params) : null,
-        headers: { 'Content-Type': 'application/json', ...options.headers },
+        body: params ? (params instanceof FormData ? params : JSON.stringify(params)) : null,
+        headers:
+          params instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers },
       })
       .then((resp) => {
         const response: FetchResponse = { url, status: resp.status, data: null };

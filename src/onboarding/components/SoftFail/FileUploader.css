@@ -1,0 +1,19 @@
+.file {
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  color: #000;
+  font-family: var(--font-main);
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  line-height: 20px;
+  border: solid 2px rgb(209, 209, 209);
+}
+
+.icon {
+  margin-top: -20px;
+  margin-left: auto;
+  color: #44b96d;
+  cursor: pointer;
+}

@@ -24,11 +24,14 @@ const ADDRESS = {
 function readEnvFile() {
   const content = fs.readFileSync(path.resolve('.env.dev'), 'utf8');
 
-  return content.split('\n').filter(Boolean).reduce((acc, str) => {
-    const [key, value] = str.split('=');
-    if (key && value) acc[key] = value;
-    return acc;
-  }, {});
+  return content
+    .split('\n')
+    .filter(Boolean)
+    .reduce((acc, str) => {
+      const [key, value] = str.split('=');
+      if (key && value) acc[key] = value;
+      return acc;
+    }, {});
 }
 
 function randomInteger(min, max) {
@@ -37,7 +40,9 @@ function randomInteger(min, max) {
 }
 
 function getRandomNum(length = 9) {
-  return Array.from(new Array(length)).map(() => randomInteger(0, 9)).join('');
+  return Array.from(new Array(length))
+    .map(() => randomInteger(0, 9))
+    .join('');
 }
 
 // function get(url) {
@@ -71,7 +76,7 @@ function request(method, url, params) {
         method: method,
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': COOKIE,
+          Cookie: COOKIE,
         },
       },
       (resp) => {
@@ -84,7 +89,7 @@ function request(method, url, params) {
 
           if (url === '/authentication/login') {
             COOKIE = (resp.headers['set-cookie'] || [])
-              .map(item => {
+              .map((item) => {
                 const match = item.match(/^.+?=.+?;/);
                 return Boolean(match) ? match[0] : '';
               })

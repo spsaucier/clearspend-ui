@@ -1,4 +1,5 @@
 import { service } from 'app/utils/service';
+import type { ManualReviewResponse } from 'onboarding/components/SoftFail/types';
 import type { UUIDString } from 'app/types/common';
 
 import type {
@@ -32,4 +33,8 @@ export async function setBusinessInfo(id: UUIDString, params: Readonly<UpdateBus
 
 export async function setBusinessOwner(ownerId: UUIDString, params: Readonly<UpdateBusinessOwner>) {
   return service.patch(`/business-owners/${ownerId}`, params);
+}
+
+export async function getRequiredDocuments() {
+  return (await service.get<Readonly<ManualReviewResponse>>('/manual-review')).data;
 }
