@@ -48,6 +48,7 @@ export interface UpdateBusinessOwner {
   dateOfBirth: string;
   taxIdentificationNumber: string;
   email: string;
+  phone: string;
   address: Readonly<Address>;
   isOnboarding?: boolean;
 }

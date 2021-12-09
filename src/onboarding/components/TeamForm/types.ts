@@ -4,6 +4,7 @@ export interface FormValues {
   birthdate: ReadonlyDate | undefined;
   ssn: string;
   email: string;
+  phone: string;
   line1: string;
   line2: string;
   city: string;

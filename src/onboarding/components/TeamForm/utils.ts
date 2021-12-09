@@ -1,9 +1,10 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
-import { validEmail, validZipCode } from '_common/components/Form/rules/patterns';
+import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
 
 import type { UpdateBusinessOwner } from '../../types';
+import { cleanSSN } from '../../../_common/formatters/ssn';
 
 import type { FormValues } from './types';
 
@@ -15,6 +16,7 @@ export function getFormOptions(): FormOptions<FormValues> {
       birthdate: undefined,
       ssn: '',
       email: '',
+      phone: '',
       line1: '',
       line2: '',
       city: '',
@@ -25,8 +27,9 @@ export function getFormOptions(): FormOptions<FormValues> {
       firstName: [required],
       lastName: [required],
       birthdate: [required], // TODO
-      ssn: [required], // TODO
+      ssn: [required],
       email: [required, validEmail],
+      phone: [required, validPhone],
       line1: [required],
       city: [required],
       state: [required],
@@ -40,9 +43,9 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusi
     firstName: data.firstName,
     lastName: data.lastName,
     dateOfBirth: dateToString(data.birthdate!),
-    taxIdentificationNumber: data.ssn,
+    taxIdentificationNumber: cleanSSN(data.ssn),
     email: data.email,
-    // TODO
+    phone: data.phone,
     address: {
       streetLine1: data.line1,
       streetLine2: data.line2,

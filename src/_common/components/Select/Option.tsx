@@ -19,6 +19,7 @@ export function Option(props: Readonly<OptionProps>) {
     if ([kbCodes.ENTER_KEY_CODE, ...kbCodes.SPACEBAR_KEY_CODES].includes(e.keyCode)) {
       context.onChange?.(props.value);
       e.preventDefault();
+      e.stopImmediatePropagation();
     } else if ([kbCodes.DOWN_ARROW_KEY_CODE].includes(e.keyCode)) {
       const nextSibling = document.activeElement?.nextElementSibling;
       if (nextSibling) {

@@ -1,7 +1,6 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone } from '_common/components/Form/rules/patterns';
-import { cleanPhone } from '_common/formatters/phone';
 
 import type { User } from '../../types';
 
@@ -24,7 +23,7 @@ export function getFormOptions(user?: Readonly<User>): FormOptions<FormValues> {
       firstName: [required],
       lastName: [required],
       email: [required, validEmail],
-      phone: [required, (val) => validPhone(cleanPhone(val))],
+      phone: [required, (val) => validPhone(val)],
     },
   };
 }

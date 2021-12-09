@@ -7,6 +7,8 @@ import { SelectState } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
+import { InputPhone } from '_common/components/InputPhone';
+import { formatSSN } from '_common/formatters/ssn';
 
 import type { ExceptionData, UpdateBusinessOwner } from '../../types';
 
@@ -65,7 +67,14 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             />
           </FormItem>
           <FormItem label="Social security number" error={errors().ssn}>
-            <Input name="ssn" value={values().ssn} error={Boolean(errors().ssn)} onChange={handlers.ssn} />
+            <Input
+              name="ssn"
+              value={values().ssn}
+              maxLength={9}
+              error={Boolean(errors().ssn)}
+              onChange={handlers.ssn}
+              formatter={formatSSN}
+            />
           </FormItem>
           <FormItem label="Email" error={errors().email}>
             <Input
@@ -75,6 +84,9 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
               error={Boolean(errors().email)}
               onChange={handlers.email}
             />
+          </FormItem>
+          <FormItem label="Phone" error={errors().phone}>
+            <InputPhone name="phone" value={values().phone} error={Boolean(errors().phone)} onChange={handlers.phone} />
           </FormItem>
           <FormItem label="Home address" error={errors().line1}>
             <Input
@@ -101,7 +113,13 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             <SelectState value={values().state} error={Boolean(errors().state)} onChange={handlers.state} />
           </FormItem>
           <FormItem label="Zip code" error={errors().zip}>
-            <Input name="zip-code" value={values().zip} error={Boolean(errors().zip)} onChange={handlers.zip} />
+            <Input
+              name="zip-code"
+              value={values().zip}
+              error={Boolean(errors().zip)}
+              maxLength={5}
+              onChange={handlers.zip}
+            />
           </FormItem>
         </div>
         <div class={css.actions}>

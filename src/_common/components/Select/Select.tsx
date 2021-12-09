@@ -82,7 +82,7 @@ export function Select(props: Readonly<SelectProps>) {
   const onKeyDown = (e: KeyboardEvent) => {
     if ([kbCodes.ESCAPE_KEY_CODE].includes(e.keyCode)) {
       setOpen(false);
-    } else if ([kbCodes.DOWN_ARROW_KEY_CODE].includes(e.keyCode)) {
+    } else if ([kbCodes.DOWN_ARROW_KEY_CODE, kbCodes.UP_ARROW_KEY_CODE].includes(e.keyCode)) {
       if (!list.contains(document.activeElement)) {
         (list.firstChild as HTMLElement).focus();
       }

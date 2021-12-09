@@ -13,6 +13,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 
 import { BUSINESS_TYPES } from '../../constants/usa';
 import type { ExceptionData, UpdateBusinessInfo } from '../../types';
+import { formatEIN } from '../../../_common/formatters/ein';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -55,7 +56,14 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             </Select>
           </FormItem>
           <FormItem label="Business EIN" error={errors().ein}>
-            <Input name="business-ein" value={values().ein} error={Boolean(errors().ein)} onChange={handlers.ein} />
+            <Input
+              name="business-ein"
+              value={values().ein}
+              maxLength={9}
+              error={Boolean(errors().ein)}
+              onChange={handlers.ein}
+              formatter={formatEIN}
+            />
           </FormItem>
           <FormItem label="Corporate phone number" error={errors().phone}>
             <InputPhone
@@ -98,7 +106,13 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             <SelectState value={values().state} error={Boolean(errors().state)} onChange={handlers.state} />
           </FormItem>
           <FormItem label="Zip code" error={errors().zip}>
-            <Input name="zip-code" value={values().zip} error={Boolean(errors().zip)} onChange={handlers.zip} />
+            <Input
+              name="zip-code"
+              value={values().zip}
+              maxLength={5}
+              error={Boolean(errors().zip)}
+              onChange={handlers.zip}
+            />
           </FormItem>
         </div>
         <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
