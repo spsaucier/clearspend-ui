@@ -41,7 +41,7 @@ export default function Onboarding() {
   if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
     getBankAccounts()
       .then((data) => setAccounts(data))
-      .catch(() => messages.error({ title: 'Something going wrong' }));
+      .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
   if (step() === OnboardingStep.SOFT_FAIL) {
@@ -58,7 +58,7 @@ export default function Onboarding() {
           setStep(OnboardingStep.REVIEW);
         }
       })
-      .catch(() => messages.error({ title: 'Something going wrong' }));
+      .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
   const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
@@ -74,7 +74,7 @@ export default function Onboarding() {
         setkybRequiredDocuments(responseData.kybRequiredDocuments);
         setkycRequiredDocuments(responseData.kycRequiredDocuments);
       })
-      .catch(() => messages.error({ title: 'Something going wrong' }));
+      .catch(() => messages.error({ title: 'Something went wrong' }));
     if (
       (kybRequiredDocuments() && kybRequiredDocuments()!.length > 0) ||
       (kycRequiredDocuments() && kycRequiredDocuments()!.length > 0)

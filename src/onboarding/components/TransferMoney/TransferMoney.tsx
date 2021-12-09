@@ -39,9 +39,11 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    deposit(data.account, parseAmount(data.amount)).catch(() => {
-      messages.error({ title: 'Something going wrong' });
-    });
+    if (!loading()) {
+      deposit(data.account, parseAmount(data.amount)).catch(() => {
+        messages.error({ title: 'Something went wrong' });
+      });
+    }
   };
 
   return (

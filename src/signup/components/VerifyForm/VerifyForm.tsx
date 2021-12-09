@@ -43,7 +43,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
     const code = value.replace(/[^\d]/g, '').substr(0, VALID_LENGTH);
     handlers.code(code);
 
-    if (code.length === VALID_LENGTH) {
+    if (code.length === VALID_LENGTH && !loading()) {
       confirm(code).catch(() => setErrors({ code: 'Invalid code or something going wrong' }));
     }
   };

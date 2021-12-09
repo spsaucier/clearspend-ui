@@ -32,9 +32,11 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
   const { values, handlers, errors, wrapSubmit } = createForm<FormValues>(getFormOptions());
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(convertFormData(data)).catch((e: ExceptionData) => {
-      messages.error({ title: 'Something went wrong.', message: e.data.message });
-    });
+    if (!loading()) {
+      next(convertFormData(data)).catch((e: ExceptionData) => {
+        messages.error({ title: 'Something went wrong.', message: e.data.message });
+      });
+    }
   };
 
   return (

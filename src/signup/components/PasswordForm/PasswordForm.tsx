@@ -28,10 +28,13 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
     rules: { password: [minLength], confirm: [samePassword] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) =>
-    create(data.password).catch(() => {
-      setErrors({ password: 'Something going wrong' });
-    });
+  const onSubmit = (data: Readonly<FormValues>) => {
+    if (!loading()) {
+      create(data.password).catch(() => {
+        setErrors({ password: 'Something went wrong' });
+      });
+    }
+  };
 
   return (
     <div>

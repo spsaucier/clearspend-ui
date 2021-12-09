@@ -64,6 +64,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="postalCode"
           type="text"
           value={props.values.postalCode}
+          maxLength={5}
           placeholder={i18n.t('ZIP Code') as string}
           error={Boolean(props.errors.postalCode)}
           onChange={props.handlers.postalCode}

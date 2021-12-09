@@ -21,6 +21,7 @@ import type { Allocation } from 'allocations/types';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
 import type { BaseUser, CreateUserResp } from 'employees/types';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import type { IssueCard, CardType } from '../../types';
@@ -48,6 +49,7 @@ interface EditCardFormProps {
 }
 
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
+  const [loading] = wrapAction(props.onSave);
   const messages = useMessages();
   const [showEmployee, toggleShowEmployee] = useBool();
 
@@ -68,7 +70,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   };
 
   const onSubmit = async () => {
-    if (hasErrors(trigger())) return;
+    if (loading() || hasErrors(trigger())) return;
     const data = values();
     await props
       .onSave({
@@ -81,7 +83,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         isPersonal: data.personal,
       })
       .catch(() => {
-        messages.error({ title: i18n.t('Something going wrong') });
+        messages.error({ title: i18n.t('Something went wrong') });
       });
   };
 

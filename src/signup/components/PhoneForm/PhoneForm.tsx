@@ -30,7 +30,9 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(cleanPhone(data.phone)).catch(() => setErrors({ phone: 'Something going wrong' }));
+    if (!loading()) {
+      next(cleanPhone(data.phone)).catch(() => setErrors({ phone: 'Something went wrong' }));
+    }
   };
 
   return (

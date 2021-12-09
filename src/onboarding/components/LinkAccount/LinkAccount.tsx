@@ -49,7 +49,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
       onEvent: (eventName) => {
         if (eventName === 'HANDOFF' && data) {
           next(data.public_token).catch(() => {
-            messages.error({ title: 'Something going wrong' });
+            messages.error({ title: 'Something went wrong' });
           });
         }
       },

@@ -21,9 +21,11 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
   const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    save(data.firstName, data.lastName, data.email).catch(() => {
-      messages.error({ title: 'Something going wrong' });
-    });
+    if (!loading()) {
+      save(data.firstName, data.lastName, data.email).catch(() => {
+        messages.error({ title: 'Something went wrong' });
+      });
+    }
   };
 
   return (

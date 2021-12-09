@@ -25,9 +25,11 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    submit(data.login, data.password).catch(() => {
-      messages.error({ title: 'Something going wrong' });
-    });
+    if (!loading()) {
+      submit(data.login, data.password).catch(() => {
+        messages.error({ title: 'Something went wrong' });
+      });
+    }
   };
 
   return (

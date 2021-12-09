@@ -30,7 +30,9 @@ export function EmailForm(props: Readonly<EmailFormProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
-    next(data.email).catch(() => setErrors({ email: 'Something going wrong' }));
+    if (!loading()) {
+      next(data.email).catch(() => setErrors({ email: 'Something went wrong' }));
+    }
   };
 
   return (

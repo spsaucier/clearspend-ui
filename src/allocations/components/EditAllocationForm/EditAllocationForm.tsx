@@ -10,6 +10,7 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import type { UUIDString } from 'app/types/common';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { AllocationSelect } from '../AllocationSelect';
 import type { Allocation, CreateAllocation } from '../../types';
@@ -29,6 +30,7 @@ interface EditAllocationFormProps {
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
+  const [loading] = wrapAction(props.onSave);
   const i18n = useI18n();
   const messages = useMessages();
 
@@ -38,7 +40,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   });
 
   const onSubmit = async () => {
-    if (hasErrors(trigger())) return;
+    if (loading() || hasErrors(trigger())) return;
     const data = values();
     await props
       .onSave({
@@ -47,7 +49,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         parentAllocationId: (data.parent || undefined) as UUIDString,
       })
       .catch(() => {
-        messages.error({ title: i18n.t('Something going wrong') });
+        messages.error({ title: i18n.t('Something went wrong') });
       });
   };
 

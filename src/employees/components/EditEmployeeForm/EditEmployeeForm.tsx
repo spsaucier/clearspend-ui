@@ -5,6 +5,7 @@ import { Form, createForm, hasErrors } from '_common/components/Form';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
@@ -19,13 +20,14 @@ interface EditEmployeeFormProps {
 }
 
 export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
+  const [loading] = wrapAction(props.onSave);
   const i18n = useI18n();
   const messages = useMessages();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(getFormOptions(props.user));
 
   const onSubmit = async () => {
-    if (hasErrors(trigger())) return;
+    if (loading() || hasErrors(trigger())) return;
     const data = values();
     await props
       .onSave(data)
@@ -33,7 +35,7 @@ export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
         if (props.user) reset(data);
       })
       .catch(() => {
-        messages.error({ title: i18n.t('Something going wrong') });
+        messages.error({ title: i18n.t('Something went wrong') });
       });
   };
 

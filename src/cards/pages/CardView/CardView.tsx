@@ -76,7 +76,7 @@ export default function CardView() {
                 onConfirm={() => {
                   freeze(card()!.cardId)
                     .then(() => reload())
-                    .catch(() => messages.error({ title: i18n.t('Something going wrong') }));
+                    .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
               >
                 {({ onClick }) => (
@@ -96,7 +96,7 @@ export default function CardView() {
                 onClick={() => {
                   unfreeze(card()!.cardId)
                     .then(() => reload())
-                    .catch(() => messages.error({ title: i18n.t('Something going wrong') }));
+                    .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
               >
                 <Text message="Unfreeze Card" />
