@@ -20,8 +20,9 @@ import { allocationWithID } from 'allocations/utils/allocationWithID';
 import type { Allocation } from 'allocations/types';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
-import type { BaseUser, CreateUserResp } from 'employees/types';
+import type { BaseUser, CreateUser, CreateUserResp } from 'employees/types';
 import { wrapAction } from '_common/utils/wrapAction';
+import type { FormValues as EmployeeFormValues } from 'employees/components/EditEmployeeForm/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import type { IssueCard, CardType } from '../../types';
@@ -44,7 +45,7 @@ interface EditCardFormProps {
   allocationId?: UUIDString;
   users: readonly Readonly<BaseUser>[];
   allocations: readonly Readonly<Allocation>[];
-  onAddEmployee: (firstName: string, lastName: string, email: string) => Promise<Readonly<CreateUserResp>>;
+  onAddEmployee: (userData: Readonly<CreateUser>) => Promise<Readonly<CreateUserResp>>;
   onSave: (params: Readonly<IssueCard>) => Promise<unknown>;
 }
 
@@ -63,8 +64,15 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     rules: { allocation: [required], employee: [required], types: [validTypes] },
   });
 
-  const onAddEmployee = async (firstName: string, lastName: string, email: string) => {
-    const resp = await props.onAddEmployee(firstName, lastName, email);
+  const onAddEmployee = async (userData: EmployeeFormValues) => {
+    const { firstName, lastName, email, phone, ...address } = userData;
+    const resp = await props.onAddEmployee({
+      firstName,
+      lastName,
+      email,
+      phone,
+      address: { ...address, country: 'USA' },
+    });
     handlers.employee(resp.userId);
     toggleShowEmployee();
   };

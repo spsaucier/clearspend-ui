@@ -1,4 +1,6 @@
 import { Routes, Route } from 'solid-app-router';
+import mixpanel from 'mixpanel-browser';
+import { createEffect } from 'solid-js';
 
 import { SignUp } from 'signup';
 
@@ -7,6 +9,9 @@ import { Messages } from './containers/Messages';
 import { Login } from './pages/Login';
 
 export function App() {
+  createEffect(() => {
+    mixpanel.init('fae11a3a59ea09ae6e4e9192a99220fb', { debug: true });
+  });
   return (
     <div>
       <Routes>

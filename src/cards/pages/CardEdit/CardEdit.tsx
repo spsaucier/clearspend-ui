@@ -10,6 +10,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { getAllocations } from 'allocations/services';
 import { getUsers, saveUser } from 'employees/services';
 import type { UUIDString } from 'app/types/common';
+import type { CreateUser } from 'employees/types';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
@@ -24,8 +25,8 @@ export default function CardEdit() {
   const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
   const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
 
-  const onAddEmployee = async (firstName: string, lastName: string, email: string) => {
-    const resp = await saveUser({ firstName, lastName, email });
+  const onAddEmployee = async (userData: Readonly<CreateUser>) => {
+    const resp = await saveUser(userData);
     await reloadUsers();
     messages.success({
       title: i18n.t('Success'),

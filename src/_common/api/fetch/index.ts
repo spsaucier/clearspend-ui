@@ -1,3 +1,7 @@
+import mixpanel from 'mixpanel-browser';
+
+import { Events } from 'app/utils/analytics';
+
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
 
 function parse<T = unknown>(body: string, type: string | null): T {
@@ -31,9 +35,16 @@ export function fetch<T = unknown>(
               ...response,
               data: parse(body, resp.headers.get('content-type')),
             };
-            resp.ok ? resolve(result) : reject(result);
+            if (resp.ok) {
+              mixpanel.track(Events[`${method}_SUCCESS`], { url });
+              resolve(result);
+            } else {
+              mixpanel.track(Events[`${method}_ERROR`], { url, result });
+              reject(result);
+            }
           })
-          .catch((error: unknown) => {
+          .catch((error: Error) => {
+            mixpanel.track(Events[`${method}_ERROR`], { url, error });
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({ ...response, data: error });
           });

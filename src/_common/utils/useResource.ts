@@ -5,7 +5,7 @@ import { getNoop } from './getNoop';
 
 export interface DataState<T> {
   loading: boolean;
-  error: unknown;
+  error: Error | null;
   data: T;
 }
 
@@ -29,7 +29,7 @@ export function useResource<T, P extends unknown>(
       .then((data: T) => {
         setState({ loading: false, error: null, data });
       })
-      .catch((error: unknown) => {
+      .catch((error: Error) => {
         setState({ loading: false, error, data: null });
       });
   };

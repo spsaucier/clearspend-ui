@@ -1,6 +1,7 @@
 import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
+import mixpanel from 'mixpanel-browser';
 
 import logo from 'app/assets/logo-name.svg';
 import { formatPhone } from '_common/formatters/phone';
@@ -56,6 +57,8 @@ export default function SignUp() {
     const resp = await signup({ email, firstName: first, lastName: last });
 
     setEmail(email, resp.businessProspectId);
+
+    mixpanel.track(`Signup: ${resp.businessProspectStatus}`);
 
     switch (resp.businessProspectStatus) {
       case ProspectStatus.COMPLETED:

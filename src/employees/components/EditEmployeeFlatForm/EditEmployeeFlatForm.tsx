@@ -11,7 +11,7 @@ import { getFormOptions } from '../EditEmployeeForm/utils';
 import css from './EditEmployeeFlatForm.css';
 
 interface EditEmployeeFlatFormProps {
-  onSave: (first: string, last: string, email: string) => Promise<unknown>;
+  onSave: (userData: FormValues) => Promise<unknown>;
 }
 
 export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>) {
@@ -22,7 +22,7 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      save(data.firstName, data.lastName, data.email).catch(() => {
+      save(data).catch(() => {
         messages.error({ title: 'Something went wrong' });
       });
     }
