@@ -24,4 +24,5 @@ export interface SelectProps {
 export interface SelectContextProps {
   value?: string;
   onChange?: (value: string) => void;
+  close?: (value?: boolean) => void;
 }

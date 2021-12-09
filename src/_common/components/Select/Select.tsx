@@ -1,5 +1,7 @@
 import { createSignal, createMemo, batch } from 'solid-js';
 
+import kbCodes from '_common/utils/kbCodes';
+
 import { Icon } from '../Icon';
 import { Input } from '../Input';
 import { Popover } from '../Popover';
@@ -16,6 +18,7 @@ const FOCUS_OUT_DELAY = 200;
 
 export function Select(props: Readonly<SelectProps>) {
   let input!: HTMLInputElement;
+  let list!: HTMLUListElement;
   const [open, setOpen] = createSignal(false);
   const [search, setSearch] = createSignal('');
 
@@ -41,12 +44,12 @@ export function Select(props: Readonly<SelectProps>) {
   };
 
   const onChange = (value: string) => {
+    props.onChange?.(value);
     batch(() => {
       setSearch('');
       setOpen(false);
       input.focus();
     });
-    props.onChange?.(value);
   };
 
   const onFocusIn = () => {
@@ -54,7 +57,7 @@ export function Select(props: Readonly<SelectProps>) {
     setOpen(true);
   };
 
-  const onFocusOut = () => {
+  const close = (maintainFocus = false) => {
     clearFocusTimeout();
     focusTimeout = setTimeout(() => {
       setOpen(false);
@@ -63,11 +66,35 @@ export function Select(props: Readonly<SelectProps>) {
         input.value = selected() || '';
       }
     }, FOCUS_OUT_DELAY);
+    if (maintainFocus) {
+      input.focus();
+    }
+  };
+
+  const onFocusOut = () => {
+    setTimeout(() => {
+      if (!list.contains(document.activeElement)) {
+        close();
+      }
+    });
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if ([kbCodes.ESCAPE_KEY_CODE].includes(e.keyCode)) {
+      setOpen(false);
+    } else if ([kbCodes.DOWN_ARROW_KEY_CODE].includes(e.keyCode)) {
+      if (!list.contains(document.activeElement)) {
+        (list.firstChild as HTMLElement).focus();
+      }
+      e.preventDefault();
+    } else if (![kbCodes.TAB_KEY_CODE].includes(e.keyCode)) {
+      setOpen(true);
+    }
   };
 
   const renderList = () => (
-    <ul class={css.list}>
-      <SelectContext.Provider value={{ value: props.value, onChange }}>{options()}</SelectContext.Provider>
+    <ul class={css.list} ref={list}>
+      <SelectContext.Provider value={{ value: props.value, onChange, close }}>{options()}</SelectContext.Provider>
     </ul>
   );
 
@@ -91,6 +118,7 @@ export function Select(props: Readonly<SelectProps>) {
           onChange={onSearch}
           onFocusIn={onFocusIn}
           onFocusOut={onFocusOut}
+          onKeyDown={onKeyDown}
         />
         <span class={css.value}>
           {typeof props.valueRender === 'function' && isString(props.value)

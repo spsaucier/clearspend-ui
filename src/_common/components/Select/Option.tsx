@@ -1,5 +1,7 @@
 import { useContext, createMemo, Show } from 'solid-js';
 
+import kbCodes from '_common/utils/kbCodes';
+
 import { Icon } from '../Icon';
 import { join } from '../../utils/join';
 
@@ -13,6 +15,29 @@ export function Option(props: Readonly<OptionProps>) {
 
   const active = createMemo(() => props.value === context.value);
 
+  const onKeyDown = (e: KeyboardEvent) => {
+    if ([kbCodes.ENTER_KEY_CODE, ...kbCodes.SPACEBAR_KEY_CODES].includes(e.keyCode)) {
+      context.onChange?.(props.value);
+      e.preventDefault();
+    } else if ([kbCodes.DOWN_ARROW_KEY_CODE].includes(e.keyCode)) {
+      const nextSibling = document.activeElement?.nextElementSibling;
+      if (nextSibling) {
+        (nextSibling as HTMLElement).focus();
+      }
+      e.preventDefault();
+    } else if ([kbCodes.UP_ARROW_KEY_CODE].includes(e.keyCode)) {
+      const prevSibling = document.activeElement?.previousElementSibling;
+      if (prevSibling) {
+        (prevSibling as HTMLElement).focus();
+      } else {
+        context.close?.(true);
+      }
+      e.preventDefault();
+    } else if ([kbCodes.ESCAPE_KEY_CODE].includes(e.keyCode)) {
+      context.close?.(true);
+    }
+  };
+
   return (
     <li
       data-value={props.value}
@@ -22,6 +47,8 @@ export function Option(props: Readonly<OptionProps>) {
         [css.disabled!]: props.disabled,
       }}
       onClick={() => context.onChange?.(props.value)}
+      onKeyDown={onKeyDown}
+      tabindex="0"
     >
       <span class={css.content}>{props.children}</span>
       <Show when={active()}>

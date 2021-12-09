@@ -5,8 +5,9 @@
   white-space: nowrap;
   cursor: pointer;
 
-  &:hover {
+  &:hover, &:focus {
     background: var(--tw-primary-light);
+    outline: none;
   }
 }
 
