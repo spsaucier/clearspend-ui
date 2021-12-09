@@ -87,7 +87,7 @@ export function Select(props: Readonly<SelectProps>) {
         (list.firstChild as HTMLElement).focus();
       }
       e.preventDefault();
-    } else if (![kbCodes.TAB_KEY_CODE].includes(e.keyCode)) {
+    } else if (e.keyCode && ![kbCodes.TAB_KEY_CODE].includes(e.keyCode)) {
       setOpen(true);
     }
   };
