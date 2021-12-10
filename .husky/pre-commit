@@ -1,4 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+node ./scripts/generateTypes.ts
+git add ./src/generated/capital.ts
+
 npx nano-staged
