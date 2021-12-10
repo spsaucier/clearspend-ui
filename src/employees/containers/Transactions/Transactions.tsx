@@ -2,8 +2,8 @@ import { useMediaContext } from '_common/api/media/context';
 import { useResource } from '_common/utils/useResource';
 import { getAccountActivity } from 'app/services/activity';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { AccountActivityRequest } from 'app/types/activity';
 import type { UUIDString } from 'app/types/common';
+import type { AccountActivityRequest } from 'generated/capital';
 
 const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: {
@@ -30,7 +30,7 @@ export function Transactions(props: Readonly<TransactionsProps>) {
       loading={status().loading}
       error={status().error}
       search={params().searchText}
-      data={cards()}
+      data={cards() as {}}
       onReload={reload}
       onChangeParams={setParams}
     />

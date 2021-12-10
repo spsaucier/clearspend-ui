@@ -8,10 +8,10 @@ import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
 import type { UUIDString } from 'app/types/common';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
+import type { SearchCardRequest } from 'generated/capital';
 
 import { CardsData } from './components/CardsData';
 import { useCards } from './stores/cards';
-import type { SearchCardRequest } from './types';
 
 const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
   pageRequest: {

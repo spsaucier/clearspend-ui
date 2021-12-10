@@ -3,8 +3,7 @@ import { Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { PieChart } from '_common/components/Charts';
-
-import type { Allocation } from '../../types';
+import type { Allocation } from 'generated/capital';
 
 import css from './AllocationBalances.css';
 
@@ -48,7 +47,7 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
                 <div class={css.children}>
                   <Text
                     message="{count, plural, =0 {No allocations} one {{count} allocation} other {{count} allocations}}"
-                    count={item.childrenAllocationIds.length}
+                    count={item.childrenAllocationIds?.length || 0}
                   />
                 </div>
               </div>

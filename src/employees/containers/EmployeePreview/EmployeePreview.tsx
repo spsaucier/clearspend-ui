@@ -8,7 +8,7 @@ import { Data } from 'app/components/Data';
 import { CardsList } from 'cards/components/CardsList';
 import { searchCards } from 'cards/services';
 import type { UUIDString } from 'app/types/common';
-import type { SearchCardRequest } from 'cards/types';
+import type { SearchCardRequest } from 'generated/capital';
 
 import { getUser } from '../../services';
 import { formatName } from '../../utils/formatName';
@@ -42,9 +42,9 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
           <h4 class={css.name}>{formatName(user()!)}</h4>
           <div class={css.data}>{user()!.email}</div>
           <div class={css.data}>{formatPhone(user()!.phone)}</div>
-          <Data data={cards()} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
+          <Data data={cards() as {}} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
             <CardsList
-              data={cards()!}
+              data={cards()! as {}}
               search={params().searchText}
               onCardClick={(id: UUIDString) => navigate(`/cards/view/${id}`)}
               onChangeParams={setParams}

@@ -5,8 +5,7 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import type { Allocation } from 'allocations/types';
-import type { User } from 'employees/types';
+import type { Allocation, User } from 'generated/capital';
 
 import { BalanceInfo } from '../BalanceInfo';
 

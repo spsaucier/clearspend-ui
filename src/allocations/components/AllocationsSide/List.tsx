@@ -1,6 +1,6 @@
 import { createMemo, For, Show } from 'solid-js';
 
-import type { Allocation } from '../../types';
+import type { Allocation } from 'generated/capital';
 
 import { Item } from './Item';
 
@@ -21,7 +21,7 @@ export function List(props: Readonly<ListProps>) {
       {(item) => (
         <div>
           <Item data={item} active={props.currentID === item.allocationId} onClick={props.onSelect} />
-          <Show when={item.childrenAllocationIds.length}>
+          <Show when={item.childrenAllocationIds?.length}>
             <div class={css.children}>
               <List
                 currentID={props.currentID}

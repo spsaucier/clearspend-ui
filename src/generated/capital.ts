@@ -9,6 +9,8 @@
  * ---------------------------------------------------------------
  */
 
+import type { UUIDString } from "app/types/common";
+
 export interface ControllerError {
   message?: string;
 }
@@ -314,7 +316,7 @@ export interface CreateUserResponse {
   errorMessage?: string;
 }
 
-export type TypedIdUserId = object;
+export type TypedIdUserId = UUIDString;
 
 export interface OrderBy {
   /** @pattern [a-zA-Z0-9_\-]* */
@@ -340,7 +342,7 @@ export interface SearchUserRequest {
   pageRequest?: PageRequest;
 }
 
-export type TypedIdAllocationId = object;
+export type TypedIdAllocationId = UUIDString;
 
 export interface CardInfo {
   cardId?: TypedIdCardId;
@@ -362,7 +364,7 @@ export interface PagedDataUserPageData {
   content?: UserPageData[];
 }
 
-export type TypedIdCardId = object;
+export type TypedIdCardId = UUIDString;
 
 export interface UserData {
   userId?: TypedIdUserId;
@@ -377,9 +379,9 @@ export interface UserPageData {
   cardInfoList?: CardInfo[];
 }
 
-export type TypedIdAccountActivityId = object;
+export type TypedIdAccountActivityId = UUIDString;
 
-export type TypedIdReceiptId = object;
+export type TypedIdReceiptId = UUIDString;
 
 export interface CreateProgramRequest {
   fundingType?: 'POOLED' | 'INDIVIDUAL';
@@ -393,7 +395,7 @@ export interface CreateProgramResponse {
   programId: TypedIdProgramId;
 }
 
-export type TypedIdProgramId = object;
+export type TypedIdProgramId = UUIDString;
 
 export interface Amount {
   /** @example USD */
@@ -420,7 +422,7 @@ export interface NetworkMessageResponse {
   networkMessageId?: TypedIdNetworkMessageId;
 }
 
-export type TypedIdNetworkMessageId = object;
+export type TypedIdNetworkMessageId = UUIDString;
 
 export interface KycPassRequest {
   to?: string;
@@ -433,7 +435,7 @@ export interface KycFailRequest {
   reasons?: string[];
 }
 
-export type TypedIdBusinessId = object;
+export type TypedIdBusinessId = UUIDString;
 
 export interface CreateBusinessOwnerRequest {
   businessId?: TypedIdBusinessId;
@@ -442,9 +444,9 @@ export interface CreateBusinessOwnerRequest {
   password?: string;
 }
 
-export type TypedIdBusinessOwnerId = object;
+export type TypedIdBusinessOwnerId = UUIDString;
 
-export type TypedIdBusinessBankAccountId = object;
+export type TypedIdBusinessBankAccountId = UUIDString;
 
 export interface TransactBankAccountRequest {
   bankAccountTransactType?: 'DEPOSIT' | 'WITHDRAW';
@@ -461,7 +463,7 @@ export interface CreateAdjustmentResponse {
   adjustmentId?: TypedIdAdjustmentId;
 }
 
-export type TypedIdAdjustmentId = object;
+export type TypedIdAdjustmentId = UUIDString;
 
 export interface CreateReceiptResponse {
   receiptId?: TypedIdReceiptId;
@@ -972,9 +974,9 @@ export interface Allocation {
   childrenAllocationIds?: TypedIdAllocationId[];
 }
 
-export type TypedIdAccountId = object;
+export type TypedIdAccountId = UUIDString;
 
-export type TypedIdLedgerAccountId = object;
+export type TypedIdLedgerAccountId = UUIDString;
 
 export interface CreateBusinessProspectRequest {
   /**
@@ -1002,7 +1004,7 @@ export interface CreateBusinessProspectResponse {
   businessProspectStatus?: 'NEW' | 'EMAIL_VERIFIED' | 'MOBILE_VERIFIED' | 'COMPLETED';
 }
 
-export type TypedIdBusinessProspectId = object;
+export type TypedIdBusinessProspectId = UUIDString;
 
 export interface ValidateBusinessProspectIdentifierRequest {
   /**
@@ -1134,7 +1136,7 @@ export interface CreateBinResponse {
   binId: TypedIdBinId;
 }
 
-export type TypedIdBinId = object;
+export type TypedIdBinId = UUIDString;
 
 export interface ResetPasswordRequest {
   changePasswordId?: string;

@@ -4,16 +4,16 @@ import { Dynamic } from 'solid-js/web';
 import type { StoreSetter } from '_common/utils/store';
 import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
+import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 
 import { CardsList } from '../CardsList';
 import { CardsTable } from '../CardsTable';
-import type { SearchCardResponse, SearchCardRequest } from '../../types';
 
 interface CardsDataProps {
   loading: boolean;
   error: unknown;
   search?: string;
-  data: Readonly<SearchCardResponse> | null;
+  data: Readonly<PagedDataSearchCardData> | null;
   table?: boolean;
   hide?: readonly string[];
   onUserClick?: (id: UUIDString) => void;

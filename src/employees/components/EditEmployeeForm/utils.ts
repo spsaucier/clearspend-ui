@@ -1,8 +1,7 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone } from '_common/components/Form/rules/patterns';
-
-import type { User } from '../../types';
+import type { User } from 'generated/capital';
 
 import type { FormValues } from './types';
 

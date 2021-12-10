@@ -10,11 +10,10 @@ import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { UUIDString } from 'app/types/common';
-import type { CardInfo } from 'app/types/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import type { CardInfo, PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 
 import { formatName } from '../../utils/formatName';
-import type { SearchUser, SearchUserResponse, SearchUserRequest } from '../../types';
 
 import css from './EmployeesTable.css';
 
@@ -25,7 +24,7 @@ function getUniqueAllocations(items: readonly Readonly<CardInfo>[]): readonly Re
 }
 
 interface EmployeesTableProps {
-  data: SearchUserResponse;
+  data: PagedDataUserPageData;
   onClick: (uid: UUIDString) => void;
   onCardClick: (id: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
@@ -34,22 +33,22 @@ interface EmployeesTableProps {
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const i18n = useI18n();
 
-  const columns: readonly Readonly<TableColumn<SearchUser>>[] = [
+  const columns: readonly Readonly<TableColumn<UserPageData>>[] = [
     {
       name: 'name',
       title: <Text message="Employee" />,
       class: css.name,
       render: (item) => formatName(item.userData),
-      onClick: (item) => props.onClick(item.userData.userId),
+      onClick: (item) => props.onClick(item.userData?.userId || '' as UUIDString),
     },
     {
       name: 'cards',
       title: <Text message="Cards" />,
       render: (item) => (
-        <Show when={item.cardInfoList.length} fallback={<Text message="No cards" />}>
+        <Show when={item.cardInfoList?.length} fallback={<Text message="No cards" />}>
           <For each={item.cardInfoList}>
             {(card) => (
-              <div class={css.card} onClick={() => props.onCardClick(card.cardId)}>
+              <div class={css.card} onClick={() => props.onCardClick(card.cardId as UUIDString)}>
                 {formatCardNumber(card.lastFour)}
               </div>
             )}
@@ -61,8 +60,8 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       name: 'allocations',
       title: <Text message="Allocations" />,
       render: (item) => (
-        <Show when={item.cardInfoList.length} fallback={<Text message="No allocations" />}>
-          <For each={getUniqueAllocations(item.cardInfoList)}>
+        <Show when={item.cardInfoList?.length} fallback={<Text message="No allocations" />}>
+          <For each={getUniqueAllocations(item.cardInfoList as [])}>
             {(card) => <div class={css.allocation}>{card.allocationName}</div>}
           </For>
         </Show>
@@ -80,9 +79,9 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber}
-            pageSize={props.data.pageSize}
-            total={props.data.totalElements}
+            current={props.data.pageNumber || 0}
+            pageSize={props.data.pageSize || 0}
+            total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />
         }
@@ -97,7 +96,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           <Text message="Export" />
         </Button>
       </Filters>
-      <Table columns={columns} data={props.data.content} />
+      <Table columns={columns} data={props.data.content || []} />
     </div>
   );
 }

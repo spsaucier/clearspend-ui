@@ -10,9 +10,10 @@ import { Button } from '_common/components/Button';
 import { keys } from '_common/utils/keys';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
+import type { ConvertBusinessProspectRequest } from 'generated/capital';
 
 import { BUSINESS_TYPES } from '../../constants/usa';
-import type { ExceptionData, UpdateBusinessInfo } from '../../types';
+import type { ExceptionData } from '../../types';
 import { formatEIN } from '../../../_common/formatters/ein';
 
 import { getFormOptions, convertFormData } from './utils';
@@ -21,7 +22,7 @@ import type { FormValues } from './types';
 import css from './BusinessForm.css';
 
 interface BusinessFormProps {
-  onNext: (data: Readonly<UpdateBusinessInfo>) => Promise<unknown>;
+  onNext: (data: Readonly<ConvertBusinessProspectRequest>) => Promise<unknown>;
 }
 
 export function BusinessForm(props: Readonly<BusinessFormProps>) {

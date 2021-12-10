@@ -2,8 +2,8 @@ import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
+import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 
-import type { UpdateBusinessOwner } from '../../types';
 import { cleanSSN } from '../../../_common/formatters/ssn';
 
 import type { FormValues } from './types';
@@ -38,7 +38,7 @@ export function getFormOptions(): FormOptions<FormValues> {
   };
 }
 
-export function convertFormData(data: Readonly<FormValues>): Readonly<UpdateBusinessOwner> {
+export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUpdateBusinessOwnerRequest> {
   return {
     firstName: data.firstName,
     lastName: data.lastName,

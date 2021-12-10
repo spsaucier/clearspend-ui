@@ -1,11 +1,10 @@
 import type { Setter } from 'solid-js';
 
+import type { PageRequest } from 'generated/capital';
 import type { StoreSetter } from '_common/utils/store';
 
-import type { PageRequest } from '../types/common';
-
-interface Generic {
-  pageRequest: Readonly<PageRequest>;
+export interface Generic {
+  pageRequest?: Readonly<PageRequest>;
 }
 
 export function changeRequestPage<T extends Readonly<Generic>>(setter: Setter<T> | StoreSetter<T>) {

@@ -8,6 +8,7 @@
   "scripts": {
     "analyze": "webpack --mode production --env analyzer=default",
     "build": "webpack --mode production",
+    "generate": "node ./scripts/generateTypes.ts",
     "lint:css": "stylelint --cache \"src/**/*.css\"",
     "lint:ts": "eslint --ext .ts,.tsx src/ --cache --max-warnings 0",
     "lint": "npm run lint:ts && npm run lint:css",

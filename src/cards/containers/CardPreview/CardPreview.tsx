@@ -8,6 +8,7 @@ import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
+import type { CardType } from 'cards/types';
 
 import { Card } from '../../components/Card';
 import { getCard } from '../../services';
@@ -25,7 +26,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
 
   createEffect(() => {
     const data = card();
-    if (data) setUserID(data.userId);
+    if (data) setUserID(data.userId as UUIDString);
   });
 
   return (
@@ -33,9 +34,9 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
       <Data data={card()} loading={status().loading} error={status().error} onReload={reload}>
         <div>
           <Card
-            type={card()!.type}
+            type={card()!.type as CardType}
             name={user() ? formatName(user()!) : ''}
-            number={card()!.lastFour}
+            number={card()!.lastFour || ''}
             balance={0}
             class={css.card}
           />

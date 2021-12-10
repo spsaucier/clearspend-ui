@@ -1,7 +1,8 @@
 import { createMemo, Show } from 'solid-js';
 
+import type { Allocation } from 'generated/capital';
+
 import { allocationWithID } from '../../utils/allocationWithID';
-import type { Allocation } from '../../types';
 
 import css from './Breadcrumbs.css';
 

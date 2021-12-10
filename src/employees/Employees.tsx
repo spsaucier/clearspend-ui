@@ -13,11 +13,11 @@ import { Data } from 'app/components/Data';
 import { logout } from 'app/services/auth';
 import { UUIDString, AppEvent } from 'app/types/common';
 import { CardPreview } from 'cards/containers/CardPreview';
+import type { SearchUserRequest } from 'generated/capital';
 
 import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
 import { useUsers } from './stores/employees';
-import type { SearchUserRequest } from './types';
 
 const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
   pageRequest: {

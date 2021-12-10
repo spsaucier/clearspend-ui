@@ -59,9 +59,7 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
     }
 
     next(fo).catch((exception: ExceptionData) => {
-      let message =
-        exception.data.message.split('default message')[exception.data.message.split('default message').length - 1];
-      messages.error({ title: 'Something went wrong.', message: 'this ' + message });
+      messages.error({ title: 'Something went wrong.', message: exception.data.message });
     });
   };
 

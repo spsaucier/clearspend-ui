@@ -10,9 +10,9 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
 import { wrapAction } from '_common/utils/wrapAction';
+import type { BankAccount } from 'generated/capital';
 
 import { BankAccounts } from '../BankAccounts';
-import type { LinkedBankAccounts } from '../../types';
 
 import { DEPOSIT_MIN_AMOUNT, validAmount } from './rules';
 
@@ -24,7 +24,7 @@ interface FormValues {
 }
 
 interface TransferMoneyProps {
-  accounts: readonly Readonly<LinkedBankAccounts>[];
+  accounts: readonly Readonly<BankAccount>[];
   onDeposit: (accountId: string, amount: number) => Promise<unknown>;
 }
 

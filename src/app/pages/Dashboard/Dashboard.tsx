@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   return (
     <Page
-      title={<Text message="Welcome, {name}" name={owner().firstName} />}
+      title={<Text message="Welcome, {name}" name={owner().firstName || ''} />}
       contentClass={css.content}
       extra={
         <AllocationSelect

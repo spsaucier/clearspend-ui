@@ -11,9 +11,9 @@ import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import type { UUIDString } from 'app/types/common';
 import { wrapAction } from '_common/utils/wrapAction';
+import type { Allocation, CreateAllocationRequest } from 'generated/capital';
 
 import { AllocationSelect } from '../AllocationSelect';
-import type { Allocation, CreateAllocation } from '../../types';
 
 import css from './EditAllocationForm.css';
 
@@ -26,7 +26,7 @@ interface FormValues {
 
 interface EditAllocationFormProps {
   allocations: readonly Readonly<Allocation>[];
-  onSave: (data: Readonly<CreateAllocation>) => Promise<unknown>;
+  onSave: (data: Readonly<CreateAllocationRequest>) => Promise<unknown>;
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
@@ -47,6 +47,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         name: data.name,
         amount: { currency: 'USD', amount: parseAmount(data.amount) },
         parentAllocationId: (data.parent || undefined) as UUIDString,
+        ownerId: data.owner as UUIDString,
       })
       .catch(() => {
         messages.error({ title: i18n.t('Something went wrong') });

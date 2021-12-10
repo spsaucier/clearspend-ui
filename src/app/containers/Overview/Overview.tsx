@@ -4,13 +4,13 @@ import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import { TransactionsData } from 'transactions/components/TransactionsData';
+import type { AccountActivityRequest } from 'generated/capital';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { LoadingError } from '../../components/LoadingError';
 import { Loading } from '../../components/Loading';
 import { useActivity } from '../../stores/activity';
-import type { AccountActivityRequest } from '../../types/activity';
 
 import { getLineData } from './mock';
 import { TimePeriod, getTimePeriod, toISO } from './utils';

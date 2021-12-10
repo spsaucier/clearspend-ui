@@ -5,9 +5,9 @@ import { useI18n, Text } from 'solid-i18n';
 import { InputSearch } from '_common/components/InputSearch';
 import { Divider } from '_common/components/Divider';
 import { Button } from '_common/components/Button';
+import type { Allocation } from 'generated/capital';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
-import type { Allocation } from '../../types';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -57,7 +57,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
               }
             >
               <Item root data={data} active={props.currentID === data.allocationId} onClick={props.onSelect} />
-              <Show when={data.childrenAllocationIds.length}>
+              <Show when={data.childrenAllocationIds?.length}>
                 <Divider class={css.divider} />
               </Show>
               <List

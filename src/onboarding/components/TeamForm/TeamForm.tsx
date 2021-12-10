@@ -9,8 +9,9 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import { InputPhone } from '_common/components/InputPhone';
 import { formatSSN } from '_common/formatters/ssn';
+import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 
-import type { ExceptionData, UpdateBusinessOwner } from '../../types';
+import type { ExceptionData } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -18,7 +19,7 @@ import type { FormValues } from './types';
 import css from './TeamForm.css';
 
 interface TeamFormProps {
-  onNext: (data: Readonly<UpdateBusinessOwner>) => Promise<unknown>;
+  onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
 }
 
 export function TeamForm(props: Readonly<TeamFormProps>) {

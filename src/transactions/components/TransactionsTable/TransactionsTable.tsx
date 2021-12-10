@@ -14,16 +14,16 @@ import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import type { AccountActivity, AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
 import type { UUIDString } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
+import type { AccountActivityRequest, AccountActivityResponse, PagedDataAccountActivityResponse } from 'generated/capital';
 
 import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
   search?: string;
-  data: AccountActivityResponse;
+  data: PagedDataAccountActivityResponse;
   onCardClick?: (id: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
@@ -31,12 +31,12 @@ interface TransactionsTableProps {
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
 
-  const columns: readonly Readonly<TableColumn<AccountActivity>>[] = [
+  const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
       name: 'date',
       title: <Text message="Date & Time" />,
       render: (item) => {
-        const date = new Date(item.activityTime);
+        const date = new Date(item.activityTime || '');
         return (
           <div>
             <div class={css.date}>
@@ -73,9 +73,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <div class={css.merchant}>
           <div class={css.icon} />
           <div>
-            <div>{item.merchant.name || '--'}</div>
-            <Show when={item.merchant.type}>
-              <div class={css.sub}>{item.merchant.type}</div>
+            <div>{item.merchant?.name || '--'}</div>
+            <Show when={item.merchant?.type}>
+              <div class={css.sub}>{item.merchant?.type}</div>
             </Show>
           </div>
         </div>
@@ -90,7 +90,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             <Icon name="confirm" size="sm" />
           </div>
           <div>
-            <div class={css.amount}>{formatCurrency(item.amount.amount)}</div>
+            <div class={css.amount}>{formatCurrency(item.amount?.amount || 0)}</div>
             <div class={css.sub}>Approved</div>
           </div>
         </div>
@@ -101,8 +101,8 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       title: <Text message="Receipt" />,
       render: (item) => (
         <Icon
-          name={item.receipt.receiptId ? 'receipt' : 'receipt-unavailable'}
-          class={join(css.receipt, !item.receipt.receiptId && css.receiptEmpty)}
+          name={item.receipt?.receiptId ? 'receipt' : 'receipt-unavailable'}
+          class={join(css.receipt, !item.receipt?.receiptId && css.receiptEmpty)}
         />
       ),
     },
@@ -113,9 +113,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber}
-            pageSize={props.data.pageSize}
-            total={props.data.totalElements}
+            current={props.data.pageNumber || 0}
+            pageSize={props.data.pageSize || 0}
+            total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />
         }
@@ -133,10 +133,10 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
       </Filters>
       <Show
-        when={props.data.content.length}
+        when={props.data.content?.length}
         fallback={<Empty message={<Text message="There are no transactions" />} />}
       >
-        <Table columns={columns} data={props.data.content} tdClass={css.cell} />
+        <Table columns={columns} data={props.data.content as []} tdClass={css.cell} />
       </Show>
     </div>
   );

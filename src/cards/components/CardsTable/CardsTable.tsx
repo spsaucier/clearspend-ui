@@ -16,18 +16,18 @@ import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { UUIDString } from 'app/types/common';
 import { formatName } from 'employees/utils/formatName';
+import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 'generated/capital';
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import type { SearchCard, SearchCardResponse, SearchCardRequest } from '../../types';
-import { CardStatus } from '../../types';
+import { CardStatus, CardType as CardTypeType } from '../../types';
 
 import css from './CardsTable.css';
 
 interface CardsTableProps {
   search?: string;
-  data: SearchCardResponse;
+  data: PagedDataSearchCardData;
   hideColumns?: readonly string[];
   onUserClick?: (id: UUIDString) => void;
   onCardClick: (id: UUIDString) => void;
@@ -37,40 +37,40 @@ interface CardsTableProps {
 export function CardsTable(props: Readonly<CardsTableProps>) {
   const i18n = useI18n();
 
-  const columns: readonly Readonly<TableColumn<SearchCard>>[] = [
+  const columns: readonly Readonly<TableColumn<SearchCardData>>[] = [
     {
       name: 'number',
       title: 'Card Number',
       class: css.number,
       render: (item) => (
         <div class={css.card}>
-          <CardIcon type={item.cardType} />
+          <CardIcon type={item.cardType as CardTypeType} />
           <div>
             {formatCardNumber(item.cardNumber)}
-            <CardType type={item.cardType} class={css.type} />
+            <CardType type={item.cardType as CardTypeType} class={css.type} />
           </div>
         </div>
       ),
-      onClick: (item) => props.onCardClick(item.cardId),
+      onClick: (item) => props.onCardClick(item.cardId as UUIDString),
     },
     {
       name: 'name',
       title: 'Employee',
       class: css.name,
       render: (item) => formatName(item.user),
-      onClick: (item) => props.onUserClick?.(item.user.userId),
+      onClick: (item) => props.onUserClick?.(item.user?.userId as UUIDString),
     },
     {
       name: 'allocation',
       title: 'Allocation',
-      render: (item) => <span>{item.allocation.name}</span>,
+      render: (item) => <span>{item.allocation?.name}</span>,
     },
     {
       name: 'balance',
       title: 'Balance',
       render: (item) => (
         <div>
-          <strong>{formatCurrency(item.balance.amount)}</strong>
+          <strong>{formatCurrency(item.balance?.amount || 0)}</strong>
           <div>[Limit]</div>
         </div>
       ),
@@ -81,7 +81,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       render: (item) => (
         <Tag type={item.cardStatus === CardStatus.OPEN ? 'success' : 'danger'}>
           <Icon name="freeze" size="xs" />
-          <span>{item.cardStatus.toLowerCase()}</span>
+          <span>{item.cardStatus?.toLowerCase()}</span>
         </Tag>
       ),
     },
@@ -92,9 +92,9 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber}
-            pageSize={props.data.pageSize}
-            total={props.data.totalElements}
+            current={props.data.pageNumber || 0}
+            pageSize={props.data.pageSize || 0}
+            total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />
         }
@@ -113,10 +113,10 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           <Text message="Export" />
         </Button>
       </Filters>
-      <Show when={props.data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
+      <Show when={props.data.content?.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
         <Table
           columns={columns.filter((col) => !props.hideColumns || !props.hideColumns.includes(col.name))}
-          data={props.data.content}
+          data={props.data.content || []}
         />
       </Show>
     </div>

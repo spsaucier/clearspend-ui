@@ -8,17 +8,18 @@ import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
 import type { StoreSetter } from '_common/utils/store';
 import type { UUIDString } from 'app/types/common';
+import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
+import type { CardType as CardTypeType } from 'cards/types';
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import type { SearchCardResponse, SearchCardRequest } from '../../types';
 
 import css from './CardsList.css';
 
 interface CardsListProps {
   search?: string;
-  data: SearchCardResponse;
+  data: PagedDataSearchCardData;
   onCardClick: (id: UUIDString) => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
@@ -35,17 +36,17 @@ export function CardsList(props: Readonly<CardsListProps>) {
         class={css.search}
         onSearch={changeRequestSearch(props.onChangeParams)}
       />
-      <Show when={props.data.content.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
+      <Show when={props.data.content?.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
         <For each={props.data.content}>
           {(item) => (
-            <div class={css.item} onClick={() => props.onCardClick(item.cardId)}>
-              <CardIcon type={item.cardType} />
+            <div class={css.item} onClick={() => props.onCardClick(item.cardId as UUIDString)}>
+              <CardIcon type={item.cardType as CardTypeType} />
               <div>
                 <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>
-                <CardType type={item.cardType} class={css.type} />
+                <CardType type={item.cardType as CardTypeType} class={css.type} />
               </div>
               <div>
-                <strong>{formatCurrency(item.balance.amount)}</strong>
+                <strong>{formatCurrency(item.balance?.amount || 0)}</strong>
                 <div class={css.limit}>[Limit]</div>
               </div>
             </div>

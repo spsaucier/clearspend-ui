@@ -18,13 +18,14 @@ import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
+import type { Allocation } from 'generated/capital';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { getCard, blockCard, unblockCard } from '../../services';
-import { CardStatus } from '../../types';
+import { CardStatus, CardType } from '../../types';
 
 enum Tabs {
   transactions,
@@ -46,10 +47,10 @@ export default function CardView() {
 
   createEffect(() => {
     const data = card();
-    if (data) setUserID(data.userId);
+    if (data) setUserID(data.userId as UUIDString);
   });
 
-  const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)));
+  const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined);
 
   return (
     <Page
@@ -74,7 +75,7 @@ export default function CardView() {
                 }
                 confirmText={<Text message="Freeze card now" />}
                 onConfirm={() => {
-                  freeze(card()!.cardId)
+                  freeze(card()!.cardId as UUIDString)
                     .then(() => reload())
                     .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
@@ -94,7 +95,7 @@ export default function CardView() {
                 view="second"
                 loading={unfreezing()}
                 onClick={() => {
-                  unfreeze(card()!.cardId)
+                  unfreeze(card()!.cardId as UUIDString)
                     .then(() => reload())
                     .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
@@ -106,12 +107,12 @@ export default function CardView() {
         </>
       }
       headerSide={
-        <Show when={card()}>
+        <Show when={card()?.type}>
           <Card
-            type={card()!.type}
+            type={card()!.type as CardType}
             name={user() ? formatName(user()!) : ''}
             allocation={allocation()?.name}
-            number={card()!.lastFour}
+            number={card()!.lastFour || ''}
             balance={allocation()?.account.ledgerBalance.amount || 0}
           />
         </Show>
@@ -140,7 +141,7 @@ export default function CardView() {
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
-            <Transactions cardId={card()!.cardId} />
+            <Transactions cardId={card()!.cardId || '' as UUIDString} />
           </Match>
           <Match when={tab() === Tabs.controls}>
             <CardControls />

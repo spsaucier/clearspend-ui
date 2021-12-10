@@ -1,15 +1,12 @@
 import { service } from 'app/utils/service';
-import type { User } from 'employees/types';
-
-import type { Businesses } from '../types/businesses';
-import type { Account } from '../types/accounts';
+import type { Account, Business, User } from 'generated/capital';
 
 export async function getOwner() {
   return (await service.get<Readonly<User>>('/users')).data;
 }
 
 export async function getBusiness() {
-  return (await service.get<Readonly<Businesses> | null>(`/businesses`)).data;
+  return (await service.get<Readonly<Business> | null>(`/businesses`)).data;
 }
 
 export async function getBusinessAccount() {

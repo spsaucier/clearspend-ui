@@ -5,15 +5,16 @@ import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import type { StoreSetter } from '_common/utils/store';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import type { PagedDataUserPageData, SearchUserRequest } from 'generated/capital';
+import type { UUIDString } from 'app/types/common';
 
 import { formatName } from '../../utils/formatName';
-import type { User, SearchUserResponse, SearchUserRequest } from '../../types';
 
 import css from './EmployeesList.css';
 
 interface EmployeesListProps {
-  data: SearchUserResponse;
-  onClick: (uid: User['userId']) => void;
+  data: PagedDataUserPageData;
+  onClick: (uid: UUIDString) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
@@ -23,10 +24,10 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
       <Input disabled placeholder="Search employees..." suffix={<Icon name="search" size="sm" />} class={css.search} />
       <For each={props.data.content}>
         {(item) => {
-          const [card, ...rest] = item.cardInfoList;
+          const [card, ...rest] = item.cardInfoList || [];
 
           return (
-            <div class={css.item} onClick={() => props.onClick(item.userData.userId)}>
+            <div class={css.item} onClick={() => props.onClick(item.userData?.userId || '' as UUIDString)}>
               <div>
                 <div class={css.name}>{formatName(item.userData)}</div>
                 <div>{item.email}</div>

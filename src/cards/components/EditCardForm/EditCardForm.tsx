@@ -17,15 +17,13 @@ import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import type { Allocation } from 'allocations/types';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { formatName } from 'employees/utils/formatName';
-import type { BaseUser, CreateUser, CreateUserResp } from 'employees/types';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { FormValues as EmployeeFormValues } from 'employees/components/EditEmployeeForm/types';
+import type { Allocation, CreateUserRequest, CreateUserResponse, IssueCardRequest, UserData } from 'generated/capital';
+import type { CardType } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
-import type { IssueCard, CardType } from '../../types';
 
 import css from './EditCardForm.css';
 
@@ -34,7 +32,7 @@ function validTypes(value: readonly CardType[]): boolean | string {
 }
 
 interface FormValues {
-  allocation: string;
+  allocationId: string;
   employee: string;
   types: CardType[];
   personal: boolean;
@@ -43,10 +41,10 @@ interface FormValues {
 interface EditCardFormProps {
   userId?: UUIDString;
   allocationId?: UUIDString;
-  users: readonly Readonly<BaseUser>[];
+  users: readonly Readonly<UserData>[];
   allocations: readonly Readonly<Allocation>[];
-  onAddEmployee: (userData: Readonly<CreateUser>) => Promise<Readonly<CreateUserResp>>;
-  onSave: (params: Readonly<IssueCard>) => Promise<unknown>;
+  onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
+  onSave: (params: Readonly<IssueCardRequest>) => Promise<Readonly<void>>;
 }
 
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
@@ -56,15 +54,15 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
 
   const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
     defaultValues: {
-      allocation: props.allocationId || '',
+      allocationId: props.allocationId || '',
       employee: props.userId || '',
       types: [],
       personal: false,
     },
-    rules: { allocation: [required], employee: [required], types: [validTypes] },
+    rules: { allocationId: [required], employee: [required], types: [validTypes] },
   });
 
-  const onAddEmployee = async (userData: EmployeeFormValues) => {
+  const onAddEmployee = async (userData: CreateUserRequest) => {
     const { firstName, lastName, email, phone, ...address } = userData;
     const resp = await props.onAddEmployee({
       firstName,
@@ -84,7 +82,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
       .onSave({
         // TODO
         programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
-        allocationId: data.allocation as UUIDString,
+        allocationId: data.allocationId as UUIDString,
         userId: data.employee as UUIDString,
         currency: 'USD',
         cardType: data.types,
@@ -96,7 +94,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   };
 
   const allocation = createMemo(() => {
-    const id = values().allocation;
+    const id = values().allocationId;
     return Boolean(id) ? props.allocations.find(allocationWithID(id)) : undefined;
   });
 
@@ -112,15 +110,15 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         <FormItem
           label={<Text message="Allocation" />}
           extra={<Text message="Choose the allocation that will fund your new card." />}
-          error={errors().allocation}
+          error={errors().allocationId}
           class={css.field}
         >
           <AllocationSelect
             items={props.allocations}
-            value={values().allocation}
+            value={values().allocationId}
             placeholder={String(i18n.t('Select allocation'))}
-            error={Boolean(errors().allocation)}
-            onChange={handlers.allocation}
+            error={Boolean(errors().allocationId)}
+            onChange={handlers.allocationId}
           />
         </FormItem>
         <FormItem label={<Text message="Employee" />} error={errors().employee} class={css.field}>
@@ -141,7 +139,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             error={Boolean(errors().employee)}
             onChange={handlers.employee}
           >
-            <For each={props.users}>{(item) => <Option value={item.userId}>{formatName(item)}</Option>}</For>
+            <For each={props.users}>{(item) => <Option value={item.userId || ''}>{formatName(item)}</Option>}</For>
           </Select>
         </FormItem>
       </Section>

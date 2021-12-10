@@ -1,7 +1,6 @@
 import { service } from 'app/utils/service';
-
-import type { AccountActivityResponse, AccountActivityRequest } from '../types/activity';
+import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
 
 export async function getAccountActivity(params: Readonly<AccountActivityRequest>) {
-  return (await service.post<AccountActivityResponse>('/account-activity', params)).data;
+  return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;
 }

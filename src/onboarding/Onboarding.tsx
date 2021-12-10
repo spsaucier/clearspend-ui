@@ -11,6 +11,8 @@ import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForManualReview } from 'app/services/review';
 import logo from 'app/assets/logo-name.svg';
+import type { BankAccount, Business, ConvertBusinessProspectRequest, CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import type { UUIDString } from 'app/types/common';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -19,7 +21,6 @@ import { LinkAccount } from './components/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
 import { getRequiredDocuments, setBusinessInfo, setBusinessOwner } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, deposit } from './services/accounts';
-import type { UpdateBusinessInfo, UpdateBusinessOwner, LinkedBankAccounts } from './types';
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 
@@ -32,8 +33,8 @@ export default function Onboarding() {
 
   const { business, owner, refetch, mutate } = useContext(BusinessContext)!;
 
-  const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep);
-  const [accounts, setAccounts] = createSignal<readonly Readonly<LinkedBankAccounts>[]>([]);
+  const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep as OnboardingStep);
+  const [accounts, setAccounts] = createSignal<readonly Readonly<BankAccount>[]>([]);
 
   const [kybRequiredDocuments, setkybRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
   const [kycRequiredDocuments, setkycRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();
@@ -61,14 +62,14 @@ export default function Onboarding() {
       .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
-  const onUpdateKYB = async (data: Readonly<UpdateBusinessInfo>) => {
-    const resp = await setBusinessInfo(owner().userId, data);
-    mutate([{ ...owner(), userId: resp.businessOwnerId }, resp.business]);
+  const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
+    const resp = await setBusinessInfo(owner().userId as UUIDString, data);
+    mutate([{ ...owner(), userId: resp.businessOwnerId }, resp.business as Business]);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
-  const onUpdateKYC = async (data: Readonly<UpdateBusinessOwner>) => {
-    await setBusinessOwner(owner().userId, { ...data, isOnboarding: true });
+  const onUpdateKYC = async (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => {
+    await setBusinessOwner(owner().userId as UUIDString, { ...data, isOnboarding: true });
     await getRequiredDocuments()
       .then((responseData) => {
         setkybRequiredDocuments(responseData.kybRequiredDocuments);
@@ -145,7 +146,7 @@ export default function Onboarding() {
         </Match>
         <Match when={step() === OnboardingStep.REVIEW}>
           <Page title="Thank you">
-            <Review ownerEmail={owner().email} />
+            <Review ownerEmail={owner().email || ''} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.LINK_ACCOUNT}>

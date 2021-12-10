@@ -9,12 +9,11 @@ import { CardsData } from 'cards/components/CardsData';
 import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
-import type { SearchCardRequest } from 'cards/types';
 import type { UUIDString } from 'app/types/common';
+import type { Allocation, SearchCardRequest } from 'generated/capital';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
 import { allocationWithID } from '../../utils/allocationWithID';
-import type { Allocation } from '../../types';
 
 import css from './Cards.css';
 
@@ -37,7 +36,7 @@ export function Cards(props: Readonly<CardsProps>) {
   const [userID, setUserID] = createSignal<UUIDString | null>(null);
 
   const children = createMemo(() =>
-    props.current.childrenAllocationIds.map((id) => props.items.find(allocationWithID(id))!),
+    props.current.childrenAllocationIds?.map((id) => props.items.find(allocationWithID(id))!),
   );
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
@@ -57,8 +56,8 @@ export function Cards(props: Readonly<CardsProps>) {
 
   return (
     <>
-      <Show when={children().length}>
-        <AllocationBalances current={props.current} items={children()} />
+      <Show when={children()?.length}>
+        <AllocationBalances current={props.current} items={children() || []} />
         <h3 class={css.title}>
           <Text message="Cards" />
         </h3>

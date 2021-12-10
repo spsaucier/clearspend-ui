@@ -9,13 +9,13 @@ import { Tag } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
-import type { AccountActivityResponse, AccountActivityRequest } from 'app/types/activity';
+import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
 
 import css from './TransactionsList.css';
 
 interface TransactionsListProps {
   search?: string;
-  data: AccountActivityResponse;
+  data: PagedDataAccountActivityResponse;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -32,18 +32,18 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
         onSearch={changeRequestSearch(props.onChangeParams)}
       />
       <Show
-        when={props.data.content.length}
+        when={props.data.content?.length}
         fallback={<Empty message={<Text message="There are no transactions" />} />}
       >
         <For each={props.data.content}>
           {(item) => {
-            const date = createMemo(() => new Date(item.activityTime));
+            const date = createMemo(() => new Date(item.activityTime || ''));
 
             return (
               <div class={css.item}>
                 <div class={css.icon} />
                 <div>
-                  <div class={css.category}>{item.merchant.name || '--'}</div>
+                  <div class={css.category}>{item.merchant?.name || '--'}</div>
                   <div class={css.date}>
                     <DateTime date={date()} />
                   </div>
@@ -51,7 +51,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
                 <div class={css.side}>
                   <Tag size="sm" type="success">
                     <Icon name="confirm" size="sm" />
-                    {formatCurrency(item.amount.amount)}
+                    {formatCurrency(item.amount?.amount || 0)}
                   </Tag>
                   <div class={css.time}>
                     <DateTime date={date()} preset={DateFormat.time} />

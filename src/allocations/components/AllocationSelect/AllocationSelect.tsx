@@ -1,9 +1,9 @@
 import { For } from 'solid-js';
 
 import { Select, Option } from '_common/components/Select';
+import type { Allocation } from 'generated/capital';
 
 import { allocationWithID } from '../../utils/allocationWithID';
-import type { Allocation } from '../../types';
 
 import { AllocationView } from './AllocationView';
 

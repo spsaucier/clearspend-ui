@@ -4,7 +4,7 @@ import { Dynamic } from 'solid-js/web';
 import type { StoreSetter } from '_common/utils/store';
 import { Data } from 'app/components/Data';
 import type { UUIDString } from 'app/types/common';
-import type { AccountActivityRequest, AccountActivityResponse } from 'app/types/activity';
+import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
 
 import { TransactionsList } from '../TransactionsList';
 import { TransactionsTable } from '../TransactionsTable';
@@ -14,7 +14,7 @@ interface TransactionsDataProps {
   loading: boolean;
   error: unknown;
   search?: string;
-  data: Readonly<AccountActivityResponse> | null;
+  data: Readonly<PagedDataAccountActivityResponse> | null;
   onCardClick?: (id: UUIDString) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;

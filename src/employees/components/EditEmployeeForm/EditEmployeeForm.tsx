@@ -6,10 +6,10 @@ import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
 import { wrapAction } from '_common/utils/wrapAction';
+import type { User } from 'generated/capital';
 
 import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
-import type { User } from '../../types';
 
 import { getFormOptions } from './utils';
 import type { FormValues } from './types';

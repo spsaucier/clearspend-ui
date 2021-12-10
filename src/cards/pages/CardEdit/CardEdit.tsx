@@ -10,11 +10,10 @@ import { useMessages } from 'app/containers/Messages/context';
 import { getAllocations } from 'allocations/services';
 import { getUsers, saveUser } from 'employees/services';
 import type { UUIDString } from 'app/types/common';
-import type { CreateUser } from 'employees/types';
+import type { CreateUserRequest , IssueCardRequest } from 'generated/capital';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
-import type { IssueCard } from '../../types';
 
 export default function CardEdit() {
   const i18n = useI18n();
@@ -25,7 +24,7 @@ export default function CardEdit() {
   const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
   const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
 
-  const onAddEmployee = async (userData: Readonly<CreateUser>) => {
+  const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
     await reloadUsers();
     messages.success({
@@ -35,7 +34,7 @@ export default function CardEdit() {
     return resp;
   };
 
-  const onSave = async (data: Readonly<IssueCard>) => {
+  const onSave = async (data: Readonly<IssueCardRequest>) => {
     await saveCard(data);
     messages.success({
       title: i18n.t('Success'),

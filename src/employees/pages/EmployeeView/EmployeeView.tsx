@@ -43,13 +43,15 @@ export default function EmployeeView() {
   const onEdit = async (data: FormValues) => {
     const userData = user()!;
     const { firstName, lastName, email, phone, ...address } = data;
-    await editUser(userData.userId, { firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
-    mutate({ ...userData, firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
+    if (userData.userId) {
+      await editUser(userData.userId, { firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
+      mutate({ ...userData, firstName, lastName, email, phone, address: { ...address, country: 'USA' } });
 
-    messages.success({
-      title: i18n.t('Success'),
-      message: i18n.t('The employee has been successfully updated.'),
-    });
+      messages.success({
+        title: i18n.t('Success'),
+        message: i18n.t('The employee has been successfully updated.'),
+      });
+    }
   };
 
   return (
@@ -69,7 +71,7 @@ export default function EmployeeView() {
           {(data) => (
             <div class={css.info}>
               <div>{data.email}</div>
-              {formatPhone(data.phone)}
+              {formatPhone(data.phone || '')}
             </div>
           )}
         </Show>
@@ -107,7 +109,7 @@ export default function EmployeeView() {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.transactions}>
-              <Transactions userId={user()!.userId} />
+              <Transactions userId={user()!.userId as UUIDString} />
             </Match>
             <Match when={tab() === Tabs.cards}>
               <Cards userId={user()!.userId} />

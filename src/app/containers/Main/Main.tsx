@@ -1,17 +1,17 @@
 import { Accessor, createMemo, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
+import { BusinessStatus } from 'app/types/businesses';
 import { Spin } from '_common/components/Spin';
 import { Fault } from '_common/components/Fault';
 import { events } from '_common/api/events';
 import { getNoop } from '_common/utils/getNoop';
 import { useResource } from '_common/utils/useResource';
-import type { User } from 'employees/types';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
+import type { Business, User } from 'generated/capital';
 
 import { getOwner, getBusiness } from '../../services/businesses';
-import { BusinessStatus, Businesses } from '../../types/businesses';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
@@ -19,7 +19,7 @@ import { BusinessContext } from './context';
 
 import css from './Main.css';
 
-function isStatus(business: Readonly<Businesses> | null, status: BusinessStatus): boolean {
+function isStatus(business: Readonly<Business> | null, status: BusinessStatus): boolean {
   return business?.status === status;
 }
 

@@ -2,8 +2,7 @@ import { Show } from 'solid-js';
 
 import { Tooltip } from '_common/components/Tooltip';
 import { Icon } from '_common/components/Icon';
-
-import type { Allocation } from '../../types';
+import type { Allocation } from 'generated/capital';
 
 import css from './Item.css';
 
