@@ -10,6 +10,7 @@
   border: 0;
   border-bottom: 4px solid transparent;
   transition: border 0.3s;
+  cursor: pointer;
 
   &:hover {
     border-bottom-color: var(--tw-black);
