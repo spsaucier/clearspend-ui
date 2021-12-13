@@ -1,4 +1,5 @@
 /configs
+/scripts
 .eslintrc.js
 .stylelintrc.js
 webpack.config.js
