@@ -50,7 +50,9 @@ export default function CardView() {
     if (data) setUserID(data.userId as UUIDString);
   });
 
-  const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined);
+  const allocation = createMemo(
+    () => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined,
+  );
 
   return (
     <Page
@@ -80,8 +82,15 @@ export default function CardView() {
                     .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
               >
-                {({ onClick }) => (
-                  <Button size="lg" icon="freeze" type="danger" view="second" loading={freezing()} onClick={onClick}>
+                {(triggerProps) => (
+                  <Button
+                    size="lg"
+                    icon="freeze"
+                    type="danger"
+                    view="second"
+                    loading={freezing()}
+                    onClick={triggerProps.onClick}
+                  >
                     <Text message="Freeze Card" />
                   </Button>
                 )}
@@ -141,7 +150,7 @@ export default function CardView() {
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
-            <Transactions cardId={card()!.cardId || '' as UUIDString} />
+            <Transactions cardId={card()!.cardId || ('' as UUIDString)} />
           </Match>
           <Match when={tab() === Tabs.controls}>
             <CardControls />
