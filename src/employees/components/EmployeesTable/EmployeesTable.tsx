@@ -11,17 +11,11 @@ import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import type { UUIDString } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
-import type { CardInfo, PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
+import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 
 import { formatName } from '../../utils/formatName';
 
 import css from './EmployeesTable.css';
-
-function getUniqueAllocations(items: readonly Readonly<CardInfo>[]): readonly Readonly<CardInfo>[] {
-  return items.filter(
-    (card, idx, self) => self.findIndex((item) => item.allocationName === card.allocationName) === idx,
-  );
-}
 
 interface EmployeesTableProps {
   data: PagedDataUserPageData;
@@ -39,30 +33,20 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       title: <Text message="Employee" />,
       class: css.name,
       render: (item) => formatName(item.userData),
-      onClick: (item) => props.onClick(item.userData?.userId || '' as UUIDString),
+      onClick: (item) => props.onClick(item.userData?.userId || ('' as UUIDString)),
     },
     {
       name: 'cards',
-      title: <Text message="Cards" />,
+      title: <Text message="Card Info" />,
       render: (item) => (
         <Show when={item.cardInfoList?.length} fallback={<Text message="No cards" />}>
           <For each={item.cardInfoList}>
             {(card) => (
               <div class={css.card} onClick={() => props.onCardClick(card.cardId as UUIDString)}>
-                {formatCardNumber(card.lastFour)}
+                <span class={css.cardNumber}>{formatCardNumber(card.lastFour)}</span>
+                <span>{card.allocationName}</span>
               </div>
             )}
-          </For>
-        </Show>
-      ),
-    },
-    {
-      name: 'allocations',
-      title: <Text message="Allocations" />,
-      render: (item) => (
-        <Show when={item.cardInfoList?.length} fallback={<Text message="No allocations" />}>
-          <For each={getUniqueAllocations(item.cardInfoList as [])}>
-            {(card) => <div class={css.allocation}>{card.allocationName}</div>}
           </For>
         </Show>
       ),
