@@ -8,7 +8,7 @@
 }
 
 .card {
-  color: var(--tw-primary-content);
+  color: var(--tw-gray-60);
   cursor: pointer;
 
   &:not(:last-child) {
@@ -16,8 +16,8 @@
   }
 }
 
-.allocation {
-  &:not(:last-child) {
-    margin-bottom: var(--pd-2);
-  }
+.card-number {
+  display: inline-block;
+  min-width: 66px;
+  color: var(--tw-primary-content);
 }
