@@ -1,6 +1,7 @@
 import { onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { Link, useNavigate } from 'solid-app-router';
+import mixpanel from 'mixpanel-browser';
 
 import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
@@ -19,8 +20,11 @@ export default function Login() {
   onMount(() => SignUp.preload());
 
   const submit = async (username: string, password: string) => {
-    await login(username, password);
-    navigate('/');
+    const user = await login(username, password);
+    if (user.userId) {
+      mixpanel.identify(user.userId);
+      navigate('/');
+    }
   };
 
   return (
