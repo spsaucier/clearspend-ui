@@ -35,7 +35,7 @@ export function TagSelect(props: Readonly<TagSelectProps>) {
         </For>
       }
     >
-      <Tag size="sm" class={css.tag}>
+      <Tag tabIndex="0" size="sm" class={css.tag}>
         <span>{value()?.text}</span>
         <Icon size="sm" name="chevron-down" />
       </Tag>
