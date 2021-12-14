@@ -1,8 +1,10 @@
 import { useI18n, Text } from 'solid-i18n';
+import { For, batch } from 'solid-js';
 
 import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
-import { SelectState } from '_common/components/Select';
+import { Select, SelectState, Option } from '_common/components/Select';
+import type { Suggestion } from 'app/utils/addressService';
 
 import type { FormValues } from '../EditEmployeeForm/types';
 import css from '../EditEmployeeForm/EditEmployeeForm.css';
@@ -11,22 +13,62 @@ interface AddressFormItemsProps {
   values: FormValues;
   errors: Readonly<Partial<Record<keyof FormValues, string>>>;
   handlers: Readonly<FormHandlers<FormValues>>;
+  suggestions?: Suggestion[];
 }
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
   const i18n = useI18n();
+  let valueRender = () => {
+    return props.values.streetLine1;
+  };
+  let onChangeStreetLine1 = props.handlers.streetLine1;
+  if (props.suggestions) {
+    onChangeStreetLine1 = (value) => {
+      const found = props.suggestions?.find((s) => s.primary_line === value);
+      if (found) {
+        batch(() => {
+          props.handlers.streetLine1(value);
+          props.handlers.locality(found.city);
+          props.handlers.region(found.state);
+          props.handlers.postalCode(found.zip_code);
+        });
+      } else {
+        props.handlers.streetLine1(value);
+      }
+    };
+  }
 
   return (
     <>
       <FormItem label={<Text message="Street address" />} error={props.errors.streetLine1} class={css.item}>
-        <Input
-          name="streetLine1"
-          type="text"
-          value={props.values.streetLine1}
-          placeholder={String(i18n.t('Street address'))}
-          error={Boolean(props.errors.streetLine1)}
-          onChange={props.handlers.streetLine1}
-        />
+        {props.suggestions ? (
+          <Select
+            name="streetLine1"
+            value={props.values.streetLine1}
+            placeholder={String(i18n.t('Street address'))}
+            error={Boolean(props.errors.streetLine1)}
+            onChange={onChangeStreetLine1}
+            changeOnSearch
+            valueRender={valueRender}
+          >
+            <For each={props.suggestions}>
+              {(suggestion) => (
+                <Option value={suggestion.primary_line}>
+                  {`${suggestion.primary_line} ${suggestion.city}, ${suggestion.state} ${suggestion.zip_code}`}
+                </Option>
+              )}
+            </For>
+          </Select>
+        ) : (
+          <Input
+            name="streetLine1"
+            type="text"
+            value={props.values.streetLine1}
+            placeholder={String(i18n.t('Street address'))}
+            error={Boolean(props.errors.streetLine1)}
+            onChange={props.handlers.streetLine1}
+          />
+        )}
       </FormItem>
       <FormItem
         label={<Text message="Apartment, unit, floor, etc." />}

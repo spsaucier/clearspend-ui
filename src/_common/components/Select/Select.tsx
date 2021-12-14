@@ -33,13 +33,17 @@ export function Select(props: Readonly<SelectProps>) {
   };
 
   const onSearch = (value: string) => {
-    setSearch(value);
-    if (!value) {
-      props.onChange?.('');
-      return;
+    if (props.changeOnSearch) {
+      props.onChange?.(value);
+    } else {
+      setSearch(value);
+      if (!value) {
+        props.onChange?.('');
+        return;
+      }
+      const exact = options().find((el) => el.innerText === value);
+      if (exact) props.onChange?.(exact.dataset.value!);
     }
-    const exact = options().find((el) => el.innerText === value);
-    if (exact) props.onChange?.(exact.dataset.value!);
   };
 
   const onChange = (value: string) => {
