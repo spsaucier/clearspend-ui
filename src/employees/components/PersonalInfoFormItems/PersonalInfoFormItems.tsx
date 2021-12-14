@@ -22,7 +22,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
         <Input
           name="first-name"
           value={props.values.firstName}
-          placeholder={i18n.t('Enter first name') as string}
+          placeholder={String(i18n.t('Enter first name'))}
           error={Boolean(props.errors.firstName)}
           onChange={props.handlers.firstName}
         />
@@ -31,7 +31,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
         <Input
           name="last-name"
           value={props.values.lastName}
-          placeholder={i18n.t('Enter last name') as string}
+          placeholder={String(i18n.t('Enter last name'))}
           error={Boolean(props.errors.lastName)}
           onChange={props.handlers.lastName}
         />
@@ -41,7 +41,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
           name="email"
           type="email"
           value={props.values.email}
-          placeholder={i18n.t('Enter email address') as string}
+          placeholder={String(i18n.t('Enter email address'))}
           error={Boolean(props.errors.email)}
           onChange={props.handlers.email}
         />
@@ -51,7 +51,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
           name="phone"
           type="tel"
           value={props.values.phone}
-          placeholder={i18n.t('Phone number') as string}
+          placeholder={String(i18n.t('Phone number'))}
           error={Boolean(props.errors.phone)}
           onChange={props.handlers.phone}
         />

@@ -1,12 +1,11 @@
 import { createSignal, createMemo, batch } from 'solid-js';
 
-import kbCodes from '_common/utils/kbCodes';
-
 import { Icon } from '../Icon';
 import { Input } from '../Input';
 import { Popover } from '../Popover';
 import { join } from '../../utils/join';
 import { isString } from '../../utils/isString';
+import { KEY_CODES } from '../../constants/keyboard';
 
 import { SelectContext } from './context';
 import { getOptions, getSelected, isMatch } from './utils';
@@ -80,14 +79,14 @@ export function Select(props: Readonly<SelectProps>) {
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if ([kbCodes.ESCAPE_KEY_CODE].includes(e.keyCode)) {
+    if (e.keyCode === KEY_CODES.Escape) {
       setOpen(false);
-    } else if ([kbCodes.DOWN_ARROW_KEY_CODE, kbCodes.UP_ARROW_KEY_CODE].includes(e.keyCode)) {
+    } else if ([KEY_CODES.ArrowUp, KEY_CODES.ArrowDown].includes(e.keyCode)) {
       if (!list.contains(document.activeElement)) {
         (list.firstChild as HTMLElement).focus();
       }
       e.preventDefault();
-    } else if (e.keyCode && ![kbCodes.TAB_KEY_CODE].includes(e.keyCode)) {
+    } else if (e.keyCode && ![KEY_CODES.Tab].includes(e.keyCode)) {
       setOpen(true);
     }
   };
@@ -112,7 +111,7 @@ export function Select(props: Readonly<SelectProps>) {
           value={selected()}
           error={props.error}
           placeholder={props.placeholder}
-          autoComplete="off"
+          autoComplete="nope"
           disabled={props.disabled}
           inputClass={css.input}
           onChange={onSearch}

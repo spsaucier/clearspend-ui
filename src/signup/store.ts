@@ -1,7 +1,6 @@
 import { createStore } from 'solid-js/store';
 
 import { storage } from '_common/api/storage';
-import type { UUIDString } from 'app/types/common';
 
 const STORAGE_KEY = 'signup';
 
@@ -10,7 +9,7 @@ export interface SignupStore {
   last?: string;
   email?: string;
   phone?: string;
-  pid?: UUIDString;
+  pid?: string;
 }
 
 function init(): SignupStore {
@@ -38,7 +37,7 @@ export function useSignup() {
   return {
     store,
     setName: (first: string, last: string) => update({ first, last }),
-    setEmail: (email: string, pid: UUIDString) => update({ email, pid }),
+    setEmail: (email: string, pid: string) => update({ email, pid }),
     setTel: (phone: string) => update({ phone }),
     cleanup: () => {
       storage.remove(STORAGE_KEY);

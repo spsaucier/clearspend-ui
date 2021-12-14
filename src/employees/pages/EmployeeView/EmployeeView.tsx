@@ -13,7 +13,6 @@ import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
 import { Section } from 'app/components/Section';
-import type { UUIDString } from 'app/types/common';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
 
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
@@ -35,7 +34,7 @@ export default function EmployeeView() {
   const messages = useMessages();
   const navigate = useNav();
 
-  const params = useParams<{ id: UUIDString }>();
+  const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
 
   const [user, status, , , reload, mutate] = useResource(getUser, params.id);
@@ -109,7 +108,7 @@ export default function EmployeeView() {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.transactions}>
-              <Transactions userId={user()!.userId as UUIDString} />
+              <Transactions userId={user()!.userId!} />
             </Match>
             <Match when={tab() === Tabs.cards}>
               <Cards userId={user()!.userId} />

@@ -14,17 +14,20 @@ import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import type { UUIDString } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
-import type { AccountActivityRequest, AccountActivityResponse, PagedDataAccountActivityResponse } from 'generated/capital';
+import type {
+  AccountActivityRequest,
+  AccountActivityResponse,
+  PagedDataAccountActivityResponse,
+} from 'generated/capital';
 
 import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
   search?: string;
   data: PagedDataAccountActivityResponse;
-  onCardClick?: (id: UUIDString) => void;
+  onCardClick?: (id: string) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 

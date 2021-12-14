@@ -9,12 +9,14 @@ export interface TagProps {
   type?: 'default' | 'success' | 'danger';
   size?: 'md' | 'sm' | 'xs';
   class?: string;
+  tabIndex?: number | string;
   children?: JSXElement;
 }
 
 export function Tag(props: Readonly<TagProps>) {
   return (
     <span
+      tabIndex={props.tabIndex}
       class={join(css.root, props.class)}
       classList={{
         [css.sm!]: props.size === 'sm',

@@ -6,7 +6,6 @@ import { useMediaContext } from '_common/api/media/context';
 import { Button } from '_common/components/Button';
 import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
-import type { UUIDString } from 'app/types/common';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { SearchCardRequest } from 'generated/capital';
 
@@ -24,7 +23,7 @@ export default function Cards() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
-  const [uid, setUID] = createSignal<UUIDString | null>(null);
+  const [uid, setUID] = createSignal<string | null>(null);
   const cardsStore = useCards({ params: DEFAULT_PARAMS });
 
   return (

@@ -3,8 +3,10 @@
   padding: var(--pd-8) var(--pd-12);
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background: var(--tw-primary-light);
+    outline: 0;
   }
 }
 

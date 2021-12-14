@@ -3,6 +3,7 @@ import type { JSXElement } from 'solid-js';
 import { Popover, PopoverPosition } from '../Popover';
 import { useBool } from '../../utils/useBool';
 import { join } from '../../utils/join';
+import { KEY_CODES } from '../../constants/keyboard';
 
 import { DropdownContext } from './context';
 
@@ -17,7 +18,23 @@ export interface DropdownProps {
 }
 
 export function Dropdown(props: Readonly<DropdownProps>) {
+  let root!: HTMLDivElement;
+  let list!: HTMLUListElement;
+
   const [open, toggle] = useBool();
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (event.keyCode === KEY_CODES.ArrowDown) {
+      if (!open()) toggle();
+      (list.firstElementChild as HTMLElement | null)?.focus();
+      event.preventDefault();
+    }
+  };
+
+  const onItemClick = () => {
+    toggle();
+    (root.firstElementChild as HTMLElement | null)?.focus();
+  };
 
   return (
     <Popover
@@ -27,12 +44,12 @@ export function Dropdown(props: Readonly<DropdownProps>) {
       class={css.popup}
       onClickOutside={toggle}
       content={
-        <ul class={css.menu}>
-          <DropdownContext.Provider value={{ onItemClick: toggle }}>{props.menu}</DropdownContext.Provider>
+        <ul ref={list} class={css.menu}>
+          <DropdownContext.Provider value={{ onItemClick }}>{props.menu}</DropdownContext.Provider>
         </ul>
       }
     >
-      <div class={join(css.root, props.class)} onClick={() => toggle()}>
+      <div ref={root} class={join(css.root, props.class)} onClick={() => toggle()} onKeyDown={onKeyDown}>
         {props.children}
       </div>
     </Popover>

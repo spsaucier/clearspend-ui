@@ -9,7 +9,6 @@ import { formatAmount, parseAmount } from '_common/formatters/amount';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
-import type { UUIDString } from 'app/types/common';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { Allocation, CreateAllocationRequest } from 'generated/capital';
 
@@ -46,8 +45,11 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
       .onSave({
         name: data.name,
         amount: { currency: 'USD', amount: parseAmount(data.amount) },
-        parentAllocationId: (data.parent || undefined) as UUIDString,
-        ownerId: data.owner as UUIDString,
+        parentAllocationId: data.parent,
+        ownerId: data.owner,
+        limits: [],
+        disabledMccGroups: [],
+        disabledTransactionChannels: [],
       })
       .catch(() => {
         messages.error({ title: i18n.t('Something went wrong') });

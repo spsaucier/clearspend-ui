@@ -14,7 +14,6 @@ import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
-import type { UUIDString } from 'app/types/common';
 import { formatName } from 'employees/utils/formatName';
 import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 'generated/capital';
 
@@ -29,8 +28,8 @@ interface CardsTableProps {
   search?: string;
   data: PagedDataSearchCardData;
   hideColumns?: readonly string[];
-  onUserClick?: (id: UUIDString) => void;
-  onCardClick: (id: UUIDString) => void;
+  onUserClick?: (id: string) => void;
+  onCardClick: (id: string) => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
 
@@ -51,14 +50,14 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           </div>
         </div>
       ),
-      onClick: (item) => props.onCardClick(item.cardId as UUIDString),
+      onClick: (item) => props.onCardClick(item.cardId!),
     },
     {
       name: 'name',
       title: 'Employee',
       class: css.name,
       render: (item) => formatName(item.user),
-      onClick: (item) => props.onUserClick?.(item.user?.userId as UUIDString),
+      onClick: (item) => props.onUserClick?.(item.user?.userId!),
     },
     {
       name: 'allocation',
@@ -102,7 +101,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
         <InputSearch
           delay={400}
           value={props.search}
-          placeholder={i18n.t('Search cards...') as string}
+          placeholder={String(i18n.t('Search cards...'))}
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />

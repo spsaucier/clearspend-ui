@@ -1,9 +1,8 @@
 import { useContext, createMemo, Show } from 'solid-js';
 
-import kbCodes from '_common/utils/kbCodes';
-
 import { Icon } from '../Icon';
 import { join } from '../../utils/join';
+import { KEY_CODES } from '../../constants/keyboard';
 
 import { SelectContext } from './context';
 import type { OptionProps } from './types';
@@ -16,17 +15,17 @@ export function Option(props: Readonly<OptionProps>) {
   const active = createMemo(() => props.value === context.value);
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if ([kbCodes.ENTER_KEY_CODE, ...kbCodes.SPACEBAR_KEY_CODES].includes(e.keyCode)) {
+    if ([KEY_CODES.Enter, KEY_CODES.Space].includes(e.keyCode)) {
       context.onChange?.(props.value);
       e.preventDefault();
       e.stopImmediatePropagation();
-    } else if ([kbCodes.DOWN_ARROW_KEY_CODE].includes(e.keyCode)) {
+    } else if (e.keyCode === KEY_CODES.ArrowDown) {
       const nextSibling = document.activeElement?.nextElementSibling;
       if (nextSibling) {
         (nextSibling as HTMLElement).focus();
       }
       e.preventDefault();
-    } else if ([kbCodes.UP_ARROW_KEY_CODE].includes(e.keyCode)) {
+    } else if (e.keyCode === KEY_CODES.ArrowUp) {
       const prevSibling = document.activeElement?.previousElementSibling;
       if (prevSibling) {
         (prevSibling as HTMLElement).focus();
@@ -34,7 +33,7 @@ export function Option(props: Readonly<OptionProps>) {
         context.close?.(true);
       }
       e.preventDefault();
-    } else if ([kbCodes.ESCAPE_KEY_CODE].includes(e.keyCode)) {
+    } else if (e.keyCode === KEY_CODES.Escape) {
       context.close?.(true);
     }
   };
