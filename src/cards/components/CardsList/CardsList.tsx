@@ -7,7 +7,6 @@ import { InputSearch } from '_common/components/InputSearch';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
 import type { StoreSetter } from '_common/utils/store';
-import type { UUIDString } from 'app/types/common';
 import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 import type { CardType as CardTypeType } from 'cards/types';
 
@@ -20,7 +19,7 @@ import css from './CardsList.css';
 interface CardsListProps {
   search?: string;
   data: PagedDataSearchCardData;
-  onCardClick: (id: UUIDString) => void;
+  onCardClick: (id: string) => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
 
@@ -32,14 +31,14 @@ export function CardsList(props: Readonly<CardsListProps>) {
       <InputSearch
         delay={400}
         value={props.search}
-        placeholder={i18n.t('Search cards...') as string}
+        placeholder={String(i18n.t('Search cards...'))}
         class={css.search}
         onSearch={changeRequestSearch(props.onChangeParams)}
       />
       <Show when={props.data.content?.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
         <For each={props.data.content}>
           {(item) => (
-            <div class={css.item} onClick={() => props.onCardClick(item.cardId as UUIDString)}>
+            <div class={css.item} onClick={() => props.onCardClick(item.cardId!)}>
               <CardIcon type={item.cardType as CardTypeType} />
               <div>
                 <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>

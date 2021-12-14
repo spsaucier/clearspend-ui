@@ -14,7 +14,7 @@ interface BreadcrumbsProps {
 export function Breadcrumbs(props: Readonly<BreadcrumbsProps>) {
   const parent = createMemo(() => {
     const id = props.current.parentAllocationId;
-    return id && props.items.find(allocationWithID(id));
+    return id ? props.items.find(allocationWithID(id)) : undefined;
   });
 
   return (

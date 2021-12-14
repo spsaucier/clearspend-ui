@@ -2,7 +2,6 @@ import { useMediaContext } from '_common/api/media/context';
 import { useResource } from '_common/utils/useResource';
 import { getAccountActivity } from 'app/services/activity';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { UUIDString } from 'app/types/common';
 import type { AccountActivityRequest } from 'generated/capital';
 
 const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
@@ -13,13 +12,13 @@ const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
 };
 
 interface TransactionsProps {
-  cardId: UUIDString;
+  cardId: string;
 }
 
 export function Transactions(props: Readonly<TransactionsProps>) {
   const media = useMediaContext();
 
-  const [cards, status, params, setParams, reload] = useResource(getAccountActivity, {
+  const [data, status, params, setParams, reload] = useResource(getAccountActivity, {
     ...DEFAULT_ACTIVITY_PARAMS,
     cardId: props.cardId,
   });
@@ -30,7 +29,7 @@ export function Transactions(props: Readonly<TransactionsProps>) {
       loading={status().loading}
       error={status().error}
       search={params().searchText}
-      data={cards()}
+      data={data()}
       onReload={reload}
       onChangeParams={setParams}
     />

@@ -12,7 +12,6 @@ import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
 import { BackLink } from 'app/components/BackLink';
 import { useMessages } from 'app/containers/Messages/context';
-import type { UUIDString } from 'app/types/common';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
@@ -35,19 +34,21 @@ enum Tabs {
 export default function CardView() {
   const i18n = useI18n();
   const messages = useMessages();
-  const params = useParams<{ id: UUIDString }>();
+  const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
 
   const allocations = useAllocations();
-  const [card, status, , , reload] = useResource(getCard, params.id);
+  const [data, status, , , reload] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
 
   const [freezing, freeze] = wrapAction(blockCard);
   const [unfreezing, unfreeze] = wrapAction(unblockCard);
 
+  const card = createMemo(() => data()?.card);
+
   createEffect(() => {
-    const data = card();
-    if (data) setUserID(data.userId as UUIDString);
+    const cardData = card();
+    if (cardData) setUserID(cardData.userId!);
   });
 
   const allocation = createMemo(
@@ -77,7 +78,7 @@ export default function CardView() {
                 }
                 confirmText={<Text message="Freeze card now" />}
                 onConfirm={() => {
-                  freeze(card()!.cardId as UUIDString)
+                  freeze(card()!.cardId!)
                     .then(() => reload())
                     .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
@@ -104,7 +105,7 @@ export default function CardView() {
                 view="second"
                 loading={unfreezing()}
                 onClick={() => {
-                  unfreeze(card()!.cardId as UUIDString)
+                  unfreeze(card()!.cardId!)
                     .then(() => reload())
                     .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
                 }}
@@ -150,7 +151,7 @@ export default function CardView() {
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
-            <Transactions cardId={card()!.cardId || ('' as UUIDString)} />
+            <Transactions cardId={card()!.cardId!} />
           </Match>
           <Match when={tab() === Tabs.controls}>
             <CardControls />

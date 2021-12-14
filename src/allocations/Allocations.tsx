@@ -9,7 +9,6 @@ import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
-import type { UUIDString } from 'app/types/common';
 
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -32,12 +31,12 @@ enum Tabs {
 
 export default function Allocations() {
   const navigate = useNav();
-  const params = useParams<{ id?: UUIDString }>();
+  const params = useParams<{ id?: string }>();
 
   const [tab, setTab] = createSignal(Tabs.cards);
   const allocations = useAllocations();
 
-  const onIdChange = (id: UUIDString) => {
+  const onIdChange = (id: string) => {
     setTab(Tabs.cards);
     navigate(`/allocations/${id}`);
   };

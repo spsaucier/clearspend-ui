@@ -23,7 +23,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="streetLine1"
           type="text"
           value={props.values.streetLine1}
-          placeholder={i18n.t('Street address') as string}
+          placeholder={String(i18n.t('Street address'))}
           error={Boolean(props.errors.streetLine1)}
           onChange={props.handlers.streetLine1}
         />
@@ -37,7 +37,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="streetLine2"
           type="text"
           value={props.values.streetLine2}
-          placeholder={i18n.t('Apartment') as string}
+          placeholder={String(i18n.t('Apartment'))}
           error={Boolean(props.errors.streetLine2)}
           onChange={props.handlers.streetLine2}
         />
@@ -47,7 +47,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="locality"
           type="text"
           value={props.values.locality}
-          placeholder={i18n.t('City') as string}
+          placeholder={String(i18n.t('City'))}
           error={Boolean(props.errors.locality)}
           onChange={props.handlers.locality}
         />
@@ -65,7 +65,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           type="text"
           value={props.values.postalCode}
           maxLength={5}
-          placeholder={i18n.t('ZIP Code') as string}
+          placeholder={String(i18n.t('ZIP Code'))}
           error={Boolean(props.errors.postalCode)}
           onChange={props.handlers.postalCode}
         />

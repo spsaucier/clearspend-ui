@@ -9,7 +9,6 @@ import { Table, TableColumn } from '_common/components/Table';
 import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
-import type { UUIDString } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 
@@ -19,8 +18,8 @@ import css from './EmployeesTable.css';
 
 interface EmployeesTableProps {
   data: PagedDataUserPageData;
-  onClick: (uid: UUIDString) => void;
-  onCardClick: (id: UUIDString) => void;
+  onClick: (uid: string) => void;
+  onCardClick: (id: string) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
@@ -33,7 +32,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       title: <Text message="Employee" />,
       class: css.name,
       render: (item) => formatName(item.userData),
-      onClick: (item) => props.onClick(item.userData?.userId || ('' as UUIDString)),
+      onClick: (item) => props.onClick(item.userData?.userId || ''),
     },
     {
       name: 'cards',
@@ -42,7 +41,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
         <Show when={item.cardInfoList?.length} fallback={<Text message="No cards" />}>
           <For each={item.cardInfoList}>
             {(card) => (
-              <div class={css.card} onClick={() => props.onCardClick(card.cardId as UUIDString)}>
+              <div class={css.card} onClick={() => props.onCardClick(card.cardId!)}>
                 <span class={css.cardNumber}>{formatCardNumber(card.lastFour)}</span>
                 <span>{card.allocationName}</span>
               </div>
@@ -72,7 +71,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       >
         <Input
           disabled
-          placeholder={i18n.t('Search employees...') as string}
+          placeholder={String(i18n.t('Search employees...'))}
           suffix={<Icon name="search" size="sm" />}
           class={css.search}
         />

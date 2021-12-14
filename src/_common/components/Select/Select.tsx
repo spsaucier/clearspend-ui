@@ -111,7 +111,7 @@ export function Select(props: Readonly<SelectProps>) {
           value={selected()}
           error={props.error}
           placeholder={props.placeholder}
-          autoComplete="off"
+          autoComplete="nope"
           disabled={props.disabled}
           inputClass={css.input}
           onChange={onSearch}

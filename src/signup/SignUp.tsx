@@ -9,8 +9,6 @@ import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/o
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
 
-import type { UUIDString } from '../app/types/common';
-
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
 import { EmailForm } from './components/EmailForm';
@@ -58,7 +56,7 @@ export default function SignUp() {
 
     const resp = await signup({ email, firstName: first, lastName: last });
 
-    setEmail(email, resp.businessProspectId || '' as UUIDString);
+    setEmail(email, resp.businessProspectId || '');
 
     mixpanel.track(`Signup: ${resp.businessProspectStatus}`);
 

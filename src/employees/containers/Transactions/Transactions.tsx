@@ -2,7 +2,6 @@ import { useMediaContext } from '_common/api/media/context';
 import { useResource } from '_common/utils/useResource';
 import { getAccountActivity } from 'app/services/activity';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { UUIDString } from 'app/types/common';
 import type { AccountActivityRequest } from 'generated/capital';
 
 const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
@@ -13,7 +12,7 @@ const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
 };
 
 interface TransactionsProps {
-  userId: UUIDString;
+  userId: string;
 }
 
 export function Transactions(props: Readonly<TransactionsProps>) {

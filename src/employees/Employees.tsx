@@ -11,7 +11,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
 import { logout } from 'app/services/auth';
-import { UUIDString, AppEvent } from 'app/types/common';
+import { AppEvent } from 'app/types/common';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
 
@@ -30,7 +30,7 @@ export default function Employees() {
   const navigate = useNavigate();
   const media = useMediaContext();
 
-  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
+  const [cardID, setCardID] = createSignal<string | null>(null);
 
   const usersStore = useUsers({ params: DEFAULT_ACTIVITY_PARAMS });
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
@@ -48,7 +48,7 @@ export default function Employees() {
         <Dynamic
           component={media.large ? EmployeesTable : EmployeesList}
           data={usersStore.data!}
-          onClick={(id: UUIDString) => navigate(`/employees/view/${id}`)}
+          onClick={(id: string) => navigate(`/employees/view/${id}`)}
           onCardClick={setCardID}
           onChangeParams={usersStore.setParams}
         />
