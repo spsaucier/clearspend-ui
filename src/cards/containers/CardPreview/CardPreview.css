@@ -7,4 +7,5 @@
 
 .card {
   width: 100%;
+  margin-bottom: var(--pd-24);
 }

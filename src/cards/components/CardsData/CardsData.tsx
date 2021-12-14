@@ -3,7 +3,6 @@ import { Dynamic } from 'solid-js/web';
 
 import type { StoreSetter } from '_common/utils/store';
 import { Data } from 'app/components/Data';
-import type { UUIDString } from 'app/types/common';
 import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 
 import { CardsList } from '../CardsList';
@@ -16,8 +15,8 @@ interface CardsDataProps {
   data: Readonly<PagedDataSearchCardData> | null;
   table?: boolean;
   hide?: readonly string[];
-  onUserClick?: (id: UUIDString) => void;
-  onCardClick: (id: UUIDString) => void;
+  onUserClick?: (id: string) => void;
+  onCardClick: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }

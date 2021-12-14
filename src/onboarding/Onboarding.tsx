@@ -11,8 +11,12 @@ import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForManualReview } from 'app/services/review';
 import logo from 'app/assets/logo-name.svg';
-import type { BankAccount, Business, ConvertBusinessProspectRequest, CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
-import type { UUIDString } from 'app/types/common';
+import type {
+  BankAccount,
+  Business,
+  ConvertBusinessProspectRequest,
+  CreateOrUpdateBusinessOwnerRequest,
+} from 'generated/capital';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -63,13 +67,13 @@ export default function Onboarding() {
   }
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
-    const resp = await setBusinessInfo(owner().userId as UUIDString, data);
+    const resp = await setBusinessInfo(owner().userId!, data);
     mutate([{ ...owner(), userId: resp.businessOwnerId }, resp.business as Business]);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
   const onUpdateKYC = async (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => {
-    await setBusinessOwner(owner().userId as UUIDString, { ...data, isOnboarding: true });
+    await setBusinessOwner(owner().userId!, { ...data, isOnboarding: true });
     await getRequiredDocuments()
       .then((responseData) => {
         setkybRequiredDocuments(responseData.kybRequiredDocuments);

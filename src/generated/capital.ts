@@ -9,8 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-import type { UUIDString } from "app/types/common";
-
 export interface ControllerError {
   message?: string;
 }
@@ -307,7 +305,8 @@ export interface CreateUserRequest {
 }
 
 export interface CreateUserResponse {
-  userId: TypedIdUserId;
+  /** @format uuid */
+  userId: string;
 
   /** Flag to indicate whether a password should be created for the user */
   password?: string;
@@ -315,8 +314,6 @@ export interface CreateUserResponse {
   /** Error message for any records that failed. Will be null if successful */
   errorMessage?: string;
 }
-
-export type TypedIdUserId = UUIDString;
 
 export interface OrderBy {
   /** @pattern [a-zA-Z0-9_\-]* */
@@ -334,7 +331,7 @@ export interface PageRequest {
 }
 
 export interface SearchUserRequest {
-  allocations?: TypedIdAllocationId[];
+  allocations?: string[];
   hasVirtualCard?: boolean;
   hasPhysicalCard?: boolean;
   withoutCard?: boolean;
@@ -342,10 +339,9 @@ export interface SearchUserRequest {
   pageRequest?: PageRequest;
 }
 
-export type TypedIdAllocationId = UUIDString;
-
 export interface CardInfo {
-  cardId?: TypedIdCardId;
+  /** @format uuid */
+  cardId?: string;
   lastFour?: string;
   allocationName?: string;
   ownerFirstName?: string;
@@ -364,10 +360,9 @@ export interface PagedDataUserPageData {
   content?: UserPageData[];
 }
 
-export type TypedIdCardId = UUIDString;
-
 export interface UserData {
-  userId?: TypedIdUserId;
+  /** @format uuid */
+  userId?: string;
   type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
   firstName?: string;
   lastName?: string;
@@ -379,10 +374,6 @@ export interface UserPageData {
   cardInfoList?: CardInfo[];
 }
 
-export type TypedIdAccountActivityId = UUIDString;
-
-export type TypedIdReceiptId = UUIDString;
-
 export interface CreateProgramRequest {
   fundingType?: 'POOLED' | 'INDIVIDUAL';
   cardType?: 'PLASTIC' | 'VIRTUAL';
@@ -392,10 +383,9 @@ export interface CreateProgramRequest {
 }
 
 export interface CreateProgramResponse {
-  programId: TypedIdProgramId;
+  /** @format uuid */
+  programId: string;
 }
-
-export type TypedIdProgramId = UUIDString;
 
 export interface Amount {
   /** @example USD */
@@ -406,7 +396,8 @@ export interface Amount {
 }
 
 export interface NetworkMessageRequest {
-  cardId?: TypedIdCardId;
+  /** @format uuid */
+  cardId?: string;
   networkMessageType?:
     | 'PRE_AUTH_TRANSACTION'
     | 'PRE_AUTH_TRANSACTION_ADVICE'
@@ -419,10 +410,9 @@ export interface NetworkMessageRequest {
 }
 
 export interface NetworkMessageResponse {
-  networkMessageId?: TypedIdNetworkMessageId;
+  /** @format uuid */
+  networkMessageId?: string;
 }
-
-export type TypedIdNetworkMessageId = UUIDString;
 
 export interface KycPassRequest {
   to?: string;
@@ -435,18 +425,15 @@ export interface KycFailRequest {
   reasons?: string[];
 }
 
-export type TypedIdBusinessId = UUIDString;
-
 export interface CreateBusinessOwnerRequest {
-  businessId?: TypedIdBusinessId;
-  businessOwnerId?: TypedIdBusinessOwnerId;
+  /** @format uuid */
+  businessId?: string;
+
+  /** @format uuid */
+  businessOwnerId?: string;
   username?: string;
   password?: string;
 }
-
-export type TypedIdBusinessOwnerId = UUIDString;
-
-export type TypedIdBusinessBankAccountId = UUIDString;
 
 export interface TransactBankAccountRequest {
   bankAccountTransactType?: 'DEPOSIT' | 'WITHDRAW';
@@ -460,13 +447,13 @@ export interface TransactBankAccountRequest {
 }
 
 export interface CreateAdjustmentResponse {
-  adjustmentId?: TypedIdAdjustmentId;
+  /** @format uuid */
+  adjustmentId?: string;
 }
 
-export type TypedIdAdjustmentId = UUIDString;
-
 export interface CreateReceiptResponse {
-  receiptId?: TypedIdReceiptId;
+  /** @format uuid */
+  receiptId?: string;
 }
 
 export interface HealthCheckRequest {
@@ -899,9 +886,23 @@ export interface EventNotificationAdvanceResponse {
 }
 
 export interface IssueCardRequest {
-  programId: TypedIdProgramId;
-  allocationId: TypedIdAllocationId;
-  userId: TypedIdUserId;
+  /**
+   * @format uuid
+   * @example 18104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  programId: string;
+
+  /**
+   * @format uuid
+   * @example 28104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  allocationId: string;
+
+  /**
+   * @format uuid
+   * @example 38104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  userId: string;
   currency: 'UNSPECIFIED' | 'USD';
   cardType: ('PLASTIC' | 'VIRTUAL')[];
   isPersonal: boolean;
@@ -910,7 +911,8 @@ export interface IssueCardRequest {
 }
 
 export interface IssueCardResponse {
-  cardId: TypedIdCardId;
+  /** @format uuid */
+  cardId: string;
 
   /** Error message for any records that failed. Will be null if successful */
   errorMessage?: string;
@@ -918,13 +920,18 @@ export interface IssueCardResponse {
 
 export interface SearchCardRequest {
   pageRequest: PageRequest;
-  userId?: TypedIdUserId;
-  allocationId?: TypedIdAllocationId;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  allocationId?: string;
   searchText?: string;
 }
 
 export interface ItemTypedIdAllocationId {
-  id?: TypedIdAllocationId;
+  /** @format uuid */
+  id?: string;
   name?: string;
 }
 
@@ -941,7 +948,8 @@ export interface PagedDataSearchCardData {
 }
 
 export interface SearchCardData {
-  cardId?: TypedIdCardId;
+  /** @format uuid */
+  cardId?: string;
   cardNumber?: string;
   user?: UserData;
   allocation?: ItemTypedIdAllocationId;
@@ -955,9 +963,14 @@ export interface SearchBusinessAllocationRequest {
 }
 
 export interface Account {
-  accountId: TypedIdAccountId;
-  businessId: TypedIdBusinessId;
-  ledgerAccountId: TypedIdLedgerAccountId;
+  /** @format uuid */
+  accountId: string;
+
+  /** @format uuid */
+  businessId: string;
+
+  /** @format uuid */
+  ledgerAccountId: string;
   type: 'ALLOCATION' | 'CARD';
 
   /** @format uuid */
@@ -966,17 +979,18 @@ export interface Account {
 }
 
 export interface Allocation {
-  allocationId: TypedIdAllocationId;
+  /** @format uuid */
+  allocationId: string;
   name: string;
-  ownerId: TypedIdUserId;
+
+  /** @format uuid */
+  ownerId: string;
   account: Account;
-  parentAllocationId?: TypedIdAllocationId;
-  childrenAllocationIds?: TypedIdAllocationId[];
+
+  /** @format uuid */
+  parentAllocationId?: string;
+  childrenAllocationIds?: string[];
 }
-
-export type TypedIdAccountId = UUIDString;
-
-export type TypedIdLedgerAccountId = UUIDString;
 
 export interface CreateBusinessProspectRequest {
   /**
@@ -1000,11 +1014,10 @@ export interface CreateBusinessProspectRequest {
 }
 
 export interface CreateBusinessProspectResponse {
-  businessProspectId?: TypedIdBusinessProspectId;
+  /** @format uuid */
+  businessProspectId?: string;
   businessProspectStatus?: 'NEW' | 'EMAIL_VERIFIED' | 'MOBILE_VERIFIED' | 'COMPLETED';
 }
-
-export type TypedIdBusinessProspectId = UUIDString;
 
 export interface ValidateBusinessProspectIdentifierRequest {
   /**
@@ -1051,7 +1064,8 @@ export interface ConvertBusinessProspectRequest {
 }
 
 export interface Business {
-  businessId?: TypedIdBusinessId;
+  /** @format uuid */
+  businessId?: string;
   legalName?: string;
   businessType?: 'UNSPECIFIED' | 'LLC' | 'LLP' | 'S_CORP' | 'C_CORP' | 'B_CORP' | 'SOLE_PROPRIETORSHIP' | '_501_C_3';
   employerIdentificationNumber?: string;
@@ -1069,7 +1083,9 @@ export interface Business {
 
 export interface ConvertBusinessProspectResponse {
   business?: Business;
-  businessOwnerId?: TypedIdBusinessOwnerId;
+
+  /** @format uuid */
+  businessOwnerId?: string;
 }
 
 export interface CreateOrUpdateBusinessOwnerRequest {
@@ -1121,7 +1137,8 @@ export interface CreateOrUpdateBusinessOwnerRequest {
 }
 
 export interface CreateBusinessOwnerResponse {
-  businessOwnerId: TypedIdBusinessOwnerId;
+  /** @format uuid */
+  businessOwnerId: string;
 
   /** Error message for any records that failed. Will be null if successful */
   errorMessage?: string;
@@ -1133,10 +1150,9 @@ export interface CreateBinRequest {
 }
 
 export interface CreateBinResponse {
-  binId: TypedIdBinId;
+  /** @format uuid */
+  binId: string;
 }
-
-export type TypedIdBinId = UUIDString;
 
 export interface ResetPasswordRequest {
   changePasswordId?: string;
@@ -1149,8 +1165,11 @@ export interface LoginRequest {
 }
 
 export interface User {
-  userId?: TypedIdUserId;
-  businessId?: TypedIdBusinessId;
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  businessId?: string;
   type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
   firstName?: string;
   lastName?: string;
@@ -1169,18 +1188,48 @@ export interface CreateAllocationRequest {
    * @example advertisement
    */
   name: string;
-  parentAllocationId: TypedIdAllocationId;
-  ownerId: TypedIdUserId;
+
+  /**
+   * @format uuid
+   * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  parentAllocationId: string;
+
+  /** @format uuid */
+  ownerId: string;
   amount: Amount;
+  limits: CurrencyLimit[];
+  disabledMccGroups: string[];
+  disabledTransactionChannels: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+}
+
+export interface CurrencyLimit {
+  currency: 'UNSPECIFIED' | 'USD';
+  typeMap: Record<string, Record<string, Limit>>;
+}
+
+export interface Limit {
+  amount?: number;
+  usedAmount?: number;
 }
 
 export interface CreateAllocationResponse {
-  allocationId: TypedIdAllocationId;
+  /** @format uuid */
+  allocationId: string;
 }
 
 export interface AllocationFundCardRequest {
-  allocationAccountId: TypedIdAccountId;
-  cardId: TypedIdCardId;
+  /**
+   * @format uuid
+   * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  allocationAccountId: string;
+
+  /**
+   * @format uuid
+   * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  cardId: string;
 
   /** @example DEPOSIT */
   reallocationType: 'ALLOCATION_TO_CARD' | 'CARD_TO_ALLOCATION';
@@ -1188,17 +1237,26 @@ export interface AllocationFundCardRequest {
 }
 
 export interface AllocationFundCardResponse {
-  businessAdjustmentId?: TypedIdAdjustmentId;
+  /** @format uuid */
+  businessAdjustmentId?: string;
   businessLedgerBalance?: Amount;
-  allocationAdjustmentId?: TypedIdAdjustmentId;
+
+  /** @format uuid */
+  allocationAdjustmentId?: string;
   allocationLedgerBalance?: Amount;
 }
 
 export interface AccountActivityRequest {
   pageRequest: PageRequest;
-  allocationId?: TypedIdAllocationId;
-  userId?: TypedIdUserId;
-  cardId?: TypedIdCardId;
+
+  /** @format uuid */
+  allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  cardId?: string;
   searchText?: string;
   type?:
     | 'BANK_LINK'
@@ -1221,7 +1279,8 @@ export interface AccountActivityRequest {
 }
 
 export interface AccountActivityResponse {
-  accountActivityId?: TypedIdAccountActivityId;
+  /** @format uuid */
+  accountActivityId?: string;
 
   /** @format date-time */
   activityTime?: string;
@@ -1270,7 +1329,8 @@ export interface PagedDataAccountActivityResponse {
 }
 
 export interface ReceiptDetails {
-  receiptId?: TypedIdReceiptId;
+  /** @format uuid */
+  receiptId?: string;
 }
 
 export interface UpdateUserRequest {
@@ -1306,7 +1366,8 @@ export interface UpdateUserRequest {
 }
 
 export interface UpdateUserResponse {
-  userId: TypedIdUserId;
+  /** @format uuid */
+  userId: string;
 
   /** Error message for any records that failed. Will be null if successful */
   errorMessage?: string;
@@ -1321,12 +1382,21 @@ export interface UpdateCardStatusRequest {
 }
 
 export interface Card {
-  cardId?: TypedIdCardId;
+  /** @format uuid */
+  cardId?: string;
   bin?: string;
-  programId?: TypedIdProgramId;
-  allocationId?: TypedIdAllocationId;
-  userId?: TypedIdUserId;
-  accountId?: TypedIdAccountId;
+
+  /** @format uuid */
+  programId?: string;
+
+  /** @format uuid */
+  allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  accountId?: string;
   status?: 'OPEN' | 'BLOCKED' | 'RETIRED';
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
   fundingType?: 'POOLED' | 'INDIVIDUAL';
@@ -1398,36 +1468,41 @@ export interface UpdateAllocationRequest {
    * @example advertisement
    */
   name?: string;
-  parentAllocationId?: TypedIdAllocationId;
-  ownerId?: TypedIdUserId;
+
+  /**
+   * @format uuid
+   * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
+   */
+  parentAllocationId?: string;
+
+  /** @format uuid */
+  ownerId?: string;
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
-export interface AllocationDetails {
+export interface AllocationDetailsResponse {
   allocation?: Allocation;
   owner?: UserData;
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
-export interface CurrencyLimit {
-  currency?: 'UNSPECIFIED' | 'USD';
-  typeMap?: Record<string, Record<string, Limit>>;
-}
-
-export interface Limit {
-  amount?: number;
-  usedAmount?: number;
-}
-
-export interface UserCardResponse {
+export interface CardDetailsResponse {
   card: Card;
   ledgerBalance: Amount;
   availableBalance: Amount;
   allocationName: string;
   limits?: CurrencyLimit[];
-  limitsFromTransactionLimits?: Record<string, Record<string, Record<string, number>>>;
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
 export interface Program {
-  programId?: TypedIdProgramId;
+  /** @format uuid */
+  programId?: string;
   name?: string;
   bin?: string;
   fundingType?: 'POOLED' | 'INDIVIDUAL';
@@ -1446,7 +1521,9 @@ export interface Bin {
 
   /** @format date-time */
   updated?: string;
-  id?: TypedIdBinId;
+
+  /** @format uuid */
+  id?: string;
 }
 
 export interface CreateTestDataResponse {
@@ -1472,6 +1549,38 @@ export interface GetBusinessesResponse {
   businesses?: Business[];
 }
 
+export interface MccGroup {
+  /** @format uuid */
+  mccGroupId?: string;
+  i2cMccGroupRef?:
+    | 'UT_MCG_CONFG'
+    | 'RS_MCG_CONFG'
+    | 'AV_MCG_CONFG'
+    | 'MS_MCG_CONFG'
+    | 'SP_MCG_CONFG'
+    | 'PS_MCG_CONFG'
+    | 'BS_MCG_CONFG'
+    | 'RR_MCG_CONFG'
+    | 'AE_MCG_CONFG'
+    | 'SM_MCG_CONFG'
+    | 'GS_MCG_CONFG'
+    | 'CR_MCG_CONFG'
+    | 'CS_MCG_CONFG'
+    | 'AL_MCG_CONFG'
+    | 'AR_MCG_CONFG'
+    | 'HM_MCG_CONFG'
+    | 'TT_MCG_CONFG'
+    | 'TE_MCG_CONFG'
+    | 'MSL_MCG_CONFG'
+    | 'WS_MCG_CONFG'
+    | 'OP_MCG_CONFG'
+    | 'DG_MCG_CONFG'
+    | 'RES_MCG_CONFG'
+    | 'GAS_MCG_CONFG'
+    | 'EDU_MCG_CONFG';
+  name?: string;
+}
+
 export interface KycDocuments {
   owner?: string;
   documents?: RequiredDocument[];
@@ -1489,7 +1598,8 @@ export interface RequiredDocument {
 }
 
 export interface BankAccount {
-  businessBankAccountId?: TypedIdBusinessBankAccountId;
+  /** @format uuid */
+  businessBankAccountId?: string;
   name?: string;
   routingNumber?: string;
   accountNumber?: string;

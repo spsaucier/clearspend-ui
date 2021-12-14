@@ -7,7 +7,6 @@ import { Drawer } from '_common/components/Drawer';
 import { CardsData } from 'cards/components/CardsData';
 import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
-import type { UUIDString } from 'app/types/common';
 import type { SearchCardRequest, User } from 'generated/capital';
 
 const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
@@ -24,7 +23,7 @@ interface CardsProps {
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
 
-  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
+  const [cardID, setCardID] = createSignal<string | null>(null);
   const [cards, status, , setParams, reload] = useResource(searchCards, { ...DEFAULT_PARAMS, userId: props.userId });
 
   return (

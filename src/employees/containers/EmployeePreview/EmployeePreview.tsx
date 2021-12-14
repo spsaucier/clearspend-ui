@@ -7,7 +7,6 @@ import { Button } from '_common/components/Button';
 import { Data } from 'app/components/Data';
 import { CardsList } from 'cards/components/CardsList';
 import { searchCards } from 'cards/services';
-import type { UUIDString } from 'app/types/common';
 import type { SearchCardRequest } from 'generated/capital';
 
 import { getUser } from '../../services';
@@ -23,7 +22,7 @@ const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
 };
 
 interface EmployeePreviewProps {
-  uid: UUIDString;
+  uid: string;
 }
 
 export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
@@ -46,7 +45,7 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
             <CardsList
               data={cards()! as {}}
               search={params().searchText}
-              onCardClick={(id: UUIDString) => navigate(`/cards/view/${id}`)}
+              onCardClick={(id: string) => navigate(`/cards/view/${id}`)}
               onChangeParams={setParams}
             />
           </Data>

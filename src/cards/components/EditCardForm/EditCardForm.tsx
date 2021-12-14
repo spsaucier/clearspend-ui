@@ -10,7 +10,6 @@ import { Select, Option } from '_common/components/Select';
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
 import { Drawer } from '_common/components/Drawer';
-import type { UUIDString } from 'app/types/common';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
@@ -39,8 +38,8 @@ interface FormValues {
 }
 
 interface EditCardFormProps {
-  userId?: UUIDString;
-  allocationId?: UUIDString;
+  userId?: string;
+  allocationId?: string;
   users: readonly Readonly<UserData>[];
   allocations: readonly Readonly<Allocation>[];
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
@@ -81,9 +80,9 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     await props
       .onSave({
         // TODO
-        programId: '033955d1-f18e-497e-9905-88ba71e90208' as UUIDString,
-        allocationId: data.allocationId as UUIDString,
-        userId: data.employee as UUIDString,
+        programId: '033955d1-f18e-497e-9905-88ba71e90208',
+        allocationId: data.allocationId,
+        userId: data.employee,
         currency: 'USD',
         cardType: data.types,
         isPersonal: data.personal,

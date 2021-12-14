@@ -9,7 +9,6 @@ import { CardsData } from 'cards/components/CardsData';
 import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
-import type { UUIDString } from 'app/types/common';
 import type { Allocation, SearchCardRequest } from 'generated/capital';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
@@ -32,8 +31,8 @@ interface CardsProps {
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
 
-  const [cardID, setCardID] = createSignal<UUIDString | null>(null);
-  const [userID, setUserID] = createSignal<UUIDString | null>(null);
+  const [cardID, setCardID] = createSignal<string | null>(null);
+  const [userID, setUserID] = createSignal<string | null>(null);
 
   const children = createMemo(() =>
     props.current.childrenAllocationIds?.map((id) => props.items.find(allocationWithID(id))!),

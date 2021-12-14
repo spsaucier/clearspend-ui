@@ -9,8 +9,7 @@ import { Loading } from 'app/components/Loading';
 import { useMessages } from 'app/containers/Messages/context';
 import { getAllocations } from 'allocations/services';
 import { getUsers, saveUser } from 'employees/services';
-import type { UUIDString } from 'app/types/common';
-import type { CreateUserRequest , IssueCardRequest } from 'generated/capital';
+import type { CreateUserRequest, IssueCardRequest } from 'generated/capital';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
@@ -19,7 +18,7 @@ export default function CardEdit() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
-  const location = useLoc<{ userId: UUIDString; allocationId: UUIDString }>();
+  const location = useLoc<{ userId: string; allocationId: string }>();
 
   const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
   const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
