@@ -23,7 +23,7 @@ export function getFormOptions(user?: Readonly<User>): FormOptions<FormValues> {
       lastName: [required],
       email: [required, validEmail],
       phone: [required, validPhone],
-      streetLine1: [required, validStreetLine1],
+      streetLine1: [validStreetLine1],
     },
   };
 }
