@@ -36,10 +36,14 @@ export function fetch<T = unknown>(
               data: parse(body, resp.headers.get('content-type')),
             };
             if (resp.ok) {
-              mixpanel.track(Events[`${method}_SUCCESS`], { url });
+              try {
+                mixpanel.track(Events[`${method}_SUCCESS`], { url });
+              } catch {}
               resolve(result);
             } else {
-              mixpanel.track(Events[`${method}_ERROR`], { url, result });
+              try {
+                mixpanel.track(Events[`${method}_ERROR`], { url, result });
+              } catch {}
               reject(result);
             }
           })

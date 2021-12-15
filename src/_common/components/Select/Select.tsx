@@ -1,4 +1,4 @@
-import { createSignal, createMemo, batch } from 'solid-js';
+import { createSignal, createMemo, batch, Show } from 'solid-js';
 
 import { Icon } from '../Icon';
 import { Input } from '../Input';
@@ -6,6 +6,7 @@ import { Popover } from '../Popover';
 import { join } from '../../utils/join';
 import { isString } from '../../utils/isString';
 import { KEY_CODES } from '../../constants/keyboard';
+import { Spin } from '../Spin';
 
 import { SelectContext } from './context';
 import { getOptions, getSelected, isMatch } from './utils';
@@ -33,13 +34,17 @@ export function Select(props: Readonly<SelectProps>) {
   };
 
   const onSearch = (value: string) => {
-    setSearch(value);
-    if (!value) {
-      props.onChange?.('');
-      return;
+    if (props.changeOnSearch) {
+      props.onChange?.(value);
+    } else {
+      setSearch(value);
+      if (!value) {
+        props.onChange?.('');
+        return;
+      }
+      const exact = options().find((el) => el.innerText === value);
+      if (exact) props.onChange?.(exact.dataset.value!);
     }
-    const exact = options().find((el) => el.innerText === value);
-    if (exact) props.onChange?.(exact.dataset.value!);
   };
 
   const onChange = (value: string) => {
@@ -118,13 +123,16 @@ export function Select(props: Readonly<SelectProps>) {
           onFocusIn={onFocusIn}
           onFocusOut={onFocusOut}
           onKeyDown={onKeyDown}
+          suffix={props.loading ? <Spin /> : null}
         />
         <span class={css.value}>
           {typeof props.valueRender === 'function' && isString(props.value)
             ? props.valueRender(props.value, selected()!)
             : selected()}
         </span>
-        <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
+        <Show when={!props.changeOnSearch}>
+          <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
+        </Show>
       </div>
     </Popover>
   );
