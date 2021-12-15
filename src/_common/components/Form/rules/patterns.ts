@@ -13,3 +13,7 @@ export function validEIN(value: string): boolean | string {
 export function validZipCode(value: string): boolean | string {
   return !!value.match(/^[0-9]{5}(?:-[0-9]{4})?$/) || 'Invalid zip code';
 }
+
+export function validStreetLine1(value: string): boolean | string {
+  return !!(value.toLocaleLowerCase().replace('.', '').indexOf('po ') !== 0) || 'PO Boxes are not allowed';
+}

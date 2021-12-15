@@ -1,10 +1,10 @@
 import { useI18n, Text } from 'solid-i18n';
-import { For, batch } from 'solid-js';
+import { For, batch, Show } from 'solid-js';
 
 import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, SelectState, Option } from '_common/components/Select';
-import type { Suggestion } from 'app/utils/addressService';
+import type { Suggestion } from 'app/services/address';
 
 import type { FormValues } from '../EditEmployeeForm/types';
 import css from '../EditEmployeeForm/EditEmployeeForm.css';
@@ -14,6 +14,7 @@ interface AddressFormItemsProps {
   errors: Readonly<Partial<Record<keyof FormValues, string>>>;
   handlers: Readonly<FormHandlers<FormValues>>;
   suggestions?: Suggestion[];
+  suggestionsLoading?: boolean;
 }
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
@@ -41,7 +42,19 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
   return (
     <>
       <FormItem label={<Text message="Street address" />} error={props.errors.streetLine1} class={css.item}>
-        {props.suggestions ? (
+        <Show
+          when={props.suggestions}
+          fallback={
+            <Input
+              name="streetLine1"
+              type="text"
+              value={props.values.streetLine1}
+              placeholder={String(i18n.t('Street address'))}
+              error={Boolean(props.errors.streetLine1)}
+              onChange={props.handlers.streetLine1}
+            />
+          }
+        >
           <Select
             name="streetLine1"
             value={props.values.streetLine1}
@@ -50,6 +63,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
             onChange={onChangeStreetLine1}
             changeOnSearch
             valueRender={valueRender}
+            loading={props.suggestionsLoading}
           >
             <For each={props.suggestions}>
               {(suggestion) => (
@@ -59,16 +73,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
               )}
             </For>
           </Select>
-        ) : (
-          <Input
-            name="streetLine1"
-            type="text"
-            value={props.values.streetLine1}
-            placeholder={String(i18n.t('Street address'))}
-            error={Boolean(props.errors.streetLine1)}
-            onChange={props.handlers.streetLine1}
-          />
-        )}
+        </Show>
       </FormItem>
       <FormItem
         label={<Text message="Apartment, unit, floor, etc." />}

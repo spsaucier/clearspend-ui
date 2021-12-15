@@ -20,6 +20,7 @@ export interface SelectProps {
   children: JSXElement;
   onChange?: (value: string) => void;
   changeOnSearch?: boolean;
+  loading?: boolean;
 }
 
 export interface SelectContextProps {

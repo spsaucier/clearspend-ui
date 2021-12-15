@@ -38,6 +38,7 @@ async function getAddresses<T = unknown>(values: FormValues) {
     city: values.locality,
     state: values.region,
     zip_code: values.postalCode,
+    geo_ip_sort: 'true',
   };
 
   const requestOptions = {
