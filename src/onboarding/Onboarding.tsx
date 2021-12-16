@@ -74,6 +74,7 @@ export default function Onboarding() {
 
   const onUpdateKYC = async (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => {
     await setBusinessOwner(owner().userId!, { ...data, isOnboarding: true });
+    await refetch();
     await getRequiredDocuments()
       .then((responseData) => {
         setkybRequiredDocuments(responseData.kybRequiredDocuments);
