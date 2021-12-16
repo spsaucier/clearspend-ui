@@ -1,13 +1,14 @@
 import { createSignal, Match, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
-import mixpanel from 'mixpanel-browser';
 
 import logo from 'app/assets/logo-name.svg';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
+
+import { sendAnalyticsEvent } from '../app/utils/analytics';
 
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
@@ -58,7 +59,7 @@ export default function SignUp() {
 
     setEmail(email, resp.businessProspectId || '');
 
-    mixpanel.track(`Signup: ${resp.businessProspectStatus}`);
+    sendAnalyticsEvent({ name: `Signup: ${resp.businessProspectStatus}` });
 
     switch (resp.businessProspectStatus) {
       case ProspectStatus.COMPLETED:

@@ -1,6 +1,4 @@
-import mixpanel from 'mixpanel-browser';
-
-import { Events } from 'app/utils/analytics';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
 
@@ -36,19 +34,15 @@ export function fetch<T = unknown>(
               data: parse(body, resp.headers.get('content-type')),
             };
             if (resp.ok) {
-              try {
-                mixpanel.track(Events[`${method}_SUCCESS`], { url });
-              } catch {}
+              sendAnalyticsEvent({ name: Events[`${method}_SUCCESS`], data: { url } });
               resolve(result);
             } else {
-              try {
-                mixpanel.track(Events[`${method}_ERROR`], { url, result });
-              } catch {}
+              sendAnalyticsEvent({ name: Events[`${method}_ERROR`], data: { url, result } });
               reject(result);
             }
           })
           .catch((error: Error) => {
-            mixpanel.track(Events[`${method}_ERROR`], { url, error });
+            sendAnalyticsEvent({ name: Events[`${method}_ERROR`], data: { url, error } });
             // eslint-disable-next-line prefer-promise-reject-errors
             reject({ ...response, data: error });
           });

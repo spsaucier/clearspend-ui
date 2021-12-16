@@ -1,12 +1,12 @@
 import { onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { Link, useNavigate } from 'solid-app-router';
-import mixpanel from 'mixpanel-browser';
 
 import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 import { SignUp } from 'signup';
+import { sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
 
 import logo from '../../assets/logo-name.svg';
 import { LoginForm } from '../../components/LoginForm';
@@ -22,7 +22,7 @@ export default function Login() {
   const submit = async (username: string, password: string) => {
     const user = await login(username, password);
     if (user.userId) {
-      mixpanel.identify(user.userId);
+      sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
       navigate('/');
     }
   };
