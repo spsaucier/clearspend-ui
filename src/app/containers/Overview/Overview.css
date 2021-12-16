@@ -41,3 +41,11 @@
   font-weight: var(--font-400);
   line-height: var(--line-28);
 }
+
+.full-width-dropdown {
+  flex-grow: 1;
+
+  & > span {
+    width: 100%;
+  }
+}

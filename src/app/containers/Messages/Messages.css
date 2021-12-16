@@ -14,5 +14,6 @@
 
   &:first-child {
     margin-top: var(--pd-24);
+    cursor: default;
   }
 }

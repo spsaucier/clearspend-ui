@@ -15,6 +15,7 @@ interface TagSelectProps {
   value: string;
   options: readonly Readonly<TagOption>[];
   onChange: (value: string) => void;
+  class?: string;
 }
 
 export function TagSelect(props: Readonly<TagSelectProps>) {
@@ -22,6 +23,7 @@ export function TagSelect(props: Readonly<TagSelectProps>) {
 
   return (
     <Dropdown
+      class={props.class}
       menu={
         <For each={props.options}>
           {(option) => (

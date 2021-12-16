@@ -10,7 +10,7 @@
 .popover {
   position: absolute;
   display: flex;
-  width: 240px;
+  width: 100%;
   padding: var(--pd-16);
   flex-direction: column;
   background: var(--tw-white);

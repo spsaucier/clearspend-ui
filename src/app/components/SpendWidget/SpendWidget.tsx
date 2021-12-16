@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 
+import type { JSXElement } from 'solid-js';
+
 import { LineChart, ILineChartData } from '_common/components/Charts';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
@@ -9,12 +11,14 @@ import css from './SpendWidget.css';
 
 interface SpendWidgetProps {
   data: readonly Readonly<ILineChartData>[];
+  controls: JSXElement;
 }
 
 export function SpendWidget(props: Readonly<SpendWidgetProps>) {
   return (
     <Widget
       title="Spend"
+      extra={props.controls}
       sub={
         <span class={css.info}>
           <strong class={css.total}>{formatCurrency(4570.04)}</strong>

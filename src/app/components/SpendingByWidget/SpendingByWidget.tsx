@@ -34,7 +34,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
     <Widget
       title="Spending by"
       class={props.class}
-      extra={<TagSelect value={type()} options={OPTIONS} onChange={setType} />}
+      extra={<TagSelect value={type()} options={OPTIONS} onChange={setType} class={css.fullWidthDropdown} />}
     >
       <div class={css.content}>
         <ol class={css.list}>

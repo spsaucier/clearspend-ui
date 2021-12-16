@@ -101,7 +101,7 @@
   background-color: transparent;
 
   &:hover {
-    background-color: var(--tw-gray-10);
+    background-color: var(--tw-gray-20);
   }
 
   &:disabled {

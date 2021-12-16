@@ -46,3 +46,11 @@
   align-self: center;
   justify-self: center;
 }
+
+.full-width-dropdown {
+  flex-grow: 1;
+
+  & > span {
+    width: 100%;
+  }
+}
