@@ -91,4 +91,5 @@
 
 .content {
   padding: 0 var(--pd-24) var(--pd-24);
+  overflow: hidden;
 }

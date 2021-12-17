@@ -8,6 +8,7 @@ import css from './FormItem.css';
 
 export interface FormItemProps {
   label?: JSX.Element;
+  multiple?: boolean;
   extra?: JSX.Element;
   error?: JSX.Element;
   class?: string;
@@ -17,7 +18,10 @@ export interface FormItemProps {
 export function FormItem(props: Readonly<FormItemProps>) {
   return (
     <div class={join(css.root, props.class)}>
-      <ConditionalWrapper condition={!!props.label} wrapper={(children) => <label>{children}</label>}>
+      <ConditionalWrapper
+        condition={!!props.label && !props.multiple}
+        wrapper={(children) => <label>{children}</label>}
+      >
         {props.label && <div class={css.label}>{props.label}</div>}
         <div>{props.children}</div>
         <div class={css.description}>

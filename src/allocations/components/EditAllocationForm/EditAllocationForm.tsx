@@ -1,30 +1,40 @@
 import { Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
+import { useBool } from '_common/utils/useBool';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
-import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
-import { Select } from '_common/components/Select';
-import { formatAmount, parseAmount } from '_common/formatters/amount';
+import { Drawer } from '_common/components/Drawer';
+import { formatAmount } from '_common/formatters/amount';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
+import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
+import { SelectEmployee } from 'employees/components/SelectEmployee';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { Allocation, CreateAllocationRequest } from 'generated/capital';
+import type {
+  Allocation,
+  UserData,
+  MccGroup,
+  CreateUserRequest,
+  CreateUserResponse,
+  CreateAllocationRequest,
+} from 'generated/capital';
 
 import { AllocationSelect } from '../AllocationSelect';
+import { PAYMENT_TYPES, SwitchPaymentTypes } from '../SwitchPaymentTypes';
+import { SwitchMccCategories } from '../SwitchMccCategories';
+
+import { getFormOptions, convertFormData } from './utils';
+import type { FormValues } from './types';
 
 import css from './EditAllocationForm.css';
 
-interface FormValues {
-  name: string;
-  parent: string;
-  amount: string;
-  owner: string;
-}
-
 interface EditAllocationFormProps {
+  users: readonly Readonly<UserData>[];
   allocations: readonly Readonly<Allocation>[];
+  mccCategories: readonly Readonly<MccGroup>[];
+  onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
   onSave: (data: Readonly<CreateAllocationRequest>) => Promise<unknown>;
 }
 
@@ -33,27 +43,20 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
 
-  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
-    defaultValues: { name: '', parent: '', amount: '', owner: '' },
-    rules: { name: [required], parent: [required] },
-  });
+  const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
+  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(getFormOptions());
+
+  const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
+    const resp = await props.onAddEmployee(data);
+    handlers.owner(resp.userId);
+    toggleEmployeeDrawer();
+  };
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    const data = values();
-    await props
-      .onSave({
-        name: data.name,
-        amount: { currency: 'USD', amount: parseAmount(data.amount) },
-        parentAllocationId: data.parent,
-        ownerId: data.owner,
-        limits: [],
-        disabledMccGroups: [],
-        disabledTransactionChannels: [],
-      })
-      .catch(() => {
-        messages.error({ title: i18n.t('Something went wrong') });
-      });
+    await props.onSave(convertFormData(values(), PAYMENT_TYPES, props.mccCategories)).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
   };
 
   return (
@@ -115,17 +118,41 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         }
       >
         <FormItem label={<Text message="Allocation owner(s)" />} error={errors().owner} class={css.field}>
-          <Select
+          <SelectEmployee
             value={values().owner}
-            placeholder={String(i18n.t('Search by employee name'))}
-            disabled
             error={Boolean(errors().owner)}
+            users={props.users}
+            onAddClick={toggleEmployeeDrawer}
             onChange={handlers.owner}
-          >
-            {undefined}
-          </Select>
+          />
         </FormItem>
       </Section>
+      <Section
+        title={<Text message="Default Card Controls" />}
+        description={
+          <Text
+            message={
+              'Set default limits for how much can be spent with cards in this allocation. ' +
+              'These can be customized when issuing new cards.'
+            }
+          />
+        }
+      >
+        <FormItem multiple label={<Text message="Categories" />}>
+          <SwitchMccCategories
+            value={values().categories}
+            items={props.mccCategories}
+            class={css.box}
+            onChange={handlers.categories}
+          />
+        </FormItem>
+        <FormItem multiple label={<Text message="Payment types" />}>
+          <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
+        </FormItem>
+      </Section>
+      <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
+        <EditEmployeeFlatForm onSave={onAddEmployee} />
+      </Drawer>
       <Show when={isDirty()}>
         <PageActions action={<Text message="Create Allocation" />} onCancel={reset} onSave={onSubmit} />
       </Show>

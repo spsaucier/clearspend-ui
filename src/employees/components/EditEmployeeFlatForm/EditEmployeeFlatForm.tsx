@@ -2,6 +2,7 @@ import { Button } from '_common/components/Button';
 import { Form, createForm } from '_common/components/Form';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useMessages } from 'app/containers/Messages/context';
+import type { CreateUserRequest } from 'generated/capital';
 
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
 import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
@@ -11,7 +12,7 @@ import { getFormOptions } from '../EditEmployeeForm/utils';
 import css from './EditEmployeeFlatForm.css';
 
 interface EditEmployeeFlatFormProps {
-  onSave: (userData: FormValues) => Promise<unknown>;
+  onSave: (userData: Readonly<CreateUserRequest>) => Promise<unknown>;
 }
 
 export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>) {
@@ -22,7 +23,14 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      save(data).catch(() => {
+      const { firstName, lastName, email, phone, ...address } = data;
+      save({
+        firstName,
+        lastName,
+        email,
+        phone,
+        address: { ...address, country: 'USA' },
+      }).catch(() => {
         messages.error({ title: 'Something went wrong' });
       });
     }
@@ -30,7 +38,7 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
 
   return (
     <Form class={css.root} onSubmit={wrapSubmit(onSubmit)}>
-      <div>
+      <div class={css.wrapper}>
         <PersonalInfoFormItems values={values()} errors={errors()} handlers={handlers} />
         <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
       </div>

@@ -94,7 +94,7 @@ export default function Allocations() {
               <CardControls />
             </Match>
             <Match when={tab() === Tabs.settings}>
-              <Settings />
+              <Settings allocation={current()!} onReload={allocations.reload} />
             </Match>
           </Switch>
         </Page>

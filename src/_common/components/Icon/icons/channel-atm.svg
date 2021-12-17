@@ -1,0 +1,12 @@
+<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="m7.2 14 .23-.76H8.7l.24.76h.94l-1.22-3.64H7.48L6.25 14h.94Zm.44-1.43.4-1.29h.04l.4 1.29h-.84ZM9.9 11.08H11V14h.86v-2.92h1.1v-.72H9.9v.72ZM13.6 10.36V14h.85v-2.25h.03l.87 2.23h.55l.88-2.21h.03V14h.85v-3.64h-1.09l-.92 2.26h-.04l-.93-2.26H13.6Z"
+    fill="currentColor"
+  />
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M19 7.5H5a.5.5 0 0 0-.5.5v8c0 .28.22.5.5.5h14a.5.5 0 0 0 .5-.5V8a.5.5 0 0 0-.5-.5ZM5 6a2 2 0 0 0-2 2v8c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5Z"
+    fill="currentColor"
+  />
+</svg>

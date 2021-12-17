@@ -1,0 +1,1 @@
+export { SwitchMccCategories } from './SwitchMccCategories';

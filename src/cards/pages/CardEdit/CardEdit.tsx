@@ -2,13 +2,13 @@ import { Switch, Match } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
-import { useResource } from '_common/utils/useResource';
 import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { useMessages } from 'app/containers/Messages/context';
-import { getAllocations } from 'allocations/services';
-import { getUsers, saveUser } from 'employees/services';
+import { useAllocations } from 'allocations/stores/allocations';
+import { saveUser } from 'employees/services';
+import { useUsersList } from 'employees/stores/usersList';
 import type { CreateUserRequest, IssueCardRequest } from 'generated/capital';
 
 import { EditCardForm } from '../../components/EditCardForm';
@@ -20,12 +20,12 @@ export default function CardEdit() {
   const navigate = useNav();
   const location = useLoc<{ userId: string; allocationId: string }>();
 
-  const [allocations, aStatus, , , reloadAllocations] = useResource(getAllocations, undefined);
-  const [users, uStatus, , , reloadUsers] = useResource(getUsers, undefined);
+  const allocations = useAllocations({ initValue: [] });
+  const users = useUsersList({ initValue: [] });
 
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
-    await reloadUsers();
+    await users.reload();
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The new employee has been successfully added to your organization.'),
@@ -45,21 +45,21 @@ export default function CardEdit() {
   return (
     <Page title={<Text message="New Card" />}>
       <Switch>
-        <Match when={aStatus().error}>
-          <LoadingError onReload={reloadAllocations} />
+        <Match when={allocations.error}>
+          <LoadingError onReload={allocations.reload} />
         </Match>
-        <Match when={uStatus().error}>
-          <LoadingError onReload={reloadUsers} />
+        <Match when={users.error}>
+          <LoadingError onReload={users.reload} />
         </Match>
-        <Match when={(aStatus().loading && !allocations()) || (uStatus().loading && !users())}>
+        <Match when={allocations.loading || users.loading}>
           <Loading />
         </Match>
-        <Match when={allocations() && users()}>
+        <Match when={allocations.data?.length}>
           <EditCardForm
             userId={location.state?.userId}
             allocationId={location.state?.allocationId}
-            users={users()!}
-            allocations={allocations()!}
+            users={users.data!}
+            allocations={allocations.data!}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
           />
