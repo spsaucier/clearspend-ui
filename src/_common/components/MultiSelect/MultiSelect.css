@@ -66,11 +66,6 @@
   flex-wrap: wrap;
   border: 1px solid #c2c2bf;
   border-radius: 8px;
-
-  /* &:focus {
-    outline: 2px solid #44f075;
-    border-color: #44f075;
-  } */
 }
 
 .selected-option {

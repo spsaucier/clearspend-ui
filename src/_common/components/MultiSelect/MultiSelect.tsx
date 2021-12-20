@@ -81,8 +81,6 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
       props.onChange?.(props.value.splice(0, props.value.length - 1));
       setOpen(true);
     }
-    // eslint-disable-next-line no-console
-    console.log('T: ', e.keyCode);
     if (e.keyCode === KEY_CODES.Escape) {
       setOpen(false);
     } else if ([KEY_CODES.ArrowUp, KEY_CODES.ArrowDown, KEY_CODES.Tab].includes(e.keyCode)) {
