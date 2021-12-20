@@ -13,7 +13,7 @@ export default {
     disabled: { control: { type: 'boolean' } },
   },
   args: {
-    placeholder: 'Placeholder...',
+    placeholder: 'Search...',
     error: false,
     disabled: false,
   },

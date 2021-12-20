@@ -1,6 +1,7 @@
-import { useContext, createMemo, Show, createSignal } from 'solid-js';
+import { useContext, createMemo, createSignal } from 'solid-js';
 
-import { Icon } from '../Icon';
+import { KEY_CODES } from '_common/constants/keyboard';
+
 import { join } from '../../utils/join';
 
 import { MultiSelectContext } from './context';
@@ -13,29 +14,29 @@ export function Option(props: Readonly<OptionProps>) {
   const active = createMemo(() => context.value?.includes(props.value));
   const [isActive, setIsActive] = createSignal(active());
 
-  // const onKeyDown = (e: KeyboardEvent) => {
-  //   if ([KEY_CODES.Enter, KEY_CODES.Space].includes(e.keyCode)) {
-  //     context.onChange?.(context.value ? [...context.value, props.value] : [props.value]);
-  //     e.preventDefault();
-  //     e.stopImmediatePropagation();
-  //   } else if (e.keyCode === KEY_CODES.ArrowDown) {
-  //     const nextSibling = document.activeElement?.nextElementSibling;
-  //     if (nextSibling) {
-  //       (nextSibling as HTMLElement).focus();
-  //     }
-  //     e.preventDefault();
-  //   } else if (e.keyCode === KEY_CODES.ArrowUp) {
-  //     const prevSibling = document.activeElement?.previousElementSibling;
-  //     if (prevSibling) {
-  //       (prevSibling as HTMLElement).focus();
-  //     } else {
-  //       context.close?.(true);
-  //     }
-  //     e.preventDefault();
-  //   } else if (e.keyCode === KEY_CODES.Escape) {
-  //     context.close?.(true);
-  //   }
-  // };
+  const onKeyDown = (e: KeyboardEvent) => {
+    if ([KEY_CODES.Enter, KEY_CODES.Space].includes(e.keyCode)) {
+      context.onChange?.(props.value);
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    } else if (e.keyCode === KEY_CODES.ArrowDown) {
+      const nextSibling = document.activeElement?.nextElementSibling;
+      if (nextSibling) {
+        (nextSibling as HTMLElement).focus();
+      }
+      e.preventDefault();
+    } else if (e.keyCode === KEY_CODES.ArrowUp) {
+      const prevSibling = document.activeElement?.previousElementSibling;
+      if (prevSibling) {
+        (prevSibling as HTMLElement).focus();
+      } else {
+        context.close?.(true);
+      }
+      e.preventDefault();
+    } else if (e.keyCode === KEY_CODES.Escape) {
+      context.close?.(true);
+    }
+  };
 
   return (
     <li
@@ -45,16 +46,15 @@ export function Option(props: Readonly<OptionProps>) {
         [css.active!]: isActive(),
         [css.disabled!]: props.disabled,
       }}
+      onKeyDown={onKeyDown}
       onClick={() => {
         setIsActive(!isActive());
         context.onChange?.(props.value);
       }}
       tabindex="0"
     >
+      <input class={css.customCheckbox} type="checkbox" checked={isActive()} tabIndex={-1} />
       <span class={css.content}>{props.children}</span>
-      <Show when={isActive()}>
-        <Icon size="sm" name="confirm" class={css.icon} />
-      </Show>
     </li>
   );
 }

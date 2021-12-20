@@ -1,5 +1,7 @@
 import { createSignal, Show, JSX, onMount, onCleanup, For } from 'solid-js';
 
+import { KEY_CODES } from '_common/constants/keyboard';
+
 import { Icon } from '../Icon';
 import { Popover } from '../Popover';
 import { join } from '../../utils/join';
@@ -13,38 +15,31 @@ import css from './MultiSelect.css';
 export function MultiSelect(props: Readonly<MultiSelectProps>) {
   let inputElement!: HTMLInputElement;
   let listElement!: HTMLUListElement;
+  let inputWrapperElement!: HTMLDivElement;
+
   const [open, setOpen] = createSignal(false);
-  const [search, ,] = createSignal('');
+  const [searchString, setSearchString] = createSignal('');
 
   const selected = () => {
     return props.value?.map((v) => getOptions(props.children).find((el) => el.dataset.value === v)?.innerText);
   };
 
   const options = () => {
-    const text = search().toLowerCase();
+    const text = searchString().toLowerCase();
     const items = getOptions(props.children);
     return !text ? items : items.filter(isMatch(text));
   };
 
-  // const onSearch = (searchString: string) => {
-  //   if (props.changeOnSearch) {
-  //     props.onChange?.([searchString]); // todo
-  //   } else {
-  //     setSearch(searchString);
-  //     if (!searchString) {
-  //       props.onChange?.(['asdf']); // todo
-  //       return;
-  //     }
-  //     const exact = options().find((el) => el.innerText === searchString);
-  //     if (exact) props.onChange?.([exact.dataset.value!]); // todo
-  //   }
-  // };
-
   const onChange = (value: string) => {
+    setOpen(false); // Toggle open on each change to force re-render of Popover incase offset changes
     if (props.value?.includes(value)) {
       props.onChange?.(props.value.filter((v) => v !== value));
     } else {
       props.onChange?.(props.value ? [...props.value, value] : [value]);
+    }
+    setOpen(true);
+    if (open()) {
+      inputElement.focus();
     }
   };
 
@@ -55,41 +50,53 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
   const resultRender = (result: string) => (props.valueRender ? props.valueRender(result) : selected());
 
   const onInputChange: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
-    // eslint-disable-next-line no-console
-    console.log('Event: ', event);
-    // let text = event.currentTarget.value;
-    // if (typeof merged.formatter === 'function') {
-    //   text = merged.formatter(text);
-    //   input.value = text;
-    // }
-    // merged.onChange?.(text, event);
+    setSearchString(event.currentTarget.value);
   };
 
   const onMouseDownEvent = (event: Event) => {
-    if (!listElement.contains(event.target as Node)) {
+    if (open() && !listElement.contains(event.target as Node) && !inputWrapperElement.contains(event.target as Node)) {
       setOpen(false);
+      setSearchString('');
     }
   };
 
-  const onBlurEvent = () => {
-    if (open()) {
-      inputElement.focus();
-    }
+  const onMouseDownInsideSelectEvent = () => {
+    setOpen(true);
+    inputElement.focus();
   };
 
   onMount(() => {
-    inputElement.addEventListener('blur', onBlurEvent);
+    inputWrapperElement.addEventListener('mousedown', onMouseDownInsideSelectEvent);
     document.addEventListener('mousedown', onMouseDownEvent);
   });
 
   onCleanup(() => {
-    inputElement.removeEventListener('blur', onBlurEvent);
+    inputWrapperElement.removeEventListener('mousedown', onMouseDownInsideSelectEvent);
     document.removeEventListener('mousedown', onMouseDownEvent);
   });
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (!searchString() && props.value && props.value.length > 0 && KEY_CODES.Delete === e.keyCode) {
+      setOpen(false);
+      props.onChange?.(props.value.splice(0, props.value.length - 1));
+      setOpen(true);
+    }
+    // eslint-disable-next-line no-console
+    console.log('T: ', e.keyCode);
+    if (e.keyCode === KEY_CODES.Escape) {
+      setOpen(false);
+    } else if ([KEY_CODES.ArrowUp, KEY_CODES.ArrowDown, KEY_CODES.Tab].includes(e.keyCode)) {
+      if (!listElement.contains(document.activeElement)) {
+        (listElement.firstChild as HTMLElement).focus();
+      }
+      e.preventDefault();
+    }
+  };
 
   return (
     <Popover
       open={open()}
+      test={props.value?.length}
       class={join(css.popup, props.popupClass)}
       position="bottom-left"
       content={
@@ -101,37 +108,32 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
       }
     >
       <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>
-        {/* <Input
-          ref={input}
-          name={props.name}
-          value={selected()}
-          error={props.error}
-          placeholder={props.placeholder}
-          autoComplete="nope"
-          disabled={props.disabled}
-          inputClass={css.input}
-          onChange={onSearch}
-          onFocusIn={onFocusIn}
-          onFocusOut={onFocusOut}
-          onKeyDown={onKeyDown}
-          suffix={props.loading ? <Spin /> : null}
-        /> */}
-        <div style={{ display: 'flex', 'margin-bottom': '20px' }}>
+        <div class={css.inputWrapper} ref={inputWrapperElement}>
           <For each={props.value}>
             {(v) => {
-              return <div>{resultRender(v)}</div>;
+              return (
+                <div class={css.selectedOption}>
+                  <span class={css.selectedOptionText}>{resultRender(v)}</span>
+                  <span class={css.selectedOptionX} onClick={() => onChange(v)}>
+                    x
+                  </span>
+                </div>
+              );
             }}
           </For>
+          <input
+            value={searchString()}
+            class={css.searchOptionInput}
+            ref={inputElement}
+            name={props.name}
+            placeholder={props.placeholder}
+            disabled={props.disabled}
+            onInput={onInputChange}
+            onClick={showOptions}
+            onKeyDown={onKeyDown}
+            onFocusIn={showOptions}
+          />
         </div>
-        <input
-          ref={inputElement}
-          name={props.name}
-          placeholder={props.placeholder}
-          disabled={props.disabled}
-          onInput={onInputChange}
-          onClick={showOptions}
-          onFocusIn={showOptions}
-        />
         <Show when={!props.changeOnSearch}>
           <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
         </Show>

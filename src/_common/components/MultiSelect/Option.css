@@ -7,7 +7,8 @@
 
   &:hover,
   &:focus {
-    background: var(--tw-primary-light);
+    background: #e7f8e8;
+    border-radius: 8px;
     outline: none;
   }
 }
@@ -30,4 +31,52 @@
 .icon {
   margin-left: var(--pd-8);
   flex-shrink: 0;
+}
+
+.custom-checkbox[type='checkbox'] {
+  position: relative;
+  margin-right: 10px;
+  margin-bottom: 4px;
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: white;
+    border: 1px solid #e9ddd1;
+    border-radius: 2px;
+  }
+
+  &:checked::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-color: #2e614e;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+  &:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 6px;
+    display: block;
+    width: 5px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 }
