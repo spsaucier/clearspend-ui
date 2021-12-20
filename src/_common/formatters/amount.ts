@@ -1,4 +1,4 @@
-import { formatCurrency } from '../api/intl/formatCurrency';
+import { formatBigNumber } from '../api/intl/formatCurrency';
 
 export function cleanAmount(val: string): string {
   return val.replace(/[^\d]/g, '');
@@ -11,5 +11,5 @@ export function parseAmount(val: string): number {
 export function formatAmount(val: string): string {
   const num = parseAmount(val);
   if (Number.isNaN(num)) return '';
-  return formatCurrency(num, { fractions: 0 });
+  return formatBigNumber(num, { fractions: 0 });
 }

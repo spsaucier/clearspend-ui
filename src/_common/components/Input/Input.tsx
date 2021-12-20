@@ -10,7 +10,7 @@ export interface InputProps {
   name?: string;
   value?: string;
   maxLength?: number;
-  type?: 'text' | 'password' | 'email' | 'tel' | 'file';
+  type?: 'text' | 'password' | 'email' | 'tel' | 'file' | 'number';
   inputMode?: 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
   formatter?: (value: string) => string;
   autoComplete?: string;

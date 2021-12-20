@@ -6,7 +6,6 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { useBool } from '_common/utils/useBool';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
-import { Input } from '_common/components/Input';
 import { Drawer } from '_common/components/Drawer';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
@@ -16,6 +15,7 @@ import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { SelectEmployee } from 'employees/components/SelectEmployee';
+import { InputCurrency } from '_common/components/InputCurrency';
 import { formatName } from 'employees/utils/formatName';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { Allocation, CreateUserRequest, CreateUserResponse, IssueCardRequest, UserData } from 'generated/capital';
@@ -162,7 +162,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             label={<Text message="Amount" />}
             extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
           >
-            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
           </FormItem>
         </SwitchBox>
         <SwitchBox disabled checked={false} label={<Text message="Monthly limit" />} class={css.switchBox}>
@@ -170,7 +170,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             label={<Text message="Amount" />}
             extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
           >
-            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
           </FormItem>
         </SwitchBox>
       </Section>

@@ -5,12 +5,12 @@ import { useBool } from '_common/utils/useBool';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Drawer } from '_common/components/Drawer';
-import { formatAmount } from '_common/formatters/amount';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { SelectEmployee } from 'employees/components/SelectEmployee';
+import { InputCurrency } from '_common/components/InputCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   Allocation,
@@ -96,11 +96,10 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           error={errors().amount}
           class={css.field}
         >
-          <Input
+          <InputCurrency
             name="amount"
-            placeholder={String(i18n.t('$ Enter the amount'))}
+            placeholder={String(i18n.t('Enter amount'))}
             value={values().amount}
-            formatter={formatAmount}
             error={Boolean(errors().amount)}
             onChange={handlers.amount}
           />

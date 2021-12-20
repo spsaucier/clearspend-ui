@@ -3,7 +3,7 @@ import { useI18n, Text } from 'solid-i18n';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { FormItem } from '_common/components/Form';
-import { Input } from '_common/components/Input';
+import { InputCurrency } from '_common/components/InputCurrency';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
 import css from './CardControls.css';
@@ -30,7 +30,7 @@ export function CardControls() {
             // eslint-disable-next-line @typescript-eslint/no-magic-numbers
             extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
           >
-            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
           </FormItem>
         </SwitchBox>
         <SwitchBox checked={true} label={<Text message="Monthly limit" />}>
@@ -39,7 +39,7 @@ export function CardControls() {
             // eslint-disable-next-line @typescript-eslint/no-magic-numbers
             extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
           >
-            <Input placeholder={String(i18n.t('$ Enter the amount'))} />
+            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
           </FormItem>
         </SwitchBox>
       </div>
