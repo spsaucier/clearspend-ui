@@ -72,12 +72,6 @@ export function Popover(props: Readonly<PopoverProps>) {
       : merged.children
   ) as Element;
 
-  // const [popoverStyle, setPopoverStyle] = createSignal(calcDialogStyle(pos(), trigger));
-
-  // createEffect(() => {
-  //   setPopoverStyle(calcDialogStyle(pos(), trigger));
-  // });
-
   return (
     <>
       {trigger}
