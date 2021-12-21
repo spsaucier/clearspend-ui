@@ -17,7 +17,6 @@ interface BaseProps {
   position?: PopoverPosition;
   content: JSXElement;
   class?: string;
-  test?: number;
 }
 
 export interface ControlledProps extends BaseProps {

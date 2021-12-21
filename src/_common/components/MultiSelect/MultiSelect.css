@@ -13,6 +13,13 @@
   }
 }
 
+.icon {
+  width: 16px;
+  height: 16px;
+  margin-top: var(--pd-4);
+  margin-left: -2px;
+}
+
 .value {
   position: absolute;
   top: 0;
@@ -62,10 +69,10 @@
 
 .input-wrapper {
   display: flex;
-  padding: 2px;
+  padding: var(--pd-2);
   flex-wrap: wrap;
-  border: 1px solid #c2c2bf;
-  border-radius: 8px;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-8);
 }
 
 .selected-option {
@@ -74,29 +81,25 @@
   box-sizing: border-box;
   max-width: 100%;
   height: 24px;
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin-top: var(--pd-2);
+  margin-bottom: var(--pd-2);
   flex: none;
   line-height: 22px;
-  background: #f5f5f5;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  background: var(--tw-gray-20);
+  background: var(--tw-gray-15);
+  border: 1px solid var(--tw-gray-30);
+  border: 1px solid var(--tw-gray-25);
+  border-radius: var(--pd-4);
   user-select: none;
   cursor: default;
-  -webkit-margin-end: 4px;
-  margin-inline-end: 4px;
-  -webkit-padding-start: 8px;
-  padding-inline-start: 8px;
-  -webkit-padding-end: 4px;
-  padding-inline-end: 4px;
+  margin-inline-end: var(--pd-4);
+  padding-inline-start: var(--pd-8);
+  padding-inline-end: var(--pd-4);
 }
 
 .selected-option-text {
   display: inline-block;
-  margin-right: 4px;
+  margin-right: var(--pd-4);
   white-space: pre;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -105,23 +108,21 @@
 .selected-option-x {
   display: inline-block;
   color: #00000073;
-  font-size: 12px;
+  font-size: var(--text-12);
   line-height: inherit;
   text-align: center;
   cursor: pointer;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 .search-option-input {
   width: auto;
   min-width: 100px;
   margin-top: 3px;
-  margin-bottom: 2px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 4px;
+  margin-bottom: var(--pd-2);
+  padding-top: var(--pd-4);
+  padding-bottom: var(--pd-4);
+  padding-left: var(--pd-4);
   flex: 1;
   border: 0;
   outline: transparent;

@@ -113,7 +113,7 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
                 <div class={css.selectedOption}>
                   <span class={css.selectedOptionText}>{resultRender(v)}</span>
                   <span class={css.selectedOptionX} onClick={() => onChange(v)}>
-                    x
+                    <Icon name={'cancel'} class={css.icon} />
                   </span>
                 </div>
               );
