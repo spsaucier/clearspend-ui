@@ -9,6 +9,10 @@
  * ---------------------------------------------------------------
  */
 
+export interface LimitTypeMap {
+  limitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE' | 'ATM_WITHDRAW';
+}
+
 export interface ControllerError {
   message?: string;
 }
@@ -885,6 +889,11 @@ export interface EventNotificationAdvanceResponse {
   NotificationEventId?: string;
 }
 
+export interface CurrencyLimit {
+  currency: 'UNSPECIFIED' | 'USD';
+  typeMap: LimitTypeMap;
+}
+
 export interface IssueCardRequest {
   /**
    * @format uuid
@@ -906,8 +915,9 @@ export interface IssueCardRequest {
   currency: 'UNSPECIFIED' | 'USD';
   cardType: ('PLASTIC' | 'VIRTUAL')[];
   isPersonal: boolean;
-  dailySpend?: Amount;
-  monthlySpend?: Amount;
+  limits: CurrencyLimit[];
+  disabledMccGroups: string[];
+  disabledTransactionChannels: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
 export interface IssueCardResponse {
@@ -1203,16 +1213,6 @@ export interface CreateAllocationRequest {
   disabledTransactionChannels: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
-export interface CurrencyLimit {
-  currency: 'UNSPECIFIED' | 'USD';
-  typeMap: Record<string, Record<string, Limit>>;
-}
-
-export interface Limit {
-  amount?: number;
-  usedAmount?: number;
-}
-
 export interface CreateAllocationResponse {
   /** @format uuid */
   allocationId: string;
@@ -1331,6 +1331,102 @@ export interface PagedDataAccountActivityResponse {
 export interface ReceiptDetails {
   /** @format uuid */
   receiptId?: string;
+}
+
+export interface GraphDataRequest {
+  /** @format uuid */
+  allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  cardId?: string;
+
+  /** @format date-time */
+  from: string;
+
+  /** @format date-time */
+  to: string;
+}
+
+export interface DashboardGraphData {
+  totalSpend?: number;
+  averageSpend?: number;
+  graphData?: GraphData[];
+}
+
+export interface GraphData {
+  amount?: number;
+
+  /** @format date-time */
+  offsetDateTime?: string;
+}
+
+export interface ChartDataRequest {
+  chartFilter: 'MERCHANT_CATEGORY' | 'ALLOCATION' | 'EMPLOYEE' | 'MERCHANT';
+
+  /** @format uuid */
+  allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format date-time */
+  from: string;
+
+  /** @format date-time */
+  to: string;
+}
+
+export interface AllocationChartData {
+  allocation?: AllocationInfo;
+  amount?: Amount;
+}
+
+export interface AllocationInfo {
+  /** @format uuid */
+  allocationId?: string;
+  name?: string;
+}
+
+export interface ChartDataResponse {
+  merchantCategoryChartData?: MerchantCategoryChartData[];
+  allocationChartData?: AllocationChartData[];
+  userChartData?: UserChartData[];
+  merchantChartData?: MerchantChartData[];
+}
+
+export interface MerchantCategoryChartData {
+  merchantType?: 'UTILITIES' | 'GROCERIES' | 'RESTAURANTS' | 'OTHERS';
+  amount?: Amount;
+}
+
+export interface MerchantChartData {
+  merchant?: MerchantInfo;
+  amount?: Amount;
+}
+
+export interface MerchantInfo {
+  name?: string;
+  type?: 'UTILITIES' | 'GROCERIES' | 'RESTAURANTS' | 'OTHERS';
+  merchantNumber?: string;
+
+  /** @format int32 */
+  merchantCategoryCode?: number;
+}
+
+export interface UserChartData {
+  user?: UserChartInfo;
+  amount?: Amount;
+}
+
+export interface UserChartInfo {
+  /** @format uuid */
+  userId?: string;
+  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface UpdateUserRequest {
@@ -1462,6 +1558,22 @@ export interface Data {
   child_entities?: ChildEntity[];
 }
 
+export interface UpdateCardRequest {
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+}
+
+export interface CardDetailsResponse {
+  card: Card;
+  ledgerBalance: Amount;
+  availableBalance: Amount;
+  allocationName: string;
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+}
+
 export interface UpdateAllocationRequest {
   /**
    * name of the department/ allocation
@@ -1485,16 +1597,6 @@ export interface UpdateAllocationRequest {
 export interface AllocationDetailsResponse {
   allocation?: Allocation;
   owner?: UserData;
-  limits?: CurrencyLimit[];
-  disabledMccGroups?: string[];
-  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
-}
-
-export interface CardDetailsResponse {
-  card: Card;
-  ledgerBalance: Amount;
-  availableBalance: Amount;
-  allocationName: string;
   limits?: CurrencyLimit[];
   disabledMccGroups?: string[];
   disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];

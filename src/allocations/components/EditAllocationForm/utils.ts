@@ -1,8 +1,10 @@
 import type { FormOptions } from '_common/components/Form';
 import { parseAmount } from '_common/formatters/amount';
 import { required } from '_common/components/Form/rules/required';
-import type { SwitchGroupBoxItem } from 'app/components/SwitchGroupBox';
 import type { CreateAllocationRequest, MccGroup } from 'generated/capital';
+
+import { DEFAULT_LIMITS } from '../../constants/limits';
+import { convertFormLimits } from '../../utils/convertFormLimits';
 
 import type { FormValues } from './types';
 
@@ -15,19 +17,21 @@ export function getFormOptions(): FormOptions<FormValues> {
       owner: '',
       categories: [],
       channels: [],
+      purchasesLimits: { ...DEFAULT_LIMITS },
+      atmLimits: { ...DEFAULT_LIMITS },
     },
     rules: {
       name: [required],
       parent: [required],
       amount: [required],
       owner: [required],
+      // TODO: add rules for limits
     },
   };
 }
 
 export function convertFormData(
   data: Readonly<FormValues>,
-  types: readonly Readonly<SwitchGroupBoxItem>[],
   categories: readonly Readonly<MccGroup>[],
 ): Readonly<CreateAllocationRequest> {
   return {
@@ -35,12 +39,6 @@ export function convertFormData(
     amount: { currency: 'USD', amount: parseAmount(data.amount) },
     parentAllocationId: data.parent,
     ownerId: data.owner,
-    limits: [{ currency: 'USD', typeMap: {} }],
-    disabledMccGroups: categories
-      .map((item) => item.mccGroupId)
-      .filter((id) => !data.categories.includes(id!)) as string[],
-    disabledTransactionChannels: types
-      .map((item) => item.key)
-      .filter((id) => !data.channels.includes(id)) as CreateAllocationRequest['disabledTransactionChannels'],
+    ...convertFormLimits(data, categories),
   };
 }

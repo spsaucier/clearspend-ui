@@ -1,64 +1,78 @@
-import { createMemo, Show } from 'solid-js';
+import { createMemo, createEffect, Show, untrack, batch } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
-import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { useBool } from '_common/utils/useBool';
+import { useResource } from '_common/utils/useResource';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
-import { required } from '_common/components/Form/rules/required';
 import { Drawer } from '_common/components/Drawer';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import { SwitchLimits } from 'allocations/components/SwitchLimits';
+import { SwitchMccCategories } from 'allocations/components/SwitchMccCategories';
+import { SwitchPaymentTypes } from 'allocations/components/SwitchPaymentTypes';
+import { getAllocation } from 'allocations/services';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
+import {
+  getCategories,
+  getChannels,
+  getATMLimits,
+  getPurchasesLimits,
+  getDefaultLimits,
+  checkSameLimits,
+} from 'allocations/utils/convertFormLimits';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { SelectEmployee } from 'employees/components/SelectEmployee';
-import { InputCurrency } from '_common/components/InputCurrency';
 import { formatName } from 'employees/utils/formatName';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { Allocation, CreateUserRequest, CreateUserResponse, IssueCardRequest, UserData } from 'generated/capital';
-import type { CardType } from 'cards/types';
+import type {
+  Allocation,
+  AllocationDetailsResponse,
+  CreateUserRequest,
+  CreateUserResponse,
+  IssueCardRequest,
+  UserData,
+  MccGroup,
+  Amount,
+} from 'generated/capital';
 
 import { CardTypeSelect } from '../CardTypeSelect';
+import { ResetLimits } from '../ResetLimits';
+
+import { getFormOptions, convertFormData } from './utils';
+import type { FormValues } from './types';
 
 import css from './EditCardForm.css';
-
-function validTypes(value: readonly CardType[]): boolean | string {
-  return !!value.length || String(i18n.t('Required field'));
-}
-
-interface FormValues {
-  allocationId: string;
-  employee: string;
-  types: CardType[];
-  personal: boolean;
-}
 
 interface EditCardFormProps {
   userId?: string;
   allocationId?: string;
   users: readonly Readonly<UserData>[];
   allocations: readonly Readonly<Allocation>[];
+  mccCategories: readonly Readonly<MccGroup>[];
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
   onSave: (params: Readonly<IssueCardRequest>) => Promise<Readonly<void>>;
 }
 
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
-  const [loading] = wrapAction(props.onSave);
+  let skipUpdates = false;
+
   const messages = useMessages();
   const [showEmployee, toggleShowEmployee] = useBool();
+  const [loading, save] = wrapAction(props.onSave);
 
-  const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>({
-    defaultValues: {
-      allocationId: props.allocationId || '',
-      employee: props.userId || '',
-      types: [],
-      personal: false,
-    },
-    rules: { allocationId: [required], employee: [required], types: [validTypes] },
-  });
+  const [allocationData, , , setAllocationId, , mutateAllocationData] = useResource(
+    getAllocation,
+    props.allocationId,
+    Boolean(props.allocationId),
+  );
+
+  const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>(
+    getFormOptions({ userId: props.userId, allocationId: props.allocationId }),
+  );
 
   const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
     const resp = await props.onAddEmployee(data);
@@ -66,22 +80,19 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     toggleShowEmployee();
   };
 
+  const onReset = () => {
+    skipUpdates = true;
+    reset();
+    skipUpdates = false;
+  };
+
   const onSubmit = async () => {
+    skipUpdates = true;
     if (loading() || hasErrors(trigger())) return;
-    const data = values();
-    await props
-      .onSave({
-        // TODO
-        programId: '033955d1-f18e-497e-9905-88ba71e90208',
-        allocationId: data.allocationId,
-        userId: data.employee,
-        currency: 'USD',
-        cardType: data.types,
-        isPersonal: data.personal,
-      })
-      .catch(() => {
-        messages.error({ title: i18n.t('Something went wrong') });
-      });
+    await save(convertFormData(values(), props.mccCategories)).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
+    skipUpdates = false;
   };
 
   const allocation = createMemo(() => {
@@ -89,11 +100,42 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     return Boolean(id) ? props.allocations.find(allocationWithID(id)) : undefined;
   });
 
+  const maxAmount = createMemo(() => {
+    return allocation()?.account.ledgerBalance || ({ currency: 'USD', amount: 0 } as Amount);
+  });
+
   const ownerName = createMemo(() => {
     const id = values().employee;
     const user = Boolean(id) && values().personal ? props.users.find((item) => item.userId === id) : undefined;
     return user && formatName(user);
   });
+
+  createEffect(() => {
+    const prevID = untrack(allocationData)?.allocation.allocationId;
+    const currID = allocation()?.allocationId;
+    if (!currID && prevID) mutateAllocationData(null);
+    else if (currID && currID !== prevID) setAllocationId(currID);
+  });
+
+  const updateLimits = (data: Required<AllocationDetailsResponse> | null) => {
+    batch(() => {
+      handlers.categories(data ? getCategories(data, props.mccCategories) : []);
+      handlers.channels(data ? getChannels(data) : []);
+      handlers.purchasesLimits(data ? getPurchasesLimits(data) : getDefaultLimits());
+      handlers.atmLimits(data ? getATMLimits(data) : getDefaultLimits());
+    });
+  };
+
+  createEffect(() => {
+    const data = allocationData();
+    if (!skipUpdates) updateLimits(data);
+  });
+
+  const onResetLimits = () => {
+    updateLimits(allocationData());
+  };
+
+  const isSameLimits = createMemo(() => checkSameLimits(values(), allocationData(), props.mccCategories));
 
   return (
     <Form class={css.form}>
@@ -142,7 +184,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           name="name-on-card"
           checked={values().personal}
           label={<Text message="Show employee name" />}
-          class={css.switchBox}
+          class={css.box}
           onChange={handlers.personal}
         />
       </Section>
@@ -157,28 +199,42 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           />
         }
       >
-        <SwitchBox disabled checked={false} label={<Text message="Daily limit" />} class={css.switchBox}>
-          <FormItem
-            label={<Text message="Amount" />}
-            extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
-          >
-            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
-          </FormItem>
-        </SwitchBox>
-        <SwitchBox disabled checked={false} label={<Text message="Monthly limit" />} class={css.switchBox}>
-          <FormItem
-            label={<Text message="Amount" />}
-            extra={<Text message="Max value: {amount}" amount={formatCurrency(0)} />}
-          >
-            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
-          </FormItem>
-        </SwitchBox>
+        <FormItem multiple label={<Text message="Purchases" />}>
+          <SwitchLimits
+            name="purchases"
+            value={values().purchasesLimits}
+            maxAmount={maxAmount()}
+            class={css.box}
+            onChange={handlers.purchasesLimits}
+          />
+        </FormItem>
+        <FormItem multiple label={<Text message="Categories" />}>
+          <SwitchMccCategories
+            value={values().categories}
+            items={props.mccCategories}
+            class={css.box}
+            onChange={handlers.categories}
+          />
+        </FormItem>
+        <FormItem multiple label={<Text message="Payment types" />}>
+          <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
+        </FormItem>
+        <FormItem multiple label={<Text message="ATM transactions" />}>
+          <SwitchLimits
+            name="atm"
+            value={values().atmLimits}
+            maxAmount={maxAmount()}
+            class={css.box}
+            onChange={handlers.atmLimits}
+          />
+        </FormItem>
+        <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Section>
       <Drawer open={showEmployee()} title={<Text message="New Employee" />} onClose={toggleShowEmployee}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>
       <Show when={isDirty()}>
-        <PageActions action={<Text message="Create Card" />} onCancel={reset} onSave={onSubmit} />
+        <PageActions action={<Text message="Create Card" />} onCancel={onReset} onSave={onSubmit} />
       </Show>
     </Form>
   );

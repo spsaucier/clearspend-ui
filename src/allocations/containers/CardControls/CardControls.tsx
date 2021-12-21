@@ -1,48 +1,45 @@
-import { useI18n, Text } from 'solid-i18n';
+import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
-import { SwitchBox } from 'app/components/SwitchBox';
-import { FormItem } from '_common/components/Form';
-import { InputCurrency } from '_common/components/InputCurrency';
-import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { Data } from 'app/components/Data';
+import { useMCC } from 'app/stores/mcc';
+import type { Amount } from 'generated/capital';
 
-import css from './CardControls.css';
+import { CardControlsForm } from '../../components/CardControlsForm';
+import type { ControlsData } from '../../types';
 
-export function CardControls() {
-  const i18n = useI18n();
+interface CardControlsProps {
+  id: string;
+  allocationId?: string;
+  data: Readonly<ControlsData>;
+  maxAmount: Readonly<Amount>;
+  onSave: (allocationId: string, data: Readonly<ControlsData>) => Promise<unknown>;
+}
+
+export function CardControls(props: Readonly<CardControlsProps>) {
+  const mcc = useMCC();
 
   return (
-    <Section
-      title={<Text message="Default Card Controls" />}
-      description={
-        <Text
-          message={
-            'Set default limits for how much can be spent with cards in this allocation. ' +
-            'These can be customized when issuing new cards.'
-          }
+    <Data data={mcc.data} loading={mcc.loading} error={mcc.error} onReload={mcc.reload}>
+      <Section
+        title={<Text message="Default Card Controls" />}
+        description={
+          <Text
+            message={
+              'Set default limits for how much can be spent with cards in this allocation. ' +
+              'These can be customized when issuing new cards.'
+            }
+          />
+        }
+      >
+        <CardControlsForm
+          data={props.data}
+          maxAmount={props.maxAmount}
+          mccCategories={mcc.data!}
+          allocationId={props.allocationId}
+          onSave={(values) => props.onSave(props.id, values)}
         />
-      }
-    >
-      <div class={css.content}>
-        <SwitchBox checked={false} label={<Text message="Daily limit" />}>
-          <FormItem
-            label={<Text message="Amount" />}
-            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-            extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
-          >
-            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
-          </FormItem>
-        </SwitchBox>
-        <SwitchBox checked={true} label={<Text message="Monthly limit" />}>
-          <FormItem
-            label={<Text message="Amount" />}
-            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-            extra={<Text message="Max value: {amount}" amount={formatCurrency(4570.04)} />}
-          >
-            <InputCurrency placeholder={String(i18n.t('Enter amount'))} />
-          </FormItem>
-        </SwitchBox>
-      </div>
-    </Section>
+      </Section>
+    </Data>
   );
 }

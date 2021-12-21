@@ -5,14 +5,19 @@ import type {
   IssueCardRequest,
   PagedDataSearchCardData,
   SearchCardRequest,
+  UpdateCardRequest,
 } from 'generated/capital';
 
 export async function getCard(cardId: Card['cardId']) {
-  return (await service.get<Readonly<CardDetailsResponse>>(`/cards/${cardId}`)).data;
+  return (await service.get<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`)).data;
 }
 
 export async function saveCard(params: Readonly<IssueCardRequest>) {
   return (await service.post('/cards', params)).data;
+}
+
+export async function updateCard(cardId: string, params: Readonly<UpdateCardRequest>) {
+  return (await service.patch<Readonly<CardDetailsResponse>>(`/cards/${cardId}`, params)).data;
 }
 
 export async function searchCards(params: Readonly<SearchCardRequest>) {

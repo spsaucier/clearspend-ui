@@ -17,13 +17,13 @@ import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
-import type { Allocation } from 'generated/capital';
+import type { Allocation, UpdateCardRequest } from 'generated/capital';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import { getCard, blockCard, unblockCard } from '../../services';
+import { getCard, updateCard, blockCard, unblockCard } from '../../services';
 import { CardStatus, CardType } from '../../types';
 
 enum Tabs {
@@ -54,6 +54,14 @@ export default function CardView() {
   const allocation = createMemo(
     () => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined,
   );
+
+  const onUpdateCard = async (cardId: string, updates: Readonly<UpdateCardRequest>) => {
+    await updateCard(cardId, updates);
+    messages.success({
+      title: i18n.t('Success'),
+      message: i18n.t('Changes successfully saved.'),
+    });
+  };
 
   return (
     <Page
@@ -154,7 +162,13 @@ export default function CardView() {
             <Transactions cardId={card()!.cardId!} />
           </Match>
           <Match when={tab() === Tabs.controls}>
-            <CardControls />
+            <CardControls
+              id={card()!.cardId!}
+              data={data()!}
+              allocationId={card()!.allocationId}
+              maxAmount={data()!.ledgerBalance}
+              onSave={onUpdateCard}
+            />
           </Match>
         </Switch>
       </Data>

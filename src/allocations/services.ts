@@ -7,7 +7,7 @@ import type {
 } from 'generated/capital';
 
 export async function getAllocation(allocationId: string) {
-  return (await service.get<Readonly<Allocation>>(`/allocations/${allocationId}`)).data;
+  return (await service.get<Readonly<Required<AllocationDetailsResponse>>>(`/allocations/${allocationId}`)).data;
 }
 
 export async function getAllocations() {

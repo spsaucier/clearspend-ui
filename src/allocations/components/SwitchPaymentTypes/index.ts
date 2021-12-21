@@ -1,1 +1,1 @@
-export { PAYMENT_TYPES, SwitchPaymentTypes } from './SwitchPaymentTypes';
+export { SwitchPaymentTypes } from './SwitchPaymentTypes';

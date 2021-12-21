@@ -6,6 +6,7 @@ import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { useMessages } from 'app/containers/Messages/context';
+import { useMCC } from 'app/stores/mcc';
 import { useAllocations } from 'allocations/stores/allocations';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
@@ -20,6 +21,7 @@ export default function CardEdit() {
   const navigate = useNav();
   const location = useLoc<{ userId: string; allocationId: string }>();
 
+  const mcc = useMCC({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
   const users = useUsersList({ initValue: [] });
 
@@ -48,17 +50,21 @@ export default function CardEdit() {
         <Match when={allocations.error}>
           <LoadingError onReload={allocations.reload} />
         </Match>
+        <Match when={mcc.error}>
+          <LoadingError onReload={mcc.reload} />
+        </Match>
         <Match when={users.error}>
           <LoadingError onReload={users.reload} />
         </Match>
-        <Match when={allocations.loading || users.loading}>
+        <Match when={allocations.loading || users.loading || mcc.loading}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length}>
+        <Match when={allocations.data?.length && mcc.data?.length}>
           <EditCardForm
             userId={location.state?.userId}
             allocationId={location.state?.allocationId}
             users={users.data!}
+            mccCategories={mcc.data!}
             allocations={allocations.data!}
             onAddEmployee={onAddEmployee}
             onSave={onSave}

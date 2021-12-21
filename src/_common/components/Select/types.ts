@@ -16,6 +16,7 @@ export interface SelectProps {
   popupClass?: string;
   popupRender?: (list: JSXElement) => JSXElement;
   placeholder?: string;
+  autoComplete?: string;
   error?: boolean;
   children: JSXElement;
   onChange?: (value: string) => void;

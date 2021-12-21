@@ -10,7 +10,7 @@
   }
 }
 
-.switch-box {
+.box {
   @media (--bp-medium) {
     max-width: 460px;
   }

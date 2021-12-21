@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useBool } from '_common/utils/useBool';
@@ -13,6 +13,7 @@ import { SelectEmployee } from 'employees/components/SelectEmployee';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
+  Amount,
   Allocation,
   UserData,
   MccGroup,
@@ -22,8 +23,10 @@ import type {
 } from 'generated/capital';
 
 import { AllocationSelect } from '../AllocationSelect';
-import { PAYMENT_TYPES, SwitchPaymentTypes } from '../SwitchPaymentTypes';
+import { SwitchPaymentTypes } from '../SwitchPaymentTypes';
 import { SwitchMccCategories } from '../SwitchMccCategories';
+import { SwitchLimits } from '../SwitchLimits';
+import { allocationWithID } from '../../utils/allocationWithID';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -39,9 +42,10 @@ interface EditAllocationFormProps {
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
-  const [loading] = wrapAction(props.onSave);
   const i18n = useI18n();
   const messages = useMessages();
+
+  const [loading, save] = wrapAction(props.onSave);
 
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(getFormOptions());
@@ -54,10 +58,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    await props.onSave(convertFormData(values(), PAYMENT_TYPES, props.mccCategories)).catch(() => {
+    await save(convertFormData(values(), props.mccCategories)).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
+
+  const maxAmount = createMemo(() => {
+    const parent = props.allocations.find(allocationWithID(values().parent));
+    return parent?.account.ledgerBalance || ({ currency: 'USD', amount: 0 } as Amount);
+  });
 
   return (
     <Form class={css.form}>
@@ -137,6 +146,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           />
         }
       >
+        <FormItem multiple label={<Text message="Purchases" />}>
+          <SwitchLimits
+            name="purchases"
+            value={values().purchasesLimits}
+            maxAmount={maxAmount()}
+            class={css.box}
+            onChange={handlers.purchasesLimits}
+          />
+        </FormItem>
         <FormItem multiple label={<Text message="Categories" />}>
           <SwitchMccCategories
             value={values().categories}
@@ -147,6 +165,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         </FormItem>
         <FormItem multiple label={<Text message="Payment types" />}>
           <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
+        </FormItem>
+        <FormItem multiple label={<Text message="ATM transactions" />}>
+          <SwitchLimits
+            name="atm"
+            value={values().atmLimits}
+            maxAmount={maxAmount()}
+            class={css.box}
+            onChange={handlers.atmLimits}
+          />
         </FormItem>
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
