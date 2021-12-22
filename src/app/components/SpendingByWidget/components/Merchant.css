@@ -1,0 +1,24 @@
+.root {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: var(--pd-10) var(--pd-8);
+  align-items: center;
+  grid-gap: var(--pd-10);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.icon {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  background: var(--tw-gray-30);
+  border-radius: var(--radius-8);
+}
+
+.amount {
+  font-weight: var(--font-400);
+  text-align: right;
+}

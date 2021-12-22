@@ -1,0 +1,28 @@
+.root {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  padding: var(--pd-10) var(--pd-8);
+  align-items: center;
+  grid-gap: var(--pd-12);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.num {
+  width: 16px;
+}
+
+.title {
+  flex-grow: 1;
+  color: var(--tw-primary-content);
+  font-weight: var(--font-400);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.amount {
+  font-weight: var(--font-400);
+  text-align: right;
+}

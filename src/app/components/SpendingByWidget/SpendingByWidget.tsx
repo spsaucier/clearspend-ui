@@ -1,65 +1,112 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createMemo, For, Show, Switch, Match } from 'solid-js';
+import { Text } from 'solid-i18n';
 
-import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { i18n } from '_common/api/intl';
+import { useNav } from '_common/api/router';
 import { PieChart } from '_common/components/Charts';
+import { Loading } from 'app/components/Loading';
+import { formatName } from 'employees/utils/formatName';
+import type { ChartDataRequest, ChartDataResponse } from 'generated/capital';
 
 import { Widget } from '../Widget';
 import { TagSelect, TagOption } from '../TagSelect';
 
+import { NumberedItem } from './components/NumberedItem';
+import { Merchant } from './components/Merchant';
+import { MerchantCategory } from './components/MerchantCategory';
+import { calcColor, calcPieChartData } from './utils';
+
 import css from './SpendingByWidget.css';
 
 const OPTIONS: readonly Readonly<TagOption>[] = [
-  { key: 'alc', text: 'Allocation' },
-  { key: 'emp', text: 'Employee' },
-  { key: 'mer', text: 'Merchant' },
-  { key: 'mca', text: 'Merchant category' },
-];
-
-const MOCK = [
-  { name: 'North Valley Enterprises', amount: 500 },
-  { name: 'Marketing', amount: 500 },
-  { name: 'Sales', amount: 300 },
-  { name: 'Q4 Ad Campaign', amount: 200 },
-  { name: 'Holiday Party', amount: 100 },
+  { key: 'ALLOCATION', text: i18n.t('Allocation') },
+  { key: 'EMPLOYEE', text: i18n.t('Employee') },
+  { key: 'MERCHANT', text: i18n.t('Merchant') },
+  { key: 'MERCHANT_CATEGORY', text: i18n.t('Merchant category') },
 ];
 
 interface SpendingByWidgetProps {
+  loading: boolean;
+  data: Readonly<ChartDataResponse>;
+  params: Readonly<ChartDataRequest>;
   class?: string;
+  onFilterChange: (value: string) => void;
 }
 
 export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
-  const [type, setType] = createSignal<string>(OPTIONS[0]!.key);
+  const navigate = useNav();
+
+  const data = createMemo(() => {
+    if (props.params.chartFilter === 'ALLOCATION') return props.data.allocationChartData || [];
+    if (props.params.chartFilter === 'EMPLOYEE') return props.data.userChartData || [];
+    if (props.params.chartFilter === 'MERCHANT') return props.data.merchantChartData || [];
+    return props.data.merchantCategoryChartData || [];
+  });
 
   return (
     <Widget
       title="Spending by"
       class={props.class}
-      extra={<TagSelect value={type()} options={OPTIONS} onChange={setType} class={css.fullWidthDropdown} />}
+      extra={
+        <TagSelect
+          value={props.params.chartFilter}
+          options={OPTIONS}
+          class={css.fullWidthDropdown}
+          onChange={props.onFilterChange}
+        />
+      }
     >
       <div class={css.content}>
-        <ol class={css.list}>
-          <For each={MOCK}>
-            {(item, idx) => (
-              <li class={css.item}>
-                <span class={css.num}>{idx() + 1}.</span>
-                <span class={css.title}>{item.name}</span>
-                <span class={css.amount}>{formatCurrency(item.amount)}</span>
-              </li>
-            )}
-          </For>
-        </ol>
-        <Show when={type() === 'mca'}>
-          <PieChart
-            size={160}
-            data={[
-              { id: '1', percent: 45, color: '#5BEA83' },
-              { id: '2', percent: 19, color: '#7CEE9C' },
-              { id: '3', percent: 16, color: '#8CF0A8' },
-              { id: '4', percent: 11, color: '#9DF2B5' },
-              { id: '5', percent: 9, color: '#ADF5C1' },
-            ]}
-            class={css.chart}
-          />
+        <Show when={!props.loading} fallback={<Loading />}>
+          <Show when={data().length} fallback={<Text message="There is no data for this period" class={css.empty!} />}>
+            <ol class={css.list}>
+              <Switch>
+                <Match when={props.params.chartFilter === 'ALLOCATION'}>
+                  <For each={props.data.allocationChartData || []}>
+                    {(item, idx) => (
+                      <NumberedItem
+                        num={idx() + 1}
+                        name={item.allocation!.name!}
+                        amount={item.amount!}
+                        onClick={() => navigate(`/allocations/${item.allocation!.allocationId}`)}
+                      />
+                    )}
+                  </For>
+                </Match>
+                <Match when={props.params.chartFilter === 'EMPLOYEE'}>
+                  <For each={props.data.userChartData || []}>
+                    {(item, idx) => (
+                      <NumberedItem
+                        num={idx() + 1}
+                        name={formatName(item.user!)}
+                        amount={item.amount!}
+                        onClick={() => navigate(`/employees/view/${item.user!.userId}`)}
+                      />
+                    )}
+                  </For>
+                </Match>
+                <Match when={props.params.chartFilter === 'MERCHANT'}>
+                  <For each={props.data.merchantChartData || []}>
+                    {(item) => <Merchant name={item.merchant!.name!} amount={item.amount!} />}
+                  </For>
+                </Match>
+                <Match when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>
+                  <For each={props.data.merchantCategoryChartData || []}>
+                    {(item, idx) => (
+                      <MerchantCategory color={calcColor(idx())} type={item.merchantType} amount={item.amount!} />
+                    )}
+                  </For>
+                </Match>
+              </Switch>
+            </ol>
+            <Show when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>
+              <PieChart
+                size={160}
+                data={calcPieChartData(props.data.merchantCategoryChartData || [])}
+                class={css.chart}
+              />
+            </Show>
+          </Show>
         </Show>
       </div>
     </Widget>

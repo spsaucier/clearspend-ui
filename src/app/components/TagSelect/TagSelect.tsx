@@ -1,4 +1,5 @@
 import { For, Show, createMemo } from 'solid-js';
+import type { JSXElement } from 'solid-js';
 
 import { Tag } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
@@ -8,7 +9,7 @@ import css from './TagSelect.css';
 
 export interface TagOption {
   key: string;
-  text: string;
+  text: JSXElement;
 }
 
 interface TagSelectProps {
