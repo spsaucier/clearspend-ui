@@ -19,7 +19,15 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.clickable {
+  transition: color 0.3s;
   cursor: pointer;
+
+  &:hover {
+    color: var(--tw-primary-bg);
+  }
 }
 
 .amount {

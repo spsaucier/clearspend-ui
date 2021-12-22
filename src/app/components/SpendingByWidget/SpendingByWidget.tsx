@@ -56,7 +56,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
         />
       }
     >
-      <div class={css.content}>
+      <div class={css.content} classList={{ [css.withChart!]: props.params.chartFilter === 'MERCHANT_CATEGORY' }}>
         <Show when={!props.loading} fallback={<Loading />}>
           <Show when={data().length} fallback={<Text message="There is no data for this period" class={css.empty!} />}>
             <ol class={css.list}>
@@ -68,7 +68,11 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                         num={idx() + 1}
                         name={item.allocation!.name!}
                         amount={item.amount!}
-                        onClick={() => navigate(`/allocations/${item.allocation!.allocationId}`)}
+                        onClick={
+                          item.allocation?.allocationId
+                            ? () => navigate(`/allocations/${item.allocation!.allocationId}`)
+                            : undefined
+                        }
                       />
                     )}
                   </For>
@@ -80,7 +84,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                         num={idx() + 1}
                         name={formatName(item.user!)}
                         amount={item.amount!}
-                        onClick={() => navigate(`/employees/view/${item.user!.userId}`)}
+                        onClick={item.user?.userId ? () => navigate(`/employees/view/${item.user!.userId}`) : undefined}
                       />
                     )}
                   </For>
