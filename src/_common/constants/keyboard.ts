@@ -5,4 +5,5 @@ export const KEY_CODES = {
   Space: 32,
   ArrowUp: 38,
   ArrowDown: 40,
+  Delete: 8,
 };

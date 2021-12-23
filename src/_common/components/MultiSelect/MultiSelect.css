@@ -1,0 +1,129 @@
+@value v-height: 36px;
+
+.root {
+  position: relative;
+}
+
+.input {
+  padding-right: var(--pd-40);
+  opacity: 0;
+
+  @nest .root[data-view='input'] & {
+    opacity: 1;
+  }
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  margin-top: var(--pd-4);
+  margin-left: -2px;
+}
+
+.value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  padding: var(--pd-8) var(--pd-40) var(--pd-8) var(--pd-12);
+  pointer-events: none;
+
+  @nest .root[data-view='input'] & {
+    visibility: hidden;
+  }
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--pd-8);
+  color: var(--tw-gray-60);
+  transition: transform 0.3s;
+  transform: translateY(-50%) rotate(0deg);
+  transform-origin: center;
+  will-change: auto;
+  pointer-events: none;
+
+  @nest .root[data-open='true'] & {
+    transform: translateY(-50%) rotate(180deg);
+  }
+}
+
+.popup {
+  width: 100%;
+  padding: 0;
+}
+
+.list {
+  display: block;
+  list-style: none;
+  width: 100%;
+  max-height: 288px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.input-wrapper {
+  display: flex;
+  padding: var(--pd-2);
+  flex-wrap: wrap;
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-8);
+}
+
+.selected-option {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  max-width: 100%;
+  height: 24px;
+  margin-top: var(--pd-2);
+  margin-bottom: var(--pd-2);
+  flex: none;
+  line-height: 22px;
+  background: var(--tw-gray-20);
+  background: var(--tw-gray-15);
+  border: 1px solid var(--tw-gray-30);
+  border: 1px solid var(--tw-gray-25);
+  border-radius: var(--pd-4);
+  user-select: none;
+  cursor: default;
+  margin-inline-end: var(--pd-4);
+  padding-inline-start: var(--pd-8);
+  padding-inline-end: var(--pd-4);
+}
+
+.selected-option-text {
+  display: inline-block;
+  margin-right: var(--pd-4);
+  white-space: pre;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.selected-option-x {
+  display: inline-block;
+  color: #00000073;
+  font-size: var(--text-12);
+  line-height: inherit;
+  text-align: center;
+  cursor: pointer;
+  text-rendering: optimizeLegibility;
+}
+
+.search-option-input {
+  width: auto;
+  min-width: 100px;
+  margin-top: 3px;
+  margin-bottom: var(--pd-2);
+  padding-top: var(--pd-4);
+  padding-bottom: var(--pd-4);
+  padding-left: var(--pd-4);
+  flex: 1;
+  border: 0;
+  outline: transparent;
+}
