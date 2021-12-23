@@ -1,8 +1,11 @@
 export enum IconName {
   add = 'add',
+  'add-receipt' = 'add-receipt',
   'add-circle-outline' = 'add-circle-outline',
   allocations = 'allocations',
+  alert = 'alert',
   approvals = 'approvals',
+  'approved-status' = 'approved-status',
   'arrow-left' = 'arrow-left',
   'audit-logs' = 'audit-logs',
   calendar = 'calendar',

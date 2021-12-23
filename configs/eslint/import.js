@@ -38,25 +38,6 @@ module.exports = {
         css: 'always',
       },
     ],
-    'import/order': [
-      1,
-      {
-        groups: [['builtin', 'external'], 'internal', 'parent', 'sibling', 'index'],
-        pathGroups: [
-          {
-            pattern: './assets/*',
-            group: 'sibling',
-            position: 'after',
-          },
-          {
-            pattern: './*.css',
-            group: 'index',
-            position: 'after',
-          },
-        ],
-        'newlines-between': 'always',
-      },
-    ],
     'import/dynamic-import-chunkname': [2, { webpackChunknameFormat: '[a-z-]+' }],
   },
   overrides: [

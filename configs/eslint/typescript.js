@@ -7,7 +7,6 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-shadow': 2,
     '@typescript-eslint/no-unused-vars': 2,
-    '@typescript-eslint/no-use-before-define': 2,
     '@typescript-eslint/no-magic-numbers': [
       1,
       {

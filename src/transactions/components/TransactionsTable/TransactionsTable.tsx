@@ -28,6 +28,7 @@ interface TransactionsTableProps {
   search?: string;
   data: PagedDataAccountActivityResponse;
   onCardClick?: (id: string) => void;
+  onReceiptClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -102,6 +103,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'receipt',
       title: <Text message="Receipt" />,
+      onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => (
         <Icon
           name={item.receipt?.receiptId ? 'receipt' : 'receipt-unavailable'}
