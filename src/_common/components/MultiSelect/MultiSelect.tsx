@@ -94,7 +94,6 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
   return (
     <Popover
       open={open()}
-      test={props.value?.length}
       class={join(css.popup, props.popupClass)}
       position="bottom-left"
       content={
