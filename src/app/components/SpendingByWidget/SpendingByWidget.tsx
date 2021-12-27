@@ -4,6 +4,7 @@ import { Text } from 'solid-i18n';
 import { i18n } from '_common/api/intl';
 import { useNav } from '_common/api/router';
 import { PieChart } from '_common/components/Charts';
+import { getChartColor } from '_common/components/Charts/utils';
 import { Loading } from 'app/components/Loading';
 import { formatName } from 'employees/utils/formatName';
 import type { ChartDataRequest, ChartDataResponse } from 'generated/capital';
@@ -14,7 +15,7 @@ import { TagSelect, TagOption } from '../TagSelect';
 import { NumberedItem } from './components/NumberedItem';
 import { Merchant } from './components/Merchant';
 import { MerchantCategory } from './components/MerchantCategory';
-import { calcColor, calcPieChartData } from './utils';
+import { calcPieChartData } from './utils';
 
 import css from './SpendingByWidget.css';
 
@@ -97,7 +98,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                 <Match when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>
                   <For each={props.data.merchantCategoryChartData || []}>
                     {(item, idx) => (
-                      <MerchantCategory color={calcColor(idx())} type={item.merchantType} amount={item.amount!} />
+                      <MerchantCategory color={getChartColor(idx())} type={item.merchantType} amount={item.amount!} />
                     )}
                   </For>
                 </Match>

@@ -1,3 +1,33 @@
+.item-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.more {
+  width: auto;
+  height: auto;
+  margin-left: var(--pd-8);
+  padding: var(--pd-8);
+  border-radius: var(--radius-10);
+
+  &:hover {
+    background-color: var(--tw-primary-light);
+  }
+}
+
+.more-icon {
+  transition: transform 0.3s;
+  transform-origin: center;
+
+  @nest .item-wrapper[data-expanded='true'] & {
+    transform: rotate(90deg);
+  }
+}
+
 .children {
   margin-left: var(--pd-16);
+}
+
+.with-border {
+  border-bottom: 1px solid var(--tw-gray-30);
 }

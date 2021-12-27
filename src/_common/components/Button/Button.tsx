@@ -13,6 +13,7 @@ type IconType = keyof typeof IconName;
 export interface IconProps {
   name: IconType;
   pos: 'left' | 'right';
+  class?: string;
 }
 
 export interface ButtonProps {
@@ -40,7 +41,11 @@ export function Button(props: Readonly<ButtonProps>) {
     return isString(merged.icon) ? { name: merged.icon, pos: 'left' } : merged.icon;
   });
 
-  const iconEl = icon() && <Icon name={icon()!.name} class={css.icon} />;
+  const iconEl = createMemo(() => {
+    const iProps = icon();
+    return iProps ? <Icon name={iProps.name} class={join(css.icon, iProps.class)} /> : null;
+  });
+
   const spinEl = <Spin class={css.spin} />;
 
   return (

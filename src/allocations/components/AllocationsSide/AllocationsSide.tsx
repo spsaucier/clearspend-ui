@@ -15,9 +15,9 @@ import { List } from './List';
 import css from './AllocationsSide.css';
 
 interface AllocationsSideProps {
-  currentID: Allocation['allocationId'];
+  currentID: string;
   items: readonly Readonly<Allocation>[];
-  onSelect: (id: Allocation['allocationId']) => void;
+  onSelect: (id: string) => void;
 }
 
 export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
@@ -50,20 +50,28 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                       root={!item.parentAllocationId}
                       data={item}
                       active={props.currentID === item.allocationId}
+                      class={css.item}
                       onClick={props.onSelect}
                     />
                   )}
                 </For>
               }
             >
-              <Item root data={data} active={props.currentID === data.allocationId} onClick={props.onSelect} />
-              <Show when={data.childrenAllocationIds?.length}>
+              <Item
+                root
+                data={data}
+                active={props.currentID === data.allocationId}
+                class={css.item}
+                onClick={props.onSelect}
+              />
+              <Show when={Boolean(data.childrenAllocationIds?.length)}>
                 <Divider class={css.divider} />
               </Show>
               <List
                 currentID={props.currentID}
                 parentID={data.allocationId}
                 items={props.items}
+                itemClass={css.item}
                 onSelect={props.onSelect}
               />
             </Show>

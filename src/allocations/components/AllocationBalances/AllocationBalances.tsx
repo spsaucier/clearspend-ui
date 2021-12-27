@@ -1,9 +1,12 @@
-import { For } from 'solid-js';
+import { Show, For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { PieChart } from '_common/components/Charts';
+import { getChartColor } from '_common/components/Charts/utils';
 import type { Allocation } from 'generated/capital';
+
+import { calcPieChartData } from './utils';
 
 import css from './AllocationBalances.css';
 
@@ -23,24 +26,17 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
         </div>
       </header>
       <div class={css.wrapper}>
-        <div class={css.chart}>
-          <PieChart
-            size={160}
-            data={[
-              { id: '1', percent: 45, color: '#5BEA83' },
-              { id: '2', percent: 19, color: '#7CEE9C' },
-              { id: '3', percent: 16, color: '#8CF0A8' },
-              { id: '4', percent: 11, color: '#9DF2B5' },
-              { id: '5', percent: 9, color: '#ADF5C1' },
-            ]}
-          />
-        </div>
+        <Show when={Boolean(props.current.account.ledgerBalance.amount)}>
+          <div class={css.chart}>
+            <PieChart size={160} data={calcPieChartData(props.items)} />
+          </div>
+        </Show>
         <div class={css.items}>
           <For each={props.items}>
-            {(item) => (
+            {(item, idx) => (
               <div class={css.item}>
                 <div class={css.header}>
-                  <div class={css.point} />
+                  <div class={css.point} style={{ background: getChartColor(idx()) }} />
                   <h4 class={css.name}>{item.name}</h4>
                 </div>
                 <strong class={css.amount}>{formatCurrency(item.account.ledgerBalance.amount)}</strong>

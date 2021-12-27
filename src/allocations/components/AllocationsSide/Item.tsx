@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 
+import { join } from '_common/utils/join';
 import { Tooltip } from '_common/components/Tooltip';
 import { Icon } from '_common/components/Icon';
 import type { Allocation } from 'generated/capital';
@@ -10,7 +11,8 @@ interface ItemProps {
   root?: boolean;
   data: Readonly<Allocation>;
   active?: boolean;
-  onClick: (id: Allocation['allocationId']) => void;
+  class?: string;
+  onClick: (id: string) => void;
 }
 
 export function Item(props: Readonly<ItemProps>) {
@@ -18,7 +20,7 @@ export function Item(props: Readonly<ItemProps>) {
     <Tooltip message={props.data.name}>
       {(ttProps) => (
         <button
-          class={css.item}
+          class={join(css.item, props.class)}
           classList={{ [css.active!]: props.active }}
           onClick={() => props.onClick(props.data.allocationId)}
           {...ttProps}
@@ -27,11 +29,6 @@ export function Item(props: Readonly<ItemProps>) {
             <Icon name="company" class={css.icon} />
           </Show>
           <span class={css.name}>{props.data.name}</span>
-          {/*
-          <Show when={!props.root && props.data.childrenAllocationIds.length}>
-            <Icon name="chevron-down" />
-          </Show>
-          */}
         </button>
       )}
     </Tooltip>

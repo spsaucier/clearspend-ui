@@ -26,6 +26,10 @@
   padding: var(--pd-16) 0;
 }
 
+.item {
+  margin: var(--pd-8) 0;
+}
+
 .divider {
   margin: 0;
 }

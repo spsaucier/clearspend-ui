@@ -1,7 +1,6 @@
 .item {
   display: flex;
   width: 100%;
-  margin: var(--pd-8) 0;
   padding: var(--pd-8);
   align-items: center;
   color: var(--tw-gray-60);
@@ -12,8 +11,9 @@
   border: 0;
   border-radius: var(--radius-10);
   transition: background-color 0.3s;
+  cursor: pointer;
 
-  &:hover {
+  &:hover:not(.active) {
     color: var(--tw-black);
     background-color: var(--tw-primary-light);
   }
@@ -22,6 +22,7 @@
 .active {
   color: var(--tw-black);
   background-color: var(--tw-gray-20);
+  cursor: default;
 }
 
 .icon {
