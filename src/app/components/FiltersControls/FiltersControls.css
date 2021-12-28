@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  padding: var(--pd-16) var(--pd-24);
+  align-items: center;
+  justify-content: flex-end;
+  background: var(--tw-gray-10);
+}
+
+.confirm {
+  min-width: 110px;
+  margin-left: var(--pd-8);
+}

@@ -8,6 +8,7 @@ import css from './Drawer.css';
 
 interface DrawerProps {
   open: boolean;
+  noPadding?: boolean;
   title: JSXElement;
   children: JSXElement;
   onClose: () => void;
@@ -25,7 +26,9 @@ export function Drawer(props: Readonly<DrawerProps>) {
                 <h3 class={css.title}>{props.title}</h3>
                 <Button view="ghost" size="sm" icon="cancel" onClick={props.onClose} />
               </header>
-              <div class={css.content}>{props.children}</div>
+              <div class={css.content} classList={{ [css.noPadding!]: props.noPadding }}>
+                {props.children}
+              </div>
             </section>
           </div>
         </Show>

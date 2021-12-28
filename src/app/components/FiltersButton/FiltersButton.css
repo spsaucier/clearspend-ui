@@ -1,0 +1,12 @@
+.inner {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  margin-right: var(--pd-4);
+}
+
+.count {
+  margin: 0 var(--pd-4);
+}

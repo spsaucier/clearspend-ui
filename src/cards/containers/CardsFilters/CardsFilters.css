@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.content {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.balance {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: var(--pd-8);
+}

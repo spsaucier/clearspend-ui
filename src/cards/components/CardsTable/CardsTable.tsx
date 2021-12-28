@@ -4,6 +4,7 @@ import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import type { StoreSetter } from '_common/utils/store';
+import { getNoop } from '_common/utils/getNoop';
 import { InputSearch } from '_common/components/InputSearch';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
@@ -12,6 +13,7 @@ import { Table, TableColumn } from '_common/components/Table';
 import { Tag } from '_common/components/Tag';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Filters } from 'app/components/Filters';
+import { FiltersButton } from 'app/components/FiltersButton';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { formatName } from 'employees/utils/formatName';
@@ -30,6 +32,7 @@ interface CardsTableProps {
   hideColumns?: readonly string[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
+  onFiltersClick: () => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
 
@@ -105,9 +108,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <Button view="ghost" icon={{ name: 'filters', pos: 'right' }}>
-          <Text message="Filters" />
-        </Button>
+        <FiltersButton count={0} onReset={getNoop()} onClick={props.onFiltersClick} />
         <Button icon={{ name: 'download', pos: 'right' }}>
           <Text message="Export" />
         </Button>

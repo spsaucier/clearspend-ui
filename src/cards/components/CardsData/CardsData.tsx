@@ -17,6 +17,7 @@ interface CardsDataProps {
   hide?: readonly string[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
+  onFiltersClick: () => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
 }
@@ -31,6 +32,7 @@ export function CardsData(props: Readonly<CardsDataProps>) {
         hideColumns={props.hide}
         onUserClick={props.onUserClick}
         onCardClick={props.onCardClick}
+        onFiltersClick={props.onFiltersClick}
         onChangeParams={props.onChangeParams}
       />
     </Data>

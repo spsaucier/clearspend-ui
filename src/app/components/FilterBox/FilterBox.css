@@ -1,0 +1,15 @@
+.root {
+  padding: var(--pd-16) var(--pd-24);
+  border-top: 1px solid var(--tw-gray-30);
+  border-bottom: 1px solid var(--tw-gray-30);
+
+  & + .root {
+    border-top: 0;
+  }
+}
+
+.title {
+  display: block;
+  margin: 0 0 var(--pd-16);
+  font: inherit;
+}

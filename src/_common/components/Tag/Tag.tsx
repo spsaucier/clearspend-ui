@@ -11,6 +11,7 @@ export interface TagProps {
   class?: string;
   tabIndex?: number | string;
   children?: JSXElement;
+  onClick?: (event: MouseEvent) => void;
 }
 
 export function Tag(props: Readonly<TagProps>) {
@@ -24,6 +25,7 @@ export function Tag(props: Readonly<TagProps>) {
         [css.success!]: props.type === 'success',
         [css.danger!]: props.type === 'danger',
       }}
+      onClick={props.onClick}
     >
       <Show when={props.label}>
         <span class={css.label}>
