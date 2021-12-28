@@ -11,6 +11,7 @@ import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
 import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
 import { Drawer } from '_common/components/Drawer';
+import { useNav } from '_common/api/router';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -45,6 +46,7 @@ const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
 
 export function Overview() {
   const media = useMediaContext();
+  const navigate = useNav();
 
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
@@ -121,6 +123,7 @@ export function Overview() {
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}
             onReceiptClick={setSelectedTransaction}
+            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />
         </Data>
 

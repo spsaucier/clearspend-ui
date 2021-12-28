@@ -1,36 +1,21 @@
 import { useNavigate } from 'solid-app-router';
-
 import { DateTime } from 'solid-i18n';
+import { Show } from 'solid-js';
+
 import type { AccountActivityResponse } from 'generated/capital';
 import { DateFormat } from '_common/api/intl/types';
-import css from './TransactionPreview.css';
-
-import smallLogo from 'app/assets/logo.svg';
 import { Icon } from '_common/components/Icon/Icon';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
+import { join } from '_common/utils/join';
+
+import css from './TransactionPreview.css';
 
 interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
 }
-
-const getTransactionStatusDetailMsg = (status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED') => {
-  switch (status) {
-    // TODO: these do not match figma, need UX/Product guidance
-    case 'PENDING':
-      return '';
-    case 'DECLINED':
-      return 'ATM is disabled';
-    case 'PROCESSED':
-      return '';
-    case 'APPROVED':
-      return 'Payment has been authorized';
-    default:
-      return 'Unknown';
-  }
-};
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const navigate = useNavigate();
@@ -39,7 +24,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   return (
     <div>
-      <div class={css.status}>
+      <div class={join(css.status, getColorClassForTransactionStatus(transaction.status))}>
         <span class={css.icon}>
           <Icon name="approved-status" />
         </span>
@@ -47,7 +32,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction.status)}</span>
       </div>
       <div class={css.summary}>
-        <img src={transaction.merchant?.merchantLogoUrl ?? smallLogo} alt="Merchant logo" class={css.merchantLogo} />
+        <Show when={transaction.merchant?.merchantLogoUrl}>
+          <img src={transaction.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.merchantLogo} />
+        </Show>
+        <Show when={!transaction.merchant?.merchantLogoUrl}>
+          <div class={css.missingLogoUrl} />
+        </Show>
         <div class={css.amount}>{displayAmount}</div>
         <div class={css.merchant}>
           {transaction.merchant?.name}
@@ -63,7 +53,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </Button>
         </div>
       </div>
-      {/* TODO: Missing comment section. API exists? */}
       <div>
         <div>
           <div class={css.title}>Card</div>
@@ -107,16 +96,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             </div>
             <div>Posted Amount</div>
             <div>{displayAmount}</div>
-            <div>Location</div>
-            <div>
-              {/* TODO: Don't have this yet? */}
-              --
-            </div>
           </div>
         </div>
         <div class={css.reportIssueCta}>
           <Button view={'default'} wide={true} icon={{ name: 'alert', pos: 'right' }}>
-            {/* TODO: Need guidance on where this goes */}
             Report an issue
           </Button>
         </div>
@@ -125,7 +108,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   );
 }
 
-export function DateWithDateTime(props: { activityTime: string }) {
+export const DateWithDateTime = (props: { activityTime: string }) => {
   const date = new Date(props.activityTime || '');
   return (
     <>
@@ -134,4 +117,34 @@ export function DateWithDateTime(props: { activityTime: string }) {
       <DateTime date={date} preset={DateFormat.time} />
     </>
   );
-}
+};
+
+const getTransactionStatusDetailMsg = (status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED') => {
+  switch (status) {
+    case 'PENDING':
+      return '';
+    case 'DECLINED':
+      return '';
+    case 'PROCESSED':
+      return '';
+    case 'APPROVED':
+      return 'Payment has been authorized';
+    default:
+      return 'Unknown';
+  }
+};
+
+const getColorClassForTransactionStatus = (status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED') => {
+  switch (status) {
+    case 'PENDING':
+      return css.grey;
+    case 'DECLINED':
+      return css.red;
+    case 'PROCESSED':
+      return css.green;
+    case 'APPROVED':
+      return css.green;
+    default:
+      return css.grey;
+  }
+};

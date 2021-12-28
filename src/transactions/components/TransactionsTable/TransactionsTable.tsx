@@ -57,7 +57,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       name: 'card',
       title: <Text message="Card" />,
       render: (item) => (
-        <div>
+        <div class={css.cardCell} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
           <div class={css.card}>{item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}</div>
           <Show when={item.card}>
             <div class={css.sub}>
@@ -105,10 +105,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       title: <Text message="Receipt" />,
       onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => (
-        <Icon
-          name={item.receipt?.receiptId ? 'receipt' : 'receipt-unavailable'}
-          class={join(css.receipt, !item.receipt?.receiptId && css.receiptEmpty)}
-        />
+        <div class={css.receiptCell}>
+          <Icon
+            name={item.receipt?.receiptId ? 'receipt' : 'receipt-unavailable'}
+            class={join(css.receipt, !item.receipt?.receiptId && css.receiptEmpty)}
+          />
+        </div>
       ),
     },
   ];

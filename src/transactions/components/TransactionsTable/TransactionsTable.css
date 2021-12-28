@@ -11,6 +11,10 @@
   font-weight: var(--font-400);
 }
 
+.card-cell {
+  cursor: pointer;
+}
+
 .card {
   color: var(--tw-primary-content);
 }
@@ -46,8 +50,15 @@
   font-weight: var(--font-700);
 }
 
+.receipt-cell {
+  padding: var(--pd-10);
+  padding-top: 0;
+  cursor: pointer;
+}
+
 .receipt {
   margin-top: -4px;
+  cursor: pointer;
 }
 
 .receipt-empty {
