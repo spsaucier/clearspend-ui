@@ -1,7 +1,8 @@
-import { createSignal, createMemo, Accessor, For } from 'solid-js';
+import { createSignal, createMemo, Accessor, For, Index } from 'solid-js';
 import { DateTime } from 'solid-i18n';
 
 import {
+  DAYS_IN_WEEK,
   daysInMonth,
   getYear,
   getMonth,
@@ -9,15 +10,15 @@ import {
   getWeekday,
   startOfMonth,
   dateToString,
-  isSameDates,
 } from '_common/api/dates';
 import { DateFormat } from '_common/api/intl/types';
 import { times } from '_common/utils/times';
 import { join } from '_common/utils/join';
 
 import { Icon } from '../Icon';
+import { KEY_CODES } from '../../constants/keyboard';
 
-import { getWeekdayNames } from './utils';
+import { isSelected, isInRange, getWeekdayNames, getMoveFocus } from './utils';
 
 import css from './Month.css';
 
@@ -27,15 +28,20 @@ interface Day {
   id: string;
   date: ReadonlyDate;
   selected: boolean;
+  inRange: boolean;
 }
 
 interface MonthProps {
-  value?: ReadonlyDate;
-  onSelect?: (date: ReadonlyDate) => void;
+  value: readonly (ReadonlyDate | undefined)[];
+  month?: ReadonlyDate;
+  class?: string;
+  onSelect: (date: ReadonlyDate) => void;
 }
 
 export function Month(props: Readonly<MonthProps>) {
-  const [month, setMonth] = createSignal(props.value || new Date());
+  let datesElement!: HTMLDivElement;
+
+  const [month, setMonth] = createSignal(props.month || props.value[0] || new Date());
 
   const names = getWeekdayNames().map((name) => name.slice(0, WEEKDAY_CHARACTERS));
 
@@ -43,8 +49,13 @@ export function Month(props: Readonly<MonthProps>) {
 
   const dates: Accessor<readonly Readonly<Day>[]> = createMemo(() => {
     return times(daysInMonth(month())).map((_: unknown, idx: number) => {
-      const date = new Date(getYear(month()), getMonth(month()), idx + 1);
-      return { id: dateToString(date), date, selected: !!props.value && isSameDates(date, props.value) };
+      const date = new Date(getYear(month()), getMonth(month()), idx + 1, 0, 0, 0, 0);
+      return {
+        date,
+        id: dateToString(date),
+        selected: isSelected(date, props.value),
+        inRange: isInRange(date, props.value),
+      };
     });
   });
 
@@ -52,35 +63,70 @@ export function Month(props: Readonly<MonthProps>) {
     setMonth((date) => new Date(getYear(date), getMonth(date) + (prev ? -1 : 1)));
   };
 
+  const onNavKeyDown = (event: KeyboardEvent) => {
+    if (event.target && event.keyCode === KEY_CODES.ArrowDown) {
+      event.preventDefault();
+      datesElement.querySelector<HTMLElement>('button:first-of-type')?.focus();
+    }
+  };
+
+  const onDayKeyDown = (event: KeyboardEvent) => {
+    if (!event.target) return;
+    const move = getMoveFocus(datesElement, event.target, month());
+
+    switch (event.keyCode) {
+      case KEY_CODES.ArrowUp:
+        event.preventDefault();
+        move(-DAYS_IN_WEEK, () => changeMonth(true));
+        break;
+      case KEY_CODES.ArrowDown:
+        event.preventDefault();
+        move(DAYS_IN_WEEK, () => changeMonth());
+        break;
+      case KEY_CODES.ArrowLeft:
+        event.preventDefault();
+        move(-1, () => changeMonth(true));
+        break;
+      case KEY_CODES.ArrowRight:
+        event.preventDefault();
+        move(1, () => changeMonth());
+        break;
+      default:
+    }
+  };
+
   return (
-    <div class={css.root}>
+    <div class={join(css.root, props.class)}>
       <div class={css.header}>
-        <button class={css.nav} onClick={() => changeMonth(true)}>
+        <button class={css.nav} onKeyDown={onNavKeyDown} onClick={() => changeMonth(true)}>
           <Icon name="chevron-left" />
         </button>
         <span>
           <DateTime date={month() as Date} preset={DateFormat.month} />
         </span>
-        <button class={css.nav} onClick={() => changeMonth()}>
+        <button class={css.nav} onKeyDown={onNavKeyDown} onClick={() => changeMonth()}>
           <Icon name="chevron-right" />
         </button>
       </div>
       <div class={css.weekdays}>
         <For each={names}>{(name) => <div class={css.weekday}>{name}</div>}</For>
       </div>
-      <div class={css.days}>
+      <div ref={datesElement} class={css.days}>
         <For each={shift()}>{() => <div class={join(css.day, css.empty)}>&nbsp;</div>}</For>
-        <For each={dates()}>
-          {(item) => (
+        <Index each={dates()}>
+          {(item, index) => (
             <button
+              tabIndex={index === 0 ? 0 : -1}
+              data-day={getDay(item().date)}
               class={css.day}
-              classList={{ [css.active!]: item.selected }}
-              onClick={() => props.onSelect?.(item.date)}
+              classList={{ [css.active!]: item().selected, [css.inRange!]: item().inRange }}
+              onClick={() => props.onSelect(item().date)}
+              onKeyDown={onDayKeyDown}
             >
-              {getDay(item.date)}
+              {getDay(item().date)}
             </button>
           )}
-        </For>
+        </Index>
       </div>
     </div>
   );

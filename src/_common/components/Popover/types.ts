@@ -12,6 +12,7 @@ export interface PopoverFuncProps {
 }
 
 interface BaseProps {
+  ref?: HTMLDivElement | ((el: HTMLDivElement) => void);
   id?: string;
   balloon?: boolean;
   position?: PopoverPosition;

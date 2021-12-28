@@ -28,7 +28,7 @@ export interface ButtonProps {
   disabled?: boolean;
   htmlType?: 'button' | 'submit';
   children?: JSX.Element;
-  onClick?: () => void;
+  onClick?: (event: MouseEvent) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
 }

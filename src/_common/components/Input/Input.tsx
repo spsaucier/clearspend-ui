@@ -21,6 +21,7 @@ export interface InputProps {
   disabled?: boolean;
   class?: string;
   inputClass?: string;
+  onClick?: (event: MouseEvent) => void;
   onChange?: (value: string, event: InputEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
   onPaste?: (event: ClipboardEvent) => void;
@@ -65,6 +66,7 @@ export function Input(props: Readonly<InputProps>) {
         disabled={merged.disabled}
         class={join(css.input, merged.inputClass)}
         onInput={onChange}
+        onClick={merged.onClick}
         onKeyDown={merged.onKeyDown}
         onPaste={merged.onPaste}
         onFocusIn={merged.onFocusIn}

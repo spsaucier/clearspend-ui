@@ -48,6 +48,7 @@ module.exports = {
                   postcssOptions: {
                     plugins: {
                       'postcss-nesting': {},
+                      'postcss-custom-media': { importFrom: 'src/media.css' },
                       ...(isProd && { autoprefixer: { flexbox: 'no-2009' } }),
                     },
                   },

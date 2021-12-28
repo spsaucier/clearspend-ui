@@ -81,7 +81,10 @@ export function Popover(props: Readonly<PopoverProps>) {
             <div
               id={merged.id}
               role="dialog"
-              ref={dialog}
+              ref={(el) => {
+                dialog = el;
+                if (typeof props.ref === 'function') props.ref(el);
+              }}
               class={join(css.popover, merged.balloon && css.balloon, getPosClass(pos()), merged.class)}
             >
               {merged.content}

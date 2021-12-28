@@ -1,3 +1,5 @@
+import { createSignal } from 'solid-js';
+
 import { InputDate, InputDateProps } from './InputDate';
 
 export default {
@@ -14,8 +16,17 @@ export default {
   },
 };
 
-export const Default = (args: InputDateProps) => (
-  <div>
-    <InputDate {...args} />
-  </div>
-);
+export const Default = (args: InputDateProps) => {
+  const [value, setValue] = createSignal(args.value);
+
+  const onChange = (date: ReadonlyDate | undefined) => {
+    setValue(date);
+    args.onChange?.(date);
+  };
+
+  return (
+    <div>
+      <InputDate {...args} value={value()} onChange={onChange} />
+    </div>
+  );
+};

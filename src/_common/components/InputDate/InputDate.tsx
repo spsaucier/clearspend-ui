@@ -1,6 +1,7 @@
 import { Accessor, createSignal, createMemo, batch } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
+import { KEY_CODES } from '../../constants/keyboard';
 import { DateFormat } from '../../api/intl/types';
 import { Input } from '../Input';
 import { Icon } from '../Icon';
@@ -26,11 +27,29 @@ export interface InputDateProps {
 
 export function InputDate(props: Readonly<InputDateProps>) {
   let element!: HTMLInputElement;
+  let dialog!: HTMLDivElement;
+
   const i18n = useI18n();
   const [open, setOpen] = createSignal(false);
 
   let focusTimeout: number;
   const clearFocusTimeout = () => clearTimeout(focusTimeout);
+
+  const onKeyDown = (event: KeyboardEvent) => {
+    switch (event.keyCode) {
+      case KEY_CODES.Tab:
+        clearFocusTimeout();
+        setOpen(false);
+        break;
+      case KEY_CODES.ArrowDown:
+        event.preventDefault();
+        if (!open()) setOpen(true);
+        dialog.querySelectorAll('button')[0]?.focus();
+        clearFocusTimeout();
+        break;
+      default:
+    }
+  };
 
   const onChange = (value: string) => {
     if (open()) setOpen(false);
@@ -64,12 +83,13 @@ export function InputDate(props: Readonly<InputDateProps>) {
 
   return (
     <Popover
+      ref={dialog}
       open={open()}
       class={css.popup}
       onClickOutside={() => setOpen(false)}
       content={
         <div class={css.calendar} onClick={clearFocusTimeout}>
-          <Month value={value()} onSelect={onSelect} />
+          <Month value={[value()]} onSelect={onSelect} />
         </div>
       }
     >
@@ -82,11 +102,13 @@ export function InputDate(props: Readonly<InputDateProps>) {
         error={props.error}
         autoComplete="off"
         placeholder="MM/DD/YYYY"
+        onClick={() => setOpen(true)}
         onFocusIn={() => setOpen(true)}
         onFocusOut={() => {
           clearFocusTimeout();
           focusTimeout = setTimeout(() => setOpen(false), FOCUS_OUT_DELAY);
         }}
+        onKeyDown={onKeyDown}
         onChange={onChange}
       />
     </Popover>
