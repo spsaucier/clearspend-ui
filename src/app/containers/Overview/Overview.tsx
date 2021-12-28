@@ -6,9 +6,12 @@ import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { AccountActivityRequest, ChartDataRequest } from 'generated/capital';
+import type { AccountActivityRequest, AccountActivityResponse, ChartDataRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
+import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
+import { Drawer } from '_common/components/Drawer';
+import { useNav } from '_common/api/router';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -43,12 +46,15 @@ const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
 
 export function Overview() {
   const media = useMediaContext();
+  const navigate = useNav();
 
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
   const [data, setData] = createSignal<readonly ILineChartData[]>(getLineData());
   const spendingStore = useSpending({ params: DEFAULT_SPENDING_PARAMS });
   const activityStore = useActivity({ params: DEFAULT_ACTIVITY_PARAMS });
+
+  const [selectTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
@@ -116,8 +122,18 @@ export function Overview() {
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}
+            onReceiptClick={setSelectedTransaction}
+            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />
         </Data>
+
+        <Drawer
+          open={Boolean(selectTransaction())}
+          title={<Text message="Transaction Details" />}
+          onClose={() => setSelectedTransaction(null)}
+        >
+          <TransactionPreview transaction={selectTransaction()!} />
+        </Drawer>
       </div>
     </div>
   );

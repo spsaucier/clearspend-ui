@@ -3,7 +3,11 @@ import { Dynamic } from 'solid-js/web';
 
 import type { StoreSetter } from '_common/utils/store';
 import { Data } from 'app/components/Data';
-import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
+import type {
+  AccountActivityRequest,
+  AccountActivityResponse,
+  PagedDataAccountActivityResponse,
+} from 'generated/capital';
 
 import { TransactionsList } from '../TransactionsList';
 import { TransactionsTable } from '../TransactionsTable';
@@ -14,6 +18,7 @@ interface TransactionsDataProps {
   error: unknown;
   search?: string;
   data: Readonly<PagedDataAccountActivityResponse> | null;
+  onReceiptClick?: (transaction: AccountActivityResponse) => void;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
@@ -27,6 +32,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         search={props.search}
         data={props.data!}
         onCardClick={props.onCardClick}
+        onReceiptClick={props.onReceiptClick}
         onChangeParams={props.onChangeParams}
       />
     </Data>
