@@ -32,6 +32,7 @@ export interface Address {
     | 'ALA'
     | 'ALB'
     | 'AND'
+    | 'ANT'
     | 'ARE'
     | 'ARG'
     | 'ARM'
@@ -45,7 +46,6 @@ export interface Address {
     | 'BDI'
     | 'BEL'
     | 'BEN'
-    | 'BES'
     | 'BFA'
     | 'BGD'
     | 'BGR'
@@ -79,7 +79,6 @@ export interface Address {
     | 'CPV'
     | 'CRI'
     | 'CUB'
-    | 'CUW'
     | 'CXR'
     | 'CYM'
     | 'CYP'
@@ -237,7 +236,6 @@ export interface Address {
     | 'SVN'
     | 'SWE'
     | 'SWZ'
-    | 'SXM'
     | 'SYC'
     | 'SYR'
     | 'TCA'
@@ -340,6 +338,7 @@ export interface SearchUserRequest {
   hasPhysicalCard?: boolean;
   withoutCard?: boolean;
   searchText?: string;
+  includeArchived?: boolean;
   pageRequest?: PageRequest;
 }
 
@@ -375,6 +374,7 @@ export interface UserData {
 export interface UserPageData {
   userData?: UserData;
   email?: string;
+  archived?: boolean;
   cardInfoList?: CardInfo[];
 }
 
@@ -403,13 +403,12 @@ export interface NetworkMessageRequest {
   /** @format uuid */
   cardId?: string;
   networkMessageType?:
-    | 'PRE_AUTH_TRANSACTION'
-    | 'PRE_AUTH_TRANSACTION_ADVICE'
-    | 'FINANCIAL_TRANSACTION'
-    | 'FINANCIAL_TRANSACTION_ADVICE'
-    | 'REVERSAL_TRANSACTION'
-    | 'REVERSAL_TRANSACTION_ADVICE'
-    | 'SERVICE_FEE_TRANSACTION';
+    | 'PRE_AUTH'
+    | 'PRE_AUTH_ADVICE'
+    | 'FINANCIAL_AUTH'
+    | 'FINANCIAL_AUTH_ADVICE'
+    | 'REVERSAL'
+    | 'REVERSAL_ADVICE';
   amount?: Amount;
 }
 
@@ -458,435 +457,6 @@ export interface CreateAdjustmentResponse {
 export interface CreateReceiptResponse {
   /** @format uuid */
   receiptId?: string;
-}
-
-export interface HealthCheckRequest {
-  Header?: I2CHeader;
-  HealthCheckId?: string;
-}
-
-export interface I2CHeader {
-  Id?: string;
-  UserId?: string;
-  Password?: string;
-
-  /** @format date-time */
-  MessageCreation?: string;
-}
-
-export interface HealthCheckResponse {
-  ResponseCode?: string;
-  HealthCheckId?: string;
-}
-
-export interface CardAcceptor {
-  AcquirerId?: string;
-  MerchantCode?: string;
-  NameAndLocation?: string;
-  MerchantCity?: string;
-  MerchantState?: string;
-  MerchantZipCode?: string;
-
-  /** @format int32 */
-  MCC?: number;
-  DeviceId?: string;
-  DeviceType?: string;
-
-  /** @format date-time */
-  LocalDateTime?: string;
-  merchantName?: string;
-  merchantCountry?:
-    | 'UNSPECIFIED'
-    | 'ABW'
-    | 'AFG'
-    | 'AGO'
-    | 'AIA'
-    | 'ALA'
-    | 'ALB'
-    | 'AND'
-    | 'ARE'
-    | 'ARG'
-    | 'ARM'
-    | 'ASM'
-    | 'ATA'
-    | 'ATF'
-    | 'ATG'
-    | 'AUS'
-    | 'AUT'
-    | 'AZE'
-    | 'BDI'
-    | 'BEL'
-    | 'BEN'
-    | 'BES'
-    | 'BFA'
-    | 'BGD'
-    | 'BGR'
-    | 'BHR'
-    | 'BHS'
-    | 'BIH'
-    | 'BLM'
-    | 'BLR'
-    | 'BLZ'
-    | 'BMU'
-    | 'BOL'
-    | 'BRA'
-    | 'BRB'
-    | 'BRN'
-    | 'BTN'
-    | 'BVT'
-    | 'BWA'
-    | 'CAF'
-    | 'CAN'
-    | 'CCK'
-    | 'CHE'
-    | 'CHL'
-    | 'CHN'
-    | 'CIV'
-    | 'CMR'
-    | 'COD'
-    | 'COG'
-    | 'COK'
-    | 'COL'
-    | 'COM'
-    | 'CPV'
-    | 'CRI'
-    | 'CUB'
-    | 'CUW'
-    | 'CXR'
-    | 'CYM'
-    | 'CYP'
-    | 'CZE'
-    | 'DEU'
-    | 'DJI'
-    | 'DMA'
-    | 'DNK'
-    | 'DOM'
-    | 'DZA'
-    | 'ECU'
-    | 'EGY'
-    | 'ERI'
-    | 'ESH'
-    | 'ESP'
-    | 'EST'
-    | 'ETH'
-    | 'FIN'
-    | 'FJI'
-    | 'FLK'
-    | 'FRA'
-    | 'FRO'
-    | 'FSM'
-    | 'GAB'
-    | 'GBR'
-    | 'GEO'
-    | 'GGY'
-    | 'GHA'
-    | 'GIB'
-    | 'GIN'
-    | 'GLP'
-    | 'GMB'
-    | 'GNB'
-    | 'GNQ'
-    | 'GRC'
-    | 'GRD'
-    | 'GRL'
-    | 'GTM'
-    | 'GUF'
-    | 'GUM'
-    | 'GUY'
-    | 'HKG'
-    | 'HMD'
-    | 'HND'
-    | 'HRV'
-    | 'HTI'
-    | 'HUN'
-    | 'IDN'
-    | 'IMN'
-    | 'IND'
-    | 'IOT'
-    | 'IRL'
-    | 'IRN'
-    | 'IRQ'
-    | 'ISL'
-    | 'ISR'
-    | 'ITA'
-    | 'JAM'
-    | 'JEY'
-    | 'JOR'
-    | 'JPN'
-    | 'KAZ'
-    | 'KEN'
-    | 'KGZ'
-    | 'KHM'
-    | 'KIR'
-    | 'KNA'
-    | 'KOR'
-    | 'KWT'
-    | 'LAO'
-    | 'LBN'
-    | 'LBR'
-    | 'LBY'
-    | 'LCA'
-    | 'LIE'
-    | 'LKA'
-    | 'LSO'
-    | 'LTU'
-    | 'LUX'
-    | 'LVA'
-    | 'MAC'
-    | 'MAF'
-    | 'MAR'
-    | 'MCO'
-    | 'MDA'
-    | 'MDG'
-    | 'MDV'
-    | 'MEX'
-    | 'MHL'
-    | 'MKD'
-    | 'MLI'
-    | 'MLT'
-    | 'MMR'
-    | 'MNE'
-    | 'MNG'
-    | 'MNP'
-    | 'MOZ'
-    | 'MRT'
-    | 'MSR'
-    | 'MTQ'
-    | 'MUS'
-    | 'MWI'
-    | 'MYS'
-    | 'MYT'
-    | 'NAM'
-    | 'NCL'
-    | 'NER'
-    | 'NFK'
-    | 'NGA'
-    | 'NIC'
-    | 'NIU'
-    | 'NLD'
-    | 'NOR'
-    | 'NPL'
-    | 'NRU'
-    | 'NZL'
-    | 'OMN'
-    | 'PAK'
-    | 'PAN'
-    | 'PCN'
-    | 'PER'
-    | 'PHL'
-    | 'PLW'
-    | 'PNG'
-    | 'POL'
-    | 'PRI'
-    | 'PRK'
-    | 'PRT'
-    | 'PRY'
-    | 'PSE'
-    | 'PYF'
-    | 'QAT'
-    | 'REU'
-    | 'ROU'
-    | 'RUS'
-    | 'RWA'
-    | 'SAU'
-    | 'SDN'
-    | 'SEN'
-    | 'SGP'
-    | 'SGS'
-    | 'SHN'
-    | 'SJM'
-    | 'SLB'
-    | 'SLE'
-    | 'SLV'
-    | 'SMR'
-    | 'SOM'
-    | 'SPM'
-    | 'SRB'
-    | 'SSD'
-    | 'STP'
-    | 'SUR'
-    | 'SVK'
-    | 'SVN'
-    | 'SWE'
-    | 'SWZ'
-    | 'SXM'
-    | 'SYC'
-    | 'SYR'
-    | 'TCA'
-    | 'TCD'
-    | 'TGO'
-    | 'THA'
-    | 'TJK'
-    | 'TKL'
-    | 'TKM'
-    | 'TLS'
-    | 'TON'
-    | 'TTO'
-    | 'TUN'
-    | 'TUR'
-    | 'TUV'
-    | 'TWN'
-    | 'TZA'
-    | 'UGA'
-    | 'UKR'
-    | 'UMI'
-    | 'URY'
-    | 'USA'
-    | 'UZB'
-    | 'VAT'
-    | 'VCT'
-    | 'VEN'
-    | 'VGB'
-    | 'VIR'
-    | 'VNM'
-    | 'VUT'
-    | 'WLF'
-    | 'WSM'
-    | 'YEM'
-    | 'ZAF'
-    | 'ZMB'
-    | 'ZWE';
-}
-
-export interface EventNotificationAdvanceRequest {
-  Header?: I2CHeader;
-  Transaction?: I2CTransaction;
-  Card?: I2CCard;
-}
-
-export interface I2CCard {
-  CardNo?: string;
-  encryptedCardNumber?: NullableEncryptedString;
-  CardProgramID?: string;
-  CardReferenceID?: string;
-  PrimaryCardNo?: string;
-  PrimaryCardReferenceID?: string;
-  CustomerId?: string;
-  MemberId?: string;
-  AvailableBalance?: string;
-  LedgerBalance?: string;
-  CardStatus?: string;
-  FirstName?: string;
-  LastName?: string;
-  AddressLine1?: string;
-  AddressLine2?: string;
-  City?: string;
-  State?: string;
-  PostalCode?: string;
-  CountryCode?: string;
-  CellNo?: string;
-  Email?: string;
-  SourceCardReferenceNo?: string;
-  SourceCardNo?: string;
-}
-
-export interface I2CTransaction {
-  NotificationEventId?: string;
-  TransactionId?: string;
-  MessageType?: string;
-
-  /** @format date */
-  Date?: string;
-  Time?: {
-    offset?: {
-      totalSeconds?: number;
-      id?: string;
-      rules?: {
-        fixedOffset?: boolean;
-        transitions?: {
-          duration?: {
-            seconds?: number;
-            nano?: number;
-            negative?: boolean;
-            zero?: boolean;
-            units?: {
-              dateBased?: boolean;
-              timeBased?: boolean;
-              durationEstimated?: boolean;
-            }[];
-          };
-          gap?: boolean;
-          dateTimeBefore?: string;
-          dateTimeAfter?: string;
-          overlap?: boolean;
-          instant?: string;
-        }[];
-        transitionRules?: {
-          month?:
-            | 'JANUARY'
-            | 'FEBRUARY'
-            | 'MARCH'
-            | 'APRIL'
-            | 'MAY'
-            | 'JUNE'
-            | 'JULY'
-            | 'AUGUST'
-            | 'SEPTEMBER'
-            | 'OCTOBER'
-            | 'NOVEMBER'
-            | 'DECEMBER';
-          timeDefinition?: 'UTC' | 'WALL' | 'STANDARD';
-          dayOfWeek?: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY';
-          dayOfMonthIndicator?: number;
-          localTime?: LocalTime;
-          midnightEndOfDay?: boolean;
-        }[];
-      };
-    };
-    hour?: number;
-    minute?: number;
-    second?: number;
-    nano?: number;
-  };
-  CardAcceptor?: CardAcceptor;
-  TransactionType?: string;
-  Service?: string;
-  RequestedAmount?: string;
-  RequestedAmountCurrency?: string;
-  TransactionAmount?: string;
-  TransactionCurrency?: string;
-  TransactionResponseCode?: string;
-  InterchangeFee?: string;
-  PANEntryMode?: string;
-  AuthorizationCode?: string;
-  ARN?: string;
-  RetrievalReferenceNo?: string;
-  SystemTraceAuditNo?: string;
-  NetworkId?: string;
-  OriginalTransId?: string;
-  TransferID?: string;
-  BankAccountNumber?: string;
-  TransactionDescription?: string;
-  ExternalTransReference?: string;
-  ExternalUserReference?: string;
-  ExternalLinkedCardRefID?: string;
-  ExternalLinkedCardProfileSet1?: string;
-  ExternalLinkedCardProfileSet2?: string;
-  PanSequenceNo?: string;
-  FraudParameter?: string;
-}
-
-export interface LocalTime {
-  /** @format int32 */
-  hour?: number;
-
-  /** @format int32 */
-  minute?: number;
-
-  /** @format int32 */
-  second?: number;
-
-  /** @format int32 */
-  nano?: number;
-}
-
-export interface NullableEncryptedString {
-  encrypted?: string;
-}
-
-export interface EventNotificationAdvanceResponse {
-  ResponseCode?: string;
-  NotificationEventId?: string;
 }
 
 export interface CurrencyLimit {
@@ -964,7 +534,7 @@ export interface SearchCardData {
   user?: UserData;
   allocation?: ItemTypedIdAllocationId;
   balance?: Amount;
-  cardStatus?: 'OPEN' | 'BLOCKED' | 'RETIRED';
+  cardStatus?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
   cardType?: 'PLASTIC' | 'VIRTUAL';
 }
 
@@ -980,11 +550,14 @@ export interface Account {
   businessId: string;
 
   /** @format uuid */
+  allocationId: string;
+
+  /** @format uuid */
   ledgerAccountId: string;
   type: 'ALLOCATION' | 'CARD';
 
   /** @format uuid */
-  ownerId: string;
+  cardId?: string;
   ledgerBalance: Amount;
 }
 
@@ -1130,14 +703,14 @@ export interface CreateOrUpdateBusinessOwnerRequest {
    * @example johnw@hightable.com
    */
   email: string;
-  address?: Address;
 
   /**
    * Phone address of the person
    * @pattern ^\+[1-9][0-9]{9,14}$
    * @example +12345679
    */
-  phone?: string;
+  phone: string;
+  address?: Address;
 
   /**
    * Indication if business owner is updated during the onboarding process
@@ -1186,6 +759,7 @@ export interface User {
   address?: Address;
   email?: string;
   phone?: string;
+  archived?: boolean;
 }
 
 export interface ForgotPasswordRequest {
@@ -1357,10 +931,12 @@ export interface DashboardGraphData {
 }
 
 export interface GraphData {
-  amount?: number;
+  /** @format date-time */
+  from?: string;
 
   /** @format date-time */
-  offsetDateTime?: string;
+  to?: string;
+  amount?: number;
 }
 
 export interface ChartDataRequest {
@@ -1414,6 +990,7 @@ export interface MerchantInfo {
 
   /** @format int32 */
   merchantCategoryCode?: number;
+  merchantLogoUrl?: string;
 }
 
 export interface UserChartData {
@@ -1471,7 +1048,7 @@ export interface UpdateUserResponse {
 
 export interface UpdateCardStatusRequest {
   /** @example BLOCKED */
-  status?: 'OPEN' | 'BLOCKED' | 'RETIRED';
+  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
 
   /** @example CARDHOLDER_REQUESTED */
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
@@ -1493,7 +1070,7 @@ export interface Card {
 
   /** @format uuid */
   accountId?: string;
-  status?: 'OPEN' | 'BLOCKED' | 'RETIRED';
+  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
   fundingType?: 'POOLED' | 'INDIVIDUAL';
 

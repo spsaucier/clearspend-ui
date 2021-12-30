@@ -43,3 +43,7 @@ export function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
     to: range[1].toISOString() as DateString,
   };
 }
+
+export function updateParams<T>(updates: Partial<T>) {
+  return (prev: T): T => ({ ...prev, ...updates });
+}

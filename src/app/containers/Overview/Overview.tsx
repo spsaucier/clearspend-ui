@@ -1,12 +1,16 @@
-import { createSignal, Index, Show, batch } from 'solid-js';
+import { createSignal, Index, Show, batch, createEffect, on } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
-import type { ILineChartData } from '_common/components/Charts';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { AccountActivityRequest, AccountActivityResponse, ChartDataRequest } from 'generated/capital';
+import type {
+  AccountActivityResponse,
+  GraphDataRequest,
+  ChartDataRequest,
+  AccountActivityRequest,
+} from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
 import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
@@ -15,26 +19,13 @@ import { useNav } from '_common/api/router';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
+import { useSpend } from '../../stores/spend';
 import { useSpending } from '../../stores/spending';
 import { useActivity } from '../../stores/activity';
 
-import { getLineData } from './mock';
-import { TimePeriod, getTimePeriod, toISO } from './utils';
+import { TimePeriod, getTimePeriod, toISO, updateParams } from './utils';
 
 import css from './Overview.css';
-
-const DEFAULT_SPENDING_PARAMS: ChartDataRequest = {
-  ...toISO(getTimePeriod(TimePeriod.week)),
-  chartFilter: 'ALLOCATION',
-};
-
-const DEFAULT_ACTIVITY_PARAMS: AccountActivityRequest = {
-  ...toISO(getTimePeriod(TimePeriod.week)),
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
-};
 
 const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
   { key: TimePeriod.week, text: i18n.t('This Week') },
@@ -44,26 +35,59 @@ const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
   { key: TimePeriod.today, text: i18n.t('Today') },
 ];
 
-export function Overview() {
+interface OverviewProps {
+  allocationId: string | undefined;
+}
+
+export function Overview(props: Readonly<OverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
 
+  const PERIOD = toISO(getTimePeriod(TimePeriod.week));
   const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
 
-  const [data, setData] = createSignal<readonly ILineChartData[]>(getLineData());
-  const spendingStore = useSpending({ params: DEFAULT_SPENDING_PARAMS });
-  const activityStore = useActivity({ params: DEFAULT_ACTIVITY_PARAMS });
+  const spendStore = useSpend({ params: { ...PERIOD, allocationId: props.allocationId } });
+
+  const spendingStore = useSpending({
+    params: {
+      ...PERIOD,
+      allocationId: props.allocationId,
+      chartFilter: 'ALLOCATION',
+    },
+  });
+
+  const activityStore = useActivity({
+    params: {
+      ...PERIOD,
+      allocationId: props.allocationId,
+      pageRequest: { pageNumber: 0, pageSize: 10 },
+    },
+  });
+
+  createEffect(
+    on(
+      [() => props.allocationId],
+      (input) => {
+        const updates = { allocationId: props.allocationId };
+        spendStore.setParams(updateParams<GraphDataRequest>(updates));
+        spendingStore.setParams(updateParams<ChartDataRequest>(updates));
+        activityStore.setParams(updateParams<AccountActivityRequest>(updates));
+        return input;
+      },
+      { defer: true },
+    ),
+  );
 
   const [selectTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
-    setData(getLineData());
 
     batch(() => {
       const range = toISO(getTimePeriod(value));
-      spendingStore.setParams((prev) => ({ ...prev, ...range }));
-      activityStore.setParams((prev) => ({ ...prev, ...range }));
+      spendStore.setParams(updateParams<GraphDataRequest>(range));
+      spendingStore.setParams(updateParams<ChartDataRequest>(range));
+      activityStore.setParams(updateParams<AccountActivityRequest>(range));
     });
   };
 
@@ -75,19 +99,22 @@ export function Overview() {
         </TabList>
       </Show>
       <div class={css.top}>
-        <SpendWidget
-          data={data()}
-          controls={
-            <Show when={media.small}>
-              <TagSelect
-                class={css.fullWidthDropdown}
-                value={period()}
-                options={PERIOD_OPTIONS}
-                onChange={(timePeriod) => changePeriod(timePeriod as TimePeriod)}
-              />
-            </Show>
-          }
-        />
+        <Data error={spendStore.error} loading={spendStore.loading} data={spendStore.data} onReload={spendStore.reload}>
+          <SpendWidget
+            period={period()}
+            data={spendStore.data!}
+            controls={
+              <Show when={media.small}>
+                <TagSelect
+                  class={css.fullWidthDropdown}
+                  value={period()}
+                  options={PERIOD_OPTIONS}
+                  onChange={(timePeriod) => changePeriod(timePeriod as TimePeriod)}
+                />
+              </Show>
+            }
+          />
+        </Data>
         <Data
           data={spendingStore.data}
           error={spendingStore.error}

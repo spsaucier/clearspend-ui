@@ -24,7 +24,7 @@ import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { getCard, updateCard, blockCard, unblockCard } from '../../services';
-import { CardStatus, CardType } from '../../types';
+import type { CardType } from '../../types';
 
 enum Tabs {
   transactions,
@@ -78,7 +78,7 @@ export default function CardView() {
       actions={
         <>
           <Switch>
-            <Match when={card()?.status === CardStatus.OPEN}>
+            <Match when={card()?.status === 'ACTIVE'}>
               <Confirm
                 position="bottom-right"
                 question={
@@ -105,7 +105,7 @@ export default function CardView() {
                 )}
               </Confirm>
             </Match>
-            <Match when={card()?.status === CardStatus.BLOCKED}>
+            <Match when={card()?.status === 'INACTIVE'}>
               <Button
                 size="lg"
                 icon="freeze"

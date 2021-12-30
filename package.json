@@ -25,7 +25,7 @@
     "colord": "2.9.2",
     "core-js": "3.20.0",
     "date-func": "0.2.0",
-    "micro-charts": "7.2.0",
+    "micro-charts": "7.3.0",
     "mixpanel-browser": "^2.42.0",
     "solid-app-router": "0.1.14",
     "solid-create-form": "1.0.0",

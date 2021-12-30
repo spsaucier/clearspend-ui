@@ -1,10 +1,12 @@
-import { createSignal, createEffect } from 'solid-js';
+import { createSignal, Switch, Match } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
+import { Loading } from 'app/components/Loading';
+import { LoadingError } from 'app/components/LoadingError';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { useAllocations } from 'allocations/stores/allocations';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
@@ -20,12 +22,14 @@ export default function Dashboard() {
   const navigate = useNav();
   const { owner } = useBusiness();
 
-  const [allocation, setAllocation] = createSignal<string>('');
-  const allocations = useAllocations({ initValue: [] });
+  const [allocation, setAllocation] = createSignal<string>();
 
-  createEffect(() => {
-    const root = getRootAllocation(allocations.data);
-    if (root) setAllocation(root.allocationId);
+  const allocations = useAllocations({
+    initValue: [],
+    onSuccess: (data) => {
+      const root = getRootAllocation(data);
+      if (root) setAllocation(root.allocationId);
+    },
   });
 
   return (
@@ -34,7 +38,6 @@ export default function Dashboard() {
       contentClass={css.content}
       extra={
         <AllocationSelect
-          // TODO
           items={allocations.data!}
           value={allocation()}
           class={css.allocations}
@@ -73,8 +76,18 @@ export default function Dashboard() {
         </div>
       }
     >
-      <Overview />
-      {/*<Landing />*/}
+      <Switch>
+        <Match when={allocations.error}>
+          <LoadingError onReload={allocations.reload} />
+        </Match>
+        <Match when={allocations.loading && !allocations.data?.length}>
+          <Loading />
+        </Match>
+        <Match when={allocations.data}>
+          <Overview allocationId={allocation()} />
+          {/*<Landing />*/}
+        </Match>
+      </Switch>
     </Page>
   );
 }

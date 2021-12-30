@@ -22,7 +22,7 @@ import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import { CardStatus, CardType as CardTypeType } from '../../types';
+import type { CardType as CardTypeType } from '../../types';
 
 import css from './CardsTable.css';
 
@@ -81,7 +81,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       name: 'status',
       title: 'Status',
       render: (item) => (
-        <Tag type={item.cardStatus === CardStatus.OPEN ? 'success' : 'danger'}>
+        <Tag type={item.cardStatus === 'ACTIVE' ? 'success' : 'danger'}>
           <Icon name="freeze" size="xs" />
           <span>{item.cardStatus?.toLowerCase()}</span>
         </Tag>
