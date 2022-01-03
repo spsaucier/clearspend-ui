@@ -50,10 +50,10 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
           />
         </div>
       </Checkbox>
-      <Checkbox value={CardType.PLASTIC} class={css.item}>
+      <Checkbox value={CardType.PHYSICAL} class={css.item}>
         <div class={css.content}>
           <Card
-            type={CardType.PLASTIC}
+            type={CardType.PHYSICAL}
             name={props.name}
             number="1234"
             allocation={props.allocation}

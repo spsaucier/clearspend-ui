@@ -15,7 +15,7 @@ export function CardType(props: Readonly<CardTypeProps>) {
         <Match when={props.type === Type.VIRTUAL}>
           <Text message="Virtual card" />
         </Match>
-        <Match when={props.type === Type.PLASTIC}>
+        <Match when={props.type === Type.PHYSICAL}>
           <Text message="Physical card" />
         </Match>
       </Switch>

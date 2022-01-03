@@ -43,8 +43,7 @@ export function convertFormData(
   categories: readonly Readonly<MccGroup>[],
 ): Readonly<IssueCardRequest> {
   return {
-    // TODO: Remove programId
-    programId: '033955d1-f18e-497e-9905-88ba71e90208',
+    binType: 'DEBIT',
     allocationId: data.allocationId,
     userId: data.employee,
     currency: 'USD',

@@ -51,7 +51,7 @@ export function CardsFilters(props: Readonly<CardsFiltersProps>) {
         </FilterBox>
         <FilterBox title={<Text message="Card Type" />}>
           <CheckboxGroup>
-            <Checkbox value="PLASTIC">
+            <Checkbox value="PHYSICAL">
               <Text message="Physical" />
             </Checkbox>
             <Checkbox value="VIRTUAL">

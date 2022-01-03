@@ -4,11 +4,13 @@ import type { Amount, MerchantCategoryChartData } from 'generated/capital';
 
 import css from './MerchantCategory.css';
 
-const NAMES = {
+const NAMES: Partial<
+  Record<NonNullable<MerchantCategoryChartData['merchantType']>, string | HTMLElement | (string | HTMLElement)[]>
+> = {
   UTILITIES: i18n.t('Utilities'),
-  GROCERIES: i18n.t('Groceries'),
-  RESTAURANTS: i18n.t('Restaurants'),
-  OTHERS: i18n.t('Others'),
+  GROCERY_STORES_SUPERMARKETS: i18n.t('Groceries'),
+  EATING_PLACES_RESTAURANTS: i18n.t('Restaurants'),
+  UNKNOWN: i18n.t('Others'),
 };
 
 interface MerchantCategoryProps {

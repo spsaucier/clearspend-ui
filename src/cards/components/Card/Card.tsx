@@ -10,7 +10,7 @@ import css from './Card.css';
 
 const BACKGROUND: Readonly<Record<CardType, string>> = {
   [CardType.VIRTUAL]: '#F3F2EF',
-  [CardType.PLASTIC]: '#43FA76',
+  [CardType.PHYSICAL]: '#43FA76',
 };
 
 interface CardProps {

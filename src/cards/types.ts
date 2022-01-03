@@ -1,4 +1,4 @@
 export enum CardType {
-  PLASTIC = 'PLASTIC',
+  PHYSICAL = 'PHYSICAL',
   VIRTUAL = 'VIRTUAL',
 }
