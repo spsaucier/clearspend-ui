@@ -17,7 +17,7 @@ export function ReceiptsView(props: { receipts: Readonly<string[]> }) {
       <For each={props.receipts}>
         {(receipt) => {
           return (
-            <div>
+            <div class={css.receiptImageWrapper}>
               <img src={receipt} />
             </div>
           );

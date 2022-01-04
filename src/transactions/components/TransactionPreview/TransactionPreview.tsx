@@ -28,16 +28,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
     const formData = new FormData();
     formData.append('receipt', (e.target as HTMLInputElement).files?.[0] as File);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+
     const { receiptId } = await uploadReceiptForActivity(formData);
-    // eslint-disable-next-line no-console
-    console.log(receiptId);
-    const linkResult = await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
-    // eslint-disable-next-line no-console
-    console.log({ linkResult });
+
+    await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
+
     const updatedTransactionWithReceipt = await getActivityById(transaction().accountActivityId!);
-    // eslint-disable-next-line no-console
-    console.log({ updatedTransactionWithReceipt });
+
     setTransaction(updatedTransactionWithReceipt);
   });
 
@@ -78,7 +75,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <DateWithDateTime activityTime={transaction().activityTime!} />
         </div>
         <div class={css.receiptCta}>
-          <Show when={!transaction().receipt?.receiptId}>
+          <Show when={!transaction().receipt?.receiptId && transaction().merchant}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="add-receipt" loading={uploading()}>
                 Add Receipt
