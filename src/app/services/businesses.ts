@@ -8,7 +8,11 @@ export async function getOwner() {
 }
 
 export async function getBusiness() {
-  return (await service.get<Readonly<Business> | null>(`/businesses`)).data;
+  try {
+    return (await service.get<Readonly<Business> | null>(`/businesses`)).data;
+  } catch (e: unknown) {
+    return null;
+  }
 }
 
 export async function getBusinessAccount() {

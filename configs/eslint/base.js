@@ -1,7 +1,7 @@
 module.exports = {
   rules: {
     'no-debugger': 2,
-    'no-console': 2,
+    'no-console': 1,
     'array-callback-return': [2, { allowImplicit: true }],
     'class-methods-use-this': [
       2,
