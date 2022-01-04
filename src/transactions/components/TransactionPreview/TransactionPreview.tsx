@@ -1,6 +1,6 @@
 import { useNavigate } from 'solid-app-router';
 import { DateTime } from 'solid-i18n';
-import { Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
 
 import type { AccountActivityResponse } from 'generated/capital';
 import { DateFormat } from '_common/api/intl/types';
@@ -10,99 +10,148 @@ import { Button } from '_common/components/Button';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import { join } from '_common/utils/join';
+import { getActivityById, linkReceiptToActivity, uploadReceiptForActivity, viewReceipt } from 'app/services/activity';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import css from './TransactionPreview.css';
 
 interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
+  onViewReceipt: (receipts: Readonly<string[]>) => void;
 }
-
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const navigate = useNavigate();
-  const transaction = props.transaction;
-  const displayAmount = formatCurrency(transaction.amount?.amount || 0);
+  const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
+  const [receiptURIs, setReceiptURIs] = createSignal<Readonly<string[]>>([]);
+  const displayAmount = formatCurrency(transaction().amount?.amount || 0);
+
+  const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
+    const formData = new FormData();
+    formData.append('receipt', (e.target as HTMLInputElement).files?.[0] as File);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const { receiptId } = await uploadReceiptForActivity(formData);
+    // eslint-disable-next-line no-console
+    console.log(receiptId);
+    const linkResult = await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
+    // eslint-disable-next-line no-console
+    console.log({ linkResult });
+    const updatedTransactionWithReceipt = await getActivityById(transaction().accountActivityId!);
+    // eslint-disable-next-line no-console
+    console.log({ updatedTransactionWithReceipt });
+    setTransaction(updatedTransactionWithReceipt);
+  });
+
+  createEffect(() => {
+    const downloadReceiptsToView = async () => {
+      const receiptId = transaction().receipt?.receiptId;
+      if (receiptId) {
+        const receiptsData = await viewReceipt(receiptId);
+        setReceiptURIs([receiptsData as unknown as string]);
+      }
+    };
+    downloadReceiptsToView();
+  });
 
   return (
     <div>
-      <div class={join(css.status, getColorClassForTransactionStatus(transaction.status))}>
+      <div class={join(css.status, getColorClassForTransactionStatus(transaction().status))}>
         <span class={css.icon}>
           <Icon name="approved-status" />
         </span>
-        {transaction.status?.toLocaleLowerCase()}
-        <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction.status)}</span>
+        {transaction().status?.toLocaleLowerCase()}
+        <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
       </div>
       <div class={css.summary}>
-        <Show when={transaction.merchant?.merchantLogoUrl}>
-          <img src={transaction.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.merchantLogo} />
+        <Show when={transaction().merchant?.merchantLogoUrl}>
+          <img src={transaction().merchant?.merchantLogoUrl} alt="Merchant logo" class={css.merchantLogo} />
         </Show>
-        <Show when={!transaction.merchant?.merchantLogoUrl}>
+        <Show when={!transaction().merchant?.merchantLogoUrl}>
           <div class={css.missingLogoUrl} />
         </Show>
         <div class={css.amount}>{displayAmount}</div>
         <div class={css.merchant}>
-          {transaction.merchant?.name}
+          {transaction().merchant?.name}
           <span>&#8226;</span>
-          {transaction.merchant?.type}
+          {transaction().merchant?.type}
         </div>
         <div class={css.date}>
-          <DateWithDateTime activityTime={transaction.activityTime!} />
+          <DateWithDateTime activityTime={transaction().activityTime!} />
         </div>
         <div class={css.receiptCta}>
-          <Button view={'default'} wide={true} icon="add-receipt">
-            Add Receipt
-          </Button>
+          <Show when={!transaction().receipt?.receiptId}>
+            <label for="receipt-upload">
+              <Button view={'default'} wide={true} icon="add-receipt" loading={uploading()}>
+                Add Receipt
+              </Button>
+            </label>
+          </Show>
+          <Show when={transaction().receipt?.receiptId}>
+            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receiptURIs())}>
+              View Receipt
+            </Button>
+          </Show>
+          <Show when={transaction().receipt?.receiptId}>
+            <label for="receipt-upload">
+              <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
+                Upload more images
+              </Button>
+            </label>
+          </Show>
+          <input type="file" id="receipt-upload" accept="image/*" onChange={uploadReceipt}></input>
         </div>
       </div>
       <div>
-        <div>
-          <div class={css.title}>Card</div>
-          <div>
-            <div class={css.card} onClick={() => navigate(`/cards/view/${transaction.card?.cardId}`)}>
-              <div class={css.cardIcon}>
-                <Icon name="card" />
-              </div>
-              <div class={css.cardDetailWrapper}>
-                <div class={css.cardNumber}>
-                  {transaction.card?.lastFour ? formatCardNumber(transaction.card.lastFour) : '--'}
-                </div>
-                <div class={css.cardName}>
-                  {formatName({
-                    firstName: transaction.card!.ownerFirstName!,
-                    lastName: transaction.card!.ownerLastName!,
-                  })}
-                </div>
-              </div>
-              <Icon name="chevron-right" />
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class={css.title}>Merchant</div>
-          <div class={css.detailRows}>
-            <div>Merchant Name</div>
-            <div>{transaction.merchant?.name}</div>
-            <div>Merchant ID</div>
-            <div>{transaction.merchant?.merchantNumber}</div>
-            <div>Merchant Category</div>
-            <div>{transaction.merchant?.merchantCategoryCode}</div>
-          </div>
-        </div>
-        <div>
-          <div class={css.title}>Transaction Details</div>
-          <div class={css.detailRows}>
-            <div>Posted On</div>
+        <Show when={transaction().card}>
+          <>
+            <div class={css.title}>Card</div>
             <div>
-              <DateWithDateTime activityTime={transaction.activityTime!} />
+              <div class={css.card} onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}>
+                <div class={css.cardIcon}>
+                  <Icon name="card" />
+                </div>
+                <div class={css.cardDetailWrapper}>
+                  <div class={css.cardNumber}>
+                    {transaction().card?.lastFour ? formatCardNumber(transaction().card?.lastFour) : '--'}
+                  </div>
+                  <div class={css.cardName}>
+                    {formatName({
+                      firstName: transaction().card?.ownerFirstName!,
+                      lastName: transaction().card?.ownerLastName!,
+                    })}
+                  </div>
+                </div>
+                <Icon name="chevron-right" />
+              </div>
             </div>
-            <div>Posted Amount</div>
-            <div>{displayAmount}</div>
+          </>
+        </Show>
+      </div>
+      <div>
+        <div class={css.title}>Merchant</div>
+        <div class={css.detailRows}>
+          <div>Merchant Name</div>
+          <div>{transaction().merchant?.name}</div>
+          <div>Merchant ID</div>
+          <div>{transaction().merchant?.merchantNumber}</div>
+          <div>Merchant Category</div>
+          <div>{transaction().merchant?.merchantCategoryCode}</div>
+        </div>
+      </div>
+      <div>
+        <div class={css.title}>Transaction Details</div>
+        <div class={css.detailRows}>
+          <div>Posted On</div>
+          <div>
+            <DateWithDateTime activityTime={transaction().activityTime!} />
           </div>
+          <div>Posted Amount</div>
+          <div>{displayAmount}</div>
         </div>
-        <div class={css.reportIssueCta}>
-          <Button view={'default'} wide={true} icon={{ name: 'alert', pos: 'right' }}>
-            Report an issue
-          </Button>
-        </div>
+      </div>
+      <div class={css.reportIssueCta}>
+        <Button view={'default'} wide={true} icon={{ name: 'alert', pos: 'right' }}>
+          Report an issue
+        </Button>
       </div>
     </div>
   );

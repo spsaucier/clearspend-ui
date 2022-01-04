@@ -16,6 +16,8 @@ import { TagOption, TagSelect } from 'app/components/TagSelect';
 import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
 import { Drawer } from '_common/components/Drawer';
 import { useNav } from '_common/api/router';
+import { Modal } from '_common/components/Modal/Modal';
+import { ReceiptsView } from 'transactions/components/TransactionPreview/ReceiptsView';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -79,6 +81,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   );
 
   const [selectTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
+  const [showReceipts, setShowReceipts] = createSignal<Readonly<string[]>>([]);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
@@ -153,14 +156,16 @@ export function Overview(props: Readonly<OverviewProps>) {
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />
         </Data>
-
         <Drawer
           open={Boolean(selectTransaction())}
           title={<Text message="Transaction Details" />}
           onClose={() => setSelectedTransaction(null)}
         >
-          <TransactionPreview transaction={selectTransaction()!} />
+          <TransactionPreview transaction={selectTransaction()!} onViewReceipt={setShowReceipts} />
         </Drawer>
+        <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
+          <ReceiptsView receipts={showReceipts()} />
+        </Modal>
       </div>
     </div>
   );

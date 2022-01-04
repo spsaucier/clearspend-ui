@@ -35,7 +35,7 @@
 .summary {
   display: flex;
   margin-bottom: var(--pd-24);
-  padding-bottom: var(--pd-24);
+  padding-bottom: var(--pd-14);
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -79,17 +79,24 @@
   margin-top: var(--pd-24);
 }
 
-.receipt-cta svg {
-  margin-top: var(--pd-8);
+.receipt-cta label {
+  cursor: pointer;
+}
+
+.receipt-cta button {
+  margin-bottom: 10px;
+}
+
+.receipt-cta label button {
+  pointer-events: none;
+}
+
+.receipt-cta input[type='file'] {
+  display: none;
 }
 
 .report-issue-cta {
   margin-top: var(--pd-24);
-}
-
-.report-issue-cta svg {
-  margin-top: 6px;
-  margin-left: 6px;
 }
 
 .title {

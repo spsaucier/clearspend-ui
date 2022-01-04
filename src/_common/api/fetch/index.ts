@@ -3,8 +3,11 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
 
 function parse<T = unknown>(body: string, type: string | null): T {
+  // eslint-disable-next-line no-console
+  console.log('PARSE TYPE: ', type);
   if (type?.includes('application/json')) return JSON.parse(body) as T;
   if (type?.includes('text/plain')) return body as unknown as T;
+  if (type?.includes('application/octet-stream')) return body as unknown as T;
   return null as unknown as T;
 }
 
@@ -15,6 +18,8 @@ export function fetch<T = unknown>(
   options: Readonly<Partial<FetchOptions>> = {},
 ): Promise<FetchResponse<T>> {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-console
+    console.log({ params, t: params instanceof FormData });
     window
       .fetch(url, {
         method,
@@ -24,6 +29,12 @@ export function fetch<T = unknown>(
           params instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers },
       })
       .then((resp) => {
+        const contentType = resp.headers.get('content-type');
+
+        if (contentType?.includes('application/octet-stream')) {
+          return resp.blob() as unknown;
+        }
+
         const response: FetchResponse = { url, status: resp.status, data: null };
 
         return resp
@@ -31,7 +42,7 @@ export function fetch<T = unknown>(
           .then((body: string) => {
             const result: FetchResponse<T> = {
               ...response,
-              data: parse(body, resp.headers.get('content-type')),
+              data: parse(body, contentType),
             };
             if (resp.ok) {
               sendAnalyticsEvent({ name: Events[`${method}_SUCCESS`], data: { url } });

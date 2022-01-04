@@ -1,0 +1,32 @@
+.top {
+  display: flex;
+  padding: var(--pd-14) 0;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.top span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.top svg {
+  display: inline-block;
+}
+
+.close {
+  cursor: pointer;
+}
+
+.bottom {
+  display: flex;
+  padding-top: var(--pd-14);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete {
+  color: var(--tw-red-70);
+}
