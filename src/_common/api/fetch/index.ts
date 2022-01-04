@@ -3,8 +3,6 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
 
 function parse<T = unknown>(body: string, type: string | null): T {
-  // eslint-disable-next-line no-console
-  console.log('PARSE TYPE: ', type);
   if (type?.includes('application/json')) return JSON.parse(body) as T;
   if (type?.includes('text/plain')) return body as unknown as T;
   if (type?.includes('application/octet-stream')) return body as unknown as T;
@@ -18,8 +16,6 @@ export function fetch<T = unknown>(
   options: Readonly<Partial<FetchOptions>> = {},
 ): Promise<FetchResponse<T>> {
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line no-console
-    console.log({ params, t: params instanceof FormData });
     window
       .fetch(url, {
         method,
