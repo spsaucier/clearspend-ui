@@ -18,6 +18,7 @@ import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
+import { Drawer } from '_common/components/Drawer';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
@@ -25,6 +26,8 @@ import { Transactions } from '../../containers/Transactions';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { getCard, updateCard, blockCard, unblockCard } from '../../services';
 import type { CardType } from '../../types';
+
+import CardDetails from './CardDetails';
 
 enum Tabs {
   transactions,
@@ -36,6 +39,7 @@ export default function CardView() {
   const messages = useMessages();
   const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
+  const [showDetails, setShowDetails] = createSignal(false);
 
   const allocations = useAllocations();
   const [data, status, , , reload] = useResource(getCard, params.id);
@@ -63,6 +67,10 @@ export default function CardView() {
     });
   };
 
+  const toggleDetails = async () => {
+    setShowDetails(!showDetails());
+  };
+
   return (
     <Page
       breadcrumbs={
@@ -76,7 +84,12 @@ export default function CardView() {
         </Show>
       }
       actions={
-        <>
+        <div>
+          <span style={{ 'margin-right': '10px' }}>
+            <Button size="lg" type="primary" view="ghost" onClick={toggleDetails}>
+              <Text message={`${showDetails() ? 'Hide' : 'Show'} Card Details`} />
+            </Button>
+          </span>
           <Switch>
             <Match when={card()?.status === 'ACTIVE'}>
               <Confirm
@@ -122,7 +135,7 @@ export default function CardView() {
               </Button>
             </Match>
           </Switch>
-        </>
+        </div>
       }
       headerSide={
         <Show when={card()?.type}>
@@ -171,6 +184,9 @@ export default function CardView() {
             />
           </Match>
         </Switch>
+        <Drawer noPadding open={showDetails()} title={<Text message="Filter cards" />} onClose={toggleDetails}>
+          <CardDetails card={card} user={user} onClose={toggleDetails} />
+        </Drawer>
       </Data>
     </Page>
   );

@@ -17,7 +17,7 @@ export function useResource<T, P extends unknown>(
   const [params, setParams] = createSignal<P>(cloneObject(initParams as P));
 
   const [state, setState] = createSignal<DataState<T | null>>({
-    loading: true,
+    loading: fetchOnMount,
     error: null,
     data: null,
   });

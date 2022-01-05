@@ -13,12 +13,13 @@ const BACKGROUND: Readonly<Record<CardType, string>> = {
   [CardType.PHYSICAL]: '#43FA76',
 };
 
-interface CardProps {
+export interface CardProps {
   type: CardType;
   name?: string;
   allocation?: string;
   number: string;
   balance: number;
+  details?: string;
   class?: string;
 }
 
@@ -62,6 +63,11 @@ export function Card(props: Readonly<CardProps>) {
       <Show when={props.allocation}>
         <text x="279" y="114" text-anchor="end" class={css.text}>
           {props.allocation}
+        </text>
+      </Show>
+      <Show when={props.details}>
+        <text x="279" y="136" text-anchor="end" class={css.text}>
+          {props.details}
         </text>
       </Show>
       <text x="27" y="168" class={css.amount}>

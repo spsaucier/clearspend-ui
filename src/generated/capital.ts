@@ -521,6 +521,17 @@ export interface SearchCardData {
   cardType?: 'PHYSICAL' | 'VIRTUAL';
 }
 
+export interface RevealCardRequest {
+  /** @format uuid */
+  cardId?: string;
+  nonce?: string;
+}
+
+export interface RevealCardResponse {
+  externalRef?: string;
+  ephemeralKey?: string;
+}
+
 export interface SearchBusinessAllocationRequest {
   name: string;
 }
@@ -1919,6 +1930,7 @@ export interface Card {
   cardNumber?: string;
   lastFour?: string;
   address?: Address;
+  externalRef?: string;
 }
 
 export interface UpdateAccountActivityRequest {
@@ -2107,17 +2119,6 @@ export interface RequiredDocument {
 export interface SoftFailRequiredDocumentsResponse {
   kybRequiredDocuments?: RequiredDocument[];
   kycRequiredDocuments?: KycDocuments[];
-}
-
-export interface CardPaymentDetailsResponse {
-  number?: string;
-
-  /** @format int64 */
-  expMonth?: number;
-
-  /** @format int64 */
-  expYear?: number;
-  cvc?: string;
 }
 
 export interface BankAccount {
