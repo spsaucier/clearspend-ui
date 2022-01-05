@@ -686,14 +686,14 @@ export interface CreateOrUpdateBusinessOwnerRequest {
    * @example johnw@hightable.com
    */
   email: string;
+  address?: Address;
 
   /**
    * Phone address of the person
    * @pattern ^\+[1-9][0-9]{9,14}$
    * @example +12345679
    */
-  phone: string;
-  address?: Address;
+  phone?: string;
 
   /**
    * Indication if business owner is updated during the onboarding process
@@ -1925,6 +1925,22 @@ export interface UpdateAccountActivityRequest {
   notes: string;
 }
 
+export interface UpdateCardRequest {
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+}
+
+export interface CardDetailsResponse {
+  card: Card;
+  ledgerBalance: Amount;
+  availableBalance: Amount;
+  allocationName: string;
+  limits?: CurrencyLimit[];
+  disabledMccGroups?: string[];
+  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+}
+
 export interface Agent {
   email?: string;
   external_id?: string;
@@ -1960,24 +1976,19 @@ export interface Data {
   completed?: string;
   reviewer?: string;
   agent?: Agent;
-  notes?: object;
+  notes?: Notes[];
   child_entities?: ChildEntity[];
 }
 
-export interface UpdateCardRequest {
-  limits?: CurrencyLimit[];
-  disabledMccGroups?: string[];
-  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
-}
+export interface Notes {
+  note?: string;
+  note_author_agent_email?: string;
 
-export interface CardDetailsResponse {
-  card: Card;
-  ledgerBalance: Amount;
-  availableBalance: Amount;
-  allocationName: string;
-  limits?: CurrencyLimit[];
-  disabledMccGroups?: string[];
-  disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
+  /** @format date-time */
+  created_at?: string;
+
+  /** @format date-time */
+  updated_at?: string;
 }
 
 export interface UpdateAllocationRequest {
@@ -2066,15 +2077,26 @@ export interface KycDocuments {
   documents?: RequiredDocument[];
 }
 
-export interface ManualReviewResponse {
-  kybRequiredDocuments?: RequiredDocument[];
-  kycRequiredDocuments?: KycDocuments[];
-}
-
 export interface RequiredDocument {
   documentName?: string;
   type?: string;
   entityTokenId?: string;
+}
+
+export interface SoftFailRequiredDocumentsResponse {
+  kybRequiredDocuments?: RequiredDocument[];
+  kycRequiredDocuments?: KycDocuments[];
+}
+
+export interface CardPaymentDetailsResponse {
+  number?: string;
+
+  /** @format int64 */
+  expMonth?: number;
+
+  /** @format int64 */
+  expYear?: number;
+  cvc?: string;
 }
 
 export interface BankAccount {
