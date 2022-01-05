@@ -1,4 +1,4 @@
-import { createMemo, createEffect, Show, untrack, batch } from 'solid-js';
+import { createMemo, createEffect, Show, untrack, batch, createSignal } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
@@ -29,6 +29,7 @@ import { SelectEmployee } from 'employees/components/SelectEmployee';
 import { formatName } from 'employees/utils/formatName';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
+  Address,
   Allocation,
   AllocationDetailsResponse,
   CreateUserRequest,
@@ -37,10 +38,15 @@ import type {
   UserData,
   MccGroup,
   Amount,
+  User,
 } from 'generated/capital';
+import { getBusiness } from 'app/services/businesses';
+import { getUser } from 'employees/services';
+import { CardType } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
+import { AddressSelect } from '../../../_common/components/AddressSelect/AddressSelect';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -63,21 +69,27 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const messages = useMessages();
   const [showEmployee, toggleShowEmployee] = useBool();
   const [loading, save] = wrapAction(props.onSave);
+  const [employee, setEmployee] = createSignal<User>();
+
+  const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>(
+    getFormOptions({ userId: props.userId, allocationId: props.allocationId }),
+  );
 
   const [allocationData, , , setAllocationId, , mutateAllocationData] = useResource(
     getAllocation,
     props.allocationId,
     Boolean(props.allocationId),
   );
-
-  const { values, errors, handlers, isDirty, trigger, reset } = createForm<FormValues>(
-    getFormOptions({ userId: props.userId, allocationId: props.allocationId }),
-  );
+  const [business] = useResource(getBusiness, null);
 
   const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
     const resp = await props.onAddEmployee(data);
     handlers.employee(resp.userId);
     toggleShowEmployee();
+  };
+
+  const onChangeEmployee = async () => {
+    setEmployee(await getUser(values().employee));
   };
 
   const onReset = () => {
@@ -137,6 +149,14 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
 
   const isSameLimits = createMemo(() => checkSameLimits(values(), allocationData(), props.mccCategories));
 
+  const handleAddressChange = (v: Address) => {
+    handlers.streetLine1(v.streetLine1 || '');
+    handlers.streetLine2(v.streetLine2 || '');
+    handlers.locality(v.locality || '');
+    handlers.region(v.region || '');
+    handlers.postalCode(v.postalCode || '');
+  };
+
   return (
     <Form class={css.form}>
       <Section title={<Text message="Company info" />}>
@@ -160,7 +180,10 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             error={Boolean(errors().employee)}
             users={props.users}
             onAddClick={toggleShowEmployee}
-            onChange={handlers.employee}
+            onChange={(e) => {
+              handlers.employee(e);
+              onChangeEmployee();
+            }}
           />
         </FormItem>
       </Section>
@@ -188,6 +211,20 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           onChange={handlers.personal}
         />
       </Section>
+      <Show when={values().types.includes(CardType.PHYSICAL)}>
+        <Section
+          title={<Text message="Delivery address" />}
+          description={<Text message="Select where you would like the card delivered" />}
+        >
+          <FormItem error={errors().streetLine1}>
+            <AddressSelect
+              onChange={handleAddressChange}
+              businessAddress={business()?.address}
+              employeeAddress={employee()?.address}
+            />
+          </FormItem>
+        </Section>
+      </Show>
       <Section
         title={<Text message="Spend Controls" />}
         description={

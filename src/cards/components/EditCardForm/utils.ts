@@ -28,6 +28,11 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       channels: [],
       purchasesLimits: getDefaultLimits(),
       atmLimits: getDefaultLimits(),
+      streetLine1: '',
+      streetLine2: '',
+      locality: '',
+      region: '',
+      postalCode: '',
     },
     rules: {
       allocationId: [required],
@@ -49,6 +54,14 @@ export function convertFormData(
     currency: 'USD',
     cardType: data.types,
     isPersonal: data.personal,
+    shippingAddress: {
+      streetLine1: data.streetLine1,
+      streetLine2: data.streetLine2,
+      locality: data.locality,
+      region: data.region,
+      postalCode: data.postalCode,
+      country: 'USA',
+    },
     ...convertFormLimits(data, categories),
   };
 }

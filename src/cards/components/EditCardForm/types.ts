@@ -7,4 +7,9 @@ export interface FormValues extends FormLimits {
   employee: string;
   types: CardType[];
   personal: boolean;
+  streetLine1: string;
+  streetLine2: string;
+  locality: string;
+  region: string;
+  postalCode: string;
 }

@@ -3,6 +3,7 @@
   align-items: center;
   line-height: var(--line-24);
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .input {
@@ -40,7 +41,6 @@
 
 .label {
   margin-left: var(--pd-4);
-  cursor: pointer;
 
   @nest .input:disabled + .control + & {
     color: var(--tw-gray-60);

@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  margin: var(--pd-8) 0 var(--pd-4);
+  flex-direction: row;
+  font-family: var(--font-header);
+}
+
+.icon {
+  margin-right: var(--pd-8);
+}
+
+.label {
+  margin-bottom: var(--pd-8);
+  font-size: var(--text-14);
+  line-height: var(--line-20);
+}
+
+.address {
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}

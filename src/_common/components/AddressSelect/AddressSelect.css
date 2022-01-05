@@ -1,0 +1,65 @@
+.root {
+  flex-direction: column;
+  gap: var(--pd-16) var(--pd-24);
+}
+
+.item {
+  width: 290px;
+  flex-direction: column;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  padding: var(--pd-16);
+  flex-direction: column;
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-10);
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover:not(.selected) {
+    border-color: var(--tw-primary-border);
+  }
+
+  @nest .item > input:checked + & {
+    border-color: var(--tw-primary-border);
+  }
+}
+
+.special-content {
+  display: flex;
+  width: 100%;
+  padding-top: var(--pd-16);
+  padding-bottom: var(--pd-16);
+  flex-direction: column;
+  border: 1px solid transparent;
+  border-radius: var(--radius-10);
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover:not(.selected) {
+    border-color: var(--tw-primary-border);
+  }
+
+  @nest .item > input:checked + & {
+    border-color: var(--tw-primary-border);
+  }
+}
+
+.no-touch {
+  pointer-events: none;
+}
+
+.show-when-inactive {
+  @nest .item > input:checked + * & {
+    display: none;
+  }
+}
+
+.show-when-active {
+  padding-right: var(--pd-16);
+  padding-left: var(--pd-16);
+
+  @nest .item > input:not(:checked) + * & {
+    display: none;
+  }
+}

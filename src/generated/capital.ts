@@ -2019,6 +2019,27 @@ export interface AllocationDetailsResponse {
   disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
+export interface Receipt {
+  /** @format uuid */
+  receiptId: string;
+
+  /** @format date-time */
+  created: string;
+
+  /** @format uuid */
+  businessId: string;
+
+  /** @format uuid */
+  allocationId: string;
+
+  /** @format uuid */
+  accountId?: string;
+
+  /** @format uuid */
+  adjustmentId?: string;
+  amount: Amount;
+}
+
 export interface CreateTestDataResponse {
   businesses?: TestBusiness[];
 }
