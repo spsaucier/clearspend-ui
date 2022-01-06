@@ -1,10 +1,11 @@
 import { i18n } from '_common/api/intl';
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
+import { isString } from '_common/utils/isString';
 import type { IssueCardRequest, MccGroup } from 'generated/capital';
 import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
 
-import type { CardType } from '../../types';
+import { CardType } from '../../types';
 
 import type { FormValues } from './types';
 
@@ -15,6 +16,13 @@ function validTypes(value: readonly CardType[]): boolean | string {
 interface Options {
   userId: string;
   allocationId: string;
+}
+
+export function requiredAddress(value: string, values: FormValues): boolean | string {
+  if (values.types.includes(CardType.PHYSICAL)) {
+    return (isString(value) && !!value.trim()) || !!value || 'Please choose a delivery address';
+  }
+  return true;
 }
 
 export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<FormValues> {
@@ -38,6 +46,7 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       allocationId: [required],
       employee: [required],
       types: [validTypes],
+      streetLine1: [requiredAddress],
       // TODO: add rules for limits
     },
   };
