@@ -216,7 +216,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           title={<Text message="Delivery address" />}
           description={<Text message="Select where you would like the card delivered" />}
         >
-          <FormItem error={errors().streetLine1}>
+          <FormItem error={errors().streetLine1 || errors().locality || errors().region || errors().postalCode}>
             <AddressSelect
               onChange={handleAddressChange}
               businessAddress={business()?.address}

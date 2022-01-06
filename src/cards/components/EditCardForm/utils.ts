@@ -47,6 +47,9 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       employee: [required],
       types: [validTypes],
       streetLine1: [requiredAddress],
+      locality: [requiredAddress],
+      region: [requiredAddress],
+      postalCode: [requiredAddress],
       // TODO: add rules for limits
     },
   };
