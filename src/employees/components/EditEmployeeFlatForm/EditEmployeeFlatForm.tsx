@@ -5,7 +5,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import type { CreateUserRequest } from 'generated/capital';
 
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
-import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
+import { AddressFormItems } from '../../../_common/components/AddressFormItems/AddressFormItems';
 import type { FormValues } from '../EditEmployeeForm/types';
 import { getFormOptions } from '../EditEmployeeForm/utils';
 

@@ -4,46 +4,43 @@ import { For, batch, Show } from 'solid-js';
 import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, SelectState, Option } from '_common/components/Select';
-import type { Suggestion } from 'app/services/address';
+import { useAddressSuggestions } from 'app/utils/useAddressSuggestions';
 
-import type { FormValues } from '../EditEmployeeForm/types';
-import css from '../EditEmployeeForm/EditEmployeeForm.css';
+import css from '../Form/FormItems.css';
+
+import type { AddressValues } from './types';
 
 interface AddressFormItemsProps {
-  values: FormValues;
-  errors: Readonly<Partial<Record<keyof FormValues, string>>>;
-  handlers: Readonly<FormHandlers<FormValues>>;
-  suggestions?: Suggestion[];
-  suggestionsLoading?: boolean;
+  values: AddressValues;
+  errors: Readonly<Partial<Record<keyof AddressValues, string>>>;
+  handlers: Readonly<FormHandlers<AddressValues>>;
 }
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
+  const { loading, suggestions } = useAddressSuggestions(props.values);
   const i18n = useI18n();
   let valueRender = () => {
     return props.values.streetLine1;
   };
-  let onChangeStreetLine1 = props.handlers.streetLine1;
-  if (props.suggestions) {
-    onChangeStreetLine1 = (value) => {
-      const found = props.suggestions?.find((s) => s.primary_line === value);
-      if (found) {
-        batch(() => {
-          props.handlers.streetLine1(value);
-          props.handlers.locality(found.city);
-          props.handlers.region(found.state);
-          props.handlers.postalCode(found.zip_code);
-        });
-      } else {
+  const onChangeStreetLine1 = (value: string) => {
+    const found = suggestions().find((s) => s.primary_line === value);
+    if (found) {
+      batch(() => {
         props.handlers.streetLine1(value);
-      }
-    };
-  }
+        props.handlers.locality(found.city);
+        props.handlers.region(found.state);
+        props.handlers.postalCode(found.zip_code);
+      });
+    } else {
+      props.handlers.streetLine1(value);
+    }
+  };
 
   return (
     <>
       <FormItem label={<Text message="Street address" />} error={props.errors.streetLine1} class={css.item}>
         <Show
-          when={props.suggestions}
+          when={suggestions()}
           fallback={
             <Input
               name="streetLine1"
@@ -63,9 +60,9 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
             onChange={onChangeStreetLine1}
             changeOnSearch
             valueRender={valueRender}
-            loading={props.suggestionsLoading}
+            loading={loading()}
           >
-            <For each={props.suggestions}>
+            <For each={suggestions()}>
               {(suggestion) => (
                 <Option value={suggestion.primary_line}>
                   {`${suggestion.primary_line} ${suggestion.city}, ${suggestion.state} ${suggestion.zip_code}`}

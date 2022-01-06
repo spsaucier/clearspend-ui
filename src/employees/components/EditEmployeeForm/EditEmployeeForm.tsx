@@ -8,7 +8,7 @@ import { Section } from 'app/components/Section';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { User } from 'generated/capital';
 
-import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
+import { AddressFormItems } from '../../../_common/components/AddressFormItems/AddressFormItems';
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
 
 import { getFormOptions } from './utils';

@@ -1,0 +1,7 @@
+.item {
+  width: 100%;
+
+  @media (--bp-medium) {
+    max-width: 400px;
+  }
+}

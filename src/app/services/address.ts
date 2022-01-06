@@ -2,7 +2,7 @@ import { fetch } from '_common/api/fetch';
 import { isFetchError } from '_common/api/fetch/isFetchError';
 import { HttpStatus } from '_common/api/fetch/types';
 import { events } from '_common/api/events';
-import type { FormValues } from 'employees/components/EditEmployeeForm/types';
+import type { AddressValues } from '_common/components/AddressFormItems/types';
 
 import { AppEvent } from '../types/common';
 
@@ -28,7 +28,7 @@ function errorHandler(error: unknown) {
   return Promise.reject(error);
 }
 
-async function getAddresses<T = unknown>(values: FormValues) {
+async function getAddresses<T = unknown>(values: AddressValues) {
   const headers = {
     Authorization: 'Basic bGl2ZV9lMGY2MDlkM2MwZTk3NzYxYTQ0OTE2MGQ5NGE4NWRmNWU0NTo=',
   };

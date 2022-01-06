@@ -2,15 +2,15 @@ import { Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
 import type { Address } from 'generated/capital';
-import { useAddressSuggestions } from 'app/utils/useAddressSuggestions';
-import type { FormValues } from 'employees/components/EditEmployeeForm/types';
-import { getFormOptions } from 'employees/components/EditEmployeeForm/utils';
 
 import { createForm } from '../Form';
-import { AddressFormItems } from '../../../employees/components/AddressFormItems/AddressFormItems';
+import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
 import { AddressView } from '../AddressView/AddressView';
 import { RadioGroup, Radio } from '../Radio';
 import { Button } from '../Button';
+import type { AddressValues } from '../AddressFormItems/types';
+
+import { getFormOptions } from './utils';
 
 import css from './AddressSelect.css';
 
@@ -29,8 +29,7 @@ enum Selected {
 }
 
 export function AddressSelect(props: Readonly<AddressSelectProps>) {
-  const { values, errors, handlers } = createForm<FormValues>(getFormOptions());
-  const { loading, suggestions } = useAddressSuggestions(values);
+  const { values, errors, handlers } = createForm<AddressValues>(getFormOptions());
 
   const chooseSelectedAddress = (val?: Selected) => {
     switch (val) {
@@ -107,13 +106,7 @@ export function AddressSelect(props: Readonly<AddressSelectProps>) {
             </Button>
           </div>
           <div class={css.showWhenActive}>
-            <AddressFormItems
-              values={values()}
-              errors={errors()}
-              handlers={handlersWithSave}
-              suggestions={suggestions()}
-              suggestionsLoading={loading()}
-            />
+            <AddressFormItems values={values()} errors={errors()} handlers={handlersWithSave} />
           </div>
         </div>
       </Radio>

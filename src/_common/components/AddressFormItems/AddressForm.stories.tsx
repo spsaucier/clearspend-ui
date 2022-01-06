@@ -1,13 +1,12 @@
 import { createForm } from 'solid-create-form';
 
-import { useAddressSuggestions } from 'app/utils/useAddressSuggestions';
 import { Button } from '_common/components/Button';
 import { Form } from '_common/components/Form';
 
-import type { FormValues } from '../EditEmployeeForm/types';
-import { getFormOptions } from '../EditEmployeeForm/utils';
+import { getFormOptions } from '../AddressSelect/utils';
 
 import { AddressFormItems } from './AddressFormItems';
+import type { AddressValues } from './types';
 
 export default {
   title: 'Composite/Form',
@@ -15,25 +14,17 @@ export default {
 };
 
 export const UserForm = () => {
-  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
+  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<AddressValues>(getFormOptions());
 
-  const onSubmit = (data: Readonly<FormValues>) => {
+  const onSubmit = (data: Readonly<AddressValues>) => {
     // eslint-disable-next-line no-console
     console.log(data);
   };
 
-  const { loading, suggestions } = useAddressSuggestions(values);
-
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <div>
-        <AddressFormItems
-          values={values()}
-          errors={errors()}
-          handlers={handlers}
-          suggestions={suggestions()}
-          suggestionsLoading={loading()}
-        />
+        <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
       </div>
       <Button wide type="primary" htmlType="submit" icon={{ name: 'confirm', pos: 'right' }} disabled={!isDirty()}>
         Add employee

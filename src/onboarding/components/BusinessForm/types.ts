@@ -1,11 +1,8 @@
-export interface FormValues {
+import type { AddressValues } from '_common/components/AddressFormItems/types';
+
+export interface FormValues extends AddressValues {
   name: string;
   type: string;
   ein: string;
   phone: string;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  zip: string;
 }
