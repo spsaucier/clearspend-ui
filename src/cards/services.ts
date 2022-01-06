@@ -31,7 +31,7 @@ export async function revealCardKey(params: Readonly<RevealCardRequest>) {
 }
 
 export async function blockCard(cardId: string) {
-  return (await service.patch(`/users/cards/${cardId}/block`, { status: 'BLOCKED' })).data;
+  return (await service.patch(`/users/cards/${cardId}/block`, { status: 'INACTIVE' })).data;
 }
 
 export async function unblockCard(cardId: string) {

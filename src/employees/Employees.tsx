@@ -1,4 +1,4 @@
-import { createSignal, Show } from 'solid-js';
+import { createSignal } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
@@ -56,13 +56,11 @@ export default function Employees() {
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
         <CardPreview cardID={cardID()!} />
       </Drawer>
-      <Show when={process.env.NODE_ENV === 'development'}>
-        <div style={{ 'margin-top': '24px' }}>
-          <Button type="primary" loading={loading()} onClick={logoutAction}>
-            Logout
-          </Button>
-        </div>
-      </Show>
+      <div style={{ 'margin-top': '24px' }}>
+        <Button type="primary" loading={loading()} onClick={logoutAction}>
+          Logout
+        </Button>
+      </div>
     </Page>
   );
 }
