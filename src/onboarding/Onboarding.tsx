@@ -137,7 +137,7 @@ export default function Onboarding() {
         </Match>
         <Match when={step() === OnboardingStep.BUSINESS_OWNERS}>
           <Page title="Tell us about your team">
-            <TeamForm onNext={onUpdateKYC} />
+            <TeamForm onNext={onUpdateKYC} owner={owner()} />
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.SOFT_FAIL}>

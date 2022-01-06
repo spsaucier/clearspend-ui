@@ -9,7 +9,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import { InputPhone } from '_common/components/InputPhone';
 import { formatSSN } from '_common/formatters/ssn';
-import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 
 import type { ExceptionData } from '../../types';
 
@@ -20,6 +20,7 @@ import css from './TeamForm.css';
 
 interface TeamFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
+  owner: User;
 }
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
@@ -27,7 +28,10 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions());
+  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
+    // NB: do not auto-populate name on additional owner forms
+    getFormOptions(props.owner),
+  );
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {

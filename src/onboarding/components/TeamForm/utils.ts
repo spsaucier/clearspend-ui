@@ -2,21 +2,21 @@ import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
-import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 
 import { cleanSSN } from '../../../_common/formatters/ssn';
 
 import type { FormValues } from './types';
 
-export function getFormOptions(): FormOptions<FormValues> {
+export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
   return {
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
       birthdate: undefined,
       ssn: '',
-      email: '',
-      phone: '',
+      email: user?.email || '',
+      phone: user?.phone || '',
       line1: '',
       line2: '',
       city: '',
