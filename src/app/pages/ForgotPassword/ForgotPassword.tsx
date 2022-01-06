@@ -1,3 +1,5 @@
+import { Link } from 'solid-app-router';
+
 import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 
@@ -17,6 +19,9 @@ export default function ForgotPassword() {
         <Box>
           <Header>Forgot Password?</Header>
           <ForgotPasswordForm onSubmit={(email: string) => forgotPassword({ email })} />
+          <Link class={css.secondary} href="/login">
+            Log In
+          </Link>
         </Box>
       </div>
     </section>
