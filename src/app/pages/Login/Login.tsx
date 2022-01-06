@@ -42,6 +42,13 @@ export default function Login() {
             />
           </Description>
           <LoginForm onSubmit={submit} />
+          <br />
+          <Description>
+            <Text
+              message="<link>Forgot password?</link>"
+              link={(text) => <Link href="/forgot-password">{text}</Link>}
+            />
+          </Description>
         </Box>
       </div>
     </section>
