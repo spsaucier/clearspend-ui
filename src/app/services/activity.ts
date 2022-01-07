@@ -43,5 +43,5 @@ export const viewReceipt = async (receiptId: string) => {
 };
 
 export const deleteReceipt = async (receiptId: string) => {
-  await axios.delete<Blob>(`api/users/receipts/${receiptId}/delete`);
+  await axios.delete(`api/users/receipts/${receiptId}/delete`);
 };
