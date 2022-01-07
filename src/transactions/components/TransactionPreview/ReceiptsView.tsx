@@ -1,11 +1,14 @@
-import { For } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 
+import { deleteReceipt } from 'app/services/activity';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 
 import css from './ReceiptsView.css';
 
-export function ReceiptsView(props: { receipts: Readonly<string[]> }) {
+export function ReceiptsView(props: { receipts: Readonly<ReceiptVideModel[]> }) {
+  const [currentReceipt] = createSignal<ReceiptVideModel | undefined>(props.receipts[0]);
+
   return (
     <div>
       <div class={css.top}>
@@ -14,23 +17,41 @@ export function ReceiptsView(props: { receipts: Readonly<string[]> }) {
           Close <Icon name="cancel" />
         </span>
       </div>
-      <For each={props.receipts}>
+      {/* TODO: Support multiple receipts selecton when API returns more than 1 per transaction */}
+      {/* <For each={props.receipts}>
         {(receipt) => {
           return (
             <div class={css.receiptImageWrapper}>
-              <img src={receipt} />
+              <img src={receipt.uri} />
             </div>
           );
         }}
-      </For>
-      <div class={css.bottom}>
-        <Button icon="download" size="lg">
-          Download
-        </Button>
-        <Button icon="trash" size="lg" class={css.delete}>
-          Delete
-        </Button>
-      </div>
+      </For> */}
+      <Show when={currentReceipt()}>
+        <>
+          <div class={css.receiptImageWrapper}>
+            <img src={currentReceipt()!.uri} />
+          </div>
+          <div class={css.bottom}>
+            <Button icon="download" size="lg">
+              Download
+            </Button>
+            <Button
+              icon="trash"
+              size="lg"
+              class={css.delete}
+              onClick={() => deleteReceipt(currentReceipt()!.receiptId)}
+            >
+              Delete
+            </Button>
+          </div>
+        </>
+      </Show>
     </div>
   );
+}
+
+export interface ReceiptVideModel {
+  receiptId: string;
+  uri: string;
 }

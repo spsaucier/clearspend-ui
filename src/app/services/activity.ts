@@ -41,3 +41,7 @@ export const viewReceipt = async (receiptId: string) => {
   });
   return URL.createObjectURL(receiptData.data);
 };
+
+export const deleteReceipt = async (receiptId: string) => {
+  await axios.delete<Blob>(`api/users/receipts/${receiptId}/delete`);
+};

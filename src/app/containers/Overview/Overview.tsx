@@ -17,7 +17,7 @@ import { TransactionPreview } from 'transactions/components/TransactionPreview/T
 import { Drawer } from '_common/components/Drawer';
 import { useNav } from '_common/api/router';
 import { Modal } from '_common/components/Modal/Modal';
-import { ReceiptsView } from 'transactions/components/TransactionPreview/ReceiptsView';
+import { ReceiptsView, ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -81,7 +81,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   );
 
   const [selectTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
-  const [showReceipts, setShowReceipts] = createSignal<Readonly<string[]>>([]);
+  const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);

@@ -21,3 +21,29 @@
   min-width: 66px;
   color: var(--tw-primary-content);
 }
+
+.side-bar-filters {
+  height: calc(100% - 24px);
+  margin: 0 -24px;
+}
+
+.side-bar-filters section {
+  padding: var(--pd-24);
+  border-top: 1px solid var(--tw-gray-30);
+}
+
+.section-title {
+  padding-bottom: var(--pd-12);
+}
+
+.side-bar-filters label {
+  padding-bottom: var(--pd-8);
+}
+
+.controls {
+  display: flex;
+}
+
+.controls button {
+  margin-right: var(--pd-8);
+}

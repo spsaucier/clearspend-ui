@@ -13,16 +13,18 @@ import { join } from '_common/utils/join';
 import { getActivityById, linkReceiptToActivity, uploadReceiptForActivity, viewReceipt } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 
+import type { ReceiptVideModel } from './ReceiptsView';
+
 import css from './TransactionPreview.css';
 
 interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
-  onViewReceipt: (receipts: Readonly<string[]>) => void;
+  onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
 }
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const navigate = useNavigate();
   const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
-  const [receiptURIs, setReceiptURIs] = createSignal<Readonly<string[]>>([]);
+  const [receipts, setReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
   const displayAmount = formatCurrency(transaction().amount?.amount || 0);
 
   const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
@@ -43,7 +45,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       const receiptId = transaction().receipt?.receiptId;
       if (receiptId) {
         const receiptsData = await viewReceipt(receiptId);
-        setReceiptURIs([receiptsData as unknown as string]);
+        setReceipts([{ receiptId, uri: receiptsData as unknown as string }]);
       }
     };
     downloadReceiptsToView();
@@ -83,14 +85,16 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             </label>
           </Show>
           <Show when={transaction().receipt?.receiptId}>
-            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receiptURIs())}>
+            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
               View Receipt
             </Button>
           </Show>
           <Show when={transaction().receipt?.receiptId}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
-                Upload more images
+                {/* Change CTA copy once backend supports multiple receipts per transaction */}
+                {/* Upload more images */}
+                Upload new receipt
               </Button>
             </label>
           </Show>
