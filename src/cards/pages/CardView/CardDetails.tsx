@@ -58,8 +58,6 @@ export default function CardDetails(props: CardDetailsProps) {
         { betas: ['issuing_elements_2'] },
       )) as StripeCS,
     );
-    // eslint-disable-next-line no-console
-    console.log(stripe());
   });
 
   createEffect(async () => {

@@ -31,9 +31,13 @@ export async function revealCardKey(params: Readonly<RevealCardRequest>) {
 }
 
 export async function blockCard(cardId: string) {
-  return (await service.patch(`/users/cards/${cardId}/block`, { status: 'INACTIVE' })).data;
+  return (
+    await service.patch(`/users/cards/${cardId}/block`, { status: 'INACTIVE', statusReason: 'CARDHOLDER_REQUESTED' })
+  ).data;
 }
 
 export async function unblockCard(cardId: string) {
-  return (await service.patch(`/users/cards/${cardId}/unblock`, { status: 'OPEN' })).data;
+  return (
+    await service.patch(`/users/cards/${cardId}/unblock`, { status: 'OPEN', statusReason: 'CARDHOLDER_REQUESTED' })
+  ).data;
 }
