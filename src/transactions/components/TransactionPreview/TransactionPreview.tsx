@@ -94,9 +94,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <Show when={transaction().receipt?.receiptId}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
-                {/* Change CTA copy once backend supports multiple receipts per transaction */}
-                {/* Upload more images */}
-                Upload new receipt
+                Upload more images
               </Button>
             </label>
           </Show>

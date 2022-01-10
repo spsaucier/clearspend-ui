@@ -80,7 +80,7 @@ export function Overview(props: Readonly<OverviewProps>) {
     ),
   );
 
-  const [selectTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
   const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
 
   const changePeriod = (value: TimePeriod) => {
@@ -157,14 +157,19 @@ export function Overview(props: Readonly<OverviewProps>) {
           />
         </Data>
         <Drawer
-          open={Boolean(selectTransaction())}
+          open={Boolean(selectedTransaction())}
           title={<Text message="Transaction Details" />}
           onClose={() => setSelectedTransaction(null)}
         >
-          <TransactionPreview transaction={selectTransaction()!} onViewReceipt={setShowReceipts} />
+          <TransactionPreview transaction={selectedTransaction()!} onViewReceipt={setShowReceipts} />
         </Drawer>
         <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
-          <ReceiptsView receipts={showReceipts()} />
+          <ReceiptsView
+            accountActivityId={selectedTransaction()?.accountActivityId!}
+            receipts={showReceipts()}
+            onEmpty={() => setShowReceipts([])}
+            onDelete={setSelectedTransaction}
+          />
         </Modal>
       </div>
     </div>
