@@ -36,15 +36,15 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
     reload: (): Promise<unknown> => {
       setStore((prev) => ({ ...prev, loading: true }));
 
-      return fetcher(store.params)
+      return fetcher(store.params as P)
         .then((data: T) => {
           batch(() => {
-            setStore((prev) => ({ ...prev, loading: false, error: null, data: data as unknown as null }));
+            setStore((prev) => ({ ...prev, loading: false, error: null, data: data } as unknown as P));
             if (callbacks.size) callbacks.forEach((cb) => cb(data));
           });
         })
         .catch((error: unknown) => {
-          setStore((prev) => ({ ...prev, loading: false, error, data: null }));
+          setStore((prev) => ({ ...prev, loading: false, error, data: null } as unknown as P));
         });
     },
     setParams: (arg: StoreSetterParams<P>) => {
@@ -79,7 +79,7 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
       }
     });
 
-    return store;
+    return store as Store<T, P>;
   }
 
   return useStore;
