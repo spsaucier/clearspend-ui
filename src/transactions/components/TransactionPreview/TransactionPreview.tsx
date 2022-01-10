@@ -42,10 +42,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   createEffect(() => {
     const downloadReceiptsToView = async () => {
-      const receiptId = transaction().receipt?.receiptId;
-      if (receiptId) {
-        const receiptsData = await viewReceipt(receiptId);
-        setReceipts([{ receiptId, uri: receiptsData as unknown as string }]);
+      const receiptIdList = transaction().receipt?.receiptId;
+      if (receiptIdList && receiptIdList.length > 0) {
+        const viewReceiptDataRequests = await Promise.all(receiptIdList.map((receiptId) => viewReceipt(receiptId)));
+        // eslint-disable-next-line no-console
+        console.log({ viewReceiptDataRequests });
+        setReceipts(viewReceiptDataRequests);
       }
     };
     downloadReceiptsToView();
@@ -84,7 +86,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               </Button>
             </label>
           </Show>
-          <Show when={transaction().receipt?.receiptId}>
+          <Show when={transaction().receipt?.receiptId?.length! > 0}>
             <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
               View Receipt
             </Button>

@@ -7,6 +7,7 @@ export enum IconName {
   approvals = 'approvals',
   'approved-status' = 'approved-status',
   'arrow-left' = 'arrow-left',
+  'arrow-right' = 'arrow-right',
   'audit-logs' = 'audit-logs',
   calendar = 'calendar',
   cancel = 'cancel',

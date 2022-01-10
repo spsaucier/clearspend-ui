@@ -1171,8 +1171,7 @@ export interface PagedDataAccountActivityResponse {
 }
 
 export interface ReceiptDetails {
-  /** @format uuid */
-  receiptId?: string;
+  receiptId?: string[];
 }
 
 export interface GraphDataRequest {
