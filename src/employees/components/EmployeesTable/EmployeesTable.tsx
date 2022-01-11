@@ -13,6 +13,8 @@ import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { Checkbox } from '_common/components/Checkbox';
+import { FiltersButton } from 'app/components/FiltersButton';
+import { getNoop } from '_common/utils/getNoop';
 
 import { formatName } from '../../utils/formatName';
 import { EmployeeFilterDrawer } from '../EmployeeFilterDrawer/EmployeeFilterDrawer';
@@ -24,13 +26,14 @@ interface EmployeesTableProps {
   onClick: (uid: string) => void;
   onCardClick: (id: string) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  params: SearchUserRequest;
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const i18n = useI18n();
   const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
 
-  const [includeArchived, setIncludeArchived] = createSignal<boolean>(false);
+  const [includeArchived, setIncludeArchived] = createSignal<boolean>(!!props.params.includeArchived);
 
   const columns: readonly Readonly<TableColumn<UserPageData>>[] = [
     {
@@ -91,9 +94,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           suffix={<Icon name="search" size="sm" />}
           class={css.search}
         />
-        <Button view="ghost" icon={{ name: 'filters', pos: 'right' }} onClick={() => setFilterPanelOpen(true)}>
-          Filters
-        </Button>
+        <FiltersButton count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
         <Checkbox
           checked={includeArchived()}
           onChange={(checked) => {
@@ -114,7 +115,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
         title={<Text message="Filter Employees" />}
         onClose={() => setFilterPanelOpen(false)}
       >
-        <EmployeeFilterDrawer onChangeParams={props.onChangeParams} />
+        <EmployeeFilterDrawer onChangeParams={props.onChangeParams} params={props.params} />
       </Drawer>
     </div>
   );

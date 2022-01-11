@@ -12,17 +12,17 @@ import { DEFAULT_ACTIVITY_PARAMS } from 'employees/Employees';
 import css from './EmployeeFilterDrawer.css';
 
 interface EmployeesFilterDrawer {
+  params: SearchUserRequest;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeeFilterDrawer(props: Readonly<EmployeesFilterDrawer>) {
   const [options, setOptions] = createSignal<{ value: string; text: string }[]>([]);
-
-  const [allocationFilterValue, setAllocationFilterValue] = createSignal<string[]>([]);
-  const [includeArchived, setIncludeArchived] = createSignal<boolean>(false);
-  const [hasVirtualCard, setHasVirtualCard] = createSignal<boolean>(false);
-  const [hasPhysicalCard, setHasPhysicalCard] = createSignal<boolean>(false);
-  const [withoutCard, setWithoutCard] = createSignal<boolean>(false);
+  const [allocationFilterValue, setAllocationFilterValue] = createSignal<string[]>(props.params.allocations ?? []);
+  const [includeArchived, setIncludeArchived] = createSignal<boolean>(!!props.params.includeArchived);
+  const [hasVirtualCard, setHasVirtualCard] = createSignal<boolean>(!!props.params.hasVirtualCard);
+  const [hasPhysicalCard, setHasPhysicalCard] = createSignal<boolean>(!!props.params.hasPhysicalCard);
+  const [withoutCard, setWithoutCard] = createSignal<boolean>(!!props.params.withoutCard);
 
   useAllocations({
     initValue: [],

@@ -48,6 +48,7 @@ export default function Employees() {
         <Dynamic
           component={media.large ? EmployeesTable : EmployeesList}
           data={usersStore.data!}
+          params={usersStore.params}
           onClick={(id: string) => navigate(`/employees/view/${id}`)}
           onCardClick={setCardID}
           onChangeParams={usersStore.setParams}
