@@ -17,8 +17,8 @@ export interface CardProps {
   type: CardType;
   name?: string;
   allocation?: string;
-  number: string;
-  balance: number;
+  number?: string;
+  balance?: number;
   details?: string;
   class?: string;
 }
@@ -53,7 +53,7 @@ export function Card(props: Readonly<CardProps>) {
         }
       />
       <text x="279" y="70" text-anchor="end" class={css.text}>
-        {formatCardNumber(props.number)}
+        {props.number && formatCardNumber(props.number)}
       </text>
       <Show when={props.name}>
         <text x="279" y="92" text-anchor="end" class={css.text}>
@@ -71,7 +71,7 @@ export function Card(props: Readonly<CardProps>) {
         </text>
       </Show>
       <text x="27" y="168" class={css.amount}>
-        {formatCurrency(props.balance)}
+        {props.balance && formatCurrency(props.balance)}
       </text>
       <path
         fill={props.type === CardType.VIRTUAL ? '#5bea83' : '#000'}

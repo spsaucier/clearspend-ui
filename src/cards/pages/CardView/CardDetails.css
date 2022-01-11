@@ -1,4 +1,59 @@
 .root {
+  position: relative;
   padding-right: var(--pd-24);
   padding-left: var(--pd-24);
+}
+
+.card-back {
+  position: absolute;
+  width: 312px;
+  height: 192px;
+  z-index: 1;
+}
+
+.card-details {
+  position: absolute;
+  bottom: 16px;
+  left: 26px;
+  font-size: 16px;
+  font-variant: tabular-nums;
+  line-height: 1.2;
+}
+
+.cvv-text,
+.exp-text {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+}
+
+.card-expiry,
+.card-cvc {
+  min-width: 45px;
+}
+
+.card-number {
+  min-width: 240px;
+}
+
+.expiry-cvc-wrapper {
+  display: flex;
+}
+
+.expiry-wrapper,
+.cvc-wrapper {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.expiry-wrapper {
+  width: 90px;
+}
+
+.address-container {
+  margin-top: 30px;
+}
+
+.address {
+  font-size: 16px;
 }

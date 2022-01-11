@@ -1,27 +1,37 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
 import { type Stripe, loadStripe } from '@stripe/stripe-js';
 import { type Accessor, createEffect, Show, createSignal } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { revealCardKey } from 'cards/services';
-import type { Card as CardType, User } from 'generated/capital';
+import type { Card as CardInterface, User } from 'generated/capital';
 import { useResource } from '_common/utils/useResource';
 import { Loading } from 'app/components/Loading';
+import { Card } from 'cards/components/Card';
+import type { CardType } from 'cards/types';
 
 import { AddressView } from '../../../_common/components/AddressView/AddressView';
 
 import css from './CardDetails.css';
 
 interface CardDetailsProps {
-  card: Accessor<CardType | undefined>;
+  card: Accessor<CardInterface | undefined>;
   user: Accessor<Readonly<User> | null>;
   onClose: () => void;
 }
 
+const NUMBER_STYLE = {
+  base: {
+    fontSize: '20px',
+    lineHeight: 2,
+    fontVariant: 'tabular-nums',
+  },
+};
 const STYLE = {
   base: {
-    color: '#666',
-    fontSize: '14px',
-    lineHeight: '24px',
+    fontSize: '16px',
+    textAlign: 'left',
+    fontVariant: 'tabular-nums',
   },
 };
 
@@ -75,14 +85,15 @@ export default function CardDetails(props: CardDetailsProps) {
       await getCardKey();
       const ephemeralKey = cardKey()?.ephemeralKey;
 
-      await stripe()?.retrieveIssuingCard(props.card()?.externalRef!, {
+      const cardResult = await stripe()?.retrieveIssuingCard(props.card()?.externalRef!, {
         ephemeralKeySecret: ephemeralKey!,
         nonce: nonceResult()?.nonce!,
       });
 
+      const nameEl = document.getElementById('cardholder-name');
       const number = elements.create('issuingCardNumberDisplay', {
         issuingCard: props.card()?.externalRef,
-        style: STYLE,
+        style: NUMBER_STYLE,
       });
       const expiry = elements.create('issuingCardExpiryDisplay', {
         issuingCard: props.card()?.externalRef,
@@ -94,6 +105,9 @@ export default function CardDetails(props: CardDetailsProps) {
       });
 
       setLoading(false);
+      if (nameEl) {
+        nameEl.textContent = cardResult?.issuingCard.cardholder.name || '';
+      }
       number?.mount('#card-number');
       expiry?.mount('#card-expiry');
       cvc?.mount('#card-cvc');
@@ -110,21 +124,30 @@ export default function CardDetails(props: CardDetailsProps) {
       }
     >
       <div class={css.root}>
-        <div>
-          {props.user()?.firstName} {props.user()?.lastName}
+        <div class={css.cardBack}>
+          <div class={css.cardDetails}>
+            <div>
+              {props.user()?.firstName} {props.user()?.lastName}
+            </div>
+            <div class={css.cardNumber} id="card-number"></div>
+            <div class={css.expiryCvcWrapper}>
+              <div class={css.expiryWrapper}>
+                <div class={css.expText}>VALID UNTIL</div>
+                <div class={css.cardExpiry} id="card-expiry"></div>
+              </div>
+              <div class={css.cvcWrapper}>
+                <div class={css.cvvText}>CVV</div>
+                <div class={css.cardCvc} id="card-cvc"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>{props.card()?.cardLine4}</div>
-        <div id="card-number" />
-        <div>
-          <div>Expiration:</div>
-          <div id="card-expiry" />
-        </div>
-        <div>
-          <div>CVV:</div>
-          <div id="card-cvc" />
-        </div>
+        <Card type={(props.card()?.type || 'VIRTUAL') as CardType} />
         <Show when={props.card()?.address?.streetLine1}>
-          <AddressView address={props.card()?.address || {}} />
+          <div class={css.addressContainer}>
+            <Text message="Billing Address" />
+            <AddressView address={props.card()?.address || {}} addressClass={css.address} />
+          </div>
         </Show>
       </div>
     </Show>
