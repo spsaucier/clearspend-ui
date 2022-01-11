@@ -21,7 +21,7 @@
 }
 
 .status-msg {
-  margin-left: var(--pd-5);
+  padding-left: var(--pd-8);
   font-weight: 400;
 }
 

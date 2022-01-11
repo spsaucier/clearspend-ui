@@ -13,16 +13,18 @@ import { join } from '_common/utils/join';
 import { getActivityById, linkReceiptToActivity, uploadReceiptForActivity, viewReceipt } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 
+import type { ReceiptVideModel } from './ReceiptsView';
+
 import css from './TransactionPreview.css';
 
 interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
-  onViewReceipt: (receipts: Readonly<string[]>) => void;
+  onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
 }
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const navigate = useNavigate();
   const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
-  const [receiptURIs, setReceiptURIs] = createSignal<Readonly<string[]>>([]);
+  const [receipts, setReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
   const displayAmount = formatCurrency(transaction().amount?.amount || 0);
 
   const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
@@ -40,10 +42,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   createEffect(() => {
     const downloadReceiptsToView = async () => {
-      const receiptId = transaction().receipt?.receiptId;
-      if (receiptId) {
-        const receiptsData = await viewReceipt(receiptId);
-        setReceiptURIs([receiptsData as unknown as string]);
+      const receiptIdList = transaction().receipt?.receiptId;
+      if (receiptIdList && receiptIdList.length > 0) {
+        const viewReceiptDataRequests = await Promise.all(receiptIdList.map((receiptId) => viewReceipt(receiptId)));
+        setReceipts(viewReceiptDataRequests);
       }
     };
     downloadReceiptsToView();
@@ -55,7 +57,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <span class={css.icon}>
           <Icon name="approved-status" />
         </span>
-        {transaction().status?.toLocaleLowerCase()}
+        <span>{transaction().status?.toLocaleLowerCase()}</span>
         <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
       </div>
       <div class={css.summary}>
@@ -75,19 +77,19 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <DateWithDateTime activityTime={transaction().activityTime!} />
         </div>
         <div class={css.receiptCta}>
-          <Show when={!transaction().receipt?.receiptId && transaction().merchant}>
+          <Show when={transaction().receipt?.receiptId?.length! > 0}>
+            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
+              View Receipt
+            </Button>
+          </Show>
+          <Show when={!transaction().receipt?.receiptId && allowReceiptUpload(transaction())}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="add-receipt" loading={uploading()}>
                 Add Receipt
               </Button>
             </label>
           </Show>
-          <Show when={transaction().receipt?.receiptId}>
-            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receiptURIs())}>
-              View Receipt
-            </Button>
-          </Show>
-          <Show when={transaction().receipt?.receiptId}>
+          <Show when={allowReceiptUpload(transaction())}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
                 Upload more images
@@ -153,6 +155,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     </div>
   );
 }
+
+const allowReceiptUpload = (transaction: AccountActivityResponse) => {
+  return transaction.merchant && ['PENDING', 'APPROVED', 'PROCESSED'].includes(transaction.status!);
+};
 
 export const DateWithDateTime = (props: { activityTime: string }) => {
   const date = new Date(props.activityTime || '');

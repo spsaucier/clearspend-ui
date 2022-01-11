@@ -3,7 +3,7 @@
   padding: var(--pd-14) 0;
   align-items: center;
   justify-content: space-between;
-  color: white;
+  color: var(--tw-white);
 }
 
 .top span {
@@ -22,9 +22,8 @@
 
 .bottom {
   display: flex;
-  width: 320px;
   max-width: 100vw;
-  padding-top: var(--pd-14);
+  padding-top: var(--pd-32);
   align-items: center;
   justify-content: space-between;
 }
@@ -34,5 +33,39 @@
 }
 
 .receipt-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+}
+
+.receipt-image-wrapper > div {
+  padding: var(--pd-32);
+  cursor: pointer;
+}
+
+.receipt-image-wrapper svg {
+  width: 32px;
+  height: 32px;
+  color: var(--tw-white);
+}
+
+.receipt-mini-image-wrapper {
+  display: flex;
+  margin-top: var(--pd-16);
+  margin-bottom: var(--pd-32);
+}
+
+.receipt-mini-image-wrapper > div > img {
+  width: 80px;
+  height: 80px;
+  margin-right: var(--pd-16);
+  border: 3px solid transparent;
+  border-radius: var(--radius-4);
+  cursor: pointer;
+}
+
+.receipt-mini-image-wrapper > div > img.current {
+  border-color: var(--tw-green-30);
+  cursor: default;
 }

@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Match, Show, Switch } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -90,12 +90,31 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       title: <Text message="Amount" />,
       render: (item) => (
         <div class={css.amountCell}>
-          <div class={css.status}>
-            <Icon name="confirm" size="sm" />
-          </div>
+          <Switch>
+            <Match when={item.status === 'PROCESSED'}>
+              <div class={css.status}>
+                <Icon name="confirm" size="sm" />
+              </div>
+            </Match>
+            <Match when={item.status === 'APPROVED'}>
+              <div class={css.status}>
+                <Icon name="confirm" size="sm" />
+              </div>
+            </Match>
+            <Match when={item.status === 'PENDING'}>
+              <div class={join(css.status, css.pending)}>
+                <Icon name="confirm" size="sm" />
+              </div>
+            </Match>
+            <Match when={item.status === 'DECLINED'}>
+              <div class={join(css.status, css.declined)}>
+                <Icon name="cancel" size="sm" />
+              </div>
+            </Match>
+          </Switch>
           <div>
             <div class={css.amount}>{formatCurrency(item.amount?.amount || 0)}</div>
-            <div class={css.sub}>Approved</div>
+            <div class={css.sub}>{item.status?.toLowerCase()}</div>
           </div>
         </div>
       ),

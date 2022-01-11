@@ -1,4 +1,4 @@
-import { Show, For } from 'solid-js';
+import { Show, For, createSignal } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { Input } from '_common/components/Input';
@@ -11,8 +11,13 @@ import { Filters } from 'app/components/Filters';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
+import { Drawer } from '_common/components/Drawer';
+import { Checkbox } from '_common/components/Checkbox';
+import { FiltersButton } from 'app/components/FiltersButton';
+import { getNoop } from '_common/utils/getNoop';
 
 import { formatName } from '../../utils/formatName';
+import { EmployeeFilterDrawer } from '../EmployeeFilterDrawer/EmployeeFilterDrawer';
 
 import css from './EmployeesTable.css';
 
@@ -21,10 +26,14 @@ interface EmployeesTableProps {
   onClick: (uid: string) => void;
   onCardClick: (id: string) => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  params: SearchUserRequest;
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const i18n = useI18n();
+  const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
+
+  const [includeArchived, setIncludeArchived] = createSignal<boolean>(!!props.params.includeArchived);
 
   const columns: readonly Readonly<TableColumn<UserPageData>>[] = [
     {
@@ -57,6 +66,16 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
     },
   ];
 
+  const applyFilters = () => {
+    props.onChangeParams((prevParams) => {
+      return {
+        // todo: Improve once https://tranwall.atlassian.net/browse/CAP-339 is completed
+        ...prevParams,
+        includeArchived: includeArchived() ? true : undefined,
+      };
+    });
+  };
+
   return (
     <div>
       <Filters
@@ -75,11 +94,29 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           suffix={<Icon name="search" size="sm" />}
           class={css.search}
         />
+        <FiltersButton count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
+        <Checkbox
+          checked={includeArchived()}
+          onChange={(checked) => {
+            setIncludeArchived(checked);
+            applyFilters();
+          }}
+        >
+          <Text message="Show Archived" />
+        </Checkbox>
         <Button icon={{ name: 'download', pos: 'right' }}>
           <Text message="Export" />
         </Button>
       </Filters>
       <Table columns={columns} data={props.data.content || []} />
+
+      <Drawer
+        open={filterPanelOpen()}
+        title={<Text message="Filter Employees" />}
+        onClose={() => setFilterPanelOpen(false)}
+      >
+        <EmployeeFilterDrawer onChangeParams={props.onChangeParams} params={props.params} />
+      </Drawer>
     </div>
   );
 }
