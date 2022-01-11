@@ -45,8 +45,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       const receiptIdList = transaction().receipt?.receiptId;
       if (receiptIdList && receiptIdList.length > 0) {
         const viewReceiptDataRequests = await Promise.all(receiptIdList.map((receiptId) => viewReceipt(receiptId)));
-        // eslint-disable-next-line no-console
-        console.log({ viewReceiptDataRequests });
         setReceipts(viewReceiptDataRequests);
       }
     };

@@ -17,7 +17,7 @@ export function ReceiptsView(props: {
   const [currentReceiptIndex, setCurrentReceiptIndex] = createSignal<number>(0);
   const [visibleReceipts, setVisibleReceipts] = createSignal<ReceiptVideModel[]>([...props.receipts]);
 
-  const [deleting, deleteReceiptAction] = wrapAction(deleteReceipt);
+  const [deleting] = wrapAction(deleteReceipt);
 
   const selectReceiptAtIndex = (e: MouseEvent, index: number) => {
     e.stopPropagation();
@@ -36,10 +36,7 @@ export function ReceiptsView(props: {
 
   const deleteSelectedReceipt = async (e: MouseEvent) => {
     e.stopPropagation();
-    const deletedReceipt = visibleReceipts()[currentReceiptIndex()]; // temp
-    const deleteResult = await deleteReceiptAction(visibleReceipts()[currentReceiptIndex()]?.receiptId!);
-    // eslint-disable-next-line no-console
-    console.log({ deleteResult, deleting: deleting() });
+    const deletedReceipt = visibleReceipts()[currentReceiptIndex()];
     const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== deletedReceipt?.receiptId);
     const updatedTransaction = await getActivityById(props.accountActivityId);
 
