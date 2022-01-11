@@ -19,7 +19,7 @@ import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
 import { useUsers } from './stores/employees';
 
-const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
+export const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,

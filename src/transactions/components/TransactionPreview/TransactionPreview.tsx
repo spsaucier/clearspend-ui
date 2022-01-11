@@ -59,7 +59,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <span class={css.icon}>
           <Icon name="approved-status" />
         </span>
-        {transaction().status?.toLocaleLowerCase()}
+        <span>{transaction().status?.toLocaleLowerCase()}</span>
         <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
       </div>
       <div class={css.summary}>
@@ -79,19 +79,19 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <DateWithDateTime activityTime={transaction().activityTime!} />
         </div>
         <div class={css.receiptCta}>
-          <Show when={!transaction().receipt?.receiptId && transaction().merchant}>
+          <Show when={transaction().receipt?.receiptId?.length! > 0}>
+            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
+              View Receipt
+            </Button>
+          </Show>
+          <Show when={!transaction().receipt?.receiptId && allowReceiptUpload(transaction())}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="add-receipt" loading={uploading()}>
                 Add Receipt
               </Button>
             </label>
           </Show>
-          <Show when={transaction().receipt?.receiptId?.length! > 0}>
-            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
-              View Receipt
-            </Button>
-          </Show>
-          <Show when={transaction().receipt?.receiptId}>
+          <Show when={allowReceiptUpload(transaction())}>
             <label for="receipt-upload">
               <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
                 Upload more images
@@ -157,6 +157,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     </div>
   );
 }
+
+const allowReceiptUpload = (transaction: AccountActivityResponse) => {
+  return transaction.merchant && ['PENDING', 'APPROVED', 'PROCESSED'].includes(transaction.status!);
+};
 
 export const DateWithDateTime = (props: { activityTime: string }) => {
   const date = new Date(props.activityTime || '');

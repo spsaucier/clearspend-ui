@@ -46,6 +46,18 @@
   border-radius: var(--radius-8);
 }
 
+.status.declined {
+  color: var(--tw-red-80);
+  background: var(--tw-red-20);
+  border-color: var(--tw-red-60);
+}
+
+.status.pending {
+  color: var(--tw-amber-70);
+  background: var(--tw-amber-20);
+  border-color: var(--tw-amber-50);
+}
+
 .amount {
   font-weight: var(--font-700);
 }
@@ -68,4 +80,5 @@
 .sub {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
+  text-transform: capitalize;
 }
