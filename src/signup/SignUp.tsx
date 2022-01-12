@@ -1,5 +1,5 @@
 import { createSignal, Match, Switch } from 'solid-js';
-import { useNavigate } from 'solid-app-router';
+import { useNavigate, useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import logo from 'app/assets/logo-name.svg';
@@ -35,6 +35,7 @@ function getInitStep(store: SignupStore): Step {
 }
 
 export default function SignUp() {
+  const [searchParams] = useSearchParams<{ email?: string }>();
   const navigate = useNavigate();
 
   const { store, setName, setEmail, setTel, cleanup } = useSignup();
@@ -117,7 +118,7 @@ export default function SignUp() {
               <StartForm onNext={onNameUpdate} />
             </Match>
             <Match when={step() === Step.email}>
-              <EmailForm onNext={onSignup} />
+              <EmailForm initialEmailValue={searchParams.email} onNext={onSignup} />
             </Match>
             <Match when={step() === Step.emailOtp}>
               <VerifyForm

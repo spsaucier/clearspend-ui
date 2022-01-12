@@ -3,47 +3,45 @@ import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
+import { minLength } from 'signup/components/PasswordForm/rules';
 
 import { useMessages } from '../../containers/Messages/context';
 
 interface FormValues {
-  login: string;
   password: string;
 }
 
-interface LoginFormProps {
-  onSubmit: (login: string, password: string) => Promise<unknown>;
+interface ResetPasswordFormProps {
+  onSubmit: (password: string) => Promise<unknown>;
 }
 
-export function LoginForm(props: Readonly<LoginFormProps>) {
+export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
   const messages = useMessages();
   const [loading, submit] = wrapAction(props.onSubmit);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
-    defaultValues: { login: '', password: '' },
-    rules: { login: [required], password: [required] },
+    defaultValues: { password: '' },
+    rules: { password: [required, minLength] },
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      submit(data.login, data.password).catch(() => {
-        messages.error({ title: 'Could not log in', message: 'Please try a different email or password' });
-      });
+      submit(data.password)
+        .then(() => {
+          messages.success({
+            title: 'Reset Password Success',
+            message: 'Your password has been successfully changed. You may now log in with your new password.',
+          });
+        })
+        .catch((e: Error) => {
+          messages.error({ title: 'Something went wrong', message: e.message });
+        });
     }
   };
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
-      <FormItem label="Your email" error={errors().login}>
-        <Input
-          name="login"
-          type="email"
-          value={values().login}
-          error={Boolean(errors().login)}
-          onChange={handlers.login}
-        />
-      </FormItem>
-      <FormItem label="Password" error={errors().password}>
+      <FormItem label="New password" error={errors().password}>
         <Input
           name="password"
           type="password"
@@ -52,8 +50,8 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
           onChange={handlers.password}
         />
       </FormItem>
-      <Button wide type="primary" htmlType="submit" loading={loading()}>
-        Login
+      <Button wide type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
+        Change Password
       </Button>
     </Form>
   );

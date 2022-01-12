@@ -12,6 +12,7 @@ interface FormValues {
 
 interface ForgotPasswordFormProps {
   onSubmit: (email: string) => Promise<unknown>;
+  initialEmailValue?: string;
 }
 
 export function ForgotPasswordForm(props: Readonly<ForgotPasswordFormProps>) {
@@ -19,7 +20,7 @@ export function ForgotPasswordForm(props: Readonly<ForgotPasswordFormProps>) {
   const [loading, submit] = wrapAction(props.onSubmit);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>({
-    defaultValues: { email: '' },
+    defaultValues: { email: props.initialEmailValue || '' },
     rules: { email: [required] },
   });
 

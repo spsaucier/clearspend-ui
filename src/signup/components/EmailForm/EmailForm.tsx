@@ -16,6 +16,7 @@ interface FormValues {
 
 interface EmailFormProps {
   onNext: (email: string) => Promise<unknown>;
+  initialEmailValue?: string;
 }
 
 export function EmailForm(props: Readonly<EmailFormProps>) {
@@ -25,7 +26,7 @@ export function EmailForm(props: Readonly<EmailFormProps>) {
   const [loading, next] = wrapAction(props.onNext);
 
   const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
-    defaultValues: { email: '' },
+    defaultValues: { email: props.initialEmailValue || '' },
     rules: { email: [required, validEmail] },
   });
 
