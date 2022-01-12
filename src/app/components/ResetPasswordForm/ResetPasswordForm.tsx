@@ -34,7 +34,12 @@ export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
           });
         })
         .catch((e: Error) => {
-          messages.error({ title: 'Something went wrong', message: e.message });
+          // eslint-disable-next-line no-console
+          console.info(e.message);
+          messages.error({
+            title: 'Something went wrong',
+            message: 'Your link may have expired. Please try the "Forgot Password" flow again.',
+          });
         });
     }
   };
