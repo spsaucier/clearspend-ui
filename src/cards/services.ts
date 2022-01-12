@@ -38,6 +38,6 @@ export async function blockCard(cardId: string) {
 
 export async function unblockCard(cardId: string) {
   return (
-    await service.patch(`/users/cards/${cardId}/unblock`, { status: 'OPEN', statusReason: 'CARDHOLDER_REQUESTED' })
+    await service.patch(`/users/cards/${cardId}/unblock`, { status: 'ACTIVE', statusReason: 'CARDHOLDER_REQUESTED' })
   ).data;
 }
