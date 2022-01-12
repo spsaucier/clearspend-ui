@@ -84,7 +84,8 @@ export function Select(props: Readonly<SelectProps>) {
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.keyCode === KEY_CODES.Escape) {
+    if ([KEY_CODES.Tab, KEY_CODES.Escape].includes(e.keyCode)) {
+      clearFocusTimeout();
       setOpen(false);
     } else if ([KEY_CODES.ArrowUp, KEY_CODES.ArrowDown].includes(e.keyCode)) {
       if (!list.contains(document.activeElement)) {
@@ -120,6 +121,7 @@ export function Select(props: Readonly<SelectProps>) {
           disabled={props.disabled}
           inputClass={css.input}
           onChange={onSearch}
+          onClick={onFocusIn}
           onFocusIn={onFocusIn}
           onFocusOut={onFocusOut}
           onKeyDown={onKeyDown}

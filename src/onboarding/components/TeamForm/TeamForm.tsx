@@ -2,12 +2,12 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
-import { InputDate } from '_common/components/InputDate';
 import { SelectState } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import { InputPhone } from '_common/components/InputPhone';
+import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
 import { formatSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 
@@ -66,7 +66,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             />
           </FormItem>
           <FormItem label="Date of birth" error={errors().birthdate}>
-            <InputDate
+            <SelectDateOfBirth
               name="birthdate"
               value={values().birthdate}
               error={Boolean(errors().birthdate)}

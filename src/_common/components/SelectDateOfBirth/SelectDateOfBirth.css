@@ -1,0 +1,9 @@
+.root {
+  display: inline-grid;
+  grid-template-columns: 1fr 26% 32%;
+  grid-gap: var(--pd-4);
+}
+
+.month-popup {
+  min-width: 140px;
+}

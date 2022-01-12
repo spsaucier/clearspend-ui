@@ -32,6 +32,7 @@
   margin: -1px 0 0 -1px;
   padding: var(--pd-8) var(--pd-12);
   font: inherit;
+  text-overflow: ellipsis;
   background: transparent;
   border: 0;
   outline: 0;
