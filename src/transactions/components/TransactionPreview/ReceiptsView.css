@@ -1,3 +1,9 @@
+.root {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
 .top {
   display: flex;
   padding: var(--pd-14) 0;
@@ -34,20 +40,26 @@
 
 .receipt-image-wrapper {
   display: flex;
+  max-width: 100%;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
 
+.receipt-image-wrapper > img {
+  max-width: 100%;
+  max-height: 50vh;
+}
+
 .receipt-image-wrapper > div {
   padding: var(--pd-32);
-  cursor: pointer;
 }
 
 .receipt-image-wrapper svg {
   width: 32px;
   height: 32px;
   color: var(--tw-white);
+  cursor: pointer;
 }
 
 .receipt-mini-image-wrapper {
@@ -68,4 +80,19 @@
 .receipt-mini-image-wrapper > div > img.current {
   border-color: var(--tw-green-30);
   cursor: default;
+}
+
+.next-arrow,
+.prev-arrow {
+  position: absolute;
+  top: 50%;
+  margin-top: -16px;
+}
+
+.prev-arrow {
+  right: 100%;
+}
+
+.next-arrow {
+  left: 100%;
 }

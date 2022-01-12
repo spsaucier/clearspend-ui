@@ -50,7 +50,7 @@ export function ReceiptsView(props: {
   };
 
   return (
-    <div>
+    <div class={css.root}>
       <div class={css.top}>
         <span>
           {currentReceiptIndex() + 1} of {visibleReceipts().length}
@@ -64,7 +64,6 @@ export function ReceiptsView(props: {
           {(receipt, index) => {
             return (
               <div onClick={(e) => selectReceiptAtIndex(e, index())}>
-                {index}
                 <img src={receipt.uri} classList={{ [css.current!]: currentReceiptIndex() === index() }} />
               </div>
             );
@@ -74,13 +73,13 @@ export function ReceiptsView(props: {
       <>
         <div class={css.receiptImageWrapper}>
           <Show when={currentReceiptIndex() > 0}>
-            <div onClick={previousReceipt}>
+            <div onClick={previousReceipt} class={css.prevArrow}>
               <Icon name="arrow-left" />
             </div>
           </Show>
           <img src={visibleReceipts()[currentReceiptIndex()]?.uri!} />
           <Show when={currentReceiptIndex() + 1 < visibleReceipts().length}>
-            <div onClick={nextReceipt}>
+            <div onClick={nextReceipt} class={css.nextArrow}>
               <Icon name="arrow-right" />
             </div>
           </Show>
