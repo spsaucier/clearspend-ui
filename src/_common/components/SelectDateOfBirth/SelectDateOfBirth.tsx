@@ -8,7 +8,8 @@ import { i18n } from '../../api/intl';
 import css from './SelectDateOfBirth.css';
 
 const MAX_DAYS = 31;
-const YEARS_COUNT = 100;
+const YEARS_COUNT = 105;
+const MIN_AGE = 18;
 
 const toInt = (value: string) => parseInt(value, 10);
 const toStr = (date: ReadonlyDate | undefined, func: (date: ReadonlyDate) => number) =>
@@ -19,7 +20,7 @@ function getMonthNames(): readonly string[] {
 }
 
 function getYears(): readonly string[] {
-  const current = getYear(new Date());
+  const current = getYear(new Date()) - MIN_AGE;
   return times(YEARS_COUNT).map((_, idx) => (current - idx).toString());
 }
 
