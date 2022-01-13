@@ -40,11 +40,19 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     setTransaction(updatedTransactionWithReceipt);
   });
 
+  const [downloadingReceipts, viewReceiptAction] = wrapAction(viewReceipt);
+
+  createEffect(() => {
+    setTransaction(props.transaction);
+  });
+
   createEffect(() => {
     const downloadReceiptsToView = async () => {
       const receiptIdList = transaction().receipt?.receiptId;
       if (receiptIdList && receiptIdList.length > 0) {
-        const viewReceiptDataRequests = await Promise.all(receiptIdList.map((receiptId) => viewReceipt(receiptId)));
+        const viewReceiptDataRequests = await Promise.all(
+          receiptIdList.map((receiptId) => viewReceiptAction(receiptId)),
+        );
         setReceipts(viewReceiptDataRequests);
       }
     };
@@ -78,7 +86,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </div>
         <div class={css.receiptCta}>
           <Show when={transaction().receipt?.receiptId?.length! > 0}>
-            <Button view={'default'} wide={true} icon="add-receipt" onClick={() => props.onViewReceipt(receipts())}>
+            <Button
+              view={'default'}
+              wide={true}
+              loading={downloadingReceipts()}
+              icon="add-receipt"
+              onClick={() => props.onViewReceipt(receipts())}
+            >
               View Receipt
             </Button>
           </Show>

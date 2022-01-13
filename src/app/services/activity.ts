@@ -44,5 +44,6 @@ export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> 
 };
 
 export const deleteReceipt = async (receiptId: string) => {
-  await axios.delete(`api/users/receipts/${receiptId}/delete`);
+  const result = await axios.delete(`api/users/receipts/${receiptId}/delete`);
+  return result;
 };
