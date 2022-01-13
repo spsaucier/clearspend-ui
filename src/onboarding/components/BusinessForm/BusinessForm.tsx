@@ -80,7 +80,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
         </div>
       </Section>
       <Section title="Business address" class={css.section}>
-        <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
+        <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
           Next
         </Button>

@@ -24,7 +24,7 @@ import { TeamForm } from './components/TeamForm';
 import { LinkAccount } from './components/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
 import { getRequiredDocuments, setBusinessInfo, setBusinessOwner } from './services/onboarding';
-import { linkBankAccounts, getBankAccounts, deposit } from './services/accounts';
+import { linkBankAccounts, getBankAccounts, onboardingDeposit } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 
@@ -105,7 +105,7 @@ export default function Onboarding() {
   };
 
   const onDeposit = async (accountId: string, amount: number) => {
-    await deposit(accountId, amount);
+    await onboardingDeposit(accountId, amount);
     await refetch();
     navigate('/');
   };

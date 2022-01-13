@@ -106,7 +106,7 @@ export function AddressSelect(props: Readonly<AddressSelectProps>) {
             </Button>
           </div>
           <div class={css.showWhenActive}>
-            <AddressFormItems values={values()} errors={errors()} handlers={handlersWithSave} />
+            <AddressFormItems values={values} errors={errors()} handlers={handlersWithSave} />
           </div>
         </div>
       </Radio>

@@ -45,7 +45,7 @@ export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
         <PersonalInfoFormItems values={values()} errors={errors()} handlers={handlers} />
       </Section>
       <Section title={<Text message="Employee Address" />} description="What's your employee’s home address?">
-        <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
+        <AddressFormItems values={values} errors={errors()} handlers={handlers} />
       </Section>
       <Show when={isDirty()}>
         <PageActions

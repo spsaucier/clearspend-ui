@@ -40,7 +40,7 @@ export function EditEmployeeFlatForm(props: Readonly<EditEmployeeFlatFormProps>)
     <Form class={css.root} onSubmit={wrapSubmit(onSubmit)}>
       <div class={css.wrapper}>
         <PersonalInfoFormItems values={values()} errors={errors()} handlers={handlers} />
-        <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
+        <AddressFormItems values={values} errors={errors()} handlers={handlers} />
       </div>
       <Button
         wide

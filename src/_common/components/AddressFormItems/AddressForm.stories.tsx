@@ -24,7 +24,7 @@ export const UserForm = () => {
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <div>
-        <AddressFormItems values={values()} errors={errors()} handlers={handlers} />
+        <AddressFormItems values={values} errors={errors()} handlers={handlers} />
       </div>
       <Button wide type="primary" htmlType="submit" icon={{ name: 'confirm', pos: 'right' }} disabled={!isDirty()}>
         Add employee
