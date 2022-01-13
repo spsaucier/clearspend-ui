@@ -1891,9 +1891,6 @@ export interface UpdateUserResponse {
 }
 
 export interface UpdateCardStatusRequest {
-  /** @example BLOCKED */
-  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-
   /** @example CARDHOLDER_REQUESTED */
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
 }
@@ -1931,6 +1928,14 @@ export interface Card {
   lastFour?: string;
   address?: Address;
   externalRef?: string;
+}
+
+export interface ActivateCardRequest {
+  /** @pattern ^\d{4}$ */
+  lastFour?: string;
+
+  /** @example CARDHOLDER_REQUESTED */
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
 }
 
 export interface UpdateAccountActivityRequest {

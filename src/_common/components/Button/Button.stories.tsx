@@ -38,4 +38,12 @@ export default {
   },
 };
 
-export const Default = (args: ButtonProps) => <Button {...args} />;
+export const Default = (args: ButtonProps) => (
+  <div>
+    <Button {...args} />
+    &nbsp;
+    <Button {...args} href="#">
+      Link
+    </Button>
+  </div>
+);
