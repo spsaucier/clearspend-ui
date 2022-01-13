@@ -89,15 +89,15 @@ export function ReceiptsView(props: {
           </Show>
         </div>
         <div class={css.bottom}>
-          <a
+          <Button
+            icon="download"
+            size="lg"
             onClick={(e) => e.stopPropagation()}
             href={visibleReceipts()[currentReceiptIndex()]?.uri}
             download={`${visibleReceipts()[currentReceiptIndex()]?.receiptId}.png`}
           >
-            <Button icon="download" size="lg">
-              Download
-            </Button>
-          </a>
+            Download
+          </Button>
           <Button icon="trash" size="lg" class={css.delete} onClick={deleteSelectedReceipt} loading={deleting()}>
             Delete
           </Button>
