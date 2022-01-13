@@ -33,9 +33,6 @@ export function Popover(props: Readonly<PopoverProps>) {
 
   const merged = mergeProps(DEFAULT_PROPS, props);
 
-  if ('open' in merged && typeof merged.children === 'function')
-    throw new Error('Function cannot be used as children in controlled component');
-
   const [open, setOpen] = createSignal(false);
   const onClick = () => setOpen((prev) => !prev);
   const opened = createMemo(() => ('open' in merged ? merged.open : open()));

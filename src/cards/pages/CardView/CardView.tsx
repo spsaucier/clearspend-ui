@@ -19,6 +19,7 @@ import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
+import { useMediaContext } from '_common/api/media/context';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
@@ -32,6 +33,7 @@ import CardDetails from './CardDetails';
 enum Tabs {
   transactions,
   controls,
+  info,
 }
 
 export default function CardView() {
@@ -40,6 +42,7 @@ export default function CardView() {
   const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
+  const media = useMediaContext();
 
   const allocations = useAllocations();
   const [data, status, , , reload] = useResource(getCard, params.id);
@@ -70,6 +73,17 @@ export default function CardView() {
   const toggleDetails = async () => {
     setShowDetails(!showDetails());
   };
+
+  const CardInfoBlock = () => (
+    <Data
+      data={allocation() && user()}
+      loading={allocations.loading || uStatus().loading}
+      error={allocations.error || uStatus().error}
+      onReload={() => Promise.all([allocations.reload(), reloadUser()]).catch(getNoop())}
+    >
+      <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} />
+    </Data>
+  );
 
   return (
     <Page
@@ -141,23 +155,16 @@ export default function CardView() {
         <Show when={card()?.type}>
           <Card
             type={card()!.type as CardType}
-            name={user() ? formatName(user()!) : ''}
-            allocation={allocation()?.name}
+            name={media.medium ? undefined : user() ? formatName(user()!) : ''}
+            allocation={media.medium ? undefined : allocation()?.name}
             number={card()!.lastFour || ''}
-            balance={allocation()?.account.ledgerBalance.amount || 0}
+            balance={media.medium ? undefined : allocation()?.account.ledgerBalance.amount || 0}
           />
         </Show>
       }
       subtitle={
-        <Show when={card()}>
-          <Data
-            data={allocation() && user()}
-            loading={allocations.loading || uStatus().loading}
-            error={allocations.error || uStatus().error}
-            onReload={() => Promise.all([allocations.reload(), reloadUser()]).catch(getNoop())}
-          >
-            <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} />
-          </Data>
+        <Show when={card() && media.medium}>
+          <CardInfoBlock />
         </Show>
       }
     >
@@ -169,10 +176,18 @@ export default function CardView() {
           <Tab value={Tabs.controls}>
             <Text message="Spend Controls" />
           </Tab>
+          {!media.medium && (
+            <Tab value={Tabs.info}>
+              <Text message="Info" />
+            </Tab>
+          )}
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
             <Transactions cardId={card()!.cardId!} />
+          </Match>
+          <Match when={tab() === Tabs.info}>
+            <CardInfoBlock />
           </Match>
           <Match when={tab() === Tabs.controls}>
             <CardControls
