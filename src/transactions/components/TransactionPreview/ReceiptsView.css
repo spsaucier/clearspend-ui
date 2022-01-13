@@ -34,6 +34,10 @@
   justify-content: space-between;
 }
 
+.bottom a {
+  text-decoration: none;
+}
+
 .delete {
   color: var(--tw-red-70);
 }

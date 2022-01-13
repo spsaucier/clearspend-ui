@@ -5,6 +5,7 @@ import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { AccountActivityResponse } from 'generated/capital';
+import { HttpStatus } from '_common/api/fetch/types';
 
 import css from './ReceiptsView.css';
 
@@ -17,7 +18,7 @@ export function ReceiptsView(props: {
   const [currentReceiptIndex, setCurrentReceiptIndex] = createSignal<number>(0);
   const [visibleReceipts, setVisibleReceipts] = createSignal<ReceiptVideModel[]>([...props.receipts]);
 
-  const [deleting] = wrapAction(deleteReceipt);
+  const [deleting, deleteReceiptAction] = wrapAction(deleteReceipt);
 
   const selectReceiptAtIndex = (e: MouseEvent, index: number) => {
     e.stopPropagation();
@@ -38,14 +39,17 @@ export function ReceiptsView(props: {
     e.stopPropagation();
     const deletedReceipt = visibleReceipts()[currentReceiptIndex()];
     const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== deletedReceipt?.receiptId);
-    const updatedTransaction = await getActivityById(props.accountActivityId);
+    const deleteActionResponse = await deleteReceiptAction(deletedReceipt?.receiptId!);
+    if (deleteActionResponse.status === HttpStatus.OK) {
+      setVisibleReceipts(remainingReceipts);
+      const updatedTransaction = await getActivityById(props.accountActivityId);
+      props.onDelete(updatedTransaction);
 
-    setVisibleReceipts(remainingReceipts);
-    props.onDelete(updatedTransaction);
-    if (remainingReceipts.length === 0) {
-      props.onEmpty();
-    } else {
-      setCurrentReceiptIndex(0);
+      if (remainingReceipts.length === 0) {
+        props.onEmpty();
+      } else {
+        setCurrentReceiptIndex(0);
+      }
     }
   };
 
@@ -85,9 +89,15 @@ export function ReceiptsView(props: {
           </Show>
         </div>
         <div class={css.bottom}>
-          <Button icon="download" size="lg">
-            Download
-          </Button>
+          <a
+            onClick={(e) => e.stopPropagation()}
+            href={visibleReceipts()[currentReceiptIndex()]?.uri}
+            download={`${visibleReceipts()[currentReceiptIndex()]?.receiptId}.png`}
+          >
+            <Button icon="download" size="lg">
+              Download
+            </Button>
+          </a>
           <Button icon="trash" size="lg" class={css.delete} onClick={deleteSelectedReceipt} loading={deleting()}>
             Delete
           </Button>
