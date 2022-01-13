@@ -1,4 +1,4 @@
-import { mergeProps, createMemo, Accessor } from 'solid-js';
+import { mergeProps, createMemo, Accessor, Show } from 'solid-js';
 import type { JSX } from 'solid-js';
 
 import { Icon, IconName } from '../Icon';
@@ -24,6 +24,8 @@ export interface ButtonProps {
   icon?: IconType | Readonly<IconProps>;
   class?: string;
   wide?: boolean;
+  href?: string;
+  download?: string;
   loading?: boolean;
   disabled?: boolean;
   htmlType?: 'button' | 'submit';
@@ -47,35 +49,37 @@ export function Button(props: Readonly<ButtonProps>) {
   });
 
   const spinEl = <Spin class={css.spin} />;
+  const isButton = createMemo(() => typeof merged.href !== 'string');
 
-  return (
-    <button
-      id={merged.id}
-      type={merged.htmlType}
-      disabled={merged.disabled}
-      class={join(css.root, merged.class)}
-      classList={{
-        [css.wide!]: merged.wide,
-        [css.sm!]: merged.size === 'sm',
-        [css.lg!]: merged.size === 'lg',
+  const sharedProps = createMemo<Partial<Readonly<ButtonProps>>>(() => ({
+    id: merged.id,
+    class: join(css.root, merged.class),
+    classList: {
+      [css.wide!]: merged.wide,
+      [css.sm!]: merged.size === 'sm',
+      [css.lg!]: merged.size === 'lg',
 
-        [css.ghost!]: merged.type === 'default' && merged.view === 'ghost',
+      [css.ghost!]: merged.type === 'default' && merged.view === 'ghost',
 
-        [css.primary!]: merged.type === 'primary' && merged.view === 'default',
-        [css.primarySecond!]: merged.type === 'primary' && merged.view === 'second',
-        [css.primaryGhost!]: merged.type === 'primary' && merged.view === 'ghost',
+      [css.primary!]: merged.type === 'primary' && merged.view === 'default',
+      [css.primarySecond!]: merged.type === 'primary' && merged.view === 'second',
+      [css.primaryGhost!]: merged.type === 'primary' && merged.view === 'ghost',
 
-        [css.danger!]: merged.type === 'danger' && merged.view === 'default',
-        [css.dangerSecond!]: merged.type === 'danger' && merged.view === 'second',
-        [css.dangerGhost!]: merged.type === 'danger' && merged.view === 'ghost',
+      [css.danger!]: merged.type === 'danger' && merged.view === 'default',
+      [css.dangerSecond!]: merged.type === 'danger' && merged.view === 'second',
+      [css.dangerGhost!]: merged.type === 'danger' && merged.view === 'ghost',
 
-        [css.iconOnly!]: Boolean(icon()) && !merged.children,
-        [css.loading!]: merged.loading,
-      }}
-      onClick={merged.onClick}
-      onMouseEnter={merged.onMouseEnter}
-      onMouseLeave={merged.onMouseLeave}
-    >
+      [css.iconOnly!]: Boolean(icon()) && !merged.children,
+      [css.disabled!]: !isButton() && merged.disabled,
+      [css.loading!]: merged.loading,
+    },
+    onClick: merged.onClick,
+    onMouseEnter: merged.onMouseEnter,
+    onMouseLeave: merged.onMouseLeave,
+  }));
+
+  const content = createMemo(() => (
+    <>
       {icon()?.pos === 'left' && (!merged.loading ? iconEl : spinEl)}
       {props.children && (
         <span classList={{ [css.noIcon!]: !icon() && merged.loading }}>
@@ -84,6 +88,21 @@ export function Button(props: Readonly<ButtonProps>) {
         </span>
       )}
       {icon()?.pos === 'right' && (!merged.loading ? iconEl : spinEl)}
-    </button>
+    </>
+  ));
+
+  return (
+    <Show
+      when={isButton()}
+      fallback={
+        <a {...sharedProps()} href={merged.href} download={merged.download}>
+          {content}
+        </a>
+      }
+    >
+      <button {...sharedProps()} type={merged.htmlType} disabled={merged.disabled}>
+        {content}
+      </button>
+    </Show>
   );
 }

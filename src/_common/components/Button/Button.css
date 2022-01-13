@@ -20,10 +20,13 @@
   cursor: pointer;
 
   &:hover {
+    color: var(--tw-black);
+    text-decoration: none;
     background: var(--tw-gray-30);
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     color: var(--tw-gray-40);
     background: var(--tw-gray-20);
     cursor: not-allowed;
@@ -61,6 +64,10 @@
     width: v-size-sm;
     padding: 0;
   }
+}
+
+.disabled {
+  pointer-events: none;
 }
 
 .loading {
@@ -101,10 +108,12 @@
   background-color: transparent;
 
   &:hover {
+    color: var(--tw-gray-60);
     background-color: var(--tw-gray-20);
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     background-color: transparent;
   }
 }
@@ -112,7 +121,8 @@
 .primary {
   background-color: var(--tw-primary-bg);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
     background-color: var(--tw-primary-content);
   }
 }
@@ -120,7 +130,9 @@
 .primary-second {
   color: var(--tw-primary-content);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
+    color: var(--tw-primary-content);
     background-color: var(--tw-gray-10);
   }
 }
@@ -130,10 +142,12 @@
   background-color: transparent;
 
   &:hover {
+    color: var(--tw-primary-content);
     background-color: var(--tw-gray-10);
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     background-color: transparent;
   }
 }
@@ -142,7 +156,9 @@
   color: var(--tw-white);
   background-color: var(--tw-red-70);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
+    color: var(--tw-white);
     background-color: var(--tw-red-80);
   }
 }
@@ -150,7 +166,9 @@
 .danger-second {
   color: var(--tw-red-80);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
+    color: var(--tw-red-80);
     background-color: var(--tw-gray-10);
   }
 }
@@ -160,10 +178,12 @@
   background-color: transparent;
 
   &:hover {
+    color: var(--tw-red-80);
     background-color: var(--tw-gray-10);
   }
 
-  &:disabled {
+  &:disabled,
+  &.disabled {
     background-color: transparent;
   }
 }
