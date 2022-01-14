@@ -2,6 +2,10 @@
   cursor: pointer;
 }
 
+.popup {
+  width: 100%;
+}
+
 .option {
   display: flex;
   align-items: center;

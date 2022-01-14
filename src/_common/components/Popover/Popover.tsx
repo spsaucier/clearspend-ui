@@ -2,6 +2,7 @@ import { mergeProps, createSignal, createMemo, createEffect, onCleanup, untrack 
 import { Show, Portal } from 'solid-js/web';
 
 import { join } from '_common/utils/join';
+import { callValue } from '_common/utils/callValue';
 
 import { getPosParts, fixPosition, calcDialogStyle, getHoverProps } from './utils';
 import type { PopoverPosition, ControlledProps, PopoverProps } from './types';
@@ -21,9 +22,11 @@ function getPosClass(pos: PopoverPosition) {
   return join(
     vPos === 'top' && css.top,
     vPos === 'bottom' && css.bottom,
-    hPos === 'left' && css.left,
-    hPos === 'center' && css.center,
-    hPos === 'right' && css.right,
+    vPos !== 'middle' && hPos === 'left' && css.left,
+    vPos !== 'middle' && hPos === 'center' && css.center,
+    vPos !== 'middle' && hPos === 'right' && css.right,
+    vPos === 'middle' && hPos === 'left' && css.middleLeft,
+    vPos === 'middle' && hPos === 'right' && css.middleRight,
   );
 }
 
@@ -34,14 +37,16 @@ export function Popover(props: Readonly<PopoverProps>) {
   const merged = mergeProps(DEFAULT_PROPS, props);
 
   const [open, setOpen] = createSignal(false);
-  const onClick = () => setOpen((prev) => !prev);
   const opened = createMemo(() => ('open' in merged ? merged.open : open()));
+
+  const onOpen = (value: boolean) => !props.disabled && setOpen(value);
+  const onClick = () => onOpen(!open());
 
   const [fixedPos, setFixedPos] = createSignal<PopoverPosition>();
   const pos = createMemo(() => fixedPos() || merged.position);
 
   const onClickOutside = (event: MouseEvent) => {
-    if (!dialog.contains(event.target as Node) && !trigger.contains(event.target as Node)) {
+    if (!dialog.contains(event.target as Node) && !callValue(trigger).contains(event.target as Node)) {
       (merged as ControlledProps).onClickOutside?.();
       setOpen(false);
     }
@@ -64,7 +69,7 @@ export function Popover(props: Readonly<PopoverProps>) {
     typeof merged.children === 'function'
       ? merged.children({
           ...(merged.trigger === 'click' && { onClick }),
-          ...(merged.trigger === 'hover' && getHoverProps(merged, setOpen)),
+          ...(merged.trigger === 'hover' && getHoverProps(merged, onOpen)),
         })
       : merged.children
   ) as Element;

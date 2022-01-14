@@ -42,6 +42,10 @@ export const Default = (args: PopoverProps) => (
       <Popover {...args} position="top-center" />
     </div>
     <div style={ROW_STYLES}>
+      <Popover {...args} position="middle-right" />
+      <Popover {...args} position="middle-left" />
+    </div>
+    <div style={ROW_STYLES}>
       <Popover {...args} position="bottom-center" />
       <Popover {...args} position="bottom-center" />
       <Popover {...args} position="bottom-center" />

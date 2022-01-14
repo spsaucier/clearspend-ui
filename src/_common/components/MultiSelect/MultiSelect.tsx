@@ -4,10 +4,10 @@ import { KEY_CODES } from '_common/constants/keyboard';
 
 import { Icon } from '../Icon';
 import { Popover } from '../Popover';
+import { getOptions, isMatch } from '../Select/utils';
 import { join } from '../../utils/join';
 
 import { MultiSelectContext } from './context';
-import { getOptions, isMatch } from './utils';
 import type { MultiSelectProps } from './types';
 
 import css from './MultiSelect.css';

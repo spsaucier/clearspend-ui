@@ -30,6 +30,8 @@ import type { CardType } from '../../types';
 
 import CardDetails from './CardDetails';
 
+import css from './CardView.css';
+
 enum Tabs {
   transactions,
   controls,
@@ -98,12 +100,10 @@ export default function CardView() {
         </Show>
       }
       actions={
-        <div>
-          <span style={{ 'margin-right': '10px' }}>
-            <Button size="lg" type="primary" view="ghost" onClick={toggleDetails}>
-              <Text message={`${showDetails() ? 'Hide' : 'Show'} Card Details`} />
-            </Button>
-          </span>
+        <div class={css.actions}>
+          <Button size="lg" type="primary" view="ghost" onClick={toggleDetails}>
+            <Text message="Show Card Details" />
+          </Button>
           <Switch>
             <Match when={card()?.status === 'ACTIVE'}>
               <Confirm

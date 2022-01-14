@@ -13,6 +13,7 @@ export interface DropdownProps {
   id?: string;
   menu: JSXElement;
   position?: PopoverPosition;
+  popupClass?: string;
   class?: string;
   children: JSXElement;
 }
@@ -41,7 +42,7 @@ export function Dropdown(props: Readonly<DropdownProps>) {
       id={props.id}
       open={open()}
       position={props.position}
-      class={css.popup}
+      class={join(css.popup, props.popupClass)}
       onClickOutside={toggle}
       content={
         <ul ref={list} class={css.menu}>

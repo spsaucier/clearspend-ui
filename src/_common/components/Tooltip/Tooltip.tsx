@@ -14,6 +14,7 @@ export const DEFAULT_LEAVE_DELAY = 0;
 export interface TooltipProps {
   message: JSXElement;
   position?: PopoverPosition;
+  disabled?: boolean;
   class?: string;
   enterDelay?: number;
   leaveDelay?: number;
@@ -34,6 +35,7 @@ export function Tooltip(props: Readonly<TooltipProps>) {
       leaveDelay={merged.leaveDelay}
       position={merged.position}
       content={merged.message}
+      disabled={merged.disabled}
       class={join(css.root, merged.class)}
     >
       {merged.children}

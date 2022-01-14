@@ -25,6 +25,7 @@ export function TagSelect(props: Readonly<TagSelectProps>) {
   return (
     <Dropdown
       class={props.class}
+      popupClass={css.popup}
       menu={
         <For each={props.options}>
           {(option) => (

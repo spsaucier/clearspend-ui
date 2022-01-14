@@ -20,12 +20,14 @@ export default {
     children: { table: { disable: true } },
     enterDelay: { control: { type: 'number' } },
     leaveDelay: { control: { type: 'number' } },
+    disabled: { control: { type: 'boolean' } },
   },
   args: {
     message: 'Tooltip text',
     children: (props: TooltipFuncProps) => <Button {...props}>Hover Me 😎</Button>,
     enterDelay: DEFAULT_ENTER_DELAY,
     leaveDelay: DEFAULT_LEAVE_DELAY,
+    disabled: false,
   },
 };
 

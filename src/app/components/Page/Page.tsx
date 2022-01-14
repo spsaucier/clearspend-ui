@@ -1,13 +1,14 @@
 import { JSXElement, onMount, Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
+import { callValue } from '_common/utils/callValue';
 
 import { PageContext, IPageContext } from './context';
 
 import css from './Page.css';
 
 function isExist(child?: JSXElement): boolean {
-  return Boolean(typeof child === 'function' ? child() : child);
+  return Boolean(callValue(child));
 }
 
 interface PageProps {

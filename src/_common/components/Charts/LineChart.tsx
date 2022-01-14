@@ -3,7 +3,8 @@ import { createLineChart } from 'micro-charts';
 import type { ILineChartData } from 'micro-charts/lib/linechart/types';
 
 import { formatCurrency } from '../../api/intl/formatCurrency';
-import { useWindowResize } from '../../api/media/useWindowResize';
+
+import { useResize } from './useResize';
 
 import css from './LineChart.css';
 
@@ -39,7 +40,10 @@ export function LineChart(props: Readonly<LineChartProps>) {
   let canvas!: HTMLCanvasElement;
 
   createEffect(() => draw(canvas, props.data));
-  useWindowResize(() => draw(canvas, props.data));
+  useResize(
+    () => canvas,
+    () => draw(canvas, props.data),
+  );
 
   return (
     <div class={css.root} style={{ height: `${props.height}px` }}>

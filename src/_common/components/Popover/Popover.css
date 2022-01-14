@@ -10,7 +10,7 @@
 .popover {
   position: absolute;
   display: flex;
-  width: 100%;
+  width: 240px;
   padding: var(--pd-16);
   flex-direction: column;
   background: var(--tw-white);
@@ -80,6 +80,38 @@
 
   &::before {
     right: var(--pd-16);
+  }
+}
+
+.middle-left {
+  top: 50%;
+  right: v-default-gap;
+  transform: translate3d(0, -50%, 0);
+
+  &::before {
+    top: 50%;
+    right: 0;
+    transform: translate3d(100%, -50%, 0) rotate(90deg);
+  }
+
+  &.balloon {
+    right: v-balloon-gap;
+  }
+}
+
+.middle-right {
+  top: 50%;
+  left: v-default-gap;
+  transform: translate3d(0, -50%, 0);
+
+  &::before {
+    top: 50%;
+    left: 0;
+    transform: translate3d(-100%, -50%, 0) rotate(270deg);
+  }
+
+  &.balloon {
+    left: v-balloon-gap;
   }
 }
 

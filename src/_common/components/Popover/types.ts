@@ -1,9 +1,9 @@
 import type { JSXElement } from 'solid-js';
 
-export type VPos = 'top' | 'bottom';
+export type VPos = 'top' | 'bottom' | 'middle';
 export type HPos = 'left' | 'center' | 'right';
 
-export type PopoverPosition = `${VPos}-${HPos}`;
+export type PopoverPosition = Exclude<`${VPos}-${HPos}`, 'middle-center'>;
 
 export interface PopoverFuncProps {
   onClick?: () => void;
@@ -17,6 +17,7 @@ interface BaseProps {
   balloon?: boolean;
   position?: PopoverPosition;
   content: JSXElement;
+  disabled?: boolean;
   class?: string;
 }
 
