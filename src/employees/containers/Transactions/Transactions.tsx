@@ -4,7 +4,7 @@ import { getAccountActivity } from 'app/services/activity';
 import { TransactionsData } from 'transactions/components/TransactionsData';
 import type { AccountActivityRequest } from 'generated/capital';
 
-const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
+export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,

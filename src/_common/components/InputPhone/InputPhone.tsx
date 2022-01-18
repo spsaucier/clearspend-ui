@@ -9,21 +9,22 @@ export function InputPhone(props: Readonly<InputProps>) {
   let value = props.value || '';
   const PHONE_LENGTH_WITHOUT_COUNTRY = 10;
   const DIGITS_OF_PREFIX = 2;
-  if (value.length > PHONE_LENGTH_WITHOUT_COUNTRY) {
-    prefix = value.slice(1, DIGITS_OF_PREFIX);
-    value = value.slice(DIGITS_OF_PREFIX);
+  if (value.toString().length > PHONE_LENGTH_WITHOUT_COUNTRY) {
+    prefix = value.toString().slice(1, DIGITS_OF_PREFIX);
+    value = value.toString().slice(DIGITS_OF_PREFIX);
   }
   return (
     <>
       <input name="phone-prefix" type="hidden" value={prefix} />
       <Input
         {...props}
-        value={formatPhone(value || '')}
+        value={formatPhone(value.toString() || '')}
         prefix={<span>+{prefix}</span>}
         type="tel"
         maxLength={10}
         formatter={formatPhone}
-        onChange={(val, e) => props.onChange?.(cleanPhone(prefix + val), e)}
+        parser={(val) => cleanPhone(prefix + val)}
+        onChange={(val, e) => props.onChange?.(val, e)}
       />
     </>
   );

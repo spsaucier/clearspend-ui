@@ -69,7 +69,6 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const applyFilters = () => {
     props.onChangeParams((prevParams) => {
       return {
-        // todo: Improve once https://tranwall.atlassian.net/browse/CAP-339 is completed
         ...prevParams,
         includeArchived: includeArchived() ? true : undefined,
       };

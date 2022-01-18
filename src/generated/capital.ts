@@ -853,7 +853,7 @@ export interface AccountActivityResponse {
     | 'REALLOCATE'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE';
-  status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED';
+  status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
   amount?: Amount;
   receipt?: ReceiptDetails;
   notes?: string;
@@ -2055,6 +2055,21 @@ export interface Receipt {
   /** @format uuid */
   adjustmentId?: string;
   amount: Amount;
+}
+
+export interface UserAllocationRoleRecord {
+  /** @format uuid */
+  userAllocationRoleId?: string;
+
+  /** @format uuid */
+  allocationId: string;
+  user?: UserData;
+  role?: string;
+  inherited?: boolean;
+}
+
+export interface UserAllocationRolesResponse {
+  userAllocationRoleList: UserAllocationRoleRecord[];
 }
 
 export interface CreateTestDataResponse {

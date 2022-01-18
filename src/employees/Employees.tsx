@@ -19,7 +19,7 @@ import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
 import { useUsers } from './stores/employees';
 
-export const DEFAULT_ACTIVITY_PARAMS: Readonly<SearchUserRequest> = {
+export const DEFAULT_EMPLOYEE_PARAMS: Readonly<SearchUserRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,
@@ -32,7 +32,7 @@ export default function Employees() {
 
   const [cardID, setCardID] = createSignal<string | null>(null);
 
-  const usersStore = useUsers({ params: DEFAULT_ACTIVITY_PARAMS });
+  const usersStore = useUsers({ params: DEFAULT_EMPLOYEE_PARAMS });
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (

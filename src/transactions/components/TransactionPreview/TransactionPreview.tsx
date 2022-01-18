@@ -185,7 +185,7 @@ export const DateWithDateTime = (props: { activityTime: string }) => {
   );
 };
 
-const getTransactionStatusDetailMsg = (status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED') => {
+const getTransactionStatusDetailMsg = (status?: AccountActivityResponse['status']) => {
   switch (status) {
     case 'PENDING':
       return '';
@@ -200,7 +200,7 @@ const getTransactionStatusDetailMsg = (status?: 'PENDING' | 'DECLINED' | 'APPROV
   }
 };
 
-const getColorClassForTransactionStatus = (status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'PROCESSED') => {
+const getColorClassForTransactionStatus = (status?: AccountActivityResponse['status']) => {
   switch (status) {
     case 'PENDING':
       return css.grey;

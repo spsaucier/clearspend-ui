@@ -23,3 +23,15 @@
 .controls button {
   margin-right: var(--pd-8);
 }
+
+.min-max-input-wrapper {
+  display: flex;
+}
+
+.min-max-input-wrapper > div:first-child {
+  margin-right: var(--pd-8);
+}
+
+div.receipt-filter {
+  gap: 0;
+}

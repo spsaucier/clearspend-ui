@@ -20,7 +20,7 @@ export function InputSearch(props: Readonly<InputSearchProps>) {
   };
 
   createEffect(() => {
-    if (props.value !== untrack(search)) setSearch(props.value || '');
+    if (props.value !== untrack(search)) setSearch(props.value?.toString() || '');
   });
 
   onCleanup(() => clearTimeout(timer));

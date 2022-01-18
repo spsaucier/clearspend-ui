@@ -8,11 +8,12 @@ import css from './Input.css';
 export interface InputProps {
   ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
   name?: string;
-  value?: string;
+  value?: string | number;
   maxLength?: number;
   type?: 'text' | 'password' | 'email' | 'tel' | 'file' | 'number';
   inputMode?: 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
   formatter?: (value: string) => string;
+  parser?: (value: string) => string;
   autoComplete?: string;
   placeholder?: string;
   prefix?: JSXElement;
@@ -39,12 +40,19 @@ export function Input(props: Readonly<InputProps>) {
   };
 
   const onChange: JSX.EventHandler<HTMLInputElement, InputEvent> = (event) => {
-    let text = event.currentTarget.value;
-    if (typeof merged.formatter === 'function') {
-      text = merged.formatter(text);
-      input.value = text;
+    if (typeof merged.parser === 'function') {
+      merged.onChange?.(merged.parser(event.currentTarget.value), event);
+    } else {
+      merged.onChange?.(event.currentTarget.value, event);
     }
-    merged.onChange?.(text, event);
+  };
+
+  const applyFormatter = (text?: string | number) => {
+    if (typeof merged.formatter === 'function') {
+      return merged.formatter(`${text}`);
+    } else {
+      return text;
+    }
   };
 
   return (
@@ -57,7 +65,7 @@ export function Input(props: Readonly<InputProps>) {
         ref={setInputRef}
         name={merged.name}
         data-name={merged.name}
-        value={merged.value || ''}
+        value={applyFormatter(merged.value || '')}
         maxLength={merged.maxLength}
         type={merged.type}
         inputmode={merged.inputMode}

@@ -1,4 +1,4 @@
-import { Match, Show, Switch } from 'solid-js';
+import { createSignal, Match, Show, Switch } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -21,6 +21,11 @@ import type {
   AccountActivityResponse,
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
+import { Drawer } from '_common/components/Drawer';
+import { getNoop } from '_common/utils/getNoop';
+import { FiltersButton } from 'app/components/FiltersButton';
+
+import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
 
 import css from './TransactionsTable.css';
 
@@ -34,6 +39,7 @@ interface TransactionsTableProps {
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
+  const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
@@ -153,9 +159,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <Button view="ghost" icon={{ name: 'filters', pos: 'right' }}>
-          More Filters
-        </Button>
+        <FiltersButton label={'More Filters'} count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
         <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
       </Filters>
       <Show
@@ -164,6 +168,19 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       >
         <Table columns={columns} data={props.data.content as []} tdClass={css.cell} />
       </Show>
+
+      <Drawer
+        open={filterPanelOpen()}
+        title={<Text message="Filter Transactions" />}
+        onClose={() => setFilterPanelOpen(false)}
+      >
+        <TransactionFilterDrawer
+          onChangeParams={() => {
+            // TODO
+          }}
+          params={{} as SearchTransactionsRequest}
+        />
+      </Drawer>
     </div>
   );
 }

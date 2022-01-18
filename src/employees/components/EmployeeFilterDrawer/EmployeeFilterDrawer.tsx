@@ -7,16 +7,16 @@ import type { SearchUserRequest } from 'generated/capital';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
 import { useAllocations } from 'allocations/stores/allocations';
 import { Checkbox } from '_common/components/Checkbox';
-import { DEFAULT_ACTIVITY_PARAMS } from 'employees/Employees';
+import { DEFAULT_EMPLOYEE_PARAMS } from 'employees/Employees';
 
 import css from './EmployeeFilterDrawer.css';
 
-interface EmployeesFilterDrawer {
+interface EmployeeFilterDrawerProps {
   params: SearchUserRequest;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
-export function EmployeeFilterDrawer(props: Readonly<EmployeesFilterDrawer>) {
+export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>) {
   const [options, setOptions] = createSignal<{ value: string; text: string }[]>([]);
   const [allocationFilterValue, setAllocationFilterValue] = createSignal<string[]>(props.params.allocations ?? []);
   const [includeArchived, setIncludeArchived] = createSignal<boolean>(!!props.params.includeArchived);
@@ -45,7 +45,7 @@ export function EmployeeFilterDrawer(props: Readonly<EmployeesFilterDrawer>) {
     setWithoutCard(false);
     setAllocationFilterValue([]);
     props.onChangeParams({
-      ...DEFAULT_ACTIVITY_PARAMS,
+      ...DEFAULT_EMPLOYEE_PARAMS,
     });
   };
 

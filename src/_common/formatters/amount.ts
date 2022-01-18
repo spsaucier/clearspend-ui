@@ -8,8 +8,8 @@ export function parseAmount(val: string): number {
   return parseInt(cleanAmount(val), 10);
 }
 
-export function formatAmount(val: string): string {
-  const num = parseAmount(val);
+export function formatAmount(val: string | number): string {
+  const num = parseAmount(val.toString());
   if (Number.isNaN(num)) return '';
   return formatBigNumber(num, { fractions: 0 });
 }

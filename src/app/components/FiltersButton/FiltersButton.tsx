@@ -9,6 +9,7 @@ import css from './FiltersButton.css';
 
 interface FiltersButtonProps {
   count: number;
+  label?: string;
   onReset: () => void;
   onClick: () => void;
 }
@@ -22,7 +23,7 @@ export function FiltersButton(props: Readonly<FiltersButtonProps>) {
   return (
     <Button view="ghost" onClick={props.onClick}>
       <span class={css.inner}>
-        <Text message="Filters" class={css.text!} />
+        <Text message={props.label ?? 'Filters'} class={css.text!} />
         <Show when={Boolean(props.count)} fallback={<Icon name="filters" />}>
           <Tag size="xs" type="success" onClick={onReset}>
             <span class={css.count}>{props.count}</span>

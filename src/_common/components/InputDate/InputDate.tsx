@@ -22,6 +22,7 @@ export interface InputDateProps {
   class?: string;
   value?: ReadonlyDate | number;
   error?: boolean;
+  placeholder?: string;
   onChange?: (date: ReadonlyDate | undefined) => void;
 }
 
@@ -101,7 +102,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
         class={props.class}
         error={props.error}
         autoComplete="off"
-        placeholder="MM/DD/YYYY"
+        placeholder={props.placeholder ?? 'MM/DD/YYYY'}
         onClick={() => setOpen(true)}
         onFocusIn={() => setOpen(true)}
         onFocusOut={() => {
