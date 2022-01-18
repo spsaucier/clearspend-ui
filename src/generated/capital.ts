@@ -532,6 +532,25 @@ export interface RevealCardResponse {
   ephemeralKey?: string;
 }
 
+export interface BusinessReallocationRequest {
+  /** @format uuid */
+  allocationIdFrom?: string;
+
+  /** @format uuid */
+  allocationIdTo?: string;
+  amount?: Amount;
+}
+
+export interface BusinessFundAllocationResponse {
+  /** @format uuid */
+  adjustmentIdFrom?: string;
+  ledgerBalanceFrom?: Amount;
+
+  /** @format uuid */
+  adjustmentIdTo?: string;
+  ledgerBalanceTo?: Amount;
+}
+
 export interface SearchBusinessAllocationRequest {
   name: string;
 }

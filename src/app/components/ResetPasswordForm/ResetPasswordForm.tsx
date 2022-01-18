@@ -38,7 +38,8 @@ export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
           console.info(e.message);
           messages.error({
             title: 'Something went wrong',
-            message: 'Your link may have expired. Please try the "Forgot Password" flow again.',
+            message:
+              'Perhaps your link is expired, or you entered a password you used previously. Please try the "Forgot Password" flow again.',
           });
         });
     }
