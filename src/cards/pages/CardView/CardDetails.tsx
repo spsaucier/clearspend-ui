@@ -20,6 +20,8 @@ interface CardDetailsProps {
   onClose: () => void;
 }
 
+const TWO_SECONDS = 2000;
+
 const NUMBER_STYLE = {
   base: {
     fontSize: '20px',
@@ -32,6 +34,13 @@ const STYLE = {
     fontSize: '16px',
     textAlign: 'left',
     fontVariant: 'tabular-nums',
+  },
+};
+
+const COPY_STYLE = {
+  base: {
+    fontSize: '12px',
+    lineHeight: '24px',
   },
 };
 
@@ -64,6 +73,7 @@ export default function CardDetails(props: CardDetailsProps) {
   createEffect(async () => {
     setStripe(
       (await loadStripe(
+        // TODO: Set this to be from env variable
         'pk_test_51K4bTGGAnZyEKADzAHWpsUzRhpZKBUdFOWgBfdfSw302hniCVohvChc3THqrUdVN7tHxqpu8JNz3ABuN35OBuYtu00m8x9cVd3',
         { betas: ['issuing_elements_2'] },
       )) as StripeCS,
@@ -104,6 +114,21 @@ export default function CardDetails(props: CardDetailsProps) {
         style: STYLE,
       });
 
+      const numberCopy = elements.create('issuingCardCopyButton', {
+        style: COPY_STYLE,
+        toCopy: 'number',
+      });
+
+      const cvcCopy = elements.create('issuingCardCopyButton', {
+        style: COPY_STYLE,
+        toCopy: 'cvc',
+      });
+
+      const expiryCopy = elements.create('issuingCardCopyButton', {
+        style: COPY_STYLE,
+        toCopy: 'expiry',
+      });
+
       setLoading(false);
       if (nameEl) {
         nameEl.textContent = cardResult?.issuingCard.cardholder.name || '';
@@ -111,6 +136,37 @@ export default function CardDetails(props: CardDetailsProps) {
       number?.mount('#card-number');
       expiry?.mount('#card-expiry');
       cvc?.mount('#card-cvc');
+
+      numberCopy.mount('#card-number-copy');
+      cvcCopy.mount('#card-cvc-copy');
+      expiryCopy.mount('#card-expiry-copy');
+
+      // Example of hiding, replacing, and re-showing icons upon click
+      const timeout = (ms: number) => {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      };
+      const hideAndShowSuccess = (iconElementId: string, successIconElementId: string) => {
+        const el = document.getElementById(iconElementId);
+        const elSuccess = document.getElementById(successIconElementId);
+        if (el && elSuccess) {
+          el.style.display = 'none';
+          elSuccess.style.display = 'block';
+          timeout(TWO_SECONDS).then(() => {
+            elSuccess.style.display = 'none';
+            el.style.display = 'block';
+          });
+        }
+      };
+
+      numberCopy.on('click', () => {
+        hideAndShowSuccess('card-number-copy', 'card-number-copy-success');
+      });
+      cvcCopy.on('click', () => {
+        hideAndShowSuccess('card-cvc-copy', 'card-cvc-copy-success');
+      });
+      expiryCopy.on('click', () => {
+        hideAndShowSuccess('card-expiry-copy', 'card-expiry-copy-success');
+      });
     }
   });
 
@@ -129,15 +185,27 @@ export default function CardDetails(props: CardDetailsProps) {
             <div>
               {props.user()?.firstName} {props.user()?.lastName}
             </div>
-            <div class={css.cardNumber} id="card-number"></div>
-            <div class={css.expiryCvcWrapper}>
+            <div class={css.row}>
+              <div class={css.cardNumber} id="card-number"></div>
+              <div class={css.copyIcon} id="card-number-copy"></div>
+              <div class={css.copyIconSuccess} id="card-number-copy-success"></div>
+            </div>
+            <div class={css.row}>
               <div class={css.expiryWrapper}>
-                <div class={css.expText}>VALID UNTIL</div>
-                <div class={css.cardExpiry} id="card-expiry"></div>
+                <div class={css.expText}>VALID THRU</div>
+                <div class={css.row}>
+                  <div class={css.cardExpiry} id="card-expiry"></div>
+                  <div class={css.copyIcon} id="card-expiry-copy"></div>
+                  <div class={css.copyIconSuccess} id="card-expiry-copy-success"></div>
+                </div>
               </div>
               <div class={css.cvcWrapper}>
                 <div class={css.cvvText}>CVV</div>
-                <div class={css.cardCvc} id="card-cvc"></div>
+                <div class={css.row}>
+                  <div class={css.cardCvc} id="card-cvc"></div>
+                  <div class={css.copyIcon} id="card-cvc-copy"></div>
+                  <div class={css.copyIconSuccess} id="card-cvc-copy-success"></div>
+                </div>
               </div>
             </div>
           </div>
