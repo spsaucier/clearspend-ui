@@ -40,10 +40,6 @@ export function getPurchasesLimits(data: Readonly<ControlsData>) {
   return formatLimits((data.limits![0]!.typeMap as any).PURCHASE || {});
 }
 
-export function getATMLimits(data: Readonly<ControlsData>) {
-  return formatLimits((data.limits![0]!.typeMap as any).ATM_WITHDRAW || {});
-}
-
 function prepareLimits(limits: Readonly<Limits>) {
   return keys(limits).reduce<Record<string, unknown>>((result, current) => {
     const limit = limits[current];
@@ -65,7 +61,6 @@ export function convertFormLimits(
         currency: 'USD',
         typeMap: {
           PURCHASE: prepareLimits(data.purchasesLimits),
-          ATM_WITHDRAW: prepareLimits(data.atmLimits),
         } as LimitTypeMap,
       },
     ] as CurrencyLimit[],
@@ -90,13 +85,11 @@ export function checkSameLimits(
       categories: getCategories(target, categories),
       channels: getChannels(target),
       purchasesLimits: getPurchasesLimits(target),
-      atmLimits: getATMLimits(target),
     },
     {
       categories: data.categories,
       channels: data.channels,
       purchasesLimits: data.purchasesLimits,
-      atmLimits: data.atmLimits,
     },
   );
 }

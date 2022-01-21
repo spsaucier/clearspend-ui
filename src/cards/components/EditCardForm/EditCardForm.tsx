@@ -19,7 +19,6 @@ import { allocationWithID } from 'allocations/utils/allocationWithID';
 import {
   getCategories,
   getChannels,
-  getATMLimits,
   getPurchasesLimits,
   getDefaultLimits,
   checkSameLimits,
@@ -134,7 +133,6 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
       handlers.categories(data ? getCategories(data, props.mccCategories) : []);
       handlers.channels(data ? getChannels(data) : []);
       handlers.purchasesLimits(data ? getPurchasesLimits(data) : getDefaultLimits());
-      handlers.atmLimits(data ? getATMLimits(data) : getDefaultLimits());
     });
   };
 
@@ -255,15 +253,6 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         </FormItem>
         <FormItem multiple label={<Text message="Payment types" />}>
           <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
-        </FormItem>
-        <FormItem multiple label={<Text message="ATM transactions" />}>
-          <SwitchLimits
-            name="atm"
-            value={values().atmLimits}
-            maxAmount={maxAmount()}
-            class={css.box}
-            onChange={handlers.atmLimits}
-          />
         </FormItem>
         <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Section>

@@ -3,13 +3,7 @@
 import type { FormOptions } from '_common/components/Form';
 import type { MccGroup } from 'generated/capital';
 
-import {
-  getCategories,
-  getChannels,
-  getPurchasesLimits,
-  getATMLimits,
-  convertFormLimits,
-} from '../../utils/convertFormLimits';
+import { getCategories, getChannels, getPurchasesLimits, convertFormLimits } from '../../utils/convertFormLimits';
 import type { ControlsData } from '../../types';
 
 import type { FormValues } from './types';
@@ -23,7 +17,6 @@ export function getFormOptions(
       categories: getCategories(data, categories),
       channels: getChannels(data),
       purchasesLimits: getPurchasesLimits(data),
-      atmLimits: getATMLimits(data),
     },
     rules: {
       // TODO: add rules for limits

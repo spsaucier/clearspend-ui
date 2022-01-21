@@ -11,7 +11,6 @@ export const DEFAULT_LIMITS: Readonly<Limits> = {
 };
 
 export const PAYMENT_TYPES: readonly Readonly<SwitchGroupBoxItem>[] = [
-  { key: 'ATM', icon: 'channel-atm', name: i18n.t('ATM withdrawals') },
   { key: 'POS', icon: 'payment-card', name: i18n.t('Point of sale (POS)') },
   { key: 'MOTO', icon: 'channel-moto', name: i18n.t('Mail/telephone order') },
   { key: 'ONLINE', icon: 'channel-ecommerce', name: i18n.t('Online') },

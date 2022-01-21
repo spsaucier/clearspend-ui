@@ -25,5 +25,4 @@ export interface FormLimits {
   categories: string[];
   channels: string[];
   purchasesLimits: Limits;
-  atmLimits: Limits;
 }

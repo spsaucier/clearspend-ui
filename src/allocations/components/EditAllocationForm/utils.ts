@@ -18,7 +18,6 @@ export function getFormOptions(): FormOptions<FormValues> {
       categories: [],
       channels: [],
       purchasesLimits: { ...DEFAULT_LIMITS },
-      atmLimits: { ...DEFAULT_LIMITS },
     },
     rules: {
       name: [required],

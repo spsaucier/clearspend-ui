@@ -35,7 +35,6 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       categories: [],
       channels: [],
       purchasesLimits: getDefaultLimits(),
-      atmLimits: getDefaultLimits(),
       streetLine1: '',
       streetLine2: '',
       locality: '',

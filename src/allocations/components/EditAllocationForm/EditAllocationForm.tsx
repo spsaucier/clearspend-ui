@@ -166,15 +166,6 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         <FormItem multiple label={<Text message="Payment types" />}>
           <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
         </FormItem>
-        <FormItem multiple label={<Text message="ATM transactions" />}>
-          <SwitchLimits
-            name="atm"
-            value={values().atmLimits}
-            maxAmount={maxAmount()}
-            class={css.box}
-            onChange={handlers.atmLimits}
-          />
-        </FormItem>
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
