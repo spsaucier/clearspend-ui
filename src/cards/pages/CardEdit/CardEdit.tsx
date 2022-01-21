@@ -56,7 +56,7 @@ export default function CardEdit() {
         <Match when={users.error}>
           <LoadingError onReload={users.reload} />
         </Match>
-        <Match when={allocations.loading || users.loading || mcc.loading}>
+        <Match when={allocations.loading || (users.loading && !users.data?.length) || mcc.loading}>
           <Loading />
         </Match>
         <Match when={allocations.data?.length && mcc.data?.length}>

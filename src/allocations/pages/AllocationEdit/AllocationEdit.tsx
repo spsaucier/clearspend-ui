@@ -53,7 +53,7 @@ export default function AllocationEdit() {
         <Match when={users.error}>
           <LoadingError onReload={users.reload} />
         </Match>
-        <Match when={allocations.loading || mcc.loading || users.loading}>
+        <Match when={allocations.loading || mcc.loading || (users.loading && !users.data?.length)}>
           <Loading />
         </Match>
         <Match when={allocations.data?.length && mcc.data?.length}>
