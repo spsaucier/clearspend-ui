@@ -532,6 +532,17 @@ export interface RevealCardResponse {
   ephemeralKey?: string;
 }
 
+export interface CardStatementRequest {
+  /** @format uuid */
+  cardId?: string;
+
+  /** @format date-time */
+  startDate?: string;
+
+  /** @format date-time */
+  endDate?: string;
+}
+
 export interface BusinessReallocationRequest {
   /** @format uuid */
   allocationIdFrom?: string;
@@ -2170,4 +2181,26 @@ export interface BankAccount {
 
 export interface LinkTokenResponse {
   linkToken?: string;
+}
+
+export interface AllocationRolePermissionRecord {
+  /** @format uuid */
+  id?: string;
+
+  /** @format uuid */
+  businessId?: string;
+  role_name: string;
+  permissions: (
+    | 'READ'
+    | 'CATEGORIZE'
+    | 'LINK_RECEIPTS'
+    | 'MANAGE_FUNDS'
+    | 'MANAGE_CARDS'
+    | 'MANAGE_USERS'
+    | 'MANAGE_PERMISSIONS'
+  )[];
+}
+
+export interface AllocationRolePermissionsResponse {
+  userAllocationRoleList: AllocationRolePermissionRecord[];
 }
