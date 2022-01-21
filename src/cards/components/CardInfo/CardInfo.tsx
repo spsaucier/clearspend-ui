@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
+import { join } from '_common/utils/join';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
@@ -15,11 +16,12 @@ interface CardInfoProps {
   user: Readonly<User>;
   allocation: Readonly<Allocation>;
   allocations: readonly Readonly<Allocation>[];
+  class?: string;
 }
 
 export function CardInfo(props: Readonly<CardInfoProps>) {
   return (
-    <div class={css.root}>
+    <div class={join(css.root, props.class)}>
       <div class={css.item}>
         <h4 class={css.title}>
           <Text message="Available Balance" />

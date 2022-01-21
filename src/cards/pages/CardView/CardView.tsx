@@ -2,15 +2,14 @@ import { createSignal, createEffect, createMemo, Show, Switch, Match } from 'sol
 import { useI18n, Text } from 'solid-i18n';
 import { useParams } from 'solid-app-router';
 
+import { useNav } from '_common/api/router';
 import { getNoop } from '_common/utils/getNoop';
-import { wrapAction } from '_common/utils/wrapAction';
-import { Confirm } from '_common/components/Confirm';
-import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useResource } from '_common/utils/useResource';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
 import { BackLink } from 'app/components/BackLink';
+import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
@@ -22,6 +21,7 @@ import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
 
 import { Card } from '../../components/Card';
+import { CardActions } from '../../components/CardActions';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
 import { formatCardNumber } from '../../utils/formatCardNumber';
@@ -41,17 +41,17 @@ enum Tabs {
 export default function CardView() {
   const i18n = useI18n();
   const messages = useMessages();
+  const navigate = useNav();
   const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
   const media = useMediaContext();
 
+  const { owner } = useBusiness();
   const allocations = useAllocations();
+
   const [data, status, , , reload] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
-
-  const [freezing, freeze] = wrapAction(blockCard);
-  const [unfreezing, unfreeze] = wrapAction(unblockCard);
 
   const card = createMemo(() => data()?.card);
 
@@ -63,6 +63,10 @@ export default function CardView() {
   const allocation = createMemo(
     () => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined,
   );
+
+  const onChangeStatus = (cardId: string, block: boolean) => {
+    return (block ? blockCard(cardId) : unblockCard(cardId)).then(() => reload());
+  };
 
   const onUpdateCard = async (cardId: string, updates: Readonly<UpdateCardRequest>) => {
     await updateCard(cardId, updates);
@@ -83,7 +87,7 @@ export default function CardView() {
       error={allocations.error || uStatus().error}
       onReload={() => Promise.all([allocations.reload(), reloadUser()]).catch(getNoop())}
     >
-      <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} />
+      <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} class={css.info} />
     </Data>
   );
 
@@ -95,60 +99,36 @@ export default function CardView() {
         </BackLink>
       }
       title={
-        <Show when={card()} fallback={<Text message="Loading..." />}>
-          {formatCardNumber(card()!.lastFour)}
+        <Switch fallback={formatCardNumber(card()!.lastFour)}>
+          <Match when={!card()}>
+            <Text message="Loading..." />
+          </Match>
+          <Match when={!card()!.activated}>
+            <Text message="Awaiting activation" />
+          </Match>
+        </Switch>
+      }
+      subtitle={
+        <Show when={card() && !card()!.activated}>
+          <Show
+            when={card()!.issueDate}
+            fallback={<Text message="This card will be mailed out in 1-2 business days." />}
+          >
+            <Text message="When this card arrives in the mail, follow the instructions provided to activate it." />
+          </Show>
         </Show>
       }
       actions={
         <div class={css.actions}>
-          <Button size="lg" type="primary" view="ghost" onClick={toggleDetails}>
-            <Text message="Show Card Details" />
-          </Button>
-          <Switch>
-            <Match when={card()?.status === 'ACTIVE'}>
-              <Confirm
-                position="bottom-right"
-                question={
-                  <Text message="Freezing the card will prevent the cardholder from performing any transactions." />
-                }
-                confirmText={<Text message="Freeze card now" />}
-                onConfirm={() => {
-                  freeze(card()!.cardId!)
-                    .then(() => reload())
-                    .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
-                }}
-              >
-                {(triggerProps) => (
-                  <Button
-                    size="lg"
-                    icon="freeze"
-                    type="danger"
-                    view="second"
-                    loading={freezing()}
-                    onClick={triggerProps.onClick}
-                  >
-                    <Text message="Freeze Card" />
-                  </Button>
-                )}
-              </Confirm>
-            </Match>
-            <Match when={card()?.status === 'INACTIVE'}>
-              <Button
-                size="lg"
-                icon="freeze"
-                type="primary"
-                view="second"
-                loading={unfreezing()}
-                onClick={() => {
-                  unfreeze(card()!.cardId!)
-                    .then(() => reload())
-                    .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
-                }}
-              >
-                <Text message="Unfreeze Card" />
-              </Button>
-            </Match>
-          </Switch>
+          <Show when={card()}>
+            <CardActions
+              user={owner()}
+              card={card()!}
+              onActivate={() => navigate(`/cards/activate/${card()!.cardId}`)}
+              onShowDetails={toggleDetails}
+              onChangeStatus={onChangeStatus}
+            />
+          </Show>
         </div>
       }
       headerSide={
@@ -159,10 +139,11 @@ export default function CardView() {
             allocation={media.medium ? undefined : allocation()?.name}
             number={card()!.lastFour || ''}
             balance={media.medium ? undefined : allocation()?.account.ledgerBalance.amount || 0}
+            notActivated={!card()!.activated}
           />
         </Show>
       }
-      subtitle={
+      headerContent={
         <Show when={card() && media.medium}>
           <CardInfoBlock />
         </Show>

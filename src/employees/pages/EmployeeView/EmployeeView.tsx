@@ -65,7 +65,7 @@ export default function EmployeeView() {
           {(data) => formatName(data)}
         </Show>
       }
-      subtitle={
+      headerContent={
         <Show when={user()}>
           {(data) => (
             <div class={css.info}>

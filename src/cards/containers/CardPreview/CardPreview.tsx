@@ -73,6 +73,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
             number={card()!.lastFour || ''}
             allocation={allocation()?.name}
             balance={data()!.availableBalance.amount}
+            notActivated={!card()!.activated}
             class={css.card}
           />
           <TabList value={tab()} onChange={setTab}>

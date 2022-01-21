@@ -6,12 +6,11 @@ import { times } from '../../utils/times';
 
 import css from './InputCode.css';
 
-const CODE_LENGTH = 6;
-
 export interface InputCodeProps {
   ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
   name?: string;
   value: string;
+  codeLength: number;
   error?: boolean;
   disabled?: boolean;
   class?: string;
@@ -38,7 +37,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
     return (value: string, event: InputEvent) => {
       // Safari's auto paste from SMS
       if (event instanceof CustomEvent) {
-        if (value.length === CODE_LENGTH) {
+        if (value.length === props.codeLength) {
           setValue(value);
           props.onChange(value);
         }
@@ -68,7 +67,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
 
   return (
     <div data-name={props.name} class={join(css.root, props.class)}>
-      <Index each={times(CODE_LENGTH)}>
+      <Index each={times(props.codeLength)}>
         {(_: unknown, idx: number) => (
           <Input
             ref={setRef(idx)}

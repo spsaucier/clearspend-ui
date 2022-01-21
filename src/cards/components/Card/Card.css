@@ -16,3 +16,10 @@
   font-weight: var(--font-700);
   line-height: var(--line-28);
 }
+
+.not-activated {
+  font-size: var(--text-16);
+  line-height: var(--line-24);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}

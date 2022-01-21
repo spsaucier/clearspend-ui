@@ -36,6 +36,7 @@ export enum IconName {
   'payment-bank' = 'payment-bank',
   'payment-card' = 'payment-card',
   photo = 'photo',
+  power = 'power',
   receipt = 'receipt',
   'receipt-unavailable' = 'receipt-unavailable',
   search = 'search',
@@ -46,6 +47,8 @@ export enum IconName {
   upload = 'upload',
   user = 'user',
   'user-super' = 'user-super',
+  view = 'view',
   'warning-rounded' = 'warning-rounded',
+  'warning-triangle' = 'warning-triangle',
   'z-placeholder' = 'z-placeholder',
 }

@@ -57,6 +57,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
           <InputCode
             ref={input}
             name="code"
+            codeLength={VALID_LENGTH}
             value={values().code}
             error={Boolean(errors().code)}
             disabled={loading()}

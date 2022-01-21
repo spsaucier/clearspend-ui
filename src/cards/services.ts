@@ -41,3 +41,9 @@ export async function unblockCard(cardId: string) {
     await service.patch(`/users/cards/${cardId}/unblock`, { status: 'ACTIVE', statusReason: 'CARDHOLDER_REQUESTED' })
   ).data;
 }
+
+export async function activateCard(cardId: string, lastFour: string) {
+  return (
+    await service.patch<Card>(`/users/cards/${cardId}/activate`, { lastFour, statusReason: 'CARDHOLDER_REQUESTED' })
+  ).data;
+}

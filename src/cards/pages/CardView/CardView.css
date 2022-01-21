@@ -5,3 +5,7 @@
   flex-shrink: 0;
   grid-gap: var(--pd-8) var(--pd-12);
 }
+
+.info {
+  margin-top: var(--pd-24);
+}

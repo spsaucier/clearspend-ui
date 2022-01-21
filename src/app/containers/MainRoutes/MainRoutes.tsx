@@ -7,6 +7,7 @@ import { Allocations } from 'allocations';
 import { AllocationEdit } from 'allocations/pages/AllocationEdit';
 import { Cards } from 'cards';
 import { CardView } from 'cards/pages/CardView';
+import { CardActivate } from 'cards/pages/CardActivate';
 import { CardEdit } from 'cards/pages/CardEdit';
 
 import { MainLayout } from '../../components/MainLayout';
@@ -31,6 +32,7 @@ export function MainRoutes() {
         <Route path="/cards" element={<Cards />} />
         <Route path="/cards/edit" element={<CardEdit />} />
         <Route path="/cards/view/:id" element={<CardView />} />
+        <Route path="/cards/activate/:id" element={<CardActivate />} />
 
         <Route path="/test/access" element={<AccessInfo />} />
       </Routes>

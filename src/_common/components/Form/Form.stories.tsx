@@ -31,7 +31,7 @@ export const KeyboardAccessibility = () => {
       </FormItem>
       <FormItem>
         {/* eslint-disable-next-line no-empty-function */}
-        <InputCode value={''} onChange={() => {}} />
+        <InputCode codeLength={6} value={''} onChange={() => {}} />
       </FormItem>
       <FormItem>
         <SelectState value={state()} onChange={setState} />

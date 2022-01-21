@@ -15,6 +15,7 @@ interface PageProps {
   title: JSXElement;
   titleClass?: string;
   subtitle?: JSXElement;
+  headerContent?: JSXElement;
   side?: JSXElement;
   headerSide?: JSXElement;
   breadcrumbs?: JSXElement;
@@ -48,13 +49,16 @@ export function Page(props: Readonly<PageProps>) {
             <div>
               <div class={css.headerMain}>
                 <div class={css.titleWrap}>
-                  <h1 class={join(css.title, props.titleClass)}>{props.title}</h1>
+                  <div>
+                    <h1 class={join(css.title, props.titleClass)}>{props.title}</h1>
+                    {props.subtitle}
+                  </div>
                   {props.extra}
                 </div>
                 {props.actions}
               </div>
-              <Show when={props.subtitle}>
-                <div class={css.subtitle}>{props.subtitle}</div>
+              <Show when={props.headerContent}>
+                <div class={css.headerContent}>{props.headerContent}</div>
               </Show>
             </div>
           </div>

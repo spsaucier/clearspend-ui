@@ -6,11 +6,9 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import type { StoreSetter } from '_common/utils/store';
 import { getNoop } from '_common/utils/getNoop';
 import { InputSearch } from '_common/components/InputSearch';
-import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
-import { Tag } from '_common/components/Tag';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Filters } from 'app/components/Filters';
 import { FiltersButton } from 'app/components/FiltersButton';
@@ -21,6 +19,7 @@ import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
+import { CardStatus } from '../CardStatus';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { CardType as CardTypeType } from '../../types';
 
@@ -80,12 +79,8 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     {
       name: 'status',
       title: 'Status',
-      render: (item) => (
-        <Tag type={item.cardStatus === 'ACTIVE' ? 'success' : 'danger'}>
-          <Icon name="freeze" size="xs" />
-          <span>{item.cardStatus?.toLowerCase()}</span>
-        </Tag>
-      ),
+      // TODO: get activated value from server data (waiting for API updates)
+      render: (item) => <CardStatus status={item.cardStatus!} activated={true} />,
     },
   ];
 

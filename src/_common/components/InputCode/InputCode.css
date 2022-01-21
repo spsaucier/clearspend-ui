@@ -3,14 +3,13 @@
 .root {
   display: flex;
   width: 100%;
-  min-width: 240px;
-  max-width: 360px;
   align-items: center;
   justify-content: space-between;
 }
 
 .input {
   width: v-width;
+  flex-shrink: 0;
 
   & input {
     text-align: center;
