@@ -79,6 +79,7 @@ export function SelectDateOfBirth(props: Readonly<SelectDateOfBirthProps>) {
         placeholder={String(i18n.t('Day'))}
         error={props.error}
         disabled={props.disabled}
+        popupClass={css.dayPopup}
         onChange={(value) => {
           if (!value) return;
           setDay(value);
@@ -93,6 +94,7 @@ export function SelectDateOfBirth(props: Readonly<SelectDateOfBirthProps>) {
         placeholder={String(i18n.t('Year'))}
         error={props.error}
         disabled={props.disabled}
+        popupClass={css.yearPopup}
         onChange={(value) => {
           if (!value) return;
           setYear(value);

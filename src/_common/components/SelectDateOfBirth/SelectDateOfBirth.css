@@ -7,3 +7,11 @@
 .month-popup {
   min-width: 140px;
 }
+
+.day-popup {
+  min-width: 80px;
+}
+
+.year-popup {
+  min-width: 100px;
+}
