@@ -47,7 +47,11 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
         <div class={css.card}>
           <CardIcon type={item.cardType as CardTypeType} />
           <div>
-            {formatCardNumber(item.cardNumber)}
+            {item.cardNumber && item.activated ? (
+              formatCardNumber(item.cardNumber)
+            ) : (
+              <Text class={css.name!} message="Awaiting activation" />
+            )}
             <CardType type={item.cardType as CardTypeType} class={css.type} />
           </div>
         </div>

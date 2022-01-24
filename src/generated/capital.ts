@@ -519,6 +519,10 @@ export interface SearchCardData {
   balance?: Amount;
   cardStatus?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
   cardType?: 'PHYSICAL' | 'VIRTUAL';
+  activated?: boolean;
+
+  /** @format date-time */
+  activationDate?: string;
 }
 
 export interface RevealCardRequest {

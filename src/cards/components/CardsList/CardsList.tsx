@@ -41,7 +41,11 @@ export function CardsList(props: Readonly<CardsListProps>) {
             <div class={css.item} onClick={() => props.onCardClick(item.cardId!)}>
               <CardIcon type={item.cardType as CardTypeType} />
               <div>
-                <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>
+                {item.cardNumber && item.activated ? (
+                  <div class={css.name}>{formatCardNumber(item.cardNumber)}</div>
+                ) : (
+                  <Text class={css.name!} message="Awaiting activation" />
+                )}
                 <CardType type={item.cardType as CardTypeType} class={css.type} />
               </div>
               <div>
