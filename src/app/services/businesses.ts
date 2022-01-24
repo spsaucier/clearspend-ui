@@ -1,6 +1,12 @@
 import { AppEvent } from 'app/types/common';
 import { service } from 'app/utils/service';
-import type { Account, Business, User } from 'generated/capital';
+import type {
+  Account,
+  Business,
+  User,
+  BusinessReallocationRequest,
+  BusinessFundAllocationResponse,
+} from 'generated/capital';
 import { events } from '_common/api/events';
 
 export async function getOwner() {
@@ -17,4 +23,8 @@ export async function getBusiness() {
 
 export async function getBusinessAccount() {
   return (await service.get<Readonly<Account>>('/businesses/accounts')).data;
+}
+
+export async function makeTransaction(params: Required<BusinessReallocationRequest>) {
+  return (await service.post<Required<BusinessFundAllocationResponse>>('/businesses/transactions', params)).data;
 }

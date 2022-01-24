@@ -1,1 +1,1 @@
-export { BankAccounts } from './BankAccounts';
+export { isBankAccount, BankAccounts } from './BankAccounts';

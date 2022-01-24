@@ -12,11 +12,3 @@ export function formatCurrency(value: number, options?: Readonly<Partial<FormatC
     maximumFractionDigits: options?.fractions,
   });
 }
-
-export function formatBigNumber(value: number, options?: Readonly<Partial<FormatCurrencyOptions>>): string {
-  return i18n.formatNumber(value, {
-    style: 'decimal',
-    minimumFractionDigits: options?.fractions,
-    maximumFractionDigits: options?.fractions,
-  });
-}

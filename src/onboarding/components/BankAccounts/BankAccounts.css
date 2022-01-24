@@ -1,5 +1,5 @@
 .root {
-  gap: var(--pd-24);
+  gap: var(--pd-16);
 }
 
 .item {
@@ -21,7 +21,7 @@
 
   @nest .item > input:checked + & {
     background-color: var(--tw-primary-light);
-    border-color: var(--tw-primary-border);
+    border-color: var(--tw-primary-bg);
   }
 }
 
@@ -37,11 +37,6 @@
 
 .name {
   font-weight: var(--font-400);
-}
-
-.type {
-  margin-left: var(--pd-4);
-  flex-shrink: 0;
 }
 
 .number {

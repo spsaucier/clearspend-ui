@@ -5,9 +5,11 @@ import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 // import { Tag } from '_common/components/Tag';
+import { Drawer } from '_common/components/Drawer';
 import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 
@@ -23,6 +25,7 @@ export default function Dashboard() {
   const { owner } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>();
+  const [manageId, setManageId] = createSignal<string>();
 
   const allocations = useAllocations({
     initValue: [],
@@ -49,8 +52,14 @@ export default function Dashboard() {
       }
       actions={
         <div class={css.actions}>
-          <Button id="add-balance-button" type="primary" size="lg" icon="add">
-            Add balance
+          <Button
+            id="add-balance-button"
+            type="primary"
+            size="lg"
+            icon="dollars"
+            onClick={() => setManageId(allocation())}
+          >
+            <Text message="Manage Balance" />
           </Button>
           <Dropdown
             id="add-new-dropdown"
@@ -58,19 +67,19 @@ export default function Dashboard() {
             menu={
               <>
                 <MenuItem name="employee" onClick={() => navigate('/employees/edit')}>
-                  Employee
+                  <Text message="Employee" />
                 </MenuItem>
                 <MenuItem name="allocation" onClick={() => navigate('/allocations/edit')}>
-                  Allocation
+                  <Text message="Allocation" />
                 </MenuItem>
                 <MenuItem name="card" onClick={() => navigate('/cards/edit')}>
-                  Card
+                  <Text message="Card" />
                 </MenuItem>
               </>
             }
           >
             <Button id="add-new-button" size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
-              Add new
+              <Text message="Add new" />
             </Button>
           </Dropdown>
         </div>
@@ -88,6 +97,9 @@ export default function Dashboard() {
           {/*<Landing />*/}
         </Match>
       </Switch>
+      <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
+        <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
+      </Drawer>
     </Page>
   );
 }

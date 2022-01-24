@@ -4,8 +4,7 @@ import { Select, Option } from '_common/components/Select';
 import type { Allocation } from 'generated/capital';
 
 import { allocationWithID } from '../../utils/allocationWithID';
-
-import { AllocationView } from './AllocationView';
+import { AllocationView } from '../AllocationView';
 
 import css from './AllocationSelect.css';
 

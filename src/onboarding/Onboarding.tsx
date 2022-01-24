@@ -38,7 +38,7 @@ export default function Onboarding() {
   const { business, owner, refetch, mutate } = useContext(BusinessContext)!;
 
   const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep as OnboardingStep);
-  const [accounts, setAccounts] = createSignal<readonly Readonly<BankAccount>[]>([]);
+  const [accounts, setAccounts] = createSignal<readonly Readonly<Required<BankAccount>>[]>([]);
 
   const [kybRequiredDocuments, setkybRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
   const [kycRequiredDocuments, setkycRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();

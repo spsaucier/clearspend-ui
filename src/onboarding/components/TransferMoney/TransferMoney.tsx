@@ -24,7 +24,7 @@ interface FormValues {
 }
 
 interface TransferMoneyProps {
-  accounts: readonly Readonly<BankAccount>[];
+  accounts: readonly Readonly<Required<BankAccount>>[];
   onDeposit: (accountId: string, amount: number) => Promise<unknown>;
 }
 

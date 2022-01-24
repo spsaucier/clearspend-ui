@@ -11,7 +11,7 @@ export interface DataState<T> {
 
 export function useResource<T, P extends unknown>(
   fetcher: (params: P) => Promise<T>,
-  initParams: P | undefined,
+  initParams?: P,
   fetchOnMount: boolean = true,
 ) {
   const [params, setParams] = createSignal<P>(cloneObject(initParams as P));

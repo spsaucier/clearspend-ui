@@ -1,0 +1,1 @@
+export { AllocationView } from './AllocationView';

@@ -10,6 +10,7 @@ import { Button } from '_common/components/Button';
 import { Tab, TabList } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
+import { Drawer } from '_common/components/Drawer';
 import { useMessages } from 'app/containers/Messages/context';
 import type { UpdateAllocationRequest } from 'generated/capital';
 
@@ -19,6 +20,7 @@ import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
 import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
+import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
 import { getRootAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
@@ -40,6 +42,7 @@ export default function Allocations() {
   const params = useParams<{ id?: string }>();
 
   const [tab, setTab] = createSignal(Tabs.cards);
+  const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
 
   const onIdChange = (id: string) => {
@@ -75,8 +78,8 @@ export default function Allocations() {
           breadcrumbs={<Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
             <div class={css.actions}>
-              <Button type="primary" size="lg" icon="add">
-                <Text message="Add Funds" />
+              <Button type="primary" size="lg" icon="dollars" onClick={() => setManageId(current()?.allocationId)}>
+                <Text message="Manage Balance" />
               </Button>
               <Button
                 icon="add"
@@ -125,6 +128,9 @@ export default function Allocations() {
               <Settings allocation={current()!} onReload={allocations.reload} />
             </Match>
           </Switch>
+          <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
+            <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
+          </Drawer>
         </Page>
       </Show>
     </Data>
