@@ -1,12 +1,13 @@
 import { For, createSignal } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { Button } from '_common/components/Button';
 import type { StoreSetter } from '_common/utils/store';
 import type { SearchUserRequest } from 'generated/capital';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
+import { FilterBox } from 'app/components/FilterBox';
+import { FiltersControls } from 'app/components/FiltersControls';
 import { useAllocations } from 'allocations/stores/allocations';
-import { Checkbox } from '_common/components/Checkbox';
+import { CheckboxGroup, Checkbox } from '_common/components/Checkbox';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { FormItem } from '_common/components/Form';
 import { Radio, RadioGroup } from '_common/components/Radio';
@@ -75,12 +76,11 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   };
 
   return (
-    <>
-      <div class={css.sideBarFilters}>
-        <section>
-          <div class={css.sectionTitle}>Amount</div>
+    <div class={css.root}>
+      <div class={css.filters}>
+        <FilterBox title={<Text message="Amount" />}>
           <div class={css.minMaxInputWrapper}>
-            <FormItem label={<Text message="Min value" />}>
+            <FormItem label={<Text message="Min value" />} class={css.inputAmount}>
               <InputCurrency
                 name="min amount"
                 placeholder={'0.00'}
@@ -88,7 +88,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
                 onChange={(v) => setAmountMin(+v)}
               />
             </FormItem>
-            <FormItem label={<Text message="Max value" />}>
+            <FormItem label={<Text message="Max value" />} class={css.inputAmount}>
               <InputCurrency
                 name="max amount"
                 value={amountMax()}
@@ -97,9 +97,8 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
               />
             </FormItem>
           </div>
-        </section>
-        <section>
-          <div class={css.sectionTitle}>Categories</div>
+        </FilterBox>
+        <FilterBox title={<Text message="Categories" />}>
           <MultiSelect
             value={categories()}
             onChange={setCategories}
@@ -112,39 +111,31 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
               }}
             </For>
           </MultiSelect>
-        </section>
-        <section>
-          <div class={css.sectionTitle}>Payment Status</div>
-          <Checkbox checked={isApproved()} onChange={setIsApproved}>
-            <Text message="Approved" />
-          </Checkbox>
-          <Checkbox checked={isBlocked()} onChange={setIsBlocked}>
-            <Text message="Blocked" />
-          </Checkbox>
-          <Checkbox checked={isPending()} onChange={setIsPending}>
-            <Text message="Pending" />
-          </Checkbox>
-        </section>
-        <section>
-          <div class={css.sectionTitle}>Receipt</div>
-          <RadioGroup name="receipt-filter-options" class={css.receiptFilter}>
+        </FilterBox>
+        <FilterBox title={<Text message="Payment Status" />}>
+          <CheckboxGroup>
+            <Checkbox checked={isApproved()} onChange={setIsApproved}>
+              <Text message="Approved" />
+            </Checkbox>
+            <Checkbox checked={isBlocked()} onChange={setIsBlocked}>
+              <Text message="Blocked" />
+            </Checkbox>
+            <Checkbox checked={isPending()} onChange={setIsPending}>
+              <Text message="Pending" />
+            </Checkbox>
+          </CheckboxGroup>
+        </FilterBox>
+        <FilterBox title={<Text message="Receipt" />}>
+          <RadioGroup name="receipt-filter-options">
             <Radio value="true">Has receipt</Radio>
             <Radio value="false">Does not have receipt</Radio>
           </RadioGroup>
-        </section>
-        <section>
-          <div class={css.sectionTitle}>Transaction Date</div>
+        </FilterBox>
+        <FilterBox title={<Text message="Transaction Date" />}>
           <SelectDateRange value={dateRange()} onChange={(dates) => setDateRange(dates)} />
-        </section>
+        </FilterBox>
       </div>
-      <div class={css.controls}>
-        <Button wide type="default" onClick={() => resetFilters()}>
-          <Text message="Reset" />
-        </Button>
-        <Button wide type="primary" onClick={() => applyFilters()}>
-          <Text message="Confirm" />
-        </Button>
-      </div>
-    </>
+      <FiltersControls onReset={resetFilters} onConfirm={applyFilters} />
+    </div>
   );
 }

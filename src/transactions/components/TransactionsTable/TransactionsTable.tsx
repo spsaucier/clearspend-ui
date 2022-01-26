@@ -170,6 +170,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       </Show>
 
       <Drawer
+        noPadding
         open={filterPanelOpen()}
         title={<Text message="Filter Transactions" />}
         onClose={() => setFilterPanelOpen(false)}
