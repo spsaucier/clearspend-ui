@@ -2,13 +2,11 @@ import { createMemo, createSignal, createEffect, untrack } from 'solid-js';
 import { Show } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
-import { useBool } from '_common/utils/useBool';
 import { useResource } from '_common/utils/useResource';
 import { useMediaContext } from '_common/api/media/context';
 import { Drawer } from '_common/components/Drawer';
 import { CardsData } from 'cards/components/CardsData';
 import { CardPreview } from 'cards/containers/CardPreview';
-import { CardsFilters } from 'cards/containers/CardsFilters';
 import { searchCards } from 'cards/services';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { Allocation, SearchCardRequest } from 'generated/capital';
@@ -33,7 +31,6 @@ interface CardsProps {
 export function Cards(props: Readonly<CardsProps>) {
   const media = useMediaContext();
 
-  const [showFilters, toggleFilters] = useBool();
   const [cardID, setCardID] = createSignal<string | null>(null);
   const [userID, setUserID] = createSignal<string | null>(null);
 
@@ -70,16 +67,13 @@ export function Cards(props: Readonly<CardsProps>) {
         error={status().error}
         search={params().searchText}
         data={cards()}
-        hide={['allocation']}
+        hiddenFields={['allocation']}
         onReload={reload}
         onCardClick={setCardID}
         onUserClick={setUserID}
-        onFiltersClick={toggleFilters}
+        params={params()}
         onChangeParams={setParams}
       />
-      <Drawer noPadding open={showFilters()} title={<Text message="Filter cards" />} onClose={toggleFilters}>
-        <CardsFilters exclude="allocations" onClose={toggleFilters} />
-      </Drawer>
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
         <CardPreview cardID={cardID()!} />
       </Drawer>

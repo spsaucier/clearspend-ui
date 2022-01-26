@@ -14,12 +14,12 @@ interface CardsDataProps {
   search?: string;
   data: Readonly<PagedDataSearchCardData> | null;
   table?: boolean;
-  hide?: readonly string[];
+  hiddenFields?: readonly string[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
-  onFiltersClick: () => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
+  params: SearchCardRequest;
 }
 
 export function CardsData(props: Readonly<CardsDataProps>) {
@@ -29,11 +29,11 @@ export function CardsData(props: Readonly<CardsDataProps>) {
         component={props.table ? CardsTable : CardsList}
         search={props.search}
         data={props.data!}
-        hideColumns={props.hide}
+        hideColumns={props.hiddenFields}
         onUserClick={props.onUserClick}
         onCardClick={props.onCardClick}
-        onFiltersClick={props.onFiltersClick}
         onChangeParams={props.onChangeParams}
+        params={props.params}
       />
     </Data>
   );

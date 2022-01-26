@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
@@ -16,11 +16,13 @@ import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { formatName } from 'employees/utils/formatName';
 import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 'generated/capital';
+import { Drawer } from '_common/components/Drawer';
+import { CardsFilterDrawer } from 'cards/containers/CardsFilterDrawer';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { CardStatus } from '../CardStatus';
-import { formatCardNumber } from '../../utils/formatCardNumber';
 import type { CardType as CardTypeType } from '../../types';
 
 import css from './CardsTable.css';
@@ -31,12 +33,13 @@ interface CardsTableProps {
   hideColumns?: readonly string[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
-  onFiltersClick: () => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
+  params: SearchCardRequest;
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
   const i18n = useI18n();
+  const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
 
   const columns: readonly Readonly<TableColumn<SearchCardData>>[] = [
     {
@@ -107,7 +110,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <FiltersButton count={0} onReset={getNoop()} onClick={props.onFiltersClick} />
+        <FiltersButton count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
         <Button icon={{ name: 'download', pos: 'right' }}>
           <Text message="Export" />
         </Button>
@@ -118,6 +121,19 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           data={props.data.content || []}
         />
       </Show>
+
+      <Drawer
+        noPadding
+        open={filterPanelOpen()}
+        title={<Text message="Filter cards" />}
+        onClose={() => setFilterPanelOpen(false)}
+      >
+        <CardsFilterDrawer
+          onChangeParams={props.onChangeParams}
+          params={props.params}
+          hiddenFields={props.hideColumns}
+        />
+      </Drawer>
     </div>
   );
 }

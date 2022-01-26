@@ -30,6 +30,7 @@
   }
 }
 
+.icon,
 .chevron {
   position: absolute;
   top: 50%;
@@ -40,7 +41,9 @@
   transform-origin: center;
   will-change: auto;
   pointer-events: none;
+}
 
+.chevron {
   @nest .root[data-open='true'] & {
     transform: translateY(-50%) rotate(180deg);
   }

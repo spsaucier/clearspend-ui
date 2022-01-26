@@ -9,10 +9,10 @@ import { Empty } from 'app/components/Empty';
 import type { StoreSetter } from '_common/utils/store';
 import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 import type { CardType as CardTypeType } from 'cards/types';
+import { formatCardNumber } from 'cards/utils/formatCardNumber';
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
-import { formatCardNumber } from '../../utils/formatCardNumber';
 
 import css from './CardsList.css';
 

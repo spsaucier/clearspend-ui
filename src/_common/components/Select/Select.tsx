@@ -133,7 +133,7 @@ export function Select(props: Readonly<SelectProps>) {
             : selected()}
         </span>
         <Show when={!props.changeOnSearch}>
-          <Icon name="chevron-down" size="sm" class={join(css.chevron)} />
+          <Icon name={props.iconName ?? 'chevron-down'} size="sm" class={props.iconName ? css.icon : css.chevron} />
         </Show>
       </div>
     </Popover>
