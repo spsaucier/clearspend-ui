@@ -2091,7 +2091,7 @@ export interface Receipt {
   amount: Amount;
 }
 
-export interface UserAllocationRoleRecord {
+export interface UserAllocationRole {
   /** @format uuid */
   userAllocationRoleId?: string;
 
@@ -2103,7 +2103,7 @@ export interface UserAllocationRoleRecord {
 }
 
 export interface UserAllocationRolesResponse {
-  userAllocationRoleList: UserAllocationRoleRecord[];
+  userAllocationRoleList: UserAllocationRole[];
 }
 
 export interface CreateTestDataResponse {

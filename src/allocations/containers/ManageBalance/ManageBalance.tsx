@@ -63,8 +63,8 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
     isBankAccount(target)
       ? await bankTransaction(tab() === Tabs.add ? 'DEPOSIT' : 'WITHDRAW', id, amount)
       : await makeTransaction({
-          allocationIdFrom: current()!.allocationId,
-          allocationIdTo: target.allocationId,
+          allocationIdFrom: tab() === Tabs.add ? target.allocationId : current()!.allocationId,
+          allocationIdTo: tab() === Tabs.add ? current()!.allocationId : target.allocationId,
           amount: { currency: 'USD', amount },
         });
 
