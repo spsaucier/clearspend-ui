@@ -1,7 +1,8 @@
-import { service } from 'app/utils/service';
+import { RespType, service } from 'app/utils/service';
 import type {
   Card,
   CardDetailsResponse,
+  CardStatementRequest,
   IssueCardRequest,
   PagedDataSearchCardData,
   RevealCardRequest,
@@ -28,6 +29,10 @@ export async function searchCards(params: Readonly<SearchCardRequest>) {
 
 export async function revealCardKey(params: Readonly<RevealCardRequest>) {
   return (await service.post<Readonly<RevealCardResponse>>(`/cards/reveal`, params)).data;
+}
+
+export async function getCardStatement(params: Required<CardStatementRequest>) {
+  return (await service.post<Blob>('/card-statement', params, { respType: RespType.blob })).data;
 }
 
 export async function blockCard(cardId: string) {

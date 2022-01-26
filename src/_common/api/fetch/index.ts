@@ -1,11 +1,11 @@
-import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+/* eslint-disable prefer-promise-reject-errors */
 
 import type { FetchMethod, FetchOptions, FetchResponse } from './types';
+import { RespType } from './types';
 
 function parse<T = unknown>(body: string, type: string | null): T {
   if (type?.includes('application/json')) return JSON.parse(body) as T;
   if (type?.includes('text/plain')) return body as unknown as T;
-  if (type?.includes('application/octet-stream')) return body as unknown as T;
   return null as unknown as T;
 }
 
@@ -22,38 +22,32 @@ export function fetch<T = unknown>(
         cache: 'no-cache',
         body: params ? (params instanceof FormData ? params : JSON.stringify(params)) : null,
         headers:
+          // TODO: Extract
           params instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers },
       })
       .then((resp) => {
-        const contentType = resp.headers.get('content-type');
+        const response: FetchResponse = { url, method, status: resp.status, data: null };
 
-        if (contentType?.includes('application/octet-stream')) {
-          return resp.blob() as unknown;
-        }
-
-        const response: FetchResponse = { url, status: resp.status, data: null };
-
-        return resp
-          .text()
-          .then((body: string) => {
-            const result: FetchResponse<T> = {
-              ...response,
-              data: parse(body, contentType),
-            };
-            if (resp.ok) {
-              sendAnalyticsEvent({ name: Events[`${method}_SUCCESS`], data: { url } });
-              resolve(result);
-            } else {
-              sendAnalyticsEvent({ name: Events[`${method}_ERROR`], data: { url, result } });
-              reject(result);
-            }
-          })
-          .catch((error: Error) => {
-            sendAnalyticsEvent({ name: Events[`${method}_ERROR`], data: { url, error } });
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ ...response, data: error });
-          });
+        (() => {
+          switch (options.respType) {
+            case RespType.blob:
+              return resp.blob().then((body: Blob) => {
+                const result: FetchResponse<T> = { ...response, data: body as unknown as T };
+                resp.ok ? resolve(result) : reject(result);
+              });
+            case RespType.default:
+            default:
+              return resp.text().then((body: string) => {
+                const result: FetchResponse<T> = { ...response, data: parse(body, resp.headers.get('content-type')) };
+                resp.ok ? resolve(result) : reject(result);
+              });
+          }
+        })().catch((error: unknown) => {
+          reject({ ...response, data: error });
+        });
       })
-      .catch(reject);
+      .catch((error: unknown) => {
+        reject({ url, method, status: 0, data: error });
+      });
   });
 }

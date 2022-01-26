@@ -9,16 +9,23 @@ export enum HttpStatus {
   ServerError = 500,
 }
 
+export enum RespType {
+  default,
+  blob,
+}
+
 export interface FetchHeaders {
   [key: string]: string;
 }
 
 export interface FetchOptions {
   headers: FetchHeaders;
+  respType: RespType;
 }
 
 export interface FetchResponse<T = unknown> {
   url: string;
+  method: FetchMethod;
   status: HttpStatus;
   data: T;
 }

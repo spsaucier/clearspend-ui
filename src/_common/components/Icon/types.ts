@@ -36,6 +36,7 @@ export enum IconName {
   'more-vertical' = 'more-vertical',
   'payment-bank' = 'payment-bank',
   'payment-card' = 'payment-card',
+  pdf = 'pdf',
   photo = 'photo',
   power = 'power',
   receipt = 'receipt',

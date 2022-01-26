@@ -24,6 +24,7 @@ import { Card } from '../../components/Card';
 import { CardActions } from '../../components/CardActions';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
+import { Statements } from '../../containers/Statements';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { getCard, updateCard, blockCard, unblockCard } from '../../services';
 import type { CardType } from '../../types';
@@ -36,6 +37,7 @@ enum Tabs {
   transactions,
   controls,
   info,
+  statements,
 }
 
 export default function CardView() {
@@ -162,6 +164,9 @@ export default function CardView() {
               <Text message="Info" />
             </Tab>
           )}
+          <Tab value={Tabs.statements}>
+            <Text message="Statements" />
+          </Tab>
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
@@ -177,6 +182,13 @@ export default function CardView() {
               allocationId={card()!.allocationId}
               maxAmount={data()!.ledgerBalance}
               onSave={onUpdateCard}
+            />
+          </Match>
+          <Match when={tab() === Tabs.statements}>
+            <Statements
+              cardId={card()!.cardId!}
+              issueDate={card()!.issueDate!}
+              expirationDate={card()!.expirationDate!}
             />
           </Match>
         </Switch>
