@@ -42,14 +42,11 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const [tab, setTab] = createSignal(Tabs.transactions);
 
   const allocations = useAllocations();
-  const [data, status, , , reload] = useResource(getCard, props.cardID);
+  const [data, getCardRequestStatus, , , reload] = useResource(getCard, props.cardID);
   const [user, , , setUserID] = useResource(getUser, undefined, false);
 
-  const [activity, aStatus, aParams, setActivityParams, reloadActivity] = useResource(
-    getAccountActivity,
-    DEFAULT_ACTIVITY_PARAMS,
-    false,
-  );
+  const [activity, accountActivityRequestStatus, accountActivityParams, setActivityParams, reloadActivity] =
+    useResource(getAccountActivity, DEFAULT_ACTIVITY_PARAMS, false);
 
   const card = createMemo(() => data()?.card);
 
@@ -65,7 +62,12 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
 
   return (
     <div class={css.root}>
-      <Data data={card()} loading={status().loading} error={status().error} onReload={reload}>
+      <Data
+        data={card()}
+        loading={getCardRequestStatus().loading}
+        error={getCardRequestStatus().error}
+        onReload={reload}
+      >
         <div>
           <Card
             type={card()!.type as CardType}
@@ -86,8 +88,17 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.transactions}>
-              <Data data={activity()} loading={aStatus().loading} error={aStatus().error} onReload={reloadActivity}>
-                <TransactionsList params={aParams()} data={activity()!} onChangeParams={setActivityParams} />
+              <Data
+                data={activity()}
+                loading={accountActivityRequestStatus().loading}
+                error={accountActivityRequestStatus().error}
+                onReload={reloadActivity}
+              >
+                <TransactionsList
+                  params={accountActivityParams()}
+                  data={activity()!}
+                  onChangeParams={setActivityParams}
+                />
               </Data>
             </Match>
             <Match when={tab() === Tabs.details}>

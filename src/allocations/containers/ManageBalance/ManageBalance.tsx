@@ -8,11 +8,14 @@ import { LoadingError } from 'app/components/LoadingError';
 import { makeTransaction } from 'app/services/businesses';
 import { isBankAccount } from 'onboarding/components/BankAccounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
-import type { Allocation } from 'generated/capital';
+import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
+import {
+  ManageBalanceSuccess,
+  ManageBalanceSuccessData,
+} from 'allocations/components/ManageBalanceSuccess/ManageBalanceSuccess';
 
 import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
-import { ManageBalanceSuccess, SuccessData } from '../../components/ManageBalanceSuccess';
 import { useAllocations } from '../../stores/allocations';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getParentsChain } from '../../utils/getParentsChain';
@@ -34,9 +37,9 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
 
   const [current, setCurrent] = createSignal<Readonly<Allocation>>();
-  const [successData, setSuccessData] = createSignal<Readonly<SuccessData>>();
+  const [manageBalanceSucessData, setManageBalanceSuccessData] = createSignal<Readonly<ManageBalanceSuccessData>>();
 
-  const [accounts, aStatus, , , reloadAccounts] = useResource(getBankAccounts, undefined, false);
+  const [accounts, accountsRequestStatus, , , reloadAccounts] = useResource(getBankAccounts, undefined, false);
 
   const allocations = useAllocations({
     initValue: [],
@@ -59,17 +62,33 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
 
   const onUpdate = async (id: string, amount: number) => {
     const target = targets().find(targetById(id))!;
+    const targetIsBankAccount = isBankAccount(target) as boolean;
+    const isWithdraw = tab() === Tabs.remove;
 
-    isBankAccount(target)
-      ? await bankTransaction(tab() === Tabs.add ? 'DEPOSIT' : 'WITHDRAW', id, amount)
+    const { name: targetName, allocationId: targetAllocationId } = target as Allocation;
+    const { name: currentName, allocationId: sourceAllocationId, account } = current()!;
+
+    const transactionResult = targetIsBankAccount
+      ? await bankTransaction(isWithdraw ? 'WITHDRAW' : 'DEPOSIT', id, amount)
       : await makeTransaction({
-          allocationIdFrom: tab() === Tabs.add ? target.allocationId : current()!.allocationId,
-          allocationIdTo: tab() === Tabs.add ? current()!.allocationId : target.allocationId,
+          allocationIdFrom: isWithdraw ? sourceAllocationId : targetAllocationId,
+          allocationIdTo: isWithdraw ? targetAllocationId : sourceAllocationId,
           amount: { currency: 'USD', amount },
         });
 
     await props.onReload();
-    setSuccessData({ amount, current: current()!, target, withdraw: tab() === Tabs.remove });
+
+    setManageBalanceSuccessData({
+      amount,
+      fromAmount: targetIsBankAccount
+        ? 0
+        : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceFrom?.amount!,
+      fromName: isWithdraw ? currentName : targetName,
+      toName: isWithdraw ? targetName : currentName,
+      toAmount: targetIsBankAccount
+        ? account.ledgerBalance.amount
+        : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
+    });
   };
 
   return (
@@ -78,7 +97,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
         <Match when={allocations.error}>
           <LoadingError onReload={allocations.reload} />
         </Match>
-        <Match when={aStatus().error}>
+        <Match when={accountsRequestStatus().error}>
           <LoadingError onReload={reloadAccounts} />
         </Match>
         <Match when={allocations.loading}>
@@ -91,15 +110,15 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
             class={css.allocation}
           />
           <Show
-            when={!successData()}
+            when={!manageBalanceSucessData()}
             fallback={
               <ManageBalanceSuccess
-                data={successData()!}
+                {...manageBalanceSucessData()!}
                 onClose={props.onClose}
                 onAgain={() => {
                   batch(() => {
                     setTab(Tabs.add);
-                    setSuccessData();
+                    setManageBalanceSuccessData();
                   });
                 }}
               />
