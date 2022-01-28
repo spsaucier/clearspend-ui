@@ -391,6 +391,9 @@ export interface NetworkMessageRequest {
   cardId?: string;
   networkMessageType?: 'AUTH_REQUEST' | 'AUTH_CREATED' | 'AUTH_UPDATED' | 'TRANSACTION_CREATED';
   amount?: Amount;
+
+  /** @format uuid */
+  priorNetworkMessageId?: string;
 }
 
 export interface NetworkMessageResponse {
@@ -1239,6 +1242,7 @@ export interface GraphData {
   /** @format date-time */
   to?: string;
   amount?: number;
+  count?: number;
 }
 
 export interface ChartDataRequest {

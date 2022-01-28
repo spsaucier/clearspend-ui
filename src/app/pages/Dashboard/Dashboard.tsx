@@ -31,7 +31,7 @@ export default function Dashboard() {
     initValue: [],
     onSuccess: (data) => {
       const root = getRootAllocation(data);
-      if (root) setAllocation(root.allocationId);
+      if (root && !allocation()) setAllocation(root.allocationId);
     },
   });
 
