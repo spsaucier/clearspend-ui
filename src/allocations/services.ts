@@ -19,5 +19,6 @@ export async function saveAllocation(params: Readonly<CreateAllocationRequest>) 
 }
 
 export async function updateAllocation(allocationId: string, params: Readonly<UpdateAllocationRequest>) {
-  return (await service.patch<Readonly<AllocationDetailsResponse>>(`/allocations/${allocationId}`, params)).data;
+  return (await service.patch<Readonly<Required<AllocationDetailsResponse>>>(`/allocations/${allocationId}`, params))
+    .data;
 }

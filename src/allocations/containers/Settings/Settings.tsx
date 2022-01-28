@@ -56,15 +56,21 @@ export function Settings(props: Readonly<SettingsProps>) {
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    const data = values();
-    const updated = await updateAllocation(props.allocation.allocationId, { name: data.name, ownerId: data.owner });
-    await props.onReload();
-    reset({ name: updated.allocation!.name, owner: updated.owner!.userId });
+    const { name, owner } = values();
 
-    messages.success({
-      title: i18n.t('Success'),
-      message: i18n.t('Changes successfully saved.'),
-    });
+    try {
+      const updated = await updateAllocation(props.allocation.allocationId, { name, ownerId: owner });
+      await props.onReload();
+
+      reset({ name: updated.allocation.name, owner: updated.owner.userId });
+
+      messages.success({
+        title: i18n.t('Success'),
+        message: i18n.t('Changes successfully saved.'),
+      });
+    } catch (error: unknown) {
+      messages.error({ title: i18n.t('Something went wrong') });
+    }
   };
 
   return (
