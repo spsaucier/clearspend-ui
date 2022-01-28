@@ -1,4 +1,4 @@
-import { service } from 'app/utils/service';
+import { service, RespType } from 'app/utils/service';
 import type {
   CreateUserRequest,
   CreateUserResponse,
@@ -14,6 +14,10 @@ export async function getUsers() {
 
 export async function searchUsers(params: Readonly<SearchUserRequest>) {
   return (await service.post<PagedDataUserPageData>('/users/search', params)).data;
+}
+
+export async function exportUsers(params: Readonly<SearchUserRequest>) {
+  return (await service.post<Blob>('/users/export-csv', params, { respType: RespType.blob })).data;
 }
 
 export async function getUser(userId: string) {

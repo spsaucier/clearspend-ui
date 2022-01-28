@@ -14,7 +14,7 @@ import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'g
 import css from './TransactionsList.css';
 
 interface TransactionsListProps {
-  search?: string;
+  params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
@@ -26,7 +26,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
     <div>
       <InputSearch
         delay={400}
-        value={props.search}
+        value={props.params.searchText}
         placeholder={String(i18n.t('Search Transactions...'))}
         class={css.search}
         onSearch={changeRequestSearch(props.onChangeParams)}

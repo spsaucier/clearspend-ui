@@ -16,7 +16,7 @@ interface TransactionsDataProps {
   table?: boolean;
   loading: boolean;
   error: unknown;
-  search?: string;
+  params: Readonly<AccountActivityRequest>;
   data: Readonly<PagedDataAccountActivityResponse> | null;
   onReceiptClick?: (transaction: AccountActivityResponse) => void;
   onCardClick?: (id: string) => void;
@@ -29,8 +29,8 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
       <Dynamic
         component={props.table ? TransactionsTable : TransactionsList}
-        search={props.search}
         data={props.data!}
+        params={props.params}
         onCardClick={props.onCardClick}
         onReceiptClick={props.onReceiptClick}
         onChangeParams={props.onChangeParams}

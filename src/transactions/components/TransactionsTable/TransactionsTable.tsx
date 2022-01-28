@@ -3,6 +3,8 @@ import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { join } from '_common/utils/join';
+import { wrapAction } from '_common/utils/wrapAction';
+import { download } from '_common/utils/download';
 import type { StoreSetter } from '_common/utils/store';
 import { DateFormat } from '_common/api/intl/types';
 import { InputSearch } from '_common/components/InputSearch';
@@ -10,10 +12,12 @@ import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
+import { useMessages } from 'app/containers/Messages/context';
 import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
+import { exportAccountActivity } from 'app/services/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import type {
@@ -30,8 +34,8 @@ import { SearchTransactionsRequest, TransactionFilterDrawer } from '../Transacti
 import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
-  search?: string;
   data: PagedDataAccountActivityResponse;
+  params: Readonly<AccountActivityRequest>;
   onCardClick?: (id: string) => void;
   onReceiptClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
@@ -39,6 +43,9 @@ interface TransactionsTableProps {
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
+  const messages = useMessages();
+
+  const [exporting, exportData] = wrapAction(exportAccountActivity);
   const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
@@ -140,6 +147,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
   ];
 
+  const onExport = () => {
+    return exportData(props.params)
+      .then((file) => download(file, 'account-activity.csv'))
+      .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
   return (
     <div>
       <Filters
@@ -154,13 +169,20 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       >
         <InputSearch
           delay={400}
-          value={props.search}
+          value={props.params.searchText}
           placeholder={String(i18n.t('Search Transactions...'))}
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <FiltersButton label={'More Filters'} count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
-        <Button icon={{ name: 'download', pos: 'right' }}>Export</Button>
+        <Button
+          loading={exporting()}
+          disabled={!props.data.content?.length}
+          icon={{ name: 'download', pos: 'right' }}
+          onClick={onExport}
+        >
+          <Text message="Export" />
+        </Button>
       </Filters>
       <Show
         when={props.data.content?.length}

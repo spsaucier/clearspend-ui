@@ -1,19 +1,23 @@
 import axios from 'axios';
 
-import { service } from 'app/utils/service';
+import { RespType, service } from 'app/utils/service';
 import type {
   AccountActivityRequest,
-  PagedDataAccountActivityResponse,
-  GraphDataRequest,
-  DashboardGraphData,
+  AccountActivityResponse,
   ChartDataRequest,
   ChartDataResponse,
-  AccountActivityResponse,
+  DashboardGraphData,
+  GraphDataRequest,
+  PagedDataAccountActivityResponse,
 } from 'generated/capital';
 import type { ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
 
 export async function getAccountActivity(params: Readonly<AccountActivityRequest>) {
   return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;
+}
+
+export async function exportAccountActivity(params: Readonly<AccountActivityRequest>) {
+  return (await service.post<Blob>('/account-activity/export-csv', params, { respType: RespType.blob })).data;
 }
 
 export async function getGraphData(params: Readonly<GraphDataRequest>) {

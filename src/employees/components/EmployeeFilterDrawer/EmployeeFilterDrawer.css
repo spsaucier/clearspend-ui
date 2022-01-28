@@ -1,25 +1,12 @@
-.side-bar-filters {
-  height: calc(100% - 24px);
-  margin: 0 -24px;
-}
-
-.side-bar-filters section {
-  padding: var(--pd-24);
-  border-top: 1px solid var(--tw-gray-30);
-}
-
-.section-title {
-  padding-bottom: var(--pd-16);
-}
-
-.side-bar-filters label {
-  padding-bottom: var(--pd-8);
-}
-
-.controls {
+.root {
   display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
-.controls button {
-  margin-right: var(--pd-8);
+.content {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }

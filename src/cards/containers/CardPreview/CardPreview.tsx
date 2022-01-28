@@ -87,7 +87,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
           <Switch>
             <Match when={tab() === Tabs.transactions}>
               <Data data={activity()} loading={aStatus().loading} error={aStatus().error} onReload={reloadActivity}>
-                <TransactionsList search={aParams().searchText} data={activity()!} onChangeParams={setActivityParams} />
+                <TransactionsList params={aParams()} data={activity()!} onChangeParams={setActivityParams} />
               </Data>
             </Match>
             <Match when={tab() === Tabs.details}>

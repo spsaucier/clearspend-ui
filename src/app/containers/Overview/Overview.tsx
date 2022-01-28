@@ -148,7 +148,7 @@ export function Overview(props: Readonly<OverviewProps>) {
             table={media.large}
             loading={activityStore.loading}
             error={activityStore.error}
-            search={activityStore.params.searchText}
+            params={activityStore.params}
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}

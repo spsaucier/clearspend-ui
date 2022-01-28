@@ -3,6 +3,8 @@ import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
+import { wrapAction } from '_common/utils/wrapAction';
+import { download } from '_common/utils/download';
 import type { StoreSetter } from '_common/utils/store';
 import { getNoop } from '_common/utils/getNoop';
 import { InputSearch } from '_common/components/InputSearch';
@@ -10,6 +12,7 @@ import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
+import { useMessages } from 'app/containers/Messages/context';
 import { Filters } from 'app/components/Filters';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Empty } from 'app/components/Empty';
@@ -23,6 +26,7 @@ import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { CardStatus } from '../CardStatus';
+import { exportCards } from '../../services';
 import type { CardType as CardTypeType } from '../../types';
 
 import css from './CardsTable.css';
@@ -30,15 +34,18 @@ import css from './CardsTable.css';
 interface CardsTableProps {
   search?: string;
   data: PagedDataSearchCardData;
+  params: Readonly<SearchCardRequest>;
   hideColumns?: readonly string[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
-  params: SearchCardRequest;
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
   const i18n = useI18n();
+  const messages = useMessages();
+
+  const [exporting, exportData] = wrapAction(exportCards);
   const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
 
   const columns: readonly Readonly<TableColumn<SearchCardData>>[] = [
@@ -91,6 +98,14 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
   ];
 
+  const onExport = () => {
+    return exportData(props.params)
+      .then((file) => download(file, 'cards.csv'))
+      .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
   return (
     <div>
       <Filters
@@ -111,7 +126,12 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <FiltersButton count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
-        <Button icon={{ name: 'download', pos: 'right' }}>
+        <Button
+          loading={exporting()}
+          disabled={!props.data.content?.length}
+          icon={{ name: 'download', pos: 'right' }}
+          onClick={onExport}
+        >
           <Text message="Export" />
         </Button>
       </Filters>

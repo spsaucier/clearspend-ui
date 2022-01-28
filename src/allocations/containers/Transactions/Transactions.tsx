@@ -28,7 +28,7 @@ export function Transactions(props: Readonly<TransactionsProps>) {
       table={media.wide}
       loading={status().loading}
       error={status().error}
-      search={params().searchText}
+      params={params()}
       data={cards()}
       onReload={reload}
       onChangeParams={setParams}

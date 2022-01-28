@@ -27,6 +27,10 @@ export async function searchCards(params: Readonly<SearchCardRequest>) {
   return (await service.post<Readonly<PagedDataSearchCardData>>('/cards/search', params)).data;
 }
 
+export async function exportCards(params: Readonly<SearchCardRequest>) {
+  return (await service.post<Blob>('/cards/export-csv', params, { respType: RespType.blob })).data;
+}
+
 export async function revealCardKey(params: Readonly<RevealCardRequest>) {
   return (await service.post<Readonly<RevealCardResponse>>(`/cards/reveal`, params)).data;
 }

@@ -1,107 +1,90 @@
-import { For, createSignal } from 'solid-js';
+import { For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { Button } from '_common/components/Button';
 import type { StoreSetter } from '_common/utils/store';
 import type { SearchUserRequest } from 'generated/capital';
+import { createForm, Form } from '_common/components/Form';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
 import { useAllocations } from 'allocations/stores/allocations';
-import { Checkbox } from '_common/components/Checkbox';
-import { DEFAULT_EMPLOYEE_PARAMS } from 'employees/Employees';
+import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
+import { FilterBox } from 'app/components/FilterBox';
+import { FiltersControls } from 'app/components/FiltersControls';
 
 import css from './EmployeeFilterDrawer.css';
 
+enum CardType {
+  virtual = 'virtual',
+  physical = 'physical',
+  none = 'none',
+}
+
+interface FormValues {
+  allocationIDs: string[];
+  cardTypes: CardType[];
+}
+
 interface EmployeeFilterDrawerProps {
   params: SearchUserRequest;
+  onReset: () => void;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>) {
-  const [options, setOptions] = createSignal<{ value: string; text: string }[]>([]);
-  const [allocationFilterValue, setAllocationFilterValue] = createSignal<string[]>(props.params.allocations ?? []);
-  const [includeArchived, setIncludeArchived] = createSignal<boolean>(!!props.params.includeArchived);
-  const [hasVirtualCard, setHasVirtualCard] = createSignal<boolean>(!!props.params.hasVirtualCard);
-  const [hasPhysicalCard, setHasPhysicalCard] = createSignal<boolean>(!!props.params.hasPhysicalCard);
-  const [withoutCard, setWithoutCard] = createSignal<boolean>(!!props.params.withoutCard);
+  const allocations = useAllocations({ initValue: [] });
 
-  useAllocations({
-    initValue: [],
-    onSuccess: (data) => {
-      setOptions(
-        data.map((allocation) => {
-          return {
-            value: allocation.allocationId,
-            ['text']: allocation.name,
-          };
-        }),
-      );
+  const { values, handlers } = createForm<FormValues>({
+    defaultValues: {
+      allocationIDs: props.params.allocations || [],
+      cardTypes: [
+        props.params.hasPhysicalCard && CardType.physical,
+        props.params.hasVirtualCard && CardType.virtual,
+        props.params.withoutCard && CardType.none,
+      ].filter(Boolean) as CardType[],
     },
   });
 
-  const resetFilters = () => {
-    setHasVirtualCard(false);
-    setHasPhysicalCard(false);
-    setIncludeArchived(false);
-    setWithoutCard(false);
-    setAllocationFilterValue([]);
-    props.onChangeParams({
-      ...DEFAULT_EMPLOYEE_PARAMS,
-    });
-  };
-
-  const applyFilters = () => {
-    props.onChangeParams((prevParams) => {
-      return {
-        // todo: Improve once https://tranwall.atlassian.net/browse/CAP-339 is completed
-        ...prevParams,
-        allocations: allocationFilterValue().length > 0 ? allocationFilterValue() : undefined,
-        hasPhysicalCard: hasPhysicalCard() ? true : undefined,
-        hasVirtualCard: hasVirtualCard() ? true : undefined,
-        includeArchived: includeArchived() ? true : undefined,
-        withoutCard: withoutCard() ? true : undefined,
-        pageRequest: withoutCard() ? undefined : prevParams.pageRequest,
-      };
-    });
+  const onApply = () => {
+    const { allocationIDs, cardTypes } = values();
+    props.onChangeParams((prev) => ({
+      ...prev,
+      ...{
+        // TODO: Improve once https://tranwall.atlassian.net/browse/CAP-339 is completed
+        allocations: allocationIDs.length ? allocationIDs : undefined,
+        hasPhysicalCard: cardTypes.includes(CardType.physical) || undefined,
+        hasVirtualCard: cardTypes.includes(CardType.virtual) || undefined,
+        withoutCard: cardTypes.includes(CardType.none) || undefined,
+      },
+    }));
   };
 
   return (
-    <>
-      <div class={css.sideBarFilters}>
-        <section>
-          <div class={css.sectionTitle}>Allocations</div>
+    <div class={css.root}>
+      <Form class={css.content}>
+        <FilterBox title={<Text message="Allocations" />}>
           <MultiSelect
-            value={allocationFilterValue()}
-            onChange={setAllocationFilterValue}
-            valueRender={(v) => options().find((o) => o.value === v)?.text}
+            value={values().allocationIDs}
+            onChange={handlers.allocationIDs}
+            // TODO: Should it works without valueRender?!
+            valueRender={(value) => allocations.data!.find((item) => item.allocationId === value)?.name}
           >
-            <For each={options()}>
-              {(o: { value: string; text: string }) => {
-                return <Option value={o.value}>{o.text}</Option>;
-              }}
-            </For>
+            <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
           </MultiSelect>
-        </section>
-        <section>
-          <div class={css.sectionTitle}>Card Type</div>
-          <Checkbox checked={hasVirtualCard()} onChange={setHasVirtualCard}>
-            <Text message="Has virtual card" />
-          </Checkbox>
-          <Checkbox checked={hasPhysicalCard()} onChange={setHasPhysicalCard}>
-            <Text message="Has physical card" />
-          </Checkbox>
-          <Checkbox checked={withoutCard()} onChange={setWithoutCard}>
-            <Text message="Does not have any cards" />
-          </Checkbox>
-        </section>
-      </div>
-      <div class={css.controls}>
-        <Button wide type="default" onClick={() => resetFilters()}>
-          <Text message="Reset" />
-        </Button>
-        <Button wide type="primary" onClick={() => applyFilters()}>
-          <Text message="Confirm" />
-        </Button>
-      </div>
-    </>
+        </FilterBox>
+        <FilterBox title={<Text message="Card Type" />}>
+          <CheckboxGroup value={values().cardTypes} onChange={(value) => handlers.cardTypes(value as CardType[])}>
+            <Checkbox value={CardType.virtual}>
+              <Text message="Has virtual card" />
+            </Checkbox>
+            <Checkbox value={CardType.physical}>
+              <Text message="Has physical card" />
+            </Checkbox>
+            <Checkbox value={CardType.none}>
+              <Text message="Does not have any cards" />
+            </Checkbox>
+          </CheckboxGroup>
+        </FilterBox>
+      </Form>
+      <FiltersControls onReset={props.onReset} onConfirm={onApply} />
+    </div>
   );
 }
