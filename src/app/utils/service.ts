@@ -2,6 +2,7 @@ import { fetch } from '_common/api/fetch';
 import { FetchOptions, HttpStatus, FetchResponse } from '_common/api/fetch/types';
 import { getNoop } from '_common/utils/getNoop';
 import { events } from '_common/api/events';
+import type { ControllerError } from 'generated/capital';
 
 import { AppEvent } from '../types/common';
 
@@ -23,13 +24,23 @@ function logFetch<T = unknown>(resp: FetchResponse<T>, isError?: boolean) {
   }).catch(getNoop());
 }
 
+function parseError(message: string): unknown {
+  try {
+    return JSON.parse(message);
+  } catch (error: unknown) {
+    return message;
+  }
+}
+
 function errorHandler<T = unknown>(error: FetchResponse): Promise<FetchResponse<T>> {
   if (error.status === HttpStatus.AccessDenied) {
     events.emit(AppEvent.Logout);
     // eslint-disable-next-line prefer-promise-reject-errors
     return Promise.reject(null);
   }
-  return Promise.reject(error);
+
+  const message = (error.data as ControllerError | null)?.message;
+  return Promise.reject(typeof message === 'string' ? { ...error, data: { message: parseError(message) } } : error);
 }
 
 function wrapFetch<T = unknown>(fetcher: Promise<FetchResponse<T>>): Promise<FetchResponse<T>> {
