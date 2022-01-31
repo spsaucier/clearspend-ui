@@ -62,9 +62,7 @@
   margin-bottom: var(--pd-2);
   flex: none;
   line-height: 22px;
-  background: var(--tw-gray-20);
   background: var(--tw-gray-15);
-  border: 1px solid var(--tw-gray-30);
   border: 1px solid var(--tw-gray-25);
   border-radius: var(--pd-4);
   user-select: none;

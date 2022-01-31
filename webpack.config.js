@@ -3,12 +3,13 @@ const path = require('path');
 
 const glob = require('glob');
 const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin').default;
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default;
 
@@ -147,6 +148,7 @@ module.exports = (env, options) => {
         filename: '[name].[contenthash:8].css',
         experimentalUseImportModule: true,
       }),
+      env.analyzer === 'default' && new CircularDependencyPlugin({ exclude: /node_modules/ }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),
       env.analyzer === 'statoscope' &&
         new StatoscopeWebpackPlugin({
