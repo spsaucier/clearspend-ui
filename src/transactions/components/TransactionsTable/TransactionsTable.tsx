@@ -88,7 +88,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       title: <Text message="Merchant" />,
       render: (item) => (
         <div class={css.merchant}>
-          <div class={css.icon} />
+          <Show when={item.merchant?.merchantLogoUrl}>
+            <img src={item.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.icon} />
+          </Show>
           <div>
             <div>{item.merchant?.name || '--'}</div>
             <Show when={item.merchant?.type}>

@@ -20,7 +20,8 @@
 .icon {
   width: 24px;
   height: 24px;
-  background: #2e6d48;
+  margin-top: 3px;
+  object-fit: contain;
   border-radius: var(--radius-8);
 }
 

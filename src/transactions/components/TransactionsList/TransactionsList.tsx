@@ -41,9 +41,11 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
 
             return (
               <div class={css.item}>
-                <div class={css.icon} />
+                <Show when={item.merchant?.merchantLogoUrl}>
+                  <img src={item.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.icon} />
+                </Show>
                 <div>
-                  <div class={css.category}>{item.merchant?.name || '--'}</div>
+                  <div class={css.category}>{item.merchant?.name || 'hello'}</div>
                   <div class={css.date}>
                     <DateTime date={date()} />
                   </div>

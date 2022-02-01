@@ -425,12 +425,6 @@ export interface CreateBusinessOwnerRequest {
 export interface TransactBankAccountRequest {
   bankAccountTransactType?: 'DEPOSIT' | 'WITHDRAW';
   amount?: Amount;
-
-  /**
-   * Indicate if transaction is requested during the onboarding process
-   * @example false
-   */
-  isOnboarding?: boolean;
 }
 
 export interface CreateAdjustmentResponse {
