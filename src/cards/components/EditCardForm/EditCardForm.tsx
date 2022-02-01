@@ -191,7 +191,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           <Text message="Virtual cards can be accessed through the ClearSpend mobile app or added to your Apple or Android wallet." />
         }
       >
-        <FormItem label={<Text message="Card type(s)" />} error={errors().types}>
+        <FormItem multiple label={<Text message="Card type(s)" />} error={errors().types}>
           <CardTypeSelect
             value={values().types}
             allocation={allocation()?.name}
