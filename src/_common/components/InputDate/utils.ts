@@ -24,6 +24,9 @@ function getDayButton(wrapper: HTMLElement, day: number) {
   return wrapper.querySelector<HTMLElement>(`button[data-day='${day}']`);
 }
 
+export const sameMonth = (date1: ReadonlyDate | Date, date2: ReadonlyDate | Date) =>
+  date1.getUTCFullYear() === date2.getUTCFullYear() && date1.getUTCMonth() === date2.getUTCMonth();
+
 export function getMoveFocus(wrapper: HTMLElement, target: EventTarget, month: ReadonlyDate) {
   return (shift: number, onMonthChange: () => void) => {
     const day = parseInt((target as HTMLElement).dataset.day!, 10) + shift;

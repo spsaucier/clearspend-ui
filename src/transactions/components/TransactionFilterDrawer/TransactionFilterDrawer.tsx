@@ -129,7 +129,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
           </RadioGroup>
         </FilterBox>
         <FilterBox title={<Text message="Transaction Date" />}>
-          <SelectDateRange value={dateRange()} onChange={(dates) => setDateRange(dates)} />
+          <SelectDateRange value={dateRange()} maxDate={new Date()} onChange={(dates) => setDateRange(dates)} />
         </FilterBox>
       </div>
       <FiltersControls onReset={resetFilters} onConfirm={applyFilters} />

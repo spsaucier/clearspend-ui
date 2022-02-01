@@ -1,4 +1,4 @@
-import { createSignal, createMemo } from 'solid-js';
+import { createSignal, createMemo, Accessor } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { startOfDay, endOfDay, shiftDate } from '_common/api/dates';
@@ -20,8 +20,25 @@ export interface SelectDateRangeProps {
   error?: boolean;
   disabled?: boolean;
   class?: string;
+  minDate?: ReadonlyDate;
+  maxDate?: ReadonlyDate;
   onChange: (value: ReadonlyDate[]) => void;
 }
+
+const getDefaultsFromRange = (range: Accessor<ReadonlyDate[]>) => {
+  let [fromDefault, toDefault] = range();
+  if (!toDefault) {
+    if (fromDefault) {
+      toDefault = shiftDate(fromDefault, { months: 1 });
+    } else {
+      toDefault = new Date();
+    }
+  }
+  if (!fromDefault) {
+    fromDefault = shiftDate(toDefault, { months: -1 });
+  }
+  return [fromDefault, toDefault];
+};
 
 export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
   const i18n = useI18n();
@@ -29,6 +46,10 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
 
   const [open, setOpen] = createSignal(false);
   const [range, setRange] = createSignal<ReadonlyDate[]>([...(props.value as ReadonlyDate[])]);
+
+  const [fromDefault, toDefault] = getDefaultsFromRange(range);
+  const [toMonth, setToMonth] = createSignal(toDefault!);
+  const [fromMonth, setFromMonth] = createSignal(fromDefault!);
 
   const onClear = (event?: MouseEvent) => {
     if (event) event.stopPropagation();
@@ -66,19 +87,6 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
     setOpen(false);
   };
 
-  const toMonth = createMemo(() => {
-    const [from, to] = range();
-    if (to) return to;
-    if (from) return shiftDate(from, { months: 1 });
-    return new Date();
-  });
-
-  const fromMonth = createMemo(() => {
-    const [from] = range();
-    if (from) return from;
-    return shiftDate(toMonth(), { months: -1 });
-  });
-
   const value = createMemo(() => {
     const [from, to] = props.value;
     return from && to ? (
@@ -97,8 +105,24 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
       content={
         <div>
           <div class={css.content}>
-            <Month month={fromMonth()} value={range()} class={css.month} onSelect={onSelectDate} />
-            <Month month={toMonth()} value={range()} class={css.month} onSelect={onSelectDate} />
+            <Month
+              month={fromMonth}
+              value={range()}
+              class={css.month}
+              setMonth={setFromMonth}
+              onSelect={onSelectDate}
+              minDate={props.minDate}
+              maxNextMonth={toMonth}
+            />
+            <Month
+              month={toMonth}
+              value={range()}
+              class={css.month}
+              setMonth={setToMonth}
+              onSelect={onSelectDate}
+              minPrevMonth={fromMonth}
+              maxDate={props.maxDate}
+            />
           </div>
           <div class={css.footer}>
             <Button view="ghost" onClick={() => setOpen(false)}>

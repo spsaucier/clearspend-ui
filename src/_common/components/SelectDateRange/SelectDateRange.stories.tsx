@@ -26,7 +26,14 @@ export const Default = (args: SelectDateRangeProps) => {
 
   return (
     <div>
-      <SelectDateRange {...args} value={value()} onChange={onChange} />
+      <SelectDateRange
+        {...args}
+        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+        minDate={new Date(new Date().setFullYear(2021))}
+        maxDate={new Date()}
+        value={value()}
+        onChange={onChange}
+      />
     </div>
   );
 };
