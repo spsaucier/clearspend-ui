@@ -16,7 +16,7 @@ function prefixUrl(url: string): string {
 
 function logFetch<T = unknown>(resp: FetchResponse<T>, isError?: boolean) {
   sendAnalyticsEvent({
-    name: Events[`${resp.method}_ERROR`],
+    name: Events[`${resp.method}_${isError ? 'ERROR' : 'SUCCESS'}`],
     data: {
       url: resp.url,
       ...(isError ? { error: resp.data } : { result: resp.data }),
