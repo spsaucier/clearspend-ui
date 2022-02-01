@@ -1,4 +1,5 @@
 import { createSignal, Index, Show, batch, createEffect, on } from 'solid-js';
+import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
@@ -44,9 +45,11 @@ interface OverviewProps {
 export function Overview(props: Readonly<OverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
+  const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
 
-  const PERIOD = toISO(getTimePeriod(TimePeriod.week));
-  const [period, setPeriod] = createSignal<TimePeriod>(TimePeriod.week);
+  const initPeriod = searchParams.period || TimePeriod.week;
+  const PERIOD = toISO(getTimePeriod(initPeriod));
+  const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
   const spendStore = useSpend({ params: { ...PERIOD, allocationId: props.allocationId } });
 
@@ -85,6 +88,7 @@ export function Overview(props: Readonly<OverviewProps>) {
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
+    setSearchParams({ period: value });
 
     batch(() => {
       const range = toISO(getTimePeriod(value));

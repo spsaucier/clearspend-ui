@@ -1,4 +1,5 @@
 import { createSignal, Switch, Match } from 'solid-js';
+import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { useNav } from '_common/api/router';
@@ -22,9 +23,10 @@ import css from './Dashboard.css';
 
 export default function Dashboard() {
   const navigate = useNav();
+  const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
   const { owner } = useBusiness();
 
-  const [allocation, setAllocation] = createSignal<string>();
+  const [allocation, setAllocation] = createSignal<string | undefined>(searchParams.allocation);
   const [manageId, setManageId] = createSignal<string>();
 
   const allocations = useAllocations({
@@ -35,6 +37,11 @@ export default function Dashboard() {
     },
   });
 
+  const onAllocationChange = (id: string) => {
+    setAllocation(id);
+    setSearchParams({ allocation: id });
+  };
+
   return (
     <Page
       title={<Text message="Welcome, {name}" name={owner().firstName || ''} />}
@@ -44,7 +51,7 @@ export default function Dashboard() {
           items={allocations.data!}
           value={allocation()}
           class={css.allocations}
-          onChange={setAllocation}
+          onChange={onAllocationChange}
         />
         // <Tag type="primary">
         //   North Valley Enterprises | <strong>$100.00</strong>

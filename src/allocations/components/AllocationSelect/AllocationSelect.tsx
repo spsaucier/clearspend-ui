@@ -26,7 +26,9 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
   const renderValue = (id: string) => {
     if (!id) return <AllocationView name="All allocations" amount={getTotalAmount(props.items)} />;
 
-    const found = props.items.find(allocationWithID(id))!;
+    const found = props.items.find(allocationWithID(id));
+    if (!found) return null;
+
     return <AllocationView name={found.name} amount={found.account.ledgerBalance.amount} />;
   };
 
