@@ -1,7 +1,7 @@
-import { createSignal, For } from 'solid-js';
-import { Text } from 'solid-i18n';
+import { For } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
-import { Form, FormItem } from '_common/components/Form';
+import { createForm, Form, FormItem } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
 import { FilterBox } from 'app/components/FilterBox';
@@ -10,67 +10,42 @@ import type { SearchCardRequest } from 'generated/capital';
 import { Select, Option } from '_common/components/Select';
 import { useAllocations } from 'allocations/stores/allocations';
 import type { StoreSetter } from '_common/utils/store';
-import { DEFAULT_CARD_PARAMS } from 'cards/Cards';
 import { useUsersList } from 'employees/stores/usersList';
+import { formatName } from 'employees/utils/formatName';
 
 import css from './CardsFilterDrawer.css';
+
+interface FormValues {
+  allocation: string;
+  user: string;
+}
 
 interface CardsFilterDrawerProps {
   hiddenFields?: readonly string[];
   params: SearchCardRequest;
+  onReset: () => void;
   onChangeParams: StoreSetter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
-  const [allocationOptions, setAllocationOptions] = createSignal<{ value: string; text: string }[]>([]);
-  const [userOptions, setUserOptions] = createSignal<{ value: string; text: string }[]>([]);
-  const [allocationFilterValue, setAllocationFilterValue] = createSignal<string | undefined>(props.params.allocationId);
-  const [userFilterValue, setUserFilterValue] = createSignal<string | undefined>(props.params.userId);
+  const i18n = useI18n();
+  const users = useUsersList({ initValue: [] });
+  const allocations = useAllocations({ initValue: [] });
 
-  useAllocations({
-    initValue: [],
-    onSuccess: (data) => {
-      setAllocationOptions(
-        data.map((allocation) => {
-          return {
-            value: allocation.allocationId,
-            ['text']: allocation.name,
-          };
-        }),
-      );
+  const { values, handlers } = createForm<FormValues>({
+    defaultValues: {
+      allocation: props.params.allocationId || '',
+      user: props.params.userId || '',
     },
   });
 
-  useUsersList({
-    initValue: [],
-    onSuccess: (data) => {
-      setUserOptions(
-        data.map((user) => {
-          return {
-            value: user.userId!,
-            ['text']: `${user.firstName} ${user.lastName}`,
-          };
-        }),
-      );
-    },
-  });
-
-  const resetFilters = () => {
-    setAllocationFilterValue(undefined);
-    setUserFilterValue(undefined);
-    props.onChangeParams({
-      ...DEFAULT_CARD_PARAMS,
-    });
-  };
-
-  const applyFilters = () => {
-    props.onChangeParams((prevParams) => {
-      return {
-        ...prevParams,
-        userId: userFilterValue(),
-        allocationId: allocationFilterValue(),
-      };
-    });
+  const onApply = () => {
+    const { allocation, user } = values();
+    props.onChangeParams((prev) => ({
+      ...prev,
+      allocationId: allocation || undefined,
+      userId: user || undefined,
+    }));
   };
 
   return (
@@ -81,11 +56,11 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
             iconName="search"
             name="allocation"
             disabled={props.hiddenFields?.includes('allocation')}
-            value={allocationFilterValue()}
-            placeholder={'Search by allocation name'}
-            onChange={setAllocationFilterValue}
+            value={values().allocation}
+            placeholder={String(i18n.t('Search by allocation name'))}
+            onChange={handlers.allocation}
           >
-            <For each={allocationOptions()}>{(item) => <Option value={item.value}>{item.text}</Option>}</For>
+            <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
           </Select>
         </FilterBox>
         <FilterBox title={<Text message="Balance" />}>
@@ -129,15 +104,15 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
             disabled={props.hiddenFields?.includes('name')}
             iconName="search"
             name="employee"
-            value={userFilterValue()}
-            placeholder={'Search by employee name'}
-            onChange={setUserFilterValue}
+            value={values().user}
+            placeholder={String(i18n.t('Search by employee name'))}
+            onChange={handlers.user}
           >
-            <For each={userOptions()}>{(item) => <Option value={item.value}>{item.text}</Option>}</For>
+            <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
           </Select>
         </FilterBox>
       </div>
-      <FiltersControls onReset={() => resetFilters()} onConfirm={() => applyFilters()} />
+      <FiltersControls onReset={props.onReset} onConfirm={onApply} />
     </Form>
   );
 }

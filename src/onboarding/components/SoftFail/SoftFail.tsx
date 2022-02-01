@@ -8,9 +8,8 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Section } from 'app/components/Section';
 import type { ExceptionData } from 'onboarding/types';
 
+import { FileUploader } from './FileUploader';
 import type { KycDocuments, RequiredDocument } from './types';
-
-import { FileUploader } from '.';
 
 import css from './SoftFail.css';
 

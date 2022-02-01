@@ -3,9 +3,8 @@ import { createSignal } from 'solid-js';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 
+import { AlloyUploader } from './AlloyUploader';
 import type { DocumentType } from './types';
-
-import { AlloyUploader } from '.';
 
 import css from './FileUploader.css';
 

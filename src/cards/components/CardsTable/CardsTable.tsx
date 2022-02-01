@@ -1,4 +1,4 @@
-import { createSignal, Show } from 'solid-js';
+import { createSignal, createMemo, Show } from 'solid-js';
 import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
@@ -6,7 +6,6 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { StoreSetter } from '_common/utils/store';
-import { getNoop } from '_common/utils/getNoop';
 import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
@@ -17,6 +16,7 @@ import { Filters } from 'app/components/Filters';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import { getResetFilters } from 'app/utils/getResetFilters';
 import { formatName } from 'employees/utils/formatName';
 import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
@@ -30,6 +30,8 @@ import { exportCards } from '../../services';
 import type { CardType as CardTypeType } from '../../types';
 
 import css from './CardsTable.css';
+
+const FILTERS_KEYS = ['allocationId', 'userId'] as const;
 
 interface CardsTableProps {
   search?: string;
@@ -98,6 +100,14 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
   ];
 
+  const filtersCount = createMemo(() =>
+    FILTERS_KEYS.reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0),
+  );
+
+  const onResetFilters = () => {
+    props.onChangeParams((prev) => ({ ...prev, ...getResetFilters(FILTERS_KEYS) }));
+  };
+
   const onExport = () => {
     return exportData(props.params)
       .then((file) => download(file, 'cards.csv'))
@@ -125,7 +135,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <FiltersButton count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
+        <FiltersButton count={filtersCount()} onReset={onResetFilters} onClick={() => setFilterPanelOpen(true)} />
         <Button
           loading={exporting()}
           disabled={!props.data.content?.length}
@@ -149,9 +159,16 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
         onClose={() => setFilterPanelOpen(false)}
       >
         <CardsFilterDrawer
-          onChangeParams={props.onChangeParams}
           params={props.params}
           hiddenFields={props.hideColumns}
+          onReset={() => {
+            setFilterPanelOpen(false);
+            onResetFilters();
+          }}
+          onChangeParams={(params) => {
+            setFilterPanelOpen(false);
+            props.onChangeParams(params);
+          }}
         />
       </Drawer>
     </div>

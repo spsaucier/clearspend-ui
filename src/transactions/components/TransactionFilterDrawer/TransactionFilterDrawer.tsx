@@ -12,7 +12,6 @@ import { InputCurrency } from '_common/components/InputCurrency';
 import { FormItem } from '_common/components/Form';
 import { Radio, RadioGroup } from '_common/components/Radio';
 import { SelectDateRange } from '_common/components/SelectDateRange';
-import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
 
 import css from './TransactionFilterDrawer.css';
 
@@ -61,9 +60,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
     setIsPending(false);
     setAmountMin(0);
     setAmountMax(0);
-    props.onChangeParams({
-      ...DEFAULT_ACTIVITY_PARAMS,
-    });
+    // TODO: props.onReset()
   };
 
   // TODO: When search filter api is ready

@@ -12,6 +12,7 @@ import type { StoreSetter } from '_common/utils/store';
 import { Filters } from 'app/components/Filters';
 import { useMessages } from 'app/containers/Messages/context';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import { getResetFilters } from 'app/utils/getResetFilters';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
@@ -24,7 +25,7 @@ import { EmployeeFilterDrawer } from '../EmployeeFilterDrawer';
 
 import css from './EmployeesTable.css';
 
-const FILTERS_KEYS: (keyof SearchUserRequest)[] = ['allocations', 'hasVirtualCard', 'hasPhysicalCard', 'withoutCard'];
+const FILTERS_KEYS = ['allocations', 'hasVirtualCard', 'hasPhysicalCard', 'withoutCard'] as const;
 
 interface EmployeesTableProps {
   data: PagedDataUserPageData;
@@ -86,14 +87,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   );
 
   const resetFilters = () => {
-    props.onChangeParams((prev) => ({
-      ...prev,
-      ...FILTERS_KEYS.reduce<SearchUserRequest>((res, key) => {
-        // eslint-disable-next-line no-param-reassign
-        res[key] = undefined;
-        return res;
-      }, {}),
-    }));
+    props.onChangeParams((prev) => ({ ...prev, ...getResetFilters(FILTERS_KEYS) }));
   };
 
   const applyFilters = () => {
