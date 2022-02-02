@@ -11,6 +11,7 @@
   padding: var(--pd-24) 0;
   grid-template-columns: auto 1fr auto;
   grid-gap: var(--pd-12);
+  cursor: pointer;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--tw-gray-30);

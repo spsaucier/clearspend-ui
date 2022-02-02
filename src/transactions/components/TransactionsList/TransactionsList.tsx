@@ -9,13 +9,18 @@ import { Tag } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
-import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
+import type {
+  AccountActivityRequest,
+  AccountActivityResponse,
+  PagedDataAccountActivityResponse,
+} from 'generated/capital';
 
 import css from './TransactionsList.css';
 
 interface TransactionsListProps {
   params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
+  onReceiptClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -40,7 +45,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
             const date = createMemo(() => new Date(item.activityTime || ''));
 
             return (
-              <div class={css.item}>
+              <div class={css.item} onClick={() => props.onReceiptClick?.(item)}>
                 <Show when={item.merchant?.merchantLogoUrl}>
                   <img src={item.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.icon} />
                 </Show>

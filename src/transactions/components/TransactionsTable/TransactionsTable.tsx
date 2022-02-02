@@ -52,6 +52,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'date',
       title: <Text message="Date & Time" />,
+      onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => {
         const date = new Date(item.activityTime || '');
         return (
@@ -69,6 +70,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'card',
       title: <Text message="Card" />,
+      onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => (
         <div class={css.cardCell} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
           <div class={css.card}>{item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}</div>
@@ -86,6 +88,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'merchant',
       title: <Text message="Merchant" />,
+      onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => (
         <div class={css.merchant}>
           <Show when={item.merchant?.merchantLogoUrl}>
@@ -103,6 +106,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount" />,
+      onClick: (row) => props.onReceiptClick?.(row),
       render: (item) => (
         <div class={css.amountCell}>
           <Switch>
