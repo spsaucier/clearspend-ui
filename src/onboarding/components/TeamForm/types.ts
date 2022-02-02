@@ -5,9 +5,9 @@ export interface FormValues {
   ssn: string;
   email: string;
   phone: string;
-  line1: string;
-  line2: string;
-  city: string;
-  state: string;
-  zip: string;
+  streetLine1: string;
+  streetLine2: string;
+  locality: string;
+  region: string;
+  postalCode: string;
 }

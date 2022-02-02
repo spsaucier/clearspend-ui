@@ -2,7 +2,6 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
-import { SelectState } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
@@ -10,6 +9,7 @@ import { InputPhone } from '_common/components/InputPhone';
 import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
 import { formatSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
 
 import type { ExceptionData } from '../../types';
 
@@ -95,39 +95,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           <FormItem label="Phone" error={errors().phone}>
             <InputPhone name="phone" value={values().phone} error={Boolean(errors().phone)} onChange={handlers.phone} />
           </FormItem>
-          <FormItem label="Home address" error={errors().line1}>
-            <Input
-              name="address-line-1"
-              value={values().line1}
-              autoComplete="off"
-              error={Boolean(errors().line1)}
-              onChange={handlers.line1}
-            />
-          </FormItem>
-          <FormItem label="Apartment, unit, floor etc..." error={errors().line2}>
-            <Input
-              name="address-line-2"
-              value={values().line2}
-              autoComplete="off"
-              error={Boolean(errors().line2)}
-              onChange={handlers.line2}
-            />
-          </FormItem>
-          <FormItem label="City" error={errors().city}>
-            <Input name="city" value={values().city} error={Boolean(errors().city)} onChange={handlers.city} />
-          </FormItem>
-          <FormItem label="State" error={errors().state}>
-            <SelectState value={values().state} error={Boolean(errors().state)} onChange={handlers.state} />
-          </FormItem>
-          <FormItem label="Zip code" error={errors().zip}>
-            <Input
-              name="zip-code"
-              value={values().zip}
-              error={Boolean(errors().zip)}
-              maxLength={5}
-              onChange={handlers.zip}
-            />
-          </FormItem>
+          <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         </div>
         <div class={css.actions}>
           <Button size="sm" icon="add" type="primary" disabled view="ghost" class={css.add}>

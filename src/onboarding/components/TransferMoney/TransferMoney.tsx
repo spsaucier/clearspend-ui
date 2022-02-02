@@ -11,6 +11,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { BankAccount } from 'generated/capital';
+import { i18n } from '_common/api/intl';
 
 import { BankAccounts } from '../BankAccounts';
 
@@ -28,6 +29,12 @@ interface TransferMoneyProps {
   onDeposit: (accountId: string, amount: number) => Promise<unknown>;
 }
 
+interface DepositError {
+  data: {
+    message: string;
+  };
+}
+
 export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   const media = useMediaContext();
   const messages = useMessages();
@@ -40,8 +47,14 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      deposit(data.account, parseAmount(data.amount)).catch(() => {
-        messages.error({ title: 'Something went wrong' });
+      deposit(data.account, parseAmount(data.amount)).catch((res: DepositError) => {
+        const message =
+          res.data.message.indexOf('does not have sufficient funds') > -1
+            ? `${String(i18n.t('Insufficient funds in this account for deposit of'))} ${formatCurrency(
+                parseAmount(data.amount),
+              )}`
+            : res.data.message;
+        messages.error({ title: 'Deposit unsuccessful', message });
       });
     }
   };

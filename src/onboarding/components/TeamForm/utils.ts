@@ -17,42 +17,36 @@ export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
       ssn: '',
       email: user?.email || '',
       phone: user?.phone || '',
-      line1: '',
-      line2: '',
-      city: '',
-      state: '',
-      zip: '',
+      streetLine1: '',
+      streetLine2: '',
+      locality: '',
+      region: '',
+      postalCode: '',
     },
     rules: {
       firstName: [required],
       lastName: [required],
-      birthdate: [required], // TODO
+      birthdate: [required],
       ssn: [required],
       email: [required, validEmail],
       phone: [required, validPhone],
-      line1: [required],
-      city: [required],
-      state: [required],
-      zip: [required, validZipCode],
+      streetLine1: [required],
+      locality: [required],
+      region: [required],
+      postalCode: [required, validZipCode],
     },
   };
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUpdateBusinessOwnerRequest> {
+  const { firstName, lastName, birthdate, ssn, email, phone, ...address } = data;
   return {
-    firstName: data.firstName,
-    lastName: data.lastName,
-    dateOfBirth: dateToString(data.birthdate!),
-    taxIdentificationNumber: cleanSSN(data.ssn),
-    email: data.email,
-    phone: data.phone,
-    address: {
-      streetLine1: data.line1,
-      streetLine2: data.line2,
-      locality: data.city,
-      region: data.state,
-      postalCode: data.zip,
-      country: 'USA',
-    },
+    firstName,
+    lastName,
+    dateOfBirth: dateToString(birthdate!),
+    taxIdentificationNumber: cleanSSN(ssn),
+    email,
+    phone,
+    address: { ...address, country: 'USA' },
   };
 }
