@@ -43,6 +43,5 @@ export async function onboardingDeposit(accountId: string, amount: number) {
       currency: 'USD',
       amount: amount,
     },
-    isOnboarding: true,
   });
 }
