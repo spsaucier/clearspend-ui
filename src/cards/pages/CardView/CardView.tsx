@@ -5,6 +5,7 @@ import { useParams } from 'solid-app-router';
 import { useNav } from '_common/api/router';
 import { getNoop } from '_common/utils/getNoop';
 import { Tab, TabList } from '_common/components/Tabs';
+import { Popover } from '_common/components/Popover';
 import { useResource } from '_common/utils/useResource';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
@@ -135,14 +136,33 @@ export default function CardView() {
       }
       headerSide={
         <Show when={card()?.type}>
-          <Card
-            type={card()!.type as CardType}
-            name={media.medium ? undefined : user() ? formatName(user()!) : ''}
-            allocation={media.medium ? undefined : allocation()?.name}
-            number={card()!.lastFour || ''}
-            balance={media.medium ? undefined : allocation()?.account.ledgerBalance.amount || 0}
-            notActivated={!card()!.activated}
-          />
+          <Popover
+            balloon
+            trigger="hover"
+            position="bottom-center"
+            disabled={card()!.status === 'ACTIVE' || !card()!.activated}
+            class={css.frozenPopup}
+            content={
+              <>
+                <Text message="Card is frozen" class={css.frozenPopupTitle!} />
+                <Text message="Cardholder cannot perform any activity with this card." />
+              </>
+            }
+          >
+            {(args) => (
+              <div {...args}>
+                <Card
+                  type={card()!.type as CardType}
+                  name={media.medium ? undefined : user() ? formatName(user()!) : ''}
+                  allocation={media.medium ? undefined : allocation()?.name}
+                  number={card()!.lastFour || ''}
+                  balance={media.medium ? undefined : allocation()?.account.ledgerBalance.amount || 0}
+                  status={card()!.status}
+                  notActivated={!card()!.activated}
+                />
+              </div>
+            )}
+          </Popover>
         </Show>
       }
       headerContent={

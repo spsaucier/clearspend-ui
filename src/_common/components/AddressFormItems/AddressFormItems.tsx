@@ -6,9 +6,9 @@ import { Input } from '_common/components/Input';
 import { Select, SelectState, Option } from '_common/components/Select';
 import { useAddressSuggestions } from 'app/utils/useAddressSuggestions';
 
-import css from '../Form/FormItems.css';
-
 import type { AddressValues } from './types';
+
+import css from './AddressFormItems.css';
 
 interface AddressFormItemsProps {
   values: Accessor<AddressValues>;

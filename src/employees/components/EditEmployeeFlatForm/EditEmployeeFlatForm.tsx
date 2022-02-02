@@ -1,11 +1,11 @@
 import { Button } from '_common/components/Button';
 import { Form, createForm } from '_common/components/Form';
+import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useMessages } from 'app/containers/Messages/context';
 import type { CreateUserRequest } from 'generated/capital';
 
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
-import { AddressFormItems } from '../../../_common/components/AddressFormItems/AddressFormItems';
 import type { FormValues } from '../EditEmployeeForm/types';
 import { getFormOptions } from '../EditEmployeeForm/utils';
 

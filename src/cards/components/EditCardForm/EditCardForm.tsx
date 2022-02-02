@@ -6,6 +6,7 @@ import { useBool } from '_common/utils/useBool';
 import { useResource } from '_common/utils/useResource';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { Drawer } from '_common/components/Drawer';
+import { AddressSelect } from '_common/components/AddressSelect/AddressSelect';
 import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
@@ -45,7 +46,6 @@ import { CardType } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
-import { AddressSelect } from '../../../_common/components/AddressSelect/AddressSelect';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';

@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { Form, createForm, hasErrors } from '_common/components/Form';
+import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
 import { useMessages } from 'app/containers/Messages/context';
 import { PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
@@ -9,7 +10,6 @@ import { handleFieldErrors } from 'app/utils/fieldErrors';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { User } from 'generated/capital';
 
-import { AddressFormItems } from '../../../_common/components/AddressFormItems/AddressFormItems';
 import { PersonalInfoFormItems } from '../PersonalInfoFormItems/PersonalInfoFormItems';
 
 import { getFormOptions } from './utils';

@@ -75,6 +75,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
             number={card()!.lastFour || ''}
             allocation={allocation()?.name}
             balance={data()!.availableBalance.amount}
+            status={card()!.status}
             notActivated={!card()!.activated}
             class={css.card}
           />

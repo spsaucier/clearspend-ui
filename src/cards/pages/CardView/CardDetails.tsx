@@ -5,12 +5,11 @@ import { Text } from 'solid-i18n';
 
 import { revealCardKey } from 'cards/services';
 import type { Card as CardInterface, User } from 'generated/capital';
+import { AddressView } from '_common/components/AddressView/AddressView';
 import { useResource } from '_common/utils/useResource';
 import { Loading } from 'app/components/Loading';
 import { Card } from 'cards/components/Card';
 import type { CardType } from 'cards/types';
-
-import { AddressView } from '../../../_common/components/AddressView/AddressView';
 
 import css from './CardDetails.css';
 

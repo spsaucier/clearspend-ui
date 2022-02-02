@@ -9,3 +9,12 @@
 .info {
   margin-top: var(--pd-24);
 }
+
+.frozen-popup {
+  width: 306px;
+}
+
+.frozen-popup-title {
+  margin-bottom: var(--pd-4);
+  font-weight: var(--font-700);
+}

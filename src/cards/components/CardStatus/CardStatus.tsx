@@ -14,7 +14,7 @@ interface Settings {
 
 const MESSAGES = defineMessages({
   active: { message: 'Active' },
-  inactive: { message: 'Inactive' },
+  inactive: { message: 'Frozen' },
   cancelled: { message: 'Cancelled' },
   notActivated: { message: 'Not Activated' },
 });

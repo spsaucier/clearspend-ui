@@ -56,14 +56,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
             </Confirm>
           </Match>
           <Match when={props.card.status === 'INACTIVE'}>
-            <Button
-              size="lg"
-              icon="freeze"
-              type="primary"
-              view="second"
-              loading={loading()}
-              onClick={() => onChangeStatus(false)}
-            >
+            <Button size="lg" icon="freeze" type="primary" loading={loading()} onClick={() => onChangeStatus(false)}>
               <Text message="Unfreeze Card" />
             </Button>
           </Match>

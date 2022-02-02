@@ -30,6 +30,14 @@ module.exports = (env, options) => {
       runtimeChunk: true,
       splitChunks: {
         chunks: 'all',
+        cacheGroups: {
+          commons: {
+            name: 'commons',
+            test: /_common\/components/,
+            reuseExistingChunk: true,
+            minChunks: 2,
+          },
+        },
       },
       minimizer: [`...`, new CssMinimizerPlugin()],
     },
@@ -147,6 +155,7 @@ module.exports = (env, options) => {
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css',
         experimentalUseImportModule: true,
+        ignoreOrder: true,
       }),
       env.analyzer === 'default' && new CircularDependencyPlugin({ exclude: /node_modules/ }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),

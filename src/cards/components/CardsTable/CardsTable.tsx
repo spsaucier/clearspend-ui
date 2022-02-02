@@ -95,8 +95,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     {
       name: 'status',
       title: 'Status',
-      // TODO: get activated value from server data (waiting for API updates)
-      render: (item) => <CardStatus status={item.cardStatus!} activated={true} />,
+      render: (item) => <CardStatus status={item.cardStatus!} activated={item.activated!} />,
     },
   ];
 

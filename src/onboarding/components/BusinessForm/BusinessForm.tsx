@@ -8,6 +8,7 @@ import { InputPhone } from '_common/components/InputPhone';
 import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
 import { keys } from '_common/utils/keys';
+import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
@@ -15,7 +16,6 @@ import { AddressFormItems } from '_common/components/AddressFormItems/AddressFor
 
 import { BUSINESS_TYPES } from '../../constants/usa';
 import type { ExceptionData } from '../../types';
-import { formatEIN } from '../../../_common/formatters/ein';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';

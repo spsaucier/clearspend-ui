@@ -2,9 +2,8 @@ import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
+import { cleanSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
-
-import { cleanSSN } from '../../../_common/formatters/ssn';
 
 import type { FormValues } from './types';
 

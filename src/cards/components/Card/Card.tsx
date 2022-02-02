@@ -1,14 +1,18 @@
-import { Show } from 'solid-js';
+import { createMemo, Show, Switch, Match } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
+import { join } from '_common/utils/join';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
+import type { Card as ICard } from 'generated/capital';
 
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { CardType } from '../../types';
 
 import css from './Card.css';
 
+const PRIMARY_COLOR = '#5bea83';
+const FROZEN_COLOR = '#10292C';
 const NOT_ACTIVATED_OPACITY = 0.2;
 
 const BACKGROUND: Readonly<Record<CardType, string>> = {
@@ -23,6 +27,7 @@ export interface CardProps {
   number?: string;
   balance?: number;
   details?: string;
+  status?: ICard['status'];
   notActivated?: boolean;
   class?: string;
 }
@@ -30,23 +35,33 @@ export interface CardProps {
 export function Card(props: Readonly<CardProps>) {
   const i18n = useI18n();
 
+  const isFrozen = createMemo(() => !props.notActivated && props.status === 'INACTIVE');
+  const mainColor = createMemo(() => (isFrozen() ? '#fff' : '#000'));
+  const mainOpacity = createMemo(() => (props.notActivated || props.status === 'INACTIVE' ? NOT_ACTIVATED_OPACITY : 1));
+
   return (
-    <svg width="306" height="192" viewBox="0 0 306 192" xmlns="http://www.w3.org/2000/svg" class={props.class}>
+    <svg
+      width="306"
+      height="192"
+      viewBox="0 0 306 192"
+      xmlns="http://www.w3.org/2000/svg"
+      class={join(css.root, props.class)}
+    >
       <path
-        fill={BACKGROUND[props.type]}
+        fill={isFrozen() ? FROZEN_COLOR : BACKGROUND[props.type]}
         d="M295 192H11a11 11 0 0 1-11-11V11A11 11 0 0 1 11 0h284a11 11 0 0 1 11 11v170a11 11 0 0 1-11 11z"
       />
       <path
-        fill="#000"
+        fill={mainColor()}
         opacity={0.02}
         d={
           'M122.7 192H295a11 11 0 0 0 10.9-10l-183.2-23.6V192zM5 1.8c-3 2-5 5.3-5 9.2v86.6l306 ' +
           '57.7V97.5L5 1.8zm252 .8-.2-2.6H118.4L257 52.4V2.6z'
         }
       />
-      <g opacity={props.notActivated ? NOT_ACTIVATED_OPACITY : 1}>
+      <g opacity={mainOpacity()}>
         <path
-          fill="#000"
+          fill={mainColor()}
           d={
             'M273.7 154.8h-3c-.9 0-1.6.3-2 1.2l-5.7 13.8h4l.8-2.2h5l.5 2.2h3.6l-3.2-15zm-4.8 9.7 ' +
             '1.5-4.2.5-1.4.3 1.3.9 4.3h-3.2zm-9.7-6.6a7 7 0 0 1 2.9.6l.3.2.5-3.2c-.8-.3-2-.6-3.5-' +
@@ -57,28 +72,28 @@ export function Card(props: Readonly<CardProps>) {
             '6.1-15H241z'
           }
         />
-        <text x="279" y="70" text-anchor="end" class={css.text}>
+        <text x="279" y="70" text-anchor="end" fill={mainColor()} class={css.text}>
           <Show when={!props.notActivated} fallback="••••">
             {props.number && formatCardNumber(props.number)}
           </Show>
         </text>
         <Show when={props.name}>
-          <text x="279" y="92" text-anchor="end" class={css.text}>
+          <text x="279" y="92" text-anchor="end" fill={mainColor()} class={css.text}>
             {props.name}
           </text>
         </Show>
         <Show when={props.allocation}>
-          <text x="279" y="114" text-anchor="end" class={css.text}>
+          <text x="279" y="114" text-anchor="end" fill={mainColor()} class={css.text}>
             {props.allocation}
           </text>
         </Show>
         <Show when={props.details}>
-          <text x="279" y="136" text-anchor="end" class={css.text}>
+          <text x="279" y="136" text-anchor="end" fill={mainColor()} class={css.text}>
             {props.details}
           </text>
         </Show>
         <path
-          fill={props.type === CardType.VIRTUAL ? '#5bea83' : '#000'}
+          fill={props.type === CardType.VIRTUAL ? PRIMARY_COLOR : '#000'}
           d={
             'M284.8 24.3c0-.2-.1-.5-.3-.6l-7.8-3.9c-.4-.2-.7-.1-.7.3v2.4l8.8 3.3v-1.5zm-4 6.5c0 .' +
             '3.2.5.4.5h5.4l.2-.4v-1.3l-6-.8v2zm5.8-3.6L276 23.9v2.4c0 .4.3.7.7.8l10.1 1.9v-1.3l-.' +
@@ -86,7 +101,7 @@ export function Card(props: Readonly<CardProps>) {
           }
         />
         <path
-          fill="#000"
+          fill={mainColor()}
           d={
             'M182.3 34.8a4 4 0 0 1 1.9-.4c1.2 0 2.1.3 2.8 1 .7.7.9 1.5 1 1.9v.1h1.8v-.1a5.6 5.6 0' +
             ' 0 0-1.7-3.2c-1-.9-2.3-1.4-3.9-1.4a7 7 0 0 0-2.5.5c-.7.3-1.4.8-1.9 1.4-.5.6-1 1.3-1.' +
@@ -129,25 +144,36 @@ export function Card(props: Readonly<CardProps>) {
           }
         />
       </g>
-      <Show
-        when={!props.notActivated}
+      <Switch
         fallback={
+          <text x="27" y="168" class={css.amount}>
+            {props.balance && formatCurrency(props.balance)}
+          </text>
+        }
+      >
+        <Match when={props.notActivated}>
           <>
             <g transform="translate(24, 150)">
               <Icon name="warning-triangle" />
             </g>
-            <text x="50" y="168" class={css.notActivated}>
+            <text x="50" y="168" class={css.inactive}>
               {i18n.t('Not activated')}
             </text>
           </>
-        }
-      >
-        <text x="27" y="168" class={css.amount}>
-          {props.balance && formatCurrency(props.balance)}
-        </text>
-      </Show>
+        </Match>
+        <Match when={props.status === 'INACTIVE'}>
+          <>
+            <g transform="translate(24, 150)" style={{ color: PRIMARY_COLOR }}>
+              <Icon name="freeze" />
+            </g>
+            <text x="50" y="167" fill="#fff" class={css.frozen}>
+              {i18n.t('Card frozen')}
+            </text>
+          </>
+        </Match>
+      </Switch>
       <Show when={props.type === CardType.VIRTUAL}>
-        <text x="27" y="45" fill="#000" class={css.type}>
+        <text x="27" y="45" fill={mainColor()} opacity={mainOpacity()} class={css.type}>
           {i18n.t('Virtual Card')}
         </text>
       </Show>

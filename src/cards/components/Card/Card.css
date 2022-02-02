@@ -1,3 +1,7 @@
+.root {
+  display: block;
+}
+
 .text {
   font-family: var(--font-main);
   font-size: var(--text-14);
@@ -17,9 +21,16 @@
   line-height: var(--line-28);
 }
 
-.not-activated {
+.inactive {
   font-size: var(--text-16);
   line-height: var(--line-24);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.frozen {
+  font-size: var(--text-12);
+  line-height: var(--line-16);
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }

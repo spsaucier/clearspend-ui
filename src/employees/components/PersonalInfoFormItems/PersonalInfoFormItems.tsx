@@ -4,8 +4,9 @@ import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputPhone } from '_common/components/InputPhone/InputPhone';
 
-import css from '../../../_common/components/Form/FormItems.css';
 import type { FormValues } from '../EditEmployeeForm/types';
+
+import css from './PersonalInfoFormItems.css';
 
 interface PersonalInfoFormItemsProps {
   values: FormValues;
