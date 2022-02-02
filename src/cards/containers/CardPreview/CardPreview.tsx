@@ -68,7 +68,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
         error={getCardRequestStatus().error}
         onReload={reload}
       >
-        <div>
+        <div class={css.content}>
           <Card
             type={card()!.type as CardType}
             name={user() ? formatName(user()!) : ''}
@@ -107,9 +107,11 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
             </Match>
           </Switch>
         </div>
-        <Button wide type="primary" onClick={() => navigate(`/cards/view/${card()!.cardId}`)}>
-          <Text message="View all card details" />
-        </Button>
+        <div class={css.controls}>
+          <Button wide type="primary" onClick={() => navigate(`/cards/view/${card()!.cardId}`)}>
+            <Text message="View all card details" />
+          </Button>
+        </div>
       </Data>
     </div>
   );

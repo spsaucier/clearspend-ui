@@ -54,7 +54,12 @@ export default function Employees() {
           onChangeParams={usersStore.setParams}
         />
       </Data>
-      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
+      <Drawer
+        open={Boolean(cardID())}
+        title={<Text message="Card summary" />}
+        onClose={() => setCardID(null)}
+        noPadding={true}
+      >
         <CardPreview cardID={cardID()!} />
       </Drawer>
       <div style={{ 'margin-top': '24px' }}>

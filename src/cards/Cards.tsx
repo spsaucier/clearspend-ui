@@ -46,7 +46,12 @@ export default function Cards() {
         onUserClick={setUID}
         onChangeParams={cardsStore.setParams}
       />
-      <Drawer open={Boolean(uid())} title={<Text message="Employee Profile" />} onClose={() => setUID(null)}>
+      <Drawer
+        open={Boolean(uid())}
+        title={<Text message="Employee Profile" />}
+        onClose={() => setUID(null)}
+        noPadding={true}
+      >
         <EmployeePreview uid={uid()!} />
       </Drawer>
     </Page>

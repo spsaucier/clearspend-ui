@@ -42,7 +42,12 @@ export function Cards(props: Readonly<CardsProps>) {
         onChangeParams={setParams}
         params={params()}
       />
-      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
+      <Drawer
+        open={Boolean(cardID())}
+        title={<Text message="Card summary" />}
+        onClose={() => setCardID(null)}
+        noPadding={true}
+      >
         <CardPreview cardID={cardID()!} />
       </Drawer>
     </>

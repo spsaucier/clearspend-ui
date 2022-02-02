@@ -9,3 +9,15 @@
   width: 100%;
   margin-bottom: var(--pd-24);
 }
+
+.content {
+  padding: 0 var(--pd-24) var(--pd-24);
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.controls {
+  padding: 0 var(--pd-24) var(--pd-24);
+}

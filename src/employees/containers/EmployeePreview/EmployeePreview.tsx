@@ -37,7 +37,7 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
   return (
     <div class={css.root}>
       <Data data={user()} loading={status().loading} error={status().error} onReload={reload}>
-        <div>
+        <div class={css.content}>
           <h4 class={css.name}>{formatName(user()!)}</h4>
           <div class={css.data}>{user()!.email}</div>
           <div class={css.data}>{formatPhone(user()!.phone)}</div>
@@ -50,9 +50,11 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
             />
           </Data>
         </div>
-        <Button wide type="primary" onClick={() => navigate(`/employees/view/${props.uid}`)}>
-          <Text message="View full profile" />
-        </Button>
+        <div class={css.controls}>
+          <Button wide type="primary" onClick={() => navigate(`/employees/view/${props.uid}`)}>
+            <Text message="View full profile" />
+          </Button>
+        </div>
       </Data>
     </div>
   );
