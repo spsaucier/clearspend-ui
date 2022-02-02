@@ -6,6 +6,7 @@
 }
 
 .name {
+  text-transform: none;
   text-overflow: ellipsis;
   overflow: hidden;
 }

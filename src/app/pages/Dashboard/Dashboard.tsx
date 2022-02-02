@@ -12,7 +12,7 @@ import { LoadingError } from 'app/components/LoadingError';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
-import { getRootAllocation } from 'allocations/utils/getRootAllocation';
+import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 
 import { Page } from '../../components/Page';
 // import { Landing } from '../../containers/Landing';
@@ -26,16 +26,11 @@ export default function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
   const { owner } = useBusiness();
 
-  const [allocation, setAllocation] = createSignal<string | undefined>(searchParams.allocation);
+  const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
+
   const [manageId, setManageId] = createSignal<string>();
 
-  const allocations = useAllocations({
-    initValue: [],
-    onSuccess: (data) => {
-      const root = getRootAllocation(data);
-      if (root && !allocation()) setAllocation(root.allocationId);
-    },
-  });
+  const allocations = useAllocations({ initValue: [] });
 
   const onAllocationChange = (id: string) => {
     setAllocation(id);
@@ -52,6 +47,7 @@ export default function Dashboard() {
           value={allocation()}
           class={css.allocations}
           onChange={onAllocationChange}
+          showAllAsOption
         />
         // <Tag type="primary">
         //   North Valley Enterprises | <strong>$100.00</strong>

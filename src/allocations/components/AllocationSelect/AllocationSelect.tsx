@@ -2,6 +2,7 @@ import { For } from 'solid-js';
 
 import { Select, Option } from '_common/components/Select';
 import type { Allocation } from 'generated/capital';
+import { i18n } from '_common/api/intl';
 
 import { allocationWithID } from '../../utils/allocationWithID';
 import { AllocationView } from '../AllocationView';
@@ -18,13 +19,17 @@ interface AllocationSelectProps {
   disabled?: boolean;
   class?: string;
   placeholder?: string;
+  showAllAsOption?: boolean;
   error?: boolean;
   onChange: (value: string) => void;
 }
 
+export const ALL_ALLOCATIONS = 'all';
+
 export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
   const renderValue = (id: string) => {
-    if (!id) return <AllocationView name="All allocations" amount={getTotalAmount(props.items)} />;
+    if (!id || id === ALL_ALLOCATIONS)
+      return <AllocationView name={String(i18n.t('All allocations'))} amount={getTotalAmount(props.items)} />;
 
     const found = props.items.find(allocationWithID(id));
     if (!found) return null;
@@ -44,6 +49,7 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
       popupClass={css.popup}
       onChange={props.onChange}
     >
+      {props.showAllAsOption && <Option value={ALL_ALLOCATIONS}>{String(i18n.t('All allocations'))}</Option>}
       <For each={props.items}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
     </Select>
   );

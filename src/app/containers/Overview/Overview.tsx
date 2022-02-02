@@ -1,4 +1,4 @@
-import { createSignal, Index, Show, batch, createEffect, on } from 'solid-js';
+import { createSignal, Index, Show, batch, createEffect, on, createMemo } from 'solid-js';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
@@ -19,6 +19,7 @@ import { Drawer } from '_common/components/Drawer';
 import { useNav } from '_common/api/router';
 import { Modal } from '_common/components/Modal/Modal';
 import { ReceiptsView, ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
+import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -51,12 +52,14 @@ export function Overview(props: Readonly<OverviewProps>) {
   const PERIOD = toISO(getTimePeriod(initPeriod));
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
-  const spendStore = useSpend({ params: { ...PERIOD, allocationId: props.allocationId } });
+  const allocationId = createMemo(() => (props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId));
+
+  const spendStore = useSpend({ params: { ...PERIOD, allocationId: allocationId() } });
 
   const spendingStore = useSpending({
     params: {
       ...PERIOD,
-      allocationId: props.allocationId,
+      allocationId: allocationId(),
       chartFilter: 'ALLOCATION',
     },
   });
@@ -64,7 +67,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   const activityStore = useActivity({
     params: {
       ...PERIOD,
-      allocationId: props.allocationId,
+      allocationId: allocationId(),
       pageRequest: { pageNumber: 0, pageSize: 10 },
     },
   });
@@ -73,7 +76,7 @@ export function Overview(props: Readonly<OverviewProps>) {
     on(
       [() => props.allocationId],
       (input) => {
-        const updates = { allocationId: props.allocationId };
+        const updates = { allocationId: allocationId() };
         spendStore.setParams(updateParams<GraphDataRequest>(updates));
         spendingStore.setParams(updateParams<ChartDataRequest>(updates));
         activityStore.setParams(updateParams<AccountActivityRequest>(updates));
