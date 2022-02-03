@@ -30,6 +30,7 @@ export interface CardProps {
   status?: ICard['status'];
   notActivated?: boolean;
   class?: string;
+  onClick?: () => void;
 }
 
 export function Card(props: Readonly<CardProps>) {
@@ -46,6 +47,7 @@ export function Card(props: Readonly<CardProps>) {
       viewBox="0 0 306 192"
       xmlns="http://www.w3.org/2000/svg"
       class={join(css.root, props.class)}
+      onClick={props.onClick}
     >
       <path
         fill={isFrozen() ? FROZEN_COLOR : BACKGROUND[props.type]}

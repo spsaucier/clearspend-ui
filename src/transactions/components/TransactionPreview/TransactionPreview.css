@@ -1,7 +1,7 @@
 .status {
   display: flex;
   margin: 0 -24px;
-  padding: var(--pd-10) var(--pd-10) var(--pd-10) var(--pd-48);
+  padding: var(--pd-8) var(--pd-24);
   align-items: center;
   color: var(--tw-white);
   font-weight: 600;
@@ -26,10 +26,7 @@
 }
 
 .icon {
-  max-height: 20px;
-  margin-top: 3px;
-  margin-bottom: -3px;
-  overflow: hidden;
+  margin-right: var(--pd-4);
 }
 
 .summary {

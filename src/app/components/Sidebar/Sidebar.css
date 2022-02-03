@@ -69,13 +69,13 @@
   overflow: hidden;
 }
 
-.menu-popup-content {
-  padding: 0;
+.side-menu {
+  padding-top: var(--pd-32);
 }
 
 .toggle {
   height: auto;
-  padding: var(--pd-16) var(--pd-32);
+  padding: var(--pd-16) 36px;
   justify-content: flex-start;
   border-radius: 0;
 

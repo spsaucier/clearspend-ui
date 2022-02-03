@@ -1,0 +1,27 @@
+@value v-card-width: 230px;
+
+.subtitle {
+  color: var(--tw-gray-60);
+}
+
+.section {
+  margin: var(--pd-24) 0;
+}
+
+.info {
+  margin-bottom: var(--pd-24);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, v-card-width);
+  grid-gap: var(--pd-24);
+}
+
+.card {
+  width: v-card-width;
+  height: auto;
+  border-radius: var(--radius-8);
+  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}

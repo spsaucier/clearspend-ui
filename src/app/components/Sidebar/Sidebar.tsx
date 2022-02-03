@@ -42,14 +42,14 @@ export function Sidebar() {
           open={menuOpen()}
           position="bottom-right"
           class={css.menuPopup}
-          content={<MainMenu view="mobile" class={css.menuPopupContent} onItemClick={toggleMenu} />}
+          content={<MainMenu view="mobile" onItemClick={toggleMenu} />}
           onClickOutside={toggleMenu}
         >
           <Button view="ghost" icon="more-vertical" class={css.menuButton} onClick={toggleMenu} />
         </Popover>
       </Show>
       <Show when={media.medium}>
-        <MainMenu view={expand() ? 'expanded' : 'collapsed'} />
+        <MainMenu view={expand() ? 'expanded' : 'collapsed'} class={css.sideMenu} />
         <Button view="ghost" class={css.toggle} onClick={onChangeExpand}>
           <Icon name="chevron-right" class={css.toggleIcon} />
         </Button>

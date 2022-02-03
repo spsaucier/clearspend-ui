@@ -59,7 +59,9 @@ export default function Main() {
         </div>
       </Match>
       <Match when={data()}>
-        <BusinessContext.Provider value={{ business, owner: owner as Accessor<Readonly<User>>, refetch, mutate }}>
+        <BusinessContext.Provider
+          value={{ business, owner: owner as Accessor<Readonly<Required<User>>>, refetch, mutate }}
+        >
           <Switch>
             <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>
               <Onboarding />

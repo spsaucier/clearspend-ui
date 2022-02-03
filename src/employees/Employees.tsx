@@ -3,15 +3,11 @@ import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import { events } from '_common/api/events';
 import { useMediaContext } from '_common/api/media/context';
 import { Drawer } from '_common/components/Drawer';
 import { Button } from '_common/components/Button';
-import { wrapAction } from '_common/utils/wrapAction';
 import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
-import { logout } from 'app/services/auth';
-import { AppEvent } from 'app/types/common';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
 
@@ -33,7 +29,6 @@ export default function Employees() {
   const [cardID, setCardID] = createSignal<string | null>(null);
 
   const usersStore = useUsers({ params: DEFAULT_EMPLOYEE_PARAMS });
-  const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
     <Page
@@ -57,11 +52,6 @@ export default function Employees() {
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID(null)}>
         <CardPreview cardID={cardID()!} />
       </Drawer>
-      <div style={{ 'margin-top': '24px' }}>
-        <Button type="primary" loading={loading()} onClick={logoutAction}>
-          Logout
-        </Button>
-      </div>
     </Page>
   );
 }

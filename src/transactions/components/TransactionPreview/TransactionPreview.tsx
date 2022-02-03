@@ -62,9 +62,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   return (
     <div>
       <div class={join(css.status, getColorClassForTransactionStatus(transaction().status))}>
-        <span class={css.icon}>
-          <Icon name="approved-status" />
-        </span>
+        <Icon name="confirm-circle-filled" size="sm" class={css.icon} />
         <span>{transaction().status?.toLocaleLowerCase()}</span>
         <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
       </div>

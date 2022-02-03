@@ -68,7 +68,7 @@ export default function Onboarding() {
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
     const resp = await setBusinessInfo(owner().userId!, data);
-    mutate([{ ...owner(), userId: resp.businessOwnerId }, resp.business as Business]);
+    mutate([{ ...owner(), userId: resp.businessOwnerId! }, resp.business as Business]);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 

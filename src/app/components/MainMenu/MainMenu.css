@@ -1,54 +1,15 @@
 .root {
+  display: flex;
   width: 100%;
-  padding: var(--pd-32) 0;
+  flex-direction: column;
   flex-grow: 1;
 }
 
-.expanded,
-.mobile {
-  width: 100%;
+.main-grow {
+  flex-grow: 1;
 }
 
-.item {
-  display: flex;
-  padding: var(--pd-16) var(--pd-32);
-  align-items: center;
-  justify-content: flex-start;
-  color: var(--tw-gray-60);
-  background: transparent;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
-  transition: color 0.3s, background-color 0.3s, border 0.3s;
-
-  &:hover {
-    color: var(--tw-black);
-    text-decoration: none;
-    background-color: var(--tw-gray-10);
-  }
-
-  @nest .mobile & {
-    padding: var(--pd-16) var(--pd-24);
-    border: 0;
-  }
-}
-
-.active {
-  color: var(--tw-black);
-  background-color: var(--tw-gray-20);
-  border-right-color: var(--tw-black);
-}
-
-.icon {
-  flex-shrink: 0;
-}
-
-.title {
-  margin-left: var(--pd-16);
-  transition: opacity 0.3s;
-  overflow: hidden;
-  opacity: 0;
-
-  @nest .expanded & {
-    opacity: 1;
-  }
+.mobile-item {
+  padding: var(--pd-16) var(--pd-24);
+  border: 0;
 }

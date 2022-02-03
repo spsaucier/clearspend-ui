@@ -3,6 +3,7 @@ import { Routes, Route } from 'solid-app-router';
 import { Employees } from 'employees';
 import { EmployeeView } from 'employees/pages/EmployeeView';
 import { EmployeeEdit } from 'employees/pages/EmployeeEdit';
+import { Profile } from 'employees/pages/Profile';
 import { Allocations } from 'allocations';
 import { AllocationEdit } from 'allocations/pages/AllocationEdit';
 import { Cards } from 'cards';
@@ -12,7 +13,6 @@ import { CardEdit } from 'cards/pages/CardEdit';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
-import { AccessInfo } from '../../components/AccessInfo';
 import { Dashboard } from '../../pages/Dashboard';
 
 export function MainRoutes() {
@@ -34,7 +34,7 @@ export function MainRoutes() {
         <Route path="/cards/view/:id" element={<CardView />} />
         <Route path="/cards/activate/:id" element={<CardActivate />} />
 
-        <Route path="/test/access" element={<AccessInfo />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </MainLayout>
   );

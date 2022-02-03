@@ -7,6 +7,6 @@ export function formatPhone(val: string | undefined): string {
   if (!val) return '';
   return val
     .replace(/[^\d]/g, '')
-    .replace(/^(\d{1})?(\d{3})(\d{3})(\d{4})$/, '+$1 ($2) $3-$4')
+    .replace(/^(\d)?(\d{3})(\d{3})(\d{4})$/, '+$1 ($2) $3-$4')
     .replace('+ ', '');
 }

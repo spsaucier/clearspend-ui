@@ -2,6 +2,7 @@ import { service, RespType } from 'app/utils/service';
 import type {
   CreateUserRequest,
   CreateUserResponse,
+  CardDetailsResponse,
   PagedDataUserPageData,
   SearchUserRequest,
   User,
@@ -40,4 +41,8 @@ export async function saveUser(params: Readonly<CreateUserRequest>) {
 
 export async function editUser(userId: string, params: Readonly<CreateUserRequest>) {
   return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
+}
+
+export async function getUserCards() {
+  return (await service.get<readonly Readonly<CardDetailsResponse>[]>('/users/cards')).data;
 }

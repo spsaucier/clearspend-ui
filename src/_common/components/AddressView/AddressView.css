@@ -17,5 +17,6 @@
 
 .address {
   font-size: var(--text-12);
-  line-height: 1.4;
+  line-height: var(--line-16);
+  white-space: break-spaces;
 }

@@ -1,0 +1,13 @@
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pd-4);
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-12);
+  }
+}
+
+.address {
+  white-space: break-spaces;
+}

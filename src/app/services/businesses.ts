@@ -10,7 +10,9 @@ import type {
 import { events } from '_common/api/events';
 
 export async function getOwner() {
-  return (await service.get<Readonly<User> | null>('/users')).data ?? events.emit(AppEvent.Logout);
+  const data = (await service.get<Readonly<Required<User>> | null>('/users')).data;
+  if (!data) events.emit(AppEvent.Logout);
+  return data;
 }
 
 export async function getBusiness() {

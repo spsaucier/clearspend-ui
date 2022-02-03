@@ -14,7 +14,7 @@ export enum BusinessType {
   SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
   T_501_C_3 = '_501_C_3',
 }
- 
+
 export enum OnboardingStep {
   BUSINESS_OWNERS = 'BUSINESS_OWNERS',
   LINK_ACCOUNT = 'LINK_ACCOUNT',

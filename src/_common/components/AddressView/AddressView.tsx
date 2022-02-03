@@ -1,16 +1,17 @@
 import { Text } from 'solid-i18n';
 
 import type { Address } from 'generated/capital';
-import { join } from '_common/utils/join';
 
 import { Icon, IconName } from '../Icon';
+import { join } from '../../utils/join';
+import { formatAddress } from '../../formatters/address';
 
 import css from './AddressView.css';
 
 export interface AddressViewProps {
   label?: string;
   icon?: keyof typeof IconName;
-  address: Address;
+  address: Readonly<Address>;
   addressClass?: string;
 }
 
@@ -24,17 +25,7 @@ export function AddressView(props: Readonly<AddressViewProps>) {
             <Text message={props.label} />
           </div>
         )}
-        <div class={join(css.address, props.addressClass)}>
-          {props.address.streetLine1}
-          <br />
-          {props.address.streetLine2 ? (
-            <>
-              {props.address.streetLine2}
-              <br />
-            </>
-          ) : null}
-          {props.address.locality}, {props.address.region} {props.address.postalCode}
-        </div>
+        <div class={join(css.address, props.addressClass)}>{formatAddress(props.address)}</div>
       </div>
     </div>
   );
