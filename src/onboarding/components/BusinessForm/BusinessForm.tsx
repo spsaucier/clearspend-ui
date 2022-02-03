@@ -13,8 +13,8 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
 import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
+import { BUSINESS_TYPES } from 'onboarding/constants/usa';
 
-import { BUSINESS_TYPES } from '../../constants/usa';
 import type { ExceptionData } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
@@ -56,7 +56,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               error={Boolean(errors().type)}
               onChange={handlers.type}
             >
-              <For each={keys(BUSINESS_TYPES)}>{(type) => <Option value={type}>{BUSINESS_TYPES[type]}</Option>}</For>
+              <For each={keys(BUSINESS_TYPES)}>
+                {(type) => <Option value={type as unknown as string}>{BUSINESS_TYPES[type]}</Option>}
+              </For>
             </Select>
           </FormItem>
           <FormItem label="Business EIN" error={errors().ein}>

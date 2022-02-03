@@ -5,14 +5,17 @@ export enum BusinessStatus {
   SUSPENDED = 'SUSPENDED',
 }
 
+// From ConvertBusinessProspectRequest['businessType']
 export enum BusinessType {
-  LLC = 'LLC',
-  LLP = 'LLP',
-  S_CORP = 'S_CORP',
-  C_CORP = 'C_CORP',
-  B_CORP = 'B_CORP',
-  SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
-  T_501_C_3 = '_501_C_3',
+  'INDIVIDUAL',
+  'SOLE_PROPRIETORSHIP',
+  'SINGLE_MEMBER_LLC',
+  'MULTI_MEMBER_LLC',
+  'PRIVATE_PARTNERSHIP',
+  'PUBLIC_PARTNERSHIP',
+  'PRIVATE_CORPORATION',
+  'PUBLIC_CORPORATION',
+  'INCORPORATED_NON_PROFIT',
 }
 
 export enum OnboardingStep {

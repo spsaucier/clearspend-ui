@@ -1,7 +1,6 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
-import type { BusinessType } from 'app/types/businesses';
 import { cleanEIN } from '_common/formatters/ein';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
 
@@ -12,6 +11,9 @@ export function getFormOptions(): FormOptions<FormValues> {
     defaultValues: {
       name: '',
       type: '',
+      url: '',
+      mcc: '',
+      description: '',
       ein: '',
       phone: '',
       streetLine1: '',
@@ -34,12 +36,15 @@ export function getFormOptions(): FormOptions<FormValues> {
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBusinessProspectRequest> {
-  const { name, type, ein, phone, ...address } = data;
+  const { name, ein, phone, mcc, url, description, type, ...address } = data;
   return {
     legalName: name,
-    businessType: type as BusinessType,
     employerIdentificationNumber: cleanEIN(ein),
     businessPhone: phone,
     address: { ...address, country: 'USA' },
+    businessType: type as ConvertBusinessProspectRequest['businessType'],
+    mcc: parseInt(mcc, 10),
+    url,
+    description,
   };
 }

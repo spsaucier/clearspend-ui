@@ -55,7 +55,7 @@ export default function SignUp() {
       return;
     }
 
-    const resp = await signup({ email, firstName: first, lastName: last });
+    const resp = await signup({ email, firstName: first, lastName: last, businessType: 'INDIVIDUAL' }); // TODO: Temp - fill in properly
 
     setEmail(email, resp.businessProspectId || '');
 

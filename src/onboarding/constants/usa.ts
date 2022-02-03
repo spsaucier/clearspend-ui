@@ -1,13 +1,15 @@
 import { BusinessType } from 'app/types/businesses';
 
 export const BUSINESS_TYPES: Readonly<Record<BusinessType, string>> = {
-  [BusinessType.LLC]: 'Limited Liability Company',
-  [BusinessType.LLP]: 'Limited Liability Partnership',
-  [BusinessType.S_CORP]: 'S Corporation',
-  [BusinessType.C_CORP]: 'C Corporation',
-  [BusinessType.B_CORP]: 'B Corporation',
+  [BusinessType.INDIVIDUAL]: 'Individual',
   [BusinessType.SOLE_PROPRIETORSHIP]: 'Sole Proprietorship',
-  [BusinessType.T_501_C_3]: '501(c)(3)',
+  [BusinessType.SINGLE_MEMBER_LLC]: 'Single Member LLC',
+  [BusinessType.MULTI_MEMBER_LLC]: 'Multi-Member LLC',
+  [BusinessType.PRIVATE_PARTNERSHIP]: 'Private Partnership',
+  [BusinessType.PUBLIC_PARTNERSHIP]: 'Public Partnership',
+  [BusinessType.PRIVATE_CORPORATION]: 'Private Corporation',
+  [BusinessType.PUBLIC_CORPORATION]: 'Public Corporation',
+  [BusinessType.INCORPORATED_NON_PROFIT]: 'Incorporated Non-Profit',
 };
 
 export const USA_STATES: Readonly<Record<string, string>> = {

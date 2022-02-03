@@ -5,4 +5,7 @@ export interface FormValues extends AddressValues {
   type: string;
   ein: string;
   phone: string;
+  url: string;
+  mcc: string;
+  description: string;
 }
