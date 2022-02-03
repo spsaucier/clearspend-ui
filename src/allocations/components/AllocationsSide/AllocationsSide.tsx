@@ -8,6 +8,7 @@ import { Button } from '_common/components/Button';
 import type { Allocation } from 'generated/capital';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
+import { byName } from '../AllocationSelect/utils';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -70,7 +71,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
               <List
                 currentID={props.currentID}
                 parentID={data.allocationId}
-                items={props.items}
+                items={[...props.items].sort(byName)}
                 itemClass={css.item}
                 onSelect={props.onSelect}
               />

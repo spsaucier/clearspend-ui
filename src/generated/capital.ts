@@ -619,6 +619,45 @@ export interface CreateBusinessProspectRequest {
    * @example Wick
    */
   lastName: string;
+
+  /**
+   * The Business type
+   * @example SINGLE_MEMBER_LLC
+   */
+  businessType:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
+
+  /**
+   * Relationship to business Owner
+   * @example true
+   */
+  relationshipOwner?: boolean;
+
+  /**
+   * Relationship to business Representative
+   * @example true
+   */
+  relationshipRepresentative?: boolean;
+
+  /**
+   * Relationship to business Executive
+   * @example true
+   */
+  relationshipExecutive?: boolean;
+
+  /**
+   * Relationship to business Director
+   * @example true
+   */
+  relationshipDirector?: boolean;
 }
 
 export interface CreateBusinessProspectResponse {
@@ -656,26 +695,59 @@ export interface SetBusinessProspectPasswordRequest {
 }
 
 export interface ConvertBusinessProspectRequest {
-  legalName?: string;
-  businessType?: 'UNSPECIFIED' | 'LLC' | 'LLP' | 'S_CORP' | 'C_CORP' | 'B_CORP' | 'SOLE_PROPRIETORSHIP' | '_501_C_3';
+  legalName: string;
+  businessType:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
 
   /** @pattern ^[1-9][0-9]{8}$ */
-  employerIdentificationNumber?: string;
+  employerIdentificationNumber: string;
 
   /**
    * Phone number in e.164 format
    * @pattern ^\+[1-9][0-9]{9,14}$
    * @example +1234567890
    */
-  businessPhone?: string;
+  businessPhone: string;
   address?: Address;
+
+  /** @format int32 */
+  mcc: number;
+
+  /**
+   * Phone number in e.164 format
+   * @example +1234567890
+   */
+  description: string;
+
+  /**
+   * Business url
+   * @example https://fecebook.com/business
+   */
+  url?: string;
 }
 
 export interface Business {
   /** @format uuid */
   businessId?: string;
   legalName?: string;
-  businessType?: 'UNSPECIFIED' | 'LLC' | 'LLP' | 'S_CORP' | 'C_CORP' | 'B_CORP' | 'SOLE_PROPRIETORSHIP' | '_501_C_3';
+  businessType?:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
   employerIdentificationNumber?: string;
 
   /**
@@ -684,7 +756,14 @@ export interface Business {
    */
   businessPhone?: string;
   address?: Address;
-  onboardingStep?: 'BUSINESS_OWNERS' | 'SOFT_FAIL' | 'REVIEW' | 'LINK_ACCOUNT' | 'TRANSFER_MONEY' | 'COMPLETE';
+  onboardingStep?:
+    | 'BUSINESS'
+    | 'BUSINESS_OWNERS'
+    | 'SOFT_FAIL'
+    | 'REVIEW'
+    | 'LINK_ACCOUNT'
+    | 'TRANSFER_MONEY'
+    | 'COMPLETE';
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
 }
@@ -694,9 +773,13 @@ export interface ConvertBusinessProspectResponse {
 
   /** @format uuid */
   businessOwnerId?: string;
+  errorMessages?: string[];
 }
 
 export interface CreateOrUpdateBusinessOwnerRequest {
+  /** @format uuid */
+  id?: string;
+
   /**
    * The first name of the person
    * @example John
@@ -708,6 +791,42 @@ export interface CreateOrUpdateBusinessOwnerRequest {
    * @example Wick
    */
   lastName: string;
+
+  /**
+   * Relationship to business Owner
+   * @example true
+   */
+  relationshipOwner?: boolean;
+
+  /**
+   * Relationship to business Representative
+   * @example true
+   */
+  relationshipRepresentative?: boolean;
+
+  /**
+   * Relationship to business Executive
+   * @example true
+   */
+  relationshipExecutive?: boolean;
+
+  /**
+   * Relationship to business Director
+   * @example true
+   */
+  relationshipDirector?: boolean;
+
+  /**
+   * Percentage Ownership from business
+   * @example 25
+   */
+  percentageOwnership?: number;
+
+  /**
+   * Title on business
+   * @example CEO
+   */
+  title?: string;
 
   /**
    * The date of birth of the person
@@ -728,7 +847,6 @@ export interface CreateOrUpdateBusinessOwnerRequest {
    * @example johnw@hightable.com
    */
   email: string;
-  address?: Address;
 
   /**
    * Phone address of the person
@@ -736,6 +854,7 @@ export interface CreateOrUpdateBusinessOwnerRequest {
    * @example +12345679
    */
   phone?: string;
+  address?: Address;
 
   /**
    * Indication if business owner is updated during the onboarding process
@@ -1990,54 +2109,88 @@ export interface CardDetailsResponse {
   disabledTransactionChannels?: ('ATM' | 'POS' | 'MOTO' | 'ONLINE')[];
 }
 
-export interface Agent {
+export interface UpdateBusinessOwnerRequest {
+  /**
+   * The first name of the person
+   * @example John
+   */
+  firstName?: string;
+
+  /**
+   * The last name of the person
+   * @example Wick
+   */
+  lastName?: string;
+
+  /**
+   * Relationship to business Owner
+   * @example true
+   */
+  relationshipOwner?: boolean;
+
+  /**
+   * Relationship to business Representative
+   * @example true
+   */
+  relationshipRepresentative?: boolean;
+
+  /**
+   * Relationship to business Executive
+   * @example true
+   */
+  relationshipExecutive?: boolean;
+
+  /**
+   * Relationship to business Director
+   * @example true
+   */
+  relationshipDirector?: boolean;
+
+  /**
+   * Percentage Ownership from business
+   * @example 25
+   */
+  percentageOwnership?: number;
+
+  /**
+   * Title on business
+   * @example CEO
+   */
+  title?: string;
+
+  /**
+   * The date of birth of the person
+   * @format date
+   * @example 1990-01-01
+   */
+  dateOfBirth?: string;
+
+  /**
+   * The tax identification number of the person
+   * @example 091827364
+   */
+  taxIdentificationNumber?: string;
+
+  /**
+   * Email address of the person
+   * @pattern ^[^@]+@[^@.]+\.[^@]+$
+   * @example johnw@hightable.com
+   */
   email?: string;
-  external_id?: string;
-}
 
-export interface AlloyWebHookResponse {
-  request_token?: string;
-  timestamp?: string;
-  type?: string;
-  description?: string;
-  data?: Data;
-}
+  /**
+   * Phone address of the person
+   * @pattern ^\+[1-9][0-9]{9,14}$
+   * @example +12345679
+   */
+  phone?: string;
+  address?: Address;
 
-export interface ChildEntity {
-  entity_token?: string;
-  evaluation_tokens?: string[];
-}
-
-export interface Data {
-  service?: string;
-  entity_token?: string;
-  external_entity_id?: string;
-  group_token?: string;
-  external_group_id?: string;
-  review_token?: string;
-  application_token?: string;
-  application_name?: string;
-  outcome?: string;
-  reason?: string;
-  reasons?: string[];
-  started?: string;
-  timestamp?: string;
-  completed?: string;
-  reviewer?: string;
-  agent?: Agent;
-  notes?: Notes[];
-  child_entities?: ChildEntity[];
-}
-
-export interface Notes {
-  note?: string;
-  note_author_agent_email?: string;
-
-  /** @format date-time */
-  created_at?: string;
-
-  /** @format date-time */
-  updated_at?: string;
+  /**
+   * Indication if business owner is updated during the onboarding process
+   * @example false
+   */
+  isOnboarding?: boolean;
 }
 
 export interface UpdateAllocationRequest {
@@ -2125,6 +2278,303 @@ export interface GetBusinessesResponse {
   businesses?: Business[];
 }
 
+export interface BusinessOwner {
+  /** @format uuid */
+  businessId?: string;
+  type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
+  firstName?: NullableEncryptedString;
+  lastName?: NullableEncryptedString;
+  email?: string;
+  countryOfCitizenship?:
+    | 'UNSPECIFIED'
+    | 'ABW'
+    | 'AFG'
+    | 'AGO'
+    | 'AIA'
+    | 'ALA'
+    | 'ALB'
+    | 'AND'
+    | 'ANT'
+    | 'ARE'
+    | 'ARG'
+    | 'ARM'
+    | 'ASM'
+    | 'ATA'
+    | 'ATF'
+    | 'ATG'
+    | 'AUS'
+    | 'AUT'
+    | 'AZE'
+    | 'BDI'
+    | 'BEL'
+    | 'BEN'
+    | 'BFA'
+    | 'BGD'
+    | 'BGR'
+    | 'BHR'
+    | 'BHS'
+    | 'BIH'
+    | 'BLM'
+    | 'BLR'
+    | 'BLZ'
+    | 'BMU'
+    | 'BOL'
+    | 'BRA'
+    | 'BRB'
+    | 'BRN'
+    | 'BTN'
+    | 'BVT'
+    | 'BWA'
+    | 'CAF'
+    | 'CAN'
+    | 'CCK'
+    | 'CHE'
+    | 'CHL'
+    | 'CHN'
+    | 'CIV'
+    | 'CMR'
+    | 'COD'
+    | 'COG'
+    | 'COK'
+    | 'COL'
+    | 'COM'
+    | 'CPV'
+    | 'CRI'
+    | 'CUB'
+    | 'CXR'
+    | 'CYM'
+    | 'CYP'
+    | 'CZE'
+    | 'DEU'
+    | 'DJI'
+    | 'DMA'
+    | 'DNK'
+    | 'DOM'
+    | 'DZA'
+    | 'ECU'
+    | 'EGY'
+    | 'ERI'
+    | 'ESH'
+    | 'ESP'
+    | 'EST'
+    | 'ETH'
+    | 'FIN'
+    | 'FJI'
+    | 'FLK'
+    | 'FRA'
+    | 'FRO'
+    | 'FSM'
+    | 'GAB'
+    | 'GBR'
+    | 'GEO'
+    | 'GGY'
+    | 'GHA'
+    | 'GIB'
+    | 'GIN'
+    | 'GLP'
+    | 'GMB'
+    | 'GNB'
+    | 'GNQ'
+    | 'GRC'
+    | 'GRD'
+    | 'GRL'
+    | 'GTM'
+    | 'GUF'
+    | 'GUM'
+    | 'GUY'
+    | 'HKG'
+    | 'HMD'
+    | 'HND'
+    | 'HRV'
+    | 'HTI'
+    | 'HUN'
+    | 'IDN'
+    | 'IMN'
+    | 'IND'
+    | 'IOT'
+    | 'IRL'
+    | 'IRN'
+    | 'IRQ'
+    | 'ISL'
+    | 'ISR'
+    | 'ITA'
+    | 'JAM'
+    | 'JEY'
+    | 'JOR'
+    | 'JPN'
+    | 'KAZ'
+    | 'KEN'
+    | 'KGZ'
+    | 'KHM'
+    | 'KIR'
+    | 'KNA'
+    | 'KOR'
+    | 'KWT'
+    | 'LAO'
+    | 'LBN'
+    | 'LBR'
+    | 'LBY'
+    | 'LCA'
+    | 'LIE'
+    | 'LKA'
+    | 'LSO'
+    | 'LTU'
+    | 'LUX'
+    | 'LVA'
+    | 'MAC'
+    | 'MAF'
+    | 'MAR'
+    | 'MCO'
+    | 'MDA'
+    | 'MDG'
+    | 'MDV'
+    | 'MEX'
+    | 'MHL'
+    | 'MKD'
+    | 'MLI'
+    | 'MLT'
+    | 'MMR'
+    | 'MNE'
+    | 'MNG'
+    | 'MNP'
+    | 'MOZ'
+    | 'MRT'
+    | 'MSR'
+    | 'MTQ'
+    | 'MUS'
+    | 'MWI'
+    | 'MYS'
+    | 'MYT'
+    | 'NAM'
+    | 'NCL'
+    | 'NER'
+    | 'NFK'
+    | 'NGA'
+    | 'NIC'
+    | 'NIU'
+    | 'NLD'
+    | 'NOR'
+    | 'NPL'
+    | 'NRU'
+    | 'NZL'
+    | 'OMN'
+    | 'PAK'
+    | 'PAN'
+    | 'PCN'
+    | 'PER'
+    | 'PHL'
+    | 'PLW'
+    | 'PNG'
+    | 'POL'
+    | 'PRI'
+    | 'PRK'
+    | 'PRT'
+    | 'PRY'
+    | 'PSE'
+    | 'PYF'
+    | 'QAT'
+    | 'REU'
+    | 'ROU'
+    | 'RUS'
+    | 'RWA'
+    | 'SAU'
+    | 'SDN'
+    | 'SEN'
+    | 'SGP'
+    | 'SGS'
+    | 'SHN'
+    | 'SJM'
+    | 'SLB'
+    | 'SLE'
+    | 'SLV'
+    | 'SMR'
+    | 'SOM'
+    | 'SPM'
+    | 'SRB'
+    | 'SSD'
+    | 'STP'
+    | 'SUR'
+    | 'SVK'
+    | 'SVN'
+    | 'SWE'
+    | 'SWZ'
+    | 'SYC'
+    | 'SYR'
+    | 'TCA'
+    | 'TCD'
+    | 'TGO'
+    | 'THA'
+    | 'TJK'
+    | 'TKL'
+    | 'TKM'
+    | 'TLS'
+    | 'TON'
+    | 'TTO'
+    | 'TUN'
+    | 'TUR'
+    | 'TUV'
+    | 'TWN'
+    | 'TZA'
+    | 'UGA'
+    | 'UKR'
+    | 'UMI'
+    | 'URY'
+    | 'USA'
+    | 'UZB'
+    | 'VAT'
+    | 'VCT'
+    | 'VEN'
+    | 'VGB'
+    | 'VIR'
+    | 'VNM'
+    | 'VUT'
+    | 'WLF'
+    | 'WSM'
+    | 'YEM'
+    | 'ZAF'
+    | 'ZMB'
+    | 'ZWE';
+  knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
+  status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
+  stripePersonReference?: string;
+
+  /** @format int64 */
+  version?: number;
+
+  /** @format date-time */
+  created?: string;
+
+  /** @format date-time */
+  updated?: string;
+
+  /** @format uuid */
+  id?: string;
+}
+
+export interface BusinessRecord {
+  business?: Business;
+  businessOwners?: BusinessOwner[];
+  user?: User;
+  allocation?: Allocation;
+}
+
+export interface NullableEncryptedString {
+  encrypted?: string;
+}
+
 export interface MccGroup {
   /** @format uuid */
   mccGroupId?: string;
@@ -2157,22 +2607,6 @@ export interface MccGroup {
   name?: string;
 }
 
-export interface KycDocuments {
-  owner?: string;
-  documents?: RequiredDocument[];
-}
-
-export interface RequiredDocument {
-  documentName?: string;
-  type?: string;
-  entityTokenId?: string;
-}
-
-export interface SoftFailRequiredDocumentsResponse {
-  kybRequiredDocuments?: RequiredDocument[];
-  kycRequiredDocuments?: KycDocuments[];
-}
-
 export interface BankAccount {
   /** @format uuid */
   businessBankAccountId?: string;
@@ -2183,6 +2617,24 @@ export interface BankAccount {
 
 export interface LinkTokenResponse {
   linkToken?: string;
+}
+
+export interface ApplicationReviewRequirements {
+  kybRequiredFields?: string[];
+  kycRequiredFields?: string[];
+  kybRequiredDocuments?: RequiredDocument[];
+  kycRequiredDocuments?: KycDocuments[];
+}
+
+export interface KycDocuments {
+  owner?: string;
+  documents?: RequiredDocument[];
+}
+
+export interface RequiredDocument {
+  documentName?: string;
+  type?: string;
+  entityTokenId?: string;
 }
 
 export interface AllocationRolePermissionRecord {

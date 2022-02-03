@@ -6,7 +6,7 @@ export interface OptionProps {
   value: string;
   disabled?: boolean;
   class?: string;
-  children: string;
+  children: JSXElement;
 }
 
 export interface SelectProps {
