@@ -1,11 +1,12 @@
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
-import { createSignal, createEffect, createMemo, Switch, Match } from 'solid-js';
+import { createSignal, createEffect, createMemo, Show, Switch, Match } from 'solid-js';
 
 import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
 import { TabList, Tab } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
+import { useBusiness } from 'app/containers/Main/context';
 import { getAccountActivity } from 'app/services/activity';
 import type { AccountActivityRequest } from 'generated/capital';
 import { useAllocations } from 'allocations/stores/allocations';
@@ -17,6 +18,7 @@ import { TransactionsList } from 'transactions/components/TransactionsList';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
+import { canActivateCard } from '../../utils/canActivateCard';
 import { getCard } from '../../services';
 
 import css from './CardPreview.css';
@@ -41,6 +43,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const navigate = useNavigate();
   const [tab, setTab] = createSignal(Tabs.transactions);
 
+  const { owner } = useBusiness();
   const allocations = useAllocations();
   const [data, getCardRequestStatus, , , reload] = useResource(getCard, props.cardID);
   const [user, , , setUserID] = useResource(getUser, undefined, false);
@@ -59,6 +62,11 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   });
 
   const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)));
+
+  const showActivate = createMemo(() => {
+    const cardData = card();
+    return cardData && !cardData.activated && canActivateCard(cardData, owner());
+  });
 
   return (
     <div class={css.root}>
@@ -108,7 +116,16 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
           </Switch>
         </div>
         <div class={css.controls}>
-          <Button wide type="primary" onClick={() => navigate(`/cards/view/${card()!.cardId}`)}>
+          <Show when={showActivate()}>
+            <Button wide type="primary" onClick={() => navigate(`/cards/activate/${card()!.cardId}`)}>
+              <Text message="Activate card now" />
+            </Button>
+          </Show>
+          <Button
+            wide
+            type={showActivate() ? 'default' : 'primary'}
+            onClick={() => navigate(`/cards/view/${card()!.cardId}`)}
+          >
             <Text message="View all card details" />
           </Button>
         </div>

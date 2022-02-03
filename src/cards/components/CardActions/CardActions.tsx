@@ -7,6 +7,8 @@ import { Button } from '_common/components/Button';
 import { useMessages } from 'app/containers/Messages/context';
 import type { User, Card } from 'generated/capital';
 
+import { canActivateCard } from '../../utils/canActivateCard';
+
 interface CardActionsProps {
   user: Readonly<User>;
   card: Readonly<Card>;
@@ -28,7 +30,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
   return (
     <Switch>
       <Match when={!props.card.activated}>
-        <Show when={props.user.type === 'BUSINESS_OWNER' || props.user.userId === props.card.userId}>
+        <Show when={canActivateCard(props.card, props.user)}>
           <Button size="lg" type="primary" icon="power" disabled={!props.card.issueDate} onClick={props.onActivate}>
             <Text message="Activate Card" />
           </Button>

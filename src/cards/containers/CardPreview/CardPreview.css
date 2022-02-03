@@ -1,8 +1,7 @@
 .root {
-  display: grid;
+  display: flex;
   height: 100%;
-  grid-template-rows: 1fr auto;
-  grid-gap: var(--pd-16);
+  flex-direction: column;
 }
 
 .card {
@@ -11,7 +10,6 @@
 }
 
 .content {
-  padding: 0 var(--pd-24) var(--pd-24);
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
@@ -19,5 +17,7 @@
 }
 
 .controls {
-  padding: 0 var(--pd-24) var(--pd-24);
+  display: grid;
+  margin-top: var(--pd-24);
+  grid-gap: var(--pd-16);
 }
