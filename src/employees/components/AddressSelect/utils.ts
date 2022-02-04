@@ -2,7 +2,7 @@ import type { FormOptions } from '_common/components/Form';
 import { validStreetLine1 } from '_common/components/Form/rules/patterns';
 import type { User } from 'generated/capital';
 
-import type { AddressValues } from '../AddressFormItems/types';
+import type { AddressValues } from '../AddressFormItems';
 
 export function getFormOptions(user?: Readonly<User>): FormOptions<AddressValues> {
   return {

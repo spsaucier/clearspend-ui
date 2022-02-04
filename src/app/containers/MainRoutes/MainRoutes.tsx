@@ -4,6 +4,8 @@ import { Employees } from 'employees';
 import { EmployeeView } from 'employees/pages/EmployeeView';
 import { EmployeeEdit } from 'employees/pages/EmployeeEdit';
 import { Profile } from 'employees/pages/Profile';
+import { ProfileSettings } from 'employees/pages/ProfileSettings';
+import { ChangePassword } from 'employees/pages/ChangePassword';
 import { Allocations } from 'allocations';
 import { AllocationEdit } from 'allocations/pages/AllocationEdit';
 import { Cards } from 'cards';
@@ -35,6 +37,8 @@ export function MainRoutes() {
         <Route path="/cards/activate/:id" element={<CardActivate />} />
 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/settings" element={<ProfileSettings />} />
+        <Route path="/profile/password" element={<ChangePassword />} />
       </Routes>
     </MainLayout>
   );

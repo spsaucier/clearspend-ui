@@ -1,4 +1,4 @@
-import type { AddressValues } from '_common/components/AddressFormItems/types';
+import type { AddressValues } from '../AddressFormItems';
 
 export interface FormValues extends AddressValues {
   firstName: string;

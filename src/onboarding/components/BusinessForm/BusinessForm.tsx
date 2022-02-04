@@ -12,7 +12,7 @@ import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
-import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
+import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { BUSINESS_TYPES } from 'onboarding/constants/usa';
 
 import type { ExceptionData } from '../../types';

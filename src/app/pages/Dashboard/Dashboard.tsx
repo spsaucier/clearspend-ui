@@ -12,12 +12,12 @@ import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
+import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 // import { Tag } from '_common/components/Tag';
 
 import { Page } from '../../components/Page';
 import { Overview } from '../../containers/Overview';
 import { useBusiness } from '../../containers/Main/context';
-import { getRootAllocation } from '../../../allocations/utils/getRootAllocation';
 
 import css from './Dashboard.css';
 

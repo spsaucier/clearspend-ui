@@ -9,7 +9,7 @@ import { InputPhone } from '_common/components/InputPhone';
 import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
 import { formatSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
-import { AddressFormItems } from '_common/components/AddressFormItems/AddressFormItems';
+import { AddressFormItems } from 'employees/components/AddressFormItems';
 
 import type { ExceptionData } from '../../types';
 

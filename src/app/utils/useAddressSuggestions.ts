@@ -3,7 +3,7 @@ import createDebounce from '@solid-primitives/debounce';
 
 import { type Suggestion, getAddresses, type SuggestionsResponse } from 'app/services/address';
 import { validStreetLine1 } from '_common/components/Form/rules/patterns';
-import type { AddressValues } from '_common/components/AddressFormItems/types';
+import type { AddressValues } from 'employees/components/AddressFormItems';
 
 const DEBOUNCE_MS = 300;
 const MIN_CHARS = 4;

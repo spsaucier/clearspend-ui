@@ -22,7 +22,7 @@ export async function exportUsers(params: Readonly<SearchUserRequest>) {
 }
 
 export async function getUser(userId: string) {
-  return (await service.get<Readonly<User>>(`/users/${userId}`)).data;
+  return (await service.get<Readonly<Required<User>>>(`/users/${userId}`)).data;
 }
 
 function extendUserParams(params: Readonly<CreateUserRequest>, pass = true) {

@@ -1,14 +1,13 @@
 import { Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
+import { createForm } from '_common/components/Form';
+import { AddressView } from '_common/components/AddressView/AddressView';
+import { RadioGroup, Radio } from '_common/components/Radio';
+import { Button } from '_common/components/Button';
 import type { Address } from 'generated/capital';
 
-import { createForm } from '../Form';
-import { AddressFormItems } from '../AddressFormItems/AddressFormItems';
-import { AddressView } from '../AddressView/AddressView';
-import { RadioGroup, Radio } from '../Radio';
-import { Button } from '../Button';
-import type { AddressValues } from '../AddressFormItems/types';
+import { AddressFormItems, AddressValues } from '../AddressFormItems';
 
 import { getFormOptions } from './utils';
 

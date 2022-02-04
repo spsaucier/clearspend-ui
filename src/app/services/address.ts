@@ -2,7 +2,7 @@ import { fetch } from '_common/api/fetch';
 import { isFetchError } from '_common/api/fetch/isFetchError';
 import { HttpStatus } from '_common/api/fetch/types';
 import { events } from '_common/api/events';
-import type { AddressValues } from '_common/components/AddressFormItems/types';
+import type { AddressValues } from 'employees/components/AddressFormItems';
 
 import { AppEvent } from '../types/common';
 

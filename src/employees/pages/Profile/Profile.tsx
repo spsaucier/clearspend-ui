@@ -4,6 +4,7 @@ import { useNavigate } from 'solid-app-router';
 
 import { events } from '_common/api/events';
 import { wrapAction } from '_common/utils/wrapAction';
+import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
 import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
@@ -15,6 +16,7 @@ import { Card } from 'cards/components/Card';
 import type { CardType } from 'cards/types';
 
 import { ProfileInfo } from '../../components/ProfileInfo';
+import { getUser } from '../../services';
 import { useUserCards } from '../../stores/userCards';
 import { formatName } from '../../utils/formatName';
 
@@ -22,7 +24,9 @@ import css from './Profile.css';
 
 export default function Profile() {
   const navigate = useNavigate();
+
   const { owner } = useBusiness();
+  const [user, userStatus, , , reloadUser] = useResource(getUser, owner().userId);
 
   const cards = useUserCards();
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
@@ -42,8 +46,10 @@ export default function Profile() {
         description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
         class={css.section}
       >
-        <ProfileInfo data={owner()} class={css.info} />
-        <Button size="lg" icon="edit">
+        <Data data={user()} error={userStatus().error} loading={userStatus().loading} onReload={reloadUser}>
+          <ProfileInfo data={user()!} class={css.info} />
+        </Data>
+        <Button size="lg" icon="edit" onClick={() => navigate('/profile/settings')}>
           <Text message="Update Profile" />
         </Button>
       </Section>
@@ -74,7 +80,7 @@ export default function Profile() {
         description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
         class={css.section}
       >
-        <Button size="lg" icon="edit">
+        <Button size="lg" icon="edit" onClick={() => navigate('/profile/password')}>
           <Text message="Update Password" />
         </Button>
       </Section>
