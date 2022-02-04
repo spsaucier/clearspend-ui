@@ -2242,19 +2242,35 @@ export interface Receipt {
   amount: Amount;
 }
 
-export interface UserAllocationRole {
+export interface UserAllocationRolesResponse {
+  userRolesAndPermissionsList: UserRolesAndPermissionsRecord[];
+}
+
+export interface UserRolesAndPermissionsRecord {
   /** @format uuid */
   userAllocationRoleId?: string;
 
   /** @format uuid */
   allocationId: string;
   user?: UserData;
-  role?: string;
+  allocationRole?: string;
   inherited?: boolean;
-}
-
-export interface UserAllocationRolesResponse {
-  userAllocationRoleList: UserAllocationRole[];
+  allocationPermissions?: (
+    | 'READ'
+    | 'CATEGORIZE'
+    | 'LINK_RECEIPTS'
+    | 'MANAGE_FUNDS'
+    | 'MANAGE_CARDS'
+    | 'MANAGE_USERS'
+    | 'MANAGE_PERMISSIONS'
+  )[];
+  globalUserPermissions?: (
+    | 'BATCH_ONBOARD'
+    | 'CROSS_BUSINESS_BOUNDARY'
+    | 'GLOBAL_READ'
+    | 'CUSTOMER_SERVICE'
+    | 'CUSTOMER_SERVICE_MANAGER'
+  )[];
 }
 
 export interface CreateTestDataResponse {
@@ -2605,6 +2621,14 @@ export interface MccGroup {
     | 'GAS_MCG_CONFG'
     | 'EDU_MCG_CONFG';
   name?: string;
+}
+
+export interface BusinessLimit {
+  /** @format int32 */
+  issuedPhysicalCardsLimit?: number;
+
+  /** @format int32 */
+  issuedPhysicalCardsTotal?: number;
 }
 
 export interface BankAccount {
