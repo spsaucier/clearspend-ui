@@ -15,12 +15,14 @@ import type {
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
 
+import { merchantImg } from '../TransactionPreview/TransactionPreview';
+
 import css from './TransactionsList.css';
 
 interface TransactionsListProps {
   params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
-  onReceiptClick?: (transaction: AccountActivityResponse) => void;
+  onRowClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -45,9 +47,9 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
             const date = createMemo(() => new Date(item.activityTime || ''));
 
             return (
-              <div class={css.item} onClick={() => props.onReceiptClick?.(item)}>
-                <Show when={item.merchant?.merchantLogoUrl}>
-                  <img src={item.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.icon} />
+              <div class={css.item} onClick={() => props.onRowClick?.(item)}>
+                <Show when={item.merchant}>
+                  <img src={merchantImg(item)} alt="Merchant logo" class={css.icon} />
                 </Show>
                 <div>
                   <div class={css.category}>{item.merchant?.name || 'hello'}</div>

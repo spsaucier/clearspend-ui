@@ -2,14 +2,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { useResource } from '_common/utils/useResource';
 import { getAccountActivity } from 'app/services/activity';
 import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { AccountActivityRequest } from 'generated/capital';
-
-const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
-};
+import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
 
 interface TransactionsProps {
   cardId: string;

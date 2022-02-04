@@ -21,6 +21,23 @@ interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
 }
+
+export const merchantImg = (transaction: AccountActivityResponse) => {
+  if (transaction.merchant) {
+    return (
+      transaction.merchant.merchantLogoUrl ||
+      `https://ui-avatars.com/api/?background=047857&color=fff&name=${encodeURIComponent(
+        transaction.merchant.name || '',
+      )}`
+    );
+  }
+  return '';
+};
+
+export const formatMerchantTypeLc = (type: string) => {
+  return type.replace(/_/g, ' ').toLocaleLowerCase();
+};
+
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const navigate = useNavigate();
   const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
@@ -67,17 +84,17 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
       </div>
       <div class={css.summary}>
-        <Show when={transaction().merchant?.merchantLogoUrl}>
-          <img src={transaction().merchant?.merchantLogoUrl} alt="Merchant logo" class={css.merchantLogo} />
+        <Show when={transaction().merchant}>
+          <img src={merchantImg(transaction())} alt="Merchant logo" class={css.merchantLogo} />
         </Show>
-        <Show when={!transaction().merchant?.merchantLogoUrl}>
+        <Show when={!transaction().merchant}>
           <div class={css.missingLogoUrl} />
         </Show>
         <div class={css.amount}>{displayAmount}</div>
         <div class={css.merchant}>
           {transaction().merchant?.name}
-          <span>&#8226;</span>
-          {transaction().merchant?.type}
+          <span class={css.pad}>&#8226;</span>
+          <span class={css.merchantType}>{formatMerchantTypeLc(transaction().merchant?.type || '')}</span>
         </div>
         <div class={css.date}>
           <DateWithDateTime activityTime={transaction().activityTime!} />

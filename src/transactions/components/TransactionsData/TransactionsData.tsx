@@ -18,7 +18,7 @@ interface TransactionsDataProps {
   error: unknown;
   params: Readonly<AccountActivityRequest>;
   data: Readonly<PagedDataAccountActivityResponse> | null;
-  onReceiptClick?: (transaction: AccountActivityResponse) => void;
+  onRowClick?: (transaction: AccountActivityResponse) => void;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
@@ -32,7 +32,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         data={props.data!}
         params={props.params}
         onCardClick={props.onCardClick}
-        onReceiptClick={props.onReceiptClick}
+        onRowClick={props.onRowClick}
         onChangeParams={props.onChangeParams}
       />
     </Data>

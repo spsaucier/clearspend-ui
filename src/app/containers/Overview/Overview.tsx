@@ -20,6 +20,7 @@ import { useNav } from '_common/api/router';
 import { Modal } from '_common/components/Modal/Modal';
 import { ReceiptsView, ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
+import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -66,9 +67,9 @@ export function Overview(props: Readonly<OverviewProps>) {
 
   const activityStore = useActivity({
     params: {
+      ...DEFAULT_ACTIVITY_PARAMS,
       ...PERIOD,
       allocationId: allocationId(),
-      pageRequest: { pageNumber: 0, pageSize: 10 },
     },
   });
 
@@ -159,7 +160,7 @@ export function Overview(props: Readonly<OverviewProps>) {
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}
-            onReceiptClick={setSelectedTransaction}
+            onRowClick={setSelectedTransaction}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />
         </Data>

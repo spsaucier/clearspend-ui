@@ -30,6 +30,7 @@ import { getNoop } from '_common/utils/getNoop';
 import { FiltersButton } from 'app/components/FiltersButton';
 
 import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
+import { formatMerchantTypeLc, merchantImg } from '../TransactionPreview/TransactionPreview';
 
 import css from './TransactionsTable.css';
 
@@ -37,7 +38,7 @@ interface TransactionsTableProps {
   data: PagedDataAccountActivityResponse;
   params: Readonly<AccountActivityRequest>;
   onCardClick?: (id: string) => void;
-  onReceiptClick?: (transaction: AccountActivityResponse) => void;
+  onRowClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -52,7 +53,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'date',
       title: <Text message="Date & Time" />,
-      onClick: (row) => props.onReceiptClick?.(row),
+      onClick: (row) => props.onRowClick?.(row),
       render: (item) => {
         const date = new Date(item.activityTime || '');
         return (
@@ -70,10 +71,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'card',
       title: <Text message="Card" />,
-      onClick: (row) => props.onReceiptClick?.(row),
+      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
-        <div class={css.cardCell} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
-          <div class={css.card}>{item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}</div>
+        <div class={css.cardCell}>
+          <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
+            {item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}
+          </div>
           <Show when={item.card}>
             <div class={css.sub}>
               {formatName({
@@ -88,16 +91,16 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'merchant',
       title: <Text message="Merchant" />,
-      onClick: (row) => props.onReceiptClick?.(row),
+      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.merchant}>
-          <Show when={item.merchant?.merchantLogoUrl}>
-            <img src={item.merchant?.merchantLogoUrl} alt="Merchant logo" class={css.icon} />
+          <Show when={item.merchant}>
+            <img src={merchantImg(item)} alt="Merchant logo" class={css.icon} />
           </Show>
           <div>
             <div>{item.merchant?.name || '--'}</div>
             <Show when={item.merchant?.type}>
-              <div class={css.sub}>{item.merchant?.type}</div>
+              <span class={css.merchantType}>{formatMerchantTypeLc(item.merchant?.type || '')}</span>
             </Show>
           </div>
         </div>
@@ -106,7 +109,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount" />,
-      onClick: (row) => props.onReceiptClick?.(row),
+      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.amountCell}>
           <Switch>
@@ -141,7 +144,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'receipt',
       title: <Text message="Receipt" />,
-      onClick: (row) => props.onReceiptClick?.(row),
+      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.receiptCell}>
           <Icon

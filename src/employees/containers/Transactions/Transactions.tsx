@@ -9,6 +9,7 @@ export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
     pageNumber: 0,
     pageSize: 10,
   },
+  type: 'NETWORK_CAPTURE',
 };
 
 interface TransactionsProps {

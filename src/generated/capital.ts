@@ -2631,6 +2631,66 @@ export interface BusinessLimit {
   issuedPhysicalCardsTotal?: number;
 }
 
+export interface BusinessProspectData {
+  /**
+   * Email address of the prospect
+   * @pattern ^[^@]+@[^@.]+\.[^@]+$
+   * @example johnw@hightable.com
+   */
+  email: string;
+
+  /**
+   * The first name of the person
+   * @example John
+   */
+  firstName: string;
+
+  /**
+   * The last name of the person
+   * @example Wick
+   */
+  lastName: string;
+
+  /**
+   * The Business type
+   * @example SINGLE_MEMBER_LLC
+   */
+  businessType:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
+
+  /**
+   * Relationship to business Owner
+   * @example true
+   */
+  relationshipOwner?: boolean;
+
+  /**
+   * Relationship to business Representative
+   * @example true
+   */
+  relationshipRepresentative?: boolean;
+
+  /**
+   * Relationship to business Executive
+   * @example true
+   */
+  relationshipExecutive?: boolean;
+
+  /**
+   * Relationship to business Director
+   * @example true
+   */
+  relationshipDirector?: boolean;
+}
+
 export interface BankAccount {
   /** @format uuid */
   businessBankAccountId?: string;

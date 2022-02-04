@@ -56,8 +56,14 @@
   line-height: var(--line-20);
 }
 
-.merchant > span {
+.merchant .pad {
   padding: var(--pd-4);
+}
+
+.merchant-type {
+  color: var(--tw-gray-60);
+  text-transform: capitalize;
+  opacity: 0.8;
 }
 
 .date {

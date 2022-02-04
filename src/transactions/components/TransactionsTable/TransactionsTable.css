@@ -17,7 +17,12 @@
 }
 
 .card {
+  display: inline-block;
   color: var(--tw-primary-content);
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .merchant,
@@ -27,8 +32,8 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   border-radius: var(--radius-8);
 }
@@ -77,8 +82,14 @@
   color: var(--tw-gray-40);
 }
 
-.sub {
+.sub,
+.merchant-type {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
   text-transform: capitalize;
+}
+
+.merchant-type {
+  text-transform: capitalize;
+  opacity: 0.8;
 }

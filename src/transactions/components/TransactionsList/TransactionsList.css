@@ -19,8 +19,8 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   margin-top: 3px;
   object-fit: contain;
   border-radius: var(--radius-8);

@@ -8,13 +8,13 @@ import { TabList, Tab } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
 import { useBusiness } from 'app/containers/Main/context';
 import { getAccountActivity } from 'app/services/activity';
-import type { AccountActivityRequest } from 'generated/capital';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
+import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
@@ -27,13 +27,6 @@ enum Tabs {
   transactions,
   details,
 }
-
-const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
-};
 
 interface CardPreviewProps {
   cardID: string;
