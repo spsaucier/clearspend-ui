@@ -966,7 +966,7 @@ export interface AccountActivityRequest {
   /** @format uuid */
   cardId?: string;
   searchText?: string;
-  type?:
+  types?: (
     | 'BANK_LINK'
     | 'BANK_DEPOSIT'
     | 'BANK_DEPOSIT_RETURN'
@@ -975,7 +975,8 @@ export interface AccountActivityRequest {
     | 'BANK_UNLINK'
     | 'REALLOCATE'
     | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE';
+    | 'NETWORK_CAPTURE'
+  )[];
 
   /** @format date-time */
   from?: string;
