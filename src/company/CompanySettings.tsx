@@ -6,6 +6,7 @@ import { Page } from 'app/components/Page';
 import { useBusiness } from 'app/containers/Main/context';
 
 import { CompanyProfile } from './containers/CompanyProfile';
+import { Integrations } from './containers/Integrations/Integrations';
 // import {BankAccounts} from './containers/BankAccounts';
 
 enum Tabs {
@@ -31,6 +32,9 @@ export default function CompanySettings() {
           <Text message="Bank Accounts" />
         </Tab>
         */}
+        <Tab value={Tabs.integrations}>
+          <Text message="Integrations" />
+        </Tab>
       </TabList>
       <Switch>
         <Match when={tab() === Tabs.profile}>
@@ -41,6 +45,9 @@ export default function CompanySettings() {
           <BankAccounts />
         </Match>
         */}
+        <Match when={tab() === Tabs.integrations}>
+          <Integrations />
+        </Match>
       </Switch>
     </Page>
   );
