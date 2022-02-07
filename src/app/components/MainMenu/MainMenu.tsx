@@ -12,6 +12,7 @@ const TITLES = defineMessages({
   allocations: { message: 'Allocations' },
   card: { message: 'Card' },
   employees: { message: 'Employees' },
+  company: { message: 'Company Settings' },
   profile: { message: 'Account Settings' },
 });
 
@@ -20,6 +21,7 @@ const MAIN_ITEMS: readonly Readonly<MenuItemOptions>[] = [
   { href: '/allocations', title: TITLES.allocations, icon: 'allocations' },
   { href: '/cards', title: TITLES.card, icon: 'card' },
   { href: '/employees', title: TITLES.employees, icon: 'employees' },
+  { href: '/settings', title: TITLES.company, icon: 'company' },
 ];
 
 const SECOND_ITEMS: readonly Readonly<MenuItemOptions>[] = [{ href: '/profile', title: TITLES.profile, icon: 'user' }];

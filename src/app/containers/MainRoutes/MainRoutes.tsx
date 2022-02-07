@@ -12,6 +12,7 @@ import { Cards } from 'cards';
 import { CardView } from 'cards/pages/CardView';
 import { CardActivate } from 'cards/pages/CardActivate';
 import { CardEdit } from 'cards/pages/CardEdit';
+import { CompanySettings } from 'company';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
@@ -35,6 +36,8 @@ export function MainRoutes() {
         <Route path="/cards/edit" element={<CardEdit />} />
         <Route path="/cards/view/:id" element={<CardView />} />
         <Route path="/cards/activate/:id" element={<CardActivate />} />
+
+        <Route path="/settings" element={<CompanySettings />} />
 
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/settings" element={<ProfileSettings />} />

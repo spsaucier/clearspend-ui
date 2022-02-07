@@ -1,6 +1,6 @@
 import { formatPhone } from '_common/formatters/phone';
 import { formatAddress } from '_common/formatters/address';
-import { Icon } from '_common/components/Icon';
+import { DataRow } from 'app/components/DataRow';
 import type { User } from 'generated/capital';
 
 import { formatName } from '../../utils/formatName';
@@ -15,22 +15,12 @@ interface ProfileInfoProps {
 export function ProfileInfo(props: Readonly<ProfileInfoProps>) {
   return (
     <div class={props.class}>
-      <div class={css.item}>
-        <Icon name="user" size="sm" />
-        <span>{formatName(props.data)}</span>
-      </div>
-      <div class={css.item}>
-        <Icon name="email" size="sm" />
-        <span>{props.data.email}</span>
-      </div>
-      <div class={css.item}>
-        <Icon name="phone" size="sm" />
-        <span>{formatPhone(props.data.phone)}</span>
-      </div>
-      <div class={css.item}>
-        <Icon name="pin" size="sm" />
-        <span class={css.address}>{formatAddress(props.data.address)}</span>
-      </div>
+      <DataRow icon="user">{formatName(props.data)}</DataRow>
+      <DataRow icon="email">{props.data.email}</DataRow>
+      <DataRow icon="phone">{formatPhone(props.data.phone)}</DataRow>
+      <DataRow icon="pin" contentClass={css.address}>
+        {formatAddress(props.data.address)}
+      </DataRow>
     </div>
   );
 }

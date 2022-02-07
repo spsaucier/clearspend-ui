@@ -6,6 +6,10 @@
   grid-gap: var(--pd-8) var(--pd-12);
 }
 
+.card-wrapper {
+  display: inline-block;
+}
+
 .info {
   margin-top: var(--pd-24);
 }

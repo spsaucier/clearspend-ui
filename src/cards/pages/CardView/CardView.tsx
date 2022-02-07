@@ -150,7 +150,7 @@ export default function CardView() {
             }
           >
             {(args) => (
-              <div {...args}>
+              <div {...args} class={css.cardWrapper}>
                 <Card
                   type={card()!.type as CardType}
                   name={media.medium ? undefined : user() ? formatName(user()!) : ''}

@@ -1,6 +1,7 @@
 import { JSX, For } from 'solid-js';
 
 import { keys } from '../../utils/keys';
+import { clipboard } from '../../api/clipboard';
 
 import { Icon, IconProps } from './Icon';
 import { IconName } from './types';
@@ -25,17 +26,7 @@ const ICON_STYLE: JSX.CSSProperties = {
 };
 
 function copy(name: string) {
-  return () => {
-    const input = document.createElement('input');
-    input.style.position = 'fixed';
-    input.style.left = '-9999px';
-    input.value = name;
-    document.body.appendChild(input);
-    input.focus();
-    input.select();
-    document.execCommand('copy');
-    input.remove();
-  };
+  return () => clipboard.copy(name);
 }
 
 export default {

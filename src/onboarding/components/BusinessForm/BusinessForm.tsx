@@ -1,19 +1,14 @@
-import { For } from 'solid-js';
-
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputPhone } from '_common/components/InputPhone';
-import { Select, Option } from '_common/components/Select';
 import { Button } from '_common/components/Button';
-import { keys } from '_common/utils/keys';
 import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
-import { BUSINESS_TYPES } from 'onboarding/constants/usa';
 
 import type { ExceptionData } from '../../types';
 
@@ -47,19 +42,6 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
         <div class={css.wrapper}>
           <FormItem label="Legal entity name" error={errors().name}>
             <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
-          </FormItem>
-          <FormItem label="Legal entity type" error={errors().type}>
-            <Select
-              name="business-type"
-              placeholder="Choose entity type"
-              value={values().type}
-              error={Boolean(errors().type)}
-              onChange={handlers.type}
-            >
-              <For each={keys(BUSINESS_TYPES)}>
-                {(type) => <Option value={type as unknown as string}>{BUSINESS_TYPES[type]}</Option>}
-              </For>
-            </Select>
           </FormItem>
           <FormItem label="Business EIN" error={errors().ein}>
             <Input

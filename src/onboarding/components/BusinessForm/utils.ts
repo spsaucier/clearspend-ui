@@ -10,7 +10,6 @@ export function getFormOptions(): FormOptions<FormValues> {
   return {
     defaultValues: {
       name: '',
-      type: '',
       url: '',
       mcc: '',
       description: '',
@@ -24,7 +23,6 @@ export function getFormOptions(): FormOptions<FormValues> {
     },
     rules: {
       name: [required],
-      type: [required],
       ein: [required, (val) => validEIN(cleanEIN(val))],
       phone: [validPhone],
       streetLine1: [required],
@@ -36,13 +34,12 @@ export function getFormOptions(): FormOptions<FormValues> {
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBusinessProspectRequest> {
-  const { name, ein, phone, mcc, url, description, type, ...address } = data;
+  const { name, ein, phone, mcc, url, description, ...address } = data;
   return {
     legalName: name,
     employerIdentificationNumber: cleanEIN(ein),
     businessPhone: phone,
     address: { ...address, country: 'USA' },
-    businessType: type as ConvertBusinessProspectRequest['businessType'],
     mcc: parseInt(mcc, 10),
     url,
     description,

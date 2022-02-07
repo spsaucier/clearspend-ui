@@ -49,21 +49,21 @@
 
 .lg {
   height: v-size-lg;
+}
 
-  &.icon-only {
-    width: v-size-lg;
-  }
+.icon-only-lg {
+  width: v-size-lg;
 }
 
 .sm {
   height: v-size-sm;
   padding: 0 var(--pd-8);
   border-radius: var(--radius-8);
+}
 
-  &.icon-only {
-    width: v-size-sm;
-    padding: 0;
-  }
+.icon-only-sm {
+  width: v-size-sm;
+  padding: 0;
 }
 
 .disabled {

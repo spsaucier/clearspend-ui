@@ -50,6 +50,7 @@ export function Button(props: Readonly<ButtonProps>) {
 
   const spinEl = <Spin class={css.spin} />;
   const isButton = createMemo(() => typeof merged.href !== 'string');
+  const isIconOnly = createMemo(() => Boolean(icon()) && !merged.children);
 
   const sharedProps = createMemo<Partial<Readonly<ButtonProps>>>(() => ({
     id: merged.id,
@@ -69,7 +70,10 @@ export function Button(props: Readonly<ButtonProps>) {
       [css.dangerSecond!]: merged.type === 'danger' && merged.view === 'second',
       [css.dangerGhost!]: merged.type === 'danger' && merged.view === 'ghost',
 
-      [css.iconOnly!]: Boolean(icon()) && !merged.children,
+      [css.iconOnly!]: isIconOnly(),
+      [css.iconOnlySm!]: isIconOnly() && merged.size === 'sm',
+      [css.iconOnlyLg!]: isIconOnly() && merged.size === 'lg',
+
       [css.disabled!]: !isButton() && merged.disabled,
       [css.loading!]: merged.loading,
     },
