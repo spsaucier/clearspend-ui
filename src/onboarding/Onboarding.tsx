@@ -148,7 +148,7 @@ export default function Onboarding() {
     >
       <Switch>
         <Match when={!step() && businessProspectInfo()?.businessType}>
-          <Page title="Tell us about your business2">
+          <Page title="Tell us about your business">
             <BusinessForm onNext={onUpdateKYB} businessType={businessProspectInfo()?.businessType!} />
           </Page>
         </Match>
