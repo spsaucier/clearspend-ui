@@ -1,9 +1,5 @@
 const NUM_MASK_LENGTH = 4;
 
-export function formatCardNumber(lastFour = ''): string {
-  if (!lastFour) return '••••';
-  if (lastFour.length <= NUM_MASK_LENGTH) {
-    return `•••• ${lastFour.slice(-NUM_MASK_LENGTH)}`;
-  }
-  return lastFour;
+export function formatCardNumber(value = ''): string {
+  return value ? `•••• ${value.slice(-NUM_MASK_LENGTH)}` : '••••';
 }

@@ -5,6 +5,7 @@ import { Icon } from '_common/components/Icon';
 import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
+import { Section } from 'app/components/Section';
 import { BusinessContext } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { BusinessType, OnboardingStep } from 'app/types/businesses';
@@ -21,7 +22,7 @@ import type {
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
-import { LinkAccount } from './components/LinkAccount';
+import { LinkAccount } from './containers/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
 import {
   getBusinessProspectInfo,
@@ -172,7 +173,13 @@ export default function Onboarding() {
         </Match>
         <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
           <Page title="Link your bank account">
-            <LinkAccount onNext={onGotVerifyToken} />
+            <Section
+              title="Connect your account"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec tempor."
+              contentClass={css.verifySectionContent}
+            >
+              <LinkAccount verifyOnLoad onSuccess={onGotVerifyToken} />
+            </Section>
           </Page>
         </Match>
         <Match when={step() === OnboardingStep.TRANSFER_MONEY}>

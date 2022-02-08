@@ -28,6 +28,12 @@
   flex-grow: 1;
 }
 
+.verify-section-content {
+  @media (--bp-large) {
+    max-width: 394px;
+  }
+}
+
 .footer {
   display: flex;
   align-items: center;
