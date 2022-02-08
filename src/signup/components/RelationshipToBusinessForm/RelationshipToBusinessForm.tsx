@@ -27,7 +27,7 @@ export function RelationshipToBusinessForm(props: Readonly<RelationshipToBusines
   return (
     <div>
       <Header>What is your role?</Header>
-      <Description>Please select the roles that best describe you.zzz</Description>
+      <Description>Please select the roles that best describe you.</Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="" error={errors().relationshipToBusiness}>
           <CheckboxGroup

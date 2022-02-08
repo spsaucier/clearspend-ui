@@ -57,6 +57,7 @@
   padding-left: var(--pd-12);
   align-items: center;
   flex-shrink: 0;
+  line-height: 1;
 
   & > svg {
     color: var(--tw-gray-60);
