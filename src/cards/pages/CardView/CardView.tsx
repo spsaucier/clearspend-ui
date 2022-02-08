@@ -50,7 +50,7 @@ export default function CardView() {
   const [showDetails, setShowDetails] = createSignal(false);
   const media = useMediaContext();
 
-  const { owner } = useBusiness();
+  const { signupUser } = useBusiness();
   const allocations = useAllocations();
 
   const [data, status, , , reload] = useResource(getCard, params.id);
@@ -125,7 +125,7 @@ export default function CardView() {
         <div class={css.actions}>
           <Show when={card()}>
             <CardActions
-              user={owner()}
+              user={signupUser()}
               card={card()!}
               onActivate={() => navigate(`/cards/activate/${card()!.cardId}`)}
               onShowDetails={toggleDetails}
