@@ -39,7 +39,12 @@ export function BusinessTypeCategoryForm(props: Readonly<BusinessTypeCategoryFor
             <Radio value={BusinessTypeCategory.NONPROFIT}>Nonprofit organization</Radio>
           </RadioGroup>
         </FormItem>
-        <Button wide type="primary" htmlType="submit">
+        <Button
+          wide
+          type="primary"
+          htmlType="submit"
+          disabled={values().businessTypeCategory === BusinessTypeCategory.UNKNOWN}
+        >
           Next
         </Button>
       </Form>

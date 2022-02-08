@@ -27,7 +27,7 @@ export function RelationshipToBusinessForm(props: Readonly<RelationshipToBusines
   return (
     <div>
       <Header>What is your role?</Header>
-      <Description>Please select the roles that best describe you.</Description>
+      <Description>Please select the roles that best describe you.zzz</Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="" error={errors().relationshipToBusiness}>
           <CheckboxGroup
@@ -41,7 +41,7 @@ export function RelationshipToBusinessForm(props: Readonly<RelationshipToBusines
             <Checkbox value={RelationshipToBusiness.OTHER}>Other</Checkbox>
           </CheckboxGroup>
         </FormItem>
-        <Button wide type="primary" htmlType="submit">
+        <Button wide type="primary" htmlType="submit" disabled={values().relationshipToBusiness.length === 1}>
           Next
         </Button>
         <Button wide type="default" view="ghost" onClick={() => props.onBack()}>

@@ -1,5 +1,4 @@
 import { For } from 'solid-js';
-import { keys } from 'solid-create-form/lib/utils';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -12,9 +11,9 @@ import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
-import { BUSINESS_MCC } from 'onboarding/constants/usa';
 import type { BusinessType } from 'app/types/businesses';
 import { Select, Option } from '_common/components/Select';
+import { BUSINESS_MCC } from 'app/types/mcc';
 
 import type { ExceptionData } from '../../types';
 
@@ -89,7 +88,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               error={Boolean(errors().mcc)}
               onChange={(value) => handlers.mcc(value)}
             >
-              <For each={keys(BUSINESS_MCC)}>{(type) => <Option value={`${type}`}>{BUSINESS_MCC[type]}</Option>}</For>
+              <For each={BUSINESS_MCC}>{(mcc) => <Option value={`${mcc.value}`}>{mcc.name}</Option>}</For>
             </Select>
             <div style={{ 'font-size': `12px` }}>
               Select the merchant category code that best describes your business.

@@ -36,12 +36,6 @@ export enum RelationshipToBusiness {
   OTHER = 'OTHER',
 }
 
-export enum BusinessMCC {
-  ac_refrigeration_repair = 7623,
-  accounting_bookkeeping_services = 8931,
-  advertising_services = 7311,
-}
-
 export enum BusinessTypeCategory {
   UNKNOWN = 'UNKNOWN',
   INDIVIDUAL = 'INDIVIDUAL',

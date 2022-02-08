@@ -45,7 +45,7 @@ export function BusinessTypeForm(props: Readonly<BusinessTypeFormProps>) {
             <Radio value={BusinessType.OTHER}>Other/I’m not sure</Radio>
           </RadioGroup>
         </FormItem>
-        <Button wide type="primary" htmlType="submit">
+        <Button wide type="primary" htmlType="submit" disabled={values().businessType === BusinessType.UNKNOWN}>
           Next
         </Button>
         <Button wide type="default" view="ghost" onClick={() => props.onBack()}>
