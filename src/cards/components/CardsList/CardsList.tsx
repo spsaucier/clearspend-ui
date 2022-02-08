@@ -46,11 +46,11 @@ export function CardsList(props: Readonly<CardsListProps>) {
                 ) : (
                   <Text class={css.name!} message="Awaiting activation" />
                 )}
-                <CardType type={item.cardType as CardTypeType} class={css.type} />
+                <CardType type={item.cardType as CardTypeType} class={css.sub} />
               </div>
               <div>
                 <strong>{formatCurrency(item.balance?.amount || 0)}</strong>
-                <div class={css.limit}>[Limit]</div>
+                {/* TODO: <div class={css.sub}>[Limit]</div> */}
               </div>
             </div>
           )}

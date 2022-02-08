@@ -88,7 +88,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       render: (item) => (
         <div>
           <strong>{formatCurrency(item.balance?.amount || 0)}</strong>
-          <div>[Limit]</div>
+          {/* TODO: <div>[Limit]</div> */}
         </div>
       ),
     },
