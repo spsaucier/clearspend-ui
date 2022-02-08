@@ -3,6 +3,7 @@ export function validEmail(value: string): boolean | string {
 }
 
 export function validPhone(value: string): boolean | string {
+  if (!value) return true;
   return !!value.match(/^\+[1-9][0-9]{9,14}$/) || 'Invalid phone number';
 }
 

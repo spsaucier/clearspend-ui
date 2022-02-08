@@ -19,7 +19,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
 
   return (
     <>
-      <FormItem label={<Text message="First name" />} error={props.errors.firstName} class={css.item}>
+      <FormItem label={<Text message="First name*" />} error={props.errors.firstName} class={css.item}>
         <Input
           name="first-name"
           value={props.values.firstName}
@@ -28,7 +28,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
           onChange={props.handlers.firstName}
         />
       </FormItem>
-      <FormItem label={<Text message="Last name" />} error={props.errors.lastName} class={css.item}>
+      <FormItem label={<Text message="Last name*" />} error={props.errors.lastName} class={css.item}>
         <Input
           name="last-name"
           value={props.values.lastName}
@@ -37,7 +37,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
           onChange={props.handlers.lastName}
         />
       </FormItem>
-      <FormItem label={<Text message="Email address" />} error={props.errors.email} class={css.item}>
+      <FormItem label={<Text message="Email address*" />} error={props.errors.email} class={css.item}>
         <Input
           name="email"
           type="email"
