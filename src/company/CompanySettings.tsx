@@ -6,7 +6,7 @@ import { Page } from 'app/components/Page';
 import { useBusiness } from 'app/containers/Main/context';
 
 import { CompanyProfile } from './containers/CompanyProfile';
-import { Integrations } from './containers/Integrations/Integrations';
+import { Integrations } from './containers/Integrations';
 // import {BankAccounts} from './containers/BankAccounts';
 
 enum Tabs {
