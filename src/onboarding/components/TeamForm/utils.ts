@@ -4,10 +4,20 @@ import { validEmail, validPhone, validZipCode } from '_common/components/Form/ru
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import { RelationshipToBusiness } from 'app/types/businesses';
 
 import type { FormValues } from './types';
-
 export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
+  const relationshipToBusiness = [];
+  if (user?.relationshipToBusiness?.owner) {
+    relationshipToBusiness.push(RelationshipToBusiness.OWNER);
+  }
+  if (user?.relationshipToBusiness?.director) {
+    relationshipToBusiness.push(RelationshipToBusiness.DIRECTOR);
+  }
+  if (user?.relationshipToBusiness?.executive) {
+    relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
+  }
   return {
     defaultValues: {
       firstName: user?.firstName || '',
@@ -21,6 +31,9 @@ export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
       locality: '',
       region: '',
       postalCode: '',
+      relationshipToBusiness,
+      percentageOwnership: 0,
+      title: '',
     },
     rules: {
       firstName: [required],
@@ -38,7 +51,18 @@ export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUpdateBusinessOwnerRequest> {
-  const { firstName, lastName, birthdate, ssn, email, phone, ...address } = data;
+  const {
+    firstName,
+    lastName,
+    birthdate,
+    ssn,
+    email,
+    phone,
+    percentageOwnership,
+    title,
+    relationshipToBusiness,
+    ...address
+  } = data;
   return {
     firstName,
     lastName,
@@ -46,6 +70,12 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     taxIdentificationNumber: cleanSSN(ssn),
     email,
     phone,
+    percentageOwnership,
+    title,
+    relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
+    relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
+    relationshipDirector: relationshipToBusiness.includes(RelationshipToBusiness.DIRECTOR),
+    relationshipRepresentative: true,
     address: { ...address, country: 'USA' },
   };
 }

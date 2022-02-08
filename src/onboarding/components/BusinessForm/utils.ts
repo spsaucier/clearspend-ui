@@ -3,13 +3,15 @@ import { required } from '_common/components/Form/rules/required';
 import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
 import { cleanEIN } from '_common/formatters/ein';
 import type { ConvertBusinessProspectRequest } from 'generated/capital';
+import type { BusinessType } from 'app/types/businesses';
 
 import type { FormValues } from './types';
 
-export function getFormOptions(): FormOptions<FormValues> {
+export function getFormOptions(type: BusinessType): FormOptions<FormValues> {
   return {
     defaultValues: {
       name: '',
+      type,
       url: '',
       mcc: '',
       description: '',
@@ -23,6 +25,8 @@ export function getFormOptions(): FormOptions<FormValues> {
     },
     rules: {
       name: [required],
+      type: [required],
+      mcc: [required],
       ein: [required, (val) => validEIN(cleanEIN(val))],
       phone: [validPhone],
       streetLine1: [required],

@@ -7,7 +7,10 @@ import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
-import { sendAnalyticsEvent } from 'app/utils/analytics';
+import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
+import type { CreateBusinessProspectRequest } from 'generated/capital';
+
+import { sendAnalyticsEvent } from '../app/utils/analytics';
 
 import { Box } from './components/Box';
 import { StartForm } from './components/StartForm';
@@ -16,46 +19,98 @@ import { PhoneForm } from './components/PhoneForm';
 import { VerifyForm } from './components/VerifyForm';
 import { PasswordForm } from './components/PasswordForm';
 import { useSignup, SignupStore } from './store';
+import { BusinessTypeCategoryForm } from './components/BusinessTypeCategoryForm/BusinessTypeCategoryForm';
+import { BusinessTypeForm } from './components/BusinessTypeForm/BusinessTypeForm';
+import { RelationshipToBusinessForm } from './components/RelationshipToBusinessForm/RelationshipToBusinessForm';
 
 import css from './SignUp.css';
 
 enum Step {
-  name,
-  email,
-  emailOtp,
-  phone,
-  phoneOtp,
-  password,
+  NameStep,
+  BusinessTypeCategoryStep,
+  BusinessTypeStep,
+  RelationshipToBusinessStep,
+  EmailStep,
+  EmailOtpStep,
+  PhoneStep,
+  PhoneOtpStep,
+  PasswordStep,
 }
 
 function getInitStep(store: SignupStore): Step {
-  const { first, last } = store;
-  return !!first && !!last ? Step.email : Step.name;
+  const { first, last, businessTypeCategory, businessType, relationshipToBusiness } = store;
+  switch (true) {
+    case !first || !last:
+      return Step.NameStep;
+    case !businessTypeCategory:
+      return Step.BusinessTypeCategoryStep;
+    case businessTypeCategory === BusinessTypeCategory.COMPANY && !businessType:
+      return Step.BusinessTypeStep;
+    case !relationshipToBusiness:
+      return Step.RelationshipToBusinessStep;
+    default:
+      return Step.EmailStep;
+  }
 }
 
 export default function SignUp() {
   const [searchParams] = useSearchParams<{ email?: string }>();
   const navigate = useNavigate();
 
-  const { store, setName, setEmail, setTel, cleanup } = useSignup();
+  const {
+    store,
+    setName,
+    setEmail,
+    setTel,
+    cleanup,
+    setBusinessType,
+    setBusinessTypeCategory,
+    setRelationshipToBusiness,
+  } = useSignup();
 
   const [step, setStep] = createSignal<Step>(getInitStep(store));
-  const next = () => setStep((prev) => prev + 1);
+
+  const next = (nextStep?: Step) => (nextStep ? setStep(nextStep) : setStep((prev) => prev + 1));
+  const back = (backStep?: Step) => (backStep ? setStep(backStep) : setStep((prev) => prev - 1));
 
   const onNameUpdate = (firstName: string, lastName: string) => {
     setName(firstName, lastName);
     next();
   };
 
+  const onBusinessTypeCategoryUpdate = (businessTypeCategory: BusinessTypeCategory) => {
+    setBusinessTypeCategory(businessTypeCategory);
+    next(businessTypeCategory === BusinessTypeCategory.COMPANY ? undefined : Step.RelationshipToBusinessStep);
+  };
+
+  const onBusinessTypeUpdate = (businessType: BusinessType) => {
+    setBusinessType(businessType);
+    next();
+  };
+
+  const onRelationshipToBusinessUpdate = (relationshipToBusiness: Readonly<RelationshipToBusiness[]>) => {
+    setRelationshipToBusiness(relationshipToBusiness);
+    next();
+  };
+
   const onSignup = async (email: string) => {
-    const { first, last } = store;
+    const { first, last, businessType, relationshipToBusiness } = store;
 
     if (!first || !last) {
-      setStep(Step.name);
+      setStep(Step.NameStep);
       return;
     }
 
-    const resp = await signup({ email, firstName: first, lastName: last, businessType: 'INDIVIDUAL' }); // TODO: Temp - fill in properly
+    const resp = await signup({
+      email,
+      firstName: first,
+      lastName: last,
+      businessType: businessType as CreateBusinessProspectRequest['businessType'],
+      relationshipOwner: relationshipToBusiness?.includes(RelationshipToBusiness.OWNER),
+      relationshipRepresentative: true, // TODO: check - this should always be true or not required by API?
+      relationshipDirector: relationshipToBusiness?.includes(RelationshipToBusiness.DIRECTOR),
+      relationshipExecutive: relationshipToBusiness?.includes(RelationshipToBusiness.EXECUTIVE),
+    });
 
     setEmail(email, resp.businessProspectId || '');
 
@@ -67,14 +122,14 @@ export default function SignUp() {
         navigate('/login');
         break;
       case ProspectStatus.EMAIL_VERIFIED:
-        setStep(Step.phone);
+        setStep(Step.PhoneStep);
         break;
       case ProspectStatus.MOBILE_VERIFIED:
-        setStep(Step.password);
+        setStep(Step.PasswordStep);
         break;
       case ProspectStatus.NEW:
       default:
-        setStep(Step.emailOtp);
+        setStep(Step.EmailOtpStep);
     }
   };
 
@@ -113,13 +168,31 @@ export default function SignUp() {
       <div class={css.content}>
         <Box>
           <Switch>
-            <Match when={step() === Step.name}>
+            <Match when={step() === Step.NameStep}>
               <StartForm onNext={onNameUpdate} />
             </Match>
-            <Match when={step() === Step.email}>
+            <Match when={step() === Step.BusinessTypeCategoryStep}>
+              <BusinessTypeCategoryForm onNext={onBusinessTypeCategoryUpdate} />
+            </Match>
+            <Match when={step() === Step.BusinessTypeStep}>
+              <BusinessTypeForm onNext={onBusinessTypeUpdate} onBack={() => back()} />
+            </Match>
+            <Match when={step() === Step.RelationshipToBusinessStep}>
+              <RelationshipToBusinessForm
+                onNext={onRelationshipToBusinessUpdate}
+                onBack={() =>
+                  back(
+                    store.businessTypeCategory === BusinessTypeCategory.COMPANY
+                      ? undefined
+                      : Step.BusinessTypeCategoryStep,
+                  )
+                }
+              />
+            </Match>
+            <Match when={step() === Step.EmailStep}>
               <EmailForm initialEmailValue={searchParams.email} onNext={onSignup} />
             </Match>
-            <Match when={step() === Step.emailOtp}>
+            <Match when={step() === Step.EmailOtpStep}>
               <VerifyForm
                 header="Verify your email"
                 description={<Text message="We have sent a confirmation code to <b>{email}</b>" email={store.email!} />}
@@ -127,10 +200,10 @@ export default function SignUp() {
                 onConfirm={onEmailConfirm}
               />
             </Match>
-            <Match when={step() === Step.phone}>
+            <Match when={step() === Step.PhoneStep}>
               <PhoneForm onNext={onPhoneUpdate} />
             </Match>
-            <Match when={step() === Step.phoneOtp}>
+            <Match when={step() === Step.PhoneOtpStep}>
               <VerifyForm
                 header="Verify your phone number"
                 description={
@@ -143,7 +216,7 @@ export default function SignUp() {
                 onConfirm={onPhoneConfirm}
               />
             </Match>
-            <Match when={step() === Step.password}>
+            <Match when={step() === Step.PasswordStep}>
               <PasswordForm onCreateAccount={onPasswordUpdate} />
             </Match>
           </Switch>

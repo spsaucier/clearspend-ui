@@ -7,15 +7,16 @@ export enum BusinessStatus {
 
 // From ConvertBusinessProspectRequest['businessType']
 export enum BusinessType {
-  'INDIVIDUAL',
-  'SOLE_PROPRIETORSHIP',
-  'SINGLE_MEMBER_LLC',
-  'MULTI_MEMBER_LLC',
-  'PRIVATE_PARTNERSHIP',
-  'PUBLIC_PARTNERSHIP',
-  'PRIVATE_CORPORATION',
-  'PUBLIC_CORPORATION',
-  'INCORPORATED_NON_PROFIT',
+  UNKNOWN = 'UNKNOWN',
+  OTHER = 'OTHER',
+  SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
+  SINGLE_MEMBER_LLC = 'SINGLE_MEMBER_LLC',
+  MULTI_MEMBER_LLC = 'MULTI_MEMBER_LLC',
+  PRIVATE_PARTNERSHIP = 'PRIVATE_PARTNERSHIP',
+  PUBLIC_PARTNERSHIP = 'PUBLIC_PARTNERSHIP',
+  PRIVATE_CORPORATION = 'PRIVATE_CORPORATION',
+  PUBLIC_CORPORATION = 'PUBLIC_CORPORATION',
+  INCORPORATED_NON_PROFIT = 'INCORPORATED_NON_PROFIT',
 }
 
 export enum OnboardingStep {
@@ -25,4 +26,25 @@ export enum OnboardingStep {
   SOFT_FAIL = 'SOFT_FAIL',
   TRANSFER_MONEY = 'TRANSFER_MONEY',
   COMPLETE = 'COMPLETE',
+}
+
+export enum RelationshipToBusiness {
+  OWNER = 'OWNER',
+  REPRESENTATIVE = 'REPRESENTATIVE',
+  EXECUTIVE = 'EXECUTIVE',
+  DIRECTOR = 'DIRECTOR',
+  OTHER = 'OTHER',
+}
+
+export enum BusinessMCC {
+  ac_refrigeration_repair = 7623,
+  accounting_bookkeeping_services = 8931,
+  advertising_services = 7311,
+}
+
+export enum BusinessTypeCategory {
+  UNKNOWN = 'UNKNOWN',
+  INDIVIDUAL = 'INDIVIDUAL',
+  COMPANY = 'COMPANY',
+  NONPROFIT = 'NONPROFIT',
 }

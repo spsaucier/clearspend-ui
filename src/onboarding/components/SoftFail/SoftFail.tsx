@@ -53,7 +53,7 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
       if (t.hasOwnProperty(f)) {
         let inputElement: HTMLInputElement = t[f] as HTMLInputElement;
         let fileList: FileList | null = inputElement.files;
-        if (fileList && fileList.length > 0) fo.append('receipt', fileList[0] as File, inputElement.name);
+        if (fileList && fileList.length > 0) fo.append('documentList', fileList[0] as File, inputElement.name);
       }
     }
 

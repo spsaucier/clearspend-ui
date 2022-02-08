@@ -9,8 +9,18 @@ import type {
   CreateOrUpdateBusinessOwnerRequest,
 } from 'generated/capital';
 
+export type BusinessRelationships =
+  | 'relationshipOwner'
+  | 'relationshipRepresentative'
+  | 'relationshipExecutive'
+  | 'relationshipDirector';
+
 export async function signup(params: Readonly<CreateBusinessProspectRequest>) {
   return (await service.post<Readonly<CreateBusinessProspectResponse>>('/business-prospects', params)).data;
+}
+
+export async function getBusinessProspectInfo(businessProspectId: string) {
+  return service.get(`/business-prospects/${businessProspectId}`);
 }
 
 export async function confirmOTP(id: string, params: Readonly<ValidateBusinessProspectIdentifierRequest>) {
@@ -34,6 +44,10 @@ export async function setBusinessOwner(ownerId: string, params: Readonly<CreateO
   return service.patch(`/business-owners/${ownerId}`, params);
 }
 
-export async function getRequiredDocuments() {
-  return (await service.get<Readonly<ManualReviewResponse>>('/manual-review')).data;
+export async function setBusinessOwners(params: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) {
+  return service.post(`/business-owners`, params);
+}
+
+export async function getApplicationReviewRequirements() {
+  return (await service.get<Readonly<ManualReviewResponse>>('/application-review/requirement')).data;
 }

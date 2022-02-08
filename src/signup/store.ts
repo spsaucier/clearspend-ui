@@ -1,5 +1,6 @@
 import { createStore } from 'solid-js/store';
 
+import type { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
 import { storage } from '_common/api/storage';
 
 const STORAGE_KEY = 'signup';
@@ -9,17 +10,15 @@ export interface SignupStore {
   last?: string;
   email?: string;
   phone?: string;
+  businessTypeCategory?: BusinessTypeCategory;
+  businessType?: BusinessType;
+  relationshipToBusiness?: Readonly<RelationshipToBusiness[]>;
   pid?: string;
 }
 
 function init(): SignupStore {
-  const value = storage.get<SignupStore>(STORAGE_KEY);
   return {
-    first: value?.first,
-    last: value?.last,
-    email: value?.email,
-    phone: value?.phone,
-    pid: value?.pid,
+    ...storage.get<SignupStore>(STORAGE_KEY),
   };
 }
 
@@ -37,6 +36,10 @@ export function useSignup() {
   return {
     store,
     setName: (first: string, last: string) => update({ first, last }),
+    setBusinessTypeCategory: (businessTypeCategory: BusinessTypeCategory) => update({ businessTypeCategory }),
+    setBusinessType: (businessType: BusinessType) => update({ businessType }),
+    setRelationshipToBusiness: (relationshipToBusiness: Readonly<RelationshipToBusiness[]>) =>
+      update({ relationshipToBusiness }),
     setEmail: (email: string, pid: string) => update({ email, pid }),
     setTel: (phone: string) => update({ phone }),
     cleanup: () => {

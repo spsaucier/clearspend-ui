@@ -3,7 +3,7 @@ import { createContext, useContext, Accessor } from 'solid-js';
 import type { Business, User } from 'generated/capital';
 
 interface InitContext {
-  owner: Accessor<Readonly<Required<User>>>;
+  signupUser: Accessor<Readonly<Required<User>>>;
   business: Accessor<Readonly<Business> | null>;
   mutate: (business: [Readonly<Required<User>>, Readonly<Business>] | null) => void;
   refetch: () => Promise<unknown>;

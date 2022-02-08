@@ -10,12 +10,12 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Header } from '../Header';
 import { Description } from '../Description';
 
-interface FormValues {
+interface EmailFormValues {
   email: string;
 }
 
 interface EmailFormProps {
-  onNext: (email: string) => Promise<unknown>;
+  onNext: (email: string) => Promise<void>;
   initialEmailValue?: string;
 }
 
@@ -25,12 +25,12 @@ export function EmailForm(props: Readonly<EmailFormProps>) {
 
   const [loading, next] = wrapAction(props.onNext);
 
-  const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
+  const { values, errors, handlers, setErrors, wrapSubmit } = createForm<EmailFormValues>({
     defaultValues: { email: props.initialEmailValue || '' },
     rules: { email: [required, validEmail] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) => {
+  const onSubmit = (data: Readonly<EmailFormValues>) => {
     if (!loading()) {
       next(data.email).catch(() => setErrors({ email: 'Something went wrong' }));
     }

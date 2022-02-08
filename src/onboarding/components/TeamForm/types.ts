@@ -10,4 +10,7 @@ export interface FormValues {
   locality: string;
   region: string;
   postalCode: string;
+  percentageOwnership: number;
+  title?: string;
+  relationshipToBusiness: string[];
 }

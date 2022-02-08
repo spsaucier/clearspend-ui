@@ -3,7 +3,6 @@ import { createSignal } from 'solid-js';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 
-import { AlloyUploader } from './AlloyUploader';
 import type { DocumentType } from './types';
 
 import css from './FileUploader.css';
@@ -44,11 +43,6 @@ export function FileUploader(props: Readonly<FileUploaderProps>) {
             {' '}
             Select file
           </Button>
-          <AlloyUploader
-            documentName={props.documentName}
-            documentType={props.type.toString()}
-            entityToken={props.entityTokenId}
-          />
         </>
       ) : (
         <div class={css.file}>

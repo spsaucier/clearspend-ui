@@ -11,7 +11,7 @@ import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
 import type { Business, User } from 'generated/capital';
 
-import { getOwner, getBusiness } from '../../services/businesses';
+import { getUsers, getBusiness } from '../../services/businesses';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
@@ -31,9 +31,9 @@ export default function Main() {
     // fetch('/api/non-production/test-data/create-all-demo').catch(getNoop());
   }
 
-  const [data, status, , , refetch, mutate] = useResource(() => Promise.all([getOwner(), getBusiness()]), null);
+  const [data, status, , , refetch, mutate] = useResource(() => Promise.all([getUsers(), getBusiness()]), null);
 
-  const owner = createMemo(() => {
+  const signupUser = createMemo(() => {
     const value = data();
     return value && value[0];
   });
@@ -60,7 +60,7 @@ export default function Main() {
       </Match>
       <Match when={data()}>
         <BusinessContext.Provider
-          value={{ business, owner: owner as Accessor<Readonly<Required<User>>>, refetch, mutate }}
+          value={{ business, signupUser: signupUser as Accessor<Readonly<Required<User>>>, refetch, mutate }}
         >
           <Switch>
             <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>

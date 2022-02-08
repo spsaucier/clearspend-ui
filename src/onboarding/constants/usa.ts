@@ -1,15 +1,31 @@
-import { BusinessType } from 'app/types/businesses';
+import { BusinessMCC, BusinessType, RelationshipToBusiness } from 'app/types/businesses';
 
 export const BUSINESS_TYPES: Readonly<Record<BusinessType, string>> = {
-  [BusinessType.INDIVIDUAL]: 'Individual',
+  [BusinessType.SINGLE_MEMBER_LLC]: 'Limited Liability Company',
+  [BusinessType.MULTI_MEMBER_LLC]: 'Limited Liability Partnership',
   [BusinessType.SOLE_PROPRIETORSHIP]: 'Sole Proprietorship',
-  [BusinessType.SINGLE_MEMBER_LLC]: 'Single Member LLC',
-  [BusinessType.MULTI_MEMBER_LLC]: 'Multi-Member LLC',
-  [BusinessType.PRIVATE_PARTNERSHIP]: 'Private Partnership',
-  [BusinessType.PUBLIC_PARTNERSHIP]: 'Public Partnership',
   [BusinessType.PRIVATE_CORPORATION]: 'Private Corporation',
+  [BusinessType.PRIVATE_PARTNERSHIP]: 'Private Partnership',
   [BusinessType.PUBLIC_CORPORATION]: 'Public Corporation',
-  [BusinessType.INCORPORATED_NON_PROFIT]: 'Incorporated Non-Profit',
+  [BusinessType.PUBLIC_PARTNERSHIP]: 'Public Partnership',
+  [BusinessType.INCORPORATED_NON_PROFIT]: 'Incorporated non-profit',
+  [BusinessType.UNKNOWN]: 'Unknown',
+  [BusinessType.OTHER]: "Other / I'm not sure",
+};
+
+export const RELATIONSHIP_TO_BUSINESS: Readonly<Record<RelationshipToBusiness, string>> = {
+  [RelationshipToBusiness.OWNER]: 'Owner',
+  [RelationshipToBusiness.REPRESENTATIVE]: 'Representative',
+  [RelationshipToBusiness.EXECUTIVE]: 'Executive',
+  [RelationshipToBusiness.DIRECTOR]: 'Director',
+  [RelationshipToBusiness.OTHER]: 'Other',
+};
+
+// MCC groups
+export const BUSINESS_MCC: Readonly<Record<BusinessMCC, string>> = {
+  [BusinessMCC.ac_refrigeration_repair]: 'ac_refrigeration_repair',
+  [BusinessMCC.accounting_bookkeeping_services]: 'accounting_bookkeeping_services',
+  [BusinessMCC.advertising_services]: 'advertising_services',
 };
 
 export const USA_STATES: Readonly<Record<string, string>> = {

@@ -871,6 +871,13 @@ export interface LoginRequest {
   password?: string;
 }
 
+export interface RelationshipToBusiness {
+  owner?: boolean;
+  executive?: boolean;
+  representative?: boolean;
+  director?: boolean;
+}
+
 export interface User {
   /** @format uuid */
   userId?: string;
@@ -884,6 +891,7 @@ export interface User {
   email?: string;
   phone?: string;
   archived?: boolean;
+  relationshipToBusiness?: RelationshipToBusiness;
 }
 
 export interface ForgotPasswordRequest {
@@ -2254,6 +2262,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'MANAGE_CARDS'
     | 'MANAGE_USERS'
     | 'MANAGE_PERMISSIONS'
+    | 'VIEW_OWN'
   )[];
   globalUserPermissions?: (
     | 'BATCH_ONBOARD'
@@ -2261,6 +2270,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'GLOBAL_READ'
     | 'CUSTOMER_SERVICE'
     | 'CUSTOMER_SERVICE_MANAGER'
+    | 'SYSTEM'
   )[];
 }
 
@@ -2727,6 +2737,7 @@ export interface AllocationRolePermissionRecord {
     | 'MANAGE_CARDS'
     | 'MANAGE_USERS'
     | 'MANAGE_PERMISSIONS'
+    | 'VIEW_OWN'
   )[];
 }
 
