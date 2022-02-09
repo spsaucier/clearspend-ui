@@ -1,5 +1,7 @@
 interface ProcessEnv {
   NODE_ENV: 'development' | 'production';
+  STRIPE_PUB_KEY: string;
+  STRIPE_ACCOUNT: string;
 }
 
 declare const process: {
