@@ -24,13 +24,31 @@ pipelines:
         name: Deploy image to GKE
         image: google/cloud-sdk:latest
         runs-on:
-          - 'self.hosted'
+          - 'env.dev'
         script:
           - echo "$GKE_DEPLOY_KEY" | base64 -d > ~/.gcloud-api-key.json
           - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
           - gcloud config set project $GCLOUD_PROJECT_ID
           - gcloud container clusters get-credentials $GCLOUD_CLUSTER --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
           - kubectl rollout restart deployment capital-ui
+          - kubectl rollout status deployment capital-ui
+    release:
+      - step:
+          name: Deploy image to QA
+          image: google/cloud-sdk:latest
+          deployment: staging
+          runs-on:
+            - 'env.qa'
+          script:
+            - echo "$GKE_DEPLOY_KEY" | base64 -d > ~/.gcloud-api-key.json
+            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+            - gcloud config set project $GCLOUD_PROJECT_ID
+            - gcloud container clusters get-credentials $GCLOUD_QA_CLUSTER --zone=$GCLOUD_ZONE --project $GCLOUD_PROJECT_ID
+            - export BITBUCKET_COMMIT_SHORT="${BITBUCKET_COMMIT::7}"
+            - gcloud container images untag $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:QA --quiet
+            - gcloud container images add-tag $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:QA --quiet
+            - kubectl rollout restart deployment capital-ui
+            - kubectl rollout status deployment capital-ui
 definitions:
   services:
     docker:
