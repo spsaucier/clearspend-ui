@@ -15,11 +15,13 @@ pipelines:
           - docker
         script:
           - echo "$GCLOUD_API_KEYFILE" | base64 -d > ~/.gcloud-api-key.json
+          - export BITBUCKET_COMMIT_SHORT="${BITBUCKET_COMMIT::7}"
           - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
           - docker login -u _json_key --password-stdin https://$DOCKER_GCR_REPO_URL < ~/.gcloud-api-key.json
           - docker build -t $DOCKER_IMAGE_NAME:${BITBUCKET_COMMIT} .
           - docker tag $DOCKER_IMAGE_NAME:${BITBUCKET_COMMIT} $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
-          - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
+          - docker tag $DOCKER_IMAGE_NAME:${BITBUCKET_COMMIT} $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT
+          - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME
     - step:
         name: Deploy image to GKE
         image: google/cloud-sdk:latest
