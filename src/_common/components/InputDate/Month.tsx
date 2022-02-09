@@ -1,4 +1,4 @@
-import { createSignal, createMemo, Accessor, For, Index, Show, createEffect } from 'solid-js';
+import { createSignal, createMemo, Accessor, For, Show } from 'solid-js';
 import { DateTime } from 'solid-i18n';
 
 import {
@@ -19,7 +19,8 @@ import { join } from '_common/utils/join';
 import { Icon } from '../Icon';
 import { KEY_CODES } from '../../constants/keyboard';
 
-import { isSelected, isInRange, getWeekdayNames, getMoveFocus, sameMonth } from './utils';
+import { getSelected, isInRange, isOutOfRange, getWeekdayNames, getMoveFocus, sameMonth } from './utils';
+import type { Selected } from './utils';
 
 import css from './Month.css';
 
@@ -28,8 +29,9 @@ const WEEKDAY_CHARACTERS = 2;
 interface Day {
   id: string;
   date: ReadonlyDate;
-  selected: boolean;
+  selected: Selected;
   inRange: boolean;
+  disabled: boolean;
 }
 
 interface MonthProps {
@@ -45,8 +47,6 @@ interface MonthProps {
 }
 
 export function Month(props: Readonly<MonthProps>) {
-  const [hidePrev, setHidePrev] = createSignal(false);
-  const [hideNext, setHideNext] = createSignal(false);
   let datesElement!: HTMLDivElement;
 
   // for uncontrolled state only
@@ -59,18 +59,18 @@ export function Month(props: Readonly<MonthProps>) {
 
   const names = getWeekdayNames().map((name) => name.slice(0, WEEKDAY_CHARACTERS));
 
-  const shift: Accessor<readonly unknown[]> = createMemo(() => times(getWeekday(startOfMonth(currentMonth()))));
-
-  const dates: Accessor<readonly Readonly<Day>[]> = createMemo(() => {
-    return times(daysInMonth(currentMonth())).map((_: unknown, idx: number) => {
+  const dates: Accessor<readonly Readonly<Day | undefined>[]> = createMemo(() => {
+    const days = times(daysInMonth(currentMonth())).map((_: unknown, idx: number) => {
       const date = new Date(getYear(currentMonth()), getMonth(currentMonth()), idx + 1, 0, 0, 0, 0);
       return {
         date,
         id: dateToString(date),
-        selected: isSelected(date, props.value),
+        selected: getSelected(date, props.value),
         inRange: isInRange(date, props.value),
+        disabled: isOutOfRange(date, props.minDate, props.maxDate),
       };
     });
+    return [...times(getWeekday(startOfMonth(currentMonth()))), ...days];
   });
 
   const changeMonth = (prev?: boolean) => {
@@ -110,19 +110,17 @@ export function Month(props: Readonly<MonthProps>) {
     }
   };
 
-  createEffect(() => {
-    const hide =
-      (props.minPrevMonth && sameMonth(currentMonth(), shiftDate(props.minPrevMonth(), { months: 1 }))) ||
-      (props.minDate && sameMonth(currentMonth(), props.minDate));
-    setHidePrev(!!hide);
-  });
+  const hidePrev = createMemo(
+    () =>
+      (!!props.minPrevMonth && sameMonth(currentMonth(), shiftDate(props.minPrevMonth(), { months: 1 }))) ||
+      (!!props.minDate && sameMonth(currentMonth(), props.minDate)),
+  );
 
-  createEffect(() => {
-    const hide =
-      (props.maxNextMonth && sameMonth(currentMonth(), shiftDate(props.maxNextMonth(), { months: -1 }))) ||
-      (props.maxDate && sameMonth(currentMonth(), props.maxDate));
-    setHideNext(!!hide);
-  });
+  const hideNext = createMemo(
+    () =>
+      (!!props.maxNextMonth && sameMonth(currentMonth(), shiftDate(props.maxNextMonth(), { months: -1 }))) ||
+      (!!props.maxDate && sameMonth(currentMonth(), props.maxDate)),
+  );
 
   return (
     <div class={join(css.root, props.class)}>
@@ -145,25 +143,31 @@ export function Month(props: Readonly<MonthProps>) {
         <For each={names}>{(name) => <div class={css.weekday}>{name}</div>}</For>
       </div>
       <div ref={datesElement} class={css.days}>
-        <For each={shift()}>{() => <div class={join(css.day, css.empty)}>&nbsp;</div>}</For>
-        <Index each={dates()}>
-          {(item, index) => (
-            <button
-              tabIndex={index === 0 ? 0 : -1}
-              data-day={getDay(item().date)}
-              class={css.day}
-              classList={{ [css.active!]: item().selected, [css.inRange!]: item().inRange }}
-              onClick={() => props.onSelect(item().date)}
-              onKeyDown={onDayKeyDown}
-              disabled={
-                (props.maxDate && props.maxDate < item().date) ||
-                (props.minDate && props.minDate > item().date && !sameMonth(props.minDate, item().date))
-              }
-            >
-              {getDay(item().date)}
-            </button>
-          )}
-        </Index>
+        <For each={dates()}>
+          {(date) => {
+            if (!date) return <div class={join(css.day, css.empty)}>&nbsp;</div>;
+            const day = getDay(date.date);
+
+            return (
+              <button
+                tabIndex={day === 1 ? 0 : -1}
+                data-day={getDay(date.date)}
+                class={css.day}
+                classList={{
+                  [css.active!]: Boolean(date.selected),
+                  [css.first!]: date.selected === 'first',
+                  [css.last!]: date.selected === 'last',
+                  [css.inRange!]: date.inRange,
+                }}
+                disabled={date.disabled}
+                onClick={() => props.onSelect(date.date)}
+                onKeyDown={onDayKeyDown}
+              >
+                {day}
+              </button>
+            );
+          }}
+        </For>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import { createSignal } from 'solid-js';
 
+import { shiftDate } from '../../api/dates';
+
 import { SelectDateRange, SelectDateRangeProps } from './SelectDateRange';
 
 export default {
@@ -17,6 +19,7 @@ export default {
 };
 
 export const Default = (args: SelectDateRangeProps) => {
+  const today: ReadonlyDate = new Date();
   const [value, setValue] = createSignal<ReadonlyDate[]>([]);
 
   const onChange = (dates: ReadonlyDate[]) => {
@@ -28,9 +31,8 @@ export const Default = (args: SelectDateRangeProps) => {
     <div>
       <SelectDateRange
         {...args}
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        minDate={new Date(new Date().setFullYear(2021))}
-        maxDate={new Date()}
+        minDate={shiftDate(today, { months: -6 })}
+        maxDate={today}
         value={value()}
         onChange={onChange}
       />

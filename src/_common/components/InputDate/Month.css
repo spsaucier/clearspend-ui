@@ -82,7 +82,7 @@
     cursor: not-allowed;
   }
 
-  &:not(:disabled):hover {
+  &:not(:disabled):not(.active):hover {
     background: var(--tw-primary-bg);
   }
 }
@@ -91,6 +91,19 @@
   background: var(--tw-primary-bg);
 }
 
+.first {
+  border-top-right-radius: var(--radius-2);
+  border-bottom-right-radius: var(--radius-2);
+}
+
+.last {
+  color: var(--tw-primary-bg);
+  background: var(--tw-primary-dark);
+  border-top-left-radius: var(--radius-2);
+  border-bottom-left-radius: var(--radius-2);
+}
+
 .in-range {
   background: var(--tw-gray-20);
+  border-radius: var(--radius-2);
 }

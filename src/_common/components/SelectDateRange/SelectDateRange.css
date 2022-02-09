@@ -77,6 +77,7 @@
 .popup {
   width: auto;
   padding: 0;
+  overflow: hidden;
 }
 
 .content {
@@ -92,6 +93,7 @@
     margin-top: var(--pd-16);
 
     @media (--bp-medium) {
+      min-height: 334px;
       margin: 0 0 0 var(--pd-48);
     }
   }

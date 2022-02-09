@@ -2540,6 +2540,12 @@ export interface MccGroup {
   name?: string;
 }
 
+export interface ExpenseCategory {
+  /** @format int32 */
+  iconRef?: number;
+  categoryName?: string;
+}
+
 export interface BusinessLimit {
   /** @format int32 */
   issuedPhysicalCardsLimit?: number;

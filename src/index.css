@@ -9,6 +9,7 @@
   --tw-gray-15: #f5f5f5;
   --tw-gray-10: #fbfbfa;
   --tw-white: #fff;
+  --tw-accent-100: #234941;
   --tw-accent-80: #49bb69;
   --tw-accent-70: #5bea83;
   --tw-accent-60: #7cee9c;
@@ -75,6 +76,7 @@
   --line-40: 40px;
 
   /* RADIUS */
+  --radius-2: 2px;
   --radius-4: 4px;
   --radius-8: 8px;
   --radius-10: 10px;
@@ -96,6 +98,7 @@
 
 :root,
 :root[theme='BLUE'] {
+  --tw-primary-dark: var(--tw-accent-100);
   --tw-primary-content: var(--tw-accent-80);
   --tw-primary-bg: var(--tw-accent-70);
   --tw-primary-border: var(--tw-accent-30);

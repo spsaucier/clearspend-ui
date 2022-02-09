@@ -2,13 +2,27 @@ import { i18n } from '../../api/intl';
 import { DAYS_IN_WEEK, startOfWeek, shiftDate, getYear, getMonth, getDay, isSameDates } from '../../api/dates';
 import { times } from '../../utils/times';
 
-export function isSelected(date: ReadonlyDate, range: readonly (ReadonlyDate | undefined)[]): boolean {
-  return range.some((item) => !!item && isSameDates(date, item));
+export type Selected = 'first' | 'last' | boolean;
+
+export function getSelected(date: ReadonlyDate, range: readonly (ReadonlyDate | undefined)[]): Selected {
+  const [from, to] = range;
+  if (from && to) {
+    if (isSameDates(date, from)) return 'first';
+    if (isSameDates(date, to)) return 'last';
+  }
+  return from && !to ? isSameDates(date, from) : false;
 }
 
 export function isInRange(date: ReadonlyDate, range: readonly (ReadonlyDate | undefined)[]): boolean {
   const [from, to] = range;
   return !!from && !!to && date > from && date < to;
+}
+
+export function isOutOfRange(date: ReadonlyDate, minDate?: ReadonlyDate, maxDate?: ReadonlyDate): boolean {
+  return (
+    (!!maxDate && maxDate < date && !isSameDates(maxDate, date)) ||
+    (!!minDate && minDate > date && !isSameDates(minDate, date))
+  );
 }
 
 export function getWeekdayNames(fromMonday: boolean = true): readonly string[] {
@@ -24,8 +38,8 @@ function getDayButton(wrapper: HTMLElement, day: number) {
   return wrapper.querySelector<HTMLElement>(`button[data-day='${day}']`);
 }
 
-export const sameMonth = (date1: ReadonlyDate | Date, date2: ReadonlyDate | Date) =>
-  date1.getUTCFullYear() === date2.getUTCFullYear() && date1.getUTCMonth() === date2.getUTCMonth();
+export const sameMonth = (date1: ReadonlyDate, date2: ReadonlyDate): boolean =>
+  getYear(date1) === getYear(date2) && getMonth(date1) === getMonth(date2);
 
 export function getMoveFocus(wrapper: HTMLElement, target: EventTarget, month: ReadonlyDate) {
   return (shift: number, onMonthChange: () => void) => {
