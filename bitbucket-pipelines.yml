@@ -23,6 +23,7 @@ pipelines:
     - step:
         name: Deploy image to GKE
         image: google/cloud-sdk:latest
+        deployment: DEV
         runs-on:
           - 'env.dev'
         script:
@@ -36,7 +37,7 @@ pipelines:
       - step:
           name: Deploy image to QA
           image: google/cloud-sdk:latest
-          deployment: staging
+          deployment: QA
           runs-on:
             - 'env.qa'
           script:
