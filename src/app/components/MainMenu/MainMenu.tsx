@@ -2,6 +2,8 @@ import { createMemo, Index, Accessor } from 'solid-js';
 import { defineMessages } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
+import { useBusiness } from 'app/containers/Main/context';
+import { canSeeAccounting } from 'accounting/utils/canSeeAccounting';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -14,6 +16,7 @@ const TITLES = defineMessages({
   employees: { message: 'Employees' },
   company: { message: 'Company Settings' },
   profile: { message: 'Account Settings' },
+  accounting: { message: 'Accounting' },
 });
 
 const MAIN_ITEMS: readonly Readonly<MenuItemOptions>[] = [
@@ -22,6 +25,7 @@ const MAIN_ITEMS: readonly Readonly<MenuItemOptions>[] = [
   { href: '/cards', title: TITLES.card, icon: 'card' },
   { href: '/employees', title: TITLES.employees, icon: 'employees' },
   { href: '/settings', title: TITLES.company, icon: 'company' },
+  { href: '/accounting', title: TITLES.accounting, icon: 'audit-logs' }, // TODO: revise icon when received from Adam
 ];
 
 const SECOND_ITEMS: readonly Readonly<MenuItemOptions>[] = [{ href: '/profile', title: TITLES.profile, icon: 'user' }];
@@ -41,10 +45,14 @@ interface MainMenuProps {
 export function MainMenu(props: Readonly<MainMenuProps>) {
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
   const itemClass = createMemo(() => (props.view === MenuView.mobile ? css.mobileItem : undefined));
+  const { signupUser } = useBusiness();
+  const canSeeMenuItem = (item: Accessor<MenuItemOptions>) =>
+    item().title !== TITLES.accounting || canSeeAccounting(signupUser());
 
-  const renderItem = (item: Accessor<MenuItemOptions>) => (
-    <MenuItem {...item()} expanded={expanded()} class={itemClass()} onClick={props.onItemClick} />
-  );
+  const renderItem = (item: Accessor<MenuItemOptions>) =>
+    canSeeMenuItem(item) ? (
+      <MenuItem {...item()} expanded={expanded()} class={itemClass()} onClick={props.onItemClick} />
+    ) : null;
 
   return (
     <nav class={join(css.root, props.class)}>

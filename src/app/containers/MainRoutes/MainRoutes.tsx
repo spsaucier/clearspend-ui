@@ -13,6 +13,7 @@ import { CardView } from 'cards/pages/CardView';
 import { CardActivate } from 'cards/pages/CardActivate';
 import { CardEdit } from 'cards/pages/CardEdit';
 import { CompanySettings } from 'company';
+import { Accounting } from 'accounting';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
@@ -42,6 +43,8 @@ export function MainRoutes() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/settings" element={<ProfileSettings />} />
         <Route path="/profile/password" element={<ChangePassword />} />
+
+        <Route path="/accounting" element={<Accounting />} />
       </Routes>
     </MainLayout>
   );
