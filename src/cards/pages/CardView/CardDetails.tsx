@@ -72,11 +72,11 @@ export default function CardDetails(props: CardDetailsProps) {
   createEffect(async () => {
     setStripe(
       (await loadStripe(
-        process.env.STRIPE_PUB_KEY ||
-          'pk_test_51K4bTGGAnZyEKADzAHWpsUzRhpZKBUdFOWgBfdfSw302hniCVohvChc3THqrUdVN7tHxqpu8JNz3ABuN35OBuYtu00m8x9cVd3',
+        // TODO: Set this to be from env variable
+        'pk_test_51K4bTGGAnZyEKADzAHWpsUzRhpZKBUdFOWgBfdfSw302hniCVohvChc3THqrUdVN7tHxqpu8JNz3ABuN35OBuYtu00m8x9cVd3',
         {
           betas: ['issuing_elements_2'],
-          stripeAccount: process.env.STRIPE_ACCOUNT || 'acct_1KPLzp4g2Xo63Nb8',
+          stripeAccount: 'acct_1KPLzp4g2Xo63Nb8',
         },
       )) as StripeCS,
     );
