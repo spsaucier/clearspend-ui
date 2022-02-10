@@ -1,9 +1,9 @@
-import { Text } from 'solid-i18n';
+import { AccountingOverview } from '../AccountingOverview';
 
 export function SyncTransactions() {
   return (
     <div>
-      <Text message="Sync Transactions" />
+      <AccountingOverview />
     </div>
   );
 }
