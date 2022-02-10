@@ -8,14 +8,16 @@ import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { Drawer } from '_common/components/Drawer';
 import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
+import { AllocationTag } from 'allocations/components/AllocationTag';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-// import { Tag } from '_common/components/Tag';
+import { useUserCards } from 'employees/stores/userCards';
 
 import { Page } from '../../components/Page';
+import { Landing } from '../../containers/Landing';
 import { Overview } from '../../containers/Overview';
 import { useBusiness } from '../../containers/Main/context';
 
@@ -30,6 +32,7 @@ export default function Dashboard() {
 
   const [manageId, setManageId] = createSignal<string>();
 
+  const userCards = useUserCards();
   const allocations = useAllocations({ initValue: [] });
 
   const onAllocationChange = (id: string) => {
@@ -42,16 +45,20 @@ export default function Dashboard() {
       title={<Text message="Welcome, {name}" name={signupUser().firstName || ''} />}
       contentClass={css.content}
       extra={
-        <AllocationSelect
-          items={allocations.data!}
-          value={allocation()}
-          class={css.allocations}
-          onChange={onAllocationChange}
-          showAllAsOption
-        />
-        // <Tag type="primary">
-        //   North Valley Enterprises | <strong>$100.00</strong>
-        // </Tag>
+        <Switch>
+          <Match when={allocations.data?.length === 1}>
+            <AllocationTag data={allocations.data![0]!} />
+          </Match>
+          <Match when={allocations.data?.length}>
+            <AllocationSelect
+              items={allocations.data!}
+              value={allocation()}
+              class={css.allocations}
+              onChange={onAllocationChange}
+              showAllAsOption
+            />
+          </Match>
+        </Switch>
       }
       actions={
         <div class={css.actions}>
@@ -96,12 +103,17 @@ export default function Dashboard() {
         <Match when={allocations.error}>
           <LoadingError onReload={allocations.reload} />
         </Match>
-        <Match when={allocations.loading && !allocations.data?.length}>
+        <Match when={userCards.error}>
+          <LoadingError onReload={userCards.reload} />
+        </Match>
+        <Match when={(allocations.loading && !allocations.data?.length) || (userCards.loading && !userCards.data)}>
           <Loading />
+        </Match>
+        <Match when={allocations.data?.length === 1 && !userCards.data?.length}>
+          <Landing />
         </Match>
         <Match when={allocations.data}>
           <Overview allocationId={allocation()} />
-          {/*<Landing />*/}
         </Match>
       </Switch>
       <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>

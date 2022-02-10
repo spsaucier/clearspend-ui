@@ -2,6 +2,7 @@ export enum IconName {
   add = 'add',
   'add-receipt' = 'add-receipt',
   'add-circle-outline' = 'add-circle-outline',
+  amount = 'amount',
   allocations = 'allocations',
   alert = 'alert',
   approvals = 'approvals',

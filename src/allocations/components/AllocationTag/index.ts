@@ -1,0 +1,1 @@
+export { AllocationTag } from './AllocationTag';

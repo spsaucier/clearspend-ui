@@ -1,0 +1,7 @@
+.root {
+  color: var(--tw-black);
+}
+
+.amount {
+  color: var(--tw-primary-content);
+}
