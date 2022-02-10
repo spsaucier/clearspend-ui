@@ -29,7 +29,6 @@
 
 .input {
   width: calc(100% + (v-border * 2));
-  margin: -1px 0 0 -1px;
   padding: var(--pd-8) var(--pd-12);
   font: inherit;
   text-overflow: ellipsis;

@@ -31,6 +31,7 @@ export enum IconName {
   edit = 'edit',
   email = 'email',
   employees = 'employees',
+  file = 'file',
   'file-text' = 'file-text',
   filters = 'filters',
   freeze = 'freeze',

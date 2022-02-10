@@ -111,6 +111,13 @@
   text-transform: uppercase;
 }
 
+.note-button {
+  width: 40px;
+  height: 100%;
+  margin: 0 calc(var(--pd-8) * -1);
+  border-radius: var(--radius-8);
+}
+
 .card {
   display: flex;
   margin: var(--pd-10) 0;

@@ -1,16 +1,25 @@
 import { useNavigate } from 'solid-app-router';
-import { DateTime } from 'solid-i18n';
-import { createEffect, createSignal, Show } from 'solid-js';
+import { useI18n, DateTime } from 'solid-i18n';
+import { createEffect, createSignal, createMemo, batch, Show } from 'solid-js';
 
 import type { AccountActivityResponse } from 'generated/capital';
+import { KEY_CODES } from '_common/constants/keyboard';
 import { DateFormat } from '_common/api/intl/types';
-import { Icon } from '_common/components/Icon/Icon';
+import { Icon } from '_common/components/Icon';
+import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
+import { useMessages } from 'app/containers/Messages/context';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import { join } from '_common/utils/join';
-import { getActivityById, linkReceiptToActivity, uploadReceiptForActivity, viewReceipt } from 'app/services/activity';
+import {
+  getActivityById,
+  setActivityNote,
+  linkReceiptToActivity,
+  uploadReceiptForActivity,
+  viewReceipt,
+} from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import type { ReceiptVideModel } from './ReceiptsView';
@@ -39,29 +48,40 @@ export const formatMerchantTypeLc = (type: string) => {
 };
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
+  const i18n = useI18n();
+  const messages = useMessages();
   const navigate = useNavigate();
+
   const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
-  const [receipts, setReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
   const displayAmount = formatCurrency(transaction().amount?.amount || 0);
 
   const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
     const formData = new FormData();
     formData.append('receipt', (e.target as HTMLInputElement).files?.[0] as File);
-
     const { receiptId } = await uploadReceiptForActivity(formData);
-
     await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
-
-    const updatedTransactionWithReceipt = await getActivityById(transaction().accountActivityId!);
-
-    setTransaction(updatedTransactionWithReceipt);
+    setTransaction(await getActivityById(transaction().accountActivityId!));
   });
 
+  const [note, setNote] = createSignal<string>();
+  const notes = createMemo(() => transaction().notes || note());
+  const [savingNote, saveNote] = wrapAction(setActivityNote);
+
+  const onSaveNote = () => {
+    saveNote(props.transaction.accountActivityId!, note()!)
+      .then((data) => {
+        batch(() => {
+          setTransaction(data);
+          setNote(undefined);
+        });
+      })
+      .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
+  const [receipts, setReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
   const [downloadingReceipts, viewReceiptAction] = wrapAction(viewReceipt);
-
-  createEffect(() => {
-    setTransaction(props.transaction);
-  });
 
   createEffect(() => {
     const downloadReceiptsToView = async () => {
@@ -127,6 +147,30 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </Show>
           <input type="file" id="receipt-upload" accept="image/*" onChange={uploadReceipt}></input>
         </div>
+      </div>
+      <div>
+        <Input
+          prefix={<Icon name="file" size="sm" />}
+          suffix={
+            <Show when={note()}>
+              <Button
+                size="sm"
+                icon="edit"
+                view="ghost"
+                loading={savingNote()}
+                class={css.noteButton}
+                onClick={onSaveNote}
+              />
+            </Show>
+          }
+          placeholder={String(i18n.t('Add transaction comments'))}
+          value={notes()}
+          disabled={savingNote()}
+          onKeyDown={(event: KeyboardEvent) => {
+            if (event.keyCode === KEY_CODES.Enter) onSaveNote();
+          }}
+          onChange={setNote}
+        />
       </div>
       <div>
         <Show when={transaction().card}>

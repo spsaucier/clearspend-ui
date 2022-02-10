@@ -32,6 +32,11 @@ export async function getActivityById(activityId: string) {
   return (await service.get<Readonly<AccountActivityResponse>>(`/account-activity/${activityId}`)).data;
 }
 
+export async function setActivityNote(activityId: string, notes: string) {
+  return (await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, { notes }))
+    .data;
+}
+
 export async function uploadReceiptForActivity(receiptData: FormData) {
   return (await service.post<Readonly<{ receiptId: string }>>('/images/receipts', receiptData)).data;
 }
