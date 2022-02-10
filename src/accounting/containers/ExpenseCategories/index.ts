@@ -1,1 +1,1 @@
-export { ExpenseCategories } from './ExpenseCategories';
+export { AccountingSettings } from './AccountingSettings';
