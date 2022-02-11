@@ -22,7 +22,6 @@
   "dependencies": {
     "@solid-primitives/debounce": "1.1.0",
     "@stripe/stripe-js": "^1.22.0",
-    "axios": "^0.24.0",
     "colord": "2.9.2",
     "core-js": "3.21.0",
     "date-func": "0.2.0",

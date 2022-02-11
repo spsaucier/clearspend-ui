@@ -33,7 +33,8 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
               </div>
               <div class={css.cards}>
                 <Show when={card} fallback={<Text message="No card" />}>
-                  <div class={css.card}>{formatCardNumber(card!.lastFour)}</div>
+                  {/* TODO need activated status */}
+                  <div class={css.card}>{formatCardNumber(card!.lastFour, true)}</div>
                   <Show when={Boolean(rest.length)} fallback={<span class={css.more}>{card!.allocationName}</span>}>
                     <Text
                       message="{count} more {count, plural, one {card} other {cards}}"

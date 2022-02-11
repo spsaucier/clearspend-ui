@@ -102,14 +102,9 @@ export default function CardView() {
         </BackLink>
       }
       title={
-        <Switch fallback={formatCardNumber(card()!.lastFour)}>
-          <Match when={!card()}>
-            <Text message="Loading..." />
-          </Match>
-          <Match when={!card()!.activated}>
-            <Text message="Awaiting activation" />
-          </Match>
-        </Switch>
+        <Show when={card()} fallback={<Text message="Loading..." />}>
+          {formatCardNumber(card()!.lastFour, card()!.activated)}
+        </Show>
       }
       subtitle={
         <Show when={card() && !card()!.activated}>

@@ -7,6 +7,7 @@ import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capit
 
 import { CardsList } from '../CardsList';
 import { CardsTable } from '../CardsTable';
+import type { CardFiltersFields } from '../../types';
 
 interface CardsDataProps {
   loading: boolean;
@@ -14,7 +15,7 @@ interface CardsDataProps {
   search?: string;
   data: Readonly<PagedDataSearchCardData> | null;
   table?: boolean;
-  hiddenFields?: readonly string[];
+  omitFilters?: readonly CardFiltersFields[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
   onReload: () => Promise<unknown>;
@@ -29,7 +30,7 @@ export function CardsData(props: Readonly<CardsDataProps>) {
         component={props.table ? CardsTable : CardsList}
         search={props.search}
         data={props.data!}
-        hideColumns={props.hiddenFields}
+        omitFilters={props.omitFilters}
         onUserClick={props.onUserClick}
         onCardClick={props.onCardClick}
         onChangeParams={props.onChangeParams}

@@ -1,7 +1,7 @@
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
-import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 
 import css from './LinkedAccountPreview.css';
 
@@ -17,7 +17,7 @@ export function LinkedAccountPreview(props: Readonly<LinkedAccountPreviewProps>)
       <div class={css.content}>
         <div class={css.card}>
           <div class={css.cardName}>[Account name]</div>
-          <div class={css.cardNumber}>{formatCardNumber('0000000000000000')}</div>
+          <div class={css.cardNumber}>{formatAccountNumber('0000000000000000')}</div>
         </div>
         <h4 class={css.header}>
           <Text message="Account info" />

@@ -32,10 +32,7 @@
 }
 
 .icon {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  border-radius: var(--radius-8);
+  margin-top: -4px;
 }
 
 .status {
@@ -45,22 +42,22 @@
   margin-top: -4px;
   align-items: center;
   justify-content: center;
-  color: var(--tw-green-70);
-  background: var(--tw-green-10);
-  border: 1px solid var(--tw-green-20);
+  color: var(--tw-gray-70);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
   border-radius: var(--radius-8);
 }
 
-.status.declined {
+.approved {
+  color: var(--tw-green-70);
+  background: var(--tw-green-10);
+  border-color: var(--tw-green-20);
+}
+
+.declined {
   color: var(--tw-red-80);
   background: var(--tw-red-20);
   border-color: var(--tw-red-60);
-}
-
-.status.pending {
-  color: var(--tw-amber-70);
-  background: var(--tw-amber-20);
-  border-color: var(--tw-amber-50);
 }
 
 .amount {
@@ -86,7 +83,6 @@
 .merchant-type {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
-  text-transform: capitalize;
 }
 
 .merchant-type {

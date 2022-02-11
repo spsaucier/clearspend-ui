@@ -5,7 +5,7 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import type { StoreSetter } from '_common/utils/store';
 import { DateFormat } from '_common/api/intl/types';
 import { InputSearch } from '_common/components/InputSearch';
-import { Tag } from '_common/components/Tag';
+import { Tag, TagProps } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
@@ -15,9 +15,20 @@ import type {
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
 
-import { merchantImg } from '../TransactionPreview/TransactionPreview';
+import { MerchantLogo } from '../MerchantLogo';
+import { STATUS_ICONS } from '../../constants';
+import type { ActivityStatus } from '../../types';
 
 import css from './TransactionsList.css';
+
+const STATUS_TYPES: Record<ActivityStatus, Required<TagProps>['type']> = {
+  APPROVED: 'success',
+  PROCESSED: 'success',
+  DECLINED: 'danger',
+  CANCELED: 'danger',
+  PENDING: 'default',
+  CREDIT: 'default',
+};
 
 interface TransactionsListProps {
   params: Readonly<AccountActivityRequest>;
@@ -49,7 +60,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
             return (
               <div class={css.item} onClick={() => props.onRowClick?.(item)}>
                 <Show when={item.merchant}>
-                  <img src={merchantImg(item)} alt="Merchant logo" class={css.icon} />
+                  <MerchantLogo data={item.merchant!} />
                 </Show>
                 <div>
                   <div class={css.category}>{item.merchant?.name || 'hello'}</div>
@@ -58,8 +69,8 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
                   </div>
                 </div>
                 <div class={css.side}>
-                  <Tag size="sm" type="success">
-                    <Icon name="confirm" size="sm" />
+                  <Tag size="sm" type={STATUS_TYPES[item.status!]}>
+                    <Icon name={STATUS_ICONS[item.status!]} size="sm" />
                     {formatCurrency(item.amount?.amount || 0)}
                   </Tag>
                   <div class={css.time}>

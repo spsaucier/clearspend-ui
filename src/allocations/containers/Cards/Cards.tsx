@@ -67,7 +67,7 @@ export function Cards(props: Readonly<CardsProps>) {
         error={status().error}
         search={params().searchText}
         data={cards()}
-        hiddenFields={['allocation']}
+        omitFilters={['allocationId']}
         onReload={reload}
         onCardClick={setCardID}
         onUserClick={setUserID}

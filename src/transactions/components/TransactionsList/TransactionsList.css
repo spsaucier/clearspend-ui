@@ -10,20 +10,12 @@
   display: grid;
   padding: var(--pd-24) 0;
   grid-template-columns: auto 1fr auto;
-  grid-gap: var(--pd-12);
+  grid-gap: var(--pd-10);
   cursor: pointer;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--tw-gray-30);
   }
-}
-
-.icon {
-  width: 36px;
-  height: 36px;
-  margin-top: 3px;
-  object-fit: contain;
-  border-radius: var(--radius-8);
 }
 
 .category {

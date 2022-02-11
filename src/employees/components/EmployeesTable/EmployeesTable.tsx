@@ -59,7 +59,8 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           <For each={item.cardInfoList}>
             {(card) => (
               <div class={css.card} onClick={() => props.onCardClick(card.cardId!)}>
-                <span class={css.cardNumber}>{formatCardNumber(card.lastFour)}</span>
+                {/* TODO need activated status */}
+                <span class={css.cardNumber}>{formatCardNumber(card.lastFour, true)}</span>
                 <span>{card.allocationName}</span>
               </div>
             )}

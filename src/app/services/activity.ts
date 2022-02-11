@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import { RespType, service } from 'app/utils/service';
 import type {
   AccountActivityRequest,
@@ -46,13 +44,10 @@ export async function linkReceiptToActivity(activityId: string, receiptId: strin
 }
 
 export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> => {
-  const receiptData = await axios.get<Blob>(`api/images/receipts/${receiptId}`, {
-    responseType: 'blob',
-  });
-  return { uri: URL.createObjectURL(receiptData.data), receiptId: receiptId };
+  const data = (await service.get<Blob>(`/images/receipts/${receiptId}`, { respType: RespType.blob })).data;
+  return { uri: URL.createObjectURL(data), receiptId: receiptId };
 };
 
 export const deleteReceipt = async (receiptId: string) => {
-  const result = await axios.delete(`api/users/receipts/${receiptId}/delete`);
-  return result;
+  await service.remove(`api/users/receipts/${receiptId}/delete`);
 };

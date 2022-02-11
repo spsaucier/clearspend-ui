@@ -27,17 +27,17 @@ import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
 import { CardStatus } from '../CardStatus';
 import { exportCards } from '../../services';
-import type { CardType as CardTypeType } from '../../types';
+import type { CardType as CardTypeType, CardFiltersFields } from '../../types';
 
 import css from './CardsTable.css';
 
-const FILTERS_KEYS = ['allocationId', 'userId'] as const;
+const FILTERS_KEYS: readonly CardFiltersFields[] = ['allocationId', 'userId'];
 
 interface CardsTableProps {
   search?: string;
   data: PagedDataSearchCardData;
   params: Readonly<SearchCardRequest>;
-  hideColumns?: readonly string[];
+  omitFilters?: readonly CardFiltersFields[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
   onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
@@ -59,11 +59,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
         <div class={css.card}>
           <CardIcon type={item.cardType as CardTypeType} />
           <div>
-            {item.cardNumber && item.activated ? (
-              formatCardNumber(item.cardNumber)
-            ) : (
-              <Text class={css.name!} message="Awaiting activation" />
-            )}
+            {formatCardNumber(item.cardNumber, item.activated)}
             <CardType type={item.cardType as CardTypeType} class={css.type} />
           </div>
         </div>
@@ -71,14 +67,14 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       onClick: (item) => props.onCardClick(item.cardId!),
     },
     {
-      name: 'name',
+      name: 'userId',
       title: 'Employee',
       class: css.name,
       render: (item) => formatName(item.user),
       onClick: (item) => props.onUserClick?.(item.user?.userId!),
     },
     {
-      name: 'allocation',
+      name: 'allocationId',
       title: 'Allocation',
       render: (item) => <span>{item.allocation?.name}</span>,
     },
@@ -99,12 +95,14 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
   ];
 
+  const filtersKeys = createMemo(() => FILTERS_KEYS.filter((key) => !props.omitFilters?.includes(key)));
+
   const filtersCount = createMemo(() =>
-    FILTERS_KEYS.reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0),
+    filtersKeys().reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0),
   );
 
   const onResetFilters = () => {
-    props.onChangeParams((prev) => ({ ...prev, ...getResetFilters(FILTERS_KEYS) }));
+    props.onChangeParams((prev) => ({ ...prev, ...getResetFilters(filtersKeys()) }));
   };
 
   const onExport = () => {
@@ -146,7 +144,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       </Filters>
       <Show when={props.data.content?.length} fallback={<Empty message={<Text message="There are no cards" />} />}>
         <Table
-          columns={columns.filter((col) => !props.hideColumns || !props.hideColumns.includes(col.name))}
+          columns={columns.filter((col) => !props.omitFilters?.includes(col.name as CardFiltersFields))}
           data={props.data.content || []}
         />
       </Show>
@@ -159,7 +157,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       >
         <CardsFilterDrawer
           params={props.params}
-          hiddenFields={props.hideColumns}
+          omitFilters={props.omitFilters}
           onReset={() => {
             setFilterPanelOpen(false);
             onResetFilters();

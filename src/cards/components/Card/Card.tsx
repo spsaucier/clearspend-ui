@@ -6,7 +6,7 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import type { Card as ICard } from 'generated/capital';
 
-import { formatCardNumber } from '../../utils/formatCardNumber';
+import { formatAccountNumber } from '../../utils/formatAccountNumber';
 import { CardType } from '../../types';
 
 import css from './Card.css';
@@ -76,7 +76,7 @@ export function Card(props: Readonly<CardProps>) {
         />
         <text x="279" y="70" text-anchor="end" fill={mainColor()} class={css.text}>
           <Show when={!props.notActivated} fallback="••••">
-            {props.number && formatCardNumber(props.number)}
+            {props.number && formatAccountNumber(props.number)}
           </Show>
         </text>
         <Show when={props.name}>

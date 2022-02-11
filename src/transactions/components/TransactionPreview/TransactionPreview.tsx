@@ -1,6 +1,6 @@
 import { useNavigate } from 'solid-app-router';
-import { useI18n, DateTime } from 'solid-i18n';
-import { createEffect, createSignal, createMemo, batch, Show } from 'solid-js';
+import { useI18n, Text, DateTime } from 'solid-i18n';
+import { createSignal, createMemo, batch, Show } from 'solid-js';
 
 import type { AccountActivityResponse } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
@@ -9,9 +9,11 @@ import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
+import { useResource } from '_common/utils/useResource';
 import { useMessages } from 'app/containers/Messages/context';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
+import { AccountItem } from 'company/components/AccountItem';
 import { join } from '_common/utils/join';
 import {
   getActivityById,
@@ -22,30 +24,29 @@ import {
 } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 
+import { MerchantLogo } from '../MerchantLogo';
+import { formatMerchantType } from '../../utils/formatMerchantType';
+import { formatActivityStatus } from '../../utils/formatActivityStatus';
+import { STATUS_FILL_ICONS } from '../../constants';
+import type { ActivityStatus } from '../../types';
+
 import type { ReceiptVideModel } from './ReceiptsView';
 
 import css from './TransactionPreview.css';
+
+const STATUS_COLORS: Record<ActivityStatus, string | undefined> = {
+  APPROVED: css.approved,
+  PROCESSED: css.approved,
+  DECLINED: css.declined,
+  CANCELED: css.declined,
+  PENDING: undefined,
+  CREDIT: undefined,
+};
 
 interface TransactionPreviewProps {
   transaction: AccountActivityResponse;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
 }
-
-export const merchantImg = (transaction: AccountActivityResponse) => {
-  if (transaction.merchant) {
-    return (
-      transaction.merchant.merchantLogoUrl ||
-      `https://ui-avatars.com/api/?background=047857&color=fff&name=${encodeURIComponent(
-        transaction.merchant.name || '',
-      )}`
-    );
-  }
-  return '';
-};
-
-export const formatMerchantTypeLc = (type: string) => {
-  return type.replace(/_/g, ' ').toLocaleLowerCase();
-};
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
@@ -80,149 +81,133 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       });
   };
 
-  const [receipts, setReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
-  const [downloadingReceipts, viewReceiptAction] = wrapAction(viewReceipt);
-
-  createEffect(() => {
-    const downloadReceiptsToView = async () => {
-      const receiptIdList = transaction().receipt?.receiptId;
-      if (receiptIdList && receiptIdList.length > 0) {
-        const viewReceiptDataRequests = await Promise.all(
-          receiptIdList.map((receiptId) => viewReceiptAction(receiptId)),
-        );
-        setReceipts(viewReceiptDataRequests);
-      }
-    };
-    downloadReceiptsToView();
-  });
+  const receiptIds = createMemo(() => transaction().receipt?.receiptId || []);
+  const [receipts, receiptsStatus, , , reloadReceipts] = useResource(() => Promise.all(receiptIds().map(viewReceipt)));
 
   return (
-    <div>
-      <div class={join(css.status, getColorClassForTransactionStatus(transaction().status))}>
-        <Icon name="confirm-circle-filled" size="sm" class={css.icon} />
-        <span>{transaction().status?.toLocaleLowerCase()}</span>
-        <span class={css.statusMsg}>{getTransactionStatusDetailMsg(transaction().status)}</span>
+    <div class={css.root}>
+      <div class={join(css.status, STATUS_COLORS[transaction().status!])}>
+        <Icon name={STATUS_FILL_ICONS[transaction().status!]} size="sm" class={css.statusIcon} />
+        <span>{formatActivityStatus(transaction().status)}</span>
       </div>
       <div class={css.summary}>
         <Show when={transaction().merchant}>
-          <img src={merchantImg(transaction())} alt="Merchant logo" class={css.merchantLogo} />
-        </Show>
-        <Show when={!transaction().merchant}>
-          <div class={css.missingLogoUrl} />
+          <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
         </Show>
         <div class={css.amount}>{displayAmount}</div>
         <div class={css.merchant}>
           {transaction().merchant?.name}
-          <span class={css.pad}>&#8226;</span>
-          <span class={css.merchantType}>{formatMerchantTypeLc(transaction().merchant?.type || '')}</span>
+          <span> &#8226; </span>
+          {formatMerchantType(transaction().merchant?.type)}
         </div>
         <div class={css.date}>
           <DateWithDateTime activityTime={transaction().activityTime!} />
         </div>
         <div class={css.receiptCta}>
-          <Show when={transaction().receipt?.receiptId?.length! > 0}>
+          <Show when={receiptIds().length}>
             <Button
-              view={'default'}
-              wide={true}
-              loading={downloadingReceipts()}
-              icon="add-receipt"
-              onClick={() => props.onViewReceipt(receipts())}
+              wide
+              loading={receiptsStatus().loading}
+              icon="receipt"
+              onClick={() => {
+                if (receiptsStatus().error) {
+                  reloadReceipts().then(() => {
+                    if (receipts()) props.onViewReceipt(receipts()!);
+                    else messages.error({ title: i18n.t('Something went wrong') });
+                  });
+                } else props.onViewReceipt(receipts()!);
+              }}
             >
-              View Receipt
+              <Text message="View Receipt" />
             </Button>
           </Show>
-          <Show when={!transaction().receipt?.receiptId && allowReceiptUpload(transaction())}>
-            <label for="receipt-upload">
-              <Button view={'default'} wide={true} icon="add-receipt" loading={uploading()}>
-                Add Receipt
+          <Show when={!receiptIds().length && allowReceiptUpload(transaction())}>
+            <label for="receipt-upload" class={css.receiptCtaLabel}>
+              <Button wide icon="add-receipt" loading={uploading()}>
+                <Text message="Add Receipt" />
               </Button>
             </label>
           </Show>
-          <Show when={allowReceiptUpload(transaction())}>
-            <label for="receipt-upload">
-              <Button view={'default'} wide={true} icon="receipt" loading={uploading()}>
-                Upload more images
+          <Show when={receiptIds().length && allowReceiptUpload(transaction())}>
+            <label for="receipt-upload" class={css.receiptCtaLabel}>
+              <Button wide icon="receipt" loading={uploading()}>
+                <Text message="Upload more images" />
               </Button>
             </label>
           </Show>
-          <input type="file" id="receipt-upload" accept="image/*" onChange={uploadReceipt}></input>
+          <input type="file" id="receipt-upload" accept="image/*" onChange={uploadReceipt} />
         </div>
       </div>
-      <div>
-        <Input
-          prefix={<Icon name="file" size="sm" />}
-          suffix={
-            <Show when={note()}>
-              <Button
-                size="sm"
-                icon="edit"
-                view="ghost"
-                loading={savingNote()}
-                class={css.noteButton}
-                onClick={onSaveNote}
-              />
-            </Show>
-          }
-          placeholder={String(i18n.t('Add transaction comments'))}
-          value={notes()}
-          disabled={savingNote()}
-          onKeyDown={(event: KeyboardEvent) => {
-            if (event.keyCode === KEY_CODES.Enter) onSaveNote();
-          }}
-          onChange={setNote}
-        />
-      </div>
-      <div>
+      <div class={css.scroll}>
+        <div>
+          <Input
+            prefix={<Icon name="file" size="sm" />}
+            suffix={
+              <Show when={note()}>
+                <Button
+                  size="sm"
+                  icon="edit"
+                  view="ghost"
+                  loading={savingNote()}
+                  class={css.noteButton}
+                  onClick={onSaveNote}
+                />
+              </Show>
+            }
+            placeholder={String(i18n.t('Add transaction comments'))}
+            value={notes()}
+            disabled={savingNote()}
+            onKeyDown={(event: KeyboardEvent) => {
+              if (event.keyCode === KEY_CODES.Enter) onSaveNote();
+            }}
+            onChange={setNote}
+          />
+        </div>
         <Show when={transaction().card}>
-          <>
-            <div class={css.title}>Card</div>
-            <div>
-              <div class={css.card} onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}>
-                <div class={css.cardIcon}>
-                  <Icon name="card" />
-                </div>
-                <div class={css.cardDetailWrapper}>
-                  <div class={css.cardNumber}>
-                    {transaction().card?.lastFour ? formatCardNumber(transaction().card?.lastFour) : '--'}
-                  </div>
-                  <div class={css.cardName}>
-                    {formatName({
-                      firstName: transaction().card?.ownerFirstName!,
-                      lastName: transaction().card?.ownerLastName!,
-                    })}
-                  </div>
-                </div>
-                <Icon name="chevron-right" />
-              </div>
-            </div>
-          </>
+          <h4 class={css.title}>
+            <Text message="Card" />
+          </h4>
+          <AccountItem
+            icon="card"
+            // TODO need activated status
+            title={formatCardNumber(transaction().card!.lastFour, true)}
+            text={formatName({
+              firstName: transaction().card?.ownerFirstName!,
+              lastName: transaction().card?.ownerLastName!,
+            })}
+            onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}
+          />
         </Show>
-      </div>
-      <div>
-        <div class={css.title}>Merchant</div>
-        <div class={css.detailRows}>
-          <div>Merchant Name</div>
-          <div>{transaction().merchant?.name}</div>
-          <div>Merchant ID</div>
-          <div>{transaction().merchant?.merchantNumber}</div>
-          <div>Merchant Category</div>
-          <div>{transaction().merchant?.merchantCategoryCode}</div>
+        <h4 class={css.title}>
+          <Text message="Merchant" />
+        </h4>
+        <div class={css.detail}>
+          <Text message="Merchant Name" />
+          <span>{transaction().merchant?.name}</span>
+        </div>
+        <div class={css.detail}>
+          <Text message="Merchant ID" />
+          <span>{transaction().merchant?.merchantNumber}</span>
+        </div>
+        <div class={css.detail}>
+          <Text message="Merchant Category" />
+          <span>{transaction().merchant?.merchantCategoryCode}</span>
+        </div>
+        <h4 class={css.title}>
+          <Text message="Transaction Details" />
+        </h4>
+        <div class={css.detail}>
+          <Text message="Posted On" />
+          <DateWithDateTime activityTime={transaction().activityTime!} />
+        </div>
+        <div class={css.detail}>
+          <Text message="Posted Amount" />
+          <span>{displayAmount}</span>
         </div>
       </div>
-      <div>
-        <div class={css.title}>Transaction Details</div>
-        <div class={css.detailRows}>
-          <div>Posted On</div>
-          <div>
-            <DateWithDateTime activityTime={transaction().activityTime!} />
-          </div>
-          <div>Posted Amount</div>
-          <div>{displayAmount}</div>
-        </div>
-      </div>
-      <div class={css.reportIssueCta}>
-        <Button view={'default'} wide={true} icon={{ name: 'alert', pos: 'right' }}>
-          Report an issue
+      <div class={css.actions}>
+        <Button wide icon={{ name: 'alert', pos: 'right' }}>
+          <Text message="Report an issue" />
         </Button>
       </div>
     </div>
@@ -236,40 +221,10 @@ const allowReceiptUpload = (transaction: AccountActivityResponse) => {
 export const DateWithDateTime = (props: { activityTime: string }) => {
   const date = new Date(props.activityTime || '');
   return (
-    <>
+    <span>
       <DateTime date={date} />
-      <span>&#8226;</span>
+      <span> &#8226; </span>
       <DateTime date={date} preset={DateFormat.time} />
-    </>
+    </span>
   );
-};
-
-const getTransactionStatusDetailMsg = (status?: AccountActivityResponse['status']) => {
-  switch (status) {
-    case 'PENDING':
-      return '';
-    case 'DECLINED':
-      return '';
-    case 'PROCESSED':
-      return '';
-    case 'APPROVED':
-      return 'Payment has been authorized';
-    default:
-      return 'Unknown';
-  }
-};
-
-const getColorClassForTransactionStatus = (status?: AccountActivityResponse['status']) => {
-  switch (status) {
-    case 'PENDING':
-      return css.grey;
-    case 'DECLINED':
-      return css.red;
-    case 'PROCESSED':
-      return css.green;
-    case 'APPROVED':
-      return css.green;
-    default:
-      return css.grey;
-  }
 };

@@ -1,0 +1,1 @@
+export { MerchantLogo } from './MerchantLogo';

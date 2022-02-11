@@ -1,7 +1,11 @@
+import type { SearchCardRequest } from 'generated/capital';
+
 export enum CardType {
   PHYSICAL = 'PHYSICAL',
   VIRTUAL = 'VIRTUAL',
 }
+
+export type CardFiltersFields = keyof Omit<SearchCardRequest, 'pageRequest' | 'searchText'>;
 
 export enum MccGroup {
   CHILD_CARE = 'CHILD_CARE',

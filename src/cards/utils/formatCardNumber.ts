@@ -1,5 +1,7 @@
-const NUM_MASK_LENGTH = 4;
+import { i18n } from '_common/api/intl';
 
-export function formatCardNumber(value = ''): string {
-  return value ? `•••• ${value.slice(-NUM_MASK_LENGTH)}` : '••••';
+import { formatAccountNumber } from './formatAccountNumber';
+
+export function formatCardNumber(value: string = '', activated?: boolean): string {
+  return activated ? formatAccountNumber(value) : String(i18n.t('Awaiting activation'));
 }

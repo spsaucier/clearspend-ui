@@ -1,38 +1,36 @@
+.root {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
 .status {
   display: flex;
-  margin: 0 -24px;
   padding: var(--pd-8) var(--pd-24);
   align-items: center;
   color: var(--tw-white);
-  font-weight: 600;
-  text-transform: capitalize;
+  font-size: var(--text-12);
+  font-weight: var(--font-700);
+  line-height: var(--line-16);
+  background: var(--tw-gray-70);
 }
 
-.status.grey {
-  background-color: var(--tw-gray-60);
+.approved {
+  background: var(--tw-green-70);
 }
 
-.status.green {
-  background-color: var(--tw-green-70);
+.declined {
+  background: var(--tw-red-70);
 }
 
-.status.red {
-  background-color: var(--tw-red-70);
-}
-
-.status-msg {
-  padding-left: var(--pd-8);
-  font-weight: 400;
-}
-
-.icon {
+.status-icon {
   margin-right: var(--pd-4);
 }
 
 .summary {
   display: flex;
-  margin-bottom: var(--pd-24);
-  padding-bottom: var(--pd-14);
+  margin: 0 var(--pd-24) var(--pd-24);
+  padding: var(--pd-24) 0 var(--pd-14);
   align-items: center;
   flex-direction: column;
   justify-content: center;
@@ -40,70 +38,45 @@
 }
 
 .amount {
-  color: #000;
+  margin-bottom: var(--pd-2);
+  font-family: var(--font-header);
   font-size: var(--text-20);
-  font-weight: bold;
+  font-weight: var(--font-700);
   line-height: var(--line-28);
 }
 
 .merchant-logo {
-  height: 46px;
-  margin: 20px 0;
+  margin-bottom: var(--pd-16);
 }
 
 .merchant {
-  font-size: var(--text-14);
-  line-height: var(--line-20);
-}
-
-.merchant .pad {
-  padding: var(--pd-4);
-}
-
-.merchant-type {
-  color: var(--tw-gray-60);
-  text-transform: capitalize;
-  opacity: 0.8;
+  text-align: center;
 }
 
 .date {
-  padding: var(--pd-2);
+  margin-top: var(--pd-10);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
   line-height: var(--line-16);
 }
 
-.date > span {
-  padding: var(--pd-2);
-}
-
 .receipt-cta {
+  display: grid;
   width: 100%;
   margin-top: var(--pd-24);
+  grid-gap: var(--pd-10);
 }
 
-.receipt-cta label {
-  cursor: pointer;
-}
-
-.receipt-cta button {
-  margin-bottom: 10px;
-}
-
-.receipt-cta label button {
-  pointer-events: none;
+.receipt-cta-label {
+  display: block;
 }
 
 .receipt-cta input[type='file'] {
   display: none;
 }
 
-.report-issue-cta {
-  margin-top: var(--pd-24);
-}
-
 .title {
-  margin: var(--pd-24) 0 var(--pd-2) 0;
+  margin: var(--pd-24) 0 var(--pd-8);
   font: inherit;
   font-size: var(--text-12);
   line-height: var(--line-16);
@@ -118,75 +91,26 @@
   border-radius: var(--radius-8);
 }
 
-.card {
+.scroll {
+  padding: 0 var(--pd-24);
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.detail {
   display: flex;
-  margin: var(--pd-10) 0;
-  padding: 12px 16px;
-  align-items: center;
-  border: 1px solid var(--tw-gray-30);
-  border-radius: var(--radius-8);
-  cursor: pointer;
-}
-
-.card-detail-wrapper {
-  flex: 1;
-}
-
-.card-icon {
-  display: flex;
-  width: 32px;
-  height: 32px;
-  margin-right: var(--pd-14);
-  align-items: center;
-  justify-content: center;
-  background: var(--tw-green-15);
-  border: 1px solid var(--tw-green-25);
-  border-radius: var(--radius-12);
-}
-
-.card-icon > svg {
-  color: var(--tw-green-30);
-}
-
-.card-number {
-  color: var(--tw-primary-content);
-  line-height: 1em;
-}
-
-.card-name {
-  margin-top: var(--pd-2);
-  color: black;
-  line-height: 1em;
-}
-
-.detail-rows {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  margin: var(--pd-12) 0;
+  justify-content: space-between;
   font-size: var(--text-12);
+  line-height: var(--line-16);
+
+  & > *:first-child {
+    color: var(--tw-gray-60);
+  }
 }
 
-.detail-rows > div:nth-child(even) {
-  width: 50%;
-  padding: var(--pd-2) 0;
-  text-align: right;
-}
-
-.detail-rows > div:nth-child(odd) {
-  width: 50%;
-  padding: var(--pd-2) 0;
-  color: var(--tw-gray-60);
-}
-
-.detail-rows > div span {
-  padding: var(--pd-2);
-}
-
-.missing-logo-url {
-  width: 46px;
-  height: 46px;
-  margin: 15px;
-  background-color: var(--tw-gray-20);
-  border: 1px solid var(--tw-gray-30);
-  border-radius: var(--radius-8);
+.actions {
+  padding: var(--pd-24);
 }

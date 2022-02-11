@@ -5,9 +5,13 @@ import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { AccountActivityResponse } from 'generated/capital';
-import { HttpStatus } from '_common/api/fetch/types';
 
 import css from './ReceiptsView.css';
+
+export interface ReceiptVideModel {
+  receiptId: string;
+  uri: string;
+}
 
 export function ReceiptsView(props: {
   receipts: Readonly<ReceiptVideModel[]>;
@@ -39,18 +43,10 @@ export function ReceiptsView(props: {
     e.stopPropagation();
     const deletedReceipt = visibleReceipts()[currentReceiptIndex()];
     const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== deletedReceipt?.receiptId);
-    const deleteActionResponse = await deleteReceiptAction(deletedReceipt?.receiptId!);
-    if (deleteActionResponse.status === HttpStatus.OK) {
-      setVisibleReceipts(remainingReceipts);
-      const updatedTransaction = await getActivityById(props.accountActivityId);
-      props.onDelete(updatedTransaction);
-
-      if (remainingReceipts.length === 0) {
-        props.onEmpty();
-      } else {
-        setCurrentReceiptIndex(0);
-      }
-    }
+    await deleteReceiptAction(deletedReceipt?.receiptId!);
+    setVisibleReceipts(remainingReceipts);
+    props.onDelete(await getActivityById(props.accountActivityId));
+    remainingReceipts.length ? setCurrentReceiptIndex(0) : props.onEmpty();
   };
 
   return (
@@ -105,9 +101,4 @@ export function ReceiptsView(props: {
       </>
     </div>
   );
-}
-
-export interface ReceiptVideModel {
-  receiptId: string;
-  uri: string;
 }

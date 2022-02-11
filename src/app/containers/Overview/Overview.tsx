@@ -165,6 +165,7 @@ export function Overview(props: Readonly<OverviewProps>) {
           />
         </Data>
         <Drawer
+          noPadding
           open={Boolean(selectedTransaction())}
           title={<Text message="Transaction Details" />}
           onClose={() => setSelectedTransaction(null)}

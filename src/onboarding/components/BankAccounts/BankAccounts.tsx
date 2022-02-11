@@ -4,7 +4,7 @@ import { Text } from 'solid-i18n';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import { Icon } from '_common/components/Icon';
-import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 import type { BankAccount, Allocation } from 'generated/capital';
 
 import css from './BankAccounts.css';
@@ -43,7 +43,7 @@ export function BankAccounts(props: Readonly<BankAccountsProps>) {
                       />
                     }
                   >
-                    {formatCardNumber((item as BankAccount).accountNumber)}
+                    {formatAccountNumber((item as BankAccount).accountNumber)}
                   </Show>
                 </div>
               </div>

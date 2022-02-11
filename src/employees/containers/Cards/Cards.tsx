@@ -36,7 +36,7 @@ export function Cards(props: Readonly<CardsProps>) {
         loading={status().loading}
         error={status().error}
         data={cards() as {}}
-        hiddenFields={['name']}
+        omitFilters={['userId']}
         onReload={reload}
         onCardClick={setCardID}
         onChangeParams={setParams}

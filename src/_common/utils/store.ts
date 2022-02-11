@@ -3,7 +3,11 @@
 import { onCleanup, batch } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
-import { getNoop } from '_common/utils/getNoop';
+import { AppEvent } from 'app/types/common';
+
+import { events } from '../api/events';
+
+import { getNoop } from './getNoop';
 
 export type StoreSetterParams<P> = P | ((params: P) => P);
 export type StoreSetter<P> = (setter: StoreSetterParams<P>) => void;
@@ -81,6 +85,10 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
 
     return store as Store<T, P>;
   }
+
+  events.sub(AppEvent.Logout, () => {
+    setStore((prev) => ({ ...prev, data: null }));
+  });
 
   return useStore;
 }

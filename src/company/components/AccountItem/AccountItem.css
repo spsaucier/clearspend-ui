@@ -1,0 +1,41 @@
+.root {
+  display: grid;
+  padding: var(--pd-16);
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: var(--pd-8);
+  border: 1px solid var(--tw-gray-30);
+  border-radius: var(--radius-10);
+  transition: border 0.3s;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-16);
+  }
+
+  &:hover {
+    border-color: var(--tw-primary-border);
+  }
+}
+
+.icon {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  align-self: flex-start;
+  justify-content: center;
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-12);
+}
+
+.name {
+  color: var(--tw-primary-content);
+}
+
+.number {
+  margin-top: var(--pd-2);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}

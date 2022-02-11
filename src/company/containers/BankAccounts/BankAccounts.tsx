@@ -2,14 +2,14 @@ import { createSignal, For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
-import { Icon } from '_common/components/Icon';
 import { Drawer } from '_common/components/Drawer';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
-import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 import { LinkAccount } from 'onboarding/containers/LinkAccount';
 import { getBankAccounts, linkBankAccounts } from 'onboarding/services/accounts';
 
+import { AccountItem } from '../../components/AccountItem';
 import { LinkedAccountPreview } from '../LinkedAccountPreview';
 
 import css from './BankAccounts.css';
@@ -39,16 +39,12 @@ export function BankAccounts() {
         >
           <For each={accounts()!}>
             {(item) => (
-              <div class={css.account} onClick={() => setViewAccountId(item.businessBankAccountId)}>
-                <div class={css.icon}>
-                  <Icon name="payment-bank" />
-                </div>
-                <div>
-                  <div class={css.name}>{item.name}</div>
-                  <div class={css.number}>{formatCardNumber(item.accountNumber)}</div>
-                </div>
-                <Icon name="chevron-right" />
-              </div>
+              <AccountItem
+                icon="payment-bank"
+                title={item.name}
+                text={formatAccountNumber(item.accountNumber)}
+                onClick={() => setViewAccountId(item.businessBankAccountId)}
+              />
             )}
           </For>
         </Data>

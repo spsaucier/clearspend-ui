@@ -1,4 +1,4 @@
-import { createSignal, Match, Show, Switch } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -29,10 +29,23 @@ import { Drawer } from '_common/components/Drawer';
 import { getNoop } from '_common/utils/getNoop';
 import { FiltersButton } from 'app/components/FiltersButton';
 
+import { MerchantLogo } from '../MerchantLogo';
 import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
-import { formatMerchantTypeLc, merchantImg } from '../TransactionPreview/TransactionPreview';
+import { formatMerchantType } from '../../utils/formatMerchantType';
+import { formatActivityStatus } from '../../utils/formatActivityStatus';
+import { STATUS_ICONS } from '../../constants';
+import type { ActivityStatus } from '../../types';
 
 import css from './TransactionsTable.css';
+
+const STATUS_COLORS: Record<ActivityStatus, string | undefined> = {
+  APPROVED: css.approved,
+  PROCESSED: css.approved,
+  DECLINED: css.declined,
+  CANCELED: css.declined,
+  PENDING: undefined,
+  CREDIT: undefined,
+};
 
 interface TransactionsTableProps {
   data: PagedDataAccountActivityResponse;
@@ -74,10 +87,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.cardCell}>
-          <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
-            {item.card?.lastFour ? formatCardNumber(item.card.lastFour) : '--'}
-          </div>
-          <Show when={item.card}>
+          <Show when={item.card} fallback="--">
+            <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
+              {/* TODO need activated status */}
+              {formatCardNumber(item.card!.lastFour, true)}
+            </div>
             <div class={css.sub}>
               {formatName({
                 firstName: item.card!.ownerFirstName!,
@@ -94,15 +108,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.merchant}>
-          <Show when={item.merchant}>
-            <img src={merchantImg(item)} alt="Merchant logo" class={css.icon} />
+          <Show when={item.merchant} fallback="--">
+            <MerchantLogo data={item.merchant!} class={css.icon} />
+            <div>
+              <div>{item.merchant!.name || '--'}</div>
+              <div class={css.merchantType}>{formatMerchantType(item.merchant!.type)}</div>
+            </div>
           </Show>
-          <div>
-            <div>{item.merchant?.name || '--'}</div>
-            <Show when={item.merchant?.type}>
-              <span class={css.merchantType}>{formatMerchantTypeLc(item.merchant?.type || '')}</span>
-            </Show>
-          </div>
         </div>
       ),
     },
@@ -112,31 +124,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.amountCell}>
-          <Switch>
-            <Match when={item.status === 'PROCESSED'}>
-              <div class={css.status}>
-                <Icon name="confirm" size="sm" />
-              </div>
-            </Match>
-            <Match when={item.status === 'APPROVED'}>
-              <div class={css.status}>
-                <Icon name="confirm" size="sm" />
-              </div>
-            </Match>
-            <Match when={item.status === 'PENDING'}>
-              <div class={join(css.status, css.pending)}>
-                <Icon name="confirm" size="sm" />
-              </div>
-            </Match>
-            <Match when={item.status === 'DECLINED'}>
-              <div class={join(css.status, css.declined)}>
-                <Icon name="cancel" size="sm" />
-              </div>
-            </Match>
-          </Switch>
+          <div class={join(css.status, STATUS_COLORS[item.status!])}>
+            <Icon name={STATUS_ICONS[item.status!]} size="sm" />
+          </div>
           <div>
             <div class={css.amount}>{formatCurrency(item.amount?.amount || 0)}</div>
-            <div class={css.sub}>{item.status?.toLowerCase()}</div>
+            <div class={css.sub}>{formatActivityStatus(item.status)}</div>
           </div>
         </div>
       ),
@@ -148,7 +141,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => (
         <div class={css.receiptCell}>
           <Icon
-            name={item.receipt?.receiptId ? 'receipt' : 'receipt-unavailable'}
+            name={item.receipt?.receiptId?.length ? 'receipt' : 'receipt-unavailable'}
             class={join(css.receipt, !item.receipt?.receiptId && css.receiptEmpty)}
           />
         </div>
