@@ -8,7 +8,8 @@
 import { keys } from '_common/utils/keys';
 import { isEqual } from '_common/components/Form';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
-import type { MccGroup, CurrencyLimit, LimitTypeMap, AllocationDetailsResponse } from 'generated/capital';
+import type { CurrencyLimit, LimitTypeMap, AllocationDetailsResponse } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { DEFAULT_LIMITS, PAYMENT_TYPES } from '../constants/limits';
 import type { Limits, FormLimits, ControlsData } from '../types';
@@ -18,11 +19,11 @@ export function getDefaultLimits() {
 }
 
 export function getCategories(data: Readonly<ControlsData>, categories: readonly Readonly<MccGroup>[]) {
-  return categories.map((item) => item.mccGroupId).filter((id) => !data.disabledMccGroups!.includes(id!)) as string[];
+  return categories.filter((id) => !data.disabledMccGroups!.includes(id!));
 }
 
 export function getChannels(data: Readonly<ControlsData>) {
-  return PAYMENT_TYPES.map((item) => item.key).filter((id) => !data.disabledTransactionChannels!.includes(id as any));
+  return PAYMENT_TYPES.map((item) => item.key).filter((id) => !data.disabledPaymentTypes!.includes(id as any));
 }
 
 function formatLimits(limits: Readonly<Limits>) {
@@ -64,12 +65,10 @@ export function convertFormLimits(
         } as LimitTypeMap,
       },
     ] as CurrencyLimit[],
-    disabledMccGroups: categories
-      .map((item) => item.mccGroupId)
-      .filter((id) => !data.categories.includes(id!)) as string[],
-    disabledTransactionChannels: PAYMENT_TYPES.map((item) => item.key).filter(
+    disabledMccGroups: categories.filter((id) => !data.categories.includes(id!)),
+    disabledPaymentTypes: PAYMENT_TYPES.map((item) => item.key).filter(
       (id) => !data.channels.includes(id),
-    ) as ControlsData['disabledTransactionChannels'],
+    ) as ControlsData['disabledPaymentTypes'],
   };
 }
 

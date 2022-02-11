@@ -2,10 +2,10 @@ import { i18n } from '_common/api/intl';
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { isString } from '_common/utils/isString';
-import type { IssueCardRequest, MccGroup } from 'generated/capital';
+import type { IssueCardRequest } from 'generated/capital';
 import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
 
-import { CardType } from '../../types';
+import { CardType, MccGroup } from '../../types';
 
 import type { FormValues } from './types';
 

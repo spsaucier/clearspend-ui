@@ -16,11 +16,11 @@ import type {
   Amount,
   Allocation,
   UserData,
-  MccGroup,
   CreateUserRequest,
   CreateUserResponse,
   CreateAllocationRequest,
 } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { AllocationSelect } from '../AllocationSelect';
 import { SwitchPaymentTypes } from '../SwitchPaymentTypes';

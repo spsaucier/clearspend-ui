@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import type { FormOptions } from '_common/components/Form';
-import type { MccGroup } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { getCategories, getChannels, getPurchasesLimits, convertFormLimits } from '../../utils/convertFormLimits';
 import type { ControlsData } from '../../types';

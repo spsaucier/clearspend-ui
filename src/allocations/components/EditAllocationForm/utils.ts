@@ -1,7 +1,8 @@
 import type { FormOptions } from '_common/components/Form';
 import { parseAmount } from '_common/formatters/amount';
 import { required } from '_common/components/Form/rules/required';
-import type { CreateAllocationRequest, MccGroup } from 'generated/capital';
+import type { CreateAllocationRequest } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { DEFAULT_LIMITS } from '../../constants/limits';
 import { convertFormLimits } from '../../utils/convertFormLimits';

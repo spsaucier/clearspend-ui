@@ -36,13 +36,12 @@ import type {
   CreateUserResponse,
   IssueCardRequest,
   UserData,
-  MccGroup,
   Amount,
   User,
 } from 'generated/capital';
 import { getBusiness } from 'app/services/businesses';
 import { getUser } from 'employees/services';
-import { CardType } from 'cards/types';
+import { CardType, MccGroup } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';

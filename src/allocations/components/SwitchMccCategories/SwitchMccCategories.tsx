@@ -3,11 +3,12 @@ import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
 import { SwitchGroupBox, SwitchGroupBoxItem } from 'app/components/SwitchGroupBox';
-import type { MccGroup } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 type Item = Omit<SwitchGroupBoxItem, 'key'>;
 
 // TODO: Update icons
+// TODO: Set these to align with new MccGroup enum
 const CATEGORIES: Readonly<Record<string, Item>> = {
   UT_MCG_CONFG: { icon: 'confirm', name: i18n.t('Utilities') },
   RS_MCG_CONFG: { icon: 'confirm', name: i18n.t('Retail Stores') },
@@ -46,8 +47,8 @@ interface SwitchMccCategoriesProps {
 export function SwitchMccCategories(props: Readonly<SwitchMccCategoriesProps>) {
   const items = createMemo(() =>
     props.items.map((item) => ({
-      key: item.mccGroupId!,
-      ...(CATEGORIES[item.i2cMccGroupRef!] || ({ icon: 'user', name: item.name! } as Item)),
+      key: item,
+      ...(CATEGORIES[item] || ({ icon: 'user', name: item } as Item)),
     })),
   );
 

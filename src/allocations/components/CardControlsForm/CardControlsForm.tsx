@@ -7,7 +7,8 @@ import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { PageActions } from 'app/components/Page';
 import { useMessages } from 'app/containers/Messages/context';
 import { ResetLimits } from 'cards/components/ResetLimits';
-import type { MccGroup, Amount } from 'generated/capital';
+import type { Amount } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { SwitchLimits } from '../SwitchLimits';
 import { SwitchMccCategories } from '../SwitchMccCategories';

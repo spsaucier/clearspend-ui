@@ -1,4 +1,4 @@
-import type { MccGroup } from 'generated/capital';
+import type { MccGroup } from 'cards/types';
 
 import { service } from '../utils/service';
 
