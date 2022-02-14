@@ -24,7 +24,7 @@ export function InputPhone(props: Readonly<InputProps>) {
         maxLength={10}
         formatter={formatPhone}
         parser={(val) => cleanPhone(prefix + val)}
-        onChange={(val, e) => props.onChange?.(val, e)}
+        onChange={(val, e) => props.onChange?.(val.length > DIGITS_OF_PREFIX ? val : '', e)}
       />
     </>
   );

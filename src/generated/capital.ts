@@ -696,6 +696,11 @@ export interface ValidateBusinessProspectIdentifierRequest {
   otp?: string;
 }
 
+export interface ValidateIdentifierResponse {
+  /** @example true */
+  'If email already exist on the system. User can login, reset password or use another email'?: boolean;
+}
+
 export interface SetBusinessProspectPhoneRequest {
   /**
    * Phone number in e.164 format
