@@ -27,7 +27,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { MerchantLogo } from '../MerchantLogo';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { formatActivityStatus } from '../../utils/formatActivityStatus';
-import { STATUS_FILL_ICONS } from '../../constants';
+import { STATUS_FILL_ICONS, MERCHANT_CATEGORIES } from '../../constants';
 import type { ActivityStatus } from '../../types';
 
 import type { ReceiptVideModel } from './ReceiptsView';
@@ -178,21 +178,23 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}
           />
         </Show>
-        <h4 class={css.title}>
-          <Text message="Merchant" />
-        </h4>
-        <div class={css.detail}>
-          <Text message="Merchant Name" />
-          <span>{transaction().merchant?.name}</span>
-        </div>
-        <div class={css.detail}>
-          <Text message="Merchant ID" />
-          <span>{transaction().merchant?.merchantNumber}</span>
-        </div>
-        <div class={css.detail}>
-          <Text message="Merchant Category" />
-          <span>{transaction().merchant?.merchantCategoryCode}</span>
-        </div>
+        <Show when={transaction().merchant}>
+          <h4 class={css.title}>
+            <Text message="Merchant" />
+          </h4>
+          <div class={css.detail}>
+            <Text message="Merchant Name" />
+            <span>{transaction().merchant!.name}</span>
+          </div>
+          <div class={css.detail}>
+            <Text message="Merchant ID" />
+            <span>{transaction().merchant!.merchantNumber}</span>
+          </div>
+          <div class={css.detail}>
+            <Text message="Merchant Category" />
+            <span>{MERCHANT_CATEGORIES[transaction().merchant!.merchantCategoryGroup!].name}</span>
+          </div>
+        </Show>
         <h4 class={css.title}>
           <Text message="Transaction Details" />
         </h4>

@@ -2,7 +2,7 @@ import type { FormOptions } from '_common/components/Form';
 import { parseAmount } from '_common/formatters/amount';
 import { required } from '_common/components/Form/rules/required';
 import type { CreateAllocationRequest } from 'generated/capital';
-import type { MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
 
 import { DEFAULT_LIMITS } from '../../constants/limits';
 import { convertFormLimits } from '../../utils/convertFormLimits';

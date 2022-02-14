@@ -35,3 +35,15 @@
   grid-template-columns: auto 1fr auto;
   grid-gap: var(--pd-8);
 }
+
+.icon {
+  display: flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-gray-60);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-8);
+}

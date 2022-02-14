@@ -9,7 +9,7 @@ import { keys } from '_common/utils/keys';
 import { isEqual } from '_common/components/Form';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
 import type { CurrencyLimit, LimitTypeMap, AllocationDetailsResponse } from 'generated/capital';
-import type { MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
 
 import { DEFAULT_LIMITS, PAYMENT_TYPES } from '../constants/limits';
 import type { Limits, FormLimits, ControlsData } from '../types';

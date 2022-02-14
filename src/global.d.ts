@@ -8,6 +8,8 @@ declare const process: {
   env: Readonly<ProcessEnv>;
 };
 
+declare type ValuesOf<T extends unknown[]> = T[number];
+
 declare type DateString = string & { __isDateString: true };
 
 declare module '*.css' {

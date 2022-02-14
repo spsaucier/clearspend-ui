@@ -20,7 +20,7 @@ import type {
   CreateUserResponse,
   CreateAllocationRequest,
 } from 'generated/capital';
-import type { MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
 
 import { AllocationSelect } from '../AllocationSelect';
 import { SwitchPaymentTypes } from '../SwitchPaymentTypes';

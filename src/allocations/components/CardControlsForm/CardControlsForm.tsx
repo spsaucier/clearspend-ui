@@ -8,7 +8,7 @@ import { PageActions } from 'app/components/Page';
 import { useMessages } from 'app/containers/Messages/context';
 import { ResetLimits } from 'cards/components/ResetLimits';
 import type { Amount } from 'generated/capital';
-import type { MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
 
 import { SwitchLimits } from '../SwitchLimits';
 import { SwitchMccCategories } from '../SwitchMccCategories';

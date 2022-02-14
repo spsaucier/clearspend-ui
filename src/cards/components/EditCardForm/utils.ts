@@ -4,8 +4,9 @@ import { required } from '_common/components/Form/rules/required';
 import { isString } from '_common/utils/isString';
 import type { IssueCardRequest } from 'generated/capital';
 import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
+import type { MccGroup } from 'transactions/types';
 
-import { CardType, MccGroup } from '../../types';
+import { CardType } from '../../types';
 
 import type { FormValues } from './types';
 

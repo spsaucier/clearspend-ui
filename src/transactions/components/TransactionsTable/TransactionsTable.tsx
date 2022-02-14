@@ -31,9 +31,8 @@ import { FiltersButton } from 'app/components/FiltersButton';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
-import { formatMerchantType } from '../../utils/formatMerchantType';
 import { formatActivityStatus } from '../../utils/formatActivityStatus';
-import { STATUS_ICONS } from '../../constants';
+import { STATUS_ICONS, MERCHANT_CATEGORIES } from '../../constants';
 import type { ActivityStatus } from '../../types';
 
 import css from './TransactionsTable.css';
@@ -112,7 +111,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             <MerchantLogo data={item.merchant!} class={css.icon} />
             <div>
               <div>{item.merchant!.name || '--'}</div>
-              <div class={css.merchantType}>{formatMerchantType(item.merchant!.type)}</div>
+              <div class={css.merchantType}>{MERCHANT_CATEGORIES[item.merchant!.merchantCategoryGroup!].name}</div>
             </div>
           </Show>
         </div>

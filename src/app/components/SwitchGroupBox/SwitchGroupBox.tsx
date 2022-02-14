@@ -7,8 +7,8 @@ import { Icon, IconName } from '_common/components/Icon';
 
 import css from './SwitchGroupBox.css';
 
-export interface SwitchGroupBoxItem {
-  key: string;
+export interface SwitchGroupBoxItem<K = string> {
+  key: K;
   icon: keyof typeof IconName;
   name: JSXElement;
 }
@@ -47,7 +47,9 @@ export function SwitchGroupBox(props: Readonly<SwitchGroupBoxProps>) {
         <For each={props.items}>
           {(item) => (
             <label class={css.item}>
-              <Icon name={item.icon} />
+              <span class={css.icon}>
+                <Icon size="sm" name={item.icon} />
+              </span>
               <span>{item.name}</span>
               <Switch
                 name={props.name ? `${props.name}-${item.key}` : item.key}

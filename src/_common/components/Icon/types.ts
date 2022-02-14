@@ -1,3 +1,11 @@
+/*
+  Rules for adding new icons
+
+  - All icons should be optimised by some tool (for example https://jakearchibald.github.io/svgomg/);
+  - All icons should have `24x24` size;
+  - All elements in single-color icons should have `currentColor` color value;
+*/
+
 export enum IconName {
   add = 'add',
   'add-receipt' = 'add-receipt',
@@ -41,6 +49,21 @@ export enum IconName {
   filters = 'filters',
   freeze = 'freeze',
   information = 'information',
+  keyboard = 'keyboard',
+  'mcc-child-care' = 'mcc-child-care',
+  'mcc-digital-goods' = 'mcc-digital-goods',
+  'mcc-education' = 'mcc-education',
+  'mcc-entertainment' = 'mcc-entertainment',
+  'mcc-food-and-beverage' = 'mcc-food-and-beverage',
+  'mcc-gambling' = 'mcc-gambling',
+  'mcc-government' = 'mcc-government',
+  'mcc-health' = 'mcc-health',
+  'mcc-memberships' = 'mcc-memberships',
+  'mcc-money-transfer' = 'mcc-money-transfer',
+  'mcc-services' = 'mcc-services',
+  'mcc-shopping' = 'mcc-shopping',
+  'mcc-travel' = 'mcc-travel',
+  'mcc-utilities' = 'mcc-utilities',
   'merchant-services' = 'merchant-services',
   'more-horizontal' = 'more-horizontal',
   'more-vertical' = 'more-vertical',

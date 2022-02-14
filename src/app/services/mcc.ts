@@ -1,4 +1,4 @@
-import type { MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
 
 import { service } from '../utils/service';
 

@@ -41,7 +41,8 @@ import type {
 } from 'generated/capital';
 import { getBusiness } from 'app/services/businesses';
 import { getUser } from 'employees/services';
-import { CardType, MccGroup } from 'cards/types';
+import type { MccGroup } from 'transactions/types';
+import { CardType } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
