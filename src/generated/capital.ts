@@ -2140,6 +2140,10 @@ export interface UpdateAccountActivityRequest {
   notes: string;
 }
 
+export interface ExpenseCategoryRequest {
+  expenseCategoryName?: string;
+}
+
 export interface UpdateCardRequest {
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
