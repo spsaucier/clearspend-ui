@@ -31,10 +31,6 @@
   gap: var(--pd-10);
 }
 
-.icon {
-  margin-top: -4px;
-}
-
 .status {
   display: flex;
   width: 24px;

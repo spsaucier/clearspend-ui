@@ -108,7 +108,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => (
         <div class={css.merchant}>
           <Show when={item.merchant} fallback="--">
-            <MerchantLogo data={item.merchant!} class={css.icon} />
+            <MerchantLogo data={item.merchant!} />
             <div>
               <div>{item.merchant!.name || '--'}</div>
               <div class={css.merchantType}>{MERCHANT_CATEGORIES[item.merchant!.merchantCategoryGroup!].name}</div>

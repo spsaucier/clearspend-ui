@@ -63,7 +63,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
                   <MerchantLogo data={item.merchant!} />
                 </Show>
                 <div>
-                  <div class={css.category}>{item.merchant?.name || 'hello'}</div>
+                  <div class={css.category}>{item.merchant?.name}</div>
                   <div class={css.date}>
                     <DateTime date={date()} />
                   </div>
