@@ -14,8 +14,10 @@ export function App() {
   createEffect(() => {
     sendAnalyticsEvent({
       type: AnalyticsEventType.Init,
+      // TODO: env variable for mixpanel
       name: 'fae11a3a59ea09ae6e4e9192a99220fb',
-      data: { debug: true },
+      // TODO: disable debug on prod
+      data: { debug: true, ignore_dnt: true },
     });
   });
   return (
