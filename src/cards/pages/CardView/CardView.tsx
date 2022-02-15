@@ -179,9 +179,11 @@ export default function CardView() {
               <Text message="Info" />
             </Tab>
           )}
-          <Tab value={Tabs.statements}>
-            <Text message="Statements" />
-          </Tab>
+          {card()!.activated && (
+            <Tab value={Tabs.statements}>
+              <Text message="Statements" />
+            </Tab>
+          )}
         </TabList>
         <Switch>
           <Match when={tab() === Tabs.transactions}>
