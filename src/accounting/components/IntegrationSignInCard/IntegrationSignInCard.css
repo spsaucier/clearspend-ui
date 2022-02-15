@@ -1,0 +1,40 @@
+.root {
+  max-width: 394px;
+  padding: var(--pd-16);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-8);
+}
+
+.title {
+  margin: 0 0 var(--pd-4);
+  font-size: var(--text-12);
+  font-weight: var(--font-400);
+  line-height: var(--line-16);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.text {
+  margin: 0 0 var(--pd-24);
+  color: var(--tw-gray-60);
+  font-size: var(--text-14);
+  line-height: var(--line-20);
+}
+
+.button {
+  color: var(--tw-white);
+  font-family: var(--font-header);
+  background-color: #2ca01c;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  font-size: var(--text-14);
+  line-height: var(--line-20);
+}
+
+.button-icon {
+  margin-right: var(--pd-8);
+}

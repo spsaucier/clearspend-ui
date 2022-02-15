@@ -1,0 +1,23 @@
+.root {
+  background-color: var(--tw-gray-10);
+}
+
+.integration-options-title {
+  margin: var(--pd-32) 0 0 0;
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  font-weight: var(--font-400);
+  line-height: var(--line-28);
+}
+
+.integration-options-subtitle {
+  margin: var(--pd-8) 0;
+  font-family: var(--font-header);
+  font-size: var(--text-14);
+  font-weight: var(--font-400);
+  line-height: var(--line-20);
+}
+
+.integration-card-container {
+  margin: var(--pd-24) 0;
+}

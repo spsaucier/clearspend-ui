@@ -37,6 +37,7 @@ export enum IconName {
   'confirm-circle' = 'confirm-circle',
   'confirm-circle-filled' = 'confirm-circle-filled',
   'confirm-square-filled' = 'confirm-square-filled',
+  connect = 'connect',
   copy = 'copy',
   dashboard = 'dashboard',
   dollars = 'dollars',

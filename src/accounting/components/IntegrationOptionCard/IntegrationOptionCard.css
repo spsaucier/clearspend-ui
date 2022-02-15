@@ -1,0 +1,34 @@
+.root {
+  max-width: 394px;
+  max-height: 230px;
+  padding: 24px;
+  background-color: var(--tw-white);
+  border-radius: 24px;
+}
+
+.icon-title-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.integration-options-card-title {
+  margin: 0 var(--pd-4);
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  font-weight: var(--font-400);
+  line-height: var(--line-28);
+}
+
+.integration-options-card-text {
+  margin: var(--pd-4) 0 var(--pd-24) 0;
+  color: var(--tw-gray-60);
+  font-family: var(--font-main);
+  font-size: var(--text-14);
+  font-weight: var(--font-400);
+  line-height: var(--line-20);
+}
+
+.button {
+  width: 120px;
+}
