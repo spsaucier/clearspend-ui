@@ -5,12 +5,12 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Confirm } from '_common/components/Confirm';
 import { Button } from '_common/components/Button';
 import { useMessages } from 'app/containers/Messages/context';
-import type { User, Card } from 'generated/capital';
+import type { Card } from 'generated/capital';
 
 import { canActivateCard } from '../../utils/canActivateCard';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 interface CardActionsProps {
-  user: Readonly<User>;
   card: Readonly<Card>;
   onActivate: () => void;
   onShowDetails: () => void;
@@ -20,6 +20,7 @@ interface CardActionsProps {
 export function CardActions(props: Readonly<CardActionsProps>) {
   const i18n = useI18n();
   const messages = useMessages();
+  const { loggedInUser } = useBusiness();
 
   const [loading, changeStatus] = wrapAction(props.onChangeStatus);
 
@@ -30,7 +31,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
   return (
     <Switch>
       <Match when={!props.card.activated}>
-        <Show when={canActivateCard(props.card, props.user)}>
+        <Show when={canActivateCard(props.card, loggedInUser())}>
           <Button size="lg" type="primary" icon="power" disabled={!props.card.issueDate} onClick={props.onActivate}>
             <Text message="Activate Card" />
           </Button>

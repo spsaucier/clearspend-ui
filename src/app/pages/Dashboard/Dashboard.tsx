@@ -26,7 +26,7 @@ import css from './Dashboard.css';
 export default function Dashboard() {
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
-  const { signupUser } = useBusiness();
+  const { loggedInUser } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
 
@@ -42,7 +42,7 @@ export default function Dashboard() {
 
   return (
     <Page
-      title={<Text message="Welcome, {name}" name={signupUser().firstName || ''} />}
+      title={<Text message="Welcome, {name}" name={loggedInUser().firstName || ''} />}
       contentClass={css.content}
       extra={
         <Switch>

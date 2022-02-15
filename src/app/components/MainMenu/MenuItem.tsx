@@ -8,14 +8,14 @@ import { join } from '_common/utils/join';
 
 import css from './MenuItem.css';
 
-export interface MenuItemOptions {
+export interface MenuItemOption {
   href: string;
   title: I18nMessage;
   icon: keyof typeof IconName;
   end?: boolean;
 }
 
-interface MenuItemProps extends MenuItemOptions {
+interface MenuItemProps extends MenuItemOption {
   class?: string;
   expanded: boolean;
   onClick?: () => void;

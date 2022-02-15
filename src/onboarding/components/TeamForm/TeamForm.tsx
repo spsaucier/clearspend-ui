@@ -23,18 +23,18 @@ import css from './TeamForm.css';
 
 interface TeamFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
-  signupUser: User;
+  user: User;
 }
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
-  const isOwner = props.signupUser.relationshipToBusiness?.owner;
+  const isOwner = props.user.relationshipToBusiness?.owner;
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
     // NB: do not auto-populate name on additional owner forms
-    getFormOptions(isOwner ? props.signupUser : {}),
+    getFormOptions(isOwner ? props.user : {}),
   );
 
   const onSubmit = (data: Readonly<FormValues>) => {

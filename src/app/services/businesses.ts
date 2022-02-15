@@ -9,7 +9,7 @@ import type {
 } from 'generated/capital';
 import { events } from '_common/api/events';
 
-export async function getUsers() {
+export async function getLoggedInUser() {
   const data = (await service.get<Readonly<Required<User>> | null>('/users')).data;
   if (!data) events.emit(AppEvent.Logout);
   return data;

@@ -36,7 +36,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const navigate = useNavigate();
   const [tab, setTab] = createSignal(Tabs.transactions);
 
-  const { signupUser } = useBusiness();
+  const { loggedInUser } = useBusiness();
   const allocations = useAllocations();
   const [data, getCardRequestStatus, , , reload] = useResource(getCard, props.cardID);
   const [user, , , setUserID] = useResource(getUser, undefined, false);
@@ -58,7 +58,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
 
   const showActivate = createMemo(() => {
     const cardData = card();
-    return cardData && !cardData.activated && canActivateCard(cardData, signupUser());
+    return cardData && !cardData.activated && canActivateCard(cardData, loggedInUser());
   });
 
   return (

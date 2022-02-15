@@ -1,4 +1,7 @@
-import { Show } from 'solid-js';
+import {
+  // For,
+  Show,
+} from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useBool } from '_common/utils/useBool';
@@ -15,8 +18,12 @@ import { SelectEmployee } from 'employees/components/SelectEmployee';
 import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
 import type { Allocation, CreateUserRequest } from 'generated/capital';
+// import { useResource } from '_common/utils/useResource';
 
-import { updateAllocation } from '../../services';
+import {
+  // getUsersPermissionsForAllocation,
+  updateAllocation,
+} from '../../services';
 
 import css from './Settings.css';
 
@@ -37,6 +44,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   const [loading, addUser] = wrapAction(saveUser);
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const users = useUsersList({ initValue: [] });
+  // const [allocationUsersPermissions] = useResource(getUsersPermissionsForAllocation, props.allocation.allocationId);
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { name: props.allocation.name, owner: props.allocation.ownerId },
@@ -105,6 +113,14 @@ export function Settings(props: Readonly<SettingsProps>) {
             onChange={handlers.owner}
           />
         </FormItem>
+        {/* <For each={allocationUsersPermissions()}>
+          {(permission) => (
+            <>
+              <div>{permission.allocationPermissions}</div>
+              <div>{`${permission.user?.firstName} ${permission.user?.lastName}`}</div>
+            </>
+          )}
+        </For> */}
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />

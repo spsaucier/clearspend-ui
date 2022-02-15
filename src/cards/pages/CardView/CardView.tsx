@@ -10,7 +10,6 @@ import { useResource } from '_common/utils/useResource';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
 import { BackLink } from 'app/components/BackLink';
-import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
@@ -49,8 +48,6 @@ export default function CardView() {
   const [tab, setTab] = createSignal(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
   const media = useMediaContext();
-
-  const { signupUser } = useBusiness();
   const allocations = useAllocations();
 
   const [data, status, , , reload] = useResource(getCard, params.id);
@@ -120,7 +117,6 @@ export default function CardView() {
         <div class={css.actions}>
           <Show when={card()}>
             <CardActions
-              user={signupUser()}
               card={card()!}
               onActivate={() => navigate(`/cards/activate/${card()!.cardId}`)}
               onShowDetails={toggleDetails}
