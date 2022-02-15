@@ -49,5 +49,5 @@ export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> 
 };
 
 export const deleteReceipt = async (receiptId: string) => {
-  await service.remove(`api/users/receipts/${receiptId}/delete`);
+  await service.remove(`/users/receipts/${receiptId}/delete`);
 };

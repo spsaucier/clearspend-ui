@@ -170,7 +170,11 @@ export function Overview(props: Readonly<OverviewProps>) {
           title={<Text message="Transaction Details" />}
           onClose={() => setSelectedTransaction(null)}
         >
-          <TransactionPreview transaction={selectedTransaction()!} onViewReceipt={setShowReceipts} />
+          <TransactionPreview
+            transaction={selectedTransaction()!}
+            onUpdate={setSelectedTransaction}
+            onViewReceipt={setShowReceipts}
+          />
         </Drawer>
         <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
           <ReceiptsView

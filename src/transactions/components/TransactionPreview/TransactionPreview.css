@@ -67,10 +67,6 @@
   grid-gap: var(--pd-10);
 }
 
-.receipt-cta-label {
-  display: block;
-}
-
 .receipt-cta input[type='file'] {
   display: none;
 }

@@ -44,7 +44,8 @@ const STATUS_COLORS: Record<ActivityStatus, string | undefined> = {
 };
 
 interface TransactionPreviewProps {
-  transaction: AccountActivityResponse;
+  transaction: Readonly<AccountActivityResponse>;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
 }
 
@@ -53,15 +54,23 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const [transaction, setTransaction] = createSignal<Readonly<AccountActivityResponse>>(props.transaction);
-  const displayAmount = formatCurrency(transaction().amount?.amount || 0);
+  let fileInput!: HTMLInputElement;
+
+  const transaction = createMemo(() => props.transaction);
+  const displayAmount = createMemo(() => formatCurrency(transaction().amount?.amount || 0));
+
+  const receiptIds = createMemo(() => transaction().receipt?.receiptId || []);
+  const [receipts, receiptsStatus, , , reloadReceipts] = useResource(() => Promise.all(receiptIds().map(viewReceipt)));
+
+  const onUploadClick = () => fileInput.click();
 
   const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
     const formData = new FormData();
     formData.append('receipt', (e.target as HTMLInputElement).files?.[0] as File);
     const { receiptId } = await uploadReceiptForActivity(formData);
     await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
-    setTransaction(await getActivityById(transaction().accountActivityId!));
+    props.onUpdate(await getActivityById(transaction().accountActivityId!));
+    reloadReceipts();
   });
 
   const [note, setNote] = createSignal<string>();
@@ -72,7 +81,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     saveNote(props.transaction.accountActivityId!, note()!)
       .then((data) => {
         batch(() => {
-          setTransaction(data);
+          props.onUpdate(data);
           setNote(undefined);
         });
       })
@@ -80,9 +89,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         messages.error({ title: i18n.t('Something went wrong') });
       });
   };
-
-  const receiptIds = createMemo(() => transaction().receipt?.receiptId || []);
-  const [receipts, receiptsStatus, , , reloadReceipts] = useResource(() => Promise.all(receiptIds().map(viewReceipt)));
 
   return (
     <div class={css.root}>
@@ -94,7 +100,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <Show when={transaction().merchant}>
           <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
         </Show>
-        <div class={css.amount}>{displayAmount}</div>
+        <div class={css.amount}>{displayAmount()}</div>
         <div class={css.merchant}>
           {transaction().merchant?.name}
           <span> &#8226; </span>
@@ -122,20 +128,16 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             </Button>
           </Show>
           <Show when={!receiptIds().length && allowReceiptUpload(transaction())}>
-            <label for="receipt-upload" class={css.receiptCtaLabel}>
-              <Button wide icon="add-receipt" loading={uploading()}>
-                <Text message="Add Receipt" />
-              </Button>
-            </label>
+            <Button wide icon="add-receipt" loading={uploading()} onClick={onUploadClick}>
+              <Text message="Add Receipt" />
+            </Button>
           </Show>
           <Show when={receiptIds().length && allowReceiptUpload(transaction())}>
-            <label for="receipt-upload" class={css.receiptCtaLabel}>
-              <Button wide icon="receipt" loading={uploading()}>
-                <Text message="Upload more images" />
-              </Button>
-            </label>
+            <Button wide icon="receipt" loading={uploading()} onClick={onUploadClick}>
+              <Text message="Upload more images" />
+            </Button>
           </Show>
-          <input type="file" id="receipt-upload" accept="image/*" onChange={uploadReceipt} />
+          <input ref={fileInput} type="file" accept="image/*" onChange={uploadReceipt} />
         </div>
       </div>
       <div class={css.scroll}>
@@ -204,7 +206,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </div>
         <div class={css.detail}>
           <Text message="Posted Amount" />
-          <span>{displayAmount}</span>
+          <span>{displayAmount()}</span>
         </div>
       </div>
       <div class={css.actions}>
