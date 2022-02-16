@@ -437,6 +437,21 @@ export interface CreateReceiptResponse {
   receiptId?: string;
 }
 
+export interface CodatError {
+  itemId?: string;
+  message?: string;
+}
+
+export interface CodatSyncDirectCostResponse {
+  status?: string;
+  pushOperationKey?: string;
+  validation?: CodatValidation;
+}
+
+export interface CodatValidation {
+  errors?: CodatError[];
+}
+
 export interface CurrencyLimit {
   currency: 'UNSPECIFIED' | 'USD';
   typeMap: LimitTypeMap;

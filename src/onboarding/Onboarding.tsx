@@ -65,7 +65,7 @@ export default function Onboarding() {
       .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
-  if (step() === OnboardingStep.SOFT_FAIL) {
+  if (step() === OnboardingStep.SOFT_FAIL || step() === OnboardingStep.BUSINESS) {
     getApplicationReviewRequirements()
       .then((data) => {
         setKYBRequiredDocuments(data.kybRequiredDocuments);

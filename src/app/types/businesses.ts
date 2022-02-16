@@ -20,6 +20,7 @@ export enum BusinessType {
 }
 
 export enum OnboardingStep {
+  BUSINESS = 'BUSINESS',
   BUSINESS_OWNERS = 'BUSINESS_OWNERS',
   LINK_ACCOUNT = 'LINK_ACCOUNT',
   REVIEW = 'REVIEW',
