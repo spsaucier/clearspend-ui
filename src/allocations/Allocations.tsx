@@ -24,7 +24,7 @@ import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
 import { getRootAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import { getAllocation, getUserPermissionsForAllocation, updateAllocation } from './services';
+import { getAllocation, updateAllocation } from './services';
 
 import css from './Allocations.css';
 
@@ -55,18 +55,10 @@ export default function Allocations() {
   });
 
   const [data, status, , setAllocationId, reload] = useResource(getAllocation, undefined, false);
-  const [userPermissions, , , setAllocationIdForPermissions] = useResource(
-    getUserPermissionsForAllocation,
-    undefined,
-    false,
-  );
 
   createEffect(() => {
     const id = current()?.allocationId;
-    if (id) {
-      setAllocationId(id);
-      setAllocationIdForPermissions(id);
-    }
+    if (id) setAllocationId(id);
   });
 
   const onUpdateAllocation = async (allocationId: string, updates: Readonly<UpdateAllocationRequest>) => {
@@ -86,20 +78,16 @@ export default function Allocations() {
           breadcrumbs={<Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
             <div class={css.actions}>
-              <Show when={userPermissions()?.allocationPermissions.includes('MANAGE_FUNDS')}>
-                <Button type="primary" size="lg" icon="dollars" onClick={() => setManageId(current()?.allocationId)}>
-                  <Text message="Manage Balance" />
-                </Button>
-              </Show>
-              <Show when={userPermissions()?.allocationPermissions.includes('MANAGE_PERMISSIONS')}>
-                <Button
-                  icon="add"
-                  size="lg"
-                  onClick={() => navigate('/cards/edit', { state: { allocationId: current()?.allocationId } })}
-                >
-                  <Text message="New Card" />
-                </Button>
-              </Show>
+              <Button type="primary" size="lg" icon="dollars" onClick={() => setManageId(current()?.allocationId)}>
+                <Text message="Manage Balance" />
+              </Button>
+              <Button
+                icon="add"
+                size="lg"
+                onClick={() => navigate('/cards/edit', { state: { allocationId: current()?.allocationId } })}
+              >
+                <Text message="New Card" />
+              </Button>
             </div>
           }
           side={<AllocationsSide currentID={current()!.allocationId} items={allocations.data!} onSelect={onIdChange} />}
@@ -112,16 +100,12 @@ export default function Allocations() {
             <Tab value={Tabs.transactions}>
               <Text message="Transactions" />
             </Tab>
-            <Show when={userPermissions()?.allocationPermissions.includes('MANAGE_PERMISSIONS')}>
-              <Tab value={Tabs.controls}>
-                <Text message="Card Controls" />
-              </Tab>
-            </Show>
-            <Show when={userPermissions()?.allocationPermissions.includes('MANAGE_USERS')}>
-              <Tab value={Tabs.settings}>
-                <Text message="Settings" />
-              </Tab>
-            </Show>
+            <Tab value={Tabs.controls}>
+              <Text message="Card Controls" />
+            </Tab>
+            <Tab value={Tabs.settings}>
+              <Text message="Settings" />
+            </Tab>
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.cards}>

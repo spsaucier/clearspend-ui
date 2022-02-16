@@ -7,7 +7,6 @@ import type {
   ConvertBusinessProspectRequest,
   ConvertBusinessProspectResponse,
   CreateOrUpdateBusinessOwnerRequest,
-  BusinessProspectData,
 } from 'generated/capital';
 
 export type BusinessRelationships =
@@ -21,7 +20,7 @@ export async function signup(params: Readonly<CreateBusinessProspectRequest>) {
 }
 
 export async function getBusinessProspectInfo(businessProspectId: string) {
-  return service.get<Readonly<BusinessProspectData>>(`/business-prospects/${businessProspectId}`);
+  return service.get(`/business-prospects/${businessProspectId}`);
 }
 
 export async function confirmOTP(id: string, params: Readonly<ValidateBusinessProspectIdentifierRequest>) {

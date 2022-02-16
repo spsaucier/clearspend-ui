@@ -10,7 +10,7 @@ import { Integrations } from './pages/Integrations';
 import { getCompanyConnection } from './services';
 
 export function Accounting() {
-  const { loggedInUser } = useBusiness();
+  const { signupUser } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
 
   onMount(async () => {
@@ -19,7 +19,7 @@ export function Accounting() {
   });
 
   return (
-    <Show when={canSeeAccounting(loggedInUser())} fallback={<Navigate href="/" />}>
+    <Show when={canSeeAccounting(signupUser())} fallback={<Navigate href="/" />}>
       <Switch>
         <Match when={hasIntegrationConnection() == null}>
           <Loading />

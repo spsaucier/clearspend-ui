@@ -111,7 +111,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               placeholder={String(i18n.t('Search by employee name'))}
               onChange={handlers.user}
             >
-              <For each={users.data}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
+              <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
             </Select>
           </FilterBox>
         </Show>

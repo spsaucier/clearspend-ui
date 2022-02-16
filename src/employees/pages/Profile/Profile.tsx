@@ -25,15 +25,15 @@ import css from './Profile.css';
 export default function Profile() {
   const navigate = useNavigate();
 
-  const { loggedInUser } = useBusiness();
-  const [user, userStatus, , , reloadUser] = useResource(getUser, loggedInUser().userId);
+  const { signupUser } = useBusiness();
+  const [user, userStatus, , , reloadUser] = useResource(getUser, signupUser().userId);
 
   const cards = useUserCards();
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
     <Page
-      title={formatName(loggedInUser())}
+      title={formatName(signupUser())}
       subtitle={<Text message="Account settings" class={css.subtitle!} />}
       actions={
         <Button size="lg" loading={loading()} onClick={logoutAction}>

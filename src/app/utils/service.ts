@@ -63,10 +63,6 @@ async function post<T = unknown>(url: string, params?: object, options?: Partial
   return wrapFetch(fetch<T>('POST', prefixUrl(url), params, options));
 }
 
-async function put<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('PUT', prefixUrl(url), params, options));
-}
-
 async function patch<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
   return wrapFetch(fetch<T>('PATCH', prefixUrl(url), params, options));
 }
@@ -75,4 +71,4 @@ async function remove(url: string, params?: object, options?: Partial<FetchOptio
   return wrapFetch(fetch('DELETE', prefixUrl(url), params, options));
 }
 
-export const service = { get, post, put, patch, remove };
+export const service = { get, post, patch, remove };

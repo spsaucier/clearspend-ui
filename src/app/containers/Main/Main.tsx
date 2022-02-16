@@ -1,17 +1,17 @@
-import { createMemo, Switch, Match } from 'solid-js';
+import { Accessor, createMemo, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import { BusinessStatus } from 'app/types/businesses';
 import { Spin } from '_common/components/Spin';
 import { Fault } from '_common/components/Fault';
 import { events } from '_common/api/events';
+import { getNoop } from '_common/utils/getNoop';
 import { useResource } from '_common/utils/useResource';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
-import type { Business } from 'generated/capital';
-import { getPermissions } from 'app/services/auth';
+import type { Business, User } from 'generated/capital';
 
-import { getLoggedInUser, getBusiness } from '../../services/businesses';
+import { getUsers, getBusiness } from '../../services/businesses';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
@@ -26,12 +26,14 @@ function isStatus(business: Readonly<Business> | null, status: BusinessStatus): 
 export default function Main() {
   const navigate = useNavigate();
 
-  const [data, status, , , refetch, mutate] = useResource(
-    () => Promise.all([getLoggedInUser(), getBusiness(), getPermissions()]),
-    null,
-  );
+  if (process.env.NODE_ENV === 'development') {
+    fetch('/api/non-production/test-data/db-content').catch(getNoop());
+    // fetch('/api/non-production/test-data/create-all-demo').catch(getNoop());
+  }
 
-  const loggedInUser = createMemo(() => {
+  const [data, status, , , refetch, mutate] = useResource(() => Promise.all([getUsers(), getBusiness()]), null);
+
+  const signupUser = createMemo(() => {
     const value = data();
     return value && value[0];
   });
@@ -39,11 +41,6 @@ export default function Main() {
   const business = createMemo(() => {
     const value = data();
     return value && value[1];
-  });
-
-  const permissions = createMemo(() => {
-    const value = data();
-    return value && value[2];
   });
 
   events.sub(AppEvent.Logout, () => {
@@ -63,13 +60,7 @@ export default function Main() {
       </Match>
       <Match when={data()}>
         <BusinessContext.Provider
-          value={{
-            business,
-            loggedInUser,
-            permissions,
-            refetch,
-            mutate,
-          }}
+          value={{ business, signupUser: signupUser as Accessor<Readonly<Required<User>>>, refetch, mutate }}
         >
           <Switch>
             <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>
