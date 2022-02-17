@@ -10,10 +10,10 @@ import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
+import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
-import { AccountItem } from 'company/components/AccountItem';
 import { join } from '_common/utils/join';
 import {
   getActivityById,
@@ -169,7 +169,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <h4 class={css.title}>
             <Text message="Card" />
           </h4>
-          <AccountItem
+          <AccountCard
             icon="card"
             // TODO need activated status
             title={formatCardNumber(transaction().card!.lastFour, true)}
