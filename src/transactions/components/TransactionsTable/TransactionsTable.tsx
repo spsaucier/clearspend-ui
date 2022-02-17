@@ -28,6 +28,7 @@ import type {
 import { Drawer } from '_common/components/Drawer';
 import { getNoop } from '_common/utils/getNoop';
 import { FiltersButton } from 'app/components/FiltersButton';
+import { syncTransaction } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
@@ -77,6 +78,27 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             <div class={css.sub}>
               <DateTime date={date} preset={DateFormat.time} />
             </div>
+          </div>
+        );
+      },
+    },
+    {
+      name: 'sync',
+      title: <Text message="Sync" />,
+      onClick: (row) => props.onRowClick?.(row),
+      render: (item) => {
+        return (
+          <div>
+            <Button
+              type="primary"
+              size="sm"
+              onClick={(event) => {
+                event.stopPropagation();
+                if (item.accountActivityId) syncTransaction(item.accountActivityId);
+              }}
+            >
+              <Text message="Sync" />
+            </Button>
           </div>
         );
       },
@@ -190,7 +212,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         when={props.data.content?.length}
         fallback={<Empty message={<Text message="There are no transactions" />} />}
       >
-        <Table columns={columns} data={props.data.content as []} tdClass={css.cell} />
+        <Table
+          columns={columns.filter((column) => column.name !== 'sync' || props.showAccountingAdminView)}
+          data={props.data.content as []}
+          tdClass={css.cell}
+        />
       </Show>
 
       <Drawer
