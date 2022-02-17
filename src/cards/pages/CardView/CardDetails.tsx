@@ -65,7 +65,6 @@ interface StripeCS extends Stripe {
 
 export default function CardDetails(props: CardDetailsProps) {
   const [loading, setLoading] = createSignal(true);
-  const [nonceResult, setNonceResult] = createSignal<Nonce>();
   const [stripe, setStripe] = createSignal<StripeCS | null>();
   const [cardKey, , , setCardKeyParams, getCardKey] = useResource(revealCardKey, undefined, false);
 
@@ -87,19 +86,17 @@ export default function CardDetails(props: CardDetailsProps) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const elements = stripe()?.elements() as any;
 
-      setNonceResult(
-        await stripe()?.createEphemeralKeyNonce({
-          issuingCard: props.card()?.externalRef!,
-        }),
-      );
-      setCardKeyParams({ cardId: props.card()?.cardId, nonce: nonceResult()?.nonce });
+      const nonceResult = await stripe()?.createEphemeralKeyNonce({
+        issuingCard: props.card()?.externalRef!,
+      });
+      setCardKeyParams({ cardId: props.card()?.cardId, nonce: nonceResult?.nonce });
 
       await getCardKey();
       const ephemeralKey = cardKey()?.ephemeralKey;
 
       const cardResult = await stripe()?.retrieveIssuingCard(props.card()?.externalRef!, {
         ephemeralKeySecret: ephemeralKey!,
-        nonce: nonceResult()?.nonce!,
+        nonce: nonceResult?.nonce!,
       });
 
       const nameEl = document.getElementById('cardholder-name');

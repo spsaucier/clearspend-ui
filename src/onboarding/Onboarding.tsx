@@ -118,10 +118,12 @@ export default function Onboarding() {
     setStep(OnboardingStep.REVIEW);
   };
 
-  const onGotVerifyToken = async (token: string, accountName: string) => {
+  const onGotVerifyToken = async (token: string, accountName?: string) => {
     const bankAccounts = await linkBankAccounts(token);
     batch(() => {
-      const matchedAccounts = bankAccounts.filter((account) => account.name === accountName);
+      const matchedAccounts = accountName
+        ? bankAccounts.filter((account) => account.name === accountName)
+        : bankAccounts;
       setAccounts(matchedAccounts);
       storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
       setStep(OnboardingStep.TRANSFER_MONEY);

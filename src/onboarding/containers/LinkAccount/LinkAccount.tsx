@@ -15,7 +15,7 @@ const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
 interface LinkAccountProps {
   verifyOnLoad?: boolean;
   disabled?: boolean;
-  onSuccess: (token: string) => Promise<unknown>;
+  onSuccess: (token: string, accountName?: string) => Promise<unknown>;
 }
 
 export function LinkAccount(props: Readonly<LinkAccountProps>) {
@@ -43,7 +43,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
       token: linkToken,
       receivedRedirectUri: null,
       onSuccess: (_, metadata) => {
-        onSuccess(metadata.public_token, metadata.accounts[0].name).catch(() => {
+        onSuccess(metadata.public_token, metadata.accounts[0]?.name).catch(() => {
           messages.error({ title: i18n.t('Something went wrong') });
         });
       },
