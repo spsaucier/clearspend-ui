@@ -52,6 +52,7 @@ interface TransactionsTableProps {
   onCardClick?: (id: string) => void;
   onRowClick?: (transaction: AccountActivityResponse) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  showAccountingAdminView?: boolean;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
@@ -203,6 +204,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             // TODO
           }}
           params={{} as SearchTransactionsRequest}
+          showAccountingAdminView={props.showAccountingAdminView}
         />
       </Drawer>
     </div>

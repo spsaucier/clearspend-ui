@@ -1,4 +1,4 @@
-import { For, createSignal } from 'solid-js';
+import { For, createSignal, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import type { StoreSetter } from '_common/utils/store';
@@ -22,11 +22,13 @@ export interface SearchTransactionsRequest {
   maxDate: string;
   hasReceipt?: boolean;
   categories: string[];
+  syncStatus: 'READY' | 'NOT_READY' | 'SYNCED';
 }
 
 interface TransactionFilterDrawerProps {
   params: SearchTransactionsRequest;
   onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  showAccountingAdminView?: boolean;
 }
 
 export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerProps>) {
@@ -39,6 +41,9 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   const [isApproved, setIsApproved] = createSignal<boolean>(!!(props.params.status === 'APPROVED'));
   const [isPending, setIsPending] = createSignal<boolean>(!!(props.params.status === 'PENDING'));
   const [isBlocked, setIsBlocked] = createSignal<boolean>(!!(props.params.status === 'BLOCKED'));
+  const [isReady, setIsReady] = createSignal<boolean>(!!(props.params.syncStatus === 'READY'));
+  const [isNotReady, setIsNotReady] = createSignal<boolean>(!!(props.params.syncStatus === 'NOT_READY'));
+  const [isSynced, setIsSynced] = createSignal<boolean>(!!(props.params.syncStatus === 'SYNCED'));
 
   useAllocations({
     initValue: [],
@@ -109,6 +114,21 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             </For>
           </MultiSelect>
         </FilterBox>
+        <Show when={props.showAccountingAdminView}>
+          <FilterBox title={<Text message="Sync Status" />}>
+            <CheckboxGroup>
+              <Checkbox checked={isReady()} onChange={setIsReady}>
+                <Text message="Not Ready" />
+              </Checkbox>
+              <Checkbox checked={isNotReady()} onChange={setIsNotReady}>
+                <Text message="Ready" />
+              </Checkbox>
+              <Checkbox checked={isSynced()} onChange={setIsSynced}>
+                <Text message="Synced and Locked" />
+              </Checkbox>
+            </CheckboxGroup>
+          </FilterBox>
+        </Show>
         <FilterBox title={<Text message="Payment Status" />}>
           <CheckboxGroup>
             <Checkbox checked={isApproved()} onChange={setIsApproved}>

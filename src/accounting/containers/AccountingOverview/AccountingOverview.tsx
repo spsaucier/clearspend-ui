@@ -61,6 +61,7 @@ export function AccountingOverview() {
             onChangeParams={activityStore.setParams}
             onRowClick={setSelectedTransaction}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
+            showAccountingAdminView
           />
         </Data>
         <Drawer

@@ -22,6 +22,7 @@ interface TransactionsDataProps {
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
+  showAccountingAdminView?: boolean;
 }
 
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
@@ -34,6 +35,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onCardClick={props.onCardClick}
         onRowClick={props.onRowClick}
         onChangeParams={props.onChangeParams}
+        showAccountingAdminView={props.showAccountingAdminView}
       />
     </Data>
   );
