@@ -12,7 +12,6 @@ import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
-import { Section } from 'app/components/Section';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
 
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
@@ -114,9 +113,7 @@ export default function EmployeeView() {
               <Cards userId={user()!.userId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
-              <Section title={<Text message="Employee Info" />}>
-                <EditEmployeeForm user={user()!} onSave={onEdit} />
-              </Section>
+              <EditEmployeeForm user={user()!} onSave={onEdit} />
             </Match>
           </Switch>
         </Match>

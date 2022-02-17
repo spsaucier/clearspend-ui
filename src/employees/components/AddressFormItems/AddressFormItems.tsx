@@ -1,10 +1,10 @@
 import { useI18n, Text } from 'solid-i18n';
-import { For, batch, Show, Accessor } from 'solid-js';
+import { createMemo, For, batch, Show, Accessor } from 'solid-js';
 
 import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, SelectState, Option } from '_common/components/Select';
-import { useAddressSuggestions } from 'app/utils/useAddressSuggestions';
+import { useAddressSuggestions, formatSuggestion } from 'app/utils/useAddressSuggestions';
 
 import type { AddressValues } from './types';
 
@@ -17,13 +17,22 @@ interface AddressFormItemsProps {
 }
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
-  const { loading, suggestions } = useAddressSuggestions(props.values);
   const i18n = useI18n();
-  let valueRender = () => {
-    return props.values().streetLine1;
-  };
+
+  const { loading, suggestions } = useAddressSuggestions(
+    createMemo(() => {
+      const data = props.values();
+      return {
+        address_prefix: data.streetLine1,
+        city: data.locality,
+        state: data.region,
+        zip_code: data.postalCode,
+      };
+    }),
+  );
+
   const onChangeStreetLine1 = (value: string) => {
-    const found = suggestions().find((s) => s.primary_line === value);
+    const found = suggestions().find((item) => formatSuggestion(item) === value);
     if (found) {
       batch(() => {
         props.handlers.streetLine1(value);
@@ -44,7 +53,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           fallback={
             <Input
               name="streetLine1"
-              type="text"
               value={props.values().streetLine1}
               placeholder={String(i18n.t('Street address'))}
               error={Boolean(props.errors.streetLine1)}
@@ -59,15 +67,10 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
             error={Boolean(props.errors.streetLine1)}
             onChange={onChangeStreetLine1}
             changeOnSearch
-            valueRender={valueRender}
             loading={loading()}
           >
             <For each={suggestions()}>
-              {(suggestion) => (
-                <Option value={suggestion.primary_line}>
-                  {`${suggestion.primary_line} ${suggestion.city}, ${suggestion.state} ${suggestion.zip_code}`}
-                </Option>
-              )}
+              {(suggestion) => <Option value={formatSuggestion(suggestion)}>{formatSuggestion(suggestion)}</Option>}
             </For>
           </Select>
         </Show>

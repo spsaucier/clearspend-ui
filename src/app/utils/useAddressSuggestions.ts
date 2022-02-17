@@ -1,33 +1,34 @@
 import { createSignal, createEffect, Accessor } from 'solid-js';
 import createDebounce from '@solid-primitives/debounce';
 
-import { type Suggestion, getAddresses, type SuggestionsResponse } from 'app/services/address';
+import { getAddressesSuggestions, Suggestion, SuggestionsRequest } from '_common/api/suggestions/address';
+import { wrapAction } from '_common/utils/wrapAction';
 import { validStreetLine1 } from '_common/components/Form/rules/patterns';
-import type { AddressValues } from 'employees/components/AddressFormItems';
 
 const DEBOUNCE_MS = 300;
 const MIN_CHARS = 4;
 
-export const useAddressSuggestions = (values: Accessor<AddressValues>) => {
-  const [prevStreetValue, setPrevStreetValue] = createSignal('');
-  const [suggestions, setSuggestions] = createSignal<Suggestion[]>([]);
-  const [loading, setLoading] = createSignal(false);
+export function formatSuggestion(value: Readonly<Suggestion>): string {
+  return `${value.primary_line} ${value.city}, ${value.state} ${value.zip_code}`;
+}
 
-  const getAddressData = async () => {
-    if (prevStreetValue() !== values().streetLine1) {
-      setLoading(true);
-      // TODO: Switch this to normal `fetch` to capital-core when available
-      const data = (await getAddresses(values())).data as SuggestionsResponse;
-      setSuggestions(data.suggestions);
-      setPrevStreetValue(values().streetLine1);
-      setLoading(false);
+export function useAddressSuggestions(values: Accessor<SuggestionsRequest>) {
+  const [prevStreetValue, setPrevStreetValue] = createSignal('');
+  const [suggestions, setSuggestions] = createSignal<readonly Suggestion[]>([]);
+
+  const [loading, getAddressData] = wrapAction(async () => {
+    const params = values();
+    if (prevStreetValue() !== params.address_prefix) {
+      setSuggestions(await getAddressesSuggestions(params));
+      setPrevStreetValue(params.address_prefix);
     }
-  };
+  });
 
   const [trigger, clear] = createDebounce(getAddressData, DEBOUNCE_MS);
 
   createEffect(() => {
-    if (validStreetLine1(values().streetLine1) === true && values().streetLine1.length >= MIN_CHARS) {
+    const prefix = values().address_prefix;
+    if (prefix.length >= MIN_CHARS && validStreetLine1(prefix) === true) {
       trigger();
     } else {
       setSuggestions([]);
@@ -36,4 +37,4 @@ export const useAddressSuggestions = (values: Accessor<AddressValues>) => {
   });
 
   return { suggestions, loading };
-};
+}
