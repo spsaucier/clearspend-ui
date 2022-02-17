@@ -2,6 +2,7 @@ import { useContext, createSignal, batch, Show, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import { Icon } from '_common/components/Icon';
+import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
@@ -36,6 +37,8 @@ import type { KycDocuments, RequiredDocument } from './components/SoftFail/types
 
 import css from './Onboarding.css';
 
+const ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY = 'ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY';
+
 export default function Onboarding() {
   const media = useMediaContext();
   const messages = useMessages();
@@ -54,12 +57,14 @@ export default function Onboarding() {
   fillBusinessProspectInfo();
 
   const [step, setStep] = createSignal<OnboardingStep | undefined>(business()?.onboardingStep as OnboardingStep);
-  const [accounts, setAccounts] = createSignal<readonly Readonly<Required<BankAccount>>[]>([]);
+  const [accounts, setAccounts] = createSignal<readonly Readonly<Required<BankAccount>>[]>(
+    storage.get<readonly Readonly<Required<BankAccount>>[]>(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []),
+  );
 
   const [kybRequiredDocuments, setKYBRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
   const [kycRequiredDocuments, setKYCRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();
 
-  if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY) {
+  if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
     getBankAccounts()
       .then((data) => setAccounts(data))
       .catch(() => messages.error({ title: 'Something went wrong' }));
@@ -113,10 +118,12 @@ export default function Onboarding() {
     setStep(OnboardingStep.REVIEW);
   };
 
-  const onGotVerifyToken = async (token: string) => {
+  const onGotVerifyToken = async (token: string, accountName: string) => {
     const bankAccounts = await linkBankAccounts(token);
     batch(() => {
-      setAccounts(bankAccounts);
+      const matchedAccounts = bankAccounts.filter((account) => account.name === accountName);
+      setAccounts(matchedAccounts);
+      storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
       setStep(OnboardingStep.TRANSFER_MONEY);
     });
   };
@@ -124,6 +131,7 @@ export default function Onboarding() {
   const onDeposit = async (accountId: string, amount: number) => {
     await onboardingDeposit(accountId, amount);
     await refetch();
+    storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
     navigate('/');
   };
 

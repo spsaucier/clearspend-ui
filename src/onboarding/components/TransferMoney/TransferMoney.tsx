@@ -41,7 +41,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   const [loading, deposit] = wrapAction(props.onDeposit);
 
   const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>({
-    defaultValues: { amount: '', account: '' },
+    defaultValues: { amount: '', account: props.accounts[0]?.businessBankAccountId || '' },
     rules: { amount: [validAmount], account: [required] },
   });
 

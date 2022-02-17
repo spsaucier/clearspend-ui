@@ -38,24 +38,18 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
     const linkToken = token();
 
     if (loading() || typeof linkToken !== 'string') return;
-    let data: PlaidMetadata | undefined;
 
     handler = Plaid.create({
       token: linkToken,
       receivedRedirectUri: null,
       onSuccess: (_, metadata) => {
-        data = metadata;
+        onSuccess(metadata.public_token, metadata.accounts[0].name).catch(() => {
+          messages.error({ title: i18n.t('Something went wrong') });
+        });
       },
       onLoad: () => {
         setInit(false);
         if (props.verifyOnLoad) handler?.open();
-      },
-      onEvent: (eventName) => {
-        if (eventName === 'HANDOFF' && data) {
-          onSuccess(data.public_token).catch(() => {
-            messages.error({ title: i18n.t('Something went wrong') });
-          });
-        }
       },
     });
   });
