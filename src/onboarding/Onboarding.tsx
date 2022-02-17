@@ -184,8 +184,8 @@ export default function Onboarding() {
         <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
           <Page title="Link your bank account">
             <Section
-              title="Connect your account"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec tempor."
+              title="Connect your bank"
+              description="Connecting your bank account brings you one step closer to becoming an expense management superstar."
               contentClass={css.verifySectionContent}
             >
               <LinkAccount verifyOnLoad onSuccess={onGotVerifyToken} />

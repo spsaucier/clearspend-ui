@@ -18,9 +18,12 @@ export function VerifyAccount(props: Readonly<VerifyAccountProps>) {
       <h4 class={css.title}>
         <Text message="Instant Bank Verification" />
       </h4>
-      <p class={css.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec tempor.</p>
+      <p class={css.text}>
+        Our instant bank verification process uses the best security protocols to ensure your information is always safe
+        and secure. No prying eyes here.
+      </p>
       <Button wide type="primary" loading={props.loading} disabled={props.disabled} onClick={props.onVerifyClick}>
-        <Text message="Verify Now" />
+        <Text message="Link Bank" />
       </Button>
     </div>
   );

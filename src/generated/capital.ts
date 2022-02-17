@@ -792,6 +792,7 @@ export interface Business {
     | 'COMPLETE';
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
 }
 
 export interface ConvertBusinessProspectResponse {
