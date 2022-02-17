@@ -8,9 +8,10 @@ import { canSeeAccounting } from './utils/canSeeAccounting';
 import { AccountingTabs } from './pages/AccountingTabs';
 import { Integrations } from './pages/Integrations';
 import { getCompanyConnection } from './services';
+import { AddCreditCardForm } from './pages/AddCreditCardForm';
 
 export function Accounting() {
-  const { signupUser } = useBusiness();
+  const { signupUser, business } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
 
   onMount(async () => {
@@ -28,7 +29,14 @@ export function Accounting() {
           <Integrations />
         </Match>
         <Match when={hasIntegrationConnection() === true}>
-          <AccountingTabs />
+          <Switch>
+            <Match when={business().accountingSetupStep !== 'COMPLETE'}>
+              <AddCreditCardForm />
+            </Match>
+            <Match when={business().accountingSetupStep === 'COMPLETE'}>
+              <AccountingTabs />
+            </Match>
+          </Switch>
         </Match>
       </Switch>
     </Show>

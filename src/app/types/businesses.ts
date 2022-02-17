@@ -43,3 +43,9 @@ export enum BusinessTypeCategory {
   COMPANY = 'COMPANY',
   NONPROFIT = 'NONPROFIT',
 }
+
+export enum AccountSetupStep {
+  ADD_CREDIT_CARD = 'ADD_CREDIT_CARD',
+  MAP_CATEGORIES = 'MAP_CATEGORIES',
+  COMPLETE = 'COMPLETE',
+}
