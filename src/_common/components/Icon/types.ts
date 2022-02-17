@@ -7,6 +7,7 @@
 */
 
 export enum IconName {
+  accounting = 'accounting',
   add = 'add',
   'add-receipt' = 'add-receipt',
   'add-circle-outline' = 'add-circle-outline',

@@ -23,7 +23,7 @@ const MAIN_ITEMS: readonly Readonly<MenuItemOptions>[] = [
   { href: '/', title: TITLES.dashboard, icon: 'dashboard', end: true },
   { href: '/allocations', title: TITLES.allocations, icon: 'allocations' },
   { href: '/cards', title: TITLES.card, icon: 'card' },
-  { href: '/accounting', title: TITLES.accounting, icon: 'audit-logs' },
+  { href: '/accounting', title: TITLES.accounting, icon: 'accounting' },
   { href: '/employees', title: TITLES.employees, icon: 'employees' },
   { href: '/settings', title: TITLES.company, icon: 'company' },
 ];

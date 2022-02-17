@@ -1,5 +1,6 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import { Text } from 'solid-i18n';
+import { useSearchParams } from 'solid-app-router';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
@@ -14,7 +15,9 @@ enum Tabs {
 }
 
 export function AccountingTabs() {
-  const [tab, setTab] = createSignal(Tabs.transactions);
+  const [params] = useSearchParams();
+  const initialTab = params.tab === 'settings' ? Tabs.settings : Tabs.transactions;
+  const [tab, setTab] = createSignal<Tabs>(initialTab);
 
   return (
     <Page title={<Text message="Accounting" />}>
