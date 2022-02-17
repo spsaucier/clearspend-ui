@@ -43,6 +43,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         checked={Boolean(props.value[LimitPeriod.DAILY])}
         label={<Text message="Daily limit" />}
         onChange={onEnableChange(LimitPeriod.DAILY)}
+        name={`${props.name}-daily-limit`}
       >
         <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
           <InputCurrency
@@ -57,6 +58,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         checked={Boolean(props.value[LimitPeriod.MONTHLY])}
         label={<Text message="Monthly limit" />}
         onChange={onEnableChange(LimitPeriod.MONTHLY)}
+        name={`${props.name}-monthly-limit`}
       >
         <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
           <InputCurrency
@@ -71,6 +73,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         checked={Boolean(props.value[LimitPeriod.INSTANT])}
         label={<Text message="Transaction limit" />}
         onChange={onEnableChange(LimitPeriod.INSTANT)}
+        name={`${props.name}-transaction-limit`}
       >
         <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
           <InputCurrency
