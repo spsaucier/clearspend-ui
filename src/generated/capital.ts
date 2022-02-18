@@ -1059,6 +1059,13 @@ export interface AccountActivityResponse {
   amount?: Amount;
   receipt?: ReceiptDetails;
   notes?: string;
+  expenseDetails?: ExpenseDetails;
+}
+
+export interface ExpenseDetails {
+  /** @format int32 */
+  iconRef?: number;
+  categoryName?: string;
 }
 
 export interface Merchant {
@@ -2157,8 +2164,25 @@ export interface ActivateCardRequest {
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
 }
 
+export interface UpdateCardAccountRequest {
+  /**
+   * @format uuid
+   * @example c9609768-647d-4f00-b755-e474cc761c33
+   */
+  allocationId?: string;
+
+  /**
+   * @format uuid
+   * @example 54826974-c2e3-4eee-a305-ba6f847748e8
+   */
+  accountId?: string;
+}
+
 export interface UpdateAccountActivityRequest {
   notes: string;
+
+  /** @format int32 */
+  iconRef?: number;
 }
 
 export interface ExpenseCategoryRequest {
@@ -2294,6 +2318,24 @@ export interface Receipt {
   amount: Amount;
 }
 
+export interface CardAccount {
+  /**
+   * @format uuid
+   * @example c9609768-647d-4f00-b755-e474cc761c33
+   */
+  allocationId?: string;
+
+  /**
+   * @format uuid
+   * @example 54826974-c2e3-4eee-a305-ba6f847748e8
+   */
+  accountId?: string;
+
+  /** @example ALLOCATION */
+  accountType?: 'ALLOCATION' | 'CARD';
+  ledgerBalance?: Amount;
+}
+
 export interface UserAllocationRolesResponse {
   userRolesAndPermissionsList: UserRolesAndPermissionsRecord[];
 }
@@ -2315,6 +2357,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'MANAGE_CARDS'
     | 'MANAGE_USERS'
     | 'MANAGE_PERMISSIONS'
+    | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
   )[];
   globalUserPermissions?: (
@@ -2764,6 +2807,7 @@ export interface AllocationRolePermissionRecord {
     | 'MANAGE_CARDS'
     | 'MANAGE_USERS'
     | 'MANAGE_PERMISSIONS'
+    | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
   )[];
 }
