@@ -4,6 +4,10 @@
   flex-direction: column;
 }
 
+.image {
+  margin-bottom: var(--pd-24);
+}
+
 .header {
   font-family: var(--font-main);
   font-size: 20px;

@@ -2,6 +2,8 @@ import { Text } from 'solid-i18n';
 
 import { Description } from 'signup/components/Description';
 
+import { ReviewingImage } from '../ReviewingImage';
+
 import css from './Review.css';
 
 interface ReviewDetails {
@@ -11,6 +13,7 @@ interface ReviewDetails {
 export function Review(props: Readonly<ReviewDetails>) {
   return (
     <div class={css.content}>
+      <ReviewingImage class={css.image} />
       <div class={css.header}>We are reviewing documents.</div>
       <Description>
         <Text
