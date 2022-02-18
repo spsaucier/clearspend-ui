@@ -6,7 +6,7 @@ export async function getCompanyConnection(): Promise<boolean> {
 }
 
 export async function syncTransaction(transactionId: string) {
-  return (await service.get<Readonly<boolean>>(`/codat/sync/${transactionId}`)).data;
+  return (await service.post<Readonly<boolean>>(`/codat/sync/${transactionId}`)).data;
 }
 
 export async function getCodatCreditCards() {
