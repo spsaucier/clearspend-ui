@@ -1,19 +1,4 @@
-.section {
-  margin-bottom: var(--pd-24);
-}
-
-.wrapper {
-  @media (--bp-large) {
-    max-width: 260px;
-  }
-}
-
-.actions {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-.add {
-  margin-bottom: var(--pd-24);
+.field {
+  margin-top: 20px;
+  margin-bottom: 15px;
 }

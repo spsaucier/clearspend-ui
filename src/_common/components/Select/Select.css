@@ -13,6 +13,10 @@
   }
 }
 
+.dark {
+  color: var(--tw-white);
+}
+
 .value {
   position: absolute;
   top: 0;
@@ -28,6 +32,10 @@
   @nest .root[data-view='input'] & {
     visibility: hidden;
   }
+
+  @nest .dark & {
+    padding: var(--pd-12);
+  }
 }
 
 .icon,
@@ -41,6 +49,10 @@
   transform-origin: center;
   will-change: auto;
   pointer-events: none;
+
+  @nest .dark & {
+    color: var(--tw-white);
+  }
 }
 
 .chevron {

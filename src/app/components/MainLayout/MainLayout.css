@@ -21,6 +21,11 @@
   }
 }
 
+.dark-side {
+  color: #fff;
+  background: var(--tw-dark);
+}
+
 .content {
   display: flex;
   flex-direction: column;

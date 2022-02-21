@@ -1,16 +1,18 @@
-import { JSXElement, onMount } from 'solid-js';
+import { JSXElement, onMount, Show } from 'solid-js';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { InputCode } from '_common/components/InputCode';
-import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
+import { FlatButton } from '../Button/FlatButton';
 
 import { createTimer } from './utils';
 
 import css from './VerifyForm.css';
+
+// eslint-disable-next-line css-modules/no-unused-class
 
 const VALID_LENGTH = 6;
 const RESEND_TIMEOUT_IN_SEC = 45;
@@ -22,8 +24,10 @@ interface FormValues {
 interface VerifyFormProps {
   header: JSXElement;
   description: JSXElement;
+  extraBtn?: JSXElement;
   onResend: () => Promise<unknown>;
   onConfirm: (code: string) => Promise<unknown>;
+  darkMode?: boolean;
 }
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
@@ -62,13 +66,15 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
             error={Boolean(errors().code)}
             disabled={loading()}
             onChange={onChange}
+            darkMode={true}
           />
         </FormItem>
         <Description class={css.note}>Didn't receive the code?</Description>
-        <Button wide loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
+        <Show when={props.extraBtn}>{props.extraBtn}</Show>
+        <FlatButton loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
           Resend confirmation code
           {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
-        </Button>
+        </FlatButton>
       </Form>
     </div>
   );

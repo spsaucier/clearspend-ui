@@ -4,6 +4,7 @@
 .root {
   display: flex;
   height: v-height;
+  background: white;
   border: v-border solid var(--tw-gray-30);
   border-radius: var(--radius-8);
   transition: border 0.3s;
@@ -15,8 +16,16 @@
   }
 }
 
+.root.dark {
+  height: auto;
+  color: var(--tw-white);
+  background-color: var(--tw-medium);
+  border-color: var(--tw-medium);
+  border-radius: var(--radius-4);
+}
+
 .error:not(.disabled) {
-  border-color: var(--tw-red-70);
+  border-color: var(--tw-red-60);
 }
 
 .disabled {
@@ -32,7 +41,6 @@
   padding: var(--pd-8) var(--pd-12);
   font: inherit;
   text-overflow: ellipsis;
-  background: transparent;
   border: 0;
   outline: 0;
 
@@ -48,11 +56,30 @@
     -webkit-text-fill-color: inherit;
     box-shadow: 0 0 0 1000px transparent inset;
   }
+
+  @nest .dark & {
+    padding: var(--pd-12) var(--pd-12);
+    color: var(--tw-white);
+    background-color: var(--tw-medium);
+  }
+
+  @nest .dark &:-webkit-autofill {
+    -webkit-text-fill-color: white;
+  }
+
+  @nest .dark &:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    caret-color: white;
+  }
+
+  @nest .dark &:-webkit-autofill:hover {
+    -webkit-text-fill-color: white;
+  }
 }
 
 .prefix {
   display: flex;
-  margin-right: -2px;
+  margin-right: var(--pd-8);
   padding-left: var(--pd-12);
   align-items: center;
   flex-shrink: 0;

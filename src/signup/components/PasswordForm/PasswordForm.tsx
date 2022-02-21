@@ -3,11 +3,11 @@ import { Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
-import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
+import { FlatButton } from '../Button/FlatButton';
 
 import type { FormValues } from './types';
 import { minLength, samePassword, PASSWORD_MIN_LENGTH } from './rules';
@@ -48,6 +48,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Password" error={errors().password}>
           <Input
+            darkMode={true}
             ref={input}
             name="new-password"
             type="password"
@@ -59,6 +60,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
         </FormItem>
         <FormItem label="Confirm password" error={errors().confirm}>
           <Input
+            darkMode={true}
             name="confirm-password"
             type="password"
             value={values().confirm}
@@ -67,9 +69,9 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
             onChange={handlers.confirm}
           />
         </FormItem>
-        <Button wide type="primary" htmlType="submit" loading={loading()}>
+        <FlatButton type="primary" htmlType="submit" loading={loading()}>
           Create Account
-        </Button>
+        </FlatButton>
       </Form>
     </div>
   );

@@ -2,6 +2,10 @@
   margin: 0 0 var(--pd-8);
 }
 
+.root.dark {
+  color: white;
+}
+
 .label {
   display: block;
   margin-bottom: var(--pd-4);
@@ -9,6 +13,11 @@
   font-weight: var(--font-400);
   line-height: var(--line-16);
   cursor: pointer;
+}
+
+.root.dark .label {
+  font-size: var(--text-14);
+  line-height: var(--line-22);
 }
 
 .description {
@@ -19,5 +28,14 @@
 }
 
 .error {
-  color: var(--tw-red-70);
+  color: var(--tw-red-60);
+}
+
+.extra {
+  @nest .dark & {
+    color: white;
+    font-size: var(--text-12);
+    line-height: var(--line-16);
+    letter-spacing: 0.5px;
+  }
 }

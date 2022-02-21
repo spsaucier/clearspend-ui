@@ -1,0 +1,24 @@
+.wrapper {
+  padding: 8px;
+  background: white;
+  border: 1px solid var(--tw-gray-30);
+}
+
+.cell {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.button {
+  margin-top: 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+}
+
+.first-action {
+  margin-right: 10px;
+}

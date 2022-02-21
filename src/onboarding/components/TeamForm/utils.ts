@@ -7,46 +7,68 @@ import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital
 import { RelationshipToBusiness } from 'app/types/businesses';
 
 import type { FormValues } from './types';
-export function getFormOptions(user?: Partial<User>): FormOptions<FormValues> {
+
+interface Props {
+  signupUser?: Partial<User>;
+  leader?: CreateOrUpdateBusinessOwnerRequest;
+}
+
+const stringToDate = (dateString: string) => {
+  return new Date(new Date(dateString).setMinutes(new Date(dateString).getMinutes() + new Date().getTimezoneOffset()));
+};
+
+export function getFormOptions({ signupUser, leader }: Props): FormOptions<FormValues> {
+  const rules = {
+    firstName: [required],
+    lastName: [required],
+    birthdate: [required],
+    ssn: [required],
+    email: [required, validEmail],
+    phone: [required, validPhone],
+    streetLine1: [required],
+    locality: [required],
+    region: [required],
+    postalCode: [required, validZipCode],
+  };
+
   const relationshipToBusiness = [];
-  if (user?.relationshipToBusiness?.owner) {
+  if (signupUser?.relationshipToBusiness?.owner) {
     relationshipToBusiness.push(RelationshipToBusiness.OWNER);
   }
-  if (user?.relationshipToBusiness?.director) {
+  if (signupUser?.relationshipToBusiness?.director) {
     relationshipToBusiness.push(RelationshipToBusiness.DIRECTOR);
   }
-  if (user?.relationshipToBusiness?.executive) {
+  if (signupUser?.relationshipToBusiness?.executive) {
     relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
   }
+  const defaultValues = {
+    firstName: signupUser?.firstName || '',
+    lastName: signupUser?.lastName || '',
+    birthdate: undefined,
+    ssn: '',
+    email: signupUser?.email || '',
+    phone: signupUser?.phone || '',
+    relationshipToBusiness,
+    percentageOwnership: 0,
+    title: '',
+    streetLine1: '',
+    streetLine2: '',
+    locality: '',
+    region: '',
+    postalCode: '',
+  };
+  if (!leader) return { defaultValues, rules };
+
+  const { address, dateOfBirth, taxIdentificationNumber, ...rest } = leader;
   return {
     defaultValues: {
-      firstName: user?.firstName || '',
-      lastName: user?.lastName || '',
-      birthdate: undefined,
-      ssn: '',
-      email: user?.email || '',
-      phone: user?.phone || '',
-      streetLine1: '',
-      streetLine2: '',
-      locality: '',
-      region: '',
-      postalCode: '',
-      relationshipToBusiness,
-      percentageOwnership: 0,
-      title: '',
+      ...defaultValues,
+      ssn: taxIdentificationNumber,
+      birthdate: stringToDate(dateOfBirth),
+      ...address,
+      ...rest,
     },
-    rules: {
-      firstName: [required],
-      lastName: [required],
-      birthdate: [required],
-      ssn: [required],
-      email: [required, validEmail],
-      phone: [required, validPhone],
-      streetLine1: [required],
-      locality: [required],
-      region: [required],
-      postalCode: [required, validZipCode],
-    },
+    rules,
   };
 }
 

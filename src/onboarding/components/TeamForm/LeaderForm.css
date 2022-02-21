@@ -8,11 +8,10 @@
   }
 }
 
-.input-help {
-  margin-top: 3px;
-  color: var(--tw-gray-60);
-  font-size: 11px;
-  line-height: 1.3;
+.actions {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .tip-title {

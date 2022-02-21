@@ -6,21 +6,30 @@
 
 .item {
   display: flex;
-  padding: var(--pd-16) var(--pd-32);
+  padding: var(--pd-16) var(--pd-32) var(--pd-16) var(--pd-8);
   align-items: center;
-  color: var(--tw-gray-60);
   font-family: var(--font-header);
   font-size: var(--text-16);
   font-weight: var(--font-500);
   border-right: 4px solid transparent;
 }
 
-.active {
-  background: var(--tw-gray-20);
-  border-right-color: var(--tw-black);
+.icon {
+  width: 24px;
+  margin-right: 8px;
 
-  &.item {
-    color: var(--tw-black);
+  & * {
+    color: var(--tw-light);
+  }
+}
+
+.active {
+  background: var(--tw-medium);
+  border-right-color: var(--tw-light);
+
+  & > *:first-child,
+  & ~ * > *:first-child {
+    opacity: 0;
   }
 }
 
@@ -29,4 +38,5 @@
   font-family: var(--font-header);
   font-weight: var(--font-700);
   line-height: var(--line-28);
+  font-variant-numeric: tabular-nums;
 }

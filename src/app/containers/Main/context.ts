@@ -11,7 +11,7 @@ interface InitContext {
 
 interface ProvenContext extends InitContext {
   owner: Accessor<Readonly<Required<User>>>;
-  business: Accessor<Readonly<Business>>;
+  business: Accessor<Readonly<Required<Business>>>;
 }
 
 export const BusinessContext = createContext<Readonly<InitContext>>();

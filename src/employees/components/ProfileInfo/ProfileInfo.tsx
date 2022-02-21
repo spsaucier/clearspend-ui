@@ -1,3 +1,5 @@
+import { Show } from 'solid-js/web';
+
 import { formatPhone } from '_common/formatters/phone';
 import { formatAddress } from '_common/formatters/address';
 import { DataRow } from 'app/components/DataRow';
@@ -18,9 +20,11 @@ export function ProfileInfo(props: Readonly<ProfileInfoProps>) {
       <DataRow icon="user">{formatName(props.data)}</DataRow>
       <DataRow icon="email">{props.data.email}</DataRow>
       <DataRow icon="phone">{formatPhone(props.data.phone)}</DataRow>
-      <DataRow icon="pin" contentClass={css.address}>
-        {formatAddress(props.data.address)}
-      </DataRow>
+      <Show when={props.data.address.streetLine1}>
+        <DataRow icon="pin" contentClass={css.address}>
+          {formatAddress(props.data.address)}
+        </DataRow>
+      </Show>
     </div>
   );
 }

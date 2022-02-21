@@ -7,7 +7,7 @@ import { useGroupContext } from './context';
 import css from './Radio.css';
 
 export interface RadioProps {
-  value: string;
+  value: string | boolean;
   class?: string;
   disabled?: boolean;
   children?: JSXElement;

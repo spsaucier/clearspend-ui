@@ -1,6 +1,8 @@
-import { mergeProps, For } from 'solid-js';
+import { mergeProps, For, Show } from 'solid-js';
 
 import { OnboardingStep } from 'app/types/businesses';
+
+import { Icon } from '../../../_common/components/Icon/Icon';
 
 import css from './SideSteps.css';
 
@@ -24,6 +26,11 @@ export function SideSteps(props: Readonly<SideStepsProps>) {
       <For each={STEPS}>
         {(step, idx) => (
           <li class={css.item} classList={{ [css.active!]: step.step.includes(merged.step) }}>
+            <div class={css.icon}>
+              <Show when={props.step !== OnboardingStep.BUSINESS}>
+                <Icon name="confirm" />
+              </Show>
+            </div>
             <span class={css.step}>0{idx() + 1}</span>
             {step.title}
           </li>

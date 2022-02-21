@@ -1,4 +1,5 @@
 import { For } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -77,7 +78,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               error={Boolean(errors().description)}
               onChange={handlers.description}
             />
-            <div style={{ 'font-size': `12px` }}>Briefly describe your business in 50 words or less.</div>
+            <div class={css.inputHelp}>
+              <Text message="Briefly describe your business in 50 words or less." />
+            </div>
           </FormItem>
           <FormItem label={'Merchant category'}>
             <Select
@@ -90,17 +93,27 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             >
               <For each={BUSINESS_MCC}>{(mcc) => <Option value={`${mcc.value}`}>{mcc.name}</Option>}</For>
             </Select>
-            <div style={{ 'font-size': `12px` }}>
-              Select the merchant category code that best describes your business.
+            <div class={css.inputHelp}>
+              <Text message="Select the merchant category code that best describes your business." />
             </div>
           </FormItem>
         </div>
       </Section>
-      <Section title="Business address" class={css.section}>
+      <Section
+        title="Business address"
+        class={css.section}
+        description="Please enter the address for your company's main office or headquarters. PO Boxes and virtual addresses are not allowed. This location will be used as the billing address for all cards issued to your employees."
+      >
         <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
-          Next
+          <Text message="Next" />
         </Button>
+        <h3 class={css.tipTitle}>
+          <Text message="Need to step away?" />
+        </h3>
+        <p class={css.tipText}>
+          <Text message="No worries! We're saving your progress as you go. Easily log back in and start where you left off at another time." />
+        </p>
       </Section>
     </Form>
   );

@@ -3,12 +3,12 @@ import { onMount } from 'solid-js';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { validPhone } from '_common/components/Form/rules/patterns';
 import { InputPhone } from '_common/components/InputPhone';
-import { Button } from '_common/components/Button';
 import { cleanPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
+import { FlatButton } from '../Button/FlatButton';
 
 interface FormValues {
   phone: string;
@@ -37,8 +37,11 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
 
   return (
     <div>
-      <Header>What is your mobile phone number?</Header>
-      <Description>Your phone number will only be used for security.</Description>
+      <Header>Where should we send a text to verify your mobile phone number?</Header>
+      <Description>
+        We promise your phone number will only be used for security and verification purposes and definitely not to call
+        you when we get lonely
+      </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Enter mobile phone number" error={errors().phone}>
           <InputPhone
@@ -47,11 +50,12 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
             value={values().phone}
             error={Boolean(errors().phone)}
             onChange={handlers.phone}
+            darkMode={true}
           />
         </FormItem>
-        <Button wide type="primary" htmlType="submit" loading={loading()}>
+        <FlatButton type="primary" htmlType="submit" loading={loading()}>
           Next
-        </Button>
+        </FlatButton>
       </Form>
     </div>
   );

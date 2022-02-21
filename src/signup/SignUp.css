@@ -1,11 +1,16 @@
 .root {
   min-height: 100vh;
-  padding: var(--pd-48) var(--pd-24);
-  background: var(--tw-gray-10);
+  padding: var(--pd-48) 6vw;
+  color: var(--tw-white);
+  background: var(--tw-dark);
 
   @media (--bp-large) {
     padding: var(--pd-48);
   }
+}
+
+.content form > div {
+  max-width: 432px;
 }
 
 .header {
@@ -18,6 +23,30 @@
 
 .content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
+}
+
+.second-btn {
+  margin-right: var(--pd-24);
+  background-color: var(--tw-gray-20);
+  border-radius: 4px;
+}
+
+/* todo: move */
+.radio-label {
+  font-size: var(--text-14);
+  line-height: var(--line-22);
+}
+
+.radio-extra {
+  display: flex;
+  margin-top: var(--pd-12);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.radio-extra svg {
+  width: 60px;
+  margin-right: var(--pd-12);
 }

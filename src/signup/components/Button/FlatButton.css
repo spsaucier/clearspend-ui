@@ -1,0 +1,11 @@
+.root {
+  background-color: var(--tw-green-65);
+  border-radius: 4px;
+
+  &:disabled,
+  &.disabled {
+    color: var(--tw-black);
+    background: var(--tw-gray-60);
+    cursor: not-allowed;
+  }
+}

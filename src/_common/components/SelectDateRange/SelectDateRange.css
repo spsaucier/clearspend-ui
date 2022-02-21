@@ -22,7 +22,7 @@
 }
 
 .error:not(.disabled) {
-  border-color: var(--tw-red-70);
+  border-color: var(--tw-red-60);
 }
 
 .disabled {

@@ -10,6 +10,10 @@
   --tw-gray-15: #f5f5f5;
   --tw-gray-10: #fbfbfa;
   --tw-white: #fff;
+  --tw-dark: #02302f;
+  --tw-medium: #1a4747;
+  --tw-light: #44f075;
+  --tw-sand: #f3f2ef;
   --tw-accent-100: #234941;
   --tw-accent-80: #49bb69;
   --tw-accent-70: #5bea83;
@@ -19,6 +23,7 @@
   --tw-accent-10: #defbe6;
   --tw-green-80: #047857;
   --tw-green-70: #059669;
+  --tw-green-65: #43fa76;
   --tw-green-60: #10b981;
   --tw-green-30: #44b96d;
   --tw-green-25: #b4f7b9;
@@ -54,6 +59,7 @@
   --font-header: 'Telegraf';
 
   /* FONT WEIGHT: */
+  --font-300: 300;
   --font-400: 400;
   --font-700: 700;
 
@@ -66,6 +72,7 @@
   --text-24: 24px;
   --text-28: 28px;
   --text-32: 32px;
+  --text-46: 46px;
 
   /* LINE HEIGHT: */
   --line-16: 16px;
@@ -75,6 +82,7 @@
   --line-32: 32px;
   --line-36: 36px;
   --line-40: 40px;
+  --line-60: 60px;
 
   /* RADIUS */
   --radius-2: 2px;

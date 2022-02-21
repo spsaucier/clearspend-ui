@@ -110,9 +110,14 @@ export function Select(props: Readonly<SelectProps>) {
       position="bottom-left"
       content={props.popupRender ? props.popupRender(renderList()) : renderList()}
     >
-      <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>
+      <div
+        class={join(css.root, props.class, props.darkMode && css.dark)}
+        data-open={open()}
+        data-view={open() || !selected() ? 'input' : ''}
+      >
         <Input
           ref={input}
+          darkMode={props.darkMode}
           name={props.name}
           value={selected()}
           error={props.error}

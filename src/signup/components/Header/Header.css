@@ -1,8 +1,9 @@
 .root {
+  max-width: 625px;
   margin: 0 0 var(--pd-16);
   font-family: var(--font-header);
-  font-size: var(--text-28);
-  font-weight: var(--font-700);
-  line-height: var(--line-36);
+  font-size: var(--text-46);
+  font-weight: var(--font-300);
+  line-height: var(--line-60);
   letter-spacing: var(--ls-small);
 }

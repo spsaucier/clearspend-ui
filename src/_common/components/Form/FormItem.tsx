@@ -13,11 +13,12 @@ export interface FormItemProps {
   error?: JSX.Element;
   class?: string;
   children: JSX.Element;
+  darkMode?: boolean;
 }
 
 export function FormItem(props: Readonly<FormItemProps>) {
   return (
-    <div class={join(css.root, props.class)}>
+    <div class={join(css.root, props.class, props.darkMode && css.dark)}>
       <ConditionalWrapper
         condition={!!props.label && !props.multiple}
         wrapper={(children) => <label>{children}</label>}
@@ -29,7 +30,9 @@ export function FormItem(props: Readonly<FormItemProps>) {
             <Match when={props.error}>
               <div class={css.error}>{props.error}</div>
             </Match>
-            <Match when={props.extra}>{props.extra}</Match>
+            <Match when={props.extra}>
+              <span class={css.extra}>{props.extra}</span>
+            </Match>
           </Switch>
         </div>
       </ConditionalWrapper>

@@ -1,152 +1,146 @@
-import { Section } from 'app/components/Section';
+import { Text } from 'solid-i18n';
+import { Show, createSignal, createEffect, createMemo } from 'solid-js';
+import { nanoid } from 'nanoid';
+
 import { useMessages } from 'app/containers/Messages/context';
-import { Form, FormItem, createForm } from '_common/components/Form';
-import { Input } from '_common/components/Input';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
-import { InputPhone } from '_common/components/InputPhone';
-import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
-import { formatSSN } from '_common/formatters/ssn';
-import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
-import { AddressFormItems } from 'employees/components/AddressFormItems';
-import { InputPercentage } from '_common/components/InputPercentage';
-import { RelationshipToBusiness } from 'app/types/businesses';
-import { CheckboxGroup, Checkbox } from '_common/components/Checkbox';
+import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import { Radio, RadioGroup } from '_common/components/Radio';
+import { storage } from '_common/api/storage';
 
-import type { ExceptionData } from '../../types';
+import { LeadershipTable } from '../LeadershipTable';
 
-import { getFormOptions, convertFormData } from './utils';
-import type { FormValues } from './types';
+import { CurrentUserForm } from './CurrentUserForm';
+import { AddEditLeaderForm } from './AddEditLeaderForm';
 
 import css from './TeamForm.css';
 
 interface TeamFormProps {
-  onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
+  onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) => Promise<unknown>;
   signupUser: User;
+  setTitle: (title: string) => void;
+  business: Business | null;
 }
+
+const hasOwner = (l: CreateOrUpdateBusinessOwnerRequest) => !!l.relationshipOwner;
+// const hasExecutive = (l: CreateOrUpdateBusinessOwnerRequest) => !!l.relationshipExecutive;
+
+export const ONBOARDING_LEADERS_KEY = 'ONBOARDING_LEADERS_KEY';
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
-  const isOwner = props.signupUser.relationshipToBusiness?.owner;
-
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
-    // NB: do not auto-populate name on additional owner forms
-    getFormOptions(isOwner ? props.signupUser : {}),
+  const [leaders, setLeaders] = createSignal<CreateOrUpdateBusinessOwnerRequest[]>(
+    storage.get<CreateOrUpdateBusinessOwnerRequest[]>(ONBOARDING_LEADERS_KEY, []),
   );
+  const [moreOwners, setMoreOwners] = createSignal('1');
+  const [editingId, setEditingId] = createSignal('');
 
-  const onSubmit = (data: Readonly<FormValues>) => {
-    if (!loading()) {
-      next(convertFormData(data)).catch((e: ExceptionData) => {
-        messages.error({ title: 'Something went wrong.', message: e.data.message });
-      });
-    }
+  const onAddClick = () => setEditingId(nanoid());
+  const onDeleteClick = (id: string) => setLeaders((oldVal) => oldVal.filter((o) => o.id !== id));
+  const onEditClick = setEditingId;
+
+  const complete = createMemo(() => {
+    return leaders().length && !moreOwners() && leaders().some(hasOwner);
+    // leaders().some(hasExecutive);
+  });
+
+  const submitLeaders = () => {
+    next(leaders()).catch(() => {
+      messages.error({ title: 'Failed to save leaders' });
+    });
   };
 
+  createEffect(() => {
+    if (!leaders().length) {
+      props.setTitle(
+        props.signupUser.relationshipToBusiness?.owner
+          ? `As an owner of ${props.business?.legalName}, we need to know a little more about you`
+          : `As a representative of ${props.business?.legalName}, we need to know a little more about you`,
+      );
+    } else if (editingId()) {
+      props.setTitle('To add a new owner or manager, we need the following details:');
+    } else {
+      props.setTitle(`Is there anyone else that owns or manages ${props.business?.legalName}?`);
+    }
+  });
+
   return (
-    <Form onSubmit={wrapSubmit(onSubmit)}>
-      <Section
-        title="Principal owner"
-        description="Provide the details for the principal owner of your business. You can add multiple owners."
-        class={css.section}
+    <>
+      <Show
+        when={leaders().length}
+        fallback={
+          <CurrentUserForm
+            signupUser={props.signupUser}
+            onNext={(leader: CreateOrUpdateBusinessOwnerRequest) =>
+              new Promise((resolve) => {
+                const leaderWithId = { id: nanoid(), ...leader };
+                setLeaders([leaderWithId]);
+                storage.set(ONBOARDING_LEADERS_KEY, [leaderWithId]);
+                messages.success({ title: `Leader added successfully` });
+                resolve(leaderWithId);
+              })
+            }
+          />
+        }
       >
-        <div class={css.wrapper}>
-          <FormItem label="First name" error={errors().firstName}>
-            <Input
-              name="first-name"
-              value={values().firstName}
-              error={Boolean(errors().firstName)}
-              onChange={handlers.firstName}
-              disabled={isOwner}
+        <Show
+          when={!editingId()}
+          fallback={
+            <AddEditLeaderForm
+              leader={leaders().find((l) => l.id === editingId())}
+              isSignupUser={!!leaders().find((l) => l.id === editingId())}
+              onNext={(leader: CreateOrUpdateBusinessOwnerRequest) =>
+                new Promise((resolve) => {
+                  const existingLeader = leaders().find((l) => l.id === editingId());
+                  if (existingLeader) {
+                    setLeaders((oldLeaders) => [...oldLeaders.filter((l) => l.id !== existingLeader.id), leader]);
+                  } else {
+                    setLeaders((oldLeaders) => [...oldLeaders, leader]);
+                  }
+                  setTimeout(() => storage.set(ONBOARDING_LEADERS_KEY, leaders()));
+                  setEditingId('');
+                  messages.success({ title: `Leader ${existingLeader ? 'edited' : 'added'} successfully` });
+                  resolve(leader);
+                })
+              }
             />
-          </FormItem>
-          <FormItem label="Last name" error={errors().lastName}>
-            <Input
-              name="last-name"
-              value={values().lastName}
-              error={Boolean(errors().lastName)}
-              onChange={handlers.lastName}
-              disabled={isOwner}
-            />
-          </FormItem>
-          <FormItem label="">
-            <CheckboxGroup
-              name="business-structure"
-              value={values().relationshipToBusiness as string[]}
-              onChange={(value: string[]) => handlers.relationshipToBusiness(value as RelationshipToBusiness[])}
+          }
+        >
+          <LeadershipTable
+            currentUserEmail={props.signupUser.email}
+            leaders={leaders()}
+            onAddClick={onAddClick}
+            onDeleteClick={onDeleteClick}
+            onEditClick={onEditClick}
+          />
+          <div class={css.field}>
+            <Text message="Is there anyone else who owns 25% or more of the company?" />
+            <RadioGroup name="moreOwners" onChange={(v) => setMoreOwners(v as string)}>
+              <Radio value="1">
+                <Text message="Yes" />
+              </Radio>
+              <Radio value="">
+                <Text message="No" />
+              </Radio>
+            </RadioGroup>
+          </div>
+          <div>
+            <Button
+              wide={media.small}
+              type="primary"
+              disabled={!complete() || loading()}
+              loading={loading()}
+              onClick={submitLeaders}
             >
-              <Checkbox value={RelationshipToBusiness.OWNER} disabled={isOwner}>
-                Owner
-              </Checkbox>
-              <Checkbox value={RelationshipToBusiness.EXECUTIVE} disabled={isOwner}>
-                Executive
-              </Checkbox>
-              <Checkbox value={RelationshipToBusiness.DIRECTOR} disabled={isOwner}>
-                Director
-              </Checkbox>
-            </CheckboxGroup>
-          </FormItem>
-          <FormItem label="Percentage ownership" error={errors().percentageOwnership}>
-            <InputPercentage
-              name="percentage-ownership"
-              value={values().percentageOwnership}
-              error={Boolean(errors().percentageOwnership)}
-              onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
-            />
-          </FormItem>
-          <FormItem label="Title" error={errors().title}>
-            <Input name="title" value={values().title} error={Boolean(errors().title)} onChange={handlers.title} />
-          </FormItem>
-          <FormItem label="Date of birth" error={errors().birthdate}>
-            <SelectDateOfBirth
-              name="birthdate"
-              value={values().birthdate}
-              error={Boolean(errors().birthdate)}
-              onChange={handlers.birthdate}
-            />
-          </FormItem>
-          <FormItem label="Social security number" error={errors().ssn}>
-            <Input
-              name="ssn"
-              value={values().ssn}
-              maxLength={9}
-              error={Boolean(errors().ssn)}
-              onChange={handlers.ssn}
-              formatter={formatSSN}
-            />
-          </FormItem>
-          <FormItem label="Email" error={errors().email}>
-            <Input
-              name="email"
-              type="email"
-              value={values().email}
-              error={Boolean(errors().email)}
-              onChange={handlers.email}
-              disabled={isOwner}
-            />
-          </FormItem>
-          <FormItem label="Phone" error={errors().phone}>
-            <InputPhone
-              name="phone"
-              value={values().phone}
-              error={Boolean(errors().phone)}
-              onChange={handlers.phone}
-              disabled={isOwner}
-            />
-          </FormItem>
-          <AddressFormItems values={values} errors={errors()} handlers={handlers} />
-        </div>
-        <div class={css.actions}>
-          <Button size="sm" icon="add" type="primary" disabled view="ghost" class={css.add}>
-            Add another owner
-          </Button>
-          <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
-            Next
-          </Button>
-        </div>
-      </Section>
-    </Form>
+              <Text message="Next" />
+            </Button>
+          </div>
+        </Show>
+      </Show>
+    </>
   );
 }

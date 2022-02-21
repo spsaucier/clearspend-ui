@@ -23,7 +23,13 @@ interface BankAccountsProps {
 
 export function BankAccounts(props: Readonly<BankAccountsProps>) {
   return (
-    <RadioGroup empty name="account" value={props.value} class={css.root} onChange={props.onChange}>
+    <RadioGroup
+      empty
+      name="account"
+      value={props.value}
+      class={css.root}
+      onChange={(value) => props.onChange?.(value as string)}
+    >
       <For each={props.accounts}>
         {(item) => (
           <Radio value={isBankAccount(item) ? item.businessBankAccountId : item.allocationId} class={css.item}>

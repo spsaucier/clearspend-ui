@@ -15,6 +15,7 @@ export interface InputCodeProps {
   disabled?: boolean;
   class?: string;
   onChange: (value: string) => void;
+  darkMode?: boolean;
 }
 
 export function InputCode(props: Readonly<InputCodeProps>) {
@@ -70,6 +71,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
       <Index each={times(props.codeLength)}>
         {(_: unknown, idx: number) => (
           <Input
+            darkMode={props.darkMode}
             ref={setRef(idx)}
             value={(props.value || '')[idx] || ''}
             maxLength={1}

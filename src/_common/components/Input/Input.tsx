@@ -28,6 +28,7 @@ export interface InputProps {
   onPaste?: (event: ClipboardEvent) => void;
   onFocusIn?: (event: FocusEvent) => void;
   onFocusOut?: (event: FocusEvent) => void;
+  darkMode?: boolean;
 }
 
 export function Input(props: Readonly<InputProps>) {
@@ -57,7 +58,7 @@ export function Input(props: Readonly<InputProps>) {
 
   return (
     <div
-      class={join(css.root, merged.class)}
+      class={join(css.root, merged.class, props.darkMode && css.dark)}
       classList={{ [css.error!]: merged.error, [css.disabled!]: merged.disabled }}
     >
       {merged.prefix && <div class={css.prefix}>{merged.prefix}</div>}

@@ -19,6 +19,8 @@ interface EmailFormProps {
   initialEmailValue?: string;
 }
 
+// TODO: DELETE THIS FILE
+
 export function EmailForm(props: Readonly<EmailFormProps>) {
   let input!: HTMLInputElement;
   onMount(() => input.focus());

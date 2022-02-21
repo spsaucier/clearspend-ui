@@ -25,6 +25,7 @@ export interface SelectProps {
   changeOnSearch?: boolean;
   loading?: boolean;
   iconName?: keyof typeof IconName;
+  darkMode?: boolean;
 }
 
 export interface SelectContextProps {
