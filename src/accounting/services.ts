@@ -1,4 +1,8 @@
-import type { CodatBankAccountResponse } from 'app/types/creditCard';
+import type {
+  CodatBankAccountResponse,
+  CodatCreateCreditCardRequest,
+  CodatCreateCreditCardResponse,
+} from 'app/types/creditCard';
 import { service } from 'app/utils/service';
 
 export async function getCompanyConnection(): Promise<boolean> {
@@ -11,4 +15,8 @@ export async function syncTransaction(transactionId: string) {
 
 export async function getCodatCreditCards() {
   return (await service.get<Readonly<CodatBankAccountResponse>>(`/codat/bank-accounts`)).data;
+}
+
+export async function postCodatCreditCard(params: Readonly<CodatCreateCreditCardRequest>) {
+  return (await service.post<Readonly<CodatCreateCreditCardResponse>>(`/codat/bank-accounts`, params)).data;
 }

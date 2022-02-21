@@ -1,7 +1,15 @@
 .root {
   display: flex;
+  height: 100%;
   flex-direction: column;
+  justify-content: space-between;
   background-color: var(--tw-white);
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .add-card-form-title {
@@ -32,4 +40,38 @@
   display: flex;
   padding: 0 30px 0 0;
   flex-direction: column;
+}
+
+.create-new-card-container {
+  display: flex;
+  margin: 0;
+  align-items: center;
+  color: var(--tw-black);
+  font: inherit;
+  vertical-align: middle;
+  background: transparent;
+  border-bottom: 1px solid var(--tw-gray-30);
+  cursor: default;
+}
+
+.add-card-icon {
+  margin: 4px;
+}
+
+.edit-button {
+  margin-top: var(--pd-24);
+}
+
+.next-button {
+  margin: 8px;
+  background: var(--tw-accent-80);
+}
+
+.footer {
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: end;
+  background-color: var(--tw-gray-10);
+  border-top: 2px solid var(--tw-gray-70);
 }
