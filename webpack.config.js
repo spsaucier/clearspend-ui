@@ -9,6 +9,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -160,7 +161,12 @@ module.exports = (env, options) => {
         include: 'initial',
         fileWhitelist: [/neue-400\..+?\.woff2$/, /telegraf-700\..+?\.woff2$/],
       }),
-      new ForkTsCheckerWebpackPlugin({ eslint: { enabled: !isProd, files: './src/**/*.{ts,tsx}' } }),
+      new ESLintPlugin({
+        files: './src/**/*.{ts,tsx}',
+        failOnError: isProd,
+        failOnWarning: isProd,
+      }),
+      new ForkTsCheckerWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash:8].css',
         experimentalUseImportModule: true,
