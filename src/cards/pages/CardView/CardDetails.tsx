@@ -11,6 +11,8 @@ import { Loading } from 'app/components/Loading';
 import { Card } from 'cards/components/Card';
 import type { CardType } from 'cards/types';
 
+import { useBusiness } from '../../../app/containers/Main/context';
+
 import css from './CardDetails.css';
 
 interface CardDetailsProps {
@@ -67,6 +69,7 @@ export default function CardDetails(props: CardDetailsProps) {
   const [loading, setLoading] = createSignal(true);
   const [stripe, setStripe] = createSignal<StripeCS | null>();
   const [cardKey, , , setCardKeyParams, getCardKey] = useResource(revealCardKey, undefined, false);
+  const { business } = useBusiness();
 
   createEffect(async () => {
     setStripe(
@@ -213,7 +216,7 @@ export default function CardDetails(props: CardDetailsProps) {
         <Show when={props.card()?.address?.streetLine1}>
           <div class={css.addressContainer}>
             <Text message="Billing Address" />
-            <AddressView address={props.card()?.address || {}} addressClass={css.address} />
+            <AddressView address={business().address || {}} addressClass={css.address} />
           </div>
         </Show>
       </div>
