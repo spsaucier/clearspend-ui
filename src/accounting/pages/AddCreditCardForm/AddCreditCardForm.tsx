@@ -1,9 +1,8 @@
 import { Text } from 'solid-i18n';
-import { createSignal, Show, useContext } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
-import { BusinessContext } from 'app/containers/Main/context';
 import { useResource } from '_common/utils/useResource';
 import { getCodatCreditCards, postCodatCreditCard } from 'accounting/services';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
@@ -13,8 +12,12 @@ import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
 
 import css from './AddCreditCardForm.css';
 
-export function AddCreditCardForm() {
-  const { business, signupUser, mutate } = useContext(BusinessContext)!;
+interface AddCreditCardFormProps {
+  onNext: () => void;
+}
+
+export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
+  const { onNext } = props;
 
   const [creditCards] = useResource(getCodatCreditCards);
 
@@ -25,7 +28,7 @@ export function AddCreditCardForm() {
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
 
   const onClick = async () => {
-    mutate([signupUser(), { ...business(), accountingSetupStep: 'COMPLETE' }]);
+    onNext();
   };
 
   const onClickNext = async () => {
@@ -37,7 +40,7 @@ export function AddCreditCardForm() {
       institution: 'ClearSpend',
     });
 
-    mutate([signupUser(), { ...business(), accountingSetupStep: 'COMPLETE' }]);
+    onNext();
   };
 
   return (

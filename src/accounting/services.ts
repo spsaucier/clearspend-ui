@@ -5,6 +5,8 @@ import type {
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
 
+import type { UpdateBusinessAccountingStepRequest } from './types';
+
 export async function getCompanyConnection(): Promise<boolean> {
   return (await service.get<Readonly<boolean>>(`/codat/connection-status`)).data;
 }
@@ -19,4 +21,9 @@ export async function getCodatCreditCards() {
 
 export async function postCodatCreditCard(params: Readonly<CodatCreateCreditCardRequest>) {
   return (await service.post<Readonly<CodatCreateCreditCardResponse>>(`/codat/bank-accounts`, params)).data;
+}
+
+export async function postAccountingStepToBusiness(params: Readonly<UpdateBusinessAccountingStepRequest>) {
+  return (await service.post<Readonly<UpdateBusinessAccountingStepRequest>>(`/businesses/accounting-step`, params))
+    .data;
 }
