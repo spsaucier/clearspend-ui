@@ -13,7 +13,7 @@ import { getCompanyConnection, postAccountingStepToBusiness } from './services';
 import { AddCreditCardForm } from './pages/AddCreditCardForm';
 import { ChartOfAccounts } from './pages/ChartOfAccounts';
 
-export function Accounting() {
+export default function Accounting() {
   const { signupUser, business } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
   const [step, setStep] = createSignal<AccountSetupStep | undefined>(
