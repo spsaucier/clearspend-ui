@@ -1,0 +1,64 @@
+@value v-height: 36px;
+
+.root {
+  position: relative;
+}
+
+.input {
+  padding-right: var(--pd-24);
+  opacity: 0;
+
+  @nest .root[data-view='input'] & {
+    opacity: 1;
+  }
+}
+
+.value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: 100%;
+  padding: var(--pd-8) var(--pd-32) var(--pd-8) var(--pd-12);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  pointer-events: none;
+
+  @nest .root[data-view='input'] & {
+    visibility: hidden;
+  }
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--pd-8);
+  color: var(--tw-gray-60);
+  transition: transform 0.3s;
+  transform: translateY(-50%) rotate(0deg);
+  transform-origin: center;
+  will-change: auto;
+  pointer-events: none;
+
+  @nest .root[data-open='true'] & {
+    transform: translateY(-50%) rotate(180deg);
+  }
+}
+
+.popup {
+  width: 100%;
+  padding: 0;
+}
+
+.list {
+  display: block;
+  list-style: none;
+  width: 100%;
+  max-height: 288px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,8 +1,8 @@
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text, DateTime } from 'solid-i18n';
-import { createSignal, createMemo, batch, Show } from 'solid-js';
+import { createSignal, createMemo, batch, Show, For } from 'solid-js';
 
-import type { AccountActivityResponse } from 'generated/capital';
+import type { AccountActivityResponse, ExpenseCategory } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { DateFormat } from '_common/api/intl/types';
 import { Icon } from '_common/components/Icon';
@@ -21,8 +21,11 @@ import {
   linkReceiptToActivity,
   uploadReceiptForActivity,
   viewReceipt,
+  setActivityExpenseCategory,
 } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
+import { useExpenseCategories } from 'accounting/stores/expenseCategories';
+import { SelectExpenseCategory, SelectExpenseCategoryOption } from 'accounting/components/SelectExpenseCategory';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { formatMerchantType } from '../../utils/formatMerchantType';
@@ -53,6 +56,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
+  const expenseCategories = useExpenseCategories({ initValue: [] });
 
   let fileInput!: HTMLInputElement;
 
@@ -86,6 +90,23 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         });
       })
       .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
+  const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(transaction().expenseDetails);
+  const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
+
+  const onSaveExpenseCategory = (ec: ExpenseCategory | undefined) => {
+    saveExpenseCategory(props.transaction.accountActivityId!, ec?.iconRef!, notes() || '')
+      .then((data) => {
+        batch(() => {
+          props.onUpdate(data);
+          setExpenseCategory(ec);
+        });
+      })
+      .catch(() => {
+        setExpenseCategory(undefined);
         messages.error({ title: i18n.t('Something went wrong') });
       });
   };
@@ -141,7 +162,24 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </div>
       </div>
       <div class={css.scroll}>
+        <div class={css.expenseCategory}>
+          <div class={css.optionTitle}>
+            <Text message="Expense Category" />
+          </div>
+          <SelectExpenseCategory
+            value={expenseCategory()}
+            onChange={(ec) => onSaveExpenseCategory(ec)}
+            disabled={savingExpenseCategory()}
+          >
+            <For each={expenseCategories.data}>
+              {(item) => <SelectExpenseCategoryOption value={item}>{item.categoryName}</SelectExpenseCategoryOption>}
+            </For>
+          </SelectExpenseCategory>
+        </div>
         <div>
+          <div class={css.optionTitle}>
+            <Text message="Comments" />
+          </div>
           <Input
             prefix={<Icon name="file" size="sm" />}
             suffix={

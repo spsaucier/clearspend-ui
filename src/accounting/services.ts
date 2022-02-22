@@ -4,6 +4,7 @@ import type {
   CodatCreateCreditCardResponse,
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
+import type { ExpenseCategory } from 'generated/capital';
 
 import type { UpdateBusinessAccountingStepRequest } from './types';
 
@@ -26,4 +27,8 @@ export async function postCodatCreditCard(params: Readonly<CodatCreateCreditCard
 export async function postAccountingStepToBusiness(params: Readonly<UpdateBusinessAccountingStepRequest>) {
   return (await service.post<Readonly<UpdateBusinessAccountingStepRequest>>(`/businesses/accounting-step`, params))
     .data;
+}
+
+export async function getExpenseCategories() {
+  return (await service.get<readonly Readonly<ExpenseCategory>[]>('/expense-categories/list')).data;
 }

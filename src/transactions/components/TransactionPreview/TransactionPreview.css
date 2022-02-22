@@ -110,3 +110,13 @@
 .actions {
   padding: var(--pd-24);
 }
+
+.option-title {
+  margin-bottom: var(--pd-4);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
+
+.expense-category {
+  margin-bottom: var(--pd-12);
+}

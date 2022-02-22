@@ -645,7 +645,7 @@ export interface Allocation {
   childrenAllocationIds?: string[];
 }
 
-export interface CreateBusinessProspectRequest {
+export interface CreateOrUpdateBusinessProspectRequest {
   /**
    * Email address of the prospect
    * @pattern ^[^@]+@[^@.]+\.[^@]+$
@@ -669,7 +669,7 @@ export interface CreateBusinessProspectRequest {
    * The Business type
    * @example SINGLE_MEMBER_LLC
    */
-  businessType:
+  businessType?:
     | 'INDIVIDUAL'
     | 'SOLE_PROPRIETORSHIP'
     | 'SINGLE_MEMBER_LLC'
@@ -697,12 +697,6 @@ export interface CreateBusinessProspectRequest {
    * @example true
    */
   relationshipExecutive?: boolean;
-
-  /**
-   * Relationship to business Director
-   * @example true
-   */
-  relationshipDirector?: boolean;
 }
 
 export interface CreateBusinessProspectResponse {
@@ -757,13 +751,11 @@ export interface ConvertBusinessProspectRequest {
    */
   businessPhone: string;
   address?: Address;
-
-  /** @format int32 */
-  mcc: number;
+  mcc: string;
 
   /**
-   * Phone number in e.164 format
-   * @example +1234567890
+   * Description
+   * @example Business small description
    */
   description: string;
 
@@ -807,6 +799,8 @@ export interface Business {
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  accountNumber?: string;
+  routingNumber?: string;
 }
 
 export interface ConvertBusinessProspectResponse {
@@ -909,7 +903,7 @@ export interface CreateBusinessOwnerResponse {
   businessOwnerId: string;
 
   /** Error message for any records that failed. Will be null if successful */
-  errorMessage?: string;
+  errorMessages?: string[];
 }
 
 export interface ResetPasswordRequest {
@@ -2415,7 +2409,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -2665,21 +2671,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -2783,6 +2777,36 @@ export interface BusinessProspectData {
    * @example true
    */
   relationshipDirector?: boolean;
+}
+
+export interface OwnersProvidedResponse {
+  business: Business;
+
+  /** Error message for any records that failed. Will be null if successful */
+  errorMessages?: string[];
+}
+
+export interface BusinessOwnerInfo {
+  /** @format uuid */
+  businessOwnerId?: string;
+
+  /** @format uuid */
+  businessId?: string;
+  firstName?: string;
+  lastName?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  taxIdentificationNumber?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  title?: string;
+  address?: Address;
+  email?: string;
+  phone?: string;
 }
 
 export interface BankAccount {

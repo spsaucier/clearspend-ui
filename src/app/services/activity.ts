@@ -35,6 +35,15 @@ export async function setActivityNote(activityId: string, notes: string) {
     .data;
 }
 
+export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: number, notes: string) {
+  return (
+    await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, {
+      notes,
+      iconRef: expenseCategoryId,
+    })
+  ).data;
+}
+
 export async function uploadReceiptForActivity(receiptData: FormData) {
   return (await service.post<Readonly<{ receiptId: string }>>('/images/receipts', receiptData)).data;
 }
