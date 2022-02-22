@@ -18,6 +18,12 @@ export async function linkBankAccounts(publicToken: string) {
   ).data;
 }
 
+export async function registerBankAccount(accountId: string) {
+  return (
+    await service.get<readonly Readonly<Required<BankAccount>>[]>(`/business-bank-accounts/${accountId}/register`)
+  ).data;
+}
+
 export async function getBankAccounts() {
   return (await service.get<readonly Readonly<Required<BankAccount>>[]>('/business-bank-accounts')).data;
 }
@@ -29,16 +35,6 @@ export async function bankTransaction(
 ) {
   return service.post<Required<CreateAdjustmentResponse>>(`/business-bank-accounts/${accountId}/transactions`, {
     bankAccountTransactType: type,
-    amount: {
-      currency: 'USD',
-      amount: amount,
-    },
-  });
-}
-
-export async function onboardingDeposit(accountId: string, amount: number) {
-  return service.post(`/business-bank-accounts/${accountId}/onboard`, {
-    bankAccountTransactType: 'DEPOSIT',
     amount: {
       currency: 'USD',
       amount: amount,

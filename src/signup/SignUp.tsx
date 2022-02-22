@@ -8,7 +8,7 @@ import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/o
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
-import type { CreateBusinessProspectRequest } from 'generated/capital';
+import type { BusinessProspectData } from 'generated/capital';
 import { Button } from '_common/components/Button';
 
 import { sendAnalyticsEvent } from '../app/utils/analytics';
@@ -124,7 +124,7 @@ export default function SignUp() {
       email,
       firstName: first,
       lastName: last,
-      businessType: businessType as CreateBusinessProspectRequest['businessType'],
+      businessType: businessType as BusinessProspectData['businessType'],
       relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
       relationshipRepresentative: true,
       relationshipDirector: relationshipToBusiness.includes(RelationshipToBusiness.DIRECTOR),

@@ -1,7 +1,7 @@
 import { service } from 'app/utils/service';
 import type { ManualReviewResponse } from 'onboarding/components/SoftFail/types';
 import type {
-  CreateBusinessProspectRequest,
+  BusinessProspectData,
   CreateBusinessProspectResponse,
   ValidateBusinessProspectIdentifierRequest,
   ConvertBusinessProspectRequest,
@@ -15,7 +15,7 @@ export type BusinessRelationships =
   | 'relationshipExecutive'
   | 'relationshipDirector';
 
-export async function signup(params: Readonly<CreateBusinessProspectRequest>) {
+export async function signup(params: Readonly<BusinessProspectData>) {
   return (await service.post<Readonly<CreateBusinessProspectResponse>>('/business-prospects', params)).data;
 }
 

@@ -44,7 +44,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBus
     employerIdentificationNumber: cleanEIN(ein),
     businessPhone: phone,
     address: { ...address, country: 'USA' },
-    mcc: parseInt(mcc, 10),
+    mcc,
     url,
     description,
   };

@@ -38,7 +38,7 @@ import {
   setBusinessInfo,
   setBusinessOwners,
 } from './services/onboarding';
-import { linkBankAccounts, getBankAccounts, onboardingDeposit } from './services/accounts';
+import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/TeamForm';
@@ -158,18 +158,19 @@ export default function Onboarding() {
 
   const onGotVerifyToken = async (token: string, accountName?: string) => {
     const bankAccounts = await linkBankAccounts(token);
-    batch(() => {
+    batch(async () => {
       const matchedAccounts = accountName
-        ? bankAccounts.filter((account) => account.name === accountName)
-        : bankAccounts;
+        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+        : bankAccounts.filter((account) => account.businessBankAccountId);
       setAccounts(matchedAccounts);
       storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
+      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
       setStep(OnboardingStep.TRANSFER_MONEY);
     });
   };
 
   const onDeposit = async (accountId: string, amount: number) => {
-    await onboardingDeposit(accountId, amount);
+    await bankTransaction('DEPOSIT', accountId, amount);
     await refetch();
     storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
     storage.set(ONBOARDING_LEADERS_KEY, []);
