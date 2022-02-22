@@ -1,4 +1,19 @@
-import type { UpdateAllocationRequest } from 'generated/capital';
+import type { UserData, UpdateAllocationRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
+
+export type AllocationPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['allocationPermissions']>;
+
+export enum AllocationRoles {
+  Admin = 'Admin',
+  Manager = 'Manager',
+  ViewOnly = 'View only',
+  Employee = 'Employee',
+}
+
+export interface AllocationUserRole {
+  inherited: boolean;
+  user: Readonly<UserData>;
+  role: AllocationRoles;
+}
 
 export enum LimitPeriod {
   DAILY = 'DAILY',

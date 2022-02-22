@@ -1,9 +1,10 @@
-import { createSignal, Match, onMount, Show, Switch, useContext } from 'solid-js';
+import { createSignal, Match, onMount, Show, Switch } from 'solid-js';
 import { Navigate } from 'solid-app-router';
 
-import { BusinessContext } from 'app/containers/Main/context';
 import { Loading } from 'app/components/Loading';
 import { AccountSetupStep } from 'app/types/businesses';
+
+import { useBusiness } from '../app/containers/Main/context';
 
 import { canSeeAccounting } from './utils/canSeeAccounting';
 import { AccountingTabs } from './pages/AccountingTabs';
@@ -13,10 +14,10 @@ import { AddCreditCardForm } from './pages/AddCreditCardForm';
 import { ChartOfAccounts } from './pages/ChartOfAccounts';
 
 export function Accounting() {
-  const { signupUser, business } = useContext(BusinessContext)!;
+  const { signupUser, business } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
   const [step, setStep] = createSignal<AccountSetupStep | undefined>(
-    business()?.accountingSetupStep as AccountSetupStep,
+    business().accountingSetupStep as AccountSetupStep,
   );
 
   onMount(async () => {

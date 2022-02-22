@@ -4,6 +4,7 @@ import { defineMessages } from 'solid-i18n';
 import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
 import { canSeeAccounting } from 'accounting/utils/canSeeAccounting';
+import { AllocationRoles } from 'allocations/types';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -43,21 +44,35 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
+  const { signupUser, permissions } = useBusiness();
+
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
   const itemClass = createMemo(() => (props.view === MenuView.mobile ? css.mobileItem : undefined));
-  const { signupUser } = useBusiness();
-  const canSeeMenuItem = (item: Accessor<MenuItemOptions>) =>
-    item().title !== TITLES.accounting || canSeeAccounting(signupUser());
 
-  const renderItem = (item: Accessor<MenuItemOptions>) =>
-    canSeeMenuItem(item) ? (
-      <MenuItem {...item()} expanded={expanded()} class={itemClass()} onClick={props.onItemClick} />
-    ) : null;
+  const mainItems = createMemo(() => {
+    const isAdmin = permissions().allocationRole === AllocationRoles.Admin;
+
+    return MAIN_ITEMS.filter((item) => {
+      switch (item.title) {
+        case TITLES.accounting:
+          return isAdmin && canSeeAccounting(signupUser());
+        case TITLES.employees:
+        case TITLES.company:
+          return isAdmin;
+        default:
+          return true;
+      }
+    });
+  });
+
+  const renderItem = (item: Accessor<MenuItemOptions>) => (
+    <MenuItem {...item()} expanded={expanded()} class={itemClass()} onClick={props.onItemClick} />
+  );
 
   return (
     <nav class={join(css.root, props.class)}>
       <div classList={{ [css.mainGrow!]: props.view !== MenuView.mobile }}>
-        <Index each={MAIN_ITEMS}>{renderItem}</Index>
+        <Index each={mainItems()}>{renderItem}</Index>
       </div>
       <div>
         <Index each={SECOND_ITEMS}>{renderItem}</Index>

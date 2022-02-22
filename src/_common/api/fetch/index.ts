@@ -12,7 +12,7 @@ function parse<T = unknown>(body: string, type: string | null): T {
 export function fetch<T = unknown>(
   method: FetchMethod,
   url: string,
-  params?: object | FormData,
+  params?: object | string | FormData,
   options: Readonly<Partial<FetchOptions>> = {},
 ): Promise<FetchResponse<T>> {
   return new Promise((resolve, reject) => {
@@ -20,7 +20,11 @@ export function fetch<T = unknown>(
       .fetch(url, {
         method,
         cache: 'no-cache',
-        body: params ? (params instanceof FormData ? params : JSON.stringify(params)) : null,
+        body: params
+          ? params instanceof FormData || typeof params === 'string'
+            ? params
+            : JSON.stringify(params)
+          : null,
         headers:
           // TODO: Extract
           params instanceof FormData ? options.headers : { 'Content-Type': 'application/json', ...options.headers },

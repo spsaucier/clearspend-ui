@@ -1,4 +1,4 @@
-import { useContext, createSignal, batch, Show, Switch, Match } from 'solid-js';
+import { createSignal, batch, Show, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 import { omit } from 'solid-create-form/lib/utils';
@@ -9,7 +9,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import { Section } from 'app/components/Section';
-import { BusinessContext } from 'app/containers/Main/context';
+import { useOnboardingBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { BusinessType, OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
@@ -52,7 +52,7 @@ export default function Onboarding() {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const { business, signupUser, refetch, mutate } = useContext(BusinessContext)!;
+  const { business, signupUser, refetch, mutate } = useOnboardingBusiness();
   const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: BusinessType }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
@@ -98,7 +98,7 @@ export default function Onboarding() {
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
     const resp = await setBusinessInfo(signupUser().userId!, data);
-    mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business]);
+    mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 

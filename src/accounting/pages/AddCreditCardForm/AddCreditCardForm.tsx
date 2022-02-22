@@ -32,6 +32,7 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
   };
 
   const onClickNext = async () => {
+    // FIXME: use await and/or catch error
     postCodatCreditCard({
       accountName: selectedCardName(),
       accountNumber: 'clearspend-credit',

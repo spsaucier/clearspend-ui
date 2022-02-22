@@ -59,11 +59,11 @@ async function get<T = unknown>(url: string, options?: Partial<FetchOptions>) {
   return wrapFetch(fetch<T>('GET', prefixUrl(url), undefined, options));
 }
 
-async function post<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
+async function post<T = unknown>(url: string, params?: object | string, options?: Partial<FetchOptions>) {
   return wrapFetch(fetch<T>('POST', prefixUrl(url), params, options));
 }
 
-async function patch<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
+async function patch<T = unknown>(url: string, params?: object | string, options?: Partial<FetchOptions>) {
   return wrapFetch(fetch<T>('PATCH', prefixUrl(url), params, options));
 }
 
