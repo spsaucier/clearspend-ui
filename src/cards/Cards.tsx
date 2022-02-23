@@ -16,6 +16,12 @@ export const DEFAULT_CARD_PARAMS: Readonly<SearchCardRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,
+    orderBy: [
+      {
+        item: 'activationDate',
+        direction: 'ASC',
+      },
+    ],
   },
 };
 

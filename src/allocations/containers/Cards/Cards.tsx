@@ -9,19 +9,13 @@ import { CardsData } from 'cards/components/CardsData';
 import { CardPreview } from 'cards/containers/CardPreview';
 import { searchCards } from 'cards/services';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
-import type { Allocation, SearchCardRequest } from 'generated/capital';
+import type { Allocation } from 'generated/capital';
+import { DEFAULT_CARD_PARAMS } from 'cards/Cards';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
 import { allocationWithID } from '../../utils/allocationWithID';
 
 import css from './Cards.css';
-
-const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
-};
 
 interface CardsProps {
   current: Readonly<Allocation>;
@@ -39,7 +33,7 @@ export function Cards(props: Readonly<CardsProps>) {
   );
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
-    ...DEFAULT_PARAMS,
+    ...DEFAULT_CARD_PARAMS,
     allocationId: props.current.allocationId,
   });
 
