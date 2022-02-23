@@ -1,34 +1,41 @@
-import { createMemo, Show } from 'solid-js';
-import { useI18n, Text } from 'solid-i18n';
+import { createMemo, createSignal, For, Show } from 'solid-js';
+import { Text, useI18n } from 'solid-i18n';
 
 import { useBool } from '_common/utils/useBool';
-import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
+import { createForm, Form, FormItem, hasErrors } from '_common/components/Form';
 import { Input } from '_common/components/Input';
+import { Option, Select } from '_common/components/Select';
 import { Drawer } from '_common/components/Drawer';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
+import { useBusiness } from 'app/containers/Main/context';
 import { PageActions } from 'app/components/Page';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
-import { SelectEmployee } from 'employees/components/SelectEmployee';
+import { NewEmployeeButton } from 'employees/components/SelectEmployee';
+import { formatName } from 'employees/utils/formatName';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
-  Amount,
   Allocation,
-  UserData,
+  Amount,
+  CreateAllocationRequest,
   CreateUserRequest,
   CreateUserResponse,
-  CreateAllocationRequest,
+  UserData,
+  UserRolesAndPermissionsRecord,
 } from 'generated/capital';
 import type { MccGroup } from 'transactions/types';
 
 import { AllocationSelect } from '../AllocationSelect';
+import { AllocationRole } from '../AllocationRole';
 import { SwitchPaymentTypes } from '../SwitchPaymentTypes';
 import { SwitchMccCategories } from '../SwitchMccCategories';
 import { SwitchLimits } from '../SwitchLimits';
 import { allocationWithID } from '../../utils/allocationWithID';
+import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
+import { AllocationRoles, AllocationUserRole } from '../../types';
 
-import { getFormOptions, convertFormData } from './utils';
+import { convertFormData, getFormOptions } from './utils';
 import type { FormValues } from './types';
 
 import css from './EditAllocationForm.css';
@@ -36,29 +43,58 @@ import css from './EditAllocationForm.css';
 interface EditAllocationFormProps {
   users: readonly Readonly<UserData>[];
   allocations: readonly Readonly<Allocation>[];
+  parentRoles: readonly Readonly<UserRolesAndPermissionsRecord>[];
   mccCategories: readonly Readonly<MccGroup>[];
+  onChangeParent: (allocationId?: string) => void;
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
-  onSave: (data: Readonly<CreateAllocationRequest>) => Promise<unknown>;
+  onSave: (data: Readonly<CreateAllocationRequest>, roles: AllocationUserRole[]) => Promise<unknown>;
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
+  const { signupUser } = useBusiness();
 
   const [loading, save] = wrapAction(props.onSave);
 
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(getFormOptions());
 
+  const [localRoles, setLocalRoles] = createSignal<AllocationUserRole[]>([]);
+
+  const onAddRole = (userId: string) => {
+    const user = props.users.find((item) => item.userId === userId);
+    if (user) setLocalRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.ViewOnly }]);
+  };
+
+  const onChangeRole = (userId: string, role: AllocationRoles) => {
+    setLocalRoles((prev) => prev.map((item) => ({ ...item, role: item.user.userId === userId ? role : item.role })));
+  };
+
+  const onRemoveRole = (userId: string) => {
+    setLocalRoles((prev) => prev.filter((item) => item.user.userId !== userId));
+  };
+
+  const onParentChange = (id: string) => {
+    handlers.parent(id);
+    props.onChangeParent(id);
+  };
+
   const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
     const resp = await props.onAddEmployee(data);
-    handlers.owner(resp.userId);
+    onAddRole(resp.userId);
     toggleEmployeeDrawer();
+  };
+
+  const onReset = () => {
+    reset();
+    props.onChangeParent();
+    setLocalRoles([]);
   };
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(values(), props.mccCategories)).catch(() => {
+    await save(convertFormData(signupUser().userId, values(), props.mccCategories), localRoles()).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
@@ -66,6 +102,10 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const maxAmount = createMemo(() => {
     const parent = props.allocations.find(allocationWithID(values().parent));
     return parent?.account.ledgerBalance || ({ currency: 'USD', amount: 0 } as Amount);
+  });
+
+  const roles = createMemo<AllocationUserRole[]>(() => {
+    return [...props.parentRoles.map((role) => getAllocationUserRole(role, true)), ...localRoles()];
   });
 
   return (
@@ -82,7 +122,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             value={values().parent}
             placeholder={String(i18n.t('Select allocation'))}
             error={Boolean(errors().parent)}
-            onChange={handlers.parent}
+            onChange={onParentChange}
           />
         </FormItem>
         <FormItem label={<Text message="Label" />} error={errors().name} class={css.field}>
@@ -125,15 +165,40 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           />
         }
       >
-        <FormItem label={<Text message="Allocation owner(s)" />} error={errors().owner} class={css.field}>
-          <SelectEmployee
-            value={values().owner}
-            error={Boolean(errors().owner)}
-            users={props.users}
-            onAddClick={toggleEmployeeDrawer}
-            onChange={handlers.owner}
-          />
+        <FormItem label={<Text message="Allocation owner(s)" />} class={css.field}>
+          <Select
+            name="employee"
+            placeholder={String(i18n.t('Search by employee name'))}
+            disabled={!values().parent}
+            popupRender={(list) => (
+              <>
+                {list}
+                <NewEmployeeButton onClick={toggleEmployeeDrawer} />
+              </>
+            )}
+            onChange={onAddRole}
+          >
+            <For each={props.users}>
+              {(item) => (
+                <Option value={item.userId!} disabled={roles().some((role) => role.user.userId === item.userId)}>
+                  {formatName(item)}
+                </Option>
+              )}
+            </For>
+          </Select>
         </FormItem>
+        <For each={roles()}>
+          {(role) => (
+            <AllocationRole
+              user={role.user}
+              role={role.role}
+              inherited={role.inherited}
+              class={css.field}
+              onChange={onChangeRole}
+              onDelete={onRemoveRole}
+            />
+          )}
+        </For>
       </Section>
       <Section
         title={<Text message="Default Card Controls" />}
@@ -171,7 +236,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>
       <Show when={isDirty()}>
-        <PageActions action={<Text message="Create Allocation" />} onCancel={reset} onSave={onSubmit} />
+        <PageActions action={<Text message="Create Allocation" />} onCancel={onReset} onSave={onSubmit} />
       </Show>
     </Form>
   );

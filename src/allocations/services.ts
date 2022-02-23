@@ -34,3 +34,11 @@ export async function getAllocationRoles(allocationId: string) {
 export async function addAllocationRole(allocationId: string, userId: string, role: AllocationRoles) {
   await service.post(`/user-allocation-roles/allocation/${allocationId}/user/${userId}`, role);
 }
+
+export async function updateAllocationRole(allocationId: string, userId: string, role: AllocationRoles) {
+  await service.put(`/user-allocation-roles/allocation/${allocationId}/user/${userId}`, role);
+}
+
+export async function removeAllocationRole(allocationId: string, userId: string) {
+  await service.remove(`/user-allocation-roles/allocation/${allocationId}/user/${userId}`);
+}

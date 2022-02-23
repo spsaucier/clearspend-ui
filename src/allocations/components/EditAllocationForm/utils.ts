@@ -15,7 +15,6 @@ export function getFormOptions(): FormOptions<FormValues> {
       name: '',
       parent: '',
       amount: '',
-      owner: '',
       categories: [],
       channels: [],
       purchasesLimits: { ...DEFAULT_LIMITS },
@@ -24,13 +23,13 @@ export function getFormOptions(): FormOptions<FormValues> {
       name: [required],
       parent: [required],
       amount: [required],
-      owner: [required],
       // TODO: add rules for limits
     },
   };
 }
 
 export function convertFormData(
+  ownerId: string,
   data: Readonly<FormValues>,
   categories: readonly Readonly<MccGroup>[],
 ): Readonly<CreateAllocationRequest> {
@@ -38,7 +37,7 @@ export function convertFormData(
     name: data.name,
     amount: { currency: 'USD', amount: parseAmount(data.amount) },
     parentAllocationId: data.parent,
-    ownerId: data.owner,
+    ownerId,
     ...convertFormLimits(data, categories),
   };
 }

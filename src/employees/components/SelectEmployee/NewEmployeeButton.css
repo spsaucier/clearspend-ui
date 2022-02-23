@@ -8,7 +8,7 @@
   vertical-align: middle;
   background: transparent;
   border: 0;
-  cursor: default;
+  cursor: pointer;
 
   &:hover {
     background: var(--tw-gray-10);

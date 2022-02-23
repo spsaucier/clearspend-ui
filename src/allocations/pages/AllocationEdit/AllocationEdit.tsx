@@ -2,6 +2,7 @@ import { Switch, Match } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
+import { useResource } from '_common/utils/useResource';
 import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
@@ -12,8 +13,9 @@ import { useUsersList } from 'employees/stores/usersList';
 import type { CreateAllocationRequest, CreateUserRequest } from 'generated/capital';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
-import { saveAllocation } from '../../services';
+import { saveAllocation, getAllocationRoles, addAllocationRole } from '../../services';
 import { useAllocations } from '../../stores/allocations';
+import type { AllocationUserRole } from '../../types';
 
 export default function AllocationEdit() {
   const i18n = useI18n();
@@ -25,6 +27,16 @@ export default function AllocationEdit() {
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
 
+  const [parentRoles, rolesStatus, , setRolesId, reloadRoles, mutateRoles] = useResource(
+    getAllocationRoles,
+    undefined,
+    false,
+  );
+
+  const onChangeParent = (allocationId?: string) => {
+    allocationId ? setRolesId(allocationId) : mutateRoles([], true);
+  };
+
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
     await users.reload();
@@ -35,10 +47,19 @@ export default function AllocationEdit() {
     return resp;
   };
 
-  const onSave = async (allocation: CreateAllocationRequest) => {
-    await saveAllocation(allocation);
-    messages.success({ title: i18n.t('Changes successfully saved.') });
-    navigate(location.state?.prev || '/allocations');
+  const onSave = async (allocation: CreateAllocationRequest, userRoles: AllocationUserRole[]) => {
+    const allocationId = await saveAllocation(allocation);
+    messages.success({ title: i18n.t('The new allocation has been successfully added.') });
+
+    try {
+      // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
+      await Promise.all(userRoles.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
+    } catch (error: unknown) {
+      messages.error({ title: i18n.t('Updating users permissions failed.') });
+    }
+
+    const prevRoute = location.state?.prev;
+    navigate(prevRoute && !prevRoute.match(/^\/allocations/) ? prevRoute : `/allocations/${allocationId}`);
   };
 
   return (
@@ -53,6 +74,9 @@ export default function AllocationEdit() {
         <Match when={users.error}>
           <LoadingError onReload={users.reload} />
         </Match>
+        <Match when={rolesStatus().error}>
+          <LoadingError onReload={reloadRoles} />
+        </Match>
         <Match when={allocations.loading || mcc.loading || (users.loading && !users.data?.length)}>
           <Loading />
         </Match>
@@ -61,6 +85,8 @@ export default function AllocationEdit() {
             users={users.data!}
             mccCategories={mcc.data!}
             allocations={allocations.data!}
+            parentRoles={parentRoles() || []}
+            onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
           />

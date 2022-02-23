@@ -180,3 +180,9 @@ a {
     text-decoration: underline;
   }
 }
+
+ul {
+  list-style-type: square;
+  margin: 0;
+  padding-inline-start: 20px;
+}

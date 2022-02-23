@@ -1,0 +1,43 @@
+@value v-icon-size: 32px;
+
+.root {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  grid-gap: var(--pd-12);
+  align-items: center;
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-16);
+  }
+}
+
+.select {
+  width: 180px;
+}
+
+.popup {
+  width: 312px;
+}
+
+.popup-title {
+  font-weight: var(--font-700);
+}
+
+.popup-content {
+  margin-top: var(--pd-4);
+}
+
+.icon {
+  display: flex;
+  width: v-icon-size;
+  height: v-icon-size;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-primary-content);
+}
+
+.remove {
+  width: v-icon-size;
+  height: v-icon-size;
+  color: var(--tw-primary-content);
+}

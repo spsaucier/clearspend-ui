@@ -14,6 +14,7 @@ export function useResource<T, P extends unknown>(
   initParams?: P,
   fetchOnMount: boolean = true,
 ) {
+  let skipUpdates = false;
   const [params, setParams] = createSignal<P>(cloneObject(initParams as P));
 
   const [state, setState] = createSignal<DataState<T | null>>({
@@ -34,8 +35,14 @@ export function useResource<T, P extends unknown>(
       });
   };
 
-  const mutate = (data: T | null) => {
+  const mutate = (data: T | null, reset?: boolean) => {
     setState((prev) => ({ ...prev, data: data }));
+
+    if (reset) {
+      skipUpdates = true;
+      setParams(() => cloneObject(initParams as P));
+      skipUpdates = false;
+    }
   };
 
   onMount(() => {
@@ -47,7 +54,7 @@ export function useResource<T, P extends unknown>(
     on(
       params,
       (input) => {
-        reload().catch(getNoop());
+        if (!skipUpdates) reload().catch(getNoop());
         return input;
       },
       { defer: true },

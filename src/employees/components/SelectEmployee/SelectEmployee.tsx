@@ -1,12 +1,11 @@
 import { For } from 'solid-js';
-import { useI18n, Text } from 'solid-i18n';
+import { useI18n } from 'solid-i18n';
 
 import { Select, Option } from '_common/components/Select';
-import { Icon } from '_common/components/Icon';
 import type { UserData } from 'generated/capital';
 import { formatName } from 'employees/utils/formatName';
 
-import css from './SelectEmployee.css';
+import { NewEmployeeButton } from './NewEmployeeButton';
 
 interface SelectEmployeeProps {
   value: string;
@@ -27,10 +26,7 @@ export function SelectEmployee(props: Readonly<SelectEmployeeProps>) {
       popupRender={(list) => (
         <>
           {list}
-          <button id="add-employee" class={css.button} onClick={props.onAddClick}>
-            <Icon name="add-circle-outline" size="sm" class={css.icon} />
-            <Text message="Add New Employee" />
-          </button>
+          <NewEmployeeButton onClick={props.onAddClick} />
         </>
       )}
       error={props.error}
