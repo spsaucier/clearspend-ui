@@ -1,5 +1,6 @@
 .wrapper {
   padding: 8px;
+  flex: 1;
   background: white;
   border: 1px solid var(--tw-gray-30);
 }

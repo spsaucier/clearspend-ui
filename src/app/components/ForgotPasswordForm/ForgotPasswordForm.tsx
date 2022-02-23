@@ -1,9 +1,10 @@
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
-import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
+import { FlatButton } from 'signup/components/Button/FlatButton';
 
+import css from '../LoginForm/LoginForm.css';
 import { useMessages } from '../../containers/Messages/context';
 
 interface FormValues {
@@ -40,9 +41,10 @@ export function ForgotPasswordForm(props: Readonly<ForgotPasswordFormProps>) {
   };
 
   return (
-    <Form onSubmit={wrapSubmit(onSubmit)}>
+    <Form onSubmit={wrapSubmit(onSubmit)} class={css.form}>
       <FormItem label="Your email" error={errors().email}>
         <Input
+          darkMode={true}
           name="email"
           type="email"
           value={values().email}
@@ -50,9 +52,9 @@ export function ForgotPasswordForm(props: Readonly<ForgotPasswordFormProps>) {
           onChange={handlers.email}
         />
       </FormItem>
-      <Button wide type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
+      <FlatButton wide type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
         Send Password Reset
-      </Button>
+      </FlatButton>
     </Form>
   );
 }

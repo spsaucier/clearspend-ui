@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { createSignal } from 'solid-js';
 
-import type { CreateOrUpdateBusinessOwnerRequest } from '../../../generated/capital';
-
-import { LeadershipTable } from './LeadershipTable';
+import { BusinessOwner, LeadershipTable } from './LeadershipTable';
 
 export default {
   title: 'Composite/Leadership Table',
@@ -38,14 +36,15 @@ const generateLeader = () =>
     relationshipRepresentative: Math.random() < 0.5,
     relationshipOwner: Math.random() < 0.5,
     percentageOwnership: Math.floor(Math.random() * 100),
-  } as CreateOrUpdateBusinessOwnerRequest);
+    businessOwnerId: randomString(30),
+  } as BusinessOwner);
 
 export const KeyboardAccessibility = () => {
-  const [leaders, setLeaders] = createSignal<CreateOrUpdateBusinessOwnerRequest[]>([]);
+  const [leaders, setLeaders] = createSignal<BusinessOwner[]>([]);
 
   // eslint-disable-next-line no-console
-  const onEditClick = (id: string) => console.log(leaders().find((l) => l.id === id));
-  const onDeleteClick = (id: string) => setLeaders((oldVal) => oldVal.filter((o) => o.id !== id));
+  const onEditClick = (id: string) => console.log(leaders().find((l) => l.businessOwnerId === id));
+  const onDeleteClick = (id: string) => setLeaders((oldVal) => oldVal.filter((o) => o.businessOwnerId !== id));
   const onAddClick = () => {
     setLeaders((oldVal) => [...oldVal, generateLeader()]);
   };

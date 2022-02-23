@@ -1,9 +1,6 @@
 import { Text } from 'solid-i18n';
 import { createEffect, onCleanup } from 'solid-js';
 
-import { Description } from 'signup/components/Description';
-import { Spin } from '_common/components/Spin';
-
 import { ReviewingImage } from '../ReviewingImage';
 
 import css from './Review.css';
@@ -28,17 +25,7 @@ export function Review(props: Readonly<ReviewDetails>) {
   return (
     <div class={css.content}>
       <ReviewingImage class={css.image} />
-      <div class={css.header}>We are reviewing documents.</div>
-      <Description>
-        <Text
-          message={
-            'Once we finish reviewing your documents, we will email ' +
-            props.ownerEmail +
-            ' with next steps for completing your application.'
-          }
-        />
-      </Description>
-      <Spin size={'large'} />
+      <Text message={`Hang tight, we’re reviewing your documents`} />
     </div>
   );
 }

@@ -97,7 +97,6 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
     relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
     relationshipDirector: relationshipToBusiness.includes(RelationshipToBusiness.DIRECTOR),
-    relationshipRepresentative: true,
     address: { ...address, country: 'USA' },
   };
 }

@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'solid-app-router';
 import { SignUp } from 'signup';
 import { sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
 import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
+import { Header } from 'signup/components/Header';
+import { Description } from 'signup/components/Description';
 
 import { LoginForm } from '../../components/LoginForm';
 import { login } from '../../services/auth';
@@ -27,15 +29,16 @@ export default function Login() {
   return (
     <PagePreAuth>
       <>
-        <h2>Log in</h2>
-        <div style={{ 'margin-bottom': '12px' }}>
+        <Header size="small">Welcome</Header>
+        <div style={{ height: `32px` }} />
+        <Description size="small">
           <Text
             message="Don't have an account? <link>Get started here</link>."
             link={(text) => (
               <Link href={`/signup${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
             )}
           />
-        </div>
+        </Description>
         <LoginForm onSubmit={submit} />
         <br />
         <Text

@@ -8,6 +8,7 @@ import type {
   ConvertBusinessProspectResponse,
   CreateOrUpdateBusinessOwnerRequest,
 } from 'generated/capital';
+import type { BusinessOwner } from 'onboarding/components/LeadershipTable/LeadershipTable';
 
 export type BusinessRelationships =
   | 'relationshipOwner'
@@ -44,8 +45,20 @@ export async function setBusinessOwner(ownerId: string, params: Readonly<CreateO
   return service.patch(`/business-owners/${ownerId}`, params);
 }
 
-export async function setBusinessOwners(params: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) {
-  return service.post(`/business-owners`, params);
+export async function createBusinessOwner(params: Readonly<CreateOrUpdateBusinessOwnerRequest>) {
+  return service.post(`/business-owners/create`, params);
+}
+
+export async function updateBusinessOwner(params: Readonly<CreateOrUpdateBusinessOwnerRequest>) {
+  return service.patch(`/business-owners/update`, params);
+}
+
+export async function listBusinessOwners() {
+  return (await service.get<BusinessOwner[]>(`/business-owners/list`)).data;
+}
+
+export async function triggerBusinessOwners() {
+  return service.get(`/business-owners/trigger-all-owners-provided`);
 }
 
 export async function getApplicationReviewRequirements() {

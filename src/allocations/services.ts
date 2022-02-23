@@ -17,6 +17,10 @@ export async function getAllocations() {
   return (await service.get<readonly Readonly<Allocation>[]>('/businesses/allocations')).data;
 }
 
+export async function completeOnboarding() {
+  return (await service.post<readonly Readonly<Allocation>[]>('/businesses/complete-onboarding')).data;
+}
+
 export async function saveAllocation(params: Readonly<CreateAllocationRequest>) {
   return (await service.post<Readonly<{ allocationId: string }>>('/allocations', params)).data.allocationId;
 }
@@ -27,8 +31,12 @@ export async function updateAllocation(allocationId: string, params: Readonly<Up
 }
 
 export async function getAllocationRoles(allocationId: string) {
-  return (await service.get<UserAllocationRolesResponse>(`/user-allocation-roles/allocation/${allocationId}`)).data
-    .userRolesAndPermissionsList;
+  try {
+    return (await service.get<UserAllocationRolesResponse>(`/user-allocation-roles/allocation/${allocationId}`)).data
+      .userRolesAndPermissionsList;
+  } catch {
+    return [];
+  }
 }
 
 export async function addAllocationRole(allocationId: string, userId: string, role: AllocationRoles) {

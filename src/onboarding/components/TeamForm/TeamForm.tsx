@@ -1,14 +1,14 @@
 import { Text } from 'solid-i18n';
 import { Show, createSignal, createEffect, createMemo } from 'solid-js';
-import { nanoid } from 'nanoid';
 
-import { useMessages } from 'app/containers/Messages/context';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 import { Radio, RadioGroup } from '_common/components/Radio';
-import { storage } from '_common/api/storage';
+import { createBusinessOwner, listBusinessOwners, updateBusinessOwner } from 'onboarding/services/onboarding';
+import { useResource } from '_common/utils/useResource';
+import { Icon } from '_common/components/Icon';
 
 import { LeadershipTable } from '../LeadershipTable';
 
@@ -24,35 +24,31 @@ interface TeamFormProps {
   business: Business | null;
 }
 
-const hasOwner = (l: CreateOrUpdateBusinessOwnerRequest) => !!l.relationshipOwner;
-// const hasExecutive = (l: CreateOrUpdateBusinessOwnerRequest) => !!l.relationshipExecutive;
+const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
 
 export const ONBOARDING_LEADERS_KEY = 'ONBOARDING_LEADERS_KEY';
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
-  const messages = useMessages();
-  const [loading, next] = wrapAction(props.onNext);
-  const [leaders, setLeaders] = createSignal<CreateOrUpdateBusinessOwnerRequest[]>(
-    storage.get<CreateOrUpdateBusinessOwnerRequest[]>(ONBOARDING_LEADERS_KEY, []),
-  );
-  const [moreOwners, setMoreOwners] = createSignal('1');
-  const [editingId, setEditingId] = createSignal('');
 
-  const onAddClick = () => setEditingId(nanoid());
-  const onDeleteClick = (id: string) => setLeaders((oldVal) => oldVal.filter((o) => o.id !== id));
-  const onEditClick = setEditingId;
+  const [loading] = wrapAction(props.onNext);
+  const [showAddingNewLeader, setShowAddingNewLeader] = createSignal(false);
+  const [editingLeaderId, setEditingLeaderId] = createSignal('');
 
-  const complete = createMemo(() => {
-    return leaders().length && !moreOwners() && leaders().some(hasOwner);
-    // leaders().some(hasExecutive);
+  const [ownersList, fetchingOwnersList, , , refetchOwnersList] = useResource(listBusinessOwners, []);
+  const [updating, updateOwner] = wrapAction(updateBusinessOwner);
+
+  const leaders = createMemo(() => {
+    const value = ownersList() ?? [];
+    return value;
   });
 
-  const submitLeaders = () => {
-    next(leaders()).catch(() => {
-      messages.error({ title: 'Failed to save leaders' });
-    });
-  };
+  const [hasOtherOwners, setHasOtherOwners] = createSignal(true);
+
+  // Note: not all 'leaders' are owners
+  const complete = createMemo(() => {
+    return leaders().length && !hasOtherOwners() && leaders().some(hasOwner);
+  });
 
   createEffect(() => {
     if (!leaders().length) {
@@ -61,7 +57,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           ? `As an owner of ${props.business?.legalName}, we need to know a little more about you`
           : `As a representative of ${props.business?.legalName}, we need to know a little more about you`,
       );
-    } else if (editingId()) {
+    } else if (showAddingNewLeader()) {
       props.setTitle('To add a new owner or manager, we need the following details:');
     } else {
       props.setTitle(`Is there anyone else that owns or manages ${props.business?.legalName}?`);
@@ -69,78 +65,91 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   });
 
   return (
-    <>
-      <Show
-        when={leaders().length}
-        fallback={
-          <CurrentUserForm
-            signupUser={props.signupUser}
-            onNext={(leader: CreateOrUpdateBusinessOwnerRequest) =>
-              new Promise((resolve) => {
-                const leaderWithId = { id: nanoid(), ...leader };
-                setLeaders([leaderWithId]);
-                storage.set(ONBOARDING_LEADERS_KEY, [leaderWithId]);
-                messages.success({ title: `Leader added successfully` });
-                resolve(leaderWithId);
-              })
+    <Show when={!fetchingOwnersList().loading}>
+      <Show when={leaders().length === 0}>
+        <CurrentUserForm
+          signupUser={props.signupUser}
+          onNext={async (businessOwner: CreateOrUpdateBusinessOwnerRequest) => {
+            await updateOwner({ ...businessOwner, id: props.signupUser.userId });
+            await refetchOwnersList();
+          }}
+        />
+      </Show>
+      <Show when={showAddingNewLeader()}>
+        <AddEditLeaderForm
+          leader={leaders().find((l) => l.businessOwnerId === editingLeaderId())}
+          isSignupUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
+          onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
+            if (editingLeaderId()) {
+              await updateOwner({ ...leader, id: editingLeaderId() });
+            } else {
+              await createBusinessOwner(leader);
             }
-          />
-        }
-      >
-        <Show
-          when={!editingId()}
-          fallback={
-            <AddEditLeaderForm
-              leader={leaders().find((l) => l.id === editingId())}
-              isSignupUser={!!leaders().find((l) => l.id === editingId())}
-              onNext={(leader: CreateOrUpdateBusinessOwnerRequest) =>
-                new Promise((resolve) => {
-                  const existingLeader = leaders().find((l) => l.id === editingId());
-                  if (existingLeader) {
-                    setLeaders((oldLeaders) => [...oldLeaders.filter((l) => l.id !== existingLeader.id), leader]);
-                  } else {
-                    setLeaders((oldLeaders) => [...oldLeaders, leader]);
-                  }
-                  setTimeout(() => storage.set(ONBOARDING_LEADERS_KEY, leaders()));
-                  setEditingId('');
-                  messages.success({ title: `Leader ${existingLeader ? 'edited' : 'added'} successfully` });
-                  resolve(leader);
-                })
-              }
-            />
-          }
-        >
+
+            await refetchOwnersList();
+            setShowAddingNewLeader(false);
+          }}
+        />
+      </Show>
+      <Show when={leaders().length > 0 && !showAddingNewLeader()}>
+        <div class={css.tableWrapper}>
           <LeadershipTable
             currentUserEmail={props.signupUser.email}
             leaders={leaders()}
-            onAddClick={onAddClick}
-            onDeleteClick={onDeleteClick}
-            onEditClick={onEditClick}
+            onAddClick={() => setShowAddingNewLeader(true)}
+            onDeleteClick={() => console.log('tbd')}
+            onEditClick={(id) => {
+              setEditingLeaderId(id);
+              setShowAddingNewLeader(true);
+            }}
           />
-          <div class={css.field}>
-            <Text message="Is there anyone else who owns 25% or more of the company?" />
-            <RadioGroup name="moreOwners" onChange={(v) => setMoreOwners(v as string)}>
-              <Radio value="1">
-                <Text message="Yes" />
-              </Radio>
-              <Radio value="">
-                <Text message="No" />
-              </Radio>
-            </RadioGroup>
+          <div class={css.rightContent}>
+            <div class={css.title}>You must include:</div>
+            <div class={css.copy}>
+              <div>
+                <Icon name="information" />
+              </div>
+              <div>Everyone who owns 25% or more of the company.</div>
+            </div>
+            <div class={css.copy}>
+              <div>
+                <Icon name="information" />
+              </div>
+              <div>
+                At least one invidual whose role or title allows them to sign contracts for your business.
+                <div class={css.examples}>
+                  Examples include: Chief Executive Officer, Chief Financial Officer, Chief Operating Officer,
+                  Management Member, General Partner, President, Vice President, or Treasurer.
+                </div>
+              </div>
+            </div>
           </div>
-          <div>
-            <Button
-              wide={media.small}
-              type="primary"
-              disabled={!complete() || loading()}
-              loading={loading()}
-              onClick={submitLeaders}
-            >
-              <Text message="Next" />
-            </Button>
-          </div>
-        </Show>
+        </div>
+        <div class={css.field}>
+          <Text message="Is there anyone else who owns 25% or more of the company?" />
+          <RadioGroup name="more-owners" onChange={(v) => setHasOtherOwners(v as boolean)}>
+            <Radio value={true}>
+              <Text message="Yes" />
+            </Radio>
+            <Radio value={false}>
+              <Text message="No" />
+            </Radio>
+          </RadioGroup>
+        </div>
+        <div>
+          <Button
+            wide={media.small}
+            type="primary"
+            disabled={hasOtherOwners() && (!complete() || loading())}
+            loading={loading() || updating()}
+            onClick={() => {
+              props.onNext(leaders());
+            }}
+          >
+            <Text message="Next" />
+          </Button>
+        </div>
       </Show>
-    </>
+    </Show>
   );
 }

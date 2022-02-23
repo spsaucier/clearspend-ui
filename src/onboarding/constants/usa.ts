@@ -1,17 +1,4 @@
-import { BusinessType, RelationshipToBusiness } from 'app/types/businesses';
-
-export const BUSINESS_TYPES: Readonly<Record<BusinessType, string>> = {
-  [BusinessType.SINGLE_MEMBER_LLC]: 'Limited Liability Company',
-  [BusinessType.MULTI_MEMBER_LLC]: 'Limited Liability Partnership',
-  [BusinessType.SOLE_PROPRIETORSHIP]: 'Sole Proprietorship',
-  [BusinessType.PRIVATE_CORPORATION]: 'Private Corporation',
-  [BusinessType.PRIVATE_PARTNERSHIP]: 'Private Partnership',
-  [BusinessType.PUBLIC_CORPORATION]: 'Public Corporation',
-  [BusinessType.PUBLIC_PARTNERSHIP]: 'Public Partnership',
-  [BusinessType.INCORPORATED_NON_PROFIT]: 'Incorporated non-profit',
-  [BusinessType.UNKNOWN]: 'Unknown',
-  [BusinessType.OTHER]: "Other / I'm not sure",
-};
+import { RelationshipToBusiness } from 'app/types/businesses';
 
 export const RELATIONSHIP_TO_BUSINESS: Readonly<Record<RelationshipToBusiness, string>> = {
   [RelationshipToBusiness.OWNER]: 'Owner',

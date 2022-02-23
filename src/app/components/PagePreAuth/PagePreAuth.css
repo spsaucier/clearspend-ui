@@ -1,7 +1,8 @@
 .root {
   min-height: 100vh;
   padding: var(--pd-48) var(--pd-24);
-  background: var(--tw-gray-10);
+  color: var(--tw-white);
+  background: var(--tw-dark);
 
   @media (--bp-large) {
     padding: var(--pd-48);
@@ -18,6 +19,6 @@
 
 .content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
 }

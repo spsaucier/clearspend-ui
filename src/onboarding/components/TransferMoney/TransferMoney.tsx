@@ -12,6 +12,8 @@ import { parseAmount, formatAmount } from '_common/formatters/amount';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { BankAccount } from 'generated/capital';
 import { i18n } from '_common/api/intl';
+import { registerBankAccount } from 'onboarding/services/accounts';
+import { completeOnboarding } from 'allocations/services';
 
 import { BankAccounts } from '../BankAccounts';
 
@@ -45,8 +47,10 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
     rules: { amount: [validAmount], account: [required] },
   });
 
-  const onSubmit = (data: Readonly<FormValues>) => {
+  const onSubmit = async (data: Readonly<FormValues>) => {
     if (!loading()) {
+      await registerBankAccount(data.account);
+      await completeOnboarding();
       deposit(data.account, parseAmount(data.amount)).catch((res: DepositError) => {
         const message =
           res.data.message.indexOf('does not have sufficient funds') > -1

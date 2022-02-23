@@ -61,4 +61,5 @@ export interface KycDocuments {
 export interface ManualReviewResponse {
   kybRequiredDocuments: readonly Readonly<RequiredDocument>[];
   kycRequiredDocuments: readonly Readonly<KycDocuments>[];
+  kybRequiredFields: readonly Readonly<string>[];
 }

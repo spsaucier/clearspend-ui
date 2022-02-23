@@ -1,7 +1,6 @@
 import { createSignal, batch, Show, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
-import { omit } from 'solid-create-form/lib/utils';
 
 import { Icon } from '_common/components/Icon';
 import { storage } from '_common/api/storage';
@@ -15,12 +14,7 @@ import { BusinessType, OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForApplicationReview } from 'app/services/review';
 import logoLight from 'app/assets/logo-light.svg';
-import type {
-  BankAccount,
-  Business,
-  ConvertBusinessProspectRequest,
-  CreateOrUpdateBusinessOwnerRequest,
-} from 'generated/capital';
+import type { BankAccount, Business, ConvertBusinessProspectRequest } from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
@@ -36,7 +30,7 @@ import {
   getBusinessProspectInfo,
   getApplicationReviewRequirements,
   setBusinessInfo,
-  setBusinessOwners,
+  triggerBusinessOwners,
 } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
@@ -56,6 +50,8 @@ export default function Onboarding() {
   const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: BusinessType }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
+  const [logoutLoading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
+
   const fillBusinessProspectInfo = async () => {
     const result = await getBusinessProspectInfo(signupUser().userId!);
     if (result.data) {
@@ -72,6 +68,8 @@ export default function Onboarding() {
 
   const [kybRequiredDocuments, setKYBRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
   const [kycRequiredDocuments, setKYCRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();
+
+  const [, setKybRequiredFields] = createSignal<readonly Readonly<string>[]>(); // use if exist to show errors
 
   if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
     getBankAccounts()
@@ -118,29 +116,24 @@ export default function Onboarding() {
     }
   };
 
-  const onUpdateKYC = async (data: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) => {
+  const onUpdateKYC = async () => {
     try {
-      const [currUser, ...users] = data;
-      await setBusinessOwners([
-        {
-          firstName: '',
-          lastName: '',
-          dateOfBirth: '',
-          taxIdentificationNumber: '',
-          email: '',
-          ...currUser,
-          id: signupUser().userId, // ID only for the already existing one (current from login)
-          isOnboarding: true,
-        },
-        ...users.map((user) => omit(user, 'id')),
-      ]);
+      // todo: trigger loading indicator
+      await triggerBusinessOwners();
       await refetch();
       const reviewRequirements = await getApplicationReviewRequirements();
 
       setKYBRequiredDocuments(reviewRequirements.kybRequiredDocuments);
       setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
 
-      if (reviewRequirements.kycRequiredDocuments.length > 0 || reviewRequirements.kybRequiredDocuments.length > 0) {
+      setKybRequiredFields(reviewRequirements.kybRequiredFields);
+
+      if (reviewRequirements.kybRequiredFields.length > 0) {
+        setStep(OnboardingStep.BUSINESS_OWNERS); // todo: parse results to show errors/where to fix things are
+      } else if (
+        reviewRequirements.kycRequiredDocuments.length > 0 ||
+        reviewRequirements.kybRequiredDocuments.length > 0
+      ) {
         setStep(OnboardingStep.SOFT_FAIL);
       } else {
         setStep(OnboardingStep.LINK_ACCOUNT);
@@ -183,8 +176,6 @@ export default function Onboarding() {
       setStep(business()?.onboardingStep as OnboardingStep);
     }
   };
-
-  const [logoutLoading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
     <MainLayout

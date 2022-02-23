@@ -1,4 +1,3 @@
-import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
@@ -9,7 +8,7 @@ import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 import css from './LeadershipTable.css';
 
 interface LeadershipTableProps {
-  leaders: CreateOrUpdateBusinessOwnerRequest[];
+  leaders: BusinessOwner[];
   onEditClick: (id: string) => void;
   onDeleteClick: (id: string) => void;
   onAddClick: () => void;
@@ -19,7 +18,7 @@ interface LeadershipTableProps {
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-  const columns: readonly Readonly<TableColumn<CreateOrUpdateBusinessOwnerRequest>>[] = [
+  const columns: readonly Readonly<TableColumn<BusinessOwner>>[] = [
     {
       name: 'name',
       title: <Text message="Name" />,
@@ -53,14 +52,14 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
       render: (leader) => (
         <div class={css.cell}>
           <div class={css.row}>
-            <a onClick={() => props.onEditClick(leader.id || '')} class={css.firstAction}>
+            <a
+              onClick={() => {
+                props.onEditClick(leader.businessOwnerId || '');
+              }}
+              class={css.firstAction}
+            >
               <Icon name="edit" />
             </a>
-            <Show when={leader.email && leader.email !== props.currentUserEmail}>
-              <a onClick={() => props.onDeleteClick(leader.id || '')}>
-                <Icon name="trash" />
-              </a>
-            </Show>
           </div>
         </div>
       ),
@@ -76,3 +75,6 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
     </div>
   );
 }
+
+// todo: get this from capital.ts generation
+export type BusinessOwner = Omit<CreateOrUpdateBusinessOwnerRequest, 'id'> & { businessOwnerId: string };

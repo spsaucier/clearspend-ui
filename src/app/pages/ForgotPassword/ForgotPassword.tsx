@@ -13,7 +13,8 @@ export default function ForgotPassword() {
   return (
     <PagePreAuth>
       <>
-        <Header>Forgot Password?</Header>
+        <Header size="small">Forgot Password?</Header>
+        <div style={{ height: `32px` }} />
         <ForgotPasswordForm
           initialEmailValue={searchParams.email}
           onSubmit={(email: string) => forgotPassword({ email })}

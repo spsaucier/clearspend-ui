@@ -29,6 +29,21 @@ interface BusinessDetailsFormProps {
   ) => void;
 }
 
+const getBusinessTypeFromCategory = (
+  businessTypeCategory: BusinessTypeCategory,
+  selectedBusinessType: BusinessType,
+) => {
+  switch (businessTypeCategory) {
+    case BusinessTypeCategory.NONPROFIT:
+      return BusinessType.INCORPORATED_NON_PROFIT;
+    case BusinessTypeCategory.INDIVIDUAL:
+      return BusinessType.INDIVIDUAL;
+    case BusinessTypeCategory.COMPANY:
+    default:
+      return selectedBusinessType;
+  }
+};
+
 export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
   const { values, errors, handlers, wrapSubmit } = createForm<BusinessDetailsFormValues>({
     defaultValues: {
@@ -41,7 +56,12 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
   });
 
   const onSubmit = (data: Readonly<BusinessDetailsFormValues>) => {
-    props.onNext(data.businessTypeCategory, data.businessType, data.isOwnerOf25, data.isExecutive);
+    props.onNext(
+      data.businessTypeCategory,
+      getBusinessTypeFromCategory(data.businessTypeCategory, data.businessType),
+      data.isOwnerOf25,
+      data.isExecutive,
+    );
   };
 
   const disableNext = (v: BusinessDetailsFormValues) => {

@@ -8,8 +8,8 @@ import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/o
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
-import type { BusinessProspectData } from 'generated/capital';
 import { Button } from '_common/components/Button';
+import type { BusinessProspectData } from 'generated/capital';
 
 import { sendAnalyticsEvent } from '../app/utils/analytics';
 
@@ -26,12 +26,12 @@ import css from './SignUp.css';
 
 enum Step {
   AccountSetUpStep,
-  BusinessTypeCategoryStep, // now contains BusinessTypeStep and RelationshipToBusinessStep, todo: rename
-  SorryButStep,
   EmailOtpStep, // todo: move to after AccountSetUpStep when backend is ready
+  BusinessTypeCategoryStep, // now contains BusinessTypeStep and RelationshipToBusinessStep, todo: rename
   PhoneStep,
   PhoneOtpStep,
   PasswordStep,
+  SorryButStep,
 }
 
 function getInitStep(store: SignupStore): Step {
@@ -73,6 +73,7 @@ export default function SignUp() {
   const onNameUpdate = async (firstName: string, lastName: string, email: string) => {
     setName(firstName, lastName);
     setEmail(email, '');
+    sendEmailVerification(firstName, lastName, email);
     next();
   };
 
@@ -126,8 +127,6 @@ export default function SignUp() {
       lastName: last,
       businessType: businessType as BusinessProspectData['businessType'],
       relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
-      relationshipRepresentative: true,
-      relationshipDirector: relationshipToBusiness.includes(RelationshipToBusiness.DIRECTOR),
       relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
     });
 
@@ -142,6 +141,39 @@ export default function SignUp() {
         break;
       case ProspectStatus.EMAIL_VERIFIED:
         setStep(Step.PhoneStep);
+        break;
+      case ProspectStatus.MOBILE_VERIFIED:
+        setStep(Step.PasswordStep);
+        break;
+      case ProspectStatus.NEW:
+      default:
+        setStep(Step.EmailOtpStep);
+    }
+  };
+
+  const sendEmailVerification = async (first: string, last: string, email: string) => {
+    if (!first || !last || !email) {
+      setStep(Step.AccountSetUpStep);
+      return;
+    }
+
+    const resp = await signup({
+      email,
+      firstName: first,
+      lastName: last,
+    } as BusinessProspectData);
+
+    setEmail(email, resp.businessProspectId || '');
+
+    sendAnalyticsEvent({ name: `Email verification sign up: ${resp.businessProspectStatus}` });
+
+    switch (resp.businessProspectStatus) {
+      case ProspectStatus.COMPLETED:
+        cleanup();
+        navigate('/login');
+        break;
+      case ProspectStatus.EMAIL_VERIFIED:
+        setStep(Step.BusinessTypeCategoryStep);
         break;
       case ProspectStatus.MOBILE_VERIFIED:
         setStep(Step.PasswordStep);

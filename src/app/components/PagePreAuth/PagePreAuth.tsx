@@ -1,8 +1,6 @@
 import type { JSX } from 'solid-js/jsx-runtime';
 
-import { Box } from 'signup/components/Box';
-
-import logo from '../../assets/logo-name.svg';
+import logo from 'app/assets/logo-light.svg';
 
 import css from './PagePreAuth.css';
 
@@ -15,8 +13,6 @@ export const PagePreAuth = (props: PagePreAuthProps) => (
     <header class={css.header}>
       <img src={logo} alt="Company logo" width={120} height={34} />
     </header>
-    <div class={css.content}>
-      <Box>{props.children}</Box>
-    </div>
+    <div class={css.content}>{props.children}</div>
   </section>
 );

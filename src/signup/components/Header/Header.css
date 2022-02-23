@@ -7,3 +7,11 @@
   line-height: var(--line-60);
   letter-spacing: var(--ls-small);
 }
+
+.small {
+  font-size: var(--text-32);
+}
+
+.large {
+  font-size: var(--text-46);
+}

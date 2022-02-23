@@ -18,6 +18,7 @@ import { RelationshipToBusiness } from 'app/types/businesses';
 import { CheckboxGroup, Checkbox } from '_common/components/Checkbox';
 
 import type { ExceptionData } from '../../types';
+import type { BusinessOwner } from '../LeadershipTable/LeadershipTable';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -26,7 +27,7 @@ import css from './LeaderForm.css';
 
 interface AddEditLeaderFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
-  leader?: Readonly<CreateOrUpdateBusinessOwnerRequest>;
+  leader?: Readonly<BusinessOwner>;
   isSignupUser?: boolean;
 }
 

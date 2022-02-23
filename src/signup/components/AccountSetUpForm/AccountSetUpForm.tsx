@@ -33,7 +33,7 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
     defaultValues: {
       firstName: store.first ?? '',
       lastName: store.last ?? '',
-      email: store.email ?? (props.initialEmailValue || ''),
+      email: store.email ?? (props.initialEmailValue || ``),
     },
     rules: { firstName: [required], lastName: [required], email: [required, validEmail] },
   });

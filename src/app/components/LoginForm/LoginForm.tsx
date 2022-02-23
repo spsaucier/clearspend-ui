@@ -1,10 +1,12 @@
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
-import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
+import { FlatButton } from 'signup/components/Button/FlatButton';
 
 import { useMessages } from '../../containers/Messages/context';
+
+import css from './LoginForm.css';
 
 interface FormValues {
   login: string;
@@ -33,11 +35,12 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
   };
 
   return (
-    <Form onSubmit={wrapSubmit(onSubmit)}>
+    <Form onSubmit={wrapSubmit(onSubmit)} class={css.form}>
       <FormItem label="Your email" error={errors().login}>
         <Input
           name="login"
           type="email"
+          darkMode={true}
           value={values().login}
           error={Boolean(errors().login)}
           onChange={handlers.login}
@@ -47,14 +50,15 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
         <Input
           name="password"
           type="password"
+          darkMode={true}
           value={values().password}
           error={Boolean(errors().password)}
           onChange={handlers.password}
         />
       </FormItem>
-      <Button wide type="primary" htmlType="submit" loading={loading()}>
+      <FlatButton wide type="primary" htmlType="submit" loading={loading()}>
         Login
-      </Button>
+      </FlatButton>
     </Form>
   );
 }

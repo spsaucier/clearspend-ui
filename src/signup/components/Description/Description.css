@@ -4,3 +4,11 @@
   font-size: var(--text-24);
   line-height: var(--line-36);
 }
+
+.small {
+  font-size: var(--text-20);
+}
+
+.large {
+  font-size: var(--text-24);
+}

@@ -20,7 +20,7 @@ export async function linkBankAccounts(publicToken: string) {
 
 export async function registerBankAccount(accountId: string) {
   return (
-    await service.get<readonly Readonly<Required<BankAccount>>[]>(`/business-bank-accounts/${accountId}/register`)
+    await service.post<readonly Readonly<Required<BankAccount>>[]>(`/business-bank-accounts/${accountId}/register`)
   ).data;
 }
 
