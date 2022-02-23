@@ -1,0 +1,22 @@
+.search {
+  width: 320px;
+}
+
+.cell {
+  padding-top: var(--pd-24);
+  padding-bottom: var(--pd-24);
+  font-family: var(--font-main);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+  vertical-align: middle;
+}
+
+.table {
+  margin: var(--pd-24) 0;
+}
+
+.column-title {
+  font-family: var(--font-header);
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+}
