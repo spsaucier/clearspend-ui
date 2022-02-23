@@ -645,6 +645,47 @@ export interface Allocation {
   childrenAllocationIds?: string[];
 }
 
+export interface UpdateBusinessAccountingStepRequest {
+  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+}
+
+export interface Business {
+  /** @format uuid */
+  businessId?: string;
+  legalName?: string;
+  businessType?:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
+  employerIdentificationNumber?: string;
+
+  /**
+   * Phone number in e.164 format
+   * @example +1234567890
+   */
+  businessPhone?: string;
+  address?: Address;
+  onboardingStep?:
+    | 'BUSINESS'
+    | 'BUSINESS_OWNERS'
+    | 'SOFT_FAIL'
+    | 'REVIEW'
+    | 'LINK_ACCOUNT'
+    | 'TRANSFER_MONEY'
+    | 'COMPLETE';
+  knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  accountNumber?: string;
+  routingNumber?: string;
+}
+
 export interface CreateOrUpdateBusinessProspectRequest {
   /**
    * Email address of the prospect
@@ -764,43 +805,6 @@ export interface ConvertBusinessProspectRequest {
    * @example https://fecebook.com/business
    */
   url?: string;
-}
-
-export interface Business {
-  /** @format uuid */
-  businessId?: string;
-  legalName?: string;
-  businessType?:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
-  employerIdentificationNumber?: string;
-
-  /**
-   * Phone number in e.164 format
-   * @example +1234567890
-   */
-  businessPhone?: string;
-  address?: Address;
-  onboardingStep?:
-    | 'BUSINESS'
-    | 'BUSINESS_OWNERS'
-    | 'SOFT_FAIL'
-    | 'REVIEW'
-    | 'LINK_ACCOUNT'
-    | 'TRANSFER_MONEY'
-    | 'COMPLETE';
-  knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
-  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
-  accountNumber?: string;
-  routingNumber?: string;
 }
 
 export interface ConvertBusinessProspectResponse {
@@ -2193,10 +2197,6 @@ export interface UpdateAccountActivityRequest {
   iconRef?: number;
 }
 
-export interface ExpenseCategoryRequest {
-  expenseCategoryName?: string;
-}
-
 export interface UpdateCardRequest {
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
@@ -2387,10 +2387,6 @@ export interface CreateUpdateUserRecord {
   password?: string;
 }
 
-export interface NullableEncryptedString {
-  encrypted?: string;
-}
-
 export interface TestBusiness {
   business?: Business;
   users?: User[];
@@ -2409,19 +2405,7 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -2671,9 +2655,21 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -2694,6 +2690,10 @@ export interface BusinessRecord {
   businessOwners?: BusinessOwner[];
   user?: User;
   allocation?: Allocation;
+}
+
+export interface NullableEncryptedString {
+  encrypted?: string;
 }
 
 export interface ExpenseCategory {
