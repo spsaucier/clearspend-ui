@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { createSignal, For } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
@@ -6,6 +6,7 @@ import { events } from '_common/api/events';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
+import { Drawer } from '_common/components/Drawer';
 import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
 import { Page } from 'app/components/Page';
@@ -13,6 +14,7 @@ import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { useBusiness } from 'app/containers/Main/context';
 import { Card } from 'cards/components/Card';
+import { CardPreview } from 'cards/containers/CardPreview';
 import type { CardType } from 'cards/types';
 
 import { ProfileInfo } from '../../components/ProfileInfo';
@@ -29,6 +31,7 @@ export default function Profile() {
   const [user, userStatus, , , reloadUser] = useResource(getUser, signupUser().userId);
 
   const cards = useUserCards();
+  const [cardID, setCardID] = createSignal<string>();
   const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   return (
@@ -68,7 +71,7 @@ export default function Profile() {
                   status={item.card.status}
                   notActivated={!item.card.activated}
                   class={css.card}
-                  onClick={() => navigate(`/cards/view/${item.card.cardId}`)}
+                  onClick={() => setCardID(item.card.cardId)}
                 />
               )}
             </For>
@@ -93,6 +96,9 @@ export default function Profile() {
           <Text message="Update Phone Number" />
         </Button>
       </Section>
+      <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={() => setCardID()}>
+        <CardPreview cardID={cardID()!} />
+      </Drawer>
     </Page>
   );
 }

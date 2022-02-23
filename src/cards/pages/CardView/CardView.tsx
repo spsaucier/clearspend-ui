@@ -12,9 +12,11 @@ import { Page } from 'app/components/Page';
 import { BackLink } from 'app/components/BackLink';
 import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
+import { getAllocationPermissions } from 'app/services/permissions';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
+import { canManagePermissions } from 'allocations/utils/permissions';
 import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
@@ -45,22 +47,27 @@ export default function CardView() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
+  const media = useMediaContext();
   const params = useParams<{ id: string }>();
+
   const [tab, setTab] = createSignal(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
-  const media = useMediaContext();
 
   const { signupUser } = useBusiness();
   const allocations = useAllocations();
 
   const [data, status, , , reload] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
+  const [permissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   const card = createMemo(() => data()?.card);
 
   createEffect(() => {
     const cardData = card();
-    if (cardData) setUserID(cardData.userId!);
+    if (cardData) {
+      setUserID(cardData.userId!);
+      setAllocationIdForPermissions(cardData.allocationId!);
+    }
   });
 
   const allocation = createMemo(
@@ -171,9 +178,11 @@ export default function CardView() {
           <Tab value={Tabs.transactions}>
             <Text message="Transactions" />
           </Tab>
-          <Tab value={Tabs.controls}>
-            <Text message="Spend Controls" />
-          </Tab>
+          <Show when={canManagePermissions(permissions())}>
+            <Tab value={Tabs.controls}>
+              <Text message="Spend Controls" />
+            </Tab>
+          </Show>
           {!media.medium && (
             <Tab value={Tabs.info}>
               <Text message="Info" />
