@@ -83,7 +83,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(undefined);
         return (
-          <div>
+          <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory
               value={expenseCategory()}
               onChange={(ec) => {
@@ -104,6 +104,17 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                 )}
               </For>
             </SelectExpenseCategory>
+            <Button
+              class={css.cancel}
+              icon="cancel"
+              view="ghost"
+              onClick={() => {
+                batch(() => {
+                  setExpenseCategory(undefined);
+                  setState(item.id, null);
+                });
+              }}
+            />
           </div>
         );
       },
