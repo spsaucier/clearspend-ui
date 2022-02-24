@@ -53,6 +53,24 @@ pipelines:
             - gcloud container images add-tag $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:QA --quiet
             - kubectl rollout restart deployment capital-ui
             - kubectl rollout status deployment capital-ui
+    prod:
+      - step:
+          name: Deploy image to PROD
+          image: google/cloud-sdk:latest
+          deployment: PROD
+          services:
+            - docker
+          script:
+            - echo "$GCLOUD_API_KEYFILE" | base64 -d > ~/.gcloud-api-key.json
+            - export BITBUCKET_COMMIT_SHORT="${BITBUCKET_COMMIT::7}"
+            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+            - docker login -u _json_key --password-stdin https://$DOCKER_GCR_REPO_URL < ~/.gcloud-api-key.json
+            - docker pull $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT
+            - docker tag $DOCKER_GCR_REPO_URL/$GCLOUD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
+            - echo "$PROD_GCR_KEY" | base64 -d > ~/.gcloud-api-key.json
+            - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
+            - docker login -u _json_key --password-stdin https://$DOCKER_GCR_REPO_URL < ~/.gcloud-api-key.json
+            - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
 definitions:
   services:
     docker:
