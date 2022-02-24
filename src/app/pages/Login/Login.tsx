@@ -11,6 +11,8 @@ import { Description } from 'signup/components/Description';
 import { LoginForm } from '../../components/LoginForm';
 import { login } from '../../services/auth';
 
+import css from './Login.css';
+
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = createSignal('');
@@ -29,24 +31,26 @@ export default function Login() {
   return (
     <PagePreAuth>
       <>
-        <Header size="small">Welcome</Header>
-        <div style={{ height: `32px` }} />
-        <Description size="small">
+        <Header>Welcome back</Header>
+        <Description>
+          <Text message="Please log in." />
+        </Description>
+        <LoginForm onSubmit={submit} />
+        <br />
+        <div class={css.text}>
           <Text
-            message="Don't have an account? <link>Get started here</link>."
+            message="<link>Forgot password?</link>"
+            link={(text) => (
+              <Link href={`/forgot-password${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
+            )}
+          />
+          <Text
+            message="Need an account? <link>Sign up here</link>"
             link={(text) => (
               <Link href={`/signup${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
             )}
           />
-        </Description>
-        <LoginForm onSubmit={submit} />
-        <br />
-        <Text
-          message="<link>Forgot password?</link>"
-          link={(text) => (
-            <Link href={`/forgot-password${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
-          )}
-        />
+        </div>
       </>
     </PagePreAuth>
   );

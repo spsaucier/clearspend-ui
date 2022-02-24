@@ -1,6 +1,9 @@
-.secondary {
+.text span {
   display: block;
-  margin-top: var(--pd-12);
+  margin-bottom: var(--pd-12);
+}
+
+.text a {
   color: var(--tw-light);
   font-weight: bold;
 }

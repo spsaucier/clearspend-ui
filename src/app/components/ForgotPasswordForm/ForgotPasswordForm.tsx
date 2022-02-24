@@ -52,7 +52,7 @@ export function ForgotPasswordForm(props: Readonly<ForgotPasswordFormProps>) {
           onChange={handlers.email}
         />
       </FormItem>
-      <FlatButton wide type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
+      <FlatButton type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
         Send Password Reset
       </FlatButton>
     </Form>

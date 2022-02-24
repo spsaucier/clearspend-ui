@@ -248,7 +248,7 @@ export default function Onboarding() {
                 description="Connecting your bank account brings you one step closer to becoming an expense management superstar."
                 contentClass={css.verifySectionContent}
               >
-                <LinkAccount verifyOnLoad onSuccess={onGotVerifyToken} />
+                <LinkAccount verifyOnLoad={false} onSuccess={onGotVerifyToken} />
               </Section>
             </Page>
           </Match>

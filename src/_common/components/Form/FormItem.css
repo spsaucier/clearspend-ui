@@ -1,5 +1,6 @@
 .root {
   margin: 0 0 var(--pd-8);
+  margin-bottom: var(--pd-32);
 }
 
 .root.dark {
@@ -25,6 +26,10 @@
   color: var(--tw-gray-60);
   font-size: var(--text-12);
   line-height: var(--line-16);
+
+  @nest .dark & {
+    color: white;
+  }
 }
 
 .error {

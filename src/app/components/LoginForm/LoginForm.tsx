@@ -36,7 +36,7 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)} class={css.form}>
-      <FormItem label="Your email" error={errors().login}>
+      <FormItem label="Your email" error={errors().login} darkMode={true}>
         <Input
           name="login"
           type="email"
@@ -46,7 +46,12 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
           onChange={handlers.login}
         />
       </FormItem>
-      <FormItem label="Password" error={errors().password}>
+      <FormItem
+        label="Password"
+        error={errors().password}
+        darkMode={true}
+        extra={'New users: Please log in with the temporary password that was sent to your work email address.'}
+      >
         <Input
           name="password"
           type="password"
@@ -56,7 +61,7 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
           onChange={handlers.password}
         />
       </FormItem>
-      <FlatButton wide type="primary" htmlType="submit" loading={loading()}>
+      <FlatButton type="primary" htmlType="submit" loading={loading()}>
         Login
       </FlatButton>
     </Form>

@@ -33,7 +33,6 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         let roles = [];
         if (leader.relationshipOwner) roles.push('Owner');
         if (leader.relationshipExecutive) roles.push('Executive');
-        if (leader.relationshipDirector) roles.push('Director');
         return (
           <div class={css.cell}>
             <Text message={roles.length ? formatter.format(roles) : 'No roles selected'} />

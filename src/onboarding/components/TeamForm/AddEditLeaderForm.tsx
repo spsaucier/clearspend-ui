@@ -34,7 +34,6 @@ interface AddEditLeaderFormProps {
 const reformatUser = (leader?: CreateOrUpdateBusinessOwnerRequest) => {
   if (!leader) return undefined;
   const relationshipToBusiness = [];
-  if (leader.relationshipDirector) relationshipToBusiness.push(RelationshipToBusiness.DIRECTOR);
   if (leader.relationshipExecutive) relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
   if (leader.relationshipOwner) relationshipToBusiness.push(RelationshipToBusiness.OWNER);
   return {

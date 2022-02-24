@@ -31,7 +31,7 @@ export const ONBOARDING_LEADERS_KEY = 'ONBOARDING_LEADERS_KEY';
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
 
-  const [loading] = wrapAction(props.onNext);
+  const [loading, next] = wrapAction(props.onNext);
   const [showAddingNewLeader, setShowAddingNewLeader] = createSignal(false);
   const [editingLeaderId, setEditingLeaderId] = createSignal('');
 
@@ -145,7 +145,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             disabled={hasOtherOwners() && (!complete() || loading())}
             loading={loading() || updating()}
             onClick={() => {
-              props.onNext(leaders());
+              next(leaders());
             }}
           >
             <Text message="Next" />

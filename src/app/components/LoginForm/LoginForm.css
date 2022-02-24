@@ -1,3 +1,8 @@
 .form {
   width: 410px;
 }
+
+.form button {
+  padding: 0 var(--pd-16);
+  font-size: var(--text-18);
+}

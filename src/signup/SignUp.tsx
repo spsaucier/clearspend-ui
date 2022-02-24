@@ -241,7 +241,7 @@ export default function SignUp() {
               }
               description={
                 <Text
-                  message={`We sent it to <b>{email}</b> - if you don't get it within {X} time, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
+                  message={`We sent it to <b>{email}</b> - if you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
                   email={store.email!}
                 />
               }

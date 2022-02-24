@@ -1,4 +1,4 @@
-import { Switch, Match } from 'solid-js';
+import { Switch, Match, Show } from 'solid-js';
 import type { JSX } from 'solid-js';
 
 import { join } from '../../utils/join';
@@ -25,16 +25,18 @@ export function FormItem(props: Readonly<FormItemProps>) {
       >
         {props.label && <div class={css.label}>{props.label}</div>}
         <div>{props.children}</div>
-        <div class={css.description}>
-          <Switch fallback="\xa0">
-            <Match when={props.error}>
-              <div class={css.error}>{props.error}</div>
-            </Match>
-            <Match when={props.extra}>
-              <span class={css.extra}>{props.extra}</span>
-            </Match>
-          </Switch>
-        </div>
+        <Show when={props.extra || props.error}>
+          <div class={css.description}>
+            <Switch fallback="\xa0">
+              <Match when={props.error}>
+                <div class={css.error}>{props.error}</div>
+              </Match>
+              <Match when={props.extra}>
+                <span class={css.extra}>{props.extra}</span>
+              </Match>
+            </Switch>
+          </div>
+        </Show>
       </ConditionalWrapper>
     </div>
   );
