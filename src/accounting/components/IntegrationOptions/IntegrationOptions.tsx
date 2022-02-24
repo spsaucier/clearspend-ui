@@ -14,7 +14,7 @@ import css from './IntegrationOptions.css';
 const integrationOptionCards: IntegrationOptionCardValues[] = [
   {
     name: 'Quickbooks',
-    description: 'Some quickbooks placeholder text',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
     largeLogo: quickbooksLargeLogo,
     smallLogo: quickbooksSmallLogo,
     onClick: async () => {
@@ -37,7 +37,7 @@ export function IntegrationOptions(props: Readonly<IntegrationOptionsProps>) {
         <Text message="Link your accounting system to sync transactions and receipts" />
       </h3>
       <h4 class={css.integrationOptionsSubtitle}>
-        <Text message="Some integration placeholder text" />
+        <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
       </h4>
       <div class={css.integrationCardContainer}>
         <For each={integrationOptionCards}>

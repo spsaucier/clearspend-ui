@@ -22,7 +22,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
           <Text message="Chart of accounts" />
         </h3>
         <p class={css.description}>
-          <Text message="Placeholder text describing your chart of accounts." />
+          <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
         </p>
       </div>
       <Data

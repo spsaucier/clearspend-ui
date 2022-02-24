@@ -16,7 +16,7 @@ export function IntegrateApp(props: IntegrateAppProps) {
     <Page title={<Text message={`${name} integration`} />}>
       <Section
         title={<Text message="Connect your account" />}
-        description={<Text message={'Placeholder text describing connecting your account.'} />}
+        description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
       >
         <IntegrationSignInCard integrationApp={props.integrationApp} />
       </Section>
