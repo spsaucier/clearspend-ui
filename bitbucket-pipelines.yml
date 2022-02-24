@@ -71,6 +71,8 @@ pipelines:
             - gcloud auth activate-service-account --key-file ~/.gcloud-api-key.json
             - docker login -u _json_key --password-stdin https://$DOCKER_GCR_REPO_URL < ~/.gcloud-api-key.json
             - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest
+            - docker tag $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:latest $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT
+            - docker push $DOCKER_GCR_REPO_URL/$GCLOUD_PROD_PROJECT_ID/$DOCKER_IMAGE_NAME:$BITBUCKET_COMMIT_SHORT
 definitions:
   services:
     docker:
