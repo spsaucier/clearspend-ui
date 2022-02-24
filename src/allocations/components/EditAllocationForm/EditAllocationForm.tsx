@@ -58,7 +58,9 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const [loading, save] = wrapAction(props.onSave);
 
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
-  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(getFormOptions());
+  const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(
+    getFormOptions(props.mccCategories),
+  );
 
   const [localRoles, setLocalRoles] = createSignal<AllocationUserRole[]>([]);
 
