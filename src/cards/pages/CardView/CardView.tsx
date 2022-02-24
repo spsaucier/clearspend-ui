@@ -217,8 +217,8 @@ export default function CardView() {
             />
           </Match>
         </Switch>
-        <Drawer noPadding open={showDetails()} title={<Text message="Card details" />} onClose={toggleDetails}>
-          <CardDetails card={card} user={user} onClose={toggleDetails} />
+        <Drawer open={showDetails() && !!user()} title={<Text message="Card details" />} onClose={toggleDetails}>
+          <CardDetails card={card()!} user={user()!} onClose={toggleDetails} />
         </Drawer>
       </Data>
     </Page>

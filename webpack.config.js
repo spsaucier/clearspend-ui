@@ -154,6 +154,8 @@ module.exports = (env, options) => {
       new webpack.ids.HashedModuleIdsPlugin(),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(options.mode),
+        'process.env.STRIPE_PUB_KEY': JSON.stringify(process.env.STRIPE_PUB_KEY),
+        'process.env.STRIPE_ACCOUNT': JSON.stringify(process.env.STRIPE_ACCOUNT),
       }),
       new HtmlWebpackPlugin({ template: './public/index.html' }),
       new PreloadWebpackPlugin({

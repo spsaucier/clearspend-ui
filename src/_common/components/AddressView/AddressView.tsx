@@ -12,12 +12,12 @@ export interface AddressViewProps {
   label?: string;
   icon?: keyof typeof IconName;
   address: Readonly<Address>;
-  addressClass?: string;
+  class?: string;
 }
 
 export function AddressView(props: Readonly<AddressViewProps>) {
   return (
-    <div class={css.root}>
+    <div class={join(css.root, props.class)}>
       {props.icon && <Icon name={props.icon} class={css.icon} />}
       <div>
         {props.label && (
@@ -25,7 +25,7 @@ export function AddressView(props: Readonly<AddressViewProps>) {
             <Text message={props.label} />
           </div>
         )}
-        <div class={join(css.address, props.addressClass)}>{formatAddress(props.address)}</div>
+        <div class={css.address}>{formatAddress(props.address)}</div>
       </div>
     </div>
   );

@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  min-height: var(--line-24);
+  align-items: center;
+}
+
+.number {
+  width: 192px;
+}
+
+.expiry {
+  width: 38px;
+}
+
+.cvc {
+  width: 26px;
+}
+
+.copy {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  color: var(--tw-primary-dark);
+}
+
+.copy-frame {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

@@ -2,7 +2,7 @@ import { Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
 import { createForm } from '_common/components/Form';
-import { AddressView } from '_common/components/AddressView/AddressView';
+import { AddressView } from '_common/components/AddressView';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import { Button } from '_common/components/Button';
 import type { Address } from 'generated/capital';
