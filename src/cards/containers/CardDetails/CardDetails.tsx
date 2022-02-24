@@ -65,7 +65,7 @@ interface StripeCS extends Stripe {
   ) => IssuingCard;
 }
 
-export default function CardDetails(props: CardDetailsProps) {
+export function CardDetails(props: CardDetailsProps) {
   const [loading, setLoading] = createSignal(true);
   const [stripe, setStripe] = createSignal<StripeCS | null>();
   const [cardKey, , , setCardKeyParams, getCardKey] = useResource(revealCardKey, undefined, false);

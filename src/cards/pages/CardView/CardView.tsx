@@ -28,11 +28,10 @@ import { CardActions } from '../../components/CardActions';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
 import { Statements } from '../../containers/Statements';
+import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { getCard, updateCard, blockCard, unblockCard } from '../../services';
 import type { CardType } from '../../types';
-
-import CardDetails from './CardDetails';
 
 import css from './CardView.css';
 

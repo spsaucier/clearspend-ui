@@ -97,6 +97,8 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             currentUserEmail={props.signupUser.email}
             leaders={leaders()}
             onAddClick={() => setShowAddingNewLeader(true)}
+            // FIXME
+            // eslint-disable-next-line
             onDeleteClick={() => console.log('tbd')}
             onEditClick={(id) => {
               setEditingLeaderId(id);
