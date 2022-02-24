@@ -20,3 +20,15 @@
   font-size: var(--text-12);
   line-height: var(--line-16);
 }
+
+.table-buttons {
+  display: flex;
+  padding: var(--pd-12) var(--pd-24);
+  justify-content: flex-end;
+  background: var(--tw-gray-10);
+  border-top: 2px solid var(--tw-gray-60);
+}
+
+.done {
+  margin-left: var(--pd-8);
+}

@@ -1,16 +1,18 @@
 import { Text, useI18n } from 'solid-i18n';
-import { createSignal, For, Show } from 'solid-js';
+import { batch, createMemo, createSignal, For, Show } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 import { Empty } from 'app/components/Empty';
 import { InputSearch } from '_common/components/InputSearch';
 import { Table, TableColumn } from '_common/components/Table';
 import type { ExpenseCategory } from 'generated/capital';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
+import { Button } from '_common/components/Button';
 
 import type { IntegrationAccountResponse } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
 
-import { getAccountType } from './utils';
+import { generateInitialCategoryMap, getAccountType } from './utils';
 
 import css from './ChartOfAccountsTable.css';
 
@@ -21,6 +23,11 @@ interface ChartOfAccountsTableProps {
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
   const i18n = useI18n();
   const expenseCategories = useExpenseCategories({ initValue: [] });
+
+  const initialState = generateInitialCategoryMap(props.data);
+  const [state, setState] = createStore(initialState);
+  const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
+  // const isComplete = createMemo(() => Object.keys(state).reduce<boolean>((prev, curr) => prev && !!state[curr], true));
 
   const columns: readonly Readonly<TableColumn<IntegrationAccountResponse>>[] = [
     {
@@ -42,7 +49,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       name: 'type',
       title: (
         <div class={css.columnTitle}>
-          <Text message="Type" />{' '}
+          <Text message="Type" />
         </div>
       ),
       render: (item) => {
@@ -73,13 +80,28 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           <Text message="ClearSpend expense category" />
         </div>
       ),
-      render: () => {
+      render: (item) => {
         const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(undefined);
         return (
           <div>
-            <SelectExpenseCategory value={expenseCategory()} onChange={(ec) => setExpenseCategory(ec)}>
+            <SelectExpenseCategory
+              value={expenseCategory()}
+              onChange={(ec) => {
+                batch(() => {
+                  setExpenseCategory(ec);
+                  setState(item.id, {
+                    accountRef: item.id,
+                    categoryIconRef: ec?.iconRef,
+                  });
+                });
+              }}
+            >
               <For each={expenseCategories.data}>
-                {(ec) => <SelectExpenseCategoryOption value={ec}>{ec.categoryName}</SelectExpenseCategoryOption>}
+                {(ec) => (
+                  <SelectExpenseCategoryOption value={ec} disabled={selectedCategories().includes(ec.iconRef)}>
+                    {ec.categoryName}
+                  </SelectExpenseCategoryOption>
+                )}
               </For>
             </SelectExpenseCategory>
           </div>
@@ -101,6 +123,22 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
         <div class={css.table}>
           <Table columns={columns} data={props.data as []} tdClass={css.cell} />
+        </div>
+        <div class={css.tableButtons}>
+          <Button view="ghost">
+            <Text message="Cancel" />
+          </Button>
+          <Button
+            class={css.done}
+            type="primary"
+            icon={{ name: 'confirm', pos: 'right' }}
+            onClick={() => {
+              // TODO
+            }}
+            // disabled={!isComplete()}
+          >
+            <Text message="Done" />
+          </Button>
         </div>
       </Show>
     </div>
