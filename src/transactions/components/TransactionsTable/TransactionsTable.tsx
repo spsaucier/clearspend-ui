@@ -92,7 +92,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             <Button
               type="primary"
               size="sm"
-              disabled={!!item.expenseDetails}
+              disabled={!item.expenseDetails}
               onClick={(event) => {
                 event.stopPropagation();
                 if (item.accountActivityId) syncTransaction(item.accountActivityId);
