@@ -16,6 +16,12 @@
   border-radius: 50%;
 }
 
+.name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .amount {
   font-weight: var(--font-400);
   text-align: right;

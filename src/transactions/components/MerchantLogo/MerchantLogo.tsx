@@ -6,7 +6,7 @@ import css from './MerchantLogo.css';
 const URL = 'https://ui-avatars.com/api/?background=047857&color=fff&name=';
 
 interface MerchantLogoProps {
-  size?: 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   data: Readonly<Merchant>;
   class?: string;
 }
@@ -17,7 +17,10 @@ export function MerchantLogo(props: Readonly<MerchantLogoProps>) {
       src={props.data!.merchantLogoUrl || URL + encodeURIComponent(props.data!.name || '')}
       alt="Merchant logo"
       class={join(css.root, props.class)}
-      classList={{ [css.lg!]: props.size === 'lg' }}
+      classList={{
+        [css.sm!]: props.size === 'sm',
+        [css.lg!]: props.size === 'lg',
+      }}
     />
   );
 }

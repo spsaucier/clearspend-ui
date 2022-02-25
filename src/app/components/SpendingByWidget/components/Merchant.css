@@ -8,16 +8,6 @@
   line-height: var(--line-16);
 }
 
-.icon {
-  display: flex;
-  width: 24px;
-  height: 24px;
-  align-items: center;
-  justify-content: center;
-  background: var(--tw-gray-30);
-  border-radius: var(--radius-8);
-}
-
 .amount {
   font-weight: var(--font-400);
   text-align: right;

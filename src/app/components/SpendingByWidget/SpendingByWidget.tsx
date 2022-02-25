@@ -92,7 +92,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                 </Match>
                 <Match when={props.params.chartFilter === 'MERCHANT'}>
                   <For each={props.data.merchantChartData || []}>
-                    {(item) => <Merchant name={item.merchant!.name!} amount={item.amount!} />}
+                    {(item) => <Merchant merchant={item.merchant!} amount={item.amount!} />}
                   </For>
                 </Match>
                 <Match when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>

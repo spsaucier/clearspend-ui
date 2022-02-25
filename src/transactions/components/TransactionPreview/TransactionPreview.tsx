@@ -248,9 +248,11 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </div>
       </div>
       <div class={css.actions}>
+        {/*
         <Button wide icon={{ name: 'alert', pos: 'right' }}>
           <Text message="Report an issue" />
         </Button>
+        */}
       </div>
     </div>
   );
