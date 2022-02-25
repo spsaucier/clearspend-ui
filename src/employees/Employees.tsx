@@ -19,6 +19,16 @@ export const DEFAULT_EMPLOYEE_PARAMS: Readonly<SearchUserRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,
+    orderBy: [
+      {
+        item: 'lastName',
+        direction: 'ASC',
+      },
+      {
+        item: 'firstName',
+        direction: 'ASC',
+      },
+    ],
   },
 };
 

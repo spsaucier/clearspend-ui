@@ -13,7 +13,7 @@ export default function ResetPassword() {
   return (
     <PagePreAuth>
       <>
-        <Header>Reset Password</Header>
+        <Header size="small">Reset Password</Header>
         <ResetPasswordForm
           onSubmit={(newPassword: string) => resetPassword({ changePasswordId: params.token as string, newPassword })}
         />

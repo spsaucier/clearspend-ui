@@ -1,11 +1,12 @@
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
-import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
 import { minLength } from 'signup/components/PasswordForm/rules';
+import { FlatButton } from 'signup/components/Button/FlatButton';
 
 import { useMessages } from '../../containers/Messages/context';
+import css from '../LoginForm/LoginForm.css';
 
 interface FormValues {
   password: string;
@@ -46,9 +47,10 @@ export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
   };
 
   return (
-    <Form onSubmit={wrapSubmit(onSubmit)}>
+    <Form onSubmit={wrapSubmit(onSubmit)} class={css.form}>
       <FormItem label="New password" error={errors().password}>
         <Input
+          darkMode={true}
           name="password"
           type="password"
           value={values().password}
@@ -56,9 +58,9 @@ export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
           onChange={handlers.password}
         />
       </FormItem>
-      <Button wide type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
+      <FlatButton type="primary" htmlType="submit" disabled={loading()} loading={loading()}>
         Change Password
-      </Button>
+      </FlatButton>
     </Form>
   );
 }

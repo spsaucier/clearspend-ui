@@ -1,5 +1,6 @@
 .form {
   width: 410px;
+  max-width: 100%;
 }
 
 .form button {
