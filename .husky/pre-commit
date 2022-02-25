@@ -1,7 +1,13 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-#npm run generate
-#git add ./src/generated/capital.ts
+if [ -f .env.dev ]; then
+  export $(cat .env.dev | xargs)
+fi
+
+if [ "$SKIP_TYPES_ON_COMMIT" != "1" ]; then
+  npm run generate
+  git add ./src/generated/capital.ts
+fi
 
 npx nano-staged
