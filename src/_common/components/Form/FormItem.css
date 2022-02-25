@@ -10,7 +10,7 @@
 .label {
   display: block;
   margin-bottom: var(--pd-4);
-  font-size: var(--text-12);
+  font-size: var(--text-14);
   font-weight: var(--font-400);
   line-height: var(--line-16);
   cursor: pointer;
