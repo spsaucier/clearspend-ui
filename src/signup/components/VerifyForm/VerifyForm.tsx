@@ -24,6 +24,7 @@ interface FormValues {
 interface VerifyFormProps {
   header: JSXElement;
   description: JSXElement;
+  extraDescription?: JSXElement;
   extraBtn?: JSXElement;
   onResend: () => Promise<unknown>;
   onConfirm: (code: string) => Promise<unknown>;
@@ -56,6 +57,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
     <div>
       <Header>{props.header}</Header>
       <Description>{props.description}</Description>
+      {props.extraDescription}
       <Form>
         <FormItem label="Enter confirmation code" error={errors().code}>
           <InputCode

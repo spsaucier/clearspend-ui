@@ -21,11 +21,12 @@ export interface SelectProps {
   autoComplete?: string;
   error?: boolean;
   children: JSXElement;
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => void | string;
   changeOnSearch?: boolean;
   loading?: boolean;
   iconName?: keyof typeof IconName;
   darkMode?: boolean;
+  blurOnSelect?: boolean;
 }
 
 export interface SelectContextProps {

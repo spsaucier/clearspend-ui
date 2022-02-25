@@ -1,4 +1,5 @@
 import { Text } from 'solid-i18n';
+import { Show } from 'solid-js';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -48,20 +49,12 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section title="What is this person's role?" class={css.section}>
         <div class={css.wrapperWide}>
-          <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
-            <RadioGroup
-              name="is-owner"
-              value={values().relationshipOwner}
-              onChange={(value) => handlers.relationshipOwner?.(value as boolean)}
-            >
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </RadioGroup>
-          </FormItem>
           <FormItem
             label={
               <div>
-                <div class={css.radioLabel}>Does your title or role allow you to sign contracts for your business?</div>
+                <div class={css.radioLabel}>
+                  Does their title or role allow you to sign contracts for your business?
+                </div>
                 <div class={css.radioExtra}>
                   Examples include: Chief Executive Officer, Chief Financial Officer, Chief Operating Officer,
                   Management Member, General Partner, President, Vice President, or Treasurer.
@@ -79,29 +72,33 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               <Radio value={false}>No</Radio>
             </RadioGroup>
           </FormItem>
-        </div>
-      </Section>
-      <Section
-        title="Ownership stake"
-        description="Please disclose your company ownership amount via percentage."
-        class={css.section}
-      >
-        <div class={css.wrapper}>
-          <FormItem label="Percentage ownership" error={errors().percentageOwnership}>
-            <InputPercentage
-              name="percentage-ownership"
-              value={values().percentageOwnership}
-              error={Boolean(errors().percentageOwnership)}
-              onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
-            />
+          <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
+            <RadioGroup
+              name="is-owner"
+              value={values().relationshipOwner}
+              onChange={(value) => handlers.relationshipOwner?.(value as boolean)}
+            >
+              <Radio value={true}>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </RadioGroup>
           </FormItem>
         </div>
       </Section>
-      <Section
-        title="Your details"
-        description="Tell us the name your momma gave you and where we can mail you love letters (just kidding... maybe)."
-        class={css.section}
-      >
+      <Show when={values().relationshipOwner}>
+        <Section title="Ownership stake" class={css.section}>
+          <div class={css.wrapper}>
+            <FormItem label="Percentage ownership" error={errors().percentageOwnership}>
+              <InputPercentage
+                name="percentage-ownership"
+                value={values().percentageOwnership}
+                error={Boolean(errors().percentageOwnership)}
+                onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
+              />
+            </FormItem>
+          </div>
+        </Section>
+      </Show>
+      <Section title="Your details" class={css.section}>
         <div class={css.wrapper}>
           <FormItem label="First name" error={errors().firstName}>
             <Input

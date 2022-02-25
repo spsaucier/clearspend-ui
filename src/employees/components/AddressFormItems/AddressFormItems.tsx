@@ -1,4 +1,4 @@
-import { useI18n, Text } from 'solid-i18n';
+import { Text } from 'solid-i18n';
 import { createMemo, For, batch, Show, Accessor } from 'solid-js';
 
 import { FormHandlers, FormItem } from '_common/components/Form';
@@ -17,8 +17,6 @@ interface AddressFormItemsProps {
 }
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
-  const i18n = useI18n();
-
   const { loading, suggestions } = useAddressSuggestions(
     createMemo(() => {
       const data = props.values();
@@ -35,11 +33,12 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
     const found = suggestions().find((item) => formatSuggestion(item) === value);
     if (found) {
       batch(() => {
-        props.handlers.streetLine1(value);
+        props.handlers.streetLine1(found.primary_line);
         props.handlers.locality(found.city);
         props.handlers.region(found.state);
         props.handlers.postalCode(found.zip_code);
       });
+      return found.primary_line;
     } else {
       props.handlers.streetLine1(value);
     }
@@ -54,7 +53,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
             <Input
               name="streetLine1"
               value={props.values().streetLine1}
-              placeholder={String(i18n.t('Street address'))}
               error={Boolean(props.errors.streetLine1)}
               onChange={props.handlers.streetLine1}
             />
@@ -63,10 +61,10 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           <Select
             name="streetLine1"
             value={props.values().streetLine1}
-            placeholder={String(i18n.t('Street address'))}
             error={Boolean(props.errors.streetLine1)}
             onChange={onChangeStreetLine1}
             changeOnSearch
+            blurOnSelect
             loading={loading()}
           >
             <For each={suggestions()}>
@@ -76,7 +74,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
         </Show>
       </FormItem>
       <FormItem
-        label={<Text message="Apartment, unit, floor, etc." />}
+        label={<Text message="Suite, apartment, unit, floor, etc." />}
         error={props.errors.streetLine2}
         class={css.item}
       >
@@ -84,7 +82,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="streetLine2"
           type="text"
           value={props.values().streetLine2}
-          placeholder={String(i18n.t('Apartment'))}
           error={Boolean(props.errors.streetLine2)}
           onChange={props.handlers.streetLine2}
         />
@@ -94,7 +91,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           name="locality"
           type="text"
           value={props.values().locality}
-          placeholder={String(i18n.t('City'))}
           error={Boolean(props.errors.locality)}
           onChange={props.handlers.locality}
         />
@@ -112,7 +108,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           type="text"
           value={props.values().postalCode}
           maxLength={5}
-          placeholder={String(i18n.t('ZIP Code'))}
           error={Boolean(props.errors.postalCode)}
           onChange={props.handlers.postalCode}
         />

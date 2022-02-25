@@ -26,7 +26,7 @@ export async function getAddressesSuggestions(params: Readonly<SuggestionsReques
     await fetch<Readonly<SuggestionsResponse>>(
       'POST',
       US_URL,
-      { ...params, geo_ip_sort: 'true' },
+      { address_prefix: params.address_prefix, state: params.state, geo_ip_sort: 'true' },
       { headers: { Authorization: AUTH_HEADER } },
     )
   ).data.suggestions;

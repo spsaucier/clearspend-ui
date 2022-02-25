@@ -24,5 +24,5 @@ export function isMatch(search: string) {
 }
 
 export function getSelected(value: string, elements: JSXElement): string | undefined {
-  return getOptions(elements).find((el) => el.dataset.value === value)?.innerText;
+  return getOptions(elements).find((el) => el.dataset.value === value)?.innerText || value;
 }

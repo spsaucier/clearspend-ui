@@ -12,6 +12,7 @@ function isExist(child?: JSXElement): boolean {
 }
 
 interface PageProps {
+  headerClass?: string;
   title: JSXElement;
   titleClass?: string;
   subtitle?: JSXElement;
@@ -47,7 +48,7 @@ export function Page(props: Readonly<PageProps>) {
               <div>{props.headerSide}</div>
             </Show>
             <div>
-              <div class={css.headerMain}>
+              <div class={join(css.headerMain, props.headerClass)}>
                 <div class={css.titleWrap}>
                   <div>
                     <h1 class={join(css.title, props.titleClass)}>{props.title}</h1>

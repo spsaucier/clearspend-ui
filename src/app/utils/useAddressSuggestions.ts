@@ -19,7 +19,8 @@ export function useAddressSuggestions(values: Accessor<SuggestionsRequest>) {
   const [loading, getAddressData] = wrapAction(async () => {
     const params = values();
     if (prevStreetValue() !== params.address_prefix) {
-      setSuggestions(await getAddressesSuggestions(params));
+      const res = await getAddressesSuggestions(params);
+      setSuggestions(res);
       setPrevStreetValue(params.address_prefix);
     }
   });

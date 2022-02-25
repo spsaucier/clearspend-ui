@@ -33,6 +33,13 @@
   border-radius: 4px;
 }
 
+.extra-description {
+  display: block;
+  max-width: 625px;
+  margin: -10px 0 22px;
+  font-size: var(--text-18);
+}
+
 /* todo: move */
 .radio-label {
   font-size: var(--text-14);

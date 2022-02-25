@@ -37,7 +37,7 @@ const getBusinessTypeFromCategory = (
     case BusinessTypeCategory.NONPROFIT:
       return BusinessType.INCORPORATED_NON_PROFIT;
     case BusinessTypeCategory.INDIVIDUAL:
-      return BusinessType.INDIVIDUAL;
+      return BusinessType.SOLE_PROPRIETORSHIP;
     case BusinessTypeCategory.COMPANY:
     default:
       return selectedBusinessType;
@@ -91,7 +91,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
             value={values().businessTypeCategory}
             onChange={(value) => handlers.businessTypeCategory(value as BusinessTypeCategory)}
           >
-            <Radio value={BusinessTypeCategory.INDIVIDUAL}>Individual</Radio>
+            <Radio value={BusinessTypeCategory.INDIVIDUAL}>Individual/Sole Proprietorship</Radio>
             <Radio value={BusinessTypeCategory.COMPANY}>Company</Radio>
             <Radio value={BusinessTypeCategory.NONPROFIT}>Nonprofit organization</Radio>
           </RadioGroup>
@@ -108,7 +108,6 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
               value={values().businessType}
               onChange={(value: string) => handlers.businessType(value as BusinessType)}
             >
-              <Option value={BusinessType.SOLE_PROPRIETORSHIP}>Sole proprietorship</Option>
               <Option value={BusinessType.SINGLE_MEMBER_LLC}>Single-member LLC</Option>
               <Option value={BusinessType.MULTI_MEMBER_LLC}>Multi-member LLC</Option>
               <Option value={BusinessType.PRIVATE_PARTNERSHIP}>Private partnership</Option>

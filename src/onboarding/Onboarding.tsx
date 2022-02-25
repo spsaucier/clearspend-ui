@@ -107,11 +107,12 @@ export default function Onboarding() {
       case OnboardingStep.LINK_ACCOUNT:
         return `4`;
       case OnboardingStep.REVIEW:
+      case OnboardingStep.SOFT_FAIL:
         return `6`;
       case OnboardingStep.BUSINESS_OWNERS:
         return `10`;
-      default:
       case OnboardingStep.BUSINESS:
+      default:
         return `12`;
     }
   };
@@ -216,17 +217,21 @@ export default function Onboarding() {
       <div class={css.sand}>
         <Switch>
           <Match when={!step() && businessProspectInfo()?.businessType}>
-            <Page title="First, tell us a little bit about your business" class={css.border} titleClass={css.thin}>
+            <Page
+              title="First, tell us a little bit about your business"
+              headerClass={css.border}
+              titleClass={css.thin}
+            >
               <BusinessForm onNext={onUpdateKYB} businessType={businessProspectInfo()?.businessType!} />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.BUSINESS_OWNERS}>
-            <Page title={teamTitle} class={css.border} titleClass={css.thin}>
+            <Page title={teamTitle} headerClass={css.border} titleClass={css.thin}>
               <TeamForm business={business()} setTitle={setTeamTitle} onNext={onUpdateKYC} signupUser={signupUser()} />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.SOFT_FAIL}>
-            <Page title="Just a few more things..." class={css.border} titleClass={css.thin}>
+            <Page title="Just a few more things..." headerClass={css.border} titleClass={css.thin}>
               <SoftFail
                 kybRequiredDocuments={kybRequiredDocuments()}
                 kycRequiredDocuments={kycRequiredDocuments()}
@@ -240,7 +245,7 @@ export default function Onboarding() {
           <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
             <Page
               title="Show us the money! Well...kind of. It's time to link your bank account 💰"
-              class={css.border}
+              headerClass={css.border}
               titleClass={css.thin}
             >
               <Section
@@ -253,7 +258,7 @@ export default function Onboarding() {
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.TRANSFER_MONEY}>
-            <Page title="Transfer money" class={css.border} titleClass={css.thin}>
+            <Page title="Transfer money" headerClass={css.border} titleClass={css.thin}>
               <Show when={accounts()}>
                 <TransferMoney accounts={accounts()} onDeposit={onDeposit} />
               </Show>

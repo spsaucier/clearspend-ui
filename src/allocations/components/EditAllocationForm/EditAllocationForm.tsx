@@ -157,17 +157,17 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
         </FormItem>
       </Section>
       <Section
-        title={<Text message="Owner(s)" />}
+        title={<Text message="Access" />}
         description={
           <Text
             message={
-              'Add additional allocation owners. ' +
-              'By default, owners of the parent allocation will be able to view this allocation.'
+              'Add additional allocation managers or viewers. ' +
+              'By default, managers of the parent allocation will be able to view this allocation.'
             }
           />
         }
       >
-        <FormItem label={<Text message="Allocation owner(s)" />} class={css.field}>
+        <FormItem label={<Text message="Add manager or viewer" />} class={css.field}>
           <Select
             name="employee"
             placeholder={String(i18n.t('Search by employee name'))}

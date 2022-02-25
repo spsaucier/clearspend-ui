@@ -40,6 +40,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
           disabled={props.current === 0}
           class={join(css.button, css.nav)}
           onClick={() => props.onChange(props.current - 1)}
+          data-name="Previous page"
         />
       </li>
       <For each={buttons()}>
@@ -49,6 +50,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
               disabled={item === undefined}
               class={join(css.button, item === props.current && css.active)}
               onClick={() => item !== undefined && props.onChange(item)}
+              data-name={`Page ${(item || 0) + 1}`}
             >
               {typeof item === 'number' ? item + 1 : '...'}
             </Button>
@@ -61,6 +63,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
           disabled={!pages().length || props.current === pages().length - 1}
           class={join(css.button, css.nav)}
           onClick={() => props.onChange(props.current + 1)}
+          data-name="Next page"
         />
       </li>
     </ul>

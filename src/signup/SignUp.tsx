@@ -233,17 +233,19 @@ export default function SignUp() {
           </Match>
           <Match when={step() === Step.EmailOtpStep}>
             <VerifyForm
-              header={
-                <Text
-                  message="👋 Hey {first}, it's nice to meet you!  Did you get your six digit confirmation code in your email?"
-                  first={store.first!}
-                />
-              }
+              header={<Text message="👋 Hey {first}, it's nice to meet you!" first={store.first!} />}
               description={
                 <Text
-                  message={`We sent it to <b>{email}</b> - if you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
+                  message={`Did you get your six digit confirmation code in your email? We sent it to <b>{email}</b>`}
                   email={store.email!}
                 />
+              }
+              extraDescription={
+                <div class={css.extraDescription}>
+                  <Text
+                    message={`If you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
+                  />
+                </div>
               }
               onResend={onEmailCodeResend}
               onConfirm={onEmailConfirm}

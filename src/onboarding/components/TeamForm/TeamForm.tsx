@@ -4,7 +4,7 @@ import { Show, createSignal, createEffect, createMemo } from 'solid-js';
 import { Button } from '_common/components/Button';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import type { Business, CreateOrUpdateBusinessOwnerRequest, User, BusinessOwner } from 'generated/capital';
 import { Radio, RadioGroup } from '_common/components/Radio';
 import { createBusinessOwner, listBusinessOwners, updateBusinessOwner } from 'onboarding/services/onboarding';
 import { useResource } from '_common/utils/useResource';
@@ -33,6 +33,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
 
   const [loading, next] = wrapAction(props.onNext);
   const [showAddingNewLeader, setShowAddingNewLeader] = createSignal(false);
+  const [showOtherOwnersQuestion, setShowOtherOwnersQuestion] = createSignal(true);
   const [editingLeaderId, setEditingLeaderId] = createSignal('');
 
   const [ownersList, fetchingOwnersList, , , refetchOwnersList] = useResource(listBusinessOwners, []);
@@ -58,9 +59,23 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           : `As a representative of ${props.business?.legalName}, we need to know a little more about you`,
       );
     } else if (showAddingNewLeader()) {
-      props.setTitle('To add a new owner or manager, we need the following details:');
+      props.setTitle('To add an owner or manager, we need the following details:');
     } else {
-      props.setTitle(`Is there anyone else that owns or manages ${props.business?.legalName}?`);
+      // Skip the ownership question if it's unnecessary
+      const totalAccountedFor = leaders().reduce(
+        (a, b) => ({
+          percentageOwnership: (a.percentageOwnership || 0) + (b.percentageOwnership || 0),
+        }),
+        {} as BusinessOwner,
+      );
+      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+      if (totalAccountedFor.percentageOwnership && totalAccountedFor.percentageOwnership >= 75) {
+        setHasOtherOwners(false);
+        setShowOtherOwnersQuestion(false);
+        props.setTitle(`Is there anyone else that manages ${props.business?.legalName}?`);
+      } else {
+        props.setTitle(`Is there anyone else that owns or manages ${props.business?.legalName}?`);
+      }
     }
   });
 
@@ -127,18 +142,20 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             </div>
           </div>
         </div>
+        <Show when={showOtherOwnersQuestion()}>
+          <div class={css.field}>
+            <Text message="Is there anyone else who owns 25% or more of the company?" />
+            <RadioGroup value={hasOtherOwners()} name="more-owners" onChange={(v) => setHasOtherOwners(v as boolean)}>
+              <Radio value={true}>
+                <Text message="Yes" />
+              </Radio>
+              <Radio value={false}>
+                <Text message="No" />
+              </Radio>
+            </RadioGroup>
+          </div>
+        </Show>
         <div class={css.field}>
-          <Text message="Is there anyone else who owns 25% or more of the company?" />
-          <RadioGroup name="more-owners" onChange={(v) => setHasOtherOwners(v as boolean)}>
-            <Radio value={true}>
-              <Text message="Yes" />
-            </Radio>
-            <Radio value={false}>
-              <Text message="No" />
-            </Radio>
-          </RadioGroup>
-        </div>
-        <div>
           <Button
             wide={media.small}
             type="primary"

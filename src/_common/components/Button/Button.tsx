@@ -33,6 +33,7 @@ export interface ButtonProps {
   onClick?: (event: MouseEvent) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  'data-name'?: string;
 }
 
 export function Button(props: Readonly<ButtonProps>) {
@@ -80,6 +81,7 @@ export function Button(props: Readonly<ButtonProps>) {
     onClick: merged.onClick,
     onMouseEnter: merged.onMouseEnter,
     onMouseLeave: merged.onMouseLeave,
+    'data-name': merged['data-name'],
   }));
 
   const content = createMemo(() => (
