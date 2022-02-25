@@ -39,7 +39,7 @@ export default function CardActivate() {
       .then(() => {
         messages.success({
           title: i18n.t('Card activated'),
-          message: i18n.t('Your card has bee successfully activated.'),
+          message: i18n.t('Your card has been successfully activated.'),
         });
         navigate(location.state?.prev || `/cards/view/${params.id}`);
       })
