@@ -30,7 +30,7 @@
   font-family: var(--font-header);
   font-size: var(--text-16);
   font-weight: var(--font-400);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }
 
 .message {

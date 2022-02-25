@@ -28,7 +28,6 @@
   font-family: var(--font-header);
   font-size: var(--text-20);
   font-weight: var(--font-400);
-  line-height: var(--line-28);
 }
 
 .card-message {

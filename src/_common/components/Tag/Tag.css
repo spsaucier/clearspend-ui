@@ -24,7 +24,7 @@
   height: v-size-xs;
   padding: var(--pd-2) var(--pd-4);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .success {

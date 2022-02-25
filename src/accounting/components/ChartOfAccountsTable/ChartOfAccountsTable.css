@@ -9,7 +9,7 @@
   padding-bottom: var(--pd-24);
   font-family: var(--font-main);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   vertical-align: middle;
 }
 
@@ -20,7 +20,7 @@
 .column-title {
   font-family: var(--font-header);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .nested-level {

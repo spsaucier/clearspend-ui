@@ -4,7 +4,7 @@
   font-family: var(--font-header);
   font-size: var(--text-46);
   font-weight: var(--font-300);
-  line-height: var(--line-60);
+  line-height: 1.2;
   letter-spacing: var(--ls-small);
 }
 

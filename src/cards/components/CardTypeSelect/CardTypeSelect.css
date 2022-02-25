@@ -39,7 +39,7 @@
   align-items: center;
   font-size: var(--text-16);
   font-weight: var(--font-400);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }
 
 .control {
@@ -59,7 +59,7 @@
   display: block;
   font-size: var(--text-12);
   font-weight: var(--font-400);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .description {
@@ -67,5 +67,5 @@
   margin-top: var(--pd-8);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }

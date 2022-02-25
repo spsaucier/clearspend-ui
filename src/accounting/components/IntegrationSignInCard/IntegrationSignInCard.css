@@ -10,7 +10,6 @@
   margin: 0 0 var(--pd-4);
   font-size: var(--text-12);
   font-weight: var(--font-400);
-  line-height: var(--line-16);
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -19,7 +18,6 @@
   margin: 0 0 var(--pd-24);
   color: var(--tw-gray-60);
   font-size: var(--text-14);
-  line-height: var(--line-20);
 }
 
 .button {
@@ -32,7 +30,6 @@
   display: flex;
   align-items: center;
   font-size: var(--text-14);
-  line-height: var(--line-20);
 }
 
 .button-icon {

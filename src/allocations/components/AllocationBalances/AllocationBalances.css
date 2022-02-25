@@ -2,7 +2,7 @@
   margin: 0;
   font: inherit;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -16,7 +16,7 @@
   margin-right: var(--pd-8);
   color: var(--tw-primary-content);
   font-size: var(--text-16);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }
 
 .wrapper {
@@ -73,7 +73,7 @@
   margin: 0;
   font: inherit;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -82,12 +82,11 @@
   display: block;
   margin-top: var(--pd-8);
   font-size: var(--text-20);
-  line-height: var(--line-28);
 }
 
 .children {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }

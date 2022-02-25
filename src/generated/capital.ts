@@ -3013,6 +3013,20 @@ export interface ExpenseCategory {
   categoryName?: string;
 }
 
+export interface CodatAccountNested {
+  id?: string;
+  name?: string;
+  status?: string;
+  fullyQualifiedCategory?: string;
+  fullyQualifiedName?: string;
+  type?: string;
+  children?: CodatAccountNested[];
+}
+
+export interface CodatAccountNestedResponse {
+  results?: CodatAccountNested[];
+}
+
 export interface CodatBankAccount {
   id?: string;
   accountName?: string;

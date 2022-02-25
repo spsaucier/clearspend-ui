@@ -1,7 +1,7 @@
 .root {
   width: 100%;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   text-align: left;
   border: 0;
   border-spacing: 0;

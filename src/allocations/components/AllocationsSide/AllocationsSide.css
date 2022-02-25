@@ -19,7 +19,7 @@
   font-family: var(--font-header);
   font-size: var(--text-28);
   font-weight: var(--font-700);
-  line-height: var(--line-36);
+  line-height: 1.28;
 }
 
 .content {

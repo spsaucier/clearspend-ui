@@ -20,7 +20,7 @@
 .cardholder {
   margin-bottom: var(--pd-4);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .data {
@@ -32,7 +32,7 @@
 
 .label {
   font-size: var(--text-10);
-  line-height: var(--line-12);
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
@@ -40,7 +40,7 @@
   margin: 0;
   font: inherit;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -52,5 +52,5 @@
 .address {
   margin: var(--pd-16) 0;
   font-size: var(--text-14);
-  line-height: var(--line-20);
+  line-height: 1.4;
 }

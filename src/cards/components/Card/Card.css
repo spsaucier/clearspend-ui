@@ -5,32 +5,30 @@
 .text {
   font-family: var(--font-main);
   font-size: var(--text-14);
-  line-height: var(--line-20);
 }
 
 .type {
   font-family: var(--font-main);
   font-size: var(--text-16);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }
 
 .amount {
   font-family: var(--font-header);
   font-size: var(--text-20);
   font-weight: var(--font-700);
-  line-height: var(--line-28);
 }
 
 .inactive {
   font-size: var(--text-16);
-  line-height: var(--line-24);
+  line-height: 1.5;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
 
 .frozen {
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }

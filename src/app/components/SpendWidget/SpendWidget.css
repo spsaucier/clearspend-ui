@@ -7,5 +7,5 @@
 .total {
   color: var(--tw-black);
   font-size: var(--text-16);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }

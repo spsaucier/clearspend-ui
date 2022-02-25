@@ -11,7 +11,7 @@
   color: var(--tw-white);
   font-size: var(--text-12);
   font-weight: var(--font-700);
-  line-height: var(--line-16);
+  line-height: 1.33;
   background: var(--tw-gray-70);
 }
 
@@ -42,7 +42,7 @@
   font-family: var(--font-header);
   font-size: var(--text-20);
   font-weight: var(--font-700);
-  line-height: var(--line-28);
+  line-height: 1.4;
 }
 
 .merchant-logo {
@@ -57,7 +57,7 @@
   margin-top: var(--pd-10);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .receipt-cta {
@@ -75,7 +75,7 @@
   margin: var(--pd-24) 0 var(--pd-8);
   font: inherit;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -100,7 +100,7 @@
   margin: var(--pd-12) 0;
   justify-content: space-between;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 
   & > *:first-child {
     color: var(--tw-gray-60);
@@ -114,7 +114,7 @@
 .option-title {
   margin-bottom: var(--pd-4);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .expense-category {

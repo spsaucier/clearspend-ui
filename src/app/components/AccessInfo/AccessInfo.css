@@ -20,7 +20,7 @@
   margin: 0;
   font-family: var(--font-header);
   font-size: var(--text-28);
-  line-height: var(--line-36);
+  line-height: 1.28;
   letter-spacing: var(--ls-small);
 }
 

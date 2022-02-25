@@ -10,7 +10,7 @@
   font-family: var(--font-header);
   font-size: var(--text-12);
   font-weight: var(--font-400);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }

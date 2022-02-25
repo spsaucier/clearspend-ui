@@ -36,14 +36,14 @@
 /* todo: move */
 .radio-label {
   font-size: var(--text-14);
-  line-height: var(--line-22);
+  line-height: 1.4;
 }
 
 .radio-extra {
   display: flex;
   margin-top: var(--pd-12);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .radio-extra svg {

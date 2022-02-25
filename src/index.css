@@ -67,24 +67,17 @@
   --text-10: 10px;
   --text-12: 12px;
   --text-14: 14px;
-  --text-16: 16px;
-  --text-18: 18px;
-  --text-20: 20px;
-  --text-24: 24px;
-  --text-28: 28px;
-  --text-32: 32px;
-  --text-46: 46px;
+  --text-16: 15px;
+  --text-18: 16px;
+  --text-20: 18px;
+  --text-24: 20px;
+  --text-28: 24px;
+  --text-32: 28px;
+  --text-46: 33px;
 
   /* LINE HEIGHT: */
-  --line-12: 12px;
-  --line-16: 16px;
-  --line-20: 20px;
   --line-24: 24px;
   --line-28: 28px;
-  --line-32: 32px;
-  --line-36: 36px;
-  --line-40: 40px;
-  --line-60: 60px;
 
   /* RADIUS */
   --radius-2: 2px;
@@ -105,6 +98,22 @@
   --z-index-modal: 1000;
   --z-index-dropdown: 1050;
   --z-index-messages: 1100;
+}
+
+@media (--bp-medium) {
+  :root {
+    /* FONT SIZE: */
+    --text-10: 10px;
+    --text-12: 12px;
+    --text-14: 14px;
+    --text-16: 16px;
+    --text-18: 18px;
+    --text-20: 20px;
+    --text-24: 24px;
+    --text-28: 28px;
+    --text-32: 32px;
+    --text-46: 46px;
+  }
 }
 
 :root,
@@ -166,7 +175,7 @@ body {
   color: var(--tw-black);
   font-family: var(--font-main), sans-serif;
   font-size: var(--text-14);
-  line-height: var(--line-20);
+  line-height: 1.4;
   background: var(--tw-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -42,5 +42,5 @@
 .number {
   margin-top: var(--pd-2);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }

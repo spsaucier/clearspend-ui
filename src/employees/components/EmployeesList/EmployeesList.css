@@ -14,7 +14,7 @@
   justify-content: space-between;
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   cursor: pointer;
 
   &:not(:last-child) {
@@ -39,5 +39,5 @@
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }

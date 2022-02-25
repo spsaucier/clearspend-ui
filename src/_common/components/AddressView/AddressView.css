@@ -3,7 +3,7 @@
   flex-direction: row;
   font-family: var(--font-header);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .icon {
@@ -13,7 +13,6 @@
 .label {
   margin-bottom: var(--pd-8);
   font-size: var(--text-14);
-  line-height: var(--line-20);
 }
 
 .address {

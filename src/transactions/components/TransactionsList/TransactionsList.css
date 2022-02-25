@@ -21,14 +21,14 @@
 .category {
   font-size: var(--text-16);
   font-weight: var(--font-400);
-  line-height: var(--line-24);
+  line-height: 1.5;
 }
 
 .date {
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 }
 
 .side {
@@ -41,6 +41,6 @@
   margin: var(--pd-2) var(--pd-8) 0 0;
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   border-right: 1px solid transparent;
 }

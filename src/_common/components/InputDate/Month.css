@@ -72,7 +72,7 @@
   align-items: center;
   justify-content: center;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   background: transparent;
   border: 0;
   border-radius: var(--radius-4);

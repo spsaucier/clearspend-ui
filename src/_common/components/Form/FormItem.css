@@ -12,20 +12,19 @@
   margin-bottom: var(--pd-4);
   font-size: var(--text-14);
   font-weight: var(--font-400);
-  line-height: var(--line-16);
+  line-height: 1.15;
   cursor: pointer;
 }
 
 .root.dark .label {
   font-size: var(--text-14);
-  line-height: var(--line-22);
 }
 
 .description {
   margin-top: var(--pd-4);
   color: var(--tw-gray-60);
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
 
   @nest .dark & {
     color: white;
@@ -40,7 +39,7 @@
   @nest .dark & {
     color: white;
     font-size: var(--text-12);
-    line-height: var(--line-16);
+    line-height: 1.33;
     letter-spacing: 0.5px;
   }
 }
