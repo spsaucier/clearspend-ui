@@ -9,6 +9,12 @@
   line-height: var(--line-28);
 }
 
+.text {
+  & > b {
+    white-space: nowrap;
+  }
+}
+
 .subtitle {
   margin: var(--pd-24) 0 var(--pd-8);
   font: inherit;

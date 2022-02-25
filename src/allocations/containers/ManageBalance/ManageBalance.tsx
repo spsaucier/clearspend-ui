@@ -9,11 +9,8 @@ import { makeTransaction } from 'app/services/businesses';
 import { isBankAccount } from 'onboarding/components/BankAccounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
-import {
-  ManageBalanceSuccess,
-  ManageBalanceSuccessData,
-} from 'allocations/components/ManageBalanceSuccess/ManageBalanceSuccess';
 
+import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
 import { useAllocations } from '../../stores/allocations';
@@ -37,7 +34,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
 
   const [current, setCurrent] = createSignal<Readonly<Allocation>>();
-  const [manageBalanceSucessData, setManageBalanceSuccessData] = createSignal<Readonly<ManageBalanceSuccessData>>();
+  const [successManageData, setSuccessManageData] = createSignal<Readonly<ManageBalanceSuccessData>>();
 
   const [accounts, accountsRequestStatus, , , reloadAccounts] = useResource(getBankAccounts, undefined, false);
 
@@ -49,8 +46,6 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
       setCurrent(found);
     },
   });
-
-  // TODO: check user role (owner|manager?)
 
   const targets = createMemo(() => {
     const allocation = current();
@@ -66,7 +61,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
     const isWithdraw = tab() === Tabs.remove;
 
     const { name: targetName, allocationId: targetAllocationId } = target as Allocation;
-    const { name: currentName, allocationId: sourceAllocationId, account } = current()!;
+    const { name: currentName, allocationId: sourceAllocationId } = current()!;
 
     const transactionResult = targetIsBankAccount
       ? await bankTransaction(isWithdraw ? 'WITHDRAW' : 'DEPOSIT', id, amount)
@@ -78,7 +73,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
 
     await props.onReload();
 
-    setManageBalanceSuccessData({
+    setSuccessManageData({
       amount,
       fromAmount: targetIsBankAccount
         ? 0
@@ -86,7 +81,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
       fromName: isWithdraw ? currentName : targetName,
       toName: isWithdraw ? targetName : currentName,
       toAmount: targetIsBankAccount
-        ? account.ledgerBalance.amount
+        ? current()!.account.ledgerBalance.amount
         : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
     });
   };
@@ -110,15 +105,15 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
             class={css.allocation}
           />
           <Show
-            when={!manageBalanceSucessData()}
+            when={!successManageData()}
             fallback={
               <ManageBalanceSuccess
-                {...manageBalanceSucessData()!}
+                {...successManageData()!}
                 onClose={props.onClose}
                 onAgain={() => {
                   batch(() => {
                     setTab(Tabs.add);
-                    setManageBalanceSuccessData();
+                    setSuccessManageData();
                   });
                 }}
               />

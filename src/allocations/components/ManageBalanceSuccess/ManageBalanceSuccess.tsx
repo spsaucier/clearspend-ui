@@ -30,6 +30,7 @@ export function ManageBalanceSuccess(props: Readonly<ManageBalanceSuccessProps>)
         </h4>
         <Text
           message="You moved <b>{amount}</b> from <b>{from}</b> to <b>{to}</b>"
+          class={css.text!}
           amount={formatCurrency(props.amount)}
           from={props.fromName}
           to={props.toName}
