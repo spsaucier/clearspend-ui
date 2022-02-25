@@ -50,6 +50,7 @@ interface TransactionPreviewProps {
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
+  onReload: () => Promise<unknown>;
 }
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
@@ -102,6 +103,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       .then((data) => {
         batch(() => {
           props.onUpdate(data);
+          props.onReload();
           setExpenseCategory(ec);
         });
       })

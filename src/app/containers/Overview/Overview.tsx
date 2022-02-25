@@ -174,6 +174,7 @@ export function Overview(props: Readonly<OverviewProps>) {
             transaction={selectedTransaction()!}
             onUpdate={setSelectedTransaction}
             onViewReceipt={setShowReceipts}
+            onReload={activityStore.reload}
           />
         </Drawer>
         <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
