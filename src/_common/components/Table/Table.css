@@ -20,8 +20,12 @@
 .row {
   transition: background-color 0.3s;
 
-  &:hover {
+  &:nth-child(2n) {
     background: var(--tw-gray-10);
+  }
+
+  &:hover {
+    background: var(--tw-gray-15);
   }
 }
 
