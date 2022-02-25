@@ -18,4 +18,5 @@ export interface CheckboxProps {
   disabled?: boolean;
   children?: JSX.Element;
   onChange?: (checked: boolean) => void;
+  darkMode?: boolean;
 }

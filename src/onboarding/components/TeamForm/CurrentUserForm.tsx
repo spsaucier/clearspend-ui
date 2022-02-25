@@ -1,3 +1,4 @@
+/* eslint-disable css-modules/no-unused-class */
 import { Text } from 'solid-i18n';
 import { Show } from 'solid-js';
 

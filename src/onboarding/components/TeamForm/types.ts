@@ -12,5 +12,6 @@ export interface FormValues {
   postalCode: string;
   percentageOwnership: number;
   title?: string;
-  relationshipToBusiness: string[];
+  relationshipOwner?: boolean;
+  relationshipExecutive?: boolean;
 }

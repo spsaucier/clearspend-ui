@@ -265,6 +265,11 @@ export default function SignUp() {
               }
               onResend={onPhoneCodeResend}
               onConfirm={onPhoneConfirm}
+              extraBtn={
+                <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.PhoneStep)}>
+                  Back
+                </Button>
+              }
             />
           </Match>
           <Match when={step() === Step.PasswordStep}>

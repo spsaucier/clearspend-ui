@@ -1,5 +1,4 @@
 import { Text } from 'solid-i18n';
-import { createMemo, Show } from 'solid-js';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -14,8 +13,7 @@ import { formatSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { InputPercentage } from '_common/components/InputPercentage';
-import { RelationshipToBusiness } from 'app/types/businesses';
-import { CheckboxGroup, Checkbox } from '_common/components/Checkbox';
+import { RadioGroup, Radio } from '_common/components/Radio';
 
 import type { ExceptionData } from '../../types';
 import type { BusinessOwner } from '../LeadershipTable/LeadershipTable';
@@ -31,25 +29,12 @@ interface AddEditLeaderFormProps {
   isSignupUser?: boolean;
 }
 
-const reformatUser = (leader?: CreateOrUpdateBusinessOwnerRequest) => {
-  if (!leader) return undefined;
-  const relationshipToBusiness = [];
-  if (leader.relationshipExecutive) relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
-  if (leader.relationshipOwner) relationshipToBusiness.push(RelationshipToBusiness.OWNER);
-  return {
-    ...leader,
-    relationshipToBusiness,
-  };
-};
-
 export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
   const media = useMediaContext();
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
-  const formattedLeader = reformatUser(props.leader);
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions({ leader: formattedLeader }));
-  const isOwner = createMemo(() => values().relationshipToBusiness.includes(RelationshipToBusiness.OWNER));
+  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions({ leader: props.leader }));
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
@@ -61,49 +46,57 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
-      <Section
-        title="What is this person's role?"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-        class={css.section}
-      >
-        <div class={css.wrapper}>
-          <FormItem label="">
-            <CheckboxGroup
-              name="business-structure"
-              value={values().relationshipToBusiness as string[]}
-              onChange={(value: string[]) => handlers.relationshipToBusiness(value as RelationshipToBusiness[])}
+      <Section title="What is this person's role?" class={css.section}>
+        <div class={css.wrapperWide}>
+          <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
+            <RadioGroup
+              name="is-owner"
+              value={values().relationshipOwner}
+              onChange={(value) => handlers.relationshipOwner?.(value as boolean)}
             >
-              <Checkbox value={RelationshipToBusiness.OWNER} disabled={props.isSignupUser}>
-                Owner
-              </Checkbox>
-              <Checkbox value={RelationshipToBusiness.EXECUTIVE} disabled={props.isSignupUser}>
-                Executive
-              </Checkbox>
-              <Checkbox value={RelationshipToBusiness.DIRECTOR} disabled={props.isSignupUser}>
-                Director
-              </Checkbox>
-            </CheckboxGroup>
+              <Radio value={true}>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </RadioGroup>
+          </FormItem>
+          <FormItem
+            label={
+              <div>
+                <div class={css.radioLabel}>Does your title or role allow you to sign contracts for your business?</div>
+                <div class={css.radioExtra}>
+                  Examples include: Chief Executive Officer, Chief Financial Officer, Chief Operating Officer,
+                  Management Member, General Partner, President, Vice President, or Treasurer.
+                </div>
+              </div>
+            }
+            error={errors().relationshipExecutive}
+          >
+            <RadioGroup
+              name="is-executive"
+              value={values().relationshipExecutive}
+              onChange={(value) => handlers.relationshipExecutive?.(value as boolean)}
+            >
+              <Radio value={true}>Yes</Radio>
+              <Radio value={false}>No</Radio>
+            </RadioGroup>
           </FormItem>
         </div>
       </Section>
-      <Show when={isOwner()}>
-        <Section
-          title="Your ownership stake"
-          description="Please disclose your company ownership amount via percentage."
-          class={css.section}
-        >
-          <div class={css.wrapper}>
-            <FormItem label="Percentage ownership" error={errors().percentageOwnership}>
-              <InputPercentage
-                name="percentage-ownership"
-                value={values().percentageOwnership}
-                error={Boolean(errors().percentageOwnership)}
-                onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
-              />
-            </FormItem>
-          </div>
-        </Section>
-      </Show>
+      <Section
+        title="Ownership stake"
+        description="Please disclose your company ownership amount via percentage."
+        class={css.section}
+      >
+        <div class={css.wrapper}>
+          <FormItem label="Percentage ownership" error={errors().percentageOwnership}>
+            <InputPercentage
+              name="percentage-ownership"
+              value={values().percentageOwnership}
+              error={Boolean(errors().percentageOwnership)}
+              onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
+            />
+          </FormItem>
+        </div>
+      </Section>
       <Section
         title="Your details"
         description="Tell us the name your momma gave you and where we can mail you love letters (just kidding... maybe)."

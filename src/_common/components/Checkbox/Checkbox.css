@@ -17,11 +17,12 @@
 }
 
 .control {
+  background-color: transparent;
   cursor: pointer;
 
   @nest .input:checked + & {
-    background-color: var(--tw-primary-bg);
-    border-color: var(--tw-primary-bg);
+    background-color: var(--tw-green-80);
+    border-color: var(--tw-green-80);
 
     &::after {
       opacity: 1;

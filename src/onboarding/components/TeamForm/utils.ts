@@ -4,7 +4,6 @@ import { validEmail, validPhone, validZipCode } from '_common/components/Form/ru
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
-import { RelationshipToBusiness } from 'app/types/businesses';
 
 import type { FormValues } from './types';
 
@@ -31,16 +30,9 @@ export function getFormOptions({ signupUser, leader }: Props): FormOptions<FormV
     postalCode: [required, validZipCode],
   };
 
-  const relationshipToBusiness = [];
-  if (signupUser?.relationshipToBusiness?.owner) {
-    relationshipToBusiness.push(RelationshipToBusiness.OWNER);
-  }
-  if (signupUser?.relationshipToBusiness?.director) {
-    relationshipToBusiness.push(RelationshipToBusiness.DIRECTOR);
-  }
-  if (signupUser?.relationshipToBusiness?.executive) {
-    relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
-  }
+  const relationshipExecutive = signupUser?.relationshipToBusiness?.executive;
+  const relationshipOwner = signupUser?.relationshipToBusiness?.owner;
+
   const defaultValues = {
     firstName: signupUser?.firstName || '',
     lastName: signupUser?.lastName || '',
@@ -48,7 +40,8 @@ export function getFormOptions({ signupUser, leader }: Props): FormOptions<FormV
     ssn: '',
     email: signupUser?.email || '',
     phone: signupUser?.phone || '',
-    relationshipToBusiness,
+    relationshipExecutive,
+    relationshipOwner,
     percentageOwnership: 0,
     title: '',
     streetLine1: '',
@@ -82,7 +75,8 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     phone,
     percentageOwnership,
     title,
-    relationshipToBusiness,
+    relationshipExecutive,
+    relationshipOwner,
     ...address
   } = data;
   return {
@@ -94,8 +88,8 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     phone,
     percentageOwnership,
     title,
-    relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
-    relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
+    relationshipOwner,
+    relationshipExecutive,
     address: { ...address, country: 'USA' },
   };
 }

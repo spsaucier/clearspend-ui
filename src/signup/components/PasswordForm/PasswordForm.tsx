@@ -38,7 +38,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
 
   return (
     <div>
-      <Header>Create a password</Header>
+      <Header>Let's create a super secure, super secret password</Header>
       <Description>
         <Text
           message="Your password must be at least {count} {count, plural, one {character} other {characters}} long."

@@ -8,6 +8,7 @@ import { Input } from '_common/components/Input';
 import { validEmail } from '_common/components/Form/rules/patterns';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useSignup } from 'signup/store';
+import { Checkbox } from '_common/components/Checkbox';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
@@ -17,6 +18,7 @@ interface AccountSetUpFormValues {
   firstName: string;
   lastName: string;
   email: string;
+  isAgreedToTos: boolean;
 }
 
 interface AccountSetUpFormProps {
@@ -34,8 +36,9 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
       firstName: store.first ?? '',
       lastName: store.last ?? '',
       email: store.email ?? (props.initialEmailValue || ``),
+      isAgreedToTos: false,
     },
-    rules: { firstName: [required], lastName: [required], email: [required, validEmail] },
+    rules: { firstName: [required], lastName: [required], email: [required, validEmail], isAgreedToTos: [required] },
   });
 
   const [loading, next] = wrapAction(props.onNext);
@@ -51,7 +54,7 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
     <div>
       <Header>Let's get your account set up</Header>
       <Description>
-        <Text message="It's easier than buying a car, and less painful, we promise." />
+        <Text message="It's easier than buying a car, (and less painful), we promise." />
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="First name" error={errors().firstName} darkMode={true}>
@@ -90,7 +93,15 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
             onChange={handlers.email}
           />
         </FormItem>
-        <div style={{ height: '24px' }} />
+        <FormItem error={errors().isAgreedToTos} class={'fullwidth'}>
+          <Checkbox value={'agree'} onChange={handlers.isAgreedToTos}>
+            <Text
+              message="I am at least 18 years old and agree to ClearSpend’s <linkToS>Terms of Service</linkToS> and <linkPP>Privacy Policy</linkPP>."
+              linkToS={(text) => <Link href="/login">{text}</Link>}
+              linkPP={(text) => <Link href="/login">{text}</Link>}
+            />
+          </Checkbox>
+        </FormItem>
         <FlatButton type="primary" htmlType="submit">
           Next
         </FlatButton>

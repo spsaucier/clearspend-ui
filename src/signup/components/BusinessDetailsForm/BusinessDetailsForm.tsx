@@ -79,7 +79,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
   return (
     <div>
       <Header>Next, we need to know about your business</Header>
-      <Description>This to ensure we set up your account with the right XYZ features.</Description>
+      <Description>Our lawyers made us ask, but we promise: this is not a credit check.</Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem
           label="Please select the legal entity type of your business."
@@ -125,11 +125,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
             values().businessType !== BusinessType.UNKNOWN
           }
         >
-          <FormItem
-            label="Are you owner with at least 25% ownership?"
-            error={errors().businessTypeCategory}
-            darkMode={true}
-          >
+          <FormItem label="Are you owner with at least 25% ownership?" error={errors().isOwnerOf25} darkMode={true}>
             <RadioGroup
               name="is-owner"
               value={values().isOwnerOf25}
@@ -147,6 +143,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
           }
         >
           <FormItem
+            darkMode={true}
             label={
               <div>
                 <div class={css.radioLabel}>Does your title or role allow you to sign contracts for your business?</div>
@@ -159,7 +156,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
                 </div>
               </div>
             }
-            error={errors().businessTypeCategory}
+            error={errors().isExecutive}
           >
             <RadioGroup
               name="is-executive"
