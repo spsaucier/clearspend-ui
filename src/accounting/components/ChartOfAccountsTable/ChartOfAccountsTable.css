@@ -23,6 +23,21 @@
   line-height: var(--line-16);
 }
 
+.nested-level {
+  display: flex;
+  align-items: bottom;
+  flex-direction: 'row';
+  justify-content: left;
+}
+
+.nested-level-3 {
+  margin-left: var(--pd-24);
+}
+
+.nested-level-4 {
+  margin-left: var(--pd-48);
+}
+
 .expense-category-cell {
   display: grid;
   grid-template-columns: 1fr auto auto;

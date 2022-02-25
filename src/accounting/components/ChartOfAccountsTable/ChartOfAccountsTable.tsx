@@ -8,16 +8,19 @@ import { Table, TableColumn } from '_common/components/Table';
 import type { ExpenseCategory } from 'generated/capital';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Button } from '_common/components/Button';
+import { Icon } from '_common/components/Icon';
+import { join } from '_common/utils/join';
 
-import type { IntegrationAccountResponse } from '../ChartOfAccountsData/types';
+import type { FlattenedIntegrationAccount, IntegrationAccount } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
 
-import { generateInitialCategoryMap, getAccountType } from './utils';
+import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
+import { NestedLevels } from './types';
 
 import css from './ChartOfAccountsTable.css';
 
 interface ChartOfAccountsTableProps {
-  data: IntegrationAccountResponse[];
+  data: IntegrationAccount[];
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -27,9 +30,21 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
+  const flattenedData = createMemo(() => flattenNestedIntegrationAccounts(props.data));
   // const isComplete = createMemo(() => Object.keys(state).reduce<boolean>((prev, curr) => prev && !!state[curr], true));
 
-  const columns: readonly Readonly<TableColumn<IntegrationAccountResponse>>[] = [
+  const getNestedCSSlevel = (account: FlattenedIntegrationAccount) => {
+    switch (account.level) {
+      case NestedLevels.Three:
+        return css.nestedLevel3;
+      case NestedLevels.Four:
+        return css.nestedLevel4;
+      default:
+        return undefined;
+    }
+  };
+
+  const columns: readonly Readonly<TableColumn<FlattenedIntegrationAccount>>[] = [
     {
       name: 'accountName',
       title: (
@@ -39,7 +54,8 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       ),
       render: (item) => {
         return (
-          <div>
+          <div class={join(css.nestedLevel, getNestedCSSlevel(item))}>
+            {item.level > 1 && <Icon name="l-tab" style={{ color: 'transparent' }} />}
             <Text message={item.name} />
           </div>
         );
@@ -133,7 +149,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       />
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
         <div class={css.table}>
-          <Table columns={columns} data={props.data as []} tdClass={css.cell} />
+          <Table columns={columns} data={flattenedData()} tdClass={css.cell} />
         </div>
         <div class={css.tableButtons}>
           <Button view="ghost">

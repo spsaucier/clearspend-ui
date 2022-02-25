@@ -7,7 +7,6 @@ import { service } from 'app/utils/service';
 import type { ExpenseCategory } from 'generated/capital';
 
 import type { IntegrationAccountResponse } from './components/ChartOfAccountsData/types';
-import { TEMP_QBO_EXPENSE_CATEGORIES } from './constants';
 import type { UpdateBusinessAccountingStepRequest } from './types';
 
 export async function getCompanyConnection(): Promise<boolean> {
@@ -35,10 +34,6 @@ export async function getExpenseCategories() {
   return (await service.get<readonly Readonly<ExpenseCategory>[]>('/expense-categories/list')).data;
 }
 
-export async function getIntegrationExpenseCategories(): Promise<IntegrationAccountResponse[]> {
-  return TEMP_QBO_EXPENSE_CATEGORIES; // TODO: delete temp data and replace with the below
+export async function getIntegrationExpenseCategories() {
+  return (await service.get<Readonly<IntegrationAccountResponse>>('/codat/chart-of-accounts/expense')).data;
 }
-
-// export async function getIntegrationExpenseCategories() {
-//   return (await service.get<Readonly<INSERT_TYPE>[]>(`/codat/get-accounts`)).data;
-// }

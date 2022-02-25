@@ -52,6 +52,7 @@ export enum IconName {
   freeze = 'freeze',
   information = 'information',
   keyboard = 'keyboard',
+  'l-tab' = 'l-tab',
   'mcc-child-care' = 'mcc-child-care',
   'mcc-digital-goods' = 'mcc-digital-goods',
   'mcc-education' = 'mcc-education',
