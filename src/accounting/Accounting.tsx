@@ -9,7 +9,12 @@ import { useBusiness } from '../app/containers/Main/context';
 import { canSeeAccounting } from './utils/canSeeAccounting';
 import { AccountingTabs } from './pages/AccountingTabs';
 import { Integrations } from './pages/Integrations';
-import { getCompanyConnection, postAccountingStepToBusiness } from './services';
+import {
+  deleteIntegrationConnection,
+  deleteIntegrationExpenseCategoryMappings,
+  getCompanyConnection,
+  postAccountingStepToBusiness,
+} from './services';
 import { AddCreditCardForm } from './pages/AddCreditCardForm';
 import { ChartOfAccounts } from './pages/ChartOfAccounts';
 
@@ -21,9 +26,13 @@ export default function Accounting() {
   );
 
   onMount(async () => {
+    getCompanyConnectionState();
+  });
+
+  const getCompanyConnectionState = async () => {
     const res = await getCompanyConnection();
     setHasIntegrationConnection(res);
-  });
+  };
 
   const onUpdateCreditCard = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.MAP_CATEGORIES });
@@ -33,6 +42,15 @@ export default function Accounting() {
   const onCompleteChartOfAccounts = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
     setStep(AccountSetupStep.COMPLETE);
+  };
+
+  const onCancelAccountingSetup = async () => {
+    setHasIntegrationConnection(null);
+    deleteIntegrationExpenseCategoryMappings();
+    await deleteIntegrationConnection();
+    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.ADD_CREDIT_CARD });
+    setStep(AccountSetupStep.ADD_CREDIT_CARD);
+    await getCompanyConnectionState();
   };
 
   return (
@@ -47,10 +65,10 @@ export default function Accounting() {
         <Match when={hasIntegrationConnection() === true}>
           <Switch>
             <Match when={step() === AccountSetupStep.ADD_CREDIT_CARD}>
-              <AddCreditCardForm onNext={onUpdateCreditCard} />
+              <AddCreditCardForm onNext={onUpdateCreditCard} onCancel={onCancelAccountingSetup} />
             </Match>
             <Match when={step() === AccountSetupStep.MAP_CATEGORIES}>
-              <ChartOfAccounts onNext={onCompleteChartOfAccounts} />
+              <ChartOfAccounts onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
             </Match>
             <Match when={step() === AccountSetupStep.COMPLETE}>
               <AccountingTabs />

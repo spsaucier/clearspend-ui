@@ -9,11 +9,13 @@ import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { Icon } from '_common/components/Icon';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
+import { CancelConfirmationButton } from 'accounting/components/CancelConfirmationButton';
 
 import css from './AddCreditCardForm.css';
 
 interface AddCreditCardFormProps {
   onNext: () => void;
+  onCancel: () => void;
 }
 
 export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
@@ -123,10 +125,11 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
         </Drawer>
       </Page>
       <div class={css.footer}>
+        <CancelConfirmationButton onCancel={props.onCancel} />
         <Button onClick={onClick} class={css.nextButton}>
           <Text message="Skip Setup" />
         </Button>
-        <Button onClick={onClickNext} class={css.nextButton}>
+        <Button onClick={onClickNext} type="primary" class={css.nextButton}>
           <Text message="Next" />
         </Button>
       </div>

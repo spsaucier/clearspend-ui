@@ -482,6 +482,24 @@ export interface CodatWebhookRequest {
   Data?: CodatWebhookDataType;
 }
 
+export interface AddChartOfAccountsMappingRequest {
+  accountRef?: string;
+
+  /** @format int32 */
+  categoryIconRef?: number;
+}
+
+export interface ChartOfAccountsMappingResponse {
+  accountRef?: string;
+
+  /** @format int32 */
+  categoryIconRef?: number;
+}
+
+export interface GetChartOfAccountsMappingResponse {
+  results?: ChartOfAccountsMappingResponse[];
+}
+
 export interface CurrencyLimit {
   currency: 'UNSPECIFIED' | 'USD';
   typeMap: LimitTypeMap;
@@ -603,6 +621,19 @@ export interface CardStatementRequest {
 
   /** @format date-time */
   endDate?: string;
+}
+
+export interface UpdateAllocationBalanceRequest {
+  amount: Amount;
+
+  /** @example CSR credit */
+  notes: string;
+}
+
+export interface UpdateAllocationBalanceResponse {
+  /** @format uuid */
+  adjustmentId?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface UpdateBusiness {
@@ -1417,15 +1448,16 @@ export interface AccountActivityRequest {
   cardId?: string;
   searchText?: string;
   types?: (
-    | 'BANK_LINK'
     | 'BANK_DEPOSIT'
     | 'BANK_DEPOSIT_RETURN'
+    | 'BANK_LINK'
+    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
-    | 'BANK_UNLINK'
-    | 'REALLOCATE'
+    | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE'
+    | 'REALLOCATE'
   )[];
 
   /** @format date-time */
@@ -1445,15 +1477,16 @@ export interface AccountActivityResponse {
   card?: CardInfo;
   merchant?: Merchant;
   type?:
-    | 'BANK_LINK'
     | 'BANK_DEPOSIT'
     | 'BANK_DEPOSIT_RETURN'
+    | 'BANK_LINK'
+    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
-    | 'BANK_UNLINK'
-    | 'REALLOCATE'
+    | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE';
+    | 'NETWORK_CAPTURE'
+    | 'REALLOCATE';
   status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
   amount?: Amount;
   receipt?: ReceiptDetails;

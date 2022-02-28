@@ -62,13 +62,12 @@
 }
 
 .next-button {
-  margin: 8px;
-  background: var(--tw-accent-80);
+  margin-left: var(--pd-8);
 }
 
 .footer {
   display: flex;
-  padding: 10px;
+  padding: var(--pd-12);
   flex-direction: row;
   justify-content: flex-end;
   background-color: var(--tw-gray-10);

@@ -34,6 +34,10 @@ export async function postAccountingStepToBusiness(params: Readonly<UpdateBusine
     .data;
 }
 
+export async function deleteIntegrationConnection() {
+  await service.remove('/codat/connection');
+}
+
 export async function getExpenseCategories() {
   return (await service.get<readonly Readonly<ExpenseCategory>[]>('/expense-categories/list')).data;
 }
@@ -49,4 +53,8 @@ export async function getIntegrationExpenseCategoryMappings() {
 export async function postIntegrationExpenseCategoryMappings(params: Readonly<IntegrationAccountMapping | null>[]) {
   return (await service.post<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings', params))
     .data;
+}
+
+export async function deleteIntegrationExpenseCategoryMappings() {
+  await service.remove('/chart-of-accounts/mappings');
 }

@@ -1,7 +1,6 @@
 import { Text } from 'solid-i18n';
 
 import { Page } from 'app/components/Page';
-import { Button } from '_common/components/Button';
 import { Data } from 'app/components/Data';
 import {
   useIntegrationExpenseCategories,
@@ -15,6 +14,7 @@ import css from './ChartOfAccounts.css';
 
 interface ChartOfAccountsProps {
   onNext: () => void;
+  onCancel: () => void;
 }
 
 export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
@@ -52,11 +52,10 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
             integrationExpenseCategoryStore.reload();
             integrationExpenseCategoryMappingStore.reload();
           }}
+          onCancel={props.onCancel}
+          onSkip={props.onNext}
         />
       </Data>
-      <Button onClick={props.onNext}>
-        <Text message="Skip Setup" />
-      </Button>
     </Page>
   );
 }

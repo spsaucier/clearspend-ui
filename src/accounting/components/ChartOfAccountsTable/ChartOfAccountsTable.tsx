@@ -13,6 +13,7 @@ import { join } from '_common/utils/join';
 
 import type { FlattenedIntegrationAccount, IntegrationAccount } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
+import { CancelConfirmationButton } from '../CancelConfirmationButton';
 
 import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
 import { IntegrationAccountMapping, NestedLevels } from './types';
@@ -22,6 +23,8 @@ import css from './ChartOfAccountsTable.css';
 interface ChartOfAccountsTableProps {
   data: IntegrationAccount[];
   onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
+  onCancel: () => void;
+  onSkip?: () => void;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -158,9 +161,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           <Table columns={columns} data={flattenedData()} tdClass={css.cell} />
         </div>
         <div class={css.tableButtons}>
-          <Button view="ghost">
-            <Text message="Cancel" />
-          </Button>
+          <CancelConfirmationButton onCancel={props.onCancel} />
+          <Show when={!!props.onSkip}>
+            <Button onClick={props.onSkip}>
+              <Text message="Skip Setup" />
+            </Button>
+          </Show>
           <Button
             class={css.done}
             type="primary"
