@@ -1,0 +1,21 @@
+.section {
+  margin: var(--pd-16) 0 var(--pd-32);
+}
+
+.data {
+  max-width: 500px;
+}
+
+.data-label {
+  margin-right: var(--pd-4);
+  color: var(--tw-gray-60);
+}
+
+.data-value {
+  display: inline-block;
+  margin-right: var(--pd-8);
+}
+
+.account-number {
+  color: var(--tw-primary-content);
+}

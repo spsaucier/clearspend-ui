@@ -28,6 +28,7 @@ export enum IconName {
   'channel-atm' = 'channel-atm',
   'channel-ecommerce' = 'channel-ecommerce',
   'channel-moto' = 'channel-moto',
+  'channel-subscription' = 'channel-subscription',
   'chevron-down' = 'chevron-down',
   'chevron-left' = 'chevron-left',
   'chevron-right' = 'chevron-right',

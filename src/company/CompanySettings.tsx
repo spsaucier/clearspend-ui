@@ -7,6 +7,7 @@ import { useBusiness } from 'app/containers/Main/context';
 
 import { CompanyProfile } from './containers/CompanyProfile';
 import { BankAccounts } from './containers/BankAccounts';
+import { FinancialInfo } from './containers/FinancialInfo';
 
 enum Tabs {
   profile,
@@ -28,6 +29,9 @@ export default function CompanySettings() {
         <Tab value={Tabs.accounts}>
           <Text message="Bank Accounts" />
         </Tab>
+        <Tab value={Tabs.financial}>
+          <Text message="Financial Info" />
+        </Tab>
       </TabList>
       <Switch>
         <Match when={tab() === Tabs.profile}>
@@ -35,6 +39,9 @@ export default function CompanySettings() {
         </Match>
         <Match when={tab() === Tabs.accounts}>
           <BankAccounts />
+        </Match>
+        <Match when={tab() === Tabs.financial}>
+          <FinancialInfo data={business()} />
         </Match>
       </Switch>
     </Page>
