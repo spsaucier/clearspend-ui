@@ -39,10 +39,7 @@ export function EditProfileForm(props: Readonly<EditProfileFormProps>) {
 
   return (
     <Form>
-      <Section
-        title={<Text message="Update address" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-      >
+      <Section title={<Text message="Employee address" />} description={'What’s your employee’s home address?'}>
         <AddressFormItems values={values} errors={errors()} handlers={handlers} />
       </Section>
       <Show when={isDirty()}>
