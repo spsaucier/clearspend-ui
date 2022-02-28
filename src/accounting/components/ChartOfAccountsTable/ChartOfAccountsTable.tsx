@@ -15,12 +15,13 @@ import type { FlattenedIntegrationAccount, IntegrationAccount } from '../ChartOf
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
 
 import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
-import { NestedLevels } from './types';
+import { IntegrationAccountMapping, NestedLevels } from './types';
 
 import css from './ChartOfAccountsTable.css';
 
 interface ChartOfAccountsTableProps {
   data: IntegrationAccount[];
+  onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -32,6 +33,11 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
   const flattenedData = createMemo(() => flattenNestedIntegrationAccounts(props.data));
   // const isComplete = createMemo(() => Object.keys(state).reduce<boolean>((prev, curr) => prev && !!state[curr], true));
+
+  const handleSave = () => {
+    const requestParams = Object.values(state).filter((value) => value != null);
+    props.onSave(requestParams);
+  };
 
   const getNestedCSSlevel = (account: FlattenedIntegrationAccount) => {
     switch (account.level) {
@@ -138,7 +144,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   ];
 
   return (
-    <div>
+    <div class={css.tableContainer}>
       <InputSearch
         delay={400}
         placeholder={String(i18n.t('Search'))}
@@ -159,9 +165,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
             class={css.done}
             type="primary"
             icon={{ name: 'confirm', pos: 'right' }}
-            onClick={() => {
-              // TODO
-            }}
+            onClick={() => handleSave()}
             // disabled={!isComplete()}
           >
             <Text message="Done" />

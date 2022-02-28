@@ -3,8 +3,13 @@ import { Text } from 'solid-i18n';
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
 import { Data } from 'app/components/Data';
-import { useIntegrationExpenseCategories } from 'accounting/stores/integrationExpenseCategories';
+import {
+  useIntegrationExpenseCategories,
+  useIntegrationExpenseCategoryMappings,
+} from 'accounting/stores/integrationExpenseCategories';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
+import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
+import { postIntegrationExpenseCategoryMappings } from 'accounting/services';
 
 import css from './ChartOfAccounts.css';
 
@@ -14,6 +19,12 @@ interface ChartOfAccountsProps {
 
 export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
   const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
+  const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
+
+  const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) => {
+    postIntegrationExpenseCategoryMappings(mappings);
+    props.onNext();
+  };
 
   return (
     <Page title={<Text message="Set up your Quickbooks integration" />}>
@@ -32,10 +43,15 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
         onReload={integrationExpenseCategoryStore.reload}
       >
         <ChartOfAccountsData
-          loading={integrationExpenseCategoryStore.loading}
-          error={integrationExpenseCategoryStore.error}
+          loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
+          error={integrationExpenseCategoryStore.error || integrationExpenseCategoryMappingStore.error}
           data={integrationExpenseCategoryStore.data}
-          onReload={integrationExpenseCategoryStore.reload}
+          mappings={integrationExpenseCategoryMappingStore.data}
+          onSave={handleSave}
+          onReload={async () => {
+            integrationExpenseCategoryStore.reload();
+            integrationExpenseCategoryMappingStore.reload();
+          }}
         />
       </Data>
       <Button onClick={props.onNext}>

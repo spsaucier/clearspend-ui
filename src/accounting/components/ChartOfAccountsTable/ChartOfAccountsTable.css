@@ -4,6 +4,10 @@
   width: 320px;
 }
 
+.table-container {
+  position: relative;
+}
+
 .cell {
   padding-top: var(--pd-24);
   padding-bottom: var(--pd-24);
@@ -15,6 +19,7 @@
 
 .table {
   margin: var(--pd-24) 0;
+  overflow: auto;
 }
 
 .column-title {
@@ -46,8 +51,11 @@
 }
 
 .table-buttons {
+  position: sticky;
+  bottom: 0;
   display: flex;
-  padding: var(--pd-12) var(--pd-24);
+  margin: 0 -48px;
+  padding: var(--pd-12) var(--pd-48);
   justify-content: flex-end;
   background: var(--tw-gray-10);
   border-top: 2px solid var(--tw-gray-60);

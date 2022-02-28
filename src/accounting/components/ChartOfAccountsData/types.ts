@@ -18,6 +18,15 @@ export interface FlattenedIntegrationAccount {
   level: number;
 }
 
+export interface IntegrationExpenseAccountMapping {
+  accountRef: string;
+  categoryIconRef: number;
+}
+
+export interface IntegrationExpenseAccountMappingResponse {
+  results: IntegrationExpenseAccountMapping[];
+}
+
 export interface IntegrationAccountResponse {
   results: IntegrationAccount[];
 }

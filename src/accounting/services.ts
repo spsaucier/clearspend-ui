@@ -6,7 +6,11 @@ import type {
 import { service } from 'app/utils/service';
 import type { ExpenseCategory } from 'generated/capital';
 
-import type { IntegrationAccountResponse } from './components/ChartOfAccountsData/types';
+import type {
+  IntegrationAccountResponse,
+  IntegrationExpenseAccountMappingResponse,
+} from './components/ChartOfAccountsData/types';
+import type { IntegrationAccountMapping } from './components/ChartOfAccountsTable/types';
 import type { UpdateBusinessAccountingStepRequest } from './types';
 
 export async function getCompanyConnection(): Promise<boolean> {
@@ -36,4 +40,13 @@ export async function getExpenseCategories() {
 
 export async function getIntegrationExpenseCategories() {
   return (await service.get<Readonly<IntegrationAccountResponse>>('/codat/chart-of-accounts/expense')).data;
+}
+
+export async function getIntegrationExpenseCategoryMappings() {
+  return (await service.get<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings')).data;
+}
+
+export async function postIntegrationExpenseCategoryMappings(params: Readonly<IntegrationAccountMapping | null>[]) {
+  return (await service.post<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings', params))
+    .data;
 }

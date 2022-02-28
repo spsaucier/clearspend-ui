@@ -1221,14 +1221,61 @@ export interface CreateBusinessOwnerResponse {
   errorMessages?: string[];
 }
 
-export interface ResetPasswordRequest {
-  changePasswordId?: string;
-  newPassword?: string;
+export interface DeviceInfo {
+  description?: string;
+  lastAccessedAddress?: string;
+
+  /** @format date-time */
+  lastAccessedInstant?: string;
+  name?: string;
+  type?: 'BROWSER' | 'DESKTOP' | 'LAPTOP' | 'MOBILE' | 'OTHER' | 'SERVER' | 'TABLET' | 'TV' | 'UNKNOWN';
 }
 
-export interface LoginRequest {
-  username?: string;
-  password?: string;
+export interface EventInfo {
+  data?: Record<string, object>;
+  deviceDescription?: string;
+  deviceName?: string;
+  deviceType?: string;
+  ipAddress?: string;
+  location?: Location;
+  os?: string;
+  userAgent?: string;
+}
+
+export interface Location {
+  city?: string;
+  country?: string;
+
+  /** @format double */
+  latitude?: number;
+
+  /** @format double */
+  longitude?: number;
+  region?: string;
+  zipcode?: string;
+  displayString?: string;
+}
+
+export interface MetaData {
+  device?: DeviceInfo;
+  scopes?: string[];
+}
+
+export interface TwoFactorLoginRequest {
+  eventInfo?: EventInfo;
+
+  /** @format uuid */
+  applicationId?: string;
+  ipAddress?: string;
+  metaData?: MetaData;
+  newDevice?: boolean;
+  noJWT?: boolean;
+  code?: string;
+  trustComputer?: boolean;
+  twoFactorId?: string;
+
+  /** @format uuid */
+  userId?: string;
 }
 
 export interface RelationshipToBusiness {
@@ -1252,6 +1299,35 @@ export interface User {
   phone?: string;
   archived?: boolean;
   relationshipToBusiness?: RelationshipToBusiness;
+}
+
+export interface FirstTwoFactorValidateRequest {
+  /** @format uuid */
+  userId?: string;
+  code?: string;
+  method?: 'email' | 'sms' | 'authenticator';
+  destination?: string;
+}
+
+export interface TwoFactorResponse {
+  recoveryCodes?: string[];
+}
+
+export interface FirstTwoFactorSendRequest {
+  /** @format uuid */
+  userId?: string;
+  destination?: string;
+  method?: 'email' | 'sms' | 'authenticator';
+}
+
+export interface ResetPasswordRequest {
+  changePasswordId?: string;
+  newPassword?: string;
+}
+
+export interface LoginRequest {
+  username?: string;
+  password?: string;
 }
 
 export interface ForgotPasswordRequest {
@@ -2716,19 +2792,7 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -2978,9 +3042,21 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
