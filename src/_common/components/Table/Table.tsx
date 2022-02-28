@@ -17,6 +17,7 @@ export interface TableProps<T extends {}> {
   data: readonly T[];
   class?: string;
   tdClass?: string;
+  onRowClick?: (data: T) => void;
 }
 
 export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
@@ -30,7 +31,7 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
       <tbody>
         <For each={props.data}>
           {(row: T) => (
-            <tr class={css.row}>
+            <tr class={css.row} onClick={() => props.onRowClick?.(row)}>
               <For each={props.columns}>
                 {(column) => {
                   return (

@@ -9,8 +9,9 @@ import { events } from '../api/events';
 
 import { getNoop } from './getNoop';
 
-export type StoreSetterParams<P> = P | ((params: P) => P);
-export type StoreSetter<P> = (setter: StoreSetterParams<P>) => void;
+export type StoreSetterFunc<T> = (params: T) => T;
+export type StoreSetterArg<T> = T | StoreSetterFunc<T>;
+export type StoreSetter<T> = (setter: StoreSetterArg<T>) => void;
 
 export type SuccessCallback<T> = (data: T) => void;
 
@@ -20,6 +21,7 @@ export interface Store<T, P> {
   data: T | null;
   params: P;
   reload: () => Promise<unknown>;
+  setData: StoreSetter<T>;
   setParams: StoreSetter<P>;
 }
 
@@ -51,7 +53,10 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
           setStore((prev) => ({ ...prev, loading: false, error, data: null } as unknown as P));
         });
     },
-    setParams: (arg: StoreSetterParams<P>) => {
+    setData: (arg: StoreSetterArg<T>) => {
+      setStore((prev) => ({ ...prev, data: typeof arg === 'function' ? (arg as Function)(prev.data) : arg }));
+    },
+    setParams: (arg: StoreSetterArg<P>) => {
       setStore((prev) => ({
         ...prev,
         params: typeof arg === 'function' ? (arg as Function)(prev.params) : arg,

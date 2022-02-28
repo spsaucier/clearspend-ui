@@ -14,7 +14,7 @@ import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
-import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
+import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';

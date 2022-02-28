@@ -2,8 +2,17 @@ import type { JSXElement } from 'solid-js';
 
 import { i18n } from '_common/api/intl';
 import type { IconName } from '_common/components/Icon';
+import type { AccountActivityRequest } from 'generated/capital';
 
 import type { ActivityStatus, MccGroup } from './types';
+
+export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
+  pageRequest: {
+    pageNumber: 0,
+    pageSize: 10,
+  },
+  types: ['NETWORK_CAPTURE', 'NETWORK_AUTHORIZATION'],
+};
 
 export const STATUS_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
   APPROVED: 'confirm',

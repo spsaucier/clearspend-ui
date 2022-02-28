@@ -1,4 +1,4 @@
-import { createSignal, For, Setter, Show } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 
 import { deleteReceipt, getActivityById } from 'app/services/activity';
 import { Button } from '_common/components/Button';
@@ -17,7 +17,7 @@ export function ReceiptsView(props: {
   receipts: Readonly<ReceiptVideModel[]>;
   accountActivityId: string;
   onEmpty: () => void;
-  onDelete: Setter<AccountActivityResponse | null>;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
 }) {
   const [currentReceiptIndex, setCurrentReceiptIndex] = createSignal<number>(0);
   const [visibleReceipts, setVisibleReceipts] = createSignal<ReceiptVideModel[]>([...props.receipts]);
@@ -45,7 +45,7 @@ export function ReceiptsView(props: {
     const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== deletedReceipt?.receiptId);
     await deleteReceiptAction(deletedReceipt?.receiptId!);
     setVisibleReceipts(remainingReceipts);
-    props.onDelete(await getActivityById(props.accountActivityId));
+    props.onUpdate(await getActivityById(props.accountActivityId));
     remainingReceipts.length ? setCurrentReceiptIndex(0) : props.onEmpty();
   };
 

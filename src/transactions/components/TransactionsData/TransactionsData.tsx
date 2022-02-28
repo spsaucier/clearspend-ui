@@ -1,7 +1,10 @@
-import type { Setter } from 'solid-js';
+import { createSignal, createMemo, type Setter } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
+import { Text } from 'solid-i18n';
 
-import type { StoreSetter } from '_common/utils/store';
+import type { StoreSetterFunc, StoreSetter } from '_common/utils/store';
+import { Drawer } from '_common/components/Drawer';
+import { Modal } from '_common/components/Modal';
 import { Data } from 'app/components/Data';
 import type {
   AccountActivityRequest,
@@ -11,6 +14,7 @@ import type {
 
 import { TransactionsList } from '../TransactionsList';
 import { TransactionsTable } from '../TransactionsTable';
+import { TransactionPreview, ReceiptsView, type ReceiptVideModel } from '../TransactionPreview';
 
 interface TransactionsDataProps {
   table?: boolean;
@@ -18,14 +22,28 @@ interface TransactionsDataProps {
   error: unknown;
   params: Readonly<AccountActivityRequest>;
   data: Readonly<PagedDataAccountActivityResponse> | null;
-  onRowClick?: (transaction: AccountActivityResponse) => void;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
+  onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   showAccountingAdminView?: boolean;
 }
 
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
+  const [previewId, setPreviewId] = createSignal<string>();
+  const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
+
+  const previewTransaction = createMemo(() =>
+    props.data?.content?.find((item) => item.accountActivityId === previewId()),
+  );
+
+  const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
+    props.onUpdateData((prev) => ({
+      ...prev,
+      content: prev.content?.map((item) => (item.accountActivityId === data.accountActivityId ? data : item)),
+    }));
+  };
+
   return (
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
       <Dynamic
@@ -33,10 +51,30 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         data={props.data!}
         params={props.params}
         onCardClick={props.onCardClick}
-        onRowClick={props.onRowClick}
+        onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}
         showAccountingAdminView={props.showAccountingAdminView}
       />
+      <Drawer
+        noPadding
+        open={Boolean(previewTransaction())}
+        title={<Text message="Transaction Details" />}
+        onClose={() => setPreviewId()}
+      >
+        <TransactionPreview
+          transaction={previewTransaction()!}
+          onUpdate={onUpdateTransaction}
+          onViewReceipt={setShowReceipts}
+        />
+      </Drawer>
+      <Modal isOpen={!!previewId() && !!showReceipts().length} close={() => setShowReceipts([])}>
+        <ReceiptsView
+          accountActivityId={previewId()!}
+          receipts={showReceipts()}
+          onEmpty={() => setShowReceipts([])}
+          onUpdate={onUpdateTransaction}
+        />
+      </Modal>
     </Data>
   );
 }

@@ -1,17 +1,9 @@
-import { createSignal } from 'solid-js';
-import { Text } from 'solid-i18n';
-
 import { useMediaContext } from '_common/api/media/context';
-import { TransactionsData } from 'transactions/components/TransactionsData';
-import type { AccountActivityResponse } from 'generated/capital';
-import { Data } from 'app/components/Data';
-import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
-import { Drawer } from '_common/components/Drawer';
 import { useNav } from '_common/api/router';
-import { Modal } from '_common/components/Modal/Modal';
-import { ReceiptsView, ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
-import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
 import { useActivity } from 'app/stores/activity';
+import { Data } from 'app/components/Data';
+import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { TransactionsData } from 'transactions/components/TransactionsData';
 
 import { AccountingTimePeriod, getAccountingTimePeriod } from './utils';
 
@@ -39,9 +31,6 @@ export function AccountingOverview() {
     },
   });
 
-  const [selectedTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
-  const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
-
   return (
     <div class={css.root}>
       <div>
@@ -59,31 +48,11 @@ export function AccountingOverview() {
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}
-            onRowClick={setSelectedTransaction}
+            onUpdateData={activityStore.setData}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
             showAccountingAdminView
           />
         </Data>
-        <Drawer
-          open={Boolean(selectedTransaction())}
-          title={<Text message="Transaction Details" />}
-          onClose={() => setSelectedTransaction(null)}
-        >
-          <TransactionPreview
-            transaction={selectedTransaction()!}
-            onUpdate={setSelectedTransaction}
-            onViewReceipt={setShowReceipts}
-            onReload={activityStore.reload}
-          />
-        </Drawer>
-        <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
-          <ReceiptsView
-            accountActivityId={selectedTransaction()?.accountActivityId!}
-            receipts={showReceipts()}
-            onEmpty={() => setShowReceipts([])}
-            onDelete={setSelectedTransaction}
-          />
-        </Modal>
       </div>
     </div>
   );

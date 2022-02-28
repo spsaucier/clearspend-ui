@@ -9,11 +9,7 @@ import { Tag, TagProps } from '_common/components/Tag';
 import { Icon } from '_common/components/Icon';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
-import type {
-  AccountActivityRequest,
-  AccountActivityResponse,
-  PagedDataAccountActivityResponse,
-} from 'generated/capital';
+import type { AccountActivityRequest, PagedDataAccountActivityResponse } from 'generated/capital';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { STATUS_ICONS } from '../../constants';
@@ -33,7 +29,7 @@ const STATUS_TYPES: Record<ActivityStatus, Required<TagProps>['type']> = {
 interface TransactionsListProps {
   params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
-  onRowClick?: (transaction: AccountActivityResponse) => void;
+  onRowClick?: (activityId: string) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
 }
 
@@ -58,7 +54,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
             const date = createMemo(() => new Date(item.activityTime || ''));
 
             return (
-              <div class={css.item} onClick={() => props.onRowClick?.(item)}>
+              <div class={css.item} onClick={() => props.onRowClick?.(item.accountActivityId!)}>
                 <Show when={item.merchant}>
                   <MerchantLogo data={item.merchant!} />
                 </Show>

@@ -3,24 +3,15 @@ import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
+import { useNav } from '_common/api/router';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
-import { TransactionsData } from 'transactions/components/TransactionsData';
-import type {
-  AccountActivityResponse,
-  GraphDataRequest,
-  ChartDataRequest,
-  AccountActivityRequest,
-} from 'generated/capital';
+import type { GraphDataRequest, ChartDataRequest, AccountActivityRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
-import { TransactionPreview } from 'transactions/components/TransactionPreview/TransactionPreview';
-import { Drawer } from '_common/components/Drawer';
-import { useNav } from '_common/api/router';
-import { Modal } from '_common/components/Modal/Modal';
-import { ReceiptsView, ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
-import { DEFAULT_ACTIVITY_PARAMS } from 'employees/containers/Transactions/Transactions';
+import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { TransactionsData } from 'transactions/components/TransactionsData';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -86,9 +77,6 @@ export function Overview(props: Readonly<OverviewProps>) {
       { defer: true },
     ),
   );
-
-  const [selectedTransaction, setSelectedTransaction] = createSignal<AccountActivityResponse | null>(null);
-  const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
 
   const changePeriod = (value: TimePeriod) => {
     setPeriod(value);
@@ -160,31 +148,10 @@ export function Overview(props: Readonly<OverviewProps>) {
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={activityStore.setParams}
-            onRowClick={setSelectedTransaction}
+            onUpdateData={activityStore.setData}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />
         </Data>
-        <Drawer
-          noPadding
-          open={Boolean(selectedTransaction())}
-          title={<Text message="Transaction Details" />}
-          onClose={() => setSelectedTransaction(null)}
-        >
-          <TransactionPreview
-            transaction={selectedTransaction()!}
-            onUpdate={setSelectedTransaction}
-            onViewReceipt={setShowReceipts}
-            onReload={activityStore.reload}
-          />
-        </Drawer>
-        <Modal isOpen={showReceipts().length > 0} close={() => setShowReceipts([])}>
-          <ReceiptsView
-            accountActivityId={selectedTransaction()?.accountActivityId!}
-            receipts={showReceipts()}
-            onEmpty={() => setShowReceipts([])}
-            onDelete={setSelectedTransaction}
-          />
-        </Modal>
       </div>
     </div>
   );

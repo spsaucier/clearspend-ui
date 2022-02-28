@@ -51,7 +51,7 @@ interface TransactionsTableProps {
   data: PagedDataAccountActivityResponse;
   params: Readonly<AccountActivityRequest>;
   onCardClick?: (id: string) => void;
-  onRowClick?: (transaction: AccountActivityResponse) => void;
+  onRowClick: (activityId: string) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
 }
@@ -67,7 +67,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'date',
       title: <Text message="Date & Time" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => {
         const date = new Date(item.activityTime || '');
         return (
@@ -85,7 +84,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'sync',
       title: <Text message="Sync" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => {
         return (
           <div>
@@ -95,6 +93,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               disabled={!item.expenseDetails}
               onClick={(event) => {
                 event.stopPropagation();
+                // FIXME: use await and/or catch error
                 if (item.accountActivityId) syncTransaction(item.accountActivityId);
               }}
             >
@@ -107,7 +106,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'card',
       title: <Text message="Card" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.cardCell}>
           <Show when={item.card} fallback="--">
@@ -128,7 +126,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'merchant',
       title: <Text message="Merchant" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.merchant}>
           <Show when={item.merchant} fallback="--">
@@ -144,7 +141,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.amountCell}>
           <div class={join(css.status, STATUS_COLORS[item.status!])}>
@@ -160,7 +156,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'receipt',
       title: <Text message="Receipt" />,
-      onClick: (row) => props.onRowClick?.(row),
       render: (item) => (
         <div class={css.receiptCell}>
           <Icon
@@ -217,6 +212,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           columns={columns.filter((column) => column.name !== 'sync' || props.showAccountingAdminView)}
           data={props.data.content as []}
           tdClass={css.cell}
+          onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>
 

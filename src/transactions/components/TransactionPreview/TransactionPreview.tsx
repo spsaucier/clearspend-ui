@@ -50,14 +50,12 @@ interface TransactionPreviewProps {
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
-  onReload: () => Promise<unknown>;
 }
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
-  const expenseCategories = useExpenseCategories({ initValue: [] });
 
   let fileInput!: HTMLInputElement;
 
@@ -95,6 +93,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       });
   };
 
+  const expenseCategories = useExpenseCategories({ initValue: [] });
   const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(transaction().expenseDetails);
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
 
@@ -103,7 +102,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       .then((data) => {
         batch(() => {
           props.onUpdate(data);
-          props.onReload();
           setExpenseCategory(ec);
         });
       })
