@@ -40,7 +40,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
       });
     } else {
       props.handlers.streetLine1(value);
-      return undefined;
     }
   };
 
