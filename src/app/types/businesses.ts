@@ -7,7 +7,7 @@ export enum BusinessStatus {
 
 // From ConvertBusinessProspectRequest['businessType']
 export enum BusinessType {
-  UNKNOWN = 'UNKNOWN',
+  UNKNOWN = '',
   OTHER = 'OTHER',
   SOLE_PROPRIETORSHIP = 'SOLE_PROPRIETORSHIP',
   SINGLE_MEMBER_LLC = 'SINGLE_MEMBER_LLC',

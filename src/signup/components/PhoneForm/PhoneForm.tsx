@@ -43,7 +43,7 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
         you when we get lonely
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
-        <FormItem label="Enter mobile phone number" error={errors().phone}>
+        <FormItem label="Enter mobile phone number" error={errors().phone} extra={'US numbers only'} darkMode={true}>
           <InputPhone
             ref={input}
             name="phone"

@@ -1,6 +1,9 @@
 .wrapper {
+  display: flex;
   padding: 8px;
   flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
   background: white;
   border: 1px solid var(--tw-gray-30);
 }
@@ -13,6 +16,7 @@
 
 .button {
   margin-top: 10px;
+  color: var(--tw-green-30);
 }
 
 .row {

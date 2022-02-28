@@ -98,7 +98,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </div>
         </Section>
       </Show>
-      <Section title="Your details" class={css.section}>
+      <Section title="Details" class={css.section}>
         <div class={css.wrapper}>
           <FormItem label="First name" error={errors().firstName}>
             <Input

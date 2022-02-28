@@ -1365,6 +1365,12 @@ export interface ForgotPasswordRequest {
   email?: string;
 }
 
+export interface ChangePasswordRequest {
+  username?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 export interface CreateAllocationRequest {
   /**
    * name of the department/ allocation

@@ -10,10 +10,6 @@ import { FlatButton } from '../Button/FlatButton';
 
 import { createTimer } from './utils';
 
-import css from './VerifyForm.css';
-
-// eslint-disable-next-line css-modules/no-unused-class
-
 const VALID_LENGTH = 6;
 const RESEND_TIMEOUT_IN_SEC = 45;
 
@@ -49,7 +45,13 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
     handlers.code(code);
 
     if (code.length === VALID_LENGTH && !loading()) {
-      confirm(code).catch(() => setErrors({ code: 'Invalid code or something going wrong' }));
+      confirm(code).catch((error: { data: { message?: string } }) => {
+        setErrors({
+          code: error.data.message?.includes('NonUniqueResultException')
+            ? 'Account alredy exists with this email.'
+            : 'Invalid code or something going wrong',
+        });
+      });
     }
   };
 
@@ -71,12 +73,11 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
             darkMode={true}
           />
         </FormItem>
-        <Description class={css.note}>Didn't receive the code?</Description>
-        <Show when={props.extraBtn}>{props.extraBtn}</Show>
-        <FlatButton loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
-          Resend confirmation code
+        <FlatButton hideIcon={true} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
+          Resend code
           {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
         </FlatButton>
+        <Show when={props.extraBtn}>{props.extraBtn}</Show>
       </Form>
     </div>
   );

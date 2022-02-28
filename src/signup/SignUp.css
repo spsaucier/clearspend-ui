@@ -28,7 +28,9 @@
 }
 
 .second-btn {
-  margin-right: var(--pd-24);
+  margin-left: var(--pd-24);
+  padding: var(--pd-16);
+  color: var(--tw-black);
   background-color: var(--tw-gray-20);
   border-radius: 4px;
 }

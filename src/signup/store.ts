@@ -9,7 +9,9 @@ export interface SignupStore {
   first?: string;
   last?: string;
   email?: string;
+  emailVerified?: boolean;
   phone?: string;
+  phoneVerified?: boolean;
   businessTypeCategory?: BusinessTypeCategory;
   businessType?: BusinessType;
   relationshipToBusiness?: Readonly<RelationshipToBusiness[]>;
@@ -42,6 +44,8 @@ export function useSignup() {
       update({ relationshipToBusiness }),
     setEmail: (email: string, pid: string) => update({ email, pid }),
     setTel: (phone: string) => update({ phone }),
+    setPhoneVerified: (phoneVerified: boolean) => update({ phoneVerified }),
+    setEmailVerified: (emailVerified: boolean) => update({ emailVerified }),
     cleanup: () => {
       storage.remove(STORAGE_KEY);
       setStore({});

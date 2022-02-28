@@ -59,7 +59,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           : `As a representative of ${props.business?.legalName}, we need to know a little more about you`,
       );
     } else if (showAddingNewLeader()) {
-      props.setTitle('To add an owner or manager, we need the following details:');
+      props.setTitle('To add an owner or manager, we need the following details');
     } else {
       // Skip the ownership question if it's unnecessary
       const totalAccountedFor = leaders().reduce(
@@ -81,7 +81,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
 
   return (
     <Show when={!fetchingOwnersList().loading}>
-      <Show when={leaders().length === 0}>
+      <Show when={leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber}>
         <CurrentUserForm
           signupUser={props.signupUser}
           onNext={async (businessOwner: CreateOrUpdateBusinessOwnerRequest) => {
@@ -106,7 +106,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           }}
         />
       </Show>
-      <Show when={leaders().length > 0 && !showAddingNewLeader()}>
+      <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
         <div class={css.tableWrapper}>
           <LeadershipTable
             currentUserEmail={props.signupUser.email}

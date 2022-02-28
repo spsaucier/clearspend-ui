@@ -68,9 +68,11 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   return (
     <div class={css.wrapper}>
       <Table columns={columns} data={props.leaders} tdClass={css.cell} />
-      <Button class={css.button} type="default" icon="add" onClick={props.onAddClick}>
-        <Text message="Add a leader" />
-      </Button>
+      <div>
+        <Button class={css.button} type="default" icon="add" onClick={props.onAddClick} size={'lg'}>
+          <Text message="Add a leader" />
+        </Button>
+      </div>
     </div>
   );
 }

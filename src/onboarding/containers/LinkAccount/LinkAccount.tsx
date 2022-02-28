@@ -29,6 +29,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
 
   const [token, setToken] = createSignal<string | Error>();
   const [init, setInit] = createSignal(true);
+  const [fetchingUpdatedStatus, setFetchingUpdatedStatus] = createSignal(false);
 
   const hasError = createMemo(() => scriptError() !== null || token() instanceof Error);
 
@@ -43,8 +44,10 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
       token: linkToken,
       receivedRedirectUri: null,
       onSuccess: (_, metadata) => {
+        setFetchingUpdatedStatus(true);
         onSuccess(metadata.public_token, metadata.accounts[0]?.name).catch(() => {
           messages.error({ title: i18n.t('Something went wrong') });
+          setFetchingUpdatedStatus(false);
         });
       },
       onLoad: () => {
@@ -57,7 +60,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
   return (
     <Show when={!hasError()} fallback={<Text message="Failed to load API" />}>
       <VerifyAccount
-        loading={loading() || init() || processing()}
+        loading={loading() || init() || processing() || fetchingUpdatedStatus()}
         disabled={props.disabled}
         class={css.verify}
         onVerifyClick={() => {

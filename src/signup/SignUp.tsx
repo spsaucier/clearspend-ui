@@ -35,16 +35,30 @@ enum Step {
 }
 
 function getInitStep(store: SignupStore): Step {
-  const { first, last, businessTypeCategory, businessType, relationshipToBusiness, phone, email } = store;
+  const {
+    first,
+    last,
+    businessTypeCategory,
+    businessType,
+    relationshipToBusiness,
+    phone,
+    email,
+    emailVerified,
+    phoneVerified,
+  } = store;
   switch (true) {
     case !first || !last || !email:
       return Step.AccountSetUpStep;
+    case !emailVerified:
+      return Step.EmailOtpStep;
     case !businessTypeCategory || !businessType || !relationshipToBusiness:
       return Step.BusinessTypeCategoryStep;
     case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER):
       return Step.SorryButStep;
     case !phone:
       return Step.PhoneStep;
+    case !phoneVerified:
+      return Step.PhoneOtpStep;
     default:
       return Step.AccountSetUpStep;
   }
@@ -63,12 +77,13 @@ export default function SignUp() {
     setBusinessType,
     setBusinessTypeCategory,
     setRelationshipToBusiness,
+    setEmailVerified,
+    setPhoneVerified,
   } = useSignup();
 
   const [step, setStep] = createSignal<Step>(getInitStep(store));
 
   const next = (nextStep?: Step) => (nextStep ? setStep(nextStep) : setStep((prev) => prev + 1));
-  // const back = (backStep?: Step) => (backStep ? setStep(backStep) : setStep((prev) => prev - 1));
 
   const onNameUpdate = async (firstName: string, lastName: string, email: string) => {
     setName(firstName, lastName);
@@ -188,6 +203,7 @@ export default function SignUp() {
 
   const onEmailConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
+    setEmailVerified(true);
     next();
   };
 
@@ -201,6 +217,7 @@ export default function SignUp() {
 
   const onPhoneConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.PHONE, otp });
+    setPhoneVerified(true);
     next();
   };
 
@@ -251,7 +268,7 @@ export default function SignUp() {
               onConfirm={onEmailConfirm}
               extraBtn={
                 <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.AccountSetUpStep)}>
-                  Back
+                  Use different email
                 </Button>
               }
             />
