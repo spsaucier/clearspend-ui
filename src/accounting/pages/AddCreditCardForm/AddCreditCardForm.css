@@ -70,7 +70,7 @@
   display: flex;
   padding: 10px;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   background-color: var(--tw-gray-10);
   border-top: 2px solid var(--tw-gray-70);
 }

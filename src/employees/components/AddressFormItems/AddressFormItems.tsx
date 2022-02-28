@@ -38,7 +38,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
         props.handlers.region(found.state);
         props.handlers.postalCode(found.zip_code);
       });
-      return found.primary_line;
     } else {
       props.handlers.streetLine1(value);
     }

@@ -21,7 +21,7 @@ export interface SelectProps {
   autoComplete?: string;
   error?: boolean;
   children: JSXElement;
-  onChange?: (value: string) => void | string;
+  onChange?: (value: string) => void;
   changeOnSearch?: boolean;
   loading?: boolean;
   iconName?: keyof typeof IconName;
