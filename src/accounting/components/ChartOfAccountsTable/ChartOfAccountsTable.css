@@ -71,5 +71,8 @@
   height: v-icon-size;
   align-items: center;
   justify-content: center;
+}
+
+.cancel-icon {
   color: var(--tw-primary-content);
 }

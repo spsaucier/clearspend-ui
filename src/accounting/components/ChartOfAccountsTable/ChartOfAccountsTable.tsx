@@ -129,17 +129,21 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                 )}
               </For>
             </SelectExpenseCategory>
-            <Button
-              class={css.cancel}
-              icon="cancel"
-              view="ghost"
-              onClick={() => {
-                batch(() => {
-                  setExpenseCategory(undefined);
-                  setState(item.id, null);
-                });
-              }}
-            />
+            <div class={css.cancel}>
+              <Show when={expenseCategory() !== undefined}>
+                <Button
+                  icon="cancel"
+                  view="ghost"
+                  class={css.cancelIcon}
+                  onClick={() => {
+                    batch(() => {
+                      setExpenseCategory(undefined);
+                      setState(item.id, null);
+                    });
+                  }}
+                />
+              </Show>
+            </div>
           </div>
         );
       },
