@@ -83,6 +83,7 @@ export enum IconName {
   'receipt-unavailable' = 'receipt-unavailable',
   search = 'search',
   settings = 'settings',
+  sync = 'sync',
   'table-columns' = 'table-columns',
   transaction = 'transaction',
   trash = 'trash',

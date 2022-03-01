@@ -6,7 +6,7 @@ import css from './Tag.css';
 
 export interface TagProps {
   label?: string;
-  type?: 'default' | 'success' | 'danger';
+  type?: 'default' | 'success' | 'danger' | 'warning';
   size?: 'md' | 'sm' | 'xs';
   class?: string;
   tabIndex?: number | string;
@@ -24,6 +24,7 @@ export function Tag(props: Readonly<TagProps>) {
         [css.xs!]: props.size === 'xs',
         [css.success!]: props.type === 'success',
         [css.danger!]: props.type === 'danger',
+        [css.warning!]: props.type === 'warning',
       }}
       onClick={props.onClick}
     >

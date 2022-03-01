@@ -1,6 +1,6 @@
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
-import { createSignal, createMemo, batch, Show, For } from 'solid-js';
+import { createSignal, createMemo, batch, Show, For, Switch, Match } from 'solid-js';
 
 import type { AccountActivityResponse, ExpenseCategory } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
@@ -22,8 +22,10 @@ import {
   setActivityExpenseCategory,
 } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
+import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from 'accounting/components/SelectExpenseCategory';
+import { syncTransaction } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionPreviewStatus } from '../TransactionPreviewStatus';
@@ -35,10 +37,17 @@ import type { ReceiptVideModel } from './ReceiptsView';
 
 import css from './TransactionPreview.css';
 
+const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
+  READY: 'success',
+  NOT_READY: 'warning',
+  SYNCED_LOCKED: 'default',
+};
+
 interface TransactionPreviewProps {
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
+  showAccountingAdminView?: boolean;
 }
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
@@ -100,6 +109,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       });
   };
 
+  const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
+  const onSyncTransaction = () => {
+    setSyncingTransaction(transaction().accountActivityId!).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
+  };
+
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
@@ -116,78 +132,124 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         <div class={css.date}>
           <TransactionDateTime date={transaction().activityTime} />
         </div>
-        <div class={css.receiptCta}>
-          <Show when={receiptIds().length}>
-            <Button
-              wide
-              loading={receiptsStatus().loading}
-              icon="receipt"
-              onClick={() => {
-                if (receiptsStatus().error) {
-                  reloadReceipts().then(() => {
-                    if (receipts()) props.onViewReceipt(receipts()!);
-                    else messages.error({ title: i18n.t('Something went wrong') });
-                  });
-                } else props.onViewReceipt(receipts()!);
-              }}
+        <Show when={props.showAccountingAdminView}>
+          <div class={css.syncTag}>
+            {/* TODO: establish enum in BE, use it for rendering & delete below function */}
+            <Switch
+              fallback={
+                <Tag size="sm" type={SYNC_STATUS_TYPES.READY}>
+                  <Icon class={css.syncTagIcon} size="sm" name="sync" />
+                  <span>Ready to sync</span>
+                </Tag>
+              }
             >
-              <Text message="View Receipt" />
-            </Button>
-          </Show>
-          <Show when={!receiptIds().length && allowReceiptUpload(transaction())}>
-            <Button wide icon="add-receipt" loading={uploading()} onClick={onUploadClick}>
-              <Text message="Add Receipt" />
-            </Button>
-          </Show>
-          <Show when={receiptIds().length && allowReceiptUpload(transaction())}>
-            <Button wide icon="receipt" loading={uploading()} onClick={onUploadClick}>
-              <Text message="Upload more images" />
-            </Button>
-          </Show>
-          <input ref={fileInput} type="file" accept="image/*" onChange={uploadReceipt} />
-        </div>
+              <Match when={!expenseCategory()}>
+                <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
+                  <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
+                  <span>Not ready to sync</span>
+                </Tag>
+              </Match>
+            </Switch>
+          </div>
+        </Show>
       </div>
       <div class={css.scroll}>
-        <div class={css.expenseCategory}>
-          <div class={css.optionTitle}>
-            <Text message="Expense Category" />
+        <Show when={props.showAccountingAdminView}>
+          <div class={css.accounting}>
+            <h4 class={css.accountingTitle}>
+              <Text message="Accounting" />
+            </h4>
+            <div class={css.detail}>
+              <Text message="Status" />
+              {/* TODO: establish enum in BE, use it for rendering & delete below function */}
+              <Switch fallback={<span>Ready to sync</span>}>
+                <Match when={!expenseCategory()}>
+                  <span>Not ready to sync</span>
+                </Match>
+              </Switch>
+            </div>
+            <div class={css.detail}>
+              <Text message="Last Sync" />
+              {/* TODO: get last sync time from BE when available */}
+              <span>N/A</span>
+            </div>
+            <Button wide icon="sync" disabled={!expenseCategory() || syncingTransaction()} onClick={onSyncTransaction}>
+              <Text message="Sync transaction" />
+            </Button>
           </div>
-          <SelectExpenseCategory
-            value={expenseCategory()}
-            onChange={(ec) => onSaveExpenseCategory(ec)}
-            disabled={savingExpenseCategory()}
-          >
-            <For each={expenseCategories.data}>
-              {(item) => <SelectExpenseCategoryOption value={item}>{item.categoryName}</SelectExpenseCategoryOption>}
-            </For>
-          </SelectExpenseCategory>
-        </div>
-        <div>
-          <div class={css.optionTitle}>
-            <Text message="Comments" />
+        </Show>
+        <div class={css.properties}>
+          <div class={css.receiptCta}>
+            <Show when={receiptIds().length}>
+              <Button
+                wide
+                loading={receiptsStatus().loading}
+                icon="receipt"
+                onClick={() => {
+                  if (receiptsStatus().error) {
+                    reloadReceipts().then(() => {
+                      if (receipts()) props.onViewReceipt(receipts()!);
+                      else messages.error({ title: i18n.t('Something went wrong') });
+                    });
+                  } else props.onViewReceipt(receipts()!);
+                }}
+              >
+                <Text message="View Receipt" />
+              </Button>
+            </Show>
+            <Show when={!receiptIds().length && allowReceiptUpload(transaction())}>
+              <Button wide icon="add-receipt" loading={uploading()} onClick={onUploadClick}>
+                <Text message="Add Receipt" />
+              </Button>
+            </Show>
+            <Show when={receiptIds().length && allowReceiptUpload(transaction())}>
+              <Button wide icon="receipt" loading={uploading()} onClick={onUploadClick}>
+                <Text message="Upload more images" />
+              </Button>
+            </Show>
+            <input ref={fileInput} type="file" accept="image/*" onChange={uploadReceipt} />
           </div>
-          <Input
-            prefix={<Icon name="file" size="sm" />}
-            suffix={
-              <Show when={note()}>
-                <Button
-                  size="sm"
-                  icon="edit"
-                  view="ghost"
-                  loading={savingNote()}
-                  class={css.noteButton}
-                  onClick={onSaveNote}
-                />
-              </Show>
-            }
-            placeholder={String(i18n.t('Add transaction comments'))}
-            value={notes()}
-            disabled={savingNote()}
-            onKeyDown={(event: KeyboardEvent) => {
-              if (event.keyCode === KEY_CODES.Enter) onSaveNote();
-            }}
-            onChange={setNote}
-          />
+          <div class={css.expenseCategory}>
+            <div class={css.optionTitle}>
+              <Text message="Expense Category" />
+            </div>
+            <SelectExpenseCategory
+              value={expenseCategory()}
+              onChange={(ec) => onSaveExpenseCategory(ec)}
+              disabled={savingExpenseCategory()}
+            >
+              <For each={expenseCategories.data}>
+                {(item) => <SelectExpenseCategoryOption value={item}>{item.categoryName}</SelectExpenseCategoryOption>}
+              </For>
+            </SelectExpenseCategory>
+          </div>
+          <div class={css.comments}>
+            <div class={css.optionTitle}>
+              <Text message="Comments" />
+            </div>
+            <Input
+              prefix={<Icon name="file" size="sm" />}
+              suffix={
+                <Show when={note()}>
+                  <Button
+                    size="sm"
+                    icon="edit"
+                    view="ghost"
+                    loading={savingNote()}
+                    class={css.noteButton}
+                    onClick={onSaveNote}
+                  />
+                </Show>
+              }
+              placeholder={String(i18n.t('Add transaction comments'))}
+              value={notes()}
+              disabled={savingNote()}
+              onKeyDown={(event: KeyboardEvent) => {
+                if (event.keyCode === KEY_CODES.Enter) onSaveNote();
+              }}
+              onChange={setNote}
+            />
+          </div>
         </div>
         <Show when={transaction().card}>
           <h4 class={css.title}>

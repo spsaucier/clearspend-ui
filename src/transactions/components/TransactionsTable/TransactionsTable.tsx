@@ -27,7 +27,6 @@ import type {
 import { Drawer } from '_common/components/Drawer';
 import { getNoop } from '_common/utils/getNoop';
 import { FiltersButton } from 'app/components/FiltersButton';
-import { syncTransaction } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -64,28 +63,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             <br />
             <DateTime date={date} preset={DateFormat.time} class={css.sub} />
           </>
-        );
-      },
-    },
-    {
-      name: 'sync',
-      title: <Text message="Sync" />,
-      render: (item) => {
-        return (
-          <div>
-            <Button
-              type="primary"
-              size="sm"
-              disabled={!item.expenseDetails}
-              onClick={(event) => {
-                event.stopPropagation();
-                // FIXME: use await and/or catch error
-                if (item.accountActivityId) syncTransaction(item.accountActivityId);
-              }}
-            >
-              <Text message="Sync" />
-            </Button>
-          </div>
         );
       },
     },

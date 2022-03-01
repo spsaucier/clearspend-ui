@@ -65,6 +65,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
           transaction={previewTransaction()!}
           onUpdate={onUpdateTransaction}
           onViewReceipt={setShowReceipts}
+          showAccountingAdminView={props.showAccountingAdminView}
         />
       </Drawer>
       <Modal isOpen={!!previewId() && !!showReceipts().length} close={() => setShowReceipts([])}>

@@ -40,7 +40,6 @@
 .receipt-cta {
   display: grid;
   width: 100%;
-  margin-top: var(--pd-24);
   grid-gap: var(--pd-10);
 }
 
@@ -95,5 +94,36 @@
 }
 
 .expense-category {
-  margin-bottom: var(--pd-12);
+  margin: var(--pd-16) 0;
+}
+
+.comments {
+  margin-bottom: var(--pd-24);
+}
+
+.properties {
+  border-bottom: 1px dashed var(--tw-gray-40);
+}
+
+.accounting {
+  margin-bottom: var(--pd-24);
+  padding-bottom: var(--pd-24);
+  border-bottom: 1px dashed var(--tw-gray-40);
+}
+
+.accounting-title {
+  margin-top: 0;
+  font: inherit;
+  font-size: var(--text-12);
+  line-height: var(--line-16);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.sync-tag {
+  margin-top: var(--pd-8);
+}
+
+.sync-tag-icon {
+  margin-right: var(--pd-4);
 }

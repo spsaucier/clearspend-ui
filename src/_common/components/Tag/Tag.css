@@ -39,6 +39,12 @@
   border-color: var(--tw-red-20);
 }
 
+.warning {
+  color: var(--tw-amber-80);
+  background-color: var(--tw-amber-10);
+  border-color: var(--tw-amber-20);
+}
+
 .label {
   font-weight: var(--font-400);
 }

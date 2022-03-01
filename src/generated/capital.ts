@@ -457,6 +457,31 @@ export interface SyncTransactionResponse {
   codatResponse?: CodatSyncDirectCostResponse;
 }
 
+export interface SyncLogRequest {
+  pageRequest: PageRequest;
+}
+
+export interface PagedDataSyncLogResponse {
+  /** @format int32 */
+  pageNumber?: number;
+
+  /** @format int32 */
+  pageSize?: number;
+
+  /** @format int64 */
+  totalElements?: number;
+  content?: SyncLogResponse[];
+}
+
+export interface SyncLogResponse {
+  /** @format date-time */
+  startTime?: string;
+  firstName?: string;
+  lastName?: string;
+  status?: string;
+  transactionId?: string;
+}
+
 export interface CodatCreateBankAccountRequest {
   accountName?: string;
   accountNumber?: string;
@@ -2831,19 +2856,7 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -3093,9 +3106,21 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
