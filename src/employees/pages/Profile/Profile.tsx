@@ -44,11 +44,7 @@ export default function Profile() {
         </Button>
       }
     >
-      <Section
-        title={<Text message="Profile" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-        class={css.section}
-      >
+      <Section title={<Text message="Profile" />} description={'Your primary account information'} class={css.section}>
         <Data data={user()} error={userStatus().error} loading={userStatus().loading} onReload={reloadUser}>
           <ProfileInfo data={user()!} class={css.info} />
         </Data>
@@ -56,11 +52,7 @@ export default function Profile() {
           <Text message="Update Profile" />
         </Button>
       </Section>
-      <Section
-        title={<Text message="Cards" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-        class={css.section}
-      >
+      <Section title={<Text message="Cards" />} description={'All cards assigned to your account'} class={css.section}>
         <Data data={cards.data} loading={cards.loading} error={cards.error} onReload={cards.reload}>
           <div class={css.cards}>
             <For each={cards.data}>
@@ -78,18 +70,14 @@ export default function Profile() {
           </div>
         </Data>
       </Section>
-      <Section
-        title={<Text message="Password" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-        class={css.section}
-      >
+      <Section title={<Text message="Password" />} description={'Change your current password'} class={css.section}>
         <Button size="lg" icon="edit" onClick={() => navigate('/profile/password')}>
           <Text message="Update Password" />
         </Button>
       </Section>
       <Section
         title={<Text message="Two-factor authentication" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
+        description={'Update the mobile number used to secure your account.'}
         class={css.section}
       >
         <Button size="lg" icon="edit">

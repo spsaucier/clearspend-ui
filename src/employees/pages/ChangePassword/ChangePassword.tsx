@@ -42,10 +42,7 @@ export default function ChangePassword() {
 
   return (
     <Page title={<Text message="Password" />}>
-      <Section
-        title={<Text message="Update password" />}
-        description={'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-      >
+      <Section title={<Text message="Update password" />} description={'Please enter your current and new password.'}>
         <Form class={css.wrapper}>
           <FormItem label={<Text message="Current password" />} error={errors().current}>
             <Input
