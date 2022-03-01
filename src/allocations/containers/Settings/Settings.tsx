@@ -136,8 +136,7 @@ export function Settings(props: Readonly<SettingsProps>) {
         description={
           <Text
             message={
-              'Add additional allocation managers or viewers. ' +
-              'By default, managers of the parent allocation will be able to view this allocation.'
+              'Add users who can view or manage this allocation. Managers can deposit funds, add employees, and issue cards to this allocation.'
             }
           />
         }

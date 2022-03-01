@@ -19,7 +19,7 @@ export const DEFAULT_CARD_PARAMS: Readonly<SearchCardRequest> = {
     orderBy: [
       {
         item: 'activationDate',
-        direction: 'ASC',
+        direction: 'DESC',
       },
     ],
   },
