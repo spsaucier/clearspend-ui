@@ -9,6 +9,8 @@ import type { ExpenseCategory } from 'generated/capital';
 import type {
   IntegrationAccountResponse,
   IntegrationExpenseAccountMappingResponse,
+  SyncLogRequest,
+  SyncLogResponse,
 } from './components/ChartOfAccountsData/types';
 import type { IntegrationAccountMapping } from './components/ChartOfAccountsTable/types';
 import type { UpdateBusinessAccountingStepRequest } from './types';
@@ -57,4 +59,8 @@ export async function postIntegrationExpenseCategoryMappings(params: Readonly<In
 
 export async function deleteIntegrationExpenseCategoryMappings() {
   await service.remove('/chart-of-accounts/mappings');
+}
+
+export async function getSyncLogs(params: Readonly<SyncLogRequest>) {
+  return (await service.post<Readonly<SyncLogResponse>>('/codat/sync-log', params)).data;
 }
