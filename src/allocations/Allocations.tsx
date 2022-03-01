@@ -56,7 +56,7 @@ export default function Allocations() {
     return params.id ? allocations.data?.find(allocationWithID(params.id)) : getRootAllocation(allocations.data);
   });
 
-  const [data, status, , setAllocationId, reload] = useResource(getAllocation, undefined, false);
+  const [data, status, , setAllocationId, reload, mutate] = useResource(getAllocation, undefined, false);
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   createEffect(() => {
@@ -68,7 +68,7 @@ export default function Allocations() {
   });
 
   const onUpdateAllocation = async (allocationId: string, updates: Readonly<UpdateAllocationRequest>) => {
-    await updateAllocation(allocationId, updates);
+    mutate(await updateAllocation(allocationId, updates));
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),

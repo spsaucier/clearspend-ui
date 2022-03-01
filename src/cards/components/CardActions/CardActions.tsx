@@ -31,7 +31,13 @@ export function CardActions(props: Readonly<CardActionsProps>) {
     <Switch>
       <Match when={!props.card.activated}>
         <Show when={canActivateCard(props.card, props.user)}>
-          <Button size="lg" type="primary" icon="power" disabled={!props.card.issueDate} onClick={props.onActivate}>
+          <Button
+            size="lg"
+            type="primary"
+            icon="card-success"
+            disabled={!props.card.issueDate}
+            onClick={props.onActivate}
+          >
             <Text message="Activate Card" />
           </Button>
         </Show>

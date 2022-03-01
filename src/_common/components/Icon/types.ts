@@ -25,6 +25,7 @@ export enum IconName {
   card = 'card',
   'card-add-new' = 'card-add-new',
   'card-fill' = 'card-fill',
+  'card-success' = 'card-success',
   'channel-atm' = 'channel-atm',
   'channel-ecommerce' = 'channel-ecommerce',
   'channel-moto' = 'channel-moto',

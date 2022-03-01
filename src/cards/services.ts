@@ -20,7 +20,7 @@ export async function saveCard(params: Readonly<IssueCardRequest>) {
 }
 
 export async function updateCard(cardId: string, params: Readonly<UpdateCardRequest>) {
-  return (await service.patch<Readonly<CardDetailsResponse>>(`/cards/${cardId}`, params)).data;
+  return (await service.patch<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`, params)).data;
 }
 
 export async function searchCards(params: Readonly<SearchCardRequest>) {

@@ -55,7 +55,7 @@ export default function CardView() {
   const { signupUser } = useBusiness();
   const allocations = useAllocations();
 
-  const [data, status, , , reload] = useResource(getCard, params.id);
+  const [data, status, , , reload, mutate] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
   const [permissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
@@ -78,7 +78,7 @@ export default function CardView() {
   };
 
   const onUpdateCard = async (cardId: string, updates: Readonly<UpdateCardRequest>) => {
-    await updateCard(cardId, updates);
+    mutate(await updateCard(cardId, updates));
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),
