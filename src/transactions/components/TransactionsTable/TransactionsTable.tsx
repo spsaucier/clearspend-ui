@@ -1,7 +1,6 @@
 import { createSignal, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
-import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { join } from '_common/utils/join';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
@@ -31,21 +30,11 @@ import { FiltersButton } from 'app/components/FiltersButton';
 import { syncTransaction } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
+import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
-import { formatActivityStatus } from '../../utils/formatActivityStatus';
-import { STATUS_ICONS, MERCHANT_CATEGORIES } from '../../constants';
-import type { ActivityStatus } from '../../types';
+import { MERCHANT_CATEGORIES } from '../../constants';
 
 import css from './TransactionsTable.css';
-
-const STATUS_COLORS: Record<ActivityStatus, string | undefined> = {
-  APPROVED: css.approved,
-  PROCESSED: css.approved,
-  DECLINED: css.declined,
-  CANCELED: css.declined,
-  PENDING: undefined,
-  CREDIT: undefined,
-};
 
 interface TransactionsTableProps {
   data: PagedDataAccountActivityResponse;
@@ -70,14 +59,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => {
         const date = new Date(item.activityTime || '');
         return (
-          <div>
-            <div class={css.date}>
-              <DateTime date={date} />
-            </div>
-            <div class={css.sub}>
-              <DateTime date={date} preset={DateFormat.time} />
-            </div>
-          </div>
+          <>
+            <DateTime date={date} />
+            <br />
+            <DateTime date={date} preset={DateFormat.time} class={css.sub} />
+          </>
         );
       },
     },
@@ -107,7 +93,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       name: 'card',
       title: <Text message="Card" />,
       render: (item) => (
-        <div class={css.cardCell}>
+        <div>
           <Show when={item.card} fallback="--">
             <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
               {/* TODO need activated status */}
@@ -141,17 +127,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount" />,
-      render: (item) => (
-        <div class={css.amountCell}>
-          <div class={join(css.status, STATUS_COLORS[item.status!])}>
-            <Icon name={STATUS_ICONS[item.status!]} size="sm" />
-          </div>
-          <div>
-            <div class={css.amount}>{formatCurrency(item.amount?.amount || 0)}</div>
-            <div class={css.sub}>{formatActivityStatus(item.status)}</div>
-          </div>
-        </div>
-      ),
+      render: (item) => <TransactionsTableAmount status={item.status!} amount={item.amount} />,
     },
     {
       name: 'receipt',
@@ -211,7 +187,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <Table
           columns={columns.filter((column) => column.name !== 'sync' || props.showAccountingAdminView)}
           data={props.data.content as []}
-          tdClass={css.cell}
+          rowClass={css.row}
           onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>

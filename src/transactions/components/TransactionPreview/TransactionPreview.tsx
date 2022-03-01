@@ -1,10 +1,9 @@
 import { useNavigate } from 'solid-app-router';
-import { useI18n, Text, DateTime } from 'solid-i18n';
+import { useI18n, Text } from 'solid-i18n';
 import { createSignal, createMemo, batch, Show, For } from 'solid-js';
 
 import type { AccountActivityResponse, ExpenseCategory } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
-import { DateFormat } from '_common/api/intl/types';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -14,7 +13,6 @@ import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
-import { join } from '_common/utils/join';
 import {
   getActivityById,
   setActivityNote,
@@ -28,23 +26,14 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from 'accounting/components/SelectExpenseCategory';
 
 import { MerchantLogo } from '../MerchantLogo';
+import { TransactionPreviewStatus } from '../TransactionPreviewStatus';
+import { TransactionDateTime } from '../TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
-import { formatActivityStatus } from '../../utils/formatActivityStatus';
-import { STATUS_FILL_ICONS, MERCHANT_CATEGORIES } from '../../constants';
-import type { ActivityStatus } from '../../types';
+import { MERCHANT_CATEGORIES } from '../../constants';
 
 import type { ReceiptVideModel } from './ReceiptsView';
 
 import css from './TransactionPreview.css';
-
-const STATUS_COLORS: Record<ActivityStatus, string | undefined> = {
-  APPROVED: css.approved,
-  PROCESSED: css.approved,
-  DECLINED: css.declined,
-  CANCELED: css.declined,
-  PENDING: undefined,
-  CREDIT: undefined,
-};
 
 interface TransactionPreviewProps {
   transaction: Readonly<AccountActivityResponse>;
@@ -113,10 +102,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   return (
     <div class={css.root}>
-      <div class={join(css.status, STATUS_COLORS[transaction().status!])}>
-        <Icon name={STATUS_FILL_ICONS[transaction().status!]} size="sm" class={css.statusIcon} />
-        <span>{formatActivityStatus(transaction().status)}</span>
-      </div>
+      <TransactionPreviewStatus status={transaction().status!} />
       <div class={css.summary}>
         <Show when={transaction().merchant}>
           <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
@@ -128,7 +114,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           {formatMerchantType(transaction().merchant?.type)}
         </div>
         <div class={css.date}>
-          <DateWithDateTime activityTime={transaction().activityTime!} />
+          <TransactionDateTime date={transaction().activityTime} />
         </div>
         <div class={css.receiptCta}>
           <Show when={receiptIds().length}>
@@ -240,7 +226,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </h4>
         <div class={css.detail}>
           <Text message="Posted On" />
-          <DateWithDateTime activityTime={transaction().activityTime!} />
+          <TransactionDateTime date={transaction().activityTime} />
         </div>
         <div class={css.detail}>
           <Text message="Posted Amount" />
@@ -260,15 +246,4 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
 const allowReceiptUpload = (transaction: AccountActivityResponse) => {
   return transaction.merchant && ['PENDING', 'APPROVED', 'PROCESSED'].includes(transaction.status!);
-};
-
-export const DateWithDateTime = (props: { activityTime: string }) => {
-  const date = new Date(props.activityTime || '');
-  return (
-    <span>
-      <DateTime date={date} />
-      <span> &#8226; </span>
-      <DateTime date={date} preset={DateFormat.time} />
-    </span>
-  );
 };

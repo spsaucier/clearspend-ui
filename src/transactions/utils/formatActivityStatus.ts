@@ -1,7 +1,8 @@
 import { defineMessages } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
-import type { AccountActivityResponse } from 'generated/capital';
+
+import type { ActivityStatus } from '../types';
 
 const messages = defineMessages({
   PENDING: { message: 'Pending' },
@@ -12,7 +13,7 @@ const messages = defineMessages({
   PROCESSED: { message: 'Processed' },
 });
 
-export function formatActivityStatus(value: AccountActivityResponse['status']) {
+export function formatActivityStatus(value: ActivityStatus | undefined) {
   const message = value && messages[value];
   return message ? i18n.t(message) : '';
 }

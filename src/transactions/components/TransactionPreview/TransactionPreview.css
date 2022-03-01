@@ -4,29 +4,6 @@
   flex-direction: column;
 }
 
-.status {
-  display: flex;
-  padding: var(--pd-8) var(--pd-24);
-  align-items: center;
-  color: var(--tw-white);
-  font-size: var(--text-12);
-  font-weight: var(--font-700);
-  line-height: 1.33;
-  background: var(--tw-gray-70);
-}
-
-.approved {
-  background: var(--tw-green-70);
-}
-
-.declined {
-  background: var(--tw-red-70);
-}
-
-.status-icon {
-  margin-right: var(--pd-4);
-}
-
 .summary {
   display: flex;
   margin: 0 var(--pd-24) var(--pd-24);

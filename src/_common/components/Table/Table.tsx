@@ -16,7 +16,8 @@ export interface TableProps<T extends {}> {
   columns: readonly Readonly<TableColumn<T>>[];
   data: readonly T[];
   class?: string;
-  tdClass?: string;
+  cellClass?: string;
+  rowClass?: string;
   onRowClick?: (data: T) => void;
 }
 
@@ -31,11 +32,11 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
       <tbody>
         <For each={props.data}>
           {(row: T) => (
-            <tr class={css.row} onClick={() => props.onRowClick?.(row)}>
+            <tr class={join(css.row, props.rowClass)} onClick={() => props.onRowClick?.(row)}>
               <For each={props.columns}>
                 {(column) => {
                   return (
-                    <td class={join(css.td, props.tdClass, column.class)} onClick={() => column.onClick?.(row)}>
+                    <td class={join(css.td, props.cellClass, column.class)} onClick={() => column.onClick?.(row)}>
                       {typeof column.render === 'function'
                         ? column.render(row)
                         : // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access

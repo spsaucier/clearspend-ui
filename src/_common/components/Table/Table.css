@@ -30,6 +30,6 @@
 }
 
 .td {
-  padding: var(--pd-16) var(--pd-12);
+  padding: 20px var(--pd-12);
   vertical-align: top;
 }

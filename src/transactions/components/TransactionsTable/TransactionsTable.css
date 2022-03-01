@@ -2,17 +2,7 @@
   width: 320px;
 }
 
-.cell {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  cursor: pointer;
-}
-
-.date {
-  font-weight: var(--font-400);
-}
-
-.card-cell {
+.row {
   cursor: pointer;
 }
 
@@ -25,39 +15,9 @@
   }
 }
 
-.merchant,
-.amount-cell {
+.merchant {
   display: flex;
   gap: var(--pd-10);
-}
-
-.status {
-  display: flex;
-  width: 24px;
-  height: 24px;
-  margin-top: -4px;
-  align-items: center;
-  justify-content: center;
-  color: var(--tw-gray-70);
-  background: var(--tw-gray-10);
-  border: 1px solid var(--tw-gray-20);
-  border-radius: var(--radius-8);
-}
-
-.approved {
-  color: var(--tw-green-70);
-  background: var(--tw-green-10);
-  border-color: var(--tw-green-20);
-}
-
-.declined {
-  color: var(--tw-red-80);
-  background: var(--tw-red-20);
-  border-color: var(--tw-red-60);
-}
-
-.amount {
-  font-weight: var(--font-700);
 }
 
 .receipt-cell {

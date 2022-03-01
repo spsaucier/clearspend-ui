@@ -7,11 +7,14 @@
   border: 1px solid var(--tw-gray-30);
   border-radius: var(--radius-10);
   transition: border 0.3s;
-  cursor: pointer;
 
   &:not(:last-child) {
     margin-bottom: var(--pd-16);
   }
+}
+
+.interactive {
+  cursor: pointer;
 
   &:hover {
     border-color: var(--tw-primary-border);

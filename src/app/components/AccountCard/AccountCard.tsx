@@ -1,4 +1,4 @@
-import type { JSXElement } from 'solid-js';
+import { createMemo, Show, type JSXElement } from 'solid-js';
 
 import { Icon, IconName } from '_common/components/Icon';
 
@@ -8,12 +8,14 @@ interface AccountCardProps {
   icon: keyof typeof IconName;
   title: JSXElement;
   text: JSXElement;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export function AccountCard(props: Readonly<AccountCardProps>) {
+  const interactive = createMemo(() => typeof props.onClick === 'function');
+
   return (
-    <div class={css.root} onClick={props.onClick}>
+    <div class={css.root} classList={{ [css.interactive!]: interactive() }} onClick={props.onClick}>
       <div class={css.icon}>
         <Icon name={props.icon} />
       </div>
@@ -21,7 +23,9 @@ export function AccountCard(props: Readonly<AccountCardProps>) {
         <div class={css.name}>{props.title}</div>
         <div class={css.number}>{props.text}</div>
       </div>
-      <Icon name="chevron-right" />
+      <Show when={interactive()}>
+        <Icon name="chevron-right" />
+      </Show>
     </div>
   );
 }

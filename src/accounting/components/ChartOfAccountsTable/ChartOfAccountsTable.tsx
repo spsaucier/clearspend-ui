@@ -158,7 +158,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       />
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
         <div class={css.table}>
-          <Table columns={columns} data={flattenedData()} tdClass={css.cell} />
+          <Table columns={columns} data={flattenedData()} cellClass={css.cell} />
         </div>
         <div class={css.tableButtons}>
           <CancelConfirmationButton onCancel={props.onCancel} />
