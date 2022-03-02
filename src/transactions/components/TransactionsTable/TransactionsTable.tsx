@@ -147,7 +147,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <InputSearch
           delay={400}
           value={props.params.searchText}
-          placeholder={String(i18n.t('Search Transactions...'))}
+          placeholder={String(i18n.t('Search transactions...'))}
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />

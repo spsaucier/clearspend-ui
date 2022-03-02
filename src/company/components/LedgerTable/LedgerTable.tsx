@@ -106,7 +106,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
         <InputSearch
           delay={400}
           value={props.params.searchText}
-          placeholder={String(i18n.t('Search Transactions...'))}
+          placeholder={String(i18n.t('Search ledger...'))}
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
@@ -129,7 +129,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
       </Filters>
       <Show
         when={props.data.content?.length}
-        fallback={<Empty message={<Text message="There are no transactions" />} />}
+        fallback={<Empty message={<Text message="There are no ledger entries" />} />}
       >
         <Table
           columns={columns}
