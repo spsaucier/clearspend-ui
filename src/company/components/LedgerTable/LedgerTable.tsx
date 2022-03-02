@@ -3,7 +3,6 @@ import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { DateFormat } from '_common/api/intl/types';
 import { useBool } from '_common/utils/useBool';
-import { getNoop } from '_common/utils/getNoop';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { StoreSetter } from '_common/utils/store';
 import { Button } from '_common/components/Button';
@@ -23,6 +22,8 @@ import type {
   AccountActivityRequest,
   AccountActivityResponse,
 } from 'generated/capital';
+
+import { LedgerFilters } from '../LedgerFilters';
 
 import css from './LedgerTable.css';
 
@@ -80,6 +81,10 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
     },
   ];
 
+  // TODO update when API is ready
+  // eslint-disable-next-line
+  const onResetFilters = () => {};
+
   const onExport = () => {
     return exportData(props.params).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
@@ -108,9 +113,9 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
         <FiltersButton
           disabled
           label={<Text message="More Filters" />}
-          // TODO
+          // TODO update when API is ready
           count={0}
-          onReset={getNoop()}
+          onReset={onResetFilters}
           onClick={toggleFilters}
         />
         <Button
@@ -134,7 +139,17 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
         />
       </Show>
       <Drawer noPadding open={showFilters()} title={<Text message="Filter Ledger" />} onClose={toggleFilters}>
-        TODO
+        <LedgerFilters
+          params={props.params}
+          onChangeParams={(params) => {
+            toggleFilters();
+            props.onChangeParams(params);
+          }}
+          onReset={() => {
+            toggleFilters();
+            onResetFilters();
+          }}
+        />
       </Drawer>
     </div>
   );
