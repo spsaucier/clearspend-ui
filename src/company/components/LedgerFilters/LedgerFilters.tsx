@@ -73,7 +73,7 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
             </Checkbox>
           </CheckboxGroup>
         </FilterBox>
-        <FilterBox title={<Text message="Transaction Date" />}>
+        <FilterBox title={<Text message="Ledger Entry Date" />}>
           <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
         </FilterBox>
       </Form>

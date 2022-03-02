@@ -111,7 +111,6 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <FiltersButton
-          disabled
           label={<Text message="More Filters" />}
           // TODO update when API is ready
           count={0}
