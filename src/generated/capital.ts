@@ -1358,8 +1358,6 @@ export interface User {
 }
 
 export interface FirstTwoFactorValidateRequest {
-  /** @format uuid */
-  userId?: string;
   code?: string;
   method?: 'email' | 'sms' | 'authenticator';
   destination?: string;
@@ -1370,8 +1368,6 @@ export interface TwoFactorResponse {
 }
 
 export interface FirstTwoFactorSendRequest {
-  /** @format uuid */
-  userId?: string;
   destination?: string;
   method?: 'email' | 'sms' | 'authenticator';
 }

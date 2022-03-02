@@ -23,7 +23,7 @@ import css from './ChartOfAccountsTable.css';
 interface ChartOfAccountsTableProps {
   data: IntegrationAccount[];
   onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
-  onCancel: () => void;
+  onCancel?: () => void;
   onSkip?: () => void;
 }
 
@@ -165,7 +165,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           <Table columns={columns} data={flattenedData()} cellClass={css.cell} />
         </div>
         <div class={css.tableButtons}>
-          <CancelConfirmationButton onCancel={props.onCancel} />
+          <Show when={!!props.onCancel}>
+            <CancelConfirmationButton onCancel={props.onCancel!} />
+          </Show>
           <Show when={!!props.onSkip}>
             <Button onClick={props.onSkip}>
               <Text message="Skip Setup" />

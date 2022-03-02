@@ -12,7 +12,7 @@ interface ChartOfAccountsDataProps {
   mappings: Readonly<IntegrationExpenseAccountMappingResponse> | null;
   onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
   onReload: () => Promise<unknown>;
-  onCancel: () => void;
+  onCancel?: () => void;
   onSkip?: () => void;
 }
 

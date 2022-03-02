@@ -1,7 +1,6 @@
 import { Text } from 'solid-i18n';
 
 import { Page } from 'app/components/Page';
-import { Data } from 'app/components/Data';
 import {
   useIntegrationExpenseCategories,
   useIntegrationExpenseCategoryMappings,
@@ -36,26 +35,19 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
           <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
         </p>
       </div>
-      <Data
-        data={integrationExpenseCategoryStore.data}
-        loading={integrationExpenseCategoryStore.loading}
+      <ChartOfAccountsData
+        loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
         error={integrationExpenseCategoryStore.error}
-        onReload={integrationExpenseCategoryStore.reload}
-      >
-        <ChartOfAccountsData
-          loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
-          error={integrationExpenseCategoryStore.error || integrationExpenseCategoryMappingStore.error}
-          data={integrationExpenseCategoryStore.data}
-          mappings={integrationExpenseCategoryMappingStore.data}
-          onSave={handleSave}
-          onReload={async () => {
-            integrationExpenseCategoryStore.reload();
-            integrationExpenseCategoryMappingStore.reload();
-          }}
-          onCancel={props.onCancel}
-          onSkip={props.onNext}
-        />
-      </Data>
+        data={integrationExpenseCategoryStore.data}
+        mappings={integrationExpenseCategoryMappingStore.data}
+        onSave={handleSave}
+        onReload={async () => {
+          integrationExpenseCategoryStore.reload();
+          integrationExpenseCategoryMappingStore.reload();
+        }}
+        onCancel={props.onCancel}
+        onSkip={props.onNext}
+      />
     </Page>
   );
 }
