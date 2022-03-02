@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PreloadWebpackPlugin = require('@vue/preload-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default;
@@ -27,6 +28,7 @@ module.exports = (env, options) => {
       filename: '[name].[contenthash:8].js',
       path: path.join(__dirname, 'dist'),
       publicPath: '/',
+      crossOriginLoading: 'anonymous',
     },
     optimization: {
       runtimeChunk: true,
@@ -174,6 +176,7 @@ module.exports = (env, options) => {
         experimentalUseImportModule: true,
         ignoreOrder: true,
       }),
+      new SubresourceIntegrityPlugin(),
       env.analyzer === 'default' && new CircularDependencyPlugin({ exclude: /node_modules/ }),
       env.analyzer === 'default' && new BundleAnalyzerPlugin(),
       env.analyzer === 'statoscope' &&
