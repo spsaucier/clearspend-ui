@@ -3,6 +3,7 @@
 .root {
   display: flex;
   width: 100%;
+  max-width: 300px;
   align-items: center;
   justify-content: space-between;
 }

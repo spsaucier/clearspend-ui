@@ -22,9 +22,11 @@ export default function Login() {
   const submit = async (username: string, password: string) => {
     setEmail(username);
     const user = await login(username, password);
-    if (user.userId) {
+    if ('userId' in user && user.userId) {
       sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
       navigate('/');
+    } else if ('twoFactorId' in user && user.twoFactorId) {
+      navigate('/login-2fa', { state: { twoFactorId: user.twoFactorId } });
     }
   };
 

@@ -6,6 +6,7 @@ import { EmployeeEdit } from 'employees/pages/EmployeeEdit';
 import { Profile } from 'employees/pages/Profile';
 import { ProfileSettings } from 'employees/pages/ProfileSettings';
 import { ChangePassword } from 'employees/pages/ChangePassword';
+import { ConfirmPhone, UpdatePhone } from 'employees/pages/UpdatePhone';
 import { Allocations } from 'allocations';
 import { AllocationEdit } from 'allocations/pages/AllocationEdit';
 import { Cards } from 'cards';
@@ -43,6 +44,8 @@ export function MainRoutes() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/settings" element={<ProfileSettings />} />
         <Route path="/profile/password" element={<ChangePassword />} />
+        <Route path="/profile/phone" element={<UpdatePhone />} />
+        <Route path="/profile/phone-verify" element={<ConfirmPhone />} />
 
         <Route path="/accounting" element={<Accounting />} />
       </Routes>

@@ -80,7 +80,7 @@ export default function Profile() {
         description={'Update the mobile number used to secure your account.'}
         class={css.section}
       >
-        <Button size="lg" icon="edit">
+        <Button size="lg" icon="edit" onClick={() => navigate('/profile/phone')}>
           <Text message="Update Phone Number" />
         </Button>
       </Section>

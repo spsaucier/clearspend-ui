@@ -22,7 +22,7 @@ interface VerifyFormProps {
   description: JSXElement;
   extraDescription?: JSXElement;
   extraBtn?: JSXElement;
-  onResend: () => Promise<unknown>;
+  onResend?: () => Promise<unknown>;
   onConfirm: (code: string) => Promise<unknown>;
   darkMode?: boolean;
 }
@@ -34,7 +34,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
   const [secondsLeft, restartTimer] = createTimer(RESEND_TIMEOUT_IN_SEC);
 
   const [loading, confirm] = wrapAction(props.onConfirm);
-  const [resending, resend] = wrapAction(() => props.onResend().then(restartTimer));
+  const [resending, resend] = wrapAction(() => (props.onResend?.() || Promise.resolve()).then(restartTimer));
 
   const { values, errors, handlers, setErrors } = createForm<FormValues>({
     defaultValues: { code: '' },
@@ -49,7 +49,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
         setErrors({
           code: error.data.message?.includes('NonUniqueResultException')
             ? 'Account alredy exists with this email.'
-            : 'Invalid code or something going wrong',
+            : 'Invalid code or something went wrong',
         });
       });
     }
@@ -73,10 +73,12 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
             darkMode={true}
           />
         </FormItem>
-        <FlatButton hideIcon={true} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
-          Resend code
-          {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
-        </FlatButton>
+        <Show when={props.onResend}>
+          <FlatButton hideIcon={true} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
+            Resend code
+            {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
+          </FlatButton>
+        </Show>
         <Show when={props.extraBtn}>{props.extraBtn}</Show>
       </Form>
     </div>
