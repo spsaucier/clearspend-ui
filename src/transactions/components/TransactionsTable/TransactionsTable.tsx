@@ -1,7 +1,8 @@
-import { createSignal, Show } from 'solid-js';
+import { Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
+import { useBool } from '_common/utils/useBool';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { StoreSetter } from '_common/utils/store';
@@ -25,12 +26,11 @@ import type {
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
-import { getNoop } from '_common/utils/getNoop';
 import { FiltersButton } from 'app/components/FiltersButton';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
-import { SearchTransactionsRequest, TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
+import { TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
 
 import css from './TransactionsTable.css';
@@ -49,7 +49,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const messages = useMessages();
 
   const [exporting, exportData] = wrapAction(exportAccountActivity);
-  const [filterPanelOpen, setFilterPanelOpen] = createSignal<boolean>(false);
+  const [showFilters, toggleFilters] = useBool();
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
@@ -128,6 +128,10 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       });
   };
 
+  // TODO update when API is ready
+  // eslint-disable-next-line
+  const onResetFilters = () => {};
+
   return (
     <div>
       <Filters
@@ -147,7 +151,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
-        <FiltersButton label={'More Filters'} count={0} onReset={getNoop()} onClick={() => setFilterPanelOpen(true)} />
+        <FiltersButton
+          label={<Text message="More Filters" />}
+          // TODO update when API is ready
+          count={0}
+          onReset={onResetFilters}
+          onClick={toggleFilters}
+        />
         <Button
           loading={exporting()}
           disabled={!props.data.content?.length}
@@ -168,19 +178,18 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>
-
-      <Drawer
-        noPadding
-        open={filterPanelOpen()}
-        title={<Text message="Filter Transactions" />}
-        onClose={() => setFilterPanelOpen(false)}
-      >
+      <Drawer noPadding open={showFilters()} title={<Text message="Filter Transactions" />} onClose={toggleFilters}>
         <TransactionFilterDrawer
-          onChangeParams={() => {
-            // TODO
-          }}
-          params={{} as SearchTransactionsRequest}
+          params={props.params}
           showAccountingAdminView={props.showAccountingAdminView}
+          onChangeParams={(params) => {
+            toggleFilters();
+            props.onChangeParams(params);
+          }}
+          onReset={() => {
+            toggleFilters();
+            onResetFilters();
+          }}
         />
       </Drawer>
     </div>
