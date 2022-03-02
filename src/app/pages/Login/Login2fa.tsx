@@ -12,12 +12,12 @@ import { loginWith2fa } from '../../services/auth';
 
 export default function Login2fa() {
   const navigate = useNavigate();
-  const { state: twoFactorId } = useLoc<{ twoFactorId: string }>();
+  const { state } = useLoc<{ twoFactorId: string }>();
 
   onMount(() => SignUp.preload());
 
   const onCodeConfirm = async (code: string) => {
-    const user = await loginWith2fa({ code, twoFactorId: twoFactorId as string });
+    const user = await loginWith2fa({ code, twoFactorId: state?.twoFactorId as string });
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
     navigate('/');
   };
