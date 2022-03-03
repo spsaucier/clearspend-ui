@@ -42,7 +42,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
     },
     {
       name: 'percentage',
-      title: <Text message="25%+ Ownership" />,
+      title: <Text message="Ownership (25% or more)" />,
       render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
     },
     {

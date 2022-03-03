@@ -4,7 +4,6 @@ import { Text } from 'solid-i18n';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { VerifyAccount } from '../../components/VerifyAccount';
-import { getNoop } from '../../../_common/utils/getNoop';
 
 import useLinkBankAccount from './useLinkBankAcccount';
 
@@ -26,7 +25,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
         loading={loading() || processing()}
         disabled={props.disabled}
         class={css.verify}
-        onVerifyClick={handler()?.open || getNoop}
+        onVerifyClick={() => handler()?.open()}
       />
     </Show>
   );

@@ -9,7 +9,7 @@ interface VerifyAccountProps {
   loading: boolean;
   disabled?: boolean;
   class?: string;
-  onVerifyClick: () => void;
+  onVerifyClick?: () => void;
 }
 
 export function VerifyAccount(props: Readonly<VerifyAccountProps>) {
