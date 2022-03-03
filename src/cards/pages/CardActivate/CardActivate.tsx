@@ -8,6 +8,7 @@ import { InputCode } from '_common/components/InputCode';
 import { useMessages } from 'app/containers/Messages/context';
 import { Page, PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { activateCard } from '../../services';
 
@@ -37,6 +38,7 @@ export default function CardActivate() {
 
     await activateCard(params.id, values().code)
       .then(() => {
+        sendAnalyticsEvent({ name: Events.ACTIVATE_CARD });
         messages.success({
           title: i18n.t('Card activated'),
           message: i18n.t('Your card has been successfully activated.'),

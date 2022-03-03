@@ -7,6 +7,7 @@ import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount';
 import { LinkAccountButton } from 'onboarding/containers/LinkAccount/LinkAccountButton';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import css from './Landing.css';
 
@@ -46,12 +47,14 @@ export function Landing(props: LandingProps) {
                   ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
                   : bankAccounts.filter((account) => account.businessBankAccountId);
                 await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+                sendAnalyticsEvent({ name: Events.LINK_BANK });
                 location.reload();
               }}
             />
           </Show>
         </div>
       </Show>
+
       <div class={css.card}>
         <h3 class={css.cardTitle}>
           <Text message="Onboard your employees" />
@@ -63,17 +66,21 @@ export function Landing(props: LandingProps) {
           <Text message="Onboard your employees" />
         </Button>
       </div>
-      <div class={css.card}>
-        <h3 class={css.cardTitle}>
-          <Text message="Set up allocations" />
-        </h3>
-        <p class={css.cardMessage}>
-          <Text message="Create and fund budgets for specific business purposes." />
-        </p>
-        <Button size="lg" icon="amount" class={css.cardAction} onClick={() => navigate('/allocations/edit')}>
-          <Text message="Create allocation" />
-        </Button>
-      </div>
+
+      <Show when={!props.addBalance}>
+        <div class={css.card}>
+          <h3 class={css.cardTitle}>
+            <Text message="Set up allocations" />
+          </h3>
+          <p class={css.cardMessage}>
+            <Text message="Create and fund budgets for specific business purposes." />
+          </p>
+          <Button size="lg" icon="amount" class={css.cardAction} onClick={() => navigate('/allocations/edit')}>
+            <Text message="Create allocation" />
+          </Button>
+        </div>
+      </Show>
+
       <div class={css.card}>
         <h3 class={css.cardTitle}>
           <Text message="Issue your first card" />

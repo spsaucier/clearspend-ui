@@ -11,6 +11,7 @@ import { useMCC } from 'app/stores/mcc';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
 import type { CreateAllocationRequest, CreateUserRequest } from 'generated/capital';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
 import { saveAllocation, getAllocationRoles, addAllocationRole } from '../../services';
@@ -40,6 +41,7 @@ export default function AllocationEdit() {
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
     await users.reload();
+    sendAnalyticsEvent({ name: Events.CREATE_EMPLOYEE });
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The new employee has been successfully added to your organization.'),
@@ -49,6 +51,7 @@ export default function AllocationEdit() {
 
   const onSave = async (allocation: CreateAllocationRequest, userRoles: AllocationUserRole[]) => {
     const allocationId = await saveAllocation(allocation);
+    sendAnalyticsEvent({ name: Events.CREATE_ALLOCATION });
     messages.success({ title: i18n.t('The new allocation has been successfully added.') });
 
     try {

@@ -18,6 +18,7 @@ import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
 import { formatName } from 'employees/utils/formatName';
 import type { Allocation, CreateUserRequest } from 'generated/capital';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { AllocationRole } from '../../components/AllocationRole';
 import {
@@ -80,6 +81,7 @@ export function Settings(props: Readonly<SettingsProps>) {
     const resp = await addUser(data);
     await users.reload();
     onAddRole(resp.userId);
+    sendAnalyticsEvent({ name: Events.CREATE_EMPLOYEE });
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The new employee has been successfully added to your organization.'),

@@ -11,6 +11,7 @@ import { useAllocations } from 'allocations/stores/allocations';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
 import type { CreateUserRequest, IssueCardRequest } from 'generated/capital';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
@@ -28,6 +29,7 @@ export default function CardEdit() {
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
     await users.reload();
+    sendAnalyticsEvent({ name: Events.CREATE_EMPLOYEE });
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The new employee has been successfully added to your organization.'),
@@ -37,6 +39,7 @@ export default function CardEdit() {
 
   const onSave = async (data: Readonly<IssueCardRequest>) => {
     await saveCard(data);
+    sendAnalyticsEvent({ name: Events.CREATE_CARD });
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),

@@ -9,6 +9,7 @@ import { validEmail } from '_common/components/Form/rules/patterns';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useSignup } from 'signup/store';
 import { Checkbox } from '_common/components/Checkbox';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
@@ -27,6 +28,7 @@ interface AccountSetUpFormProps {
 }
 
 export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
+  sendAnalyticsEvent({ name: Events.VIEW_SIGNUP });
   let input!: HTMLInputElement;
   onMount(() => input.focus());
   const { store } = useSignup();

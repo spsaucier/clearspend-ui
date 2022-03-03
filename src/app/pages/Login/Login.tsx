@@ -3,7 +3,7 @@ import { Text } from 'solid-i18n';
 import { Link, useNavigate } from 'solid-app-router';
 
 import { SignUp } from 'signup';
-import { sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
+import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';
 import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
@@ -24,6 +24,7 @@ export default function Login() {
     const user = await login(username, password);
     if ('userId' in user && user.userId) {
       sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
+      sendAnalyticsEvent({ name: Events.LOGIN });
       navigate('/');
     } else if ('twoFactorId' in user && user.twoFactorId) {
       navigate('/login-2fa', { state: { twoFactorId: user.twoFactorId } });

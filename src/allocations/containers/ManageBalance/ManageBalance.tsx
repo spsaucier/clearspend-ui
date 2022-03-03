@@ -9,6 +9,7 @@ import { makeTransaction } from 'app/services/businesses';
 import { isBankAccount } from 'onboarding/components/BankAccounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
@@ -72,6 +73,16 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
         });
 
     await props.onReload();
+
+    if (targetIsBankAccount) {
+      if (isWithdraw) {
+        sendAnalyticsEvent({ name: Events.WITHDRAW_CASH, data: { amount } });
+      } else {
+        sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+      }
+    } else {
+      sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
+    }
 
     setSuccessManageData({
       amount,

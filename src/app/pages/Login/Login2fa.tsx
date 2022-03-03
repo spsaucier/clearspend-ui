@@ -6,7 +6,7 @@ import { SignUp } from 'signup';
 import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
 import { VerifyForm } from 'signup/components/VerifyForm';
 import { useLoc } from '_common/api/router';
-import { sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
+import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';
 
 import { loginWith2fa } from '../../services/auth';
 
@@ -19,6 +19,7 @@ export default function Login2fa() {
   const onCodeConfirm = async (code: string) => {
     const user = await loginWith2fa({ code, twoFactorId: state?.twoFactorId as string });
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
+    sendAnalyticsEvent({ name: Events.LOGIN });
     navigate('/');
   };
 

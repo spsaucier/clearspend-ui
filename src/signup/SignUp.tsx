@@ -11,7 +11,7 @@ import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/
 import { Button } from '_common/components/Button';
 import type { BusinessProspectData } from 'generated/capital';
 
-import { sendAnalyticsEvent } from '../app/utils/analytics';
+import { Events, sendAnalyticsEvent, AnalyticsEventType } from '../app/utils/analytics';
 
 import { AccountSetUpForm } from './components/AccountSetUpForm';
 import { PhoneForm } from './components/PhoneForm';
@@ -89,6 +89,7 @@ export default function SignUp() {
     setName(firstName, lastName);
     setEmail(email, '');
     sendEmailVerification(firstName, lastName, email);
+    sendAnalyticsEvent({ name: Events.SUBMIT_NAME_EMAIL });
     next();
   };
 
@@ -199,11 +200,15 @@ export default function SignUp() {
     }
   };
 
-  const onEmailCodeResend = async () => onSignup();
+  const onEmailCodeResend = async () => {
+    sendAnalyticsEvent({ name: Events.RESEND_EMAIL_OTP });
+    return onSignup();
+  };
 
   const onEmailConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
     setEmailVerified(true);
+    sendAnalyticsEvent({ name: Events.VERIFY_EMAIL });
     next();
   };
 
@@ -213,11 +218,15 @@ export default function SignUp() {
     next();
   };
 
-  const onPhoneCodeResend = async () => onPhoneUpdate(store.phone!);
+  const onPhoneCodeResend = async () => {
+    sendAnalyticsEvent({ name: Events.RESEND_PHONE_OTP });
+    return onPhoneUpdate(store.phone!);
+  };
 
   const onPhoneConfirm = async (otp: string) => {
     await confirmOTP(store.pid!, { identifierType: IdentifierType.PHONE, otp });
     setPhoneVerified(true);
+    sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
     next();
   };
 
@@ -225,6 +234,8 @@ export default function SignUp() {
     await setPassword(store.pid!, password);
     await login(store.email!, password);
     cleanup();
+    sendAnalyticsEvent({ name: Events.SET_PASSWORD });
+    sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: store.email });
     navigate('/onboarding');
   };
 

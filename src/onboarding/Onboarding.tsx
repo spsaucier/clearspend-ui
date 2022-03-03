@@ -20,6 +20,7 @@ import { AppEvent } from 'app/types/common';
 import { events } from '_common/api/events';
 import { Button } from '_common/components/Button';
 import { completeOnboarding } from 'allocations/services';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -97,6 +98,7 @@ export default function Onboarding() {
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
     const resp = await setBusinessInfo(signupUser().userId!, data);
     mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
+    sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
@@ -120,6 +122,7 @@ export default function Onboarding() {
   const onUpdateKYC = async () => {
     try {
       // todo: trigger loading indicator
+      sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
       await triggerBusinessOwners();
       await refetch();
       const reviewRequirements = await getApplicationReviewRequirements();
@@ -128,7 +131,6 @@ export default function Onboarding() {
       setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
 
       setKybRequiredFields(reviewRequirements.kybRequiredFields);
-
       if (reviewRequirements.kybRequiredFields.length > 0) {
         setStep(OnboardingStep.BUSINESS_OWNERS); // todo: parse results to show errors/where to fix things are
       } else if (
@@ -159,6 +161,7 @@ export default function Onboarding() {
       setAccounts(matchedAccounts);
       storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
       await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+      sendAnalyticsEvent({ name: Events.LINK_BANK });
       setStep(OnboardingStep.TRANSFER_MONEY);
     });
   };
@@ -168,6 +171,8 @@ export default function Onboarding() {
     await refetch();
     storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
     storage.set(ONBOARDING_LEADERS_KEY, []);
+    sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+    sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
     navigate('/');
   };
 
@@ -180,6 +185,8 @@ export default function Onboarding() {
 
   const skipDeposit = async () => {
     await completeOnboarding();
+    sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
+    sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
     location.reload();
   };
 
