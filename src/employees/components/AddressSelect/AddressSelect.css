@@ -22,7 +22,8 @@
   }
 
   @nest .item > input:checked + & {
-    border-color: var(--tw-primary-border);
+    background-color: #ecfdf5;
+    border-color: #10b981;
   }
 }
 

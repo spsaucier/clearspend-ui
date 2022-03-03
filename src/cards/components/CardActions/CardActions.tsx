@@ -34,7 +34,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
           <Button
             size="lg"
             type="primary"
-            icon="card-success"
+            icon="card-add-new"
             disabled={!props.card.issueDate}
             onClick={props.onActivate}
           >
