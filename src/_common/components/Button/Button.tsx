@@ -19,7 +19,7 @@ export interface IconProps {
 export interface ButtonProps {
   id?: string;
   type?: 'default' | 'primary' | 'danger';
-  view?: 'default' | 'second' | 'ghost';
+  view?: 'default' | 'second' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   icon?: IconType | Readonly<IconProps>;
   class?: string;
@@ -62,6 +62,7 @@ export function Button(props: Readonly<ButtonProps>) {
       [css.lg!]: merged.size === 'lg',
 
       [css.ghost!]: merged.type === 'default' && merged.view === 'ghost',
+      [css.outline!]: merged.type === 'default' && merged.view === 'outline',
 
       [css.primary!]: merged.type === 'primary' && merged.view === 'default',
       [css.primarySecond!]: merged.type === 'primary' && merged.view === 'second',

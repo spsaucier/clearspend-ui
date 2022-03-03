@@ -1,7 +1,7 @@
 import { Text } from 'solid-i18n';
 import { Show } from 'solid-js';
 
-import { getBankAccounts } from 'onboarding/services/accounts';
+import { getBankAccounts, linkBankAccounts } from 'onboarding/services/accounts';
 import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
@@ -40,9 +40,9 @@ export function Landing(props: LandingProps) {
           />
           <Show when={accounts.length === 0}>
             <LinkAccountButton
-              onSuccess={(res) => {
-                console.log(res);
-                return Promise.resolve(res);
+              onSuccess={async (token) => {
+                await linkBankAccounts(token);
+                navigate('/');
               }}
             />
           </Show>

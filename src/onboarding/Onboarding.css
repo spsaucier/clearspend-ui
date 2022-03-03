@@ -32,12 +32,6 @@
   flex-grow: 1;
 }
 
-.verify-section-content {
-  @media (--bp-large) {
-    max-width: 394px;
-  }
-}
-
 .estimated {
   display: flex;
   margin: var(--pd-24) var(--pd-16);

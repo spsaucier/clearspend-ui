@@ -24,7 +24,8 @@
   border-radius: var(--radius-20);
 
   @media (--bp-large) {
-    flex-basis: 32%;
+    flex-basis: 320px;
+    flex-grow: 1;
   }
 }
 

@@ -12,11 +12,12 @@
   justify-content: center;
   color: var(--tw-black);
   font: inherit;
+  font-family: var(--font-header);
   vertical-align: middle;
   background: var(--tw-gray-20);
   border: 0;
   border-radius: var(--radius-12);
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
   cursor: pointer;
 
   &:hover {
@@ -64,6 +65,17 @@
 .icon-only-sm {
   width: v-size-sm;
   padding: 0;
+}
+
+.outline {
+  color: var(--tw-gray-70);
+  border: 1px solid var(--tw-gray-70);
+
+  &:hover {
+    color: var(--tw-primary-content);
+    background: white;
+    border-color: var(--tw-gray-30);
+  }
 }
 
 :disabled,

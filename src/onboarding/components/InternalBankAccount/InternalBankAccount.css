@@ -29,6 +29,7 @@
 }
 
 .dark-content {
+  display: inline-block;
   color: black;
 }
 
@@ -36,7 +37,7 @@
   display: flex;
   min-height: 1.5em;
   margin-bottom: 4px;
-  align-items: start;
+  align-items: flex-start;
   flex-direction: row;
 }
 

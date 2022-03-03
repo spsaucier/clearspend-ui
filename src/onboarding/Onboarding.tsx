@@ -7,7 +7,6 @@ import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
-import { Section } from 'app/components/Section';
 import { useOnboardingBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { BusinessType, OnboardingStep } from 'app/types/businesses';
@@ -20,11 +19,11 @@ import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
 import { events } from '_common/api/events';
 import { Button } from '_common/components/Button';
+import { completeOnboarding } from 'allocations/services';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
-import { LinkAccount } from './containers/LinkAccount';
 import { TransferMoney } from './components/TransferMoney';
 import {
   getBusinessProspectInfo,
@@ -36,6 +35,7 @@ import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/TeamForm';
+import LinkAccountStep from './containers/LinkAccount/LinkAccountStep';
 
 import css from './Onboarding.css';
 
@@ -178,6 +178,11 @@ export default function Onboarding() {
     }
   };
 
+  const skipDeposit = async () => {
+    await completeOnboarding();
+    location.reload();
+  };
+
   return (
     <MainLayout
       darkSide
@@ -248,13 +253,7 @@ export default function Onboarding() {
               headerClass={css.border}
               titleClass={css.thin}
             >
-              <Section
-                title="Connect your bank"
-                description="Connecting your bank account brings you one step closer to becoming an expense management superstar."
-                contentClass={css.verifySectionContent}
-              >
-                <LinkAccount verifyOnLoad={false} onSuccess={onGotVerifyToken} />
-              </Section>
+              <LinkAccountStep onSuccess={onGotVerifyToken} skipDeposit={skipDeposit} />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.TRANSFER_MONEY}>

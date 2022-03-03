@@ -1,0 +1,16 @@
+.root {
+  color: var(--tw-gray-60);
+}
+
+.heading {
+  margin-top: 16px;
+  color: black;
+  font-family: var(--font-header);
+  font-weight: 400;
+}
+
+.verify-section-content {
+  @media (--bp-large) {
+    max-width: 394px;
+  }
+}
