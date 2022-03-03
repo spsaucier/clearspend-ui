@@ -144,9 +144,46 @@
 @font-face {
   font-family: 'Telegraf';
   font-display: swap;
+  font-weight: 200;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-ultralight-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-ultralight-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-light-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-light-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
   font-weight: 400;
   font-style: normal;
-  src: local(''), url('fonts/telegraf-400.woff2') format('woff2');
+  src: local(''), url('fonts/pptelegraf-regular-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-regular-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-medium-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-medium-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-semibold-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-semibold-webfont.woff') format('woff');
 }
 
 @font-face {
@@ -154,7 +191,26 @@
   font-display: swap;
   font-weight: 700;
   font-style: normal;
-  src: local(''), url('fonts/telegraf-700.woff2') format('woff2');
+  src: local(''), url('fonts/pptelegraf-bold-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-bold-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
+  font-weight: 800;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-ultrabold-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-ultrabold-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Telegraf';
+  font-display: swap;
+  font-weight: 900;
+  font-style: normal;
+  src: local(''), url('fonts/pptelegraf-black-webfont.woff2') format('woff2'),
+    url('fonts/pptelegraf-black-webfont.woff') format('woff');
 }
 
 *,

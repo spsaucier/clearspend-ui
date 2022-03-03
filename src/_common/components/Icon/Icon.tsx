@@ -17,7 +17,7 @@ interface SVGModule {
 
 export interface IconProps {
   name: keyof typeof IconName;
-  size?: 'md' | 'sm' | 'xs';
+  size?: 'lg' | 'md' | 'sm' | 'xs';
   class?: string;
   style?: JSX.CSSProperties;
 }
@@ -32,7 +32,13 @@ export function Icon(props: Readonly<IconProps>) {
   });
 
   const classes = createMemo(() =>
-    join(css.root, props.size === 'sm' && css.sm, props.size === 'xs' && css.xs, props.class),
+    join(
+      css.root,
+      props.size === 'lg' && css.lg,
+      props.size === 'sm' && css.sm,
+      props.size === 'xs' && css.xs,
+      props.class,
+    ),
   );
 
   return createMemo(() => {

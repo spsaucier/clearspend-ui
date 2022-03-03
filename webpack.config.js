@@ -163,7 +163,7 @@ module.exports = (env, options) => {
       new PreloadWebpackPlugin({
         rel: 'preload',
         include: 'initial',
-        fileWhitelist: [/neue-400\..+?\.woff2$/, /telegraf-700\..+?\.woff2$/],
+        fileWhitelist: [/\.woff2$/, /\.woff$/],
       }),
       new ESLintPlugin({
         files: './src/**/*.{ts,tsx}',

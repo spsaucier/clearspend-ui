@@ -66,10 +66,8 @@
   padding: 0;
 }
 
-.disabled {
-  pointer-events: none;
-}
-
+:disabled,
+.disabled,
 .loading {
   pointer-events: none;
 }
@@ -121,8 +119,7 @@
 .primary {
   background-color: var(--tw-primary-bg);
 
-  &:hover:not(:disabled),
-  &:hover:not(.disabled) {
+  &:hover:not(:disabled):not(.disabled) {
     background-color: var(--tw-primary-content);
   }
 }
@@ -130,8 +127,7 @@
 .primary-second {
   color: var(--tw-primary-content);
 
-  &:hover:not(:disabled),
-  &:hover:not(.disabled) {
+  &:hover:not(:disabled):not(.disabled) {
     color: var(--tw-primary-content);
     background-color: var(--tw-gray-10);
   }
@@ -156,8 +152,7 @@
   color: var(--tw-white);
   background-color: var(--tw-red-70);
 
-  &:hover:not(:disabled),
-  &:hover:not(.disabled) {
+  &:hover:not(:disabled):not(.disabled) {
     color: var(--tw-white);
     background-color: var(--tw-red-80);
   }
@@ -166,8 +161,7 @@
 .danger-second {
   color: var(--tw-red-80);
 
-  &:hover:not(:disabled),
-  &:hover:not(.disabled) {
+  &:hover:not(:disabled):not(.disabled) {
     color: var(--tw-red-80);
     background-color: var(--tw-gray-10);
   }

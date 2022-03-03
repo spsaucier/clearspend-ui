@@ -9,6 +9,7 @@ import { Button } from '_common/components/Button';
 import { useMessages } from 'app/containers/Messages/context';
 import type { Allocation, BankAccount } from 'generated/capital';
 import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts';
+import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 
 import css from './ManageBalanceForm.css';
 
@@ -90,6 +91,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
           </FormItem>
         </Show>
       </Form>
+      <InternalBankAccount heading={<Text message="Want to wire money?" />} />
       <Button wide type="primary" loading={loading()} disabled={!isValid()} onClick={onSubmit}>
         <Text message="Update Balance" />
       </Button>

@@ -1,3 +1,4 @@
+@value v-size-lg: 40px;
 @value v-size-md: 24px;
 @value v-size-sm: 20px;
 @value v-size-xs: 16px;
@@ -8,6 +9,11 @@
   height: v-size-md;
   overflow: hidden;
   fill: currentColor;
+}
+
+.lg {
+  width: v-size-lg;
+  height: v-size-lg;
 }
 
 .sm {
