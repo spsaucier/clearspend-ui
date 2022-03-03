@@ -4,6 +4,7 @@ import { Text } from 'solid-i18n';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { VerifyAccount } from '../../components/VerifyAccount';
+import { getNoop } from '../../../_common/utils/getNoop';
 
 import useLinkBankAccount from './useLinkBankAcccount';
 
@@ -17,7 +18,7 @@ interface LinkAccountProps {
 
 export function LinkAccount(props: Readonly<LinkAccountProps>) {
   const [processing, onSuccess] = wrapAction(props.onSuccess);
-  const { open, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
+  const { handler, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
 
   return (
     <Show when={!hasError()} fallback={<Text message="Failed to load API" />}>
@@ -25,7 +26,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
         loading={loading() || processing()}
         disabled={props.disabled}
         class={css.verify}
-        onVerifyClick={open!}
+        onVerifyClick={handler()?.open || getNoop}
       />
     </Show>
   );

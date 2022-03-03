@@ -14,11 +14,16 @@ interface LinkAccountProps {
 
 export function LinkAccountButton(props: Readonly<LinkAccountProps>) {
   const [processing, onSuccess] = wrapAction(props.onSuccess);
-  const { open, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
+  const { handler, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
 
   return (
     <Show when={!hasError()} fallback={<Text message="Failed to link bank account" />}>
-      <Button icon="add" loading={loading() || processing()} disabled={props.disabled} onClick={open}>
+      <Button
+        icon="add"
+        loading={loading() || processing()}
+        disabled={props.disabled}
+        onClick={() => handler()?.open()}
+      >
         <Text message="Link Bank Account" />
       </Button>
     </Show>

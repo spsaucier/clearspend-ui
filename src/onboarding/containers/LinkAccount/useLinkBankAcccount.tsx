@@ -1,5 +1,5 @@
 import { useI18n } from 'solid-i18n';
-import { createSignal, createMemo, createEffect } from 'solid-js';
+import { createSignal, createMemo } from 'solid-js';
 import { useScript } from 'solid-use-script';
 
 import { getLinkToken } from 'onboarding/services/accounts';
@@ -11,8 +11,6 @@ export default function useLinkBankAccount(
   onSuccess: (token: string, accountName?: string | undefined) => Promise<unknown>,
   verifyOnLoad = false,
 ) {
-  let handler: PlaidLink | undefined;
-
   const i18n = useI18n();
   const messages = useMessages();
 
@@ -27,12 +25,12 @@ export default function useLinkBankAccount(
 
   getLinkToken().then(setToken).catch(setToken);
 
-  createEffect(() => {
+  const handler = createMemo(() => {
     const linkToken = token();
 
-    if (loading() || typeof linkToken !== 'string') return;
+    if (loading() || typeof linkToken !== 'string') return undefined;
 
-    handler = Plaid.create({
+    const instance = Plaid.create({
       token: linkToken,
       receivedRedirectUri: null,
       onSuccess: (_, metadata) => {
@@ -44,9 +42,11 @@ export default function useLinkBankAccount(
       },
       onLoad: () => {
         setInit(false);
-        if (verifyOnLoad) handler?.open();
+        if (verifyOnLoad) instance.open();
       },
     });
+    return instance;
   });
-  return { loading: isLoading, hasError, open: handler?.open };
+
+  return { loading: isLoading, hasError, handler };
 }
