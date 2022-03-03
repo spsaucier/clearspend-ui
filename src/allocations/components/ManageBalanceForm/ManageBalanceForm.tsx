@@ -11,6 +11,8 @@ import type { Allocation, BankAccount } from 'generated/capital';
 import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 
+import { useBusiness } from '../../../app/containers/Main/context';
+
 import css from './ManageBalanceForm.css';
 
 export function targetById(id: string) {
@@ -34,6 +36,7 @@ interface ManageBalanceFormProps {
 export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
+  const { signupUser } = useBusiness();
 
   const [loading, update] = wrapAction(props.onUpdate);
 
@@ -91,7 +94,9 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
           </FormItem>
         </Show>
       </Form>
-      <InternalBankAccount heading={<Text message="Want to wire money?" />} />
+      <Show when={signupUser().type === 'BUSINESS_OWNER'}>
+        <InternalBankAccount heading={<Text message="Want to wire money?" />} />
+      </Show>
       <Button wide type="primary" loading={loading()} disabled={!isValid()} onClick={onSubmit}>
         <Text message="Update Balance" />
       </Button>

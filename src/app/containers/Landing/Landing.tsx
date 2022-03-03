@@ -1,7 +1,7 @@
 import { Text } from 'solid-i18n';
 import { Show } from 'solid-js';
 
-import { getBankAccounts, linkBankAccounts } from 'onboarding/services/accounts';
+import { getBankAccounts, linkBankAccounts, registerBankAccount } from 'onboarding/services/accounts';
 import { useNav } from '_common/api/router';
 import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
@@ -40,9 +40,13 @@ export function Landing(props: LandingProps) {
           />
           <Show when={accounts.length === 0}>
             <LinkAccountButton
-              onSuccess={async (token) => {
-                await linkBankAccounts(token);
-                navigate('/');
+              onSuccess={async (token, accountName) => {
+                const bankAccounts = await linkBankAccounts(token);
+                const matchedAccounts = accountName
+                  ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+                  : bankAccounts.filter((account) => account.businessBankAccountId);
+                await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+                location.reload();
               }}
             />
           </Show>
