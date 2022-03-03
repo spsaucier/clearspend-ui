@@ -48,7 +48,7 @@ export default function CompanySettings() {
           <BankAccounts />
         </Match>
         <Match when={tab() === Tabs.financial}>
-          <FinancialInfo data={business()} />
+          <FinancialInfo />
         </Match>
       </Switch>
     </Page>

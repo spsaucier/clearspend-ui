@@ -1,20 +1,14 @@
 import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
-import type { Business } from 'generated/capital';
-
-import { InternalBankAccount } from '../../../onboarding/components/InternalBankAccount/InternalBankAccount';
+import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 
 import css from './FinancialInfo.css';
 
-interface FinancialInfoProps {
-  data: Readonly<Business>;
-}
-
-export function FinancialInfo(props: Readonly<FinancialInfoProps>) {
+export function FinancialInfo() {
   return (
     <Section
-      title={props.data.legalName}
+      title="ClearSpend"
       description={
         <Text
           message={
