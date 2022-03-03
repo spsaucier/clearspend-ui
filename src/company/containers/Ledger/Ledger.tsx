@@ -8,6 +8,7 @@ import { Drawer } from '_common/components/Drawer';
 import { Data } from 'app/components/Data';
 import { exportAccountActivity } from 'app/services/activity';
 import type { AccountActivityRequest } from 'generated/capital';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { LedgerTable } from '../../components/LedgerTable';
 // import {LedgerList} from '../../components/LedgerList';
@@ -39,7 +40,10 @@ export function Ledger() {
   const previewData = createMemo(() => store.data?.content?.find((item) => item.accountActivityId === previewId()));
 
   const onExport = (params: Readonly<AccountActivityRequest>) => {
-    return exportAccountActivity(params).then((file) => download(file, 'ledger.csv'));
+    return exportAccountActivity(params).then((file) => {
+      sendAnalyticsEvent({ name: Events.EXPORT_LEDGER });
+      return download(file, 'ledger.csv');
+    });
   };
 
   return (

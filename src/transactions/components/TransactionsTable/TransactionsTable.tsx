@@ -27,6 +27,7 @@ import type {
 } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { FiltersButton } from 'app/components/FiltersButton';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -121,7 +122,10 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
 
   const onExport = () => {
     return exportData(props.params)
-      .then((file) => download(file, 'account-activity.csv'))
+      .then((file) => {
+        sendAnalyticsEvent({ name: Events.EXPORT_TRANSACTIONS });
+        return download(file, 'account-activity.csv');
+      })
       .catch(() => {
         messages.error({ title: i18n.t('Something went wrong') });
       });

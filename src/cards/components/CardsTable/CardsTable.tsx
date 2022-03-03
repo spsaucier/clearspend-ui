@@ -22,6 +22,7 @@ import type { PagedDataSearchCardData, SearchCardData, SearchCardRequest } from 
 import { Drawer } from '_common/components/Drawer';
 import { CardsFilterDrawer } from 'cards/containers/CardsFilterDrawer';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { CardIcon } from '../CardIcon';
 import { CardType } from '../CardType';
@@ -107,7 +108,10 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
 
   const onExport = () => {
     return exportData(props.params)
-      .then((file) => download(file, 'cards.csv'))
+      .then((file) => {
+        sendAnalyticsEvent({ name: Events.EXPORT_CARDS });
+        return download(file, 'cards.csv');
+      })
       .catch(() => {
         messages.error({ title: i18n.t('Something went wrong') });
       });

@@ -22,6 +22,7 @@ import { FiltersButton } from 'app/components/FiltersButton';
 import { formatName } from '../../utils/formatName';
 import { exportUsers } from '../../services';
 import { EmployeeFilterDrawer } from '../EmployeeFilterDrawer';
+import { Events, sendAnalyticsEvent } from '../../../app/utils/analytics';
 
 import css from './EmployeesTable.css';
 
@@ -76,7 +77,10 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
 
   const onExport = () => {
     return exportData(props.params)
-      .then((file) => download(file, 'employees.csv'))
+      .then((file) => {
+        sendAnalyticsEvent({ name: Events.EXPORT_EMPLOYEES });
+        return download(file, 'employees.csv');
+      })
       .catch(() => {
         messages.error({ title: i18n.t('Something went wrong') });
       });
