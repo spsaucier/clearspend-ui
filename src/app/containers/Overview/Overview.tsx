@@ -1,9 +1,10 @@
-import { createSignal, Index, Show, batch, createEffect, on, createMemo } from 'solid-js';
+import { createSignal, Index, Show, batch, createMemo } from 'solid-js';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
 import { useNav } from '_common/api/router';
+import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import type { GraphDataRequest, ChartDataRequest, AccountActivityRequest } from 'generated/capital';
@@ -64,18 +65,16 @@ export function Overview(props: Readonly<OverviewProps>) {
     },
   });
 
-  createEffect(
-    on(
-      [() => props.allocationId],
-      (input) => {
+  useDeferEffect(
+    () => {
+      batch(() => {
         const updates = { allocationId: allocationId() };
         spendStore.setParams(updateParams<GraphDataRequest>(updates));
         spendingStore.setParams(updateParams<ChartDataRequest>(updates));
         activityStore.setParams(updateParams<AccountActivityRequest>(updates));
-        return input;
-      },
-      { defer: true },
-    ),
+      });
+    },
+    () => props.allocationId,
   );
 
   const changePeriod = (value: TimePeriod) => {

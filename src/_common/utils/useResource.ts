@@ -1,6 +1,7 @@
-import { createSignal, createEffect, onMount, createMemo, on } from 'solid-js';
+import { createSignal, onMount, createMemo } from 'solid-js';
 
 import { cloneObject } from './cloneObject';
+import { useDeferEffect } from './useDeferEffect';
 import { getNoop } from './getNoop';
 
 export interface DataState<T> {
@@ -50,16 +51,9 @@ export function useResource<T, P extends unknown>(
     reload().catch(getNoop());
   });
 
-  createEffect(
-    on(
-      params,
-      (input) => {
-        if (!skipUpdates) reload().catch(getNoop());
-        return input;
-      },
-      { defer: true },
-    ),
-  );
+  useDeferEffect(() => {
+    if (!skipUpdates) reload().catch(getNoop());
+  }, params);
 
   const data = createMemo(() => state().data);
 
