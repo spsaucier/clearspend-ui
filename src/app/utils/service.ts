@@ -71,8 +71,8 @@ async function put<T = unknown>(url: string, params?: object | string, options?:
   return wrapFetch(fetch<T>('PUT', prefixUrl(url), params, options));
 }
 
-async function remove(url: string, params?: object, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch('DELETE', prefixUrl(url), params, options));
+async function remove<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
+  return wrapFetch(fetch<T>('DELETE', prefixUrl(url), params, options));
 }
 
 export const service = { get, post, patch, put, remove };

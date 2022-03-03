@@ -35,7 +35,7 @@ export async function setActivityNote(activityId: string, notes: string) {
     .data;
 }
 
-export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: number, notes: string) {
+export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: number | null, notes: string) {
   return (
     await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, {
       notes,

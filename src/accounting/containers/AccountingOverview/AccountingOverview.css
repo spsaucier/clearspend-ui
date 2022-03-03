@@ -1,8 +1,0 @@
-.root {
-  display: block;
-  padding: var(--pd-16) var(--pd-24);
-
-  @media (--bp-medium) {
-    padding: 0 var(--pd-48);
-  }
-}

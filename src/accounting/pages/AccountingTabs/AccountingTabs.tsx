@@ -4,9 +4,13 @@ import { useSearchParams } from 'solid-app-router';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
+import { useActivity } from 'app/stores/activity';
+import { Data } from 'app/components/Data';
 import { AccountingSettings } from 'accounting/containers/AccountingSettings';
-import { SyncTransactions } from 'accounting/containers/SyncTransactions';
 import { SyncLog } from 'accounting/containers/SyncLog';
+import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
+import { AccountingOverview } from 'accounting/containers/AccountingOverview';
+import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 
 enum Tabs {
   transactions,
@@ -14,10 +18,28 @@ enum Tabs {
   log,
 }
 
+function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
+  return {
+    from: range[0].toISOString() as DateString,
+    to: range[1].toISOString() as DateString,
+  };
+}
+
 export function AccountingTabs() {
   const [params] = useSearchParams();
   const initialTab = params.tab === 'settings' ? Tabs.settings : Tabs.transactions;
   const [tab, setTab] = createSignal<Tabs>(initialTab);
+
+  const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
+  const PERIOD = toISO(getAccountingTimePeriod(initPeriod));
+
+  const activityStore = useActivity({
+    params: {
+      ...DEFAULT_ACTIVITY_PARAMS,
+      ...PERIOD,
+      // allocationId,
+    },
+  });
 
   return (
     <Page title={<Text message="Accounting" />}>
@@ -32,17 +54,32 @@ export function AccountingTabs() {
           <Text message="Settings" />
         </Tab>
       </TabList>
-      <Switch>
-        <Match when={tab() === Tabs.transactions}>
-          <SyncTransactions />
-        </Match>
-        <Match when={tab() === Tabs.log}>
-          <SyncLog />
-        </Match>
-        <Match when={tab() === Tabs.settings}>
-          <AccountingSettings />
-        </Match>
-      </Switch>
+      <Data
+        data={activityStore.data}
+        loading={activityStore.loading}
+        error={activityStore.error}
+        onReload={activityStore.reload}
+      >
+        <Switch>
+          <Match when={tab() === Tabs.transactions}>
+            <AccountingOverview
+              loading={activityStore.loading}
+              error={activityStore.error}
+              params={activityStore.params}
+              data={activityStore.data}
+              onReload={activityStore.reload}
+              onChangeParams={activityStore.setParams}
+              onUpdateData={activityStore.setData}
+            />
+          </Match>
+          <Match when={tab() === Tabs.log}>
+            <SyncLog />
+          </Match>
+          <Match when={tab() === Tabs.settings}>
+            <AccountingSettings data={activityStore.data} />
+          </Match>
+        </Switch>
+      </Data>
     </Page>
   );
 }

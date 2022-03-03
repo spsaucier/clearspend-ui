@@ -1,25 +1,59 @@
-import { Text } from 'solid-i18n';
+import { Text, useI18n } from 'solid-i18n';
 import { createSignal } from 'solid-js';
+import { useNavigate } from 'solid-app-router';
 
 import { Section } from 'app/components/Section';
+import { setActivityExpenseCategory } from 'app/services/activity';
+import { useMessages } from 'app/containers/Messages/context';
 import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
+import type { PagedDataAccountActivityResponse } from 'generated/capital';
+import { postIntegrationExpenseCategoryMappings, deleteCompanyConnection } from 'accounting/services';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
+import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
 import {
   useIntegrationExpenseCategories,
   useIntegrationExpenseCategoryMappings,
 } from 'accounting/stores/integrationExpenseCategories';
-import { postIntegrationExpenseCategoryMappings } from 'accounting/services';
-import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
 
 import css from './AccountingSettings.css';
 
-export function AccountingSettings() {
+interface AccountingSettingsProps {
+  data: Readonly<PagedDataAccountActivityResponse> | null;
+}
+
+export function AccountingSettings(props: AccountingSettingsProps) {
+  const i18n = useI18n();
+  const navigate = useNavigate();
+  const messages = useMessages();
   const [open, setOpen] = createSignal(false);
+  const [unlinkingIntegration, setUnlinkingIntegration] = createSignal(false);
+
   const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
   const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) =>
     postIntegrationExpenseCategoryMappings(mappings);
+
+  const transactionData = props.data?.content ?? [];
+
+  const onUnlinkIntegration = async () => {
+    setUnlinkingIntegration(true);
+    try {
+      await Promise.all([
+        deleteCompanyConnection(),
+        transactionData.map((item) => setActivityExpenseCategory(item.accountActivityId!, null, item.notes || '')),
+      ]);
+      messages.success({
+        title: i18n.t('Success'),
+        message: i18n.t('The integration has been successfully unlinked.'),
+      });
+      setUnlinkingIntegration(false);
+      navigate('/');
+    } catch (error: unknown) {
+      setUnlinkingIntegration(false);
+      messages.error({ title: i18n.t('Something went wrong') });
+    }
+  };
 
   return (
     <div>
@@ -60,9 +94,9 @@ export function AccountingSettings() {
                 <Button
                   class={css.popoverUnlink}
                   icon={{ name: 'confirm', pos: 'right' }}
-                  onClick={() => {
-                    // TODO
-                  }}
+                  disabled={unlinkingIntegration()}
+                  loading={unlinkingIntegration()}
+                  onClick={onUnlinkIntegration}
                 >
                   <Text message="Unlink now" />
                 </Button>

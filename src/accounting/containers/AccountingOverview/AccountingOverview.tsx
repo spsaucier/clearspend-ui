@@ -1,59 +1,46 @@
+import type { Setter } from 'solid-js';
+
+import type {
+  AccountActivityRequest,
+  AccountActivityResponse,
+  PagedDataAccountActivityResponse,
+} from 'generated/capital';
+import { TransactionsData } from 'transactions/components/TransactionsData';
 import { useMediaContext } from '_common/api/media/context';
 import { useNav } from '_common/api/router';
-import { useActivity } from 'app/stores/activity';
-import { Data } from 'app/components/Data';
-import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
-import { TransactionsData } from 'transactions/components/TransactionsData';
+import type { StoreSetter, StoreSetterFunc } from '_common/utils/store';
 
-import { AccountingTimePeriod, getAccountingTimePeriod } from './utils';
-
-import css from './AccountingOverview.css';
-
-function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
-  return {
-    from: range[0].toISOString() as DateString,
-    to: range[1].toISOString() as DateString,
-  };
+interface AccountingOverviewProps {
+  loading: boolean;
+  error: unknown;
+  params: Readonly<AccountActivityRequest>;
+  data: Readonly<PagedDataAccountActivityResponse> | null;
+  onRowClick?: (transaction: AccountActivityResponse) => void;
+  onCardClick?: (id: string) => void;
+  onReload: () => Promise<unknown>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
+  showAccountingAdminView?: boolean;
+  onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
 }
 
-export function AccountingOverview() {
+export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
 
-  const initPeriod = AccountingTimePeriod.year;
-  const PERIOD = toISO(getAccountingTimePeriod(initPeriod));
-
-  const activityStore = useActivity({
-    params: {
-      ...DEFAULT_ACTIVITY_PARAMS,
-      ...PERIOD,
-      // allocationId,
-    },
-  });
-
   return (
-    <div class={css.root}>
-      <div>
-        <Data
-          data={activityStore.data}
-          loading={activityStore.loading}
-          error={activityStore.error}
-          onReload={activityStore.reload}
-        >
-          <TransactionsData
-            table={media.large}
-            loading={activityStore.loading}
-            error={activityStore.error}
-            params={activityStore.params}
-            data={activityStore.data}
-            onReload={activityStore.reload}
-            onChangeParams={activityStore.setParams}
-            onUpdateData={activityStore.setData}
-            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
-            showAccountingAdminView
-          />
-        </Data>
-      </div>
+    <div>
+      <TransactionsData
+        table={media.large}
+        loading={props.loading}
+        error={props.error}
+        params={props.params}
+        data={props.data}
+        onReload={props.onReload}
+        onChangeParams={props.onChangeParams}
+        onUpdateData={props.onUpdateData}
+        onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
+        showAccountingAdminView
+      />
     </div>
   );
 }

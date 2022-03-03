@@ -60,7 +60,10 @@ export async function postIntegrationExpenseCategoryMappings(params: Readonly<In
 export async function deleteIntegrationExpenseCategoryMappings() {
   await service.remove('/chart-of-accounts/mappings');
 }
-
 export async function getSyncLogs(params: Readonly<SyncLogRequest>) {
   return (await service.post<Readonly<SyncLogResponse>>('/codat/sync-log', params)).data;
+}
+
+export async function deleteCompanyConnection() {
+  return (await service.remove<Readonly<boolean>>(`/codat/connection`)).data;
 }
