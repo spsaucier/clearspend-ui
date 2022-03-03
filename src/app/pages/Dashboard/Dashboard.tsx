@@ -41,7 +41,7 @@ export default function Dashboard() {
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   const currentAllocationId = createMemo(() => {
-    // TODO: Check and update for single allocation manager view (when it's not the root allocation)
+    // TODO: Check and update for single allocation manager view (when it's not the root allocation): CAP-410
     return allocation() === ALL_ALLOCATIONS ? getRootAllocation(allocations.data)?.allocationId : allocation();
   });
 

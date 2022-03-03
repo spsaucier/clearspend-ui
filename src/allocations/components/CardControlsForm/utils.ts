@@ -18,9 +18,7 @@ export function getFormOptions(
       channels: getChannels(data),
       purchasesLimits: getPurchasesLimits(data),
     },
-    rules: {
-      // TODO: add rules for limits
-    },
+    rules: {},
   };
 }
 

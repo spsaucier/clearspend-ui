@@ -23,7 +23,6 @@ export function getFormOptions(categories: readonly Readonly<MccGroup>[]): FormO
       name: [required],
       parent: [required],
       amount: [required],
-      // TODO: add rules for limits
     },
   };
 }

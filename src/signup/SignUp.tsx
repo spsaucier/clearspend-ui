@@ -260,7 +260,7 @@ export default function SignUp() {
               extraDescription={
                 <div class={css.extraDescription}>
                   <Text
-                    message={`If you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
+                    message={`It could end up in your spam folder, but if you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
                   />
                 </div>
               }

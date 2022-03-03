@@ -257,7 +257,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </h4>
           <AccountCard
             icon="card"
-            // TODO need activated status
             title={formatCardNumber(transaction().card!.lastFour, true)}
             text={formatName({
               firstName: transaction().card?.ownerFirstName!,

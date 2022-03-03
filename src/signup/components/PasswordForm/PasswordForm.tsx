@@ -16,7 +16,7 @@ interface PasswordFormProps {
   onCreateAccount: (password: string) => Promise<unknown>;
 }
 
-// TODO: Add password strong checking
+// TODO: Add visual password strength checking, or just rely on Reactor?
 export function PasswordForm(props: Readonly<PasswordFormProps>) {
   let input!: HTMLInputElement;
   onMount(() => input.focus());

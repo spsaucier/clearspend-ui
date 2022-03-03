@@ -46,20 +46,21 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <CopyButton value={formatPhone(props.data.businessPhone)} class={css.copy} />
         </DataRow>
       </Section>
-      <Section title={<Text message="Business description" />} class={css.section}>
+      {/* TODO: When API supports (CAP-577), show below */}
+      {/* <Section title={<Text message="Business description" />} class={css.section}>
         <DataRow icon="file-text" class={css.data}>
           <span class={css.dataLabel}>
             <Text message="Brief description" />:
           </span>
-          <span class={css.dataValue}>TODO</span>
+          <span class={css.dataValue}>{props.data.description}</span>
         </DataRow>
         <DataRow icon="merchant-services" class={css.data}>
           <span class={css.dataLabel}>
             <Text message="Merchant category" />:
           </span>
-          <span class={css.dataValue}>TODO</span>
+          <span class={css.dataValue}>{props.data.mcc}</span>
         </DataRow>
-      </Section>
+      </Section> */}
       <Section
         title={<Text message="Business address" />}
         description={

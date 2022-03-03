@@ -50,7 +50,6 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       locality: [requiredAddress],
       region: [requiredAddress],
       postalCode: [requiredAddress],
-      // TODO: add rules for limits
     },
   };
 }

@@ -64,7 +64,7 @@ export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>)
           <MultiSelect
             value={values().allocationIDs}
             onChange={handlers.allocationIDs}
-            // TODO: Should it works without valueRender?!
+            // TODO: Should it work without valueRender?
             valueRender={(value) => allocations.data!.find((item) => item.allocationId === value)?.name}
           >
             <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>

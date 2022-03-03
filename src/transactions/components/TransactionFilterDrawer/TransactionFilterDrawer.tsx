@@ -39,7 +39,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   const allocations = useAllocations({ initValue: [] });
 
   const { values, handlers } = createForm<FormValues>({
-    // TODO update when API is ready
+    // TODO update when API is ready - CAP-305
     defaultValues: {
       amountMin: '',
       amountMax: '',
@@ -51,7 +51,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
     },
   });
 
-  // TODO: When search filter api is ready
+  // TODO: When search filter api is ready - CAP-305
   const applyFilters = () => {
     // eslint-disable-next-line
     console.log(JSON.stringify(values(), null, ' '));

@@ -73,7 +73,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <div>
           <Show when={item.card} fallback="--">
             <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
-              {/* TODO need activated status */}
               {formatCardNumber(item.card!.lastFour, true)}
             </div>
             <div class={css.sub}>
@@ -128,7 +127,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       });
   };
 
-  // TODO update when API is ready
+  // TODO update when API is ready - CAP-305
   // eslint-disable-next-line
   const onResetFilters = () => {};
 
@@ -153,7 +152,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         />
         <FiltersButton
           label={<Text message="More Filters" />}
-          // TODO update when API is ready
+          // TODO update when API is ready - CAP-305
           count={0}
           onReset={onResetFilters}
           onClick={toggleFilters}
