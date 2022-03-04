@@ -20,7 +20,7 @@ const integrationOptionCards: IntegrationOptionCardValues[] = [
     onClick: async () => {
       const result = await getQboIntegrationLink();
       if (result.data) {
-        window.open(result.data as string);
+        window.location.href = result.data as string;
       }
     },
   },
