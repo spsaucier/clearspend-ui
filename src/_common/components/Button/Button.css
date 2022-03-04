@@ -78,7 +78,6 @@
   }
 }
 
-:disabled,
 .disabled,
 .loading {
   pointer-events: none;

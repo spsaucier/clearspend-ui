@@ -163,7 +163,12 @@ module.exports = (env, options) => {
       new PreloadWebpackPlugin({
         rel: 'preload',
         include: 'initial',
-        fileWhitelist: [/\.woff2$/, /\.woff$/],
+        fileWhitelist: [
+          /neue-400\..+?\.woff2$/,
+          /neue-700\..+?\.woff2$/,
+          /pptelegraf-light-webfont\..+?\.woff2$/,
+          /pptelegraf-regular-webfont\..+?\.woff2$/,
+        ],
       }),
       new ESLintPlugin({
         files: './src/**/*.{ts,tsx}',
