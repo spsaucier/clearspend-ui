@@ -62,3 +62,21 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+.add-new {
+  display: flex;
+  padding: var(--pd-8) var(--pd-12);
+  align-items: center;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background: var(--tw-primary-light);
+    outline: none;
+  }
+}
+
+.icon {
+  margin-right: var(--pd-8);
+  color: var(--tw-primary-bg);
+}

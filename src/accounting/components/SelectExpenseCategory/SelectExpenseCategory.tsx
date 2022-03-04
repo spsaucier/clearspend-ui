@@ -1,4 +1,4 @@
-import { batch, createMemo, createSignal, JSXElement } from 'solid-js';
+import { batch, createMemo, createSignal, JSXElement, Show } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
 import { Icon } from '_common/components/Icon';
@@ -8,6 +8,7 @@ import { Input } from '_common/components/Input';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Spin } from '_common/components/Spin';
 import { isString } from '_common/utils/isString';
+import { Divider } from '_common/components/Divider';
 
 import { getOptions, getSelected, isMatch } from './utils';
 import { SelectExpenseCategoryContext } from './context';
@@ -21,6 +22,7 @@ interface SelectExpenseCategoryProps {
   disabled?: boolean;
   loading?: boolean;
   children: JSXElement;
+  createNewName?: string;
 }
 
 const FOCUS_OUT_DELAY = 200;
@@ -104,6 +106,18 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
 
   const renderList = () => (
     <ul class={css.list} ref={list}>
+      <Show when={!!props.createNewName}>
+        <li
+          class={css.addNew}
+          onClick={() => {
+            // TODO
+          }}
+        >
+          <Icon class={css.icon} name="add-circle-outline" />
+          <span>{`Create ${props.createNewName}`}</span>
+        </li>
+      </Show>
+      <Divider />
       <SelectExpenseCategoryContext.Provider value={{ value: props.value, onChange, close }}>
         {options()}
       </SelectExpenseCategoryContext.Provider>
@@ -127,6 +141,7 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
           onFocusOut={onFocusOut}
           onKeyDown={onKeyDown}
           suffix={props.loading ? <Spin /> : null}
+          autoComplete="off"
         />
         <span class={css.value}>{selected()}</span>
         <Icon name="chevron-down" size="sm" class={css.chevron} />

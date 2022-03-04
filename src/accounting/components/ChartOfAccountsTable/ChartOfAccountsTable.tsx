@@ -122,6 +122,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory
               value={expenseCategory()}
+              createNewName={item.name}
               onChange={(ec) => {
                 batch(() => {
                   setExpenseCategory(ec);
