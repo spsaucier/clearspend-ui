@@ -102,7 +102,7 @@ export default function EmployeeView() {
               <Text message="Cards" />
             </Tab>
             <Tab value={Tabs.settings}>
-              <Text message="Edit" />
+              <Text message="Edit Employee" />
             </Tab>
           </TabList>
           <Switch>
@@ -113,6 +113,7 @@ export default function EmployeeView() {
               <Cards userId={user()!.userId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
+              {/* TODO: Add 'Archive Employee button - CAP-580  */}
               <EditEmployeeForm user={user()!} onSave={onEdit} />
             </Match>
           </Switch>

@@ -55,6 +55,10 @@ export default function Dashboard() {
     setSearchParams({ allocation: id });
   };
 
+  const rootAllocation = createMemo(() => {
+    return allocations.data?.find((a) => !a.parentAllocationId);
+  });
+
   return (
     <Page
       title={<Text message="Welcome, {name}" name={signupUser().firstName || ''} />}
@@ -122,16 +126,10 @@ export default function Dashboard() {
         <Match when={(allocations.loading && !allocations.data?.length) || (userCards.loading && !userCards.data)}>
           <Loading />
         </Match>
-        <Match
-          when={
-            signupUser().type === 'BUSINESS_OWNER' &&
-            allocations.data?.find((a) => !a.parentAllocationId)?.account.ledgerBalance.amount === 0
-          }
-        >
-          <Landing addBalance />
-        </Match>
         <Match when={allocations.data?.length === 1 && !userCards.data?.length}>
-          <Landing />
+          <Landing
+            addBalance={signupUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.ledgerBalance.amount === 0}
+          />
         </Match>
         <Match when={allocations.data}>
           <Overview allocationId={allocation()} />
