@@ -1,8 +1,9 @@
-import { createSignal, Match, Switch } from 'solid-js';
+import { createSignal, Match, Switch, Show } from 'solid-js';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import logo from 'app/assets/logo-light.svg';
+import { useMediaContext } from '_common/api/media/context';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
@@ -20,6 +21,7 @@ import { PasswordForm } from './components/PasswordForm';
 import { useSignup, SignupStore } from './store';
 import { BusinessDetailsForm } from './components/BusinessDetailsForm/BusinessDetailsForm';
 import { SorryButForm } from './components/SorryButForm/SorryBut';
+import { EasyStarted } from './components/EasyStarted';
 
 // eslint-disable-next-line css-modules/no-unused-class
 import css from './SignUp.css';
@@ -67,6 +69,7 @@ function getInitStep(store: SignupStore): Step {
 export default function SignUp() {
   const [searchParams] = useSearchParams<{ email?: string }>();
   const navigate = useNavigate();
+  const media = useMediaContext();
 
   const {
     store,
@@ -297,7 +300,7 @@ export default function SignUp() {
               onConfirm={onPhoneConfirm}
               extraBtn={
                 <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.PhoneStep)}>
-                  Back
+                  <Text message="Back" />
                 </Button>
               }
             />
@@ -307,6 +310,13 @@ export default function SignUp() {
           </Match>
         </Switch>
       </div>
+      <Show when={media.large}>
+        <div class={css.side}>
+          <div class={css.sideContent}>
+            <EasyStarted />
+          </div>
+        </div>
+      </Show>
     </section>
   );
 }

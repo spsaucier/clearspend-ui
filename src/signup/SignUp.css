@@ -1,11 +1,14 @@
+@value v-side-width: 560px;
+
 .root {
+  position: relative;
   min-height: 100vh;
   padding: var(--pd-48) 6vw;
   color: var(--tw-white);
   background: var(--tw-dark);
 
   @media (--bp-large) {
-    padding: var(--pd-48);
+    padding: var(--pd-48) calc(v-side-width + var(--pd-24)) var(--pd-48) var(--pd-48);
   }
 }
 
@@ -58,4 +61,21 @@
 .radio-extra svg {
   width: 60px;
   margin-right: var(--pd-12);
+}
+
+.side {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: v-side-width;
+  height: 100%;
+}
+
+.side-content {
+  position: sticky;
+  top: 0;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
 }
