@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-magic-numbers */
 import type { FlattenedIntegrationAccount, IntegrationAccount } from '../ChartOfAccountsData/types';
 
 import type { IntegrationAccountMap } from './types';

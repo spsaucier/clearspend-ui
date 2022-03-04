@@ -10,8 +10,13 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { join } from '_common/utils/join';
+import { wrapAction } from '_common/utils/wrapAction';
 
-import type { FlattenedIntegrationAccount, IntegrationAccount } from '../ChartOfAccountsData/types';
+import type {
+  FlattenedIntegrationAccount,
+  IntegrationAccount,
+  IntegrationExpenseAccountMapping,
+} from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
 import { CancelConfirmationButton } from '../CancelConfirmationButton';
 
@@ -23,6 +28,7 @@ import css from './ChartOfAccountsTable.css';
 interface ChartOfAccountsTableProps {
   data: IntegrationAccount[];
   onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
+  mappings?: IntegrationExpenseAccountMapping[] | undefined;
   onCancel?: () => void;
   onSkip?: () => void;
 }
@@ -35,12 +41,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const [state, setState] = createStore(initialState);
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
   const flattenedData = createMemo(() => flattenNestedIntegrationAccounts(props.data));
-  // const isComplete = createMemo(() => Object.keys(state).reduce<boolean>((prev, curr) => prev && !!state[curr], true));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const requestParams = Object.values(state).filter((value) => value != null);
-    props.onSave(requestParams);
+    await props.onSave(requestParams);
   };
+  const [savingMapping, saveMapping] = wrapAction(handleSave);
 
   const getNestedCSSlevel = (account: FlattenedIntegrationAccount) => {
     switch (account.level) {
@@ -106,7 +112,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         </div>
       ),
       render: (item) => {
-        const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(undefined);
+        const existingMap = props.mappings?.find((mapping) => mapping.accountRef === item.id);
+        const initValue = existingMap
+          ? expenseCategories.data?.find((ec) => ec.iconRef === existingMap.categoryIconRef)
+          : undefined;
+        if (initValue) setState(item.id, { accountRef: item.id, categoryIconRef: initValue.iconRef });
+        const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(initValue);
         return (
           <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory
@@ -174,11 +185,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
             </Button>
           </Show>
           <Button
+            loading={savingMapping()}
+            disabled={savingMapping()}
             class={css.done}
             type="primary"
             icon={{ name: 'confirm', pos: 'right' }}
-            onClick={() => handleSave()}
-            // disabled={!isComplete()}
+            onClick={saveMapping}
           >
             <Text message="Done" />
           </Button>

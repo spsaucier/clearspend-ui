@@ -8,6 +8,8 @@ import {
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
 import { postIntegrationExpenseCategoryMappings } from 'accounting/services';
+import { useMessages } from 'app/containers/Messages/context';
+import { i18n } from '_common/api/intl';
 
 import css from './ChartOfAccounts.css';
 
@@ -17,11 +19,14 @@ interface ChartOfAccountsProps {
 }
 
 export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
+  const messages = useMessages();
   const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
 
   const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) => {
-    postIntegrationExpenseCategoryMappings(mappings);
+    postIntegrationExpenseCategoryMappings(mappings).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
     props.onNext();
   };
 

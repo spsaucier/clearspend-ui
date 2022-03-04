@@ -19,7 +19,12 @@ interface ChartOfAccountsDataProps {
 export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
   return (
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
-      <ChartOfAccountsTable data={props.data?.results!} onSave={props.onSave} onCancel={props.onCancel} />
+      <ChartOfAccountsTable
+        data={props.data?.results!}
+        mappings={props.mappings?.results}
+        onSave={props.onSave}
+        onCancel={props.onCancel}
+      />
     </Data>
   );
 }
