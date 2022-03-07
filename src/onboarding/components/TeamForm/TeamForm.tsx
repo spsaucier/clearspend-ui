@@ -53,7 +53,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   });
 
   createEffect(() => {
-    if (!leaders().length) {
+    if (leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber) {
       props.setTitle(
         props.signupUser.relationshipToBusiness?.owner
           ? `As an owner of ${props.business?.legalName}, we need to know a little more about you`
