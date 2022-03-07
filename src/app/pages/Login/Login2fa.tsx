@@ -3,7 +3,7 @@ import { Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
 import { SignUp } from 'signup';
-import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
+import { PagePreAuth } from 'app/components/PagePreAuth';
 import { VerifyForm } from 'signup/components/VerifyForm';
 import { useLoc } from '_common/api/router';
 import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';

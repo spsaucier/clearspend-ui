@@ -4,11 +4,12 @@ import { Link, useNavigate } from 'solid-app-router';
 
 import { SignUp } from 'signup';
 import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';
-import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
+import { PagePreAuth } from 'app/components/PagePreAuth';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 
 import { LoginForm } from '../../components/LoginForm';
+import { Reviews } from '../../containers/Reviews';
 import { login } from '../../services/auth';
 
 import css from './Login.css';
@@ -36,7 +37,7 @@ export default function Login() {
   };
 
   return (
-    <PagePreAuth>
+    <PagePreAuth side={<Reviews />}>
       <>
         <Header>Welcome back</Header>
         <Description>

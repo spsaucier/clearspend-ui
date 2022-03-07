@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'solid-app-router';
 
 import { Header } from 'signup/components/Header';
-import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
+import { PagePreAuth } from 'app/components/PagePreAuth';
 
 import { ForgotPasswordForm } from '../../components/ForgotPasswordForm';
 import { forgotPassword } from '../../services/auth';

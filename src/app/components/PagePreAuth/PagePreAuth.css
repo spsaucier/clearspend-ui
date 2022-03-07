@@ -1,11 +1,21 @@
 .root {
+  display: flex;
   min-height: 100vh;
-  padding: var(--pd-48) var(--pd-24);
+  flex-direction: column;
   color: var(--tw-white);
   background: var(--tw-dark);
 
   @media (--bp-large) {
+    flex-direction: row;
+  }
+}
+
+.main {
+  padding: var(--pd-48) var(--pd-24);
+
+  @media (--bp-large) {
     padding: var(--pd-48);
+    flex-grow: 1;
   }
 }
 
@@ -21,4 +31,12 @@
   display: flex;
   align-items: flex-start;
   flex-direction: column;
+}
+
+.side {
+  width: 100%;
+
+  @media (--bp-large) {
+    width: 496px;
+  }
 }

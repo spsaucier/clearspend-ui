@@ -2,7 +2,7 @@ import { Link, useParams } from 'solid-app-router';
 
 import { Header } from 'signup/components/Header';
 import { ResetPasswordForm } from 'app/components/ResetPasswordForm';
-import { PagePreAuth } from 'app/components/PagePreAuth/PagePreAuth';
+import { PagePreAuth } from 'app/components/PagePreAuth';
 
 import { resetPassword } from '../../services/auth';
 
