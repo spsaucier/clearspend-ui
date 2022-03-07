@@ -21,7 +21,7 @@ export function LinkAccountButton(props: Readonly<LinkAccountProps>) {
       <Button
         icon="add"
         loading={loading() || processing()}
-        disabled={props.disabled}
+        disabled={props.disabled || loading()}
         onClick={() => handler()?.open()}
       >
         <Text message="Link Bank Account" />

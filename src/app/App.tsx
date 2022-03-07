@@ -2,6 +2,7 @@ import { Routes, Route } from 'solid-app-router';
 import { createEffect } from 'solid-js';
 
 import { SignUp } from 'signup';
+import { Enable2fa } from 'onboarding';
 
 import { Main } from './containers/Main';
 import { Messages } from './containers/Messages';
@@ -24,6 +25,7 @@ export function App() {
     <div>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/enable-2fa" element={<Enable2fa />} />
         <Route path="/login-2fa" element={<Login2fa />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

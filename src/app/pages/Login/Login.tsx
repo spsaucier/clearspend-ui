@@ -25,7 +25,11 @@ export default function Login() {
     if ('userId' in user && user.userId) {
       sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
       sendAnalyticsEvent({ name: Events.LOGIN });
-      navigate('/');
+      if (user.phone !== '+11111111111') {
+        navigate('/enable-2fa');
+      } else {
+        navigate('/');
+      }
     } else if ('twoFactorId' in user && user.twoFactorId) {
       navigate('/login-2fa', { state: { twoFactorId: user.twoFactorId } });
     }
