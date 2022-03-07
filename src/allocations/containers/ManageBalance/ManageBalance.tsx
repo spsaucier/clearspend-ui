@@ -84,15 +84,21 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
       sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
     }
 
+    const currentAmount = current()!.account.ledgerBalance.amount;
+
     setSuccessManageData({
       amount,
       fromAmount: targetIsBankAccount
-        ? 0
+        ? isWithdraw
+          ? currentAmount
+          : 0
         : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceFrom?.amount!,
       fromName: isWithdraw ? currentName : targetName,
       toName: isWithdraw ? targetName : currentName,
       toAmount: targetIsBankAccount
-        ? current()!.account.ledgerBalance.amount
+        ? isWithdraw
+          ? 0
+          : currentAmount
         : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
     });
   };
