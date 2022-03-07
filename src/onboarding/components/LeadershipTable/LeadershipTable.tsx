@@ -1,3 +1,4 @@
+import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
@@ -27,7 +28,9 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         return (
           <div class={css.cell}>
             {`${leader.firstName} ${leader.lastName}`}
-            <Icon name="alert" class={css.error} />
+            <Show when={props.leaderIdWithError?.includes(leader.businessOwnerId)}>
+              <Icon name="alert" class={css.error} />
+            </Show>
           </div>
         );
       },

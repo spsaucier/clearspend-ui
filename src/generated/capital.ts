@@ -848,6 +848,12 @@ export interface CreateOrUpdateBusinessProspectRequest {
    * @example true
    */
   relationshipExecutive?: boolean;
+
+  /**
+   * Terms of Service and Privacy Policy Acceptance
+   * @example true
+   */
+  tosAndPrivacyPolicyAcceptance: boolean;
 }
 
 export interface CreateBusinessProspectResponse {
@@ -1003,6 +1009,21 @@ export interface CreateOrUpdateBusinessOwnerRequest {
 export interface CreateBusinessOwnerResponse {
   /** @format uuid */
   businessOwnerId: string;
+
+  /** Error message for any records that failed. Will be null if successful */
+  errorMessages?: string[];
+}
+
+export interface OwnersProvidedRequest {
+  /** No other owners to provide */
+  noOtherOwnersToProvide?: boolean;
+
+  /** No executive to provide */
+  noExecutiveToProvide?: boolean;
+}
+
+export interface OwnersProvidedResponse {
+  business: Business;
 
   /** Error message for any records that failed. Will be null if successful */
   errorMessages?: string[];
@@ -2371,10 +2392,7 @@ export interface UpdateCardAccountRequest {
 export interface UpdateAccountActivityRequest {
   notes: string;
 
-  /**
-   * @format int32
-   * @min 1
-   */
+  /** @format int32 */
   iconRef?: number;
 }
 
@@ -2586,7 +2604,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -2836,21 +2866,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -2974,13 +2992,6 @@ export interface BusinessProspectData {
   relationshipDirector?: boolean;
 }
 
-export interface OwnersProvidedResponse {
-  business: Business;
-
-  /** Error message for any records that failed. Will be null if successful */
-  errorMessages?: string[];
-}
-
 export interface BusinessOwnerInfo {
   /** @format uuid */
   businessOwnerId?: string;
@@ -3023,6 +3034,54 @@ export interface ApplicationReviewRequirements {
   kycRequiredDocuments?: KycDocuments[];
   requireOwner?: boolean;
   requireRepresentative?: boolean;
+  pendingVerification?: string[];
+  errorCodes?: (
+    | 'invalid_address_city_state_postal_code'
+    | 'invalid_street_address'
+    | 'invalid_value_other'
+    | 'verification_document_address_mismatch'
+    | 'verification_document_address_missing'
+    | 'verification_document_corrupt'
+    | 'verification_document_country_not_supported'
+    | 'verification_document_dob_mismatch'
+    | 'verification_document_duplicate_type'
+    | 'verification_document_expired'
+    | 'verification_document_failed_copy'
+    | 'verification_document_failed_greyscale'
+    | 'verification_document_failed_other'
+    | 'verification_document_failed_test_mode'
+    | 'verification_document_fraudulent'
+    | 'verification_document_id_number_mismatch'
+    | 'verification_document_id_number_missing'
+    | 'verification_document_incomplete'
+    | 'verification_document_invalid'
+    | 'verification_document_issue_or_expiry_date_missing'
+    | 'verification_document_manipulated'
+    | 'verification_document_missing_back'
+    | 'verification_document_missing_front'
+    | 'verification_document_name_mismatch'
+    | 'verification_document_name_missing'
+    | 'verification_document_nationality_mismatch'
+    | 'verification_document_not_readable'
+    | 'verification_document_not_signed'
+    | 'verification_document_not_uploaded'
+    | 'verification_document_photo_mismatch'
+    | 'verification_document_too_large'
+    | 'verification_document_type_not_supported'
+    | 'verification_failed_address_match'
+    | 'verification_failed_business_iec_number'
+    | 'verification_failed_document_match'
+    | 'verification_failed_id_number_match'
+    | 'verification_failed_keyed_identity'
+    | 'verification_failed_keyed_match'
+    | 'verification_failed_name_match'
+    | 'verification_failed_other'
+    | 'verification_failed_tax_id_match'
+    | 'verification_failed_tax_id_not_issued'
+    | 'verification_missing_executives'
+    | 'verification_missing_owners'
+    | 'verification_requires_additional_memorandum_of_associations'
+  )[];
 }
 
 export interface KycDocuments {
