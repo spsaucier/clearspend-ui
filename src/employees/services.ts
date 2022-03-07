@@ -7,6 +7,7 @@ import type {
   SearchUserRequest,
   User,
   UserData,
+  ChangePasswordRequest,
 } from 'generated/capital';
 
 export async function getUsers() {
@@ -45,4 +46,8 @@ export async function editUser(userId: string, params: Readonly<CreateUserReques
 
 export async function getUserCards() {
   return (await service.get<readonly Readonly<CardDetailsResponse>[]>('/users/cards')).data;
+}
+
+export function changePassword(params: Readonly<ChangePasswordRequest>) {
+  return service.post('/authentication/change-password', params);
 }

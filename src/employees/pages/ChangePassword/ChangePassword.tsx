@@ -9,9 +9,11 @@ import { Page, PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { minLength, samePassword } from 'signup/components/PasswordForm/rules';
+import { useBusiness } from 'app/containers/Main/context';
+
+import { changePassword } from '../../services';
 
 import css from './ChangePassword.css';
-
 interface FormValues {
   current: string;
   password: string;
@@ -22,6 +24,7 @@ export default function ChangePassword() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
+  const { signupUser } = useBusiness();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { current: '', password: '', confirm: '' },
@@ -31,13 +34,23 @@ export default function ChangePassword() {
   const onUpdate = async () => {
     if (hasErrors(trigger())) return;
 
-    // TODO: Add service
-
-    messages.success({
-      title: i18n.t('Success'),
-      message: i18n.t('The password has been successfully updated.'),
-    });
-    navigate('/profile');
+    try {
+      await changePassword({
+        username: signupUser().email,
+        currentPassword: values().current,
+        newPassword: values().password,
+      });
+      messages.success({
+        title: i18n.t('Success'),
+        message: i18n.t('The password has been successfully updated.'),
+      });
+      navigate('/profile');
+    } catch (e: unknown) {
+      messages.error({
+        title: i18n.t('Error'),
+        message: i18n.t('Something went wrong'),
+      });
+    }
   };
 
   return (
