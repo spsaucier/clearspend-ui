@@ -22,6 +22,7 @@ interface TeamFormProps {
   signupUser: User;
   setTitle: (title: string) => void;
   business: Business | null;
+  kycErrors?: Readonly<{ [key: string]: string[] }>;
 }
 
 const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
@@ -104,6 +105,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             await refetchOwnersList();
             setShowAddingNewLeader(false);
           }}
+          kycErrors={props.kycErrors?.[editingLeaderId()]}
         />
       </Show>
       <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
@@ -111,6 +113,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           <LeadershipTable
             currentUserEmail={props.signupUser.email}
             leaders={leaders()}
+            leaderIdWithError={props.kycErrors ? Object.keys(props.kycErrors) : []}
             onAddClick={() => setShowAddingNewLeader(true)}
             // FIXME
             // eslint-disable-next-line

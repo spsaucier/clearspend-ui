@@ -55,7 +55,7 @@ export function FileUploader(props: Readonly<FileUploaderProps>) {
       <input
         ref={hiddenFileInput}
         accept="image/*,.pdf"
-        name={props.entityTokenId + '|' + props.type + '|' + props.documentName}
+        name={props.entityTokenId + '|' + props.type + '|'}
         onChange={() => handleChange()}
         type="file"
         style={{ display: 'none' }}

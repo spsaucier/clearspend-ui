@@ -6,6 +6,7 @@
   font-weight: var(--font-300);
   line-height: 1.2;
   letter-spacing: var(--ls-small);
+  cursor: default;
 }
 
 .small {

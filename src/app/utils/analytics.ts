@@ -1,6 +1,6 @@
 import mixpanel from 'mixpanel-browser';
 
-export const Events = {
+export const Events: { [key: string]: string } = {
   ACTIVATE_CARD: 'Activate Card',
   CREATE_ALLOCATION: 'Create Allocation',
   CREATE_CARD: 'Create Card',

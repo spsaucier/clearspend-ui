@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { Show } from 'solid-js';
+import { createEffect, Show } from 'solid-js';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -28,6 +28,7 @@ interface AddEditLeaderFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
   leader?: Readonly<BusinessOwner>;
   isSignupUser?: boolean;
+  kycErrors?: readonly Readonly<string>[];
 }
 
 export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
@@ -35,7 +36,20 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
 
-  const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(getFormOptions({ leader: props.leader }));
+  const { values, errors, setErrors, handlers, wrapSubmit } = createForm<FormValues>(
+    getFormOptions({ leader: props.leader }),
+  );
+
+  createEffect(() => {
+    const kycErrors: { [key: string]: string } = {};
+    props.kycErrors?.forEach((fieldError) => {
+      const fieldKey = fieldError.includes('.') ? fieldError.split(/[.]+/)[1] : fieldError;
+      if (fieldKey) {
+        kycErrors[fieldKey] = `Invalid value`;
+      }
+    });
+    setErrors(kycErrors);
+  });
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {

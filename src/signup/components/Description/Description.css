@@ -3,6 +3,7 @@
   margin: 0 0 var(--pd-24);
   font-size: var(--text-24);
   line-height: 36px;
+  cursor: default;
 }
 
 .small {

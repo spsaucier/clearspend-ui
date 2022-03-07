@@ -147,7 +147,8 @@ export default function SignUp() {
       businessType: businessType as BusinessProspectData['businessType'],
       relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
       relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
-    });
+      tosAndPrivacyPolicyAcceptance: true,
+    } as BusinessProspectData & { tosAndPrivacyPolicyAcceptance: boolean });
 
     setEmail(email, resp.businessProspectId || '');
 
@@ -180,7 +181,8 @@ export default function SignUp() {
       email,
       firstName: first,
       lastName: last,
-    } as BusinessProspectData);
+      tosAndPrivacyPolicyAcceptance: true,
+    } as BusinessProspectData & { tosAndPrivacyPolicyAcceptance: boolean });
 
     setEmail(email, resp.businessProspectId || '');
 

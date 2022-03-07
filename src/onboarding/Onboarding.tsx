@@ -9,11 +9,11 @@ import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import { useOnboardingBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
-import { BusinessType, OnboardingStep } from 'app/types/businesses';
+import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForApplicationReview } from 'app/services/review';
 import logoLight from 'app/assets/logo-light.svg';
-import type { BankAccount, Business, ConvertBusinessProspectRequest } from 'generated/capital';
+import type { BankAccount, Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
@@ -31,6 +31,7 @@ import {
   getApplicationReviewRequirements,
   setBusinessInfo,
   triggerBusinessOwners,
+  updateBusinessInfo,
 } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
@@ -48,7 +49,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
 
   const { business, signupUser, refetch, mutate } = useOnboardingBusiness();
-  const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: BusinessType }>();
+  const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['businessType'] }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
   const [logoutLoading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
@@ -56,7 +57,7 @@ export default function Onboarding() {
   const fillBusinessProspectInfo = async () => {
     const result = await getBusinessProspectInfo(signupUser().userId!);
     if (result.data) {
-      setBusinessProspectInfo(result.data as { businessType: BusinessType });
+      setBusinessProspectInfo(result.data as { businessType: Business['businessType'] });
     }
   };
 
@@ -70,7 +71,8 @@ export default function Onboarding() {
   const [kybRequiredDocuments, setKYBRequiredDocuments] = createSignal<readonly Readonly<RequiredDocument>[]>();
   const [kycRequiredDocuments, setKYCRequiredDocuments] = createSignal<readonly Readonly<KycDocuments>[]>();
 
-  const [, setKybRequiredFields] = createSignal<readonly Readonly<string>[]>(); // use if exist to show errors
+  const [kybRequiredFields, setKybRequiredFields] = createSignal<readonly Readonly<string>[]>();
+  const [kycRequiredFields, setKycRequiredFields] = createSignal<Readonly<{ [key: string]: string[] }>>({});
 
   if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
     getBankAccounts()
@@ -78,26 +80,38 @@ export default function Onboarding() {
       .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
-  if (step() === OnboardingStep.SOFT_FAIL || step() === OnboardingStep.BUSINESS) {
+  if (
+    step() === OnboardingStep.SOFT_FAIL ||
+    step() === OnboardingStep.BUSINESS ||
+    step() === OnboardingStep.BUSINESS_OWNERS
+  ) {
     getApplicationReviewRequirements()
       .then((data) => {
         setKYBRequiredDocuments(data.kybRequiredDocuments);
         setKYCRequiredDocuments(data.kycRequiredDocuments);
-        if (
-          kybRequiredDocuments() &&
-          kybRequiredDocuments()!.length === 0 &&
-          kycRequiredDocuments() &&
-          kycRequiredDocuments()!.length === 0
-        ) {
+        setKybRequiredFields(data.kybRequiredFields);
+        setKycRequiredFields(data.kycRequiredFields);
+        if (data.kybRequiredFields.length > 0) {
+          setStep(OnboardingStep.BUSINESS);
+        } else if (Object.keys(data.kycRequiredFields).length > 0) {
+          setStep(OnboardingStep.BUSINESS_OWNERS);
+        } else if (data.kybRequiredDocuments.length === 0 && data.kycRequiredDocuments.length === 0) {
           setStep(OnboardingStep.REVIEW);
         }
       })
       .catch(() => messages.error({ title: 'Something went wrong' }));
   }
 
-  const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest>) => {
-    const resp = await setBusinessInfo(signupUser().userId!, data);
-    mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
+  const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => {
+    if (business()) {
+      // update
+      await updateBusinessInfo(data as UpdateBusiness);
+      await refetch();
+    } else {
+      // create
+      const resp = await setBusinessInfo(signupUser().userId!, data as ConvertBusinessProspectRequest);
+      mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
+    }
     sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
@@ -131,8 +145,12 @@ export default function Onboarding() {
       setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
 
       setKybRequiredFields(reviewRequirements.kybRequiredFields);
+      setKycRequiredFields(reviewRequirements.kycRequiredFields);
+
       if (reviewRequirements.kybRequiredFields.length > 0) {
-        setStep(OnboardingStep.BUSINESS_OWNERS); // todo: parse results to show errors/where to fix things are
+        setStep(OnboardingStep.BUSINESS);
+      } else if (Object.keys(reviewRequirements.kycRequiredFields).length > 0) {
+        setStep(OnboardingStep.BUSINESS_OWNERS);
       } else if (
         reviewRequirements.kycRequiredDocuments.length > 0 ||
         reviewRequirements.kybRequiredDocuments.length > 0
@@ -228,18 +246,29 @@ export default function Onboarding() {
     >
       <div class={css.sand}>
         <Switch>
-          <Match when={!step() && businessProspectInfo()?.businessType}>
+          <Match when={step() === OnboardingStep.BUSINESS || (!step() && businessProspectInfo()?.businessType)}>
             <Page
               title="First, tell us a little bit about your business"
               headerClass={css.border}
               titleClass={css.thin}
             >
-              <BusinessForm onNext={onUpdateKYB} businessType={businessProspectInfo()?.businessType!} />
+              <BusinessForm
+                onNext={onUpdateKYB}
+                businessType={businessProspectInfo()?.businessType ?? business()?.businessType!}
+                businessPrefills={business()!}
+                kybErrors={kybRequiredFields()}
+              />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.BUSINESS_OWNERS}>
             <Page title={teamTitle} headerClass={css.border} titleClass={css.thin}>
-              <TeamForm business={business()} setTitle={setTeamTitle} onNext={onUpdateKYC} signupUser={signupUser()} />
+              <TeamForm
+                business={business()}
+                kycErrors={kycRequiredFields()}
+                setTitle={setTeamTitle}
+                onNext={onUpdateKYC}
+                signupUser={signupUser()}
+              />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.SOFT_FAIL}>

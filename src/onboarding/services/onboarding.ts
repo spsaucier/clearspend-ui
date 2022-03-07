@@ -7,6 +7,7 @@ import type {
   ConvertBusinessProspectRequest,
   ConvertBusinessProspectResponse,
   CreateOrUpdateBusinessOwnerRequest,
+  UpdateBusiness,
 } from 'generated/capital';
 import type { BusinessOwner } from 'onboarding/components/LeadershipTable/LeadershipTable';
 
@@ -41,6 +42,10 @@ export async function setBusinessInfo(id: string, params: Readonly<ConvertBusine
     .data;
 }
 
+export async function updateBusinessInfo(params: Readonly<UpdateBusiness>) {
+  return (await service.post<Readonly<UpdateBusiness>>(`/businesses/update`, params)).data;
+}
+
 export async function setBusinessOwner(ownerId: string, params: Readonly<CreateOrUpdateBusinessOwnerRequest>) {
   return service.patch(`/business-owners/${ownerId}`, params);
 }
@@ -58,7 +63,10 @@ export async function listBusinessOwners() {
 }
 
 export async function triggerBusinessOwners() {
-  return service.get(`/business-owners/trigger-all-owners-provided`);
+  return service.post(`/business-owners/trigger-all-owners-provided`, {
+    noOtherOwnersToProvide: true,
+    noExecutiveToProvide: true,
+  });
 }
 
 export async function getApplicationReviewRequirements() {

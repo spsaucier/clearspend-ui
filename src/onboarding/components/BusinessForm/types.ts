@@ -6,6 +6,6 @@ export interface FormValues extends AddressValues {
   url: string;
   mcc: string;
   description: string;
-  ein: string;
+  employerIdentificationNumber: string;
   phone: string;
 }

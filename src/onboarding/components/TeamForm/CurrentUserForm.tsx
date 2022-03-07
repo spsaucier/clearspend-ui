@@ -1,6 +1,5 @@
-/* eslint-disable css-modules/no-unused-class */
-import { Text } from 'solid-i18n';
 import { Show } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -21,6 +20,7 @@ import type { ExceptionData } from '../../types';
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
 
+// eslint-disable-next-line css-modules/no-unused-class
 import css from './LeaderForm.css';
 
 interface UserFormProps {

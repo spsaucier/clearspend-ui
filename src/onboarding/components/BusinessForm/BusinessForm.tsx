@@ -1,4 +1,4 @@
-import { For } from 'solid-js';
+import { createEffect, For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
@@ -10,9 +10,8 @@ import { Button } from '_common/components/Button';
 import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { ConvertBusinessProspectRequest } from 'generated/capital';
+import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
-import type { BusinessType } from 'app/types/businesses';
 import { Select, Option } from '_common/components/Select';
 import { BUSINESS_MCC } from 'app/types/mcc';
 
@@ -23,17 +22,29 @@ import type { FormValues } from './types';
 
 import css from './BusinessForm.css';
 
+const reMapStripeToClearspendFields = (stripeKey: string) => {
+  // todo: need a full list from George
+  if (stripeKey === 'tax_id') {
+    return 'employerIdentificationNumber';
+  }
+  return stripeKey;
+};
+
 interface BusinessFormProps {
-  onNext: (data: Readonly<ConvertBusinessProspectRequest>) => Promise<unknown>;
-  businessType: BusinessType;
+  onNext: (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
+  businessType: Business['businessType'];
+  businessPrefills?: Business;
+  kybErrors?: readonly Readonly<string>[];
 }
 
 export function BusinessForm(props: Readonly<BusinessFormProps>) {
   const media = useMediaContext();
   const messages = useMessages();
-  const [loading, next] = wrapAction(props.onNext);
 
-  const { values, handlers, errors, wrapSubmit } = createForm<FormValues>(getFormOptions(props.businessType));
+  const [loading, next] = wrapAction(props.onNext);
+  const { values, handlers, errors, setErrors, wrapSubmit } = createForm<FormValues>(
+    getFormOptions(props.businessType, props.businessPrefills),
+  );
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
       next(convertFormData(data)).catch((e: ExceptionData) => {
@@ -42,6 +53,17 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
     }
   };
 
+  createEffect(() => {
+    const kybErrors: { [key: string]: string } = {};
+    props.kybErrors?.forEach((fieldError) => {
+      const fieldKey = fieldError.includes('.') ? fieldError.split(/[.]+/)[1] : fieldError;
+      if (fieldKey) {
+        kybErrors[reMapStripeToClearspendFields(fieldKey)] = `Invalid value`;
+      }
+    });
+    setErrors(kybErrors);
+  });
+
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section title="Business details" class={css.section}>
@@ -49,13 +71,13 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           <FormItem label="Legal entity name" error={errors().name}>
             <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
           </FormItem>
-          <FormItem label="Business EIN" error={errors().ein}>
+          <FormItem label="Business EIN" error={errors().employerIdentificationNumber}>
             <Input
               name="business-ein"
-              value={values().ein}
+              value={values().employerIdentificationNumber}
               maxLength={9}
-              error={Boolean(errors().ein)}
-              onChange={handlers.ein}
+              error={Boolean(errors().employerIdentificationNumber)}
+              onChange={handlers.employerIdentificationNumber}
               formatter={formatEIN}
             />
           </FormItem>

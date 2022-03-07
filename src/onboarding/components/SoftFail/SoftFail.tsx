@@ -46,18 +46,19 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
 
   const onSubmit = (e: Event) => {
     e.preventDefault();
-    let fo = new FormData();
+    const formData = new FormData();
 
-    let t = formElement.getElementsByTagName('input');
-    for (let f in t) {
-      if (t.hasOwnProperty(f)) {
-        let inputElement: HTMLInputElement = t[f] as HTMLInputElement;
-        let fileList: FileList | null = inputElement.files;
-        if (fileList && fileList.length > 0) fo.append('documentList', fileList[0] as File, inputElement.name);
+    const fileInputs = formElement.getElementsByTagName('input');
+    for (const file in fileInputs) {
+      if (fileInputs.hasOwnProperty(file)) {
+        const inputElement: HTMLInputElement = fileInputs[file] as HTMLInputElement;
+        const fileList: FileList | null = inputElement.files;
+        if (fileList && fileList.length > 0) {
+          formData.append('documentList', fileList[0] as File, `${inputElement.name}${fileList[0]?.name}`);
+        }
       }
     }
-
-    next(fo).catch((exception: ExceptionData) => {
+    next(formData).catch((exception: ExceptionData) => {
       messages.error({ title: 'Something went wrong.', message: exception.data.message });
     });
   };

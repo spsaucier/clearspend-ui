@@ -65,6 +65,7 @@
 
   @nest .dark &:-webkit-autofill {
     -webkit-text-fill-color: white;
+    background-color: var(--tw-medium) !important !important;
   }
 
   @nest .dark &:-webkit-autofill:focus {
@@ -74,6 +75,10 @@
 
   @nest .dark &:-webkit-autofill:hover {
     -webkit-text-fill-color: white;
+  }
+
+  @nest .dark &:-internal-autofill-selected {
+    background-color: yellow;
   }
 }
 

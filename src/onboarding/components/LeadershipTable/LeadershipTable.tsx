@@ -13,6 +13,7 @@ interface LeadershipTableProps {
   onDeleteClick: (id: string) => void;
   onAddClick: () => void;
   currentUserEmail?: string;
+  leaderIdWithError?: string[];
 }
 
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
@@ -23,7 +24,12 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
       name: 'name',
       title: <Text message="Name" />,
       render: (leader) => {
-        return <div class={css.cell}>{`${leader.firstName} ${leader.lastName}`}</div>;
+        return (
+          <div class={css.cell}>
+            {`${leader.firstName} ${leader.lastName}`}
+            <Icon name="alert" class={css.error} />
+          </div>
+        );
       },
     },
     {

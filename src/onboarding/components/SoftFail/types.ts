@@ -62,4 +62,6 @@ export interface ManualReviewResponse {
   kybRequiredDocuments: readonly Readonly<RequiredDocument>[];
   kycRequiredDocuments: readonly Readonly<KycDocuments>[];
   kybRequiredFields: readonly Readonly<string>[];
+  kycRequiredFields: Readonly<{ [key: string]: string[] }>;
+  pendingVerification: string[]; // todo: How should UI present this?
 }
