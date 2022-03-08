@@ -1,3 +1,5 @@
+import type { DeepReadonly } from 'solid-js/store';
+
 import { Data } from 'app/components/Data';
 
 import { ChartOfAccountsTable } from '../ChartOfAccountsTable';
@@ -14,6 +16,9 @@ interface ChartOfAccountsDataProps {
   onReload: () => Promise<unknown>;
   onCancel?: () => void;
   onSkip?: () => void;
+  setShowRoadblock?: (newValue: boolean) => void;
+  setUnselectedCategories?: (newValue: (number | undefined)[]) => void;
+  setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
 }
 
 export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
@@ -24,6 +29,9 @@ export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
         mappings={props.mappings?.results}
         onSave={props.onSave}
         onCancel={props.onCancel}
+        setShowRoadblock={props.setShowRoadblock}
+        setUnselectedCategories={props.setUnselectedCategories}
+        setRoadblockRequestParameters={props.setRoadblockRequestParameters}
       />
     </Data>
   );

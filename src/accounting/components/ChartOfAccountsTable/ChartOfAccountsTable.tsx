@@ -1,6 +1,6 @@
 import { Text, useI18n } from 'solid-i18n';
 import { batch, createMemo, createSignal, For, Show } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createStore, DeepReadonly } from 'solid-js/store';
 
 import { Empty } from 'app/components/Empty';
 import { InputSearch } from '_common/components/InputSearch';
@@ -31,6 +31,9 @@ interface ChartOfAccountsTableProps {
   mappings?: IntegrationExpenseAccountMapping[] | undefined;
   onCancel?: () => void;
   onSkip?: () => void;
+  setShowRoadblock?: (newValue: boolean) => void;
+  setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
+  setUnselectedCategories?: (newValue: (number | undefined)[]) => void;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -44,7 +47,22 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
 
   const handleSave = async () => {
     const requestParams = Object.values(state).filter((value) => value != null);
-    await props.onSave(requestParams);
+    const unmappedCategories = expenseCategories.data?.filter(
+      (category) => !selectedCategories().includes(category.iconRef),
+    );
+    if (
+      unmappedCategories !== undefined &&
+      unmappedCategories.length !== 0 &&
+      props.setUnselectedCategories &&
+      props.setRoadblockRequestParameters &&
+      props.setShowRoadblock
+    ) {
+      props.setShowRoadblock(true);
+      props.setUnselectedCategories(unmappedCategories.map((category) => category.iconRef));
+      props.setRoadblockRequestParameters(requestParams);
+    } else {
+      await props.onSave(requestParams);
+    }
   };
   const [savingMapping, saveMapping] = wrapAction(handleSave);
 
