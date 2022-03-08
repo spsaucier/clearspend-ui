@@ -1,6 +1,5 @@
 import { createSignal, Switch, Match } from 'solid-js';
 import { Text } from 'solid-i18n';
-import { useSearchParams } from 'solid-app-router';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
@@ -26,9 +25,7 @@ function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
 }
 
 export function AccountingTabs() {
-  const [params] = useSearchParams();
-  const initialTab = params.tab === 'settings' ? Tabs.settings : Tabs.transactions;
-  const [tab, setTab] = createSignal<Tabs>(initialTab);
+  const [tab, setTab] = createSignal<Tabs>(Tabs.transactions);
 
   const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
   const PERIOD = toISO(getAccountingTimePeriod(initPeriod));
