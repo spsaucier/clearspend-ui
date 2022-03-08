@@ -1,5 +1,6 @@
 interface ProcessEnv {
   NODE_ENV: 'development' | 'production';
+  MIXPANEL_PROJECT_TOKEN: string;
   STRIPE_PUB_KEY: string;
   STRIPE_ACCOUNT: string;
 }

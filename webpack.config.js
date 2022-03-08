@@ -158,6 +158,7 @@ module.exports = (env, options) => {
         'process.env.NODE_ENV': JSON.stringify(options.mode),
         'process.env.STRIPE_PUB_KEY': JSON.stringify(process.env.STRIPE_PUB_KEY),
         'process.env.STRIPE_ACCOUNT': JSON.stringify(process.env.STRIPE_ACCOUNT),
+        'process.env.MIXPANEL_PROJECT_TOKEN': JSON.stringify(process.env.MIXPANEL_PROJECT_TOKEN),
       }),
       new HtmlWebpackPlugin({ template: './public/index.html' }),
       new PreloadWebpackPlugin({

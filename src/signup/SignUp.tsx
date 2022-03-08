@@ -28,7 +28,7 @@ import css from './SignUp.css';
 
 enum Step {
   AccountSetUpStep,
-  EmailOtpStep, // todo: move to after AccountSetUpStep when backend is ready
+  EmailOtpStep, // TODO: move to after AccountSetUpStep when backend is ready
   BusinessTypeCategoryStep, // now contains BusinessTypeStep and RelationshipToBusinessStep, todo: rename
   PhoneStep,
   PhoneOtpStep,

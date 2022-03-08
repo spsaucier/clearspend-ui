@@ -16,7 +16,7 @@ export function App() {
     sendAnalyticsEvent({
       type: AnalyticsEventType.Init,
       // TODO: env variable for mixpanel
-      name: 'fae11a3a59ea09ae6e4e9192a99220fb',
+      name: process.env.MIXPANEL_PROJECT_TOKEN || 'fae11a3a59ea09ae6e4e9192a99220fb',
       // TODO: disable debug on prod
       data: { debug: true, ignore_dnt: true },
     });
