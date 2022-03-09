@@ -78,6 +78,8 @@
   /* LINE HEIGHT: */
   --line-24: 24px;
   --line-28: 28px;
+  --line-32: 32px;
+  --line-36: 36px;
 
   /* RADIUS */
   --radius-2: 2px;
@@ -87,6 +89,7 @@
   --radius-12: 12px;
   --radius-16: 16px;
   --radius-20: 20px;
+  --radius-25: 25px;
 
   /* LETTER-SPACING */
   --ls-2: 2px;

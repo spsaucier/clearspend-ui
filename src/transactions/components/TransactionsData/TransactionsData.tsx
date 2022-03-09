@@ -15,6 +15,7 @@ import type {
 import { TransactionsList } from '../TransactionsList';
 import { TransactionsTable } from '../TransactionsTable';
 import { TransactionPreview, ReceiptsView, type ReceiptVideModel } from '../TransactionPreview';
+import { TransactionReportModal } from '../TransactionReportModal';
 
 interface TransactionsDataProps {
   table?: boolean;
@@ -28,6 +29,8 @@ interface TransactionsDataProps {
   onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   showAccountingAdminView?: boolean;
 }
+
+const [reportModalOpen, setReportModalOpen] = createSignal<boolean>(false);
 
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
   const [previewId, setPreviewId] = createSignal<string>();
@@ -66,6 +69,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
           onUpdate={onUpdateTransaction}
           onViewReceipt={setShowReceipts}
           showAccountingAdminView={props.showAccountingAdminView}
+          onReport={() => setReportModalOpen(true)}
         />
       </Drawer>
       <Modal isOpen={!!previewId() && !!showReceipts().length} close={() => setShowReceipts([])}>
@@ -75,6 +79,9 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
           onEmpty={() => setShowReceipts([])}
           onUpdate={onUpdateTransaction}
         />
+      </Modal>
+      <Modal isOpen={reportModalOpen()} close={() => setReportModalOpen(false)}>
+        <TransactionReportModal onGoBack={() => setReportModalOpen(false)} />
       </Modal>
     </Data>
   );
