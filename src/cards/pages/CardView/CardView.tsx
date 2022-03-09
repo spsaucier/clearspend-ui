@@ -157,7 +157,7 @@ export default function CardView() {
                   name={media.medium ? undefined : user() ? formatName(user()!) : ''}
                   allocation={media.medium ? undefined : allocation()?.name}
                   number={card()!.lastFour || ''}
-                  balance={media.medium ? undefined : allocation()?.account.ledgerBalance.amount || 0}
+                  balance={media.medium ? undefined : allocation()?.account.availableBalance?.amount || 0}
                   status={card()!.status}
                   notActivated={!card()!.activated}
                 />
@@ -205,7 +205,7 @@ export default function CardView() {
               id={card()!.cardId!}
               data={data()!}
               allocationId={card()!.allocationId}
-              maxAmount={data()!.ledgerBalance}
+              maxAmount={data()!.availableBalance}
               onSave={onUpdateCard}
             />
           </Match>

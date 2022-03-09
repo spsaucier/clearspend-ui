@@ -27,7 +27,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <Text message="Available Balance" />
         </h4>
         <div class={css.value}>
-          <strong>{formatCurrency(props.allocation.account.ledgerBalance.amount)}</strong>
+          <strong>{formatCurrency(props.allocation.account.availableBalance?.amount || 0)}</strong>
           <BalanceInfo />
         </div>
         <Text message="Monthly limit: {amount}" amount={formatCurrency(0)} class={css.note!} />

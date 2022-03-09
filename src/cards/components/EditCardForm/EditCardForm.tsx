@@ -112,7 +112,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   });
 
   const maxAmount = createMemo(() => {
-    return allocation()?.account.ledgerBalance || ({ currency: 'USD', amount: 0 } as Amount);
+    return allocation()?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
   });
 
   const ownerName = createMemo(() => {
@@ -195,7 +195,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           <CardTypeSelect
             value={values().types}
             allocation={allocation()?.name}
-            balance={allocation()?.account.ledgerBalance.amount}
+            balance={allocation()?.account.availableBalance?.amount || 0}
             name={ownerName()}
             class={css.types}
             onChange={handlers.types}

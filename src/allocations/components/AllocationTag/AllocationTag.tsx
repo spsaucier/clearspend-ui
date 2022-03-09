@@ -15,7 +15,7 @@ export function AllocationTag(props: Readonly<AllocationTagProps>) {
     <Tag class={join(css.root, props.class)}>
       {props.data.name}
       <span>&nbsp;|&nbsp;</span>
-      <strong class={css.amount}>{formatCurrency(props.data.account.ledgerBalance.amount)}</strong>
+      <strong class={css.amount}>{formatCurrency(props.data.account.availableBalance?.amount || 0)}</strong>
     </Tag>
   );
 }

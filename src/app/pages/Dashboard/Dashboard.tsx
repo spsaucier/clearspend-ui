@@ -128,7 +128,9 @@ export default function Dashboard() {
         </Match>
         <Match when={allocations.data?.length === 1 && !userCards.data?.length}>
           <Landing
-            addBalance={signupUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.ledgerBalance.amount === 0}
+            addBalance={
+              signupUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.availableBalance?.amount === 0
+            }
           />
         </Match>
         <Match when={allocations.data}>

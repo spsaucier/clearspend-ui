@@ -45,7 +45,7 @@ export function BankAccounts(props: Readonly<BankAccountsProps>) {
                     fallback={
                       <Text
                         message="Balance: {amount}"
-                        amount={formatCurrency((item as Allocation).account.ledgerBalance.amount)}
+                        amount={formatCurrency((item as Allocation).account.availableBalance?.amount || 0)}
                       />
                     }
                   >

@@ -79,7 +79,7 @@ export default function Allocations() {
     <Data data={allocations.data} loading={allocations.loading} error={allocations.error} onReload={allocations.reload}>
       <Show when={current()}>
         <Page
-          title={formatCurrency(current()!.account.ledgerBalance.amount)}
+          title={formatCurrency(current()!.account.availableBalance?.amount || 0)}
           titleClass={css.title}
           breadcrumbs={<Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
@@ -133,7 +133,7 @@ export default function Allocations() {
                 <CardControls
                   id={data()!.allocation.allocationId}
                   data={data()!}
-                  maxAmount={data()!.allocation.account.ledgerBalance}
+                  maxAmount={data()!.allocation.account.availableBalance || { currency: 'UNSPECIFIED', amount: 0 }}
                   onSave={onUpdateAllocation}
                 />
               </Data>

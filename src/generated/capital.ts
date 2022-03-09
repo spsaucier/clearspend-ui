@@ -679,6 +679,7 @@ export interface UpdateAllocationBalanceResponse {
 
 export interface UpdateBusiness {
   legalName?: string;
+  businessName?: string;
   businessType?:
     | 'INDIVIDUAL'
     | 'SOLE_PROPRIETORSHIP'
@@ -742,6 +743,7 @@ export interface Account {
   /** @format uuid */
   cardId?: string;
   ledgerBalance: Amount;
+  availableBalance?: Amount;
 }
 
 export interface Allocation {
@@ -915,6 +917,12 @@ export interface ConvertBusinessProspectRequest {
    * @example Business small description
    */
   description: string;
+
+  /**
+   * Doing business as name if is different by company name
+   * @example business
+   */
+  businessName?: string;
 
   /**
    * Business url

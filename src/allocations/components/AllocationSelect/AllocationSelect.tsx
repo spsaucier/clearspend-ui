@@ -12,7 +12,7 @@ import { createSortedNestedArray } from './utils';
 import css from './AllocationSelect.css';
 
 function getTotalAmount(items: readonly Readonly<Allocation>[]): number {
-  return items.reduce<number>((sum, item) => sum + item.account.ledgerBalance.amount, 0);
+  return items.reduce<number>((sum, item) => sum + (item.account.availableBalance?.amount || 0), 0);
 }
 
 interface AllocationSelectProps {
@@ -37,7 +37,7 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
     const found = props.items.find(allocationWithID(id));
     if (!found) return null;
 
-    return <AllocationView name={found.name} amount={found.account.ledgerBalance.amount} />;
+    return <AllocationView name={found.name} amount={found.account.availableBalance?.amount || 0} />;
   };
 
   const allocations = createMemo(() => {

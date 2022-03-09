@@ -49,8 +49,8 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
           const target = props.targets.find(targetById(values().target))!;
 
           return (
-            (props.withdraw && amount <= props.current.account.ledgerBalance.amount) ||
-            (!props.withdraw && (isBankAccount(target) || amount <= target.account.ledgerBalance.amount)) ||
+            (props.withdraw && amount <= (props.current.account.availableBalance?.amount || 0)) ||
+            (!props.withdraw && (isBankAccount(target) || amount <= (target.account.availableBalance?.amount || 0))) ||
             String(i18n.t('Insufficient funds.'))
           );
         },

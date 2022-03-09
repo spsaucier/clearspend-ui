@@ -84,7 +84,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
       sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
     }
 
-    const currentAmount = current()!.account.ledgerBalance.amount;
+    const currentAmount = current()!.account.availableBalance?.amount || 0;
 
     setSuccessManageData({
       amount,
@@ -118,7 +118,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
         <Match when={current()}>
           <AllocationView
             name={current()!.name}
-            amount={current()!.account.ledgerBalance.amount}
+            amount={current()!.account.availableBalance?.amount || 0}
             class={css.allocation}
           />
           <Show

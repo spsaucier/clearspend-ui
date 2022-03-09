@@ -6,11 +6,11 @@ import type { Allocation } from 'generated/capital';
 const TOTAL_PERCENT = 100;
 
 export function calcPieChartData(items: readonly Readonly<Allocation>[]): readonly Readonly<IPieChartData>[] {
-  const total = items.reduce<number>((sum, curr) => sum + curr.account.ledgerBalance.amount, 0);
+  const total = items.reduce<number>((sum, curr) => sum + (curr.account.availableBalance?.amount || 0), 0);
 
   return items.map((item, idx) => ({
     id: item.allocationId,
-    percent: (item.account.ledgerBalance.amount * TOTAL_PERCENT) / total,
+    percent: ((item.account.availableBalance?.amount || 0) * TOTAL_PERCENT) / total,
     color: getChartColor(idx),
   }));
 }

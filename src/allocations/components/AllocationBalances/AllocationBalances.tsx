@@ -21,12 +21,12 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
       <header>
         <h3 class={css.title}>Balances</h3>
         <div class={css.info}>
-          <strong class={css.total}>{formatCurrency(props.current.account.ledgerBalance.amount)}</strong>
+          <strong class={css.total}>{formatCurrency(props.current.account.availableBalance?.amount || 0)}</strong>
           <Text message="All {name} allocations" name={props.current.name} />
         </div>
       </header>
       <div class={css.wrapper}>
-        <Show when={Boolean(props.current.account.ledgerBalance.amount)}>
+        <Show when={Boolean(props.current.account.availableBalance?.amount || 0)}>
           <div class={css.chart}>
             <PieChart size={160} data={calcPieChartData(props.items)} />
           </div>
@@ -39,7 +39,7 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
                   <div class={css.point} style={{ background: getChartColor(idx()) }} />
                   <h4 class={css.name}>{item.name}</h4>
                 </div>
-                <strong class={css.amount}>{formatCurrency(item.account.ledgerBalance.amount)}</strong>
+                <strong class={css.amount}>{formatCurrency(item.account.availableBalance?.amount || 0)}</strong>
                 <div class={css.children}>
                   <Text
                     message="{count, plural, =0 {No allocations} one {{count} allocation} other {{count} allocations}}"

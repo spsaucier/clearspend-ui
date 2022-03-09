@@ -103,7 +103,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const maxAmount = createMemo(() => {
     const parent = props.allocations.find(allocationWithID(values().parent));
-    return parent?.account.ledgerBalance || ({ currency: 'USD', amount: 0 } as Amount);
+    return parent?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
   });
 
   const roles = createMemo<AllocationUserRole[]>(() => {
