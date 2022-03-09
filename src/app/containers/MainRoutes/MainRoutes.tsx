@@ -15,6 +15,7 @@ import { CardActivate } from 'cards/pages/CardActivate';
 import { CardEdit } from 'cards/pages/CardEdit';
 import { CompanySettings } from 'company';
 import { Accounting } from 'accounting';
+import AccountingSetup from 'accounting/pages/AccountingSetup/AccountingSetup';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
@@ -22,33 +23,41 @@ import { Dashboard } from '../../pages/Dashboard';
 
 export function MainRoutes() {
   return (
-    <MainLayout side={<Sidebar />}>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
+    <Routes>
+      <Route path="/accounting-setup" element={<AccountingSetup />} />
+      <Route
+        path="/*all"
+        element={
+          <MainLayout side={<Sidebar />}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
 
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/employees/edit" element={<EmployeeEdit />} />
-        <Route path="/employees/view/:id" element={<EmployeeView />} />
+              <Route path="/employees" element={<Employees />} />
+              <Route path="/employees/edit" element={<EmployeeEdit />} />
+              <Route path="/employees/view/:id" element={<EmployeeView />} />
 
-        <Route path="/allocations" element={<Allocations />} />
-        <Route path="/allocations/:id" element={<Allocations />} />
-        <Route path="/allocations/edit" element={<AllocationEdit />} />
+              <Route path="/allocations" element={<Allocations />} />
+              <Route path="/allocations/:id" element={<Allocations />} />
+              <Route path="/allocations/edit" element={<AllocationEdit />} />
 
-        <Route path="/cards" element={<Cards />} />
-        <Route path="/cards/edit" element={<CardEdit />} />
-        <Route path="/cards/view/:id" element={<CardView />} />
-        <Route path="/cards/activate/:id" element={<CardActivate />} />
+              <Route path="/cards" element={<Cards />} />
+              <Route path="/cards/edit" element={<CardEdit />} />
+              <Route path="/cards/view/:id" element={<CardView />} />
+              <Route path="/cards/activate/:id" element={<CardActivate />} />
 
-        <Route path="/settings" element={<CompanySettings />} />
+              <Route path="/settings" element={<CompanySettings />} />
 
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/profile/settings" element={<ProfileSettings />} />
-        <Route path="/profile/password" element={<ChangePassword />} />
-        <Route path="/profile/phone" element={<UpdatePhone />} />
-        <Route path="/profile/phone-verify" element={<ConfirmPhone />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/settings" element={<ProfileSettings />} />
+              <Route path="/profile/password" element={<ChangePassword />} />
+              <Route path="/profile/phone" element={<UpdatePhone />} />
+              <Route path="/profile/phone-verify" element={<ConfirmPhone />} />
 
-        <Route path="/accounting" element={<Accounting />} />
-      </Routes>
-    </MainLayout>
+              <Route path="/accounting" element={<Accounting />} />
+            </Routes>
+          </MainLayout>
+        }
+      />
+    </Routes>
   );
 }

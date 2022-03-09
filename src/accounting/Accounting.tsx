@@ -1,5 +1,5 @@
 import { createSignal, Match, onMount, Show, Switch } from 'solid-js';
-import { Navigate } from 'solid-app-router';
+import { Navigate, useNavigate } from 'solid-app-router';
 
 import { Loading } from 'app/components/Loading';
 import { AccountSetupStep } from 'app/types/businesses';
@@ -9,48 +9,25 @@ import { useBusiness } from '../app/containers/Main/context';
 import { canSeeAccounting } from './utils/canSeeAccounting';
 import { AccountingTabs } from './pages/AccountingTabs';
 import { Integrations } from './pages/Integrations';
-import {
-  deleteIntegrationConnection,
-  deleteIntegrationExpenseCategoryMappings,
-  getCompanyConnection,
-  postAccountingStepToBusiness,
-} from './services';
-import { AddCreditCardForm } from './pages/AddCreditCardForm';
-import { ChartOfAccounts } from './pages/ChartOfAccounts';
+import { getCompanyConnection } from './services';
 
 export default function Accounting() {
   const { signupUser, business } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
-  const [step, setStep] = createSignal<AccountSetupStep | undefined>(
-    business().accountingSetupStep as AccountSetupStep,
-  );
+  const step = business().accountingSetupStep as AccountSetupStep;
+
+  const navigate = useNavigate();
 
   onMount(async () => {
     getCompanyConnectionState();
+    if (step !== AccountSetupStep.COMPLETE) {
+      navigate('/accounting-setup');
+    }
   });
 
   const getCompanyConnectionState = async () => {
     const res = await getCompanyConnection();
     setHasIntegrationConnection(res);
-  };
-
-  const onUpdateCreditCard = async () => {
-    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.MAP_CATEGORIES });
-    setStep(AccountSetupStep.MAP_CATEGORIES);
-  };
-
-  const onCompleteChartOfAccounts = async () => {
-    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
-    setStep(AccountSetupStep.COMPLETE);
-  };
-
-  const onCancelAccountingSetup = async () => {
-    setHasIntegrationConnection(null);
-    deleteIntegrationExpenseCategoryMappings();
-    await deleteIntegrationConnection();
-    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.ADD_CREDIT_CARD });
-    setStep(AccountSetupStep.ADD_CREDIT_CARD);
-    await getCompanyConnectionState();
   };
 
   return (
@@ -63,17 +40,7 @@ export default function Accounting() {
           <Integrations />
         </Match>
         <Match when={hasIntegrationConnection() === true}>
-          <Switch>
-            <Match when={step() === AccountSetupStep.ADD_CREDIT_CARD}>
-              <AddCreditCardForm onNext={onUpdateCreditCard} onCancel={onCancelAccountingSetup} />
-            </Match>
-            <Match when={step() === AccountSetupStep.MAP_CATEGORIES}>
-              <ChartOfAccounts onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
-            </Match>
-            <Match when={step() === AccountSetupStep.COMPLETE}>
-              <AccountingTabs />
-            </Match>
-          </Switch>
+          <AccountingTabs />
         </Match>
       </Switch>
     </Show>
