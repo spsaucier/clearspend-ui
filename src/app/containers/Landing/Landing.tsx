@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { Show } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 
 import { getBankAccounts, linkBankAccounts, registerBankAccount } from 'onboarding/services/accounts';
 import { useNav } from '_common/api/router';
@@ -8,6 +8,9 @@ import { useResource } from '_common/utils/useResource';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount';
 import { LinkAccountButton } from 'onboarding/containers/LinkAccount/LinkAccountButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { Modal } from '_common/components/Modal';
+import { join } from '_common/utils/join';
+import { storage } from '_common/api/storage';
 
 import css from './Landing.css';
 
@@ -15,12 +18,34 @@ interface LandingProps {
   addBalance?: boolean;
 }
 
+const DISMISSED_ONBOARDING_MODAL = 'DISMISSED_ONBOARDING_MODAL';
 export function Landing(props: LandingProps) {
   const navigate = useNav();
   const [accounts] = useResource(getBankAccounts);
+  const [isOpenCongratulationsModal, setIsOpenCongratulationsModal] = createSignal<boolean>(
+    storage.get<boolean>(DISMISSED_ONBOARDING_MODAL, true),
+  );
+
+  const dismissModal = () => {
+    storage.set(DISMISSED_ONBOARDING_MODAL, false);
+    setIsOpenCongratulationsModal(false);
+  };
 
   return (
     <div class={css.root}>
+      <Modal isOpen={isOpenCongratulationsModal()} close={dismissModal}>
+        <div class={join(css.card, css.popup)}>
+          <h3 class={css.cardTitle}>
+            <Text message="Congratulations!" />
+          </h3>
+          <p class={css.cardMessage}>
+            <Text message="Your account is all set and ready to go! We’re so happy to have you here. Time to make you the expense management superstar you were always meant to be. Let’s get going!" />
+          </p>
+          <Button size="lg" type="primary" class={css.cardAction} onClick={dismissModal}>
+            <Text message="Go to dashboard" />
+          </Button>
+        </div>
+      </Modal>
       <Show when={props.addBalance}>
         <div class={css.card}>
           <h3 class={css.cardTitle}>
@@ -62,9 +87,11 @@ export function Landing(props: LandingProps) {
         <p class={css.cardMessage}>
           <Text message="Give employees access! Create and manage your team member accounts here." />
         </p>
-        <Button size="lg" icon="user" class={css.cardAction} onClick={() => navigate('/employees/edit')}>
-          <Text message="Onboard your employees" />
-        </Button>
+        <div>
+          <Button size="lg" icon="user" class={css.cardAction} onClick={() => navigate('/employees/edit')}>
+            <Text message="Onboard your employees" />
+          </Button>
+        </div>
       </div>
 
       <Show when={!props.addBalance}>
@@ -75,9 +102,11 @@ export function Landing(props: LandingProps) {
           <p class={css.cardMessage}>
             <Text message="Create and fund budgets for specific business purposes." />
           </p>
-          <Button size="lg" icon="amount" class={css.cardAction} onClick={() => navigate('/allocations/edit')}>
-            <Text message="Create allocation" />
-          </Button>
+          <div>
+            <Button size="lg" icon="amount" class={css.cardAction} onClick={() => navigate('/allocations/edit')}>
+              <Text message="Create allocation" />
+            </Button>
+          </div>
         </div>
       </Show>
 
@@ -88,9 +117,11 @@ export function Landing(props: LandingProps) {
         <p class={css.cardMessage}>
           <Text message="It’s time to set up your first ClearSpend card." />
         </p>
-        <Button size="lg" icon="card-add-new" class={css.cardAction} onClick={() => navigate('/cards/edit')}>
-          <Text message="Issue a card" />
-        </Button>
+        <div>
+          <Button size="lg" icon="card-add-new" class={css.cardAction} onClick={() => navigate('/cards/edit')}>
+            <Text message="Issue a card" />
+          </Button>
+        </div>
       </div>
     </div>
   );
