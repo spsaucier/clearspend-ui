@@ -34,7 +34,7 @@ export function AccountingTabs() {
     params: {
       ...DEFAULT_ACTIVITY_PARAMS,
       ...PERIOD,
-      // allocationId,
+      statuses: ['APPROVED'],
     },
   });
 
