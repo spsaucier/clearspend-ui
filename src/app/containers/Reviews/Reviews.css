@@ -15,9 +15,10 @@
 .content {
   @media (--bp-large) {
     display: flex;
+    margin-top: 106px;
     flex-direction: column;
     flex-grow: 1;
-    justify-content: center;
+    justify-content: flex-start;
   }
 }
 

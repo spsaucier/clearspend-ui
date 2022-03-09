@@ -30,10 +30,13 @@ const reMapStripeToClearspendFields = (stripeKey: string) => {
   return stripeKey;
 };
 
+// temp
+export type BusinessWithBusinessName = Business & { businessName: string };
+
 interface BusinessFormProps {
   onNext: (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
   businessType: Business['businessType'];
-  businessPrefills?: Business;
+  businessPrefills?: BusinessWithBusinessName;
   kybErrors?: readonly Readonly<string>[];
 }
 
@@ -93,8 +96,17 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
       </Section>
       <Section title="Business Description" class={css.section}>
         <div class={css.wrapper}>
+          <FormItem label="Business DBA name" error={errors().businessName}>
+            <Input
+              name="business-dba-name"
+              value={values().businessName}
+              error={Boolean(errors().businessName)}
+              onChange={handlers.businessName}
+            />
+          </FormItem>
           <FormItem label="Describe your business" error={errors().description}>
             <Input
+              useTextArea={true}
               name="business-description"
               value={values().description}
               error={Boolean(errors().description)}
@@ -103,6 +115,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
             <div class={css.inputHelp}>
               <Text message="Briefly describe your business in 50 words or less." />
             </div>
+          </FormItem>
+          <FormItem label="Business website (optional)" error={errors().url}>
+            <Input name="business-website" value={values().url} error={Boolean(errors().url)} onChange={handlers.url} />
           </FormItem>
           <FormItem label={'Merchant category'}>
             <Select

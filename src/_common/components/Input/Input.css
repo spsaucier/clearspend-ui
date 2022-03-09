@@ -16,6 +16,10 @@
   }
 }
 
+.root.auto-height {
+  height: auto;
+}
+
 .root.dark {
   height: auto;
   color: var(--tw-white);

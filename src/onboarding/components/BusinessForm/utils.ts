@@ -5,8 +5,12 @@ import { cleanEIN } from '_common/formatters/ein';
 import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 
 import type { FormValues } from './types';
+import type { BusinessWithBusinessName } from './BusinessForm';
 
-export function getFormOptions(type: Business['businessType'], prefill?: Business): FormOptions<FormValues> {
+export function getFormOptions(
+  type: Business['businessType'],
+  prefill?: BusinessWithBusinessName,
+): FormOptions<FormValues> {
   return {
     defaultValues: {
       name: prefill?.legalName ?? '',
@@ -21,6 +25,7 @@ export function getFormOptions(type: Business['businessType'], prefill?: Busines
       locality: prefill?.address?.locality ?? '',
       region: prefill?.address?.region ?? '',
       postalCode: prefill?.address?.postalCode ?? '',
+      businessName: prefill?.businessName ?? '',
     },
     rules: {
       name: [required],
@@ -37,7 +42,7 @@ export function getFormOptions(type: Business['businessType'], prefill?: Busines
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBusinessProspectRequest | UpdateBusiness> {
-  const { name, employerIdentificationNumber, phone, mcc, url, description, type, ...address } = data;
+  const { name, employerIdentificationNumber, businessName, phone, mcc, url, description, type, ...address } = data;
   return {
     legalName: name,
     employerIdentificationNumber: cleanEIN(employerIdentificationNumber),
@@ -47,5 +52,6 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBus
     url,
     businessType: type as UpdateBusiness['businessType'],
     description,
+    businessName,
   };
 }

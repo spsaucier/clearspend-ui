@@ -8,4 +8,5 @@ export interface FormValues extends AddressValues {
   description: string;
   employerIdentificationNumber: string;
   phone: string;
+  businessName: string;
 }

@@ -38,6 +38,7 @@ import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
 import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/TeamForm';
 import LinkAccountStep from './containers/LinkAccount/LinkAccountStep';
+import type { BusinessWithBusinessName } from './components/BusinessForm/BusinessForm';
 
 import css from './Onboarding.css';
 
@@ -255,7 +256,7 @@ export default function Onboarding() {
               <BusinessForm
                 onNext={onUpdateKYB}
                 businessType={businessProspectInfo()?.businessType ?? business()?.businessType!}
-                businessPrefills={business()!}
+                businessPrefills={business()! as BusinessWithBusinessName}
                 kybErrors={kybRequiredFields()}
               />
             </Page>
