@@ -96,6 +96,7 @@ export function Input(props: Readonly<InputProps>) {
       {merged.useTextArea && (
         <textarea
           ref={setTextareaRef}
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
           rows={merged.rows ?? 3}
           name={merged.name}
           data-name={merged.name}
