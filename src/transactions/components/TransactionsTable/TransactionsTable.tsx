@@ -54,6 +54,21 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
+      name: 'sync',
+      title: null,
+      render: (item) => {
+        if (item.syncStatus === 'SYNCED_LOCKED') {
+          return (
+            <div class={css.dot}>
+              <Icon name={'lock'} class={css.lock} />
+            </div>
+          );
+        } else {
+          return <></>;
+        }
+      },
+    },
+    {
       name: 'date',
       title: <Text message="Date & Time" />,
       render: (item) => {

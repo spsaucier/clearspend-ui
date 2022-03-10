@@ -45,3 +45,18 @@
   text-transform: capitalize;
   opacity: 0.8;
 }
+
+.dot {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--tw-gray-80);
+  border-radius: 50%;
+}
+
+.lock {
+  color: var(--tw-white);
+}
