@@ -40,7 +40,7 @@ export default function Login() {
     <PagePreAuth side={<Reviews />}>
       <>
         <Header>Welcome back</Header>
-        <Description>
+        <Description class={css.whiteText}>
           <Text message="Please log in." />
         </Description>
         <LoginForm onSubmit={submit} />
