@@ -11,6 +11,7 @@ import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
+import { FileTypes } from 'app/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import {
@@ -36,6 +37,8 @@ import { MERCHANT_CATEGORIES } from '../../constants';
 import type { ReceiptVideModel } from './ReceiptsView';
 
 import css from './TransactionPreview.css';
+
+const RECEIPT_FILE_TYPES = [FileTypes.JPG, FileTypes.PNG, FileTypes.PDF];
 
 const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
   READY: 'success',
@@ -212,7 +215,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 <Text message="Upload more images" />
               </Button>
             </Show>
-            <input ref={fileInput} type="file" accept="image/*" onChange={uploadReceipt} />
+            <input ref={fileInput} type="file" accept={RECEIPT_FILE_TYPES.join(',')} onChange={uploadReceipt} />
           </div>
           <div class={css.expenseCategory}>
             <div class={css.optionTitle}>

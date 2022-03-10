@@ -30,6 +30,7 @@
     "micro-charts": "7.3.0",
     "mixpanel-browser": "^2.42.0",
     "nanoid": "^3.3.1",
+    "pdfjs-dist": "2.13.216",
     "solid-app-router": "0.3.0",
     "solid-create-form": "1.0.0",
     "solid-i18n": "1.0.2",

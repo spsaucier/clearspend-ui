@@ -72,6 +72,13 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
+          test: /pdf\.worker\.min\.js$/,
+          type: 'asset/resource',
+          generator: {
+            filename: 'workers/pdf.worker.[hash][ext]',
+          },
+        },
+        {
           test: /\.(ts)x?$/,
           exclude: /node_modules/,
           use: [

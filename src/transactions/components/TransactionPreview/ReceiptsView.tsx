@@ -1,15 +1,20 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createSignal, createMemo, For, Show } from 'solid-js';
+import { Text } from 'solid-i18n';
 
+import { PdfView } from '_common/components/PdfView';
 import { deleteReceipt, getActivityById } from 'app/services/activity';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { wrapAction } from '_common/utils/wrapAction';
+import { FileTypes } from 'app/types/common';
+import { FILE_EXTENSIONS } from 'app/constants/files';
 import type { AccountActivityResponse } from 'generated/capital';
 
 import css from './ReceiptsView.css';
 
 export interface ReceiptVideModel {
   receiptId: string;
+  type: FileTypes;
   uri: string;
 }
 
@@ -21,6 +26,7 @@ export function ReceiptsView(props: {
 }) {
   const [currentReceiptIndex, setCurrentReceiptIndex] = createSignal<number>(0);
   const [visibleReceipts, setVisibleReceipts] = createSignal<ReceiptVideModel[]>([...props.receipts]);
+  const currentReceipt = createMemo(() => visibleReceipts()[currentReceiptIndex()]!);
 
   const [deleting, deleteReceiptAction] = wrapAction(deleteReceipt);
 
@@ -41,9 +47,8 @@ export function ReceiptsView(props: {
 
   const deleteSelectedReceipt = async (e: MouseEvent) => {
     e.stopPropagation();
-    const deletedReceipt = visibleReceipts()[currentReceiptIndex()];
-    const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== deletedReceipt?.receiptId);
-    await deleteReceiptAction(deletedReceipt?.receiptId!);
+    const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== currentReceipt().receiptId);
+    await deleteReceiptAction(currentReceipt().receiptId!);
     setVisibleReceipts(remainingReceipts);
     props.onUpdate(await getActivityById(props.accountActivityId));
     remainingReceipts.length ? setCurrentReceiptIndex(0) : props.onEmpty();
@@ -52,50 +57,61 @@ export function ReceiptsView(props: {
   return (
     <div class={css.root}>
       <div class={css.top}>
-        <span>
-          {currentReceiptIndex() + 1} of {visibleReceipts().length}
-        </span>
+        <Text message="{current} of {total}" current={currentReceiptIndex() + 1} total={visibleReceipts().length} />
         <span class={css.close}>
-          Close <Icon name="cancel" />
+          <Text message="Close" />
+          <Icon name="cancel" />
         </span>
       </div>
-      <div class={css.receiptMiniImageWrapper}>
+      <div class={css.previews}>
         <For each={visibleReceipts()}>
-          {(receipt, index) => {
-            return (
-              <div onClick={(e) => selectReceiptAtIndex(e, index())}>
-                <img src={receipt.uri} classList={{ [css.current!]: currentReceiptIndex() === index() }} />
-              </div>
-            );
-          }}
+          {(receipt, index) => (
+            <div
+              class={css.preview}
+              classList={{ [css.current!]: currentReceiptIndex() === index() }}
+              onClick={(e) => selectReceiptAtIndex(e, index())}
+            >
+              <Show when={receipt.type === FileTypes.PDF} fallback={<img src={receipt.uri} alt="Receipt preview" />}>
+                <PdfView uri={receipt.uri} />
+              </Show>
+            </div>
+          )}
         </For>
       </div>
       <>
-        <div class={css.receiptImageWrapper}>
+        <div class={css.content}>
           <Show when={currentReceiptIndex() > 0}>
-            <div onClick={previousReceipt} class={css.prevArrow}>
-              <Icon name="arrow-left" />
-            </div>
+            <Button view="ghost" icon="arrow-left" class={css.prev} onClick={previousReceipt} />
           </Show>
-          <img src={visibleReceipts()[currentReceiptIndex()]?.uri!} />
+          <Show
+            when={currentReceipt().type === FileTypes.PDF}
+            fallback={<img src={currentReceipt().uri} alt="Receipt" />}
+          >
+            <PdfView uri={currentReceipt().uri} />
+          </Show>
           <Show when={currentReceiptIndex() + 1 < visibleReceipts().length}>
-            <div onClick={nextReceipt} class={css.nextArrow}>
-              <Icon name="arrow-right" />
-            </div>
+            <Button view="ghost" icon="arrow-right" class={css.next} onClick={nextReceipt} />
           </Show>
         </div>
-        <div class={css.bottom}>
+        <div class={css.actions}>
           <Button
             icon="download"
             size="lg"
             onClick={(e) => e.stopPropagation()}
-            href={visibleReceipts()[currentReceiptIndex()]?.uri}
-            download={`${visibleReceipts()[currentReceiptIndex()]?.receiptId}.png`}
+            href={currentReceipt().uri}
+            download={`${currentReceipt().receiptId}.${FILE_EXTENSIONS[currentReceipt().type]}`}
           >
-            Download
+            <Text message="Download" />
           </Button>
-          <Button icon="trash" size="lg" class={css.delete} onClick={deleteSelectedReceipt} loading={deleting()}>
-            Delete
+          <Button
+            type="danger"
+            view="second"
+            icon="trash"
+            size="lg"
+            onClick={deleteSelectedReceipt}
+            loading={deleting()}
+          >
+            <Text message="Delete" />
           </Button>
         </div>
       </>

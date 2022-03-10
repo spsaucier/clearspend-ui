@@ -26,7 +26,7 @@
   cursor: pointer;
 }
 
-.bottom {
+.actions {
   display: flex;
   max-width: 100vw;
   padding-top: var(--pd-32);
@@ -34,65 +34,61 @@
   justify-content: space-between;
 }
 
-.delete {
-  color: var(--tw-red-70);
-}
-
-.receipt-image-wrapper {
+.previews {
   display: flex;
-  max-width: 100%;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  margin: var(--pd-16) 0 var(--pd-32);
 }
 
-.receipt-image-wrapper > img {
-  max-width: 100%;
-  max-height: 50vh;
-}
-
-.receipt-image-wrapper > div {
-  padding: var(--pd-32);
-}
-
-.receipt-image-wrapper svg {
-  width: 32px;
-  height: 32px;
-  color: var(--tw-white);
-  cursor: pointer;
-}
-
-.receipt-mini-image-wrapper {
-  display: flex;
-  margin-top: var(--pd-16);
-  margin-bottom: var(--pd-32);
-}
-
-.receipt-mini-image-wrapper > div > img {
+.preview {
   width: 80px;
   height: 80px;
-  margin-right: var(--pd-16);
-  border: 3px solid transparent;
-  border-radius: var(--radius-4);
+  border-radius: var(--radius-2);
+  overflow: hidden;
   cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: var(--pd-8);
+  }
+
+  & > img,
+  & > canvas {
+    width: 100%;
+    height: 100%;
+  }
 }
 
-.receipt-mini-image-wrapper > div > img.current {
-  border-color: var(--tw-green-30);
+.current {
+  border: 3px solid var(--tw-green-30);
   cursor: default;
 }
 
-.next-arrow,
-.prev-arrow {
+.content {
+  display: flex;
+  max-width: 100%;
+  height: 50vh;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  & > img,
+  & > canvas {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.next,
+.prev {
   position: absolute;
   top: 50%;
-  margin-top: -16px;
+  width: 40px;
+  color: var(--tw-white);
 }
 
-.prev-arrow {
-  right: 100%;
+.prev {
+  right: calc(100% + var(--pd-16));
 }
 
-.next-arrow {
-  left: 100%;
+.next {
+  left: calc(100% + var(--pd-16));
 }

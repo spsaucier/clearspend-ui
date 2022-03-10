@@ -28,6 +28,11 @@ declare module '*.svg' {
   export default src;
 }
 
+declare module 'pdfjs-dist/build/pdf.worker.min' {
+  const path: string;
+  export default path;
+}
+
 declare namespace Intl {
   type ListType = 'conjunction' | 'disjunction';
 

@@ -1,3 +1,4 @@
+import type { FileTypes } from 'app/types/common';
 import { RespType, service } from 'app/utils/service';
 import type {
   AccountActivityRequest,
@@ -54,7 +55,7 @@ export async function linkReceiptToActivity(activityId: string, receiptId: strin
 
 export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> => {
   const data = (await service.get<Blob>(`/images/receipts/${receiptId}`, { respType: RespType.blob })).data;
-  return { uri: URL.createObjectURL(data), receiptId: receiptId };
+  return { receiptId, type: data.type as FileTypes, uri: URL.createObjectURL(data) };
 };
 
 export const deleteReceipt = async (receiptId: string) => {
