@@ -85,6 +85,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         batch(() => {
           props.onUpdate(data);
           setNote(undefined);
+          messages.success({
+            title: i18n.t('Success'),
+            message: i18n.t('Your changes has been successfully saved.'),
+          });
         });
       })
       .catch(() => {
