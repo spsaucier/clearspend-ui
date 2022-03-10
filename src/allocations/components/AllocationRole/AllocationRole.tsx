@@ -29,8 +29,14 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
         disabled={props.inherited}
         onChange={(value) => props.onChange(props.user.userId!, value as AllocationRoles)}
       >
+        <Option value={AllocationRoles.Admin}>
+          <Text message="Admin" />
+        </Option>
         <Option value={AllocationRoles.Manager}>
           <Text message="Manage" />
+        </Option>
+        <Option value={AllocationRoles.Employee}>
+          <Text message="Employee" />
         </Option>
         <Option value={AllocationRoles.ViewOnly}>
           <Text message="View only" />

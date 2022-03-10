@@ -1,7 +1,6 @@
 import type { UserRolesAndPermissionsRecord } from 'generated/capital';
 
-import { AllocationRoles } from '../types';
-import type { AllocationUserRole } from '../types';
+import type { AllocationRoles, AllocationUserRole } from '../types';
 
 export function getAllocationUserRole(
   data: Readonly<UserRolesAndPermissionsRecord>,
@@ -10,9 +9,6 @@ export function getAllocationUserRole(
   return {
     user: data.user!,
     inherited: inherited ?? Boolean(data.inherited),
-    role:
-      data.allocationRole === AllocationRoles.Admin
-        ? AllocationRoles.Manager
-        : (data.allocationRole as AllocationRoles),
+    role: data.allocationRole as AllocationRoles,
   };
 }

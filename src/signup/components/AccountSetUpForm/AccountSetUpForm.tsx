@@ -100,12 +100,12 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
             <Text
               message="I am at least 18 years old and agree to ClearSpend’s <linkToS>Terms of Service</linkToS> and <linkPP>Privacy Policy</linkPP>."
               linkToS={(text) => (
-                <Link href="https://www.clearspend.com/terms-and-conditions" target="_blank">
+                <Link href="https://www.clearspend.com/terms" target="_blank">
                   {text}
                 </Link>
               )}
               linkPP={(text) => (
-                <Link href="https://www.clearspend.com/privacy-policy" target="_blank">
+                <Link href="https://www.clearspend.com/privacy" target="_blank">
                   {text}
                 </Link>
               )}
