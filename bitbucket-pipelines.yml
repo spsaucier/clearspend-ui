@@ -9,6 +9,7 @@ pipelines:
     - step:
         name: Build image and push to GCR
         image: google/cloud-sdk:latest
+        size: 2x
         artifacts:
           - dist/*
         services:
