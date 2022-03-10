@@ -20,6 +20,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@formatjs/intl-listformat": "6.5.2",
+    "@formatjs/intl-locale": "2.4.45",
     "@solid-primitives/debounce": "1.1.1",
     "@stripe/stripe-js": "^1.22.0",
     "colord": "2.9.2",

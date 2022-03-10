@@ -1,0 +1,1 @@
+export { IntlPolyfills } from './IntlPolyfills';

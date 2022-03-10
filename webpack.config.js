@@ -123,7 +123,7 @@ module.exports = (env, options) => {
           ],
         },
         {
-          test: /\.woff2/,
+          test: /\.woff2?$/,
           type: 'asset/resource',
           generator: {
             filename: 'fonts/[name].[hash:8][ext]',

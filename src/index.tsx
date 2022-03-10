@@ -6,6 +6,7 @@ import { I18nProvider } from 'solid-i18n';
 
 import { MediaProvider } from '_common/api/media/provider';
 import { i18n } from '_common/api/intl';
+import { IntlPolyfills } from 'app/containers/IntlPolyfills';
 import { MessagesProvider } from 'app/containers/Messages/provider';
 import { App } from 'app';
 
@@ -14,9 +15,11 @@ render(
     <MediaProvider>
       <Router>
         <I18nProvider i18n={i18n}>
-          <MessagesProvider>
-            <App />
-          </MessagesProvider>
+          <IntlPolyfills>
+            <MessagesProvider>
+              <App />
+            </MessagesProvider>
+          </IntlPolyfills>
         </I18nProvider>
       </Router>
     </MediaProvider>

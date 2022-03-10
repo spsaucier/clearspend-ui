@@ -85,7 +85,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             </FormItem>
           </div>
         </FilterBox>
-        <FilterBox title={<Text message="Categories" />}>
+        <FilterBox title={<Text message="Expense Category" />}>
           <MultiSelect
             value={values().categories}
             placeholder={String(i18n.t('Search for a category'))}
