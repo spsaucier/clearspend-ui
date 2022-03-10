@@ -59,7 +59,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => {
         if (item.syncStatus === 'SYNCED_LOCKED') {
           return (
-            <div class={css.dot}>
+            <div class={css.lockDot}>
               <Icon name={'lock'} class={css.lock} />
             </div>
           );
@@ -70,7 +70,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             </div>
           );
         } else {
-          return <></>;
+          return (
+            <div class={css.errorDot}>
+              <Icon name={'error-circle'} class={css.error} />
+            </div>
+          );
         }
       },
     },

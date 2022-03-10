@@ -46,7 +46,7 @@
   opacity: 0.8;
 }
 
-.dot {
+.lock-dot {
   display: flex;
   width: 28px;
   height: 28px;
@@ -69,10 +69,26 @@
   border-radius: 50%;
 }
 
+.error-dot {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--tw-amber-10);
+  border: 1px solid var(--tw-amber-20);
+  border-radius: 50%;
+}
+
 .lock {
   color: var(--tw-white);
 }
 
 .sync {
   color: var(--tw-green-80);
+}
+
+.error {
+  color: var(--tw-amber-80);
 }
