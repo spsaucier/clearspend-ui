@@ -25,17 +25,17 @@ import css from './LeaderForm.css';
 
 interface UserFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
-  signupUser: User;
+  currentUser: User;
 }
 
 export function CurrentUserForm(props: Readonly<UserFormProps>) {
   const media = useMediaContext();
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
-  const isOwner = props.signupUser.relationshipToBusiness?.owner;
+  const isOwner = props.currentUser.relationshipToBusiness?.owner;
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
-    getFormOptions({ signupUser: props.signupUser }),
+    getFormOptions({ currentUser: props.currentUser }),
   );
 
   const onSubmit = (data: Readonly<FormValues>) => {

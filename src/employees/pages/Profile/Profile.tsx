@@ -27,8 +27,8 @@ import css from './Profile.css';
 export default function Profile() {
   const navigate = useNavigate();
 
-  const { signupUser } = useBusiness();
-  const [user, userStatus, , , reloadUser] = useResource(getUser, signupUser().userId);
+  const { currentUser } = useBusiness();
+  const [user, userStatus, , , reloadUser] = useResource(getUser, currentUser().userId);
 
   const cards = useUserCards();
   const [cardID, setCardID] = createSignal<string>();
@@ -36,7 +36,7 @@ export default function Profile() {
 
   return (
     <Page
-      title={formatName(signupUser())}
+      title={formatName(currentUser())}
       subtitle={<Text message="Account settings" class={css.subtitle!} />}
       actions={
         <Button size="lg" loading={loading()} onClick={logoutAction}>

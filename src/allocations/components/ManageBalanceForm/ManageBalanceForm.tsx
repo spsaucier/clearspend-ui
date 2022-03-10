@@ -36,7 +36,7 @@ interface ManageBalanceFormProps {
 export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
 
   const [loading, update] = wrapAction(props.onUpdate);
 
@@ -94,7 +94,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
           </FormItem>
         </Show>
       </Form>
-      <Show when={signupUser().type === 'BUSINESS_OWNER'}>
+      <Show when={currentUser().type === 'BUSINESS_OWNER'}>
         <InternalBankAccount heading={<Text message="Want to wire money?" />} />
       </Show>
       <Button wide type="primary" loading={loading()} disabled={!isValid()} onClick={onSubmit}>

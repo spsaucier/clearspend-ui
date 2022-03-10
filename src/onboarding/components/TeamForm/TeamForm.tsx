@@ -19,7 +19,7 @@ import css from './TeamForm.css';
 
 interface TeamFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) => Promise<unknown>;
-  signupUser: User;
+  currentUser: User;
   setTitle: (title: string) => void;
   business: Business | null;
   kycErrors?: Readonly<{ [key: string]: string[] }>;
@@ -55,7 +55,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   createEffect(() => {
     if (leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber) {
       props.setTitle(
-        props.signupUser.relationshipToBusiness?.owner
+        props.currentUser.relationshipToBusiness?.owner
           ? `As an owner of ${props.business?.legalName}, we need to know a little more about you`
           : `As a representative of ${props.business?.legalName}, we need to know a little more about you`,
       );
@@ -84,9 +84,9 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
     <Show when={!fetchingOwnersList().loading}>
       <Show when={leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber}>
         <CurrentUserForm
-          signupUser={props.signupUser}
+          currentUser={props.currentUser}
           onNext={async (businessOwner: CreateOrUpdateBusinessOwnerRequest) => {
-            await updateOwner({ ...businessOwner, id: props.signupUser.userId });
+            await updateOwner({ ...businessOwner, id: props.currentUser.userId });
             await refetchOwnersList();
           }}
         />
@@ -94,7 +94,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
       <Show when={showAddingNewLeader()}>
         <AddEditLeaderForm
           leader={leaders().find((l) => l.businessOwnerId === editingLeaderId())}
-          isSignupUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
+          isCurrentUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
             if (editingLeaderId()) {
               await updateOwner({ ...leader, id: editingLeaderId() });
@@ -111,7 +111,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
       <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
         <div class={css.tableWrapper}>
           <LeadershipTable
-            currentUserEmail={props.signupUser.email}
+            currentUserEmail={props.currentUser.email}
             leaders={leaders()}
             leaderIdWithError={props.kycErrors ? Object.keys(props.kycErrors) : []}
             onAddClick={() => setShowAddingNewLeader(true)}

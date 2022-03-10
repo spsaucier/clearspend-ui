@@ -49,14 +49,14 @@ export default function Onboarding() {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const { business, signupUser, refetch, mutate } = useOnboardingBusiness();
+  const { business, currentUser, refetch, mutate } = useOnboardingBusiness();
   const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['businessType'] }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
   const [logoutLoading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
 
   const fillBusinessProspectInfo = async () => {
-    const result = await getBusinessProspectInfo(signupUser().userId!);
+    const result = await getBusinessProspectInfo(currentUser().userId!);
     if (result.data) {
       setBusinessProspectInfo(result.data as { businessType: Business['businessType'] });
     }
@@ -110,8 +110,8 @@ export default function Onboarding() {
       await refetch();
     } else {
       // create
-      const resp = await setBusinessInfo(signupUser().userId!, data as ConvertBusinessProspectRequest);
-      mutate([{ ...signupUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
+      const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
+      mutate([{ ...currentUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
     }
     sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
     setStep(OnboardingStep.BUSINESS_OWNERS);
@@ -229,7 +229,7 @@ export default function Onboarding() {
           <footer class={css.footer}>
             <div>
               <Icon name="user" />
-              <span class={css.user}>{formatName(signupUser())}</span>
+              <span class={css.user}>{formatName(currentUser())}</span>
             </div>
             <Button
               size="sm"
@@ -268,7 +268,7 @@ export default function Onboarding() {
                 kycErrors={kycRequiredFields()}
                 setTitle={setTeamTitle}
                 onNext={onUpdateKYC}
-                signupUser={signupUser()}
+                currentUser={currentUser()}
               />
             </Page>
           </Match>
@@ -282,7 +282,7 @@ export default function Onboarding() {
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.REVIEW}>
-            <Review ownerEmail={signupUser().email || ''} refetch={checkReviewStatus} />
+            <Review ownerEmail={currentUser().email || ''} refetch={checkReviewStatus} />
           </Match>
           <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
             <Page

@@ -29,7 +29,7 @@ import css from './Dashboard.css';
 export default function Dashboard() {
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
 
@@ -61,7 +61,7 @@ export default function Dashboard() {
 
   return (
     <Page
-      title={<Text message="Welcome, {name}" name={signupUser().firstName || ''} />}
+      title={<Text message="Welcome, {name}" name={currentUser().firstName || ''} />}
       contentClass={css.content}
       extra={
         <Switch>
@@ -129,7 +129,7 @@ export default function Dashboard() {
         <Match when={allocations.data?.length === 1 && !userCards.data?.length}>
           <Landing
             addBalance={
-              signupUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.availableBalance?.amount === 0
+              currentUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.availableBalance?.amount === 0
             }
           />
         </Match>

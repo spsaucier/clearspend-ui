@@ -53,7 +53,7 @@ interface EditAllocationFormProps {
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
 
   const [loading, save] = wrapAction(props.onSave);
 
@@ -96,7 +96,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(signupUser().userId, values(), props.mccCategories), localRoles()).catch(() => {
+    await save(convertFormData(currentUser().userId, values(), props.mccCategories), localRoles()).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };

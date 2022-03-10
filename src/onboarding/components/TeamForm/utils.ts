@@ -8,7 +8,7 @@ import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital
 import type { FormValues } from './types';
 
 interface Props {
-  signupUser?: Partial<User>;
+  currentUser?: Partial<User>;
   leader?: CreateOrUpdateBusinessOwnerRequest;
 }
 
@@ -16,7 +16,7 @@ const stringToDate = (dateString: string) => {
   return new Date(new Date(dateString).setMinutes(new Date(dateString).getMinutes() + new Date().getTimezoneOffset()));
 };
 
-export function getFormOptions({ signupUser, leader }: Props): FormOptions<FormValues> {
+export function getFormOptions({ currentUser, leader }: Props): FormOptions<FormValues> {
   const rules = {
     firstName: [required],
     lastName: [required],
@@ -30,16 +30,16 @@ export function getFormOptions({ signupUser, leader }: Props): FormOptions<FormV
     postalCode: [required, validZipCode],
   };
 
-  const relationshipExecutive = signupUser?.relationshipToBusiness?.executive;
-  const relationshipOwner = signupUser?.relationshipToBusiness?.owner;
+  const relationshipExecutive = currentUser?.relationshipToBusiness?.executive;
+  const relationshipOwner = currentUser?.relationshipToBusiness?.owner;
 
   const defaultValues = {
-    firstName: signupUser?.firstName || '',
-    lastName: signupUser?.lastName || '',
+    firstName: currentUser?.firstName || '',
+    lastName: currentUser?.lastName || '',
     birthdate: undefined,
     ssn: '',
-    email: signupUser?.email || '',
-    phone: signupUser?.phone || '',
+    email: currentUser?.email || '',
+    phone: currentUser?.phone || '',
     relationshipExecutive,
     relationshipOwner,
     percentageOwnership: 0,

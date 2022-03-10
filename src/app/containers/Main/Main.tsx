@@ -51,7 +51,7 @@ export default function Main() {
         <BusinessContext.Provider
           value={{
             business,
-            signupUser: createMemo(() => data()?.[0] || null),
+            currentUser: createMemo(() => data()?.[0] || null),
             permissions: createMemo(() => data()?.[2] || null),
             refetch,
             mutate,

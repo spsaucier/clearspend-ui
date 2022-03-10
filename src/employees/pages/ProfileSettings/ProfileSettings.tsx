@@ -16,11 +16,11 @@ export default function ProfileSettings() {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const { signupUser } = useBusiness();
-  const [user, status, , , reload] = useResource(getUser, signupUser().userId);
+  const { currentUser } = useBusiness();
+  const [user, status, , , reload] = useResource(getUser, currentUser().userId);
 
   const onUpdate = async (params: Readonly<CreateUserRequest>) => {
-    await editUser(signupUser().userId, params);
+    await editUser(currentUser().userId, params);
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The address has been successfully updated.'),

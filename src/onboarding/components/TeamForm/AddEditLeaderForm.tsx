@@ -27,7 +27,7 @@ import css from './LeaderForm.css';
 interface AddEditLeaderFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
   leader?: Readonly<BusinessOwner>;
-  isSignupUser?: boolean;
+  isCurrentUser?: boolean;
   kycErrors?: readonly Readonly<string>[];
 }
 
@@ -120,7 +120,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               value={values().firstName}
               error={Boolean(errors().firstName)}
               onChange={handlers.firstName}
-              disabled={props.isSignupUser}
+              disabled={props.isCurrentUser}
             />
           </FormItem>
           <FormItem label="Last name" error={errors().lastName}>
@@ -129,7 +129,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               value={values().lastName}
               error={Boolean(errors().lastName)}
               onChange={handlers.lastName}
-              disabled={props.isSignupUser}
+              disabled={props.isCurrentUser}
             />
           </FormItem>
           <FormItem label="Title" error={errors().title}>
@@ -160,7 +160,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               value={values().email}
               error={Boolean(errors().email)}
               onChange={handlers.email}
-              disabled={props.isSignupUser}
+              disabled={props.isCurrentUser}
             />
           </FormItem>
           <FormItem label="Phone" error={errors().phone}>
@@ -169,7 +169,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               value={values().phone}
               error={Boolean(errors().phone)}
               onChange={handlers.phone}
-              disabled={props.isSignupUser}
+              disabled={props.isCurrentUser}
             />
           </FormItem>
           <AddressFormItems values={values} errors={errors()} handlers={handlers} />

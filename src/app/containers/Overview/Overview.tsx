@@ -13,12 +13,16 @@ import { TagOption, TagSelect } from 'app/components/TagSelect';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { TransactionsData } from 'transactions/components/TransactionsData';
+import { getAllocationPermissions } from 'app/services/permissions';
+import { useResource } from '_common/utils/useResource';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpend } from '../../stores/spend';
 import { useSpending } from '../../stores/spending';
 import { useActivity } from '../../stores/activity';
+import { canManageFunds } from '../../../allocations/utils/permissions';
+import { useBusiness } from '../Main/context';
 
 import { TimePeriod, getTimePeriod, toISO, updateParams } from './utils';
 
@@ -40,12 +44,19 @@ export function Overview(props: Readonly<OverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
+  const { currentUser } = useBusiness();
 
   const initPeriod = searchParams.period || TimePeriod.week;
   const PERIOD = toISO(getTimePeriod(initPeriod));
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
-  const allocationId = createMemo(() => (props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId));
+  const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
+
+  const allocationId = createMemo(() => {
+    const id = props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
+    setAllocationIdForPermissions(id || '');
+    return id;
+  });
 
   const spendStore = useSpend({ params: { ...PERIOD, allocationId: allocationId() } });
 
@@ -91,44 +102,51 @@ export function Overview(props: Readonly<OverviewProps>) {
 
   return (
     <div class={css.root}>
-      <Show when={!media.small}>
-        <TabList value={period()} onChange={changePeriod}>
-          <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
-        </TabList>
-      </Show>
-      <div class={css.top}>
-        <Data error={spendStore.error} loading={spendStore.loading} data={spendStore.data} onReload={spendStore.reload}>
-          <SpendWidget
-            period={period()}
-            data={spendStore.data!}
-            controls={
-              <Show when={media.small}>
-                <TagSelect
-                  class={css.fullWidthDropdown}
-                  value={period()}
-                  options={PERIOD_OPTIONS}
-                  onChange={(timePeriod) => changePeriod(timePeriod as TimePeriod)}
-                />
-              </Show>
-            }
-          />
-        </Data>
-        <Data
-          data={spendingStore.data}
-          error={spendingStore.error}
-          loading={spendingStore.loading}
-          onReload={spendingStore.reload}
-        >
-          <SpendingByWidget
+      <Show when={currentUser().type === 'BUSINESS_OWNER' || canManageFunds(userPermissions())}>
+        <Show when={!media.small}>
+          <TabList value={period()} onChange={changePeriod}>
+            <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
+          </TabList>
+        </Show>
+        <div class={css.top}>
+          <Data
+            error={spendStore.error}
+            loading={spendStore.loading}
+            data={spendStore.data}
+            onReload={spendStore.reload}
+          >
+            <SpendWidget
+              period={period()}
+              data={spendStore.data!}
+              controls={
+                <Show when={media.small}>
+                  <TagSelect
+                    class={css.fullWidthDropdown}
+                    value={period()}
+                    options={PERIOD_OPTIONS}
+                    onChange={(timePeriod) => changePeriod(timePeriod as TimePeriod)}
+                  />
+                </Show>
+              }
+            />
+          </Data>
+          <Data
+            data={spendingStore.data}
+            error={spendingStore.error}
             loading={spendingStore.loading}
-            data={spendingStore.data!}
-            params={spendingStore.params}
-            onFilterChange={(chartFilter) =>
-              spendingStore.setParams((prev) => ({ ...prev, chartFilter } as ChartDataRequest))
-            }
-          />
-        </Data>
-      </div>
+            onReload={spendingStore.reload}
+          >
+            <SpendingByWidget
+              loading={spendingStore.loading}
+              data={spendingStore.data!}
+              params={spendingStore.params}
+              onFilterChange={(chartFilter) =>
+                spendingStore.setParams((prev) => ({ ...prev, chartFilter } as ChartDataRequest))
+              }
+            />
+          </Data>
+        </div>
+      </Show>
       <div>
         <h3 class={css.transactionTitle}>
           <Text message="Recent Transactions" />

@@ -52,7 +52,7 @@ export default function CardView() {
   const [tab, setTab] = createSignal(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
 
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
   const allocations = useAllocations();
 
   const [data, status, , , reload, mutate] = useResource(getCard, params.id);
@@ -126,7 +126,7 @@ export default function CardView() {
         <div class={css.actions}>
           <Show when={card()}>
             <CardActions
-              user={signupUser()}
+              user={currentUser()}
               card={card()!}
               onActivate={() => navigate(`/cards/activate/${card()!.cardId}`)}
               onShowDetails={toggleDetails}

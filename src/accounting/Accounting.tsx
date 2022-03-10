@@ -11,7 +11,7 @@ import { Integrations } from './pages/Integrations';
 import { getCompanyConnection } from './services';
 
 export default function Accounting() {
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
 
   onMount(async () => {
@@ -24,7 +24,7 @@ export default function Accounting() {
   };
 
   return (
-    <Show when={canSeeAccounting(signupUser())} fallback={<Navigate href="/" />}>
+    <Show when={canSeeAccounting(currentUser())} fallback={<Navigate href="/" />}>
       <Switch>
         <Match when={hasIntegrationConnection() == null}>
           <Loading />

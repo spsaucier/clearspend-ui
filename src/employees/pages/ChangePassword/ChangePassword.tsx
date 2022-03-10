@@ -24,7 +24,7 @@ export default function ChangePassword() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
-  const { signupUser } = useBusiness();
+  const { currentUser } = useBusiness();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { current: '', password: '', confirm: '' },
@@ -36,7 +36,7 @@ export default function ChangePassword() {
 
     try {
       await changePassword({
-        username: signupUser().email,
+        username: currentUser().email,
         currentPassword: values().current,
         newPassword: values().password,
       });

@@ -44,7 +44,7 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
-  const { signupUser, permissions } = useBusiness();
+  const { currentUser, permissions } = useBusiness();
 
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
   const itemClass = createMemo(() => (props.view === MenuView.mobile ? css.mobileItem : undefined));
@@ -55,7 +55,7 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
         case TITLES.accounting:
-          return isAdmin && canSeeAccounting(signupUser());
+          return isAdmin && canSeeAccounting(currentUser());
         case TITLES.employees:
         case TITLES.company:
           return isAdmin;
