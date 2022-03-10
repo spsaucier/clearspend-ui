@@ -44,7 +44,7 @@ export default function AccountingSetup() {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
     setStep(AccountSetupStep.COMPLETE);
     mutate([signupUser(), { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE }, permissions()]);
-    navigate('/accounting');
+    navigate('/accounting?notification=setup');
   };
 
   const onCancelAccountingSetup = async () => {

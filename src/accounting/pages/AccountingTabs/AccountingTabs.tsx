@@ -1,6 +1,6 @@
 import { createSignal, Switch, Match, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
-import { useNavigate } from 'solid-app-router';
+import { useNavigate, useSearchParams } from 'solid-app-router';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
@@ -13,6 +13,7 @@ import { AccountingOverview } from 'accounting/containers/AccountingOverview';
 import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
+import { useMessages } from 'app/containers/Messages/context';
 
 enum Tabs {
   transactions,
@@ -31,12 +32,17 @@ export function AccountingTabs() {
   const [tab, setTab] = createSignal<Tabs>(Tabs.transactions);
   const { business } = useBusiness();
   const step = business().accountingSetupStep as AccountSetupStep;
+  const [params] = useSearchParams();
+  const messages = useMessages();
 
   const navigate = useNavigate();
 
   onMount(() => {
     if (step !== AccountSetupStep.COMPLETE) {
       navigate('/accounting-setup');
+    }
+    if (params.notification === 'setup') {
+      messages.success({ title: 'Settings update complete', message: 'Ready to sync transactions.' });
     }
   });
 
