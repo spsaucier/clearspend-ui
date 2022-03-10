@@ -1,5 +1,6 @@
-import { createSignal, Switch, Match } from 'solid-js';
+import { createSignal, Switch, Match, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
+import { useNavigate } from 'solid-app-router';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
@@ -10,6 +11,8 @@ import { SyncLog } from 'accounting/containers/SyncLog';
 import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
 import { AccountingOverview } from 'accounting/containers/AccountingOverview';
 import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { useBusiness } from 'app/containers/Main/context';
+import { AccountSetupStep } from 'app/types/businesses';
 
 enum Tabs {
   transactions,
@@ -26,6 +29,16 @@ function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
 
 export function AccountingTabs() {
   const [tab, setTab] = createSignal<Tabs>(Tabs.transactions);
+  const { business } = useBusiness();
+  const step = business().accountingSetupStep as AccountSetupStep;
+
+  const navigate = useNavigate();
+
+  onMount(() => {
+    if (step !== AccountSetupStep.COMPLETE) {
+      navigate('/accounting-setup');
+    }
+  });
 
   const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
   const PERIOD = toISO(getAccountingTimePeriod(initPeriod));

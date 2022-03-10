@@ -1,8 +1,7 @@
 import { createSignal, Match, onMount, Show, Switch } from 'solid-js';
-import { Navigate, useNavigate } from 'solid-app-router';
+import { Navigate } from 'solid-app-router';
 
 import { Loading } from 'app/components/Loading';
-import { AccountSetupStep } from 'app/types/businesses';
 
 import { useBusiness } from '../app/containers/Main/context';
 
@@ -12,17 +11,11 @@ import { Integrations } from './pages/Integrations';
 import { getCompanyConnection } from './services';
 
 export default function Accounting() {
-  const { signupUser, business } = useBusiness();
+  const { signupUser } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
-  const step = business().accountingSetupStep as AccountSetupStep;
-
-  const navigate = useNavigate();
 
   onMount(async () => {
     getCompanyConnectionState();
-    if (step !== AccountSetupStep.COMPLETE) {
-      navigate('/accounting-setup');
-    }
   });
 
   const getCompanyConnectionState = async () => {

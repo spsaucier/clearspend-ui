@@ -35,6 +35,9 @@ export default function AccountingSetup() {
 
   onMount(async () => {
     getCompanyConnectionState();
+    if (step() === AccountSetupStep.COMPLETE) {
+      navigate('/accounting');
+    }
   });
 
   const onCompleteChartOfAccounts = async () => {
