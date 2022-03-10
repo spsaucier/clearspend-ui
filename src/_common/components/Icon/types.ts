@@ -82,6 +82,7 @@ export enum IconName {
   power = 'power',
   receipt = 'receipt',
   'receipt-unavailable' = 'receipt-unavailable',
+  refresh = 'refresh',
   search = 'search',
   settings = 'settings',
   sync = 'sync',

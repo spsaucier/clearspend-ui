@@ -63,6 +63,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               <Icon name={'lock'} class={css.lock} />
             </div>
           );
+        } else if (item.expenseDetails?.iconRef !== undefined) {
+          return (
+            <div class={css.syncDot}>
+              <Icon name={'refresh'} class={css.sync} />
+            </div>
+          );
         } else {
           return <></>;
         }
