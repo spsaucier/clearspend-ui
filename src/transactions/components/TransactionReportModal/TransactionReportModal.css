@@ -11,29 +11,29 @@
   background: #fff;
   border: 1px solid #f3f2ef;
   border-radius: var(--radius-25);
-}
 
-h4 {
-  margin: 0;
-  color: #000;
-  font-family: var(--font-header);
-  font-size: var(--text-32);
-  font-weight: bold;
-  font-style: normal;
-  line-height: var(--line-36);
-  letter-spacing: 0.01em;
-}
+  h4 {
+    margin: 0;
+    color: #000;
+    font-family: var(--font-header);
+    font-size: var(--text-32);
+    font-weight: bold;
+    font-style: normal;
+    line-height: var(--line-36);
+    letter-spacing: 0.01em;
+  }
 
-p {
-  margin: var(--pd-16) 0;
-  align-self: stretch;
-  flex-grow: 0;
-  color: #000;
-  font-family: var(--font-header);
-  font-size: var(--text-24);
-  font-weight: normal;
-  font-style: normal;
-  line-height: var(--line-32);
+  p {
+    margin: var(--pd-16) 0;
+    align-self: stretch;
+    flex-grow: 0;
+    color: #000;
+    font-family: var(--font-header);
+    font-size: var(--text-24);
+    font-weight: normal;
+    font-style: normal;
+    line-height: var(--line-32);
+  }
 }
 
 .info {
