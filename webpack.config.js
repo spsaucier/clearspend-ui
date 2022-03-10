@@ -151,6 +151,7 @@ module.exports = (env, options) => {
             { from: 'public/favicons', to: 'favicons' },
             { from: 'public/browserconfig.xml' },
             { from: 'public/site.webmanifest' },
+            { from: 'public/stripe-reveal.html' },
           ],
         }),
       new webpack.ids.HashedModuleIdsPlugin(),
