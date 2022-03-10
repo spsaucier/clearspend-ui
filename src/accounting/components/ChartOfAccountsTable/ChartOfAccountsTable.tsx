@@ -34,6 +34,7 @@ interface ChartOfAccountsTableProps {
   setShowRoadblock?: (newValue: boolean) => void;
   setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
   setUnselectedCategories?: (newValue: (number | undefined)[]) => void;
+  saveOnChange: boolean;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -149,6 +150,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                     categoryIconRef: ec?.iconRef,
                   });
                 });
+                if (props.saveOnChange) {
+                  saveMapping();
+                }
               }}
             >
               <For each={expenseCategories.data}>
@@ -170,6 +174,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                       setExpenseCategory(undefined);
                       setState(item.id, null);
                     });
+                    if (props.saveOnChange) {
+                      saveMapping();
+                    }
                   }}
                 />
               </Show>
@@ -194,26 +201,28 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         <div class={css.table}>
           <Table columns={columns} data={flattenedData()} cellClass={css.cell} />
         </div>
-        <div class={css.tableButtons}>
-          <Show when={!!props.onCancel}>
-            <CancelConfirmationButton onCancel={props.onCancel!} />
-          </Show>
-          <Show when={!!props.onSkip}>
-            <Button onClick={props.onSkip}>
-              <Text message="Skip Setup" />
+        <Show when={!props.saveOnChange}>
+          <div class={css.tableButtons}>
+            <Show when={!!props.onCancel}>
+              <CancelConfirmationButton onCancel={props.onCancel!} />
+            </Show>
+            <Show when={!!props.onSkip}>
+              <Button onClick={props.onSkip}>
+                <Text message="Skip Setup" />
+              </Button>
+            </Show>
+            <Button
+              loading={savingMapping()}
+              disabled={savingMapping()}
+              class={css.done}
+              type="primary"
+              icon={{ name: 'confirm', pos: 'right' }}
+              onClick={saveMapping}
+            >
+              <Text message="Done" />
             </Button>
-          </Show>
-          <Button
-            loading={savingMapping()}
-            disabled={savingMapping()}
-            class={css.done}
-            type="primary"
-            icon={{ name: 'confirm', pos: 'right' }}
-            onClick={saveMapping}
-          >
-            <Text message="Done" />
-          </Button>
-        </div>
+          </div>
+        </Show>
       </Show>
     </div>
   );

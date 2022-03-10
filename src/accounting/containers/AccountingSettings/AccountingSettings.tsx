@@ -72,6 +72,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
             integrationExpenseCategoryStore.reload();
             integrationExpenseCategoryMappingStore.reload();
           }}
+          saveOnChange={true}
         />
       </Section>
       <Section
