@@ -16,10 +16,11 @@ export function App() {
   createEffect(() => {
     sendAnalyticsEvent({
       type: AnalyticsEventType.Init,
-      // TODO: env variable for mixpanel
-      name: process.env.MIXPANEL_PROJECT_TOKEN || 'fae11a3a59ea09ae6e4e9192a99220fb',
-      // TODO: disable debug on prod
-      data: { debug: true, ignore_dnt: true },
+      name: (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN,
+      data: {
+        debug: !(window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN,
+        ignore_dnt: true,
+      },
     });
   });
   return (

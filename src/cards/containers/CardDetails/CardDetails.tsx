@@ -33,9 +33,10 @@ export function CardDetails(props: CardDetailsProps) {
 
   const init = () => {
     setError();
-    initStripe(process.env.STRIPE_PUB_KEY, {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    initStripe((window as CSWindow).clearspend_env?.STRIPE_PUB_KEY || process.env.STRIPE_PUB_KEY, {
       betas: ['issuing_elements_2'],
-      stripeAccount: process.env.STRIPE_ACCOUNT,
+      stripeAccount: (window as CSWindow).clearspend_env?.STRIPE_ACCOUNT || process.env.STRIPE_ACCOUNT,
     })
       .then((stripe) => {
         batch(() => {

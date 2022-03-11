@@ -15,6 +15,7 @@
     "prepare": "husky install",
     "sb:build": "build-storybook",
     "sb": "start-storybook -p 6006",
+    "set-env": "./scripts/env.sh",
     "start": "webpack-dev-server --mode development --open --hot",
     "statoscope": "webpack --mode production --env analyzer=statoscope",
     "test": "echo \"Error: no test specified\" && exit 1"

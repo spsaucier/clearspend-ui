@@ -7,6 +7,7 @@ RUN cd /app && \
 	npm i && \
 	npm run build
 
+RUN cd /app && sh scripts/env.sh
 FROM nginx:stable
 LABEL app=ui
 COPY --from=builder /app/dist /usr/share/nginx/html
