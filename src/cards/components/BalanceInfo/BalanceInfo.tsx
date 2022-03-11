@@ -14,8 +14,8 @@ export function BalanceInfo() {
       class={css.root}
       content={
         <>
-          <Text message="Available balance details" class={css.header!} />
-          <Text message="Balances are determined by how much is remaining for the card's limit OR the allocation balance." />
+          <Text message="Available balance" class={css.header!} />
+          <Text message="Amount shown is the balance available to this card, minus any pending transaction holds. Actual spending power may be limited by daily, monthly, or single-transaction limits set by your company." />
         </>
       }
     >
