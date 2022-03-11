@@ -1,0 +1,28 @@
+.root {
+  display: flex;
+  padding: var(--pd-24);
+  flex-direction: column;
+  background: var(--tw-white);
+  border-radius: var(--radius-20);
+}
+
+.title {
+  margin: 0 0 var(--pd-8);
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  font-weight: var(--font-400);
+}
+
+.content {
+  flex: 1;
+  color: var(--tw-gray-60);
+
+  & > span {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+.actions {
+  margin-top: var(--pd-12);
+}

@@ -23,6 +23,7 @@ import { Page } from '../../components/Page';
 import { Landing } from '../../containers/Landing';
 import { Overview } from '../../containers/Overview';
 import { useBusiness } from '../../containers/Main/context';
+import { ALLOCATIONS_START_COUNT } from '../../constants/common';
 
 import css from './Dashboard.css';
 
@@ -37,6 +38,14 @@ export default function Dashboard() {
 
   const userCards = useUserCards();
   const allocations = useAllocations({ initValue: [] });
+
+  const cardsCount = createMemo(() => userCards.data?.length || 0);
+  const allocationCount = createMemo(() => allocations.data?.length || 0);
+
+  const canAddBalance = createMemo(() => {
+    const root = getRootAllocation(allocations.data);
+    return currentUser().type === 'BUSINESS_OWNER' && root?.account.availableBalance?.amount === 0;
+  });
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
@@ -54,10 +63,6 @@ export default function Dashboard() {
     setAllocation(id);
     setSearchParams({ allocation: id });
   };
-
-  const rootAllocation = createMemo(() => {
-    return allocations.data?.find((a) => !a.parentAllocationId);
-  });
 
   return (
     <Page
@@ -126,12 +131,8 @@ export default function Dashboard() {
         <Match when={(allocations.loading && !allocations.data?.length) || (userCards.loading && !userCards.data)}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length === 1 && !userCards.data?.length}>
-          <Landing
-            addBalance={
-              currentUser().type === 'BUSINESS_OWNER' && rootAllocation()?.account.availableBalance?.amount === 0
-            }
-          />
+        <Match when={allocationCount() === ALLOCATIONS_START_COUNT || !cardsCount()}>
+          <Landing allocationsCount={allocationCount()} cardsCount={cardsCount()} showAddBalance={canAddBalance()} />
         </Match>
         <Match when={allocations.data}>
           <Overview allocationId={allocation()} />

@@ -5,7 +5,7 @@
   align-content: baseline;
   flex-direction: column;
   flex-grow: 1;
-  background: var(--tw-gray-10);
+  background: var(--tw-gray-20);
   gap: var(--pd-24);
 
   @media (--bp-medium) {
@@ -20,55 +20,13 @@
 }
 
 .card {
-  display: flex;
-  min-height: 208px;
-  padding: var(--pd-24);
-  flex-direction: column;
-  background: var(--tw-white);
-  border-radius: var(--radius-20);
-
   @media (--bp-large) {
+    min-height: 208px;
     flex-basis: 320px;
     flex-grow: 1;
   }
 }
 
-.popup {
-  width: 444px;
-  max-width: 100vw;
-  margin-top: -33vh;
-
-  @media (--bp-large) {
-    flex-basis: unset;
-    flex-grow: unset;
-  }
-}
-
-.card-title {
-  margin: 0 0 var(--pd-8);
-  font-family: var(--font-header);
-  font-size: var(--text-20);
-  font-weight: var(--font-400);
-
-  @nest .popup & {
-    font-weight: bold;
-  }
-}
-
-.card-message {
-  margin-bottom: 10px;
-  flex: 1;
-  color: var(--tw-gray-60);
-
-  @nest .popup & {
-    color: var(--tw-black);
-  }
-}
-
-.card-action {
-  margin-top: var(--pd-12);
-}
-
 .internal-bank-account {
-  margin: 2em 0;
+  margin: var(--pd-24) 0 var(--pd-32);
 }
