@@ -25,11 +25,11 @@ export function TransactionReportModal(props: ReportModalViewProps) {
       <div class={css.info}>
         <div>
           <Icon size="xs" name="email" />
-          <a href="mailto:help@clearspend.com">help@clearspend.com</a>
+          <a href="mailto:disputes@clearspend.com">disputes@clearspend.com</a>
         </div>
         <div>
           <Icon size="xs" name="phone" />
-          <a href="tel:8885271240">888-527-1240</a>
+          <a href="tel:+18553700660">(855) 370-0660</a>
         </div>
       </div>
       <Button onClick={props.onGoBack} wide={true}>
