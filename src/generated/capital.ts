@@ -1102,7 +1102,11 @@ export interface RelationshipToBusiness {
   director?: boolean;
 }
 
-export interface User {
+export interface UserLoginResponse {
+  twoFactorId?: string;
+  changePasswordId?: string;
+  changePasswordReason?: 'Administrative' | 'Breached' | 'Expired' | 'Validation';
+
   /** @format uuid */
   userId?: string;
 
@@ -1151,6 +1155,11 @@ export interface ChangePasswordRequest {
   username?: string;
   currentPassword?: string;
   newPassword?: string;
+}
+
+export interface ChangePasswordResponse {
+  oneTimePassword?: string;
+  state?: Record<string, object>;
 }
 
 export interface CreateAllocationRequest {
@@ -2513,6 +2522,22 @@ export interface AllocationDetailsResponse {
     | 'OTHER'
   )[];
   disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+}
+
+export interface User {
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  businessId?: string;
+  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  firstName?: string;
+  lastName?: string;
+  address?: Address;
+  email?: string;
+  phone?: string;
+  archived?: boolean;
+  relationshipToBusiness?: RelationshipToBusiness;
 }
 
 export interface Receipt {

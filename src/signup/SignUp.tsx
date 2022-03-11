@@ -308,7 +308,7 @@ export default function SignUp() {
             />
           </Match>
           <Match when={step() === Step.PasswordStep}>
-            <PasswordForm onCreateAccount={onPasswordUpdate} />
+            <PasswordForm submitText={<Text message="Create Account" />} onPasswordUpdate={onPasswordUpdate} />
           </Match>
         </Switch>
       </div>

@@ -8,12 +8,14 @@ import { Input } from '_common/components/Input';
 import { validEmail } from '_common/components/Form/rules/patterns';
 import { wrapAction } from '_common/utils/wrapAction';
 import { useSignup } from 'signup/store';
-import { Checkbox } from '_common/components/Checkbox';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
+import { AgreementCheckbox } from '../AgreementCheckbox';
 import { FlatButton } from '../Button/FlatButton';
+
+import css from './AccountSetUpForm.css';
 
 interface AccountSetUpFormValues {
   firstName: string;
@@ -54,12 +56,14 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
 
   return (
     <div>
-      <Header>Let's get your account set up</Header>
+      <Header>
+        <Text message="Let's get your account set up" />
+      </Header>
       <Description>
         <Text message="It's easier than buying a car, (and less painful), we promise." />
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
-        <FormItem label="First name" error={errors().firstName} darkMode={true}>
+        <FormItem darkMode label={<Text message="First name" />} error={errors().firstName}>
           <Input
             ref={input}
             darkMode={true}
@@ -69,7 +73,7 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
             onChange={handlers.firstName}
           />
         </FormItem>
-        <FormItem label="Last name" error={errors().lastName} darkMode={true}>
+        <FormItem darkMode label={<Text message="Last name" />} error={errors().lastName}>
           <Input
             darkMode={true}
             name="last-name"
@@ -79,15 +83,20 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
           />
         </FormItem>
         <FormItem
-          darkMode={true}
-          label="Work email"
+          darkMode
+          label={<Text message="Work email" />}
           error={errors().email}
           extra={
-            'We’ll send you a confirmation email just to make sure you’re human and not some distant planet invader looking to expense their UFO repairs on Earth'
+            <Text
+              message={
+                'We’ll send you a confirmation email just to make sure you’re human ' +
+                'and not some distant planet invader looking to expense their UFO repairs on Earth'
+              }
+            />
           }
         >
           <Input
-            darkMode={true}
+            darkMode
             name="email"
             type="email"
             value={values().email}
@@ -95,27 +104,13 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
             onChange={handlers.email}
           />
         </FormItem>
-        <FormItem error={errors().isAgreedToTos} class={'fullwidth'}>
-          <Checkbox value={'agree'} onChange={handlers.isAgreedToTos}>
-            <Text
-              message="I am at least 18 years old and agree to ClearSpend’s <linkToS>Terms of Service</linkToS> and <linkPP>Privacy Policy</linkPP>."
-              linkToS={(text) => (
-                <Link href="https://www.clearspend.com/terms" target="_blank">
-                  {text}
-                </Link>
-              )}
-              linkPP={(text) => (
-                <Link href="https://www.clearspend.com/privacy" target="_blank">
-                  {text}
-                </Link>
-              )}
-            />
-          </Checkbox>
+        <FormItem error={errors().isAgreedToTos} class="fullwidth">
+          <AgreementCheckbox value={values().isAgreedToTos} onChange={handlers.isAgreedToTos} />
         </FormItem>
         <FlatButton type="primary" htmlType="submit">
-          Next
+          <Text message="Next" />
         </FlatButton>
-        <div style={{ 'margin-top': '24px' }}>
+        <div class={css.haveAccount}>
           <Text
             message="Already have an account? <link>Log in here</link>."
             link={(text) => (

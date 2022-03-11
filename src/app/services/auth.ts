@@ -2,19 +2,16 @@ import { service } from 'app/utils/service';
 import type {
   ResetPasswordRequest,
   ForgotPasswordRequest,
-  User,
+  UserLoginResponse,
   FirstTwoFactorValidateRequest,
   FirstTwoFactorSendRequest,
   TwoFactorLoginRequest,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
 } from 'generated/capital';
 
-interface TwoFactorId {
-  twoFactorId: string;
-}
-
-export async function login(username: string, password: string): Promise<User | TwoFactorId> {
-  const loginResponse = await service.post<User | TwoFactorId>('/authentication/login', { username, password });
-  return loginResponse.data;
+export async function login(username: string, password: string) {
+  return (await service.post<UserLoginResponse>('/authentication/login', { username, password })).data;
 }
 
 export async function loginWith2fa(params: TwoFactorLoginRequest) {
@@ -47,4 +44,14 @@ export async function forgotPassword({ email }: ForgotPasswordRequest) {
 export async function resetPassword(params: ResetPasswordRequest) {
   const resetResponse = await service.post<ResetPasswordRequest>('/authentication/reset-password', params);
   return resetResponse.data;
+}
+
+export async function changePassword(params: Readonly<Required<ChangePasswordRequest>>) {
+  await service.post('/authentication/change-password', params);
+}
+
+export async function changePasswordById(changePasswordId: string, params: Readonly<Required<ChangePasswordRequest>>) {
+  return (
+    await service.post<Readonly<ChangePasswordResponse>>(`/authentication/change-password/${changePasswordId}`, params)
+  ).data;
 }

@@ -1,6 +1,6 @@
 import mixpanel from 'mixpanel-browser';
 
-export const Events: { [key: string]: string } = {
+export const Events = {
   ACTIVATE_CARD: 'Activate Card',
   CREATE_ALLOCATION: 'Create Allocation',
   CREATE_CARD: 'Create Card',
@@ -38,7 +38,7 @@ export const Events: { [key: string]: string } = {
   VERIFY_MOBILE: 'Verify Mobile',
   VIEW_SIGNUP: 'View Sign Up',
   WITHDRAW_CASH: 'Withdraw Cash',
-};
+} as const;
 
 export interface AnalyticsEvent {
   name?: string;
@@ -85,7 +85,7 @@ const vendorActions = {
   },
 };
 
-export const sendAnalyticsEvent = async ({
+export const sendAnalyticsEvent = ({
   name,
   data,
   type = AnalyticsEventType.Track,

@@ -1,6 +1,5 @@
 import { fetch } from '_common/api/fetch';
 import { FetchOptions, HttpStatus, FetchResponse } from '_common/api/fetch/types';
-import { getNoop } from '_common/utils/getNoop';
 import { events } from '_common/api/events';
 import type { ControllerError } from 'generated/capital';
 
@@ -21,7 +20,7 @@ function logFetch<T = unknown>(resp: FetchResponse<T>, isError?: boolean) {
       url: resp.url,
       ...(isError ? { error: resp.data } : { result: resp.data }),
     },
-  }).catch(getNoop());
+  });
 }
 
 function parseError(message: string): unknown {

@@ -8,8 +8,7 @@ import { complete2faEnrollment, send2faEnrollmentCode } from 'app/services/auth'
 import { PhoneForm } from 'signup/components/PhoneForm';
 import { VerifyForm } from 'signup/components/VerifyForm';
 import { useMessages } from 'app/containers/Messages/context';
-
-import { Events, sendAnalyticsEvent } from '../app/utils/analytics';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import css from './Enable2fa.css';
 

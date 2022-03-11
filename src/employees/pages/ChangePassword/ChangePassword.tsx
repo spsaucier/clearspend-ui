@@ -10,10 +10,10 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { minLength, samePassword } from 'signup/components/PasswordForm/rules';
 import { useBusiness } from 'app/containers/Main/context';
-
-import { changePassword } from '../../services';
+import { changePassword } from 'app/services/auth';
 
 import css from './ChangePassword.css';
+
 interface FormValues {
   current: string;
   password: string;

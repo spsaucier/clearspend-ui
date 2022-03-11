@@ -11,6 +11,7 @@ import { Description } from 'signup/components/Description';
 import { LoginForm } from '../../components/LoginForm';
 import { Reviews } from '../../containers/Reviews';
 import { login } from '../../services/auth';
+import { onSuccessLogin } from '../../utils/onSuccessLogin';
 
 import css from './Login.css';
 
@@ -23,23 +24,21 @@ export default function Login() {
   const submit = async (username: string, password: string) => {
     setEmail(username);
     const user = await login(username, password);
-    if ('userId' in user && user.userId) {
+    if (user.userId) {
       sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
       sendAnalyticsEvent({ name: Events.LOGIN });
-      if (user.phone !== '+11111111111') {
-        navigate('/enable-2fa');
-      } else {
-        navigate('/');
-      }
-    } else if ('twoFactorId' in user && user.twoFactorId) {
-      navigate('/login-2fa', { state: { twoFactorId: user.twoFactorId } });
     }
+    user.changePasswordId
+      ? navigate('/set-password', { state: { username, password, changePasswordId: user.changePasswordId } })
+      : onSuccessLogin(user, navigate);
   };
 
   return (
     <PagePreAuth side={<Reviews />}>
       <>
-        <Header>Welcome back</Header>
+        <Header>
+          <Text message="Welcome back" />
+        </Header>
         <Description>
           <Text message="Please log in." />
         </Description>
