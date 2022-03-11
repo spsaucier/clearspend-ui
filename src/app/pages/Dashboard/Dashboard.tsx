@@ -131,7 +131,7 @@ export default function Dashboard() {
         <Match when={(allocations.loading && !allocations.data?.length) || (userCards.loading && !userCards.data)}>
           <Loading />
         </Match>
-        <Match when={allocationCount() === ALLOCATIONS_START_COUNT || !cardsCount()}>
+        <Match when={allocationCount() === ALLOCATIONS_START_COUNT && !cardsCount()}>
           <Landing allocationsCount={allocationCount()} cardsCount={cardsCount()} showAddBalance={canAddBalance()} />
         </Match>
         <Match when={allocations.data}>
