@@ -16,6 +16,7 @@ import { CardEdit } from 'cards/pages/CardEdit';
 import { CompanySettings } from 'company';
 import { Accounting } from 'accounting';
 import AccountingSetup from 'accounting/pages/AccountingSetup/AccountingSetup';
+import { Enable2fa } from 'onboarding/pages/Enable2fa';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
@@ -25,6 +26,7 @@ export function MainRoutes() {
   return (
     <Routes>
       <Route path="/accounting-setup" element={<AccountingSetup />} />
+      <Route path="/enable-2fa" element={<Enable2fa />} />
       <Route
         path="/*all"
         element={

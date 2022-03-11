@@ -9,12 +9,16 @@ import { PhoneForm } from 'signup/components/PhoneForm';
 import { VerifyForm } from 'signup/components/VerifyForm';
 import { useMessages } from 'app/containers/Messages/context';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { updateCurrentUser } from 'employees/services';
+
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './Enable2fa.css';
 
 export default function Enable2fa() {
   const message = useMessages();
   const navigate = useNavigate();
+  const { currentUser } = useBusiness();
   const [number, setNumber] = createSignal('');
 
   const onPhoneUpdate = async (phone: string) => {
@@ -48,6 +52,7 @@ export default function Enable2fa() {
   const onPhoneConfirm = async (otp: string) => {
     try {
       await complete2faEnrollment({ destination: number(), code: otp, method: 'sms' });
+      await updateCurrentUser({ ...currentUser, phone: number() });
       sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
       message.success({ title: `${formatPhone(number())} set as authentication method` });
       navigate('/');

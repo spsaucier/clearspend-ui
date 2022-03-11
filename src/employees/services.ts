@@ -7,6 +7,7 @@ import type {
   SearchUserRequest,
   User,
   UserData,
+  UpdateUserRequest,
 } from 'generated/capital';
 
 export async function getUsers() {
@@ -38,6 +39,9 @@ function extendUserParams(params: Readonly<CreateUserRequest>, pass = true) {
 export async function saveUser(params: Readonly<CreateUserRequest>) {
   return (await service.post<Readonly<CreateUserResponse>>('/users', extendUserParams(params))).data;
 }
+
+export const updateCurrentUser = async (user: User) =>
+  (await service.post<Readonly<UpdateUserRequest>>(`/users/${user.userId}`, { ...user })).data;
 
 export async function editUser(userId: string, params: Readonly<CreateUserRequest>) {
   return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
