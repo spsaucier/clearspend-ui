@@ -96,14 +96,12 @@
             <div id="exp-text">VALID THRU</div>
             <div class="row">
               <div id="card-expiry"></div>
-              <div class="copy-icon" id="card-expiry-copy"></div>
             </div>
           </div>
           <div id="cvc-wrapper">
             <div id="cvv-text">CVV</div>
             <div class="row">
               <div id="card-cvc"></div>
-              <div class="copy-icon" id="card-cvc-copy"></div>
             </div>
           </div>
         </div>
@@ -211,24 +209,12 @@
           toCopy: 'number',
         });
 
-        const cvcCopy = elements.create('issuingCardCopyButton', {
-          style: COPY_STYLE,
-          toCopy: 'cvc',
-        });
-
-        const expiryCopy = elements.create('issuingCardCopyButton', {
-          style: COPY_STYLE,
-          toCopy: 'expiry',
-        });
-
         name.textContent = cardResult.issuingCard.cardholder.name;
         number.mount('#card-number');
         expiry.mount('#card-expiry');
         cvc.mount('#card-cvc');
 
         numberCopy.mount('#card-number-copy');
-        expiryCopy.mount('#card-expiry-copy');
-        cvcCopy.mount('#card-cvc-copy');
       };
 
       renderCard();
