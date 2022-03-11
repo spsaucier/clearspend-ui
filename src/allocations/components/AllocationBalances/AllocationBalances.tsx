@@ -16,17 +16,21 @@ interface AllocationBalancesProps {
 }
 
 export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
+  const subAllocationBalance = props.items.reduce(
+    (previousValue, allocation) => (allocation.account.availableBalance?.amount || 0) + previousValue,
+    0,
+  );
   return (
     <section>
       <header>
         <h3 class={css.title}>Balances</h3>
         <div class={css.info}>
-          <strong class={css.total}>{formatCurrency(props.current.account.availableBalance?.amount || 0)}</strong>
-          <Text message="All {name} allocations" name={props.current.name} />
+          <strong class={css.total}>{formatCurrency(subAllocationBalance)}</strong>
+          <Text message="All {name} sub-allocations" name={props.current.name} />
         </div>
       </header>
       <div class={css.wrapper}>
-        <Show when={Boolean(props.current.account.availableBalance?.amount || 0)}>
+        <Show when={Boolean(subAllocationBalance || 0)}>
           <div class={css.chart}>
             <PieChart size={160} data={calcPieChartData(props.items)} />
           </div>
