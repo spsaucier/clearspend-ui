@@ -18,7 +18,7 @@ import { LandingCard } from './LandingCard';
 
 import css from './Landing.css';
 
-const DISMISSED_ONBOARDING_MODAL = 'DISMISSED_ONBOARDING_MODAL';
+const SHOW_ONBOARDING_MODAL = 'SHOW_ONBOARDING_MODAL';
 
 interface LandingProps {
   allocationsCount: number;
@@ -31,13 +31,12 @@ export function Landing(props: Readonly<LandingProps>) {
 
   const users = useUsersList({ initValue: [] });
   const [accounts] = useResource(getBankAccounts);
-
   const [isOpenCongratulationsModal, setIsOpenCongratulationsModal] = createSignal<boolean>(
-    storage.get<boolean>(DISMISSED_ONBOARDING_MODAL, true),
+    storage.get<boolean>(SHOW_ONBOARDING_MODAL, true),
   );
 
   const dismissModal = () => {
-    storage.set(DISMISSED_ONBOARDING_MODAL, false);
+    storage.set(SHOW_ONBOARDING_MODAL, false);
     setIsOpenCongratulationsModal(false);
   };
 

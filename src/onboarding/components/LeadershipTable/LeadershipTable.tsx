@@ -14,7 +14,7 @@ interface LeadershipTableProps {
   onDeleteClick: (id: string) => void;
   onAddClick: () => void;
   currentUserEmail?: string;
-  leaderIdWithError?: string[];
+  leaderIdsWithError?: string[];
 }
 
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
@@ -28,8 +28,10 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         return (
           <div class={css.cell}>
             {`${leader.firstName} ${leader.lastName}`}
-            <Show when={props.leaderIdWithError?.includes(leader.businessOwnerId)}>
-              <Icon name="alert" class={css.error} />
+            <Show when={props.leaderIdsWithError && props.leaderIdsWithError.includes(leader.businessOwnerId)}>
+              <div>
+                <Icon name="alert" class={css.error} />
+              </div>
             </Show>
           </div>
         );

@@ -13,3 +13,12 @@
 .image {
   margin-bottom: var(--pd-40);
 }
+
+.text {
+  max-width: unset;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 20px;
+}

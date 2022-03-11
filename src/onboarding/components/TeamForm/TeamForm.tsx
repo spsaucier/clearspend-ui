@@ -23,6 +23,7 @@ interface TeamFormProps {
   setTitle: (title: string) => void;
   business: Business | null;
   kycErrors?: Readonly<{ [key: string]: string[] }>;
+  onLeaderUpdate: (leaderId: string) => void;
 }
 
 const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
@@ -98,6 +99,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
             if (editingLeaderId()) {
               await updateOwner({ ...leader, id: editingLeaderId() });
+              props.onLeaderUpdate(editingLeaderId());
             } else {
               await createBusinessOwner(leader);
             }
@@ -113,7 +115,11 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           <LeadershipTable
             currentUserEmail={props.currentUser.email}
             leaders={leaders()}
-            leaderIdWithError={props.kycErrors ? Object.keys(props.kycErrors) : []}
+            leaderIdsWithError={
+              props.kycErrors
+                ? Object.keys(props.kycErrors).filter((key) => (props.kycErrors?.[key] as string[]).length > 0)
+                : []
+            }
             onAddClick={() => setShowAddingNewLeader(true)}
             // FIXME
             // eslint-disable-next-line

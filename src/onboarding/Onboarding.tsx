@@ -107,6 +107,7 @@ export default function Onboarding() {
     if (business()) {
       // update
       await updateBusinessInfo(data as UpdateBusiness);
+      setKYBRequiredDocuments([]);
       await refetch();
     } else {
       // create
@@ -136,7 +137,6 @@ export default function Onboarding() {
 
   const onUpdateKYC = async () => {
     try {
-      // todo: trigger loading indicator
       sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
       await triggerBusinessOwners();
       await refetch();
@@ -209,6 +209,13 @@ export default function Onboarding() {
     location.reload();
   };
 
+  const onLeaderUpdate = (leaderId: string) => {
+    setKycRequiredFields({
+      ...kycRequiredFields(),
+      [leaderId]: [],
+    });
+  };
+
   return (
     <MainLayout
       darkSide
@@ -268,6 +275,7 @@ export default function Onboarding() {
                 kycErrors={kycRequiredFields()}
                 setTitle={setTeamTitle}
                 onNext={onUpdateKYC}
+                onLeaderUpdate={onLeaderUpdate}
                 currentUser={currentUser()}
               />
             </Page>
