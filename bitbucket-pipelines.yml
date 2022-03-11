@@ -58,6 +58,7 @@ pipelines:
       - step:
           name: Deploy image to PROD
           image: google/cloud-sdk:latest
+          size: 2x
           deployment: PROD
           services:
             - docker
