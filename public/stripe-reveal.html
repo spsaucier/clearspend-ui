@@ -65,8 +65,8 @@
 
       .copy-icon,
       .copy-icon-success {
-        width: 14px;
-        height: 14px;
+        width: 3vw;
+        height: 3vw;
         background-repeat: no-repeat;
         background-size: 100%;
         background-size: contain;
@@ -190,7 +190,11 @@
           },
         };
 
-        const name = document.getElementById('cardholder-name');
+        document.getElementById('cardholder-name').style.color = params.textColor;
+        document.getElementById('exp-text').style.color = params.textColor;
+        document.getElementById('cvv-text').style.color = params.textColor;
+
+        // const name = document.getElementById('cardholder-name');
         const number = elements.create('issuingCardNumberDisplay', {
           issuingCard: CARD_ID,
           style: NUMBER_STYLE,
@@ -209,7 +213,7 @@
           toCopy: 'number',
         });
 
-        name.textContent = cardResult.issuingCard.cardholder.name;
+        // name.textContent = cardResult.issuingCard.cardholder.name;
         number.mount('#card-number');
         expiry.mount('#card-expiry');
         cvc.mount('#card-cvc');
