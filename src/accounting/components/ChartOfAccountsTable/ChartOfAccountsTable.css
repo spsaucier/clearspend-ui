@@ -43,6 +43,10 @@
   margin-left: var(--pd-48);
 }
 
+.nested-level-5 {
+  margin-left: var(--pd-72);
+}
+
 .expense-category-cell {
   display: grid;
   grid-template-columns: 1fr auto auto;

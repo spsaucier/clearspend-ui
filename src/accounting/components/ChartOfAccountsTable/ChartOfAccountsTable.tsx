@@ -44,7 +44,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
-  const flattenedData = createMemo(() => flattenNestedIntegrationAccounts(props.data));
+  const flattenedData = createMemo(() => {
+    return flattenNestedIntegrationAccounts(props.data);
+  });
 
   const handleSave = async () => {
     const requestParams = Object.values(state).filter((value) => value != null);
@@ -73,6 +75,8 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         return css.nestedLevel3;
       case NestedLevels.Four:
         return css.nestedLevel4;
+      case NestedLevels.Five:
+        return css.nestedLevel5;
       default:
         return undefined;
     }
@@ -137,6 +141,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           : undefined;
         if (initValue) setState(item.id, { accountRef: item.id, categoryIconRef: initValue.iconRef });
         const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(initValue);
+        if (item.hasChildren) {
+          return <></>;
+        }
         return (
           <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory

@@ -19,6 +19,7 @@ export interface FlattenedIntegrationAccount {
   type: string; // TODO: enum
   status: string; // TODO: enum
   level: number;
+  hasChildren: boolean;
 }
 
 export interface IntegrationExpenseAccountMapping {

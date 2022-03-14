@@ -2615,6 +2615,14 @@ export interface UserRolesAndPermissionsRecord {
   )[];
 }
 
+export interface TermsAndConditionsResponse {
+  user?: User;
+  isAcceptedTermsAndConditions?: boolean;
+
+  /** @format date-time */
+  documentTimestamp?: string;
+}
+
 export interface CreateTestDataResponse {
   businesses?: TestBusiness[];
 }

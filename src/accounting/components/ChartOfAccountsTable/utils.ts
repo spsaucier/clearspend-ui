@@ -20,7 +20,7 @@ export const flattenNestedIntegrationAccounts = (
 ): FlattenedIntegrationAccount[] => {
   return accounts.reduce<FlattenedIntegrationAccount[]>((flattenedAccounts, currentValue) => {
     let newArray = flattenedAccounts;
-    newArray.push({ ...currentValue, level: currentLevel });
+    newArray.push({ ...currentValue, level: currentLevel, hasChildren: currentValue.children.length !== 0 });
     if (currentValue.children.length) {
       const nestedAccounts = flattenNestedIntegrationAccounts(currentValue.children, currentLevel + 1);
       newArray = newArray.concat(nestedAccounts);
