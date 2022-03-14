@@ -182,7 +182,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               {/* TODO: get last sync time from BE when available */}
               <span>N/A</span>
             </div>
-            <Button wide icon="sync" disabled={!expenseCategory() || syncingTransaction()} onClick={onSyncTransaction}>
+            <Button
+              wide
+              icon="sync"
+              disabled={!expenseCategory() || syncingTransaction()}
+              onClick={onSyncTransaction}
+              data-name="sync-transaction-button"
+            >
               <Text message="Sync transaction" />
             </Button>
           </div>
@@ -247,6 +253,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                     loading={savingNote()}
                     class={css.noteButton}
                     onClick={onSaveNote}
+                    data-name="save-note-button"
                   />
                 </Show>
               }
