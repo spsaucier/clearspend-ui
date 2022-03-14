@@ -10,6 +10,8 @@ import { isBankAccount } from 'onboarding/components/BankAccounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { useMessages } from 'app/containers/Messages/context';
+import { i18n } from '_common/api/intl';
 
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
@@ -33,6 +35,7 @@ interface ManageBalanceProps {
 
 export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
+  const messages = useMessages();
 
   const [current, setCurrent] = createSignal<Readonly<Allocation>>();
   const [successManageData, setSuccessManageData] = createSignal<Readonly<ManageBalanceSuccessData>>();
@@ -75,10 +78,19 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
     await props.onReload();
 
     if (targetIsBankAccount) {
+      const message = i18n.t('Your funds will be available within 3-5 business days.');
       if (isWithdraw) {
         sendAnalyticsEvent({ name: Events.WITHDRAW_CASH, data: { amount } });
+        messages.success({
+          title: i18n.t('Deposit request successful'),
+          message,
+        });
       } else {
         sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+        messages.success({
+          title: i18n.t('Withdrawal request successful'),
+          message,
+        });
       }
     } else {
       sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
