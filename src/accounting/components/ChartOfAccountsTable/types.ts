@@ -3,9 +3,7 @@ export interface IntegrationAccountMapping {
   categoryIconRef: number;
 }
 
-export interface IntegrationAccountMap {
-  [key: string]: IntegrationAccountMapping | null;
-}
+export type IntegrationAccountMap = Record<string, Readonly<IntegrationAccountMapping> | null>;
 
 export enum NestedLevels {
   One = 1,
