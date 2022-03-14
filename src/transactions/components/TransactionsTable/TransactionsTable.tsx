@@ -28,6 +28,7 @@ import type {
 import { Drawer } from '_common/components/Drawer';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -64,11 +65,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             </div>
           );
         } else if (item.expenseDetails?.iconRef !== undefined) {
-          return (
-            <div class={css.syncDot}>
-              <Icon name={'refresh'} class={css.sync} />
-            </div>
-          );
+          return <SyncSelectIcon />;
         } else {
           return (
             <div class={css.errorDot}>

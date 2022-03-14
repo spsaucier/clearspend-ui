@@ -1,0 +1,1 @@
+export { SyncSelectIcon } from './SyncSelectIcon';

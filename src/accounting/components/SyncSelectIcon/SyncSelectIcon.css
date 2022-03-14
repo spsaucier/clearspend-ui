@@ -1,0 +1,34 @@
+.sync-dot {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--tw-green-10);
+  border: 1px solid var(--tw-green-20);
+  border-radius: 50%;
+}
+
+.sync {
+  color: var(--tw-green-80);
+}
+
+.control-container {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.control {
+  @nest .item > input:checked + .content & {
+    background-color: var(--tw-primary-bg);
+    border-color: var(--tw-primary-bg);
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
