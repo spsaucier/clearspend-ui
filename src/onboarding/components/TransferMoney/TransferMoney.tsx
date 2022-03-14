@@ -66,7 +66,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
       <Section
-        title="Add balance"
+        title={<Text message="Add balance" />}
         description={
           <Text
             message="To have an active account, you need a minimum balance of {amount}."
@@ -76,7 +76,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
         class={css.section}
       >
         <div class={css.wrapper}>
-          <FormItem label="Amount" error={errors().amount}>
+          <FormItem label={<Text message="Amount to deposit" />} error={errors().amount}>
             <Input
               name="amount"
               placeholder={formatCurrency(0)}
@@ -88,15 +88,19 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
           </FormItem>
         </div>
       </Section>
-      <Section title="Select account" class={css.section}>
+      <Section title={<Text message="Funding source" />} class={css.section}>
         <div class={css.wrapper}>
           <FormItem error={errors().account}>
             <BankAccounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
           </FormItem>
         </div>
-        <p>
-          <Text message="By clicking Authorize Deposit, you authorize ClearSpend to debit the bank account specified for the amount shown above. Once authorized, this funds transfer cannot be canceled. Please allow up to 5 business days for this transfer to be credited to your ClearSpend account." />
-        </p>
+        <Text
+          message={
+            'By clicking Authorize Deposit, you authorize ClearSpend to debit the bank account specified ' +
+            'for the amount shown above. Once authorized, this funds transfer cannot be canceled. ' +
+            'Please allow up to 5 business days for this transfer to be credited to your ClearSpend account.'
+          }
+        />
         <Button
           type="primary"
           htmlType="submit"

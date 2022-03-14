@@ -7,11 +7,12 @@ import { createForm, Form, FormItem, hasErrors } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Button } from '_common/components/Button';
 import { useMessages } from 'app/containers/Messages/context';
+import { useBusiness } from 'app/containers/Main/context';
 import type { Allocation, BankAccount } from 'generated/capital';
 import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 
-import { useBusiness } from '../../../app/containers/Main/context';
+import { BankTransferNotice } from '../BankTransferNotice';
 
 import css from './ManageBalanceForm.css';
 
@@ -44,11 +45,12 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
     defaultValues: { target: '', amount: '' },
     rules: {
       amount: [
-        (value: string): boolean | string => {
-          const amount = parseAmount(value);
-          const target = props.targets.find(targetById(values().target))!;
+        (amountValue, formValues): boolean | string => {
+          const amount = parseAmount(amountValue);
+          const target = props.targets.find(targetById(formValues.target));
 
           return (
+            !target ||
             (props.withdraw && amount <= (props.current.account.availableBalance?.amount || 0)) ||
             (!props.withdraw && (isBankAccount(target) || amount <= (target.account.availableBalance?.amount || 0))) ||
             String(i18n.t('Insufficient funds.'))
@@ -72,6 +74,8 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
     return !Number.isNaN(num) && num > 0 && Boolean(target);
   });
 
+  const selectedTarget = createMemo(() => props.targets.find(targetById(values().target)));
+
   return (
     <>
       <Form class={css.form}>
@@ -94,12 +98,17 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
           </FormItem>
         </Show>
       </Form>
-      <Show when={currentUser().type === 'BUSINESS_OWNER'}>
-        <InternalBankAccount heading={<Text message="Want to wire money?" />} />
-      </Show>
-      <Button wide type="primary" loading={loading()} disabled={!isValid()} onClick={onSubmit}>
-        <Text message="Update Balance" />
-      </Button>
+      <div class={css.footer}>
+        <Show when={currentUser().type === 'BUSINESS_OWNER'}>
+          <InternalBankAccount heading={<Text message="Want to wire money?" />} />
+        </Show>
+        <Show when={isBankAccount(selectedTarget())}>
+          <BankTransferNotice withdraw={Boolean(props.withdraw)} class={css.notice} />
+        </Show>
+        <Button wide type="primary" loading={loading()} disabled={!isValid()} onClick={onSubmit}>
+          <Text message="Update Balance" />
+        </Button>
+      </div>
     </>
   );
 }

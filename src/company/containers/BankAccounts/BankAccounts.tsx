@@ -1,4 +1,4 @@
-import { createMemo, Show } from 'solid-js';
+import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
@@ -24,22 +24,21 @@ export function BankAccounts() {
     return Promise.resolve();
   };
 
-  const extraProps = createMemo(() => {
-    if (accounts()?.length) {
-      return {
-        description:
-          'To change this bank account, please unlink it first. Unlinking this account will not affect any pending transfers.',
-      };
-    }
-    return {};
-  });
-
   return (
     <Section
       title={<Text message="Your company bank account" />}
+      description={
+        !!accounts()?.length && (
+          <Text
+            message={
+              'To change this bank account, please unlink it first. ' +
+              'Unlinking this account will not affect any pending transfers.'
+            }
+          />
+        )
+      }
       class={css.section}
       contentClass={css.sectionContent}
-      {...extraProps()}
     >
       <Data
         data={accounts()}

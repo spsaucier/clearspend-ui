@@ -15,8 +15,10 @@ interface LinkAccountStepProps {
 export default function LinkAccountStep(props: LinkAccountStepProps) {
   return (
     <Section
-      title="Connect your bank"
-      description="Connecting your bank account brings you one step closer to becoming an expense management superstar."
+      title={<Text message="Connect your bank" />}
+      description={
+        <Text message="Connecting your bank account brings you one step closer to becoming an expense management superstar." />
+      }
       contentClass={css.verifySectionContent}
       class={css.root}
     >

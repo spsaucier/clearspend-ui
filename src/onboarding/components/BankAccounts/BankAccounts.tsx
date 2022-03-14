@@ -10,9 +10,9 @@ import type { BankAccount, Allocation } from 'generated/capital';
 import css from './BankAccounts.css';
 
 export function isBankAccount(
-  value: Readonly<Required<BankAccount> | Allocation>,
+  value: Readonly<Required<BankAccount> | Allocation> | undefined,
 ): value is Readonly<Required<BankAccount>> {
-  return 'businessBankAccountId' in value;
+  return !!value && 'businessBankAccountId' in value;
 }
 
 interface BankAccountsProps {

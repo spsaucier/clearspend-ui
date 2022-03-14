@@ -206,6 +206,7 @@ export default function Onboarding() {
     await completeOnboarding();
     sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
     sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
+    navigate('/');
     location.reload();
   };
 
@@ -227,7 +228,10 @@ export default function Onboarding() {
           <Show when={media.medium}>
             <div class={css.estimated}>
               <Icon size={'md'} name={'clock'} />
-              Estimated time remaing: {getMinutesRemaining(step())} minutes
+              <Text
+                message="Estimated time remaining: {minutes} {minutes, plural, one {minute} other {minutes}}"
+                minutes={getMinutesRemaining(step())}
+              />
             </div>
             <div class={css.steps}>
               <SideSteps step={step()} />
@@ -256,7 +260,7 @@ export default function Onboarding() {
         <Switch>
           <Match when={step() === OnboardingStep.BUSINESS || (!step() && businessProspectInfo()?.businessType)}>
             <Page
-              title="First, tell us a little bit about your business"
+              title={<Text message="First, tell us a little bit about your business" />}
               headerClass={css.border}
               titleClass={css.thin}
             >
@@ -281,7 +285,7 @@ export default function Onboarding() {
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.SOFT_FAIL}>
-            <Page title="Just a few more things..." headerClass={css.border} titleClass={css.thin}>
+            <Page title={<Text message="Just a few more things..." />} headerClass={css.border} titleClass={css.thin}>
               <SoftFail
                 kybRequiredDocuments={kybRequiredDocuments()}
                 kycRequiredDocuments={kycRequiredDocuments()}
@@ -294,7 +298,7 @@ export default function Onboarding() {
           </Match>
           <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
             <Page
-              title="Show us the money! Well...kind of. It's time to link your bank account 💰"
+              title={<Text message="Show us the money! Well...kind of. It's time to link your bank account 💰" />}
               headerClass={css.border}
               titleClass={css.thin}
             >
@@ -302,7 +306,13 @@ export default function Onboarding() {
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.TRANSFER_MONEY}>
-            <Page title="Transfer money" headerClass={css.border} titleClass={css.thin}>
+            <Page
+              title={
+                <Text message="One last thing! To start issuing ClearSpend cards, you must have at least $100 in your account" />
+              }
+              headerClass={css.border}
+              titleClass={css.thin}
+            >
               <Show when={accounts()}>
                 <TransferMoney accounts={accounts()} onDeposit={onDeposit} />
               </Show>

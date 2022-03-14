@@ -1,0 +1,1 @@
+export { BankTransferNotice } from './BankTransferNotice';

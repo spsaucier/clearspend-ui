@@ -1,0 +1,12 @@
+.title {
+  margin: 0 0 var(--pd-8);
+  font-family: var(--font-header);
+  font-weight: var(--font-400);
+}
+
+.message {
+  margin: 0;
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+  line-height: 1.33;
+}

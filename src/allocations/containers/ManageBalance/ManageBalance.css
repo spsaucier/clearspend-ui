@@ -6,5 +6,6 @@
 
 .allocation {
   margin-bottom: var(--pd-24);
+  flex-shrink: 0;
   font-size: var(--text-20);
 }
