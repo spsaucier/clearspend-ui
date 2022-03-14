@@ -2558,9 +2558,6 @@ export interface Receipt {
 
   /** @format uuid */
   accountId?: string;
-
-  /** @format uuid */
-  adjustmentId?: string;
   amount: Amount;
 }
 
