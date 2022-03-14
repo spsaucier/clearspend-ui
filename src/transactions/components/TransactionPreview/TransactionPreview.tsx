@@ -90,7 +90,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           setNote(undefined);
           messages.success({
             title: i18n.t('Success'),
-            message: i18n.t('Your changes has been successfully saved.'),
+            message: i18n.t('Your changes have been successfully saved.'),
           });
         });
       })
@@ -245,7 +245,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <Input
               prefix={<Icon name="file" size="sm" />}
               suffix={
-                <Show when={note()}>
+                <Show when={note() || (transaction().notes && !note())}>
                   <Button
                     size="sm"
                     icon="edit"
