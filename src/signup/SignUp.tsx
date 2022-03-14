@@ -276,7 +276,11 @@ export default function SignUp() {
               extraDescription={
                 <div class={css.extraDescription}>
                   <Text
-                    message={`It could end up in your spam folder, but if you don't get it within 5 minutes, please click  "I didn't receive the code" below and we'll try again, and again until one of us needs a break ☕️`}
+                    message={
+                      "It could end up in your spam folder, but if you don't get it within 5 minutes, " +
+                      'please click  "Resend code" below and we\'ll try again, ' +
+                      'and again until one of us needs a break ☕️'
+                    }
                   />
                 </div>
               }
@@ -284,7 +288,7 @@ export default function SignUp() {
               onConfirm={onEmailConfirm}
               extraBtn={
                 <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.AccountSetUpStep)}>
-                  Use different email
+                  <Text message="Use different email" />
                 </Button>
               }
             />

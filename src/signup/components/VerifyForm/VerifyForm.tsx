@@ -1,4 +1,5 @@
 import { JSXElement, onMount, Show } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { InputCode } from '_common/components/InputCode';
@@ -29,6 +30,8 @@ interface VerifyFormProps {
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
   let input!: HTMLInputElement;
+  const i18n = useI18n();
+
   onMount(() => input.focus());
 
   const [secondsLeft, restartTimer] = createTimer(RESEND_TIMEOUT_IN_SEC);
@@ -48,8 +51,8 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       confirm(code).catch((error: { data: { message?: string } }) => {
         setErrors({
           code: error.data.message?.includes('NonUniqueResultException')
-            ? 'Account alredy exists with this email.'
-            : 'Invalid code or something went wrong',
+            ? String(i18n.t('Account already exists with this email.'))
+            : String(i18n.t('Invalid code or something went wrong')),
         });
       });
     }
@@ -61,7 +64,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       <Description>{props.description}</Description>
       {props.extraDescription}
       <Form>
-        <FormItem label="Enter confirmation code" error={errors().code}>
+        <FormItem label={<Text message="Enter confirmation code" />} error={errors().code}>
           <InputCode
             ref={input}
             name="code"
@@ -75,8 +78,9 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
         </FormItem>
         <Show when={props.onResend}>
           <FlatButton hideIcon={true} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
-            Resend code
-            {secondsLeft() > 0 && <span> in {secondsLeft()} sec</span>}
+            <Show when={secondsLeft() > 0} fallback={<Text message="Resend code" />}>
+              <Text message="Resend code in {seconds} sec" seconds={secondsLeft()} />
+            </Show>
           </FlatButton>
         </Show>
         <Show when={props.extraBtn}>{props.extraBtn}</Show>

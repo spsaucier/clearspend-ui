@@ -29,6 +29,7 @@ const DEFAULT_PARAMS: Readonly<AccountActivityRequest> = {
     'BANK_WITHDRAWAL_RETURN',
     'MANUAL',
     'REALLOCATE',
+    'FEE',
   ],
 };
 
