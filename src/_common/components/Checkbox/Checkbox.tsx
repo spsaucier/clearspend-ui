@@ -28,7 +28,7 @@ export function Checkbox(props: Readonly<CheckboxProps>) {
   const disabled = createMemo(() => props.disabled ?? group.disabled);
 
   return (
-    <label class={join(css.root, props.class)}>
+    <label class={join(css.root, props.class)} onClick={(e) => e.stopPropagation()}>
       <input
         type="checkbox"
         name={name()}

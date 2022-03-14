@@ -64,8 +64,16 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               <Icon name={'lock'} class={css.lock} />
             </div>
           );
-        } else if (item.expenseDetails?.iconRef !== undefined) {
-          return <SyncSelectIcon />;
+        } else if (item.expenseDetails?.iconRef !== undefined && item.accountActivityId !== undefined) {
+          return (
+            <SyncSelectIcon
+              id={item.accountActivityId}
+              onChange={() => {
+                // TODO add form
+                return null;
+              }}
+            />
+          );
         } else {
           return (
             <div class={css.errorDot}>
