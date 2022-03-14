@@ -119,6 +119,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
   const onSyncTransaction = () => {
+    props.onUpdate({ ...transaction(), syncStatus: 'SYNCED_LOCKED' });
     setSyncingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
