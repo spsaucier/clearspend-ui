@@ -204,10 +204,10 @@ export default function Onboarding() {
 
   const skipDeposit = async () => {
     await completeOnboarding();
+    await refetch();
     sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
     sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
     navigate('/');
-    location.reload();
   };
 
   const onLeaderUpdate = (leaderId: string) => {

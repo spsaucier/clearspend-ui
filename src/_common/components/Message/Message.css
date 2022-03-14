@@ -34,6 +34,7 @@
 }
 
 .message {
+  max-width: 250px;
   margin-top: var(--pd-4);
 }
 
