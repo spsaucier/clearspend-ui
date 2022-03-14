@@ -49,7 +49,7 @@ export default function Profile() {
           <ProfileInfo data={user()!} class={css.info} />
         </Data>
         <Button size="lg" icon="edit" onClick={() => navigate('/profile/settings')}>
-          <Text message="Update Profile" />
+          <Text message="Update Address" />
         </Button>
       </Section>
       <Section title={<Text message="Cards" />} description={'All cards assigned to your account'} class={css.section}>

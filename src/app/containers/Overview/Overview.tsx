@@ -102,12 +102,12 @@ export function Overview(props: Readonly<OverviewProps>) {
 
   return (
     <div class={css.root}>
+      <Show when={!media.small}>
+        <TabList value={period()} onChange={changePeriod}>
+          <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
+        </TabList>
+      </Show>
       <Show when={currentUser().type === 'BUSINESS_OWNER' || canManageFunds(userPermissions())}>
-        <Show when={!media.small}>
-          <TabList value={period()} onChange={changePeriod}>
-            <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
-          </TabList>
-        </Show>
         <div class={css.top}>
           <Data
             error={spendStore.error}
