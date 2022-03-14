@@ -37,6 +37,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
+    if (loading()) return;
     update(data.password).catch(() => {
       setErrors({ password: String(i18n.t('Something went wrong')) });
     });

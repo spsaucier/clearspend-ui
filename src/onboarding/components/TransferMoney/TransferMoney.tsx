@@ -1,4 +1,5 @@
-import { Text } from 'solid-i18n';
+import { createSignal } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
 import { useMediaContext } from '_common/api/media/context';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -9,9 +10,7 @@ import { Input } from '_common/components/Input';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
-import { wrapAction } from '_common/utils/wrapAction';
 import type { BankAccount } from 'generated/capital';
-import { i18n } from '_common/api/intl';
 import { registerBankAccount } from 'onboarding/services/accounts';
 import { completeOnboarding } from 'allocations/services';
 
@@ -38,9 +37,11 @@ interface DepositError {
 }
 
 export function TransferMoney(props: Readonly<TransferMoneyProps>) {
+  const i18n = useI18n();
   const media = useMediaContext();
   const messages = useMessages();
-  const [loading, deposit] = wrapAction(props.onDeposit);
+
+  const [loading, setLoading] = createSignal(false);
 
   const { values, errors, isDirty, handlers, wrapSubmit } = createForm<FormValues>({
     defaultValues: { amount: '', account: props.accounts[0]?.businessBankAccountId || '' },
@@ -48,18 +49,28 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
   });
 
   const onSubmit = async (data: Readonly<FormValues>) => {
-    if (!loading()) {
+    if (loading()) return;
+    setLoading(true);
+
+    try {
       await registerBankAccount(data.account);
-      await completeOnboarding();
-      deposit(data.account, parseAmount(data.amount)).catch((res: DepositError) => {
-        const message =
-          res.data.message.indexOf('does not have sufficient funds') > -1
-            ? `${String(i18n.t('Insufficient funds in this account for deposit of'))} ${formatCurrency(
-                parseAmount(data.amount),
-              )}`
-            : res.data.message;
-        messages.error({ title: 'Deposit unsuccessful', message });
+      await props.onDeposit(data.account, parseAmount(data.amount)).catch((error: DepositError) => {
+        messages.error({
+          title: String(i18n.t('Deposit unsuccessful')),
+          message: error.data.message.includes('does not have sufficient funds')
+            ? String(
+                i18n.t('Insufficient funds in this account for deposit of {amount}', {
+                  amount: formatCurrency(parseAmount(data.amount)),
+                }),
+              )
+            : error.data.message,
+        });
+        throw error;
       });
+      await completeOnboarding();
+      setLoading(false);
+    } catch (e: unknown) {
+      setLoading(false);
     }
   };
 
