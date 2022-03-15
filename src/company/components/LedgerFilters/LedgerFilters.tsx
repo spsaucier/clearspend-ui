@@ -66,7 +66,7 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
               <Text message="Approved" />
             </Checkbox>
             <Checkbox value="DECLINED">
-              <Text message="Blocked" />
+              <Text message="Declined" />
             </Checkbox>
             <Checkbox value="PENDING">
               <Text message="Pending" />
