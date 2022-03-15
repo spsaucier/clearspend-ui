@@ -18,7 +18,7 @@ import { AddEditLeaderForm } from './AddEditLeaderForm';
 import css from './TeamForm.css';
 
 interface TeamFormProps {
-  onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest[]>) => Promise<unknown>;
+  onNext: () => Promise<unknown>;
   currentUser: User;
   setTitle: (title: string) => void;
   business: Business | null;
@@ -171,7 +171,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             disabled={hasOtherOwners() && (!complete() || loading())}
             loading={loading() || updating()}
             onClick={() => {
-              next(leaders());
+              next();
             }}
           >
             <Text message="Next" />

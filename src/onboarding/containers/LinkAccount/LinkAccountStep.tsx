@@ -1,3 +1,4 @@
+import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
@@ -10,6 +11,8 @@ import css from './LinkAccountStep.css';
 interface LinkAccountStepProps {
   onSuccess: (token: string, accountName?: string | undefined) => Promise<unknown>;
   skipDeposit: () => {};
+  onCheckVerification: () => void;
+  disabled: boolean;
 }
 
 export default function LinkAccountStep(props: LinkAccountStepProps) {
@@ -22,7 +25,15 @@ export default function LinkAccountStep(props: LinkAccountStepProps) {
       contentClass={css.verifySectionContent}
       class={css.root}
     >
-      <LinkAccount verifyOnLoad={false} onSuccess={props.onSuccess} />
+      <Show when={props.disabled}>
+        <div class={css.wrapper}>
+          <Button type="primary" onClick={props.onCheckVerification}>
+            <Text message="Check verification status" />
+          </Button>
+        </div>
+      </Show>
+      <LinkAccount verifyOnLoad={false} onSuccess={props.onSuccess} disabled={props.disabled} />
+
       <h3 class={css.heading}>
         <Text message="Don’t want to connect a bank account now?" />
       </h3>

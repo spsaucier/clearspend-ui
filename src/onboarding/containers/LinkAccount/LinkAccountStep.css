@@ -9,6 +9,10 @@
   font-weight: 400;
 }
 
+.wrapper {
+  margin-bottom: var(--pd-24);
+}
+
 .verify-section-content {
   @media (--bp-large) {
     max-width: 394px;

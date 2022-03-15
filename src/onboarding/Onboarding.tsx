@@ -75,6 +75,8 @@ export default function Onboarding() {
   const [kybRequiredFields, setKybRequiredFields] = createSignal<readonly Readonly<string>[]>();
   const [kycRequiredFields, setKycRequiredFields] = createSignal<Readonly<{ [key: string]: string[] }>>({});
 
+  const [pendingVerification, setPendingVerification] = createSignal<readonly Readonly<string>[]>([]);
+
   if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
     getBankAccounts()
       .then((data) => setAccounts(data))
@@ -135,10 +137,12 @@ export default function Onboarding() {
     }
   };
 
-  const onUpdateKYC = async () => {
+  const onUpdateKYC = async (skipTrigger?: boolean) => {
     try {
       sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
-      await triggerBusinessOwners();
+      if (!skipTrigger) {
+        await triggerBusinessOwners();
+      }
       await refetch();
       const reviewRequirements = await getApplicationReviewRequirements();
 
@@ -147,6 +151,8 @@ export default function Onboarding() {
 
       setKybRequiredFields(reviewRequirements.kybRequiredFields);
       setKycRequiredFields(reviewRequirements.kycRequiredFields);
+
+      setPendingVerification(reviewRequirements.pendingVerification);
 
       if (reviewRequirements.kybRequiredFields.length > 0) {
         setStep(OnboardingStep.BUSINESS);
@@ -173,6 +179,7 @@ export default function Onboarding() {
 
   const onGotVerifyToken = async (token: string, accountName?: string) => {
     const bankAccounts = await linkBankAccounts(token);
+
     batch(async () => {
       const matchedAccounts = accountName
         ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
@@ -198,11 +205,18 @@ export default function Onboarding() {
   const checkReviewStatus = async () => {
     await refetch();
     if (business()?.onboardingStep !== 'REVIEW') {
+      setPendingVerification([]);
       setStep(business()?.onboardingStep as OnboardingStep);
     }
   };
 
   const skipDeposit = async () => {
+    // temp patch while backend resolves issue of pending verification to proper business step
+    if (pendingVerification().length > 0) {
+      await onUpdateKYC(true);
+      return;
+    }
+
     await completeOnboarding();
     await refetch();
     sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
@@ -302,7 +316,12 @@ export default function Onboarding() {
               headerClass={css.border}
               titleClass={css.thin}
             >
-              <LinkAccountStep onSuccess={onGotVerifyToken} skipDeposit={skipDeposit} />
+              <LinkAccountStep
+                disabled={pendingVerification().length > 0}
+                onSuccess={onGotVerifyToken}
+                skipDeposit={skipDeposit}
+                onCheckVerification={() => onUpdateKYC(true)}
+              />
             </Page>
           </Match>
           <Match when={step() === OnboardingStep.TRANSFER_MONEY}>
