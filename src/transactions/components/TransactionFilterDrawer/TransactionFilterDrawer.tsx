@@ -11,7 +11,7 @@ import { Radio, RadioGroup } from '_common/components/Radio';
 import { SelectDateRange } from '_common/components/SelectDateRange';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
-import { useAllocations } from 'allocations/stores/allocations';
+import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 
 import type { ActivityStatus } from '../../types';
 
@@ -36,7 +36,7 @@ interface TransactionFilterDrawerProps {
 
 export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerProps>) {
   const i18n = useI18n();
-  const allocations = useAllocations({ initValue: [] });
+  const expenseCategories = useExpenseCategories({ initValue: [] });
 
   const { values, handlers } = createForm<FormValues>({
     // TODO update when API is ready - CAP-305
@@ -89,10 +89,12 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
           <MultiSelect
             value={values().categories}
             placeholder={String(i18n.t('Search for a category'))}
-            valueRender={(id) => allocations.data!.find((item) => item.allocationId === id)?.name}
+            valueRender={(name) => expenseCategories.data!.find((item) => item.categoryName === name)?.categoryName}
             onChange={handlers.categories}
           >
-            <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
+            <For each={expenseCategories.data}>
+              {(item) => <Option value={item.categoryName || ''}>{item.categoryName || ''}</Option>}
+            </For>
           </MultiSelect>
         </FilterBox>
         <Show when={props.showAccountingAdminView}>
