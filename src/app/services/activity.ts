@@ -8,6 +8,7 @@ import type {
   DashboardGraphData,
   GraphDataRequest,
   PagedDataAccountActivityResponse,
+  UpdateAccountActivityRequest,
 } from 'generated/capital';
 import type { ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
 
@@ -31,9 +32,10 @@ export async function getActivityById(activityId: string) {
   return (await service.get<Readonly<AccountActivityResponse>>(`/account-activity/${activityId}`)).data;
 }
 
-export async function setActivityNote(activityId: string, notes: string) {
-  return (await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, { notes }))
-    .data;
+export async function setActivityNote(activityId: string, activityUpdate: UpdateAccountActivityRequest) {
+  return (
+    await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, activityUpdate)
+  ).data;
 }
 
 export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: number | null, notes: string) {

@@ -83,7 +83,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const [savingNote, saveNote] = wrapAction(setActivityNote);
 
   const onSaveNote = () => {
-    saveNote(props.transaction.accountActivityId!, note()!)
+    saveNote(props.transaction.accountActivityId!, {
+      notes: note()!,
+      iconRef: props.transaction.expenseDetails?.iconRef,
+    })
       .then((data) => {
         batch(() => {
           props.onUpdate(data);
@@ -109,6 +112,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         batch(() => {
           props.onUpdate(data);
           setExpenseCategory(ec);
+          messages.success({
+            title: i18n.t('Success'),
+            message: i18n.t('Your changes have been successfully saved.'),
+          });
         });
       })
       .catch(() => {
@@ -124,6 +131,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
+
+  const canSubmitNote = createMemo(() => {
+    return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
+  });
 
   return (
     <div class={css.root}>
@@ -245,7 +256,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <Input
               prefix={<Icon name="file" size="sm" />}
               suffix={
-                <Show when={note() || (transaction().notes && !note())}>
+                <Show when={canSubmitNote()}>
                   <Button
                     size="sm"
                     icon="edit"
@@ -261,7 +272,9 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               value={notes()}
               disabled={savingNote()}
               onKeyDown={(event: KeyboardEvent) => {
-                if (event.keyCode === KEY_CODES.Enter) onSaveNote();
+                if (event.keyCode === KEY_CODES.Enter && canSubmitNote()) {
+                  onSaveNote();
+                }
               }}
               onChange={setNote}
             />
