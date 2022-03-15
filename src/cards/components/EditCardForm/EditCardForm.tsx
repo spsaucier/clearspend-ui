@@ -26,7 +26,6 @@ import {
 import { AddressSelect } from 'employees/components/AddressSelect';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { SelectEmployee } from 'employees/components/SelectEmployee';
-import { formatName } from 'employees/utils/formatName';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   Address,
@@ -115,12 +114,6 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     return allocation()?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
   });
 
-  const ownerName = createMemo(() => {
-    const id = values().employee;
-    const user = Boolean(id) && values().personal ? props.users.find((item) => item.userId === id) : undefined;
-    return user && formatName(user);
-  });
-
   createEffect(() => {
     const prevID = untrack(allocationData)?.allocation.allocationId;
     const currID = allocation()?.allocationId;
@@ -192,14 +185,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
         }
       >
         <FormItem multiple label={<Text message="Card type(s)" />} error={errors().types}>
-          <CardTypeSelect
-            value={values().types}
-            allocation={allocation()?.name}
-            balance={allocation()?.account.availableBalance?.amount || 0}
-            name={ownerName()}
-            class={css.types}
-            onChange={handlers.types}
-          />
+          <CardTypeSelect value={values().types} class={css.types} onChange={handlers.types} />
         </FormItem>
         <SwitchBox
           name="name-on-card"

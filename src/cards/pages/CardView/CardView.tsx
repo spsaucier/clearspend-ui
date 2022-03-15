@@ -17,7 +17,6 @@ import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { canManagePermissions } from 'allocations/utils/permissions';
-import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
@@ -154,12 +153,9 @@ export default function CardView() {
               <div {...args} class={css.cardWrapper}>
                 <Card
                   type={card()!.type as CardType}
-                  name={media.medium ? undefined : user() ? formatName(user()!) : ''}
-                  allocation={media.medium ? undefined : allocation()?.name}
                   number={card()!.lastFour || ''}
-                  balance={media.medium ? undefined : allocation()?.account.availableBalance?.amount || 0}
                   status={card()!.status}
-                  notActivated={!card()!.activated}
+                  activated={card()!.activated}
                 />
               </div>
             )}

@@ -1,34 +1,22 @@
 .root {
   display: block;
+  border-radius: var(--radius-10);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-.text {
+.number {
   font-family: var(--font-main);
-  font-size: var(--text-14);
-}
-
-.type {
-  font-family: var(--font-main);
-  font-size: var(--text-16);
-  line-height: 1.5;
-}
-
-.amount {
-  font-family: var(--font-header);
-  font-size: var(--text-20);
-  font-weight: var(--font-700);
+  font-size: var(--text-12);
 }
 
 .inactive {
-  font-size: var(--text-16);
-  line-height: 1.5;
+  font-size: var(--text-20);
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
 
 .frozen {
   font-size: var(--text-12);
-  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }

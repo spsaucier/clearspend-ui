@@ -61,7 +61,7 @@ export default function Profile() {
                   type={item.card.type as CardType}
                   number={item.card.cardNumber}
                   status={item.card.status}
-                  notActivated={!item.card.activated}
+                  activated={item.card.activated}
                   class={css.card}
                   onClick={() => setCardID(item.card.cardId)}
                 />

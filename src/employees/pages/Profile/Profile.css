@@ -21,7 +21,5 @@
 .card {
   width: v-card-width;
   height: auto;
-  border-radius: var(--radius-8);
-  box-shadow: 0 16px 24px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }

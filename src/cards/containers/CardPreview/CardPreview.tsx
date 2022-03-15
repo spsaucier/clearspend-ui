@@ -10,7 +10,6 @@ import { useBusiness } from 'app/containers/Main/context';
 import { getAccountActivity } from 'app/services/activity';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import { formatName } from 'employees/utils/formatName';
 import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
@@ -72,12 +71,9 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
         <div class={css.content}>
           <Card
             type={card()!.type as CardType}
-            name={user() ? formatName(user()!) : ''}
             number={card()!.lastFour || ''}
-            allocation={allocation()?.name}
-            balance={data()!.availableBalance.amount}
             status={card()!.status}
-            notActivated={!card()!.activated}
+            activated={card()!.activated}
             class={css.card}
           />
           <TabList value={tab()} onChange={setTab}>

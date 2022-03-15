@@ -7,21 +7,21 @@ export default {
   component: Card,
   argTypes: {
     type: {
-      options: CardType,
       control: { type: 'radio' },
+      options: Object.keys(CardType),
     },
-    number: { control: { type: 'number' } },
-    name: { control: { type: 'text' } },
-    allocation: { control: { type: 'text' } },
-    details: { control: { type: 'text' } },
-    balance: { control: { type: 'number' } },
+    number: { control: { type: 'text' } },
+    status: {
+      control: { type: 'radio' },
+      options: ['ACTIVE', 'INACTIVE'],
+    },
+    activated: { control: { type: 'boolean' } },
   },
   args: {
-    type: CardType.VIRTUAL,
-    name: 'Renaud Béranger',
-    allocation: 'Marketing Q1 2022 (Advertisement)',
-    number: 4056232515578984,
-    balance: 4586.3,
+    type: CardType.PHYSICAL,
+    number: '4056232515578984',
+    status: 'ACTIVE',
+    activated: true,
   },
 };
 

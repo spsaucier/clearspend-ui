@@ -1,4 +1,3 @@
-import { createMemo } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Checkbox, CheckboxGroup, Tick } from '_common/components/Checkbox';
@@ -11,16 +10,11 @@ import css from './CardTypeSelect.css';
 
 interface CardTypeSelectProps {
   value: readonly CardType[];
-  balance?: number;
-  name?: string;
-  allocation?: string;
   class?: string;
   onChange?: (value: CardType[]) => void;
 }
 
 export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
-  const balance = createMemo(() => props.balance || 0);
-
   return (
     <CheckboxGroup
       empty
@@ -31,14 +25,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
     >
       <Checkbox value={CardType.VIRTUAL} class={css.item}>
         <div class={css.content}>
-          <Card
-            type={CardType.VIRTUAL}
-            name={props.name}
-            number="1234"
-            allocation={props.allocation}
-            balance={balance()}
-            class={css.card}
-          />
+          <Card type={CardType.VIRTUAL} number="1234" class={css.card} />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Virtual card" />
@@ -52,14 +39,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
       </Checkbox>
       <Checkbox value={CardType.PHYSICAL} class={css.item}>
         <div class={css.content}>
-          <Card
-            type={CardType.PHYSICAL}
-            name={props.name}
-            number="1234"
-            allocation={props.allocation}
-            balance={balance()}
-            class={css.card}
-          />
+          <Card type={CardType.PHYSICAL} number="1234" class={css.card} />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Physical card" />
