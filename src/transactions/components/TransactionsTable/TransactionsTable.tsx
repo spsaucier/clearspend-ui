@@ -99,7 +99,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'card',
-      title: <Text message="Card" />,
+      title: <Text message="Card • Employee" />,
       render: (item) => (
         <div>
           <Show when={item.card} fallback="--">
@@ -113,6 +113,16 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               })}
             </div>
           </Show>
+        </div>
+      ),
+    },
+    {
+      name: 'card',
+      title: <Text message="Allocation" />,
+      render: (item) => (
+        <div>
+          <div data-name="allocation-name">{item.card?.allocationName}</div>
+          <div class={css.sub}>{/* TODO: Parent allocation */}</div>
         </div>
       ),
     },
@@ -133,8 +143,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'amount',
-      title: <Text message="Amount" />,
+      title: <Text message="Amount • Status" />,
       render: (item) => <TransactionsTableAmount status={item.status!} amount={item.amount} />,
+    },
+    {
+      name: 'expense-category',
+      title: <Text message="Expense Category" />,
+      render: (item) => <div data-name="expense-category">{item.expenseDetails?.categoryName}</div>,
     },
     {
       name: 'receipt',
