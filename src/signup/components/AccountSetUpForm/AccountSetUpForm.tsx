@@ -60,7 +60,7 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
         <Text message="Let's get your account set up" />
       </Header>
       <Description>
-        <Text message="It's easier than buying a car, (and less painful), we promise." />
+        <Text message="It's easier than buying a car (and less painful), we promise." />
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem darkMode label={<Text message="First name" />} error={errors().firstName}>
