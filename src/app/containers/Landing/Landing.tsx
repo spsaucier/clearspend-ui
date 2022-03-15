@@ -85,7 +85,7 @@ export function Landing(props: Readonly<LandingProps>) {
           class={css.card}
           title={<Text message="Onboard your employees" />}
           actions={
-            <Button size="lg" icon="user" onClick={() => navigate('/employees/edit')}>
+            <Button size="lg" icon="user" onClick={() => navigate('/employees/edit')} data-name="landing-add-employee">
               <Text message="Onboard your employees" />
             </Button>
           }
@@ -98,7 +98,12 @@ export function Landing(props: Readonly<LandingProps>) {
           class={css.card}
           title={<Text message="Set up allocations" />}
           actions={
-            <Button size="lg" icon="amount" onClick={() => navigate('/allocations/edit')}>
+            <Button
+              size="lg"
+              icon="amount"
+              onClick={() => navigate('/allocations/edit')}
+              data-name="landing-create-allocation"
+            >
               <Text message="Create allocation" />
             </Button>
           }
@@ -111,7 +116,12 @@ export function Landing(props: Readonly<LandingProps>) {
           class={css.card}
           title={<Text message="Issue your first card" />}
           actions={
-            <Button size="lg" icon="card-add-new" onClick={() => navigate('/cards/edit')}>
+            <Button
+              size="lg"
+              icon="card-add-new"
+              onClick={() => navigate('/cards/edit')}
+              data-name="landing-issue-card"
+            >
               <Text message="Issue a card" />
             </Button>
           }
@@ -124,7 +134,7 @@ export function Landing(props: Readonly<LandingProps>) {
         <ModalCard
           title={<Text message="Congratulations!" />}
           actions={
-            <Button size="lg" type="primary" onClick={dismissModal}>
+            <Button size="lg" type="primary" onClick={dismissModal} data-name="go-to-dashboard">
               <Text message="Go to dashboard" />
             </Button>
           }

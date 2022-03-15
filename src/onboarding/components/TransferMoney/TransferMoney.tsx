@@ -105,13 +105,15 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
             <BankAccounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
           </FormItem>
         </div>
-        <Text
-          message={
-            'By clicking Authorize Deposit, you authorize ClearSpend to debit the bank account specified ' +
-            'for the amount shown above. Once authorized, this funds transfer cannot be canceled. ' +
-            'Please allow up to 5 business days for this transfer to be credited to your ClearSpend account.'
-          }
-        />
+        <p>
+          <Text
+            message={
+              'By clicking Authorize Deposit, you authorize ClearSpend to debit the bank account specified ' +
+              'for the amount shown above. Once authorized, this funds transfer cannot be canceled. ' +
+              'Please allow up to 5 business days for this transfer to be credited to your ClearSpend account.'
+            }
+          />
+        </p>
         <Button
           type="primary"
           htmlType="submit"
@@ -119,6 +121,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
           loading={loading()}
           disabled={!isDirty() || !values().account}
           class={css.button}
+          data-name="authorize-deposit"
         >
           <Text message="Authorize deposit" />
         </Button>
