@@ -6,9 +6,13 @@ import { InputSearch } from '_common/components/InputSearch';
 import { Divider } from '_common/components/Divider';
 import { Button } from '_common/components/Button';
 import type { Allocation } from 'generated/capital';
+import { getAllocationPermissions } from 'app/services/permissions';
+import { useResource } from '_common/utils/useResource';
+import { useDeferEffect } from '_common/utils/useDeferEffect';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
 import { byName } from '../AllocationSelect/utils';
+import { canManageFunds } from '../../utils/permissions';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -27,6 +31,21 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
 
   const [search, setSearch] = createSignal('');
   const root = createMemo(() => getRootAllocation(props.items));
+
+  const [userPermissions, , , setAllocationIdForPermissions] = useResource(
+    getAllocationPermissions,
+    props.currentID,
+    Boolean(props.currentID),
+  );
+
+  useDeferEffect(
+    () => {
+      if (props.currentID) {
+        setAllocationIdForPermissions(props.currentID);
+      }
+    },
+    () => props.currentID,
+  );
 
   const found = createMemo(() => {
     const target = search().toLowerCase();
@@ -76,9 +95,16 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                 onSelect={props.onSelect}
               />
             </Show>
-            <Button wide type="primary" icon="add" onClick={() => navigate('/allocations/edit')}>
-              <Text message="New Allocation" />
-            </Button>
+            <Show when={canManageFunds(userPermissions())}>
+              <Button
+                wide
+                type="primary"
+                icon="add"
+                onClick={() => navigate('/allocations/edit', { state: { parentAllocationId: props.currentID } })}
+              >
+                <Text message="New Allocation" />
+              </Button>
+            </Show>
           </div>
         )}
       </Show>

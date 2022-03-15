@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
@@ -10,6 +10,9 @@ import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
+import { canManageCards } from 'allocations/utils/permissions';
+
+import { useBusiness } from '../app/containers/Main/context';
 
 import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
@@ -35,6 +38,7 @@ export const DEFAULT_EMPLOYEE_PARAMS: Readonly<SearchUserRequest> = {
 export default function Employees() {
   const navigate = useNavigate();
   const media = useMediaContext();
+  const { permissions } = useBusiness();
 
   const [cardID, setCardID] = createSignal<string | null>(null);
 
@@ -44,9 +48,11 @@ export default function Employees() {
     <Page
       title={<Text message="Employees" />}
       actions={
-        <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/edit')}>
-          <Text message="New employee" />
-        </Button>
+        <Show when={canManageCards(permissions())}>
+          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/edit')}>
+            <Text message="New employee" />
+          </Button>
+        </Show>
       }
     >
       <Data data={usersStore.data} loading={usersStore.loading} error={usersStore.error} onReload={usersStore.reload}>

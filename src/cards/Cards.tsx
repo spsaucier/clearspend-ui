@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
@@ -8,6 +8,9 @@ import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { SearchCardRequest } from 'generated/capital';
+import { canManageCards } from 'allocations/utils/permissions';
+
+import { useBusiness } from '../app/containers/Main/context';
 
 import { CardsData } from './components/CardsData';
 import { useCards } from './stores/cards';
@@ -28,6 +31,7 @@ export const DEFAULT_CARD_PARAMS: Readonly<SearchCardRequest> = {
 export default function Cards() {
   const navigate = useNavigate();
   const media = useMediaContext();
+  const { permissions } = useBusiness();
 
   const [uid, setUID] = createSignal<string | null>(null);
   const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
@@ -36,9 +40,11 @@ export default function Cards() {
     <Page
       title={<Text message="Cards" />}
       actions={
-        <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/edit')}>
-          <Text message="New Card" />
-        </Button>
+        <Show when={canManageCards(permissions())}>
+          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/edit')}>
+            <Text message="New Card" />
+          </Button>
+        </Show>
       }
     >
       <CardsData

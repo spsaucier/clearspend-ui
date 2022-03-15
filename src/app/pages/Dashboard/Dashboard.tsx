@@ -16,7 +16,7 @@ import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-import { canManageFunds } from 'allocations/utils/permissions';
+import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
 import { useUserCards } from 'employees/stores/userCards';
 
 import { Page } from '../../components/Page';
@@ -97,27 +97,49 @@ export default function Dashboard() {
               <Text message="Manage Balance" />
             </Button>
           </Show>
-          <Dropdown
-            id="add-new-dropdown"
-            position="bottom-right"
-            menu={
-              <>
-                <MenuItem name="employee" onClick={() => navigate('/employees/edit')}>
-                  <Text message="Employee" />
-                </MenuItem>
-                <MenuItem name="allocation" onClick={() => navigate('/allocations/edit')}>
-                  <Text message="Allocation" />
-                </MenuItem>
-                <MenuItem name="card" onClick={() => navigate('/cards/edit')}>
-                  <Text message="Card" />
-                </MenuItem>
-              </>
+          <Show
+            when={
+              canManageUsers(userPermissions()) ||
+              canManageFunds(userPermissions()) ||
+              canManageCards(userPermissions())
             }
           >
-            <Button id="add-new-button" size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
-              <Text message="Add new" />
-            </Button>
-          </Dropdown>
+            <Dropdown
+              id="add-new-dropdown"
+              position="bottom-right"
+              menu={
+                <>
+                  {canManageUsers(userPermissions()) ? (
+                    <MenuItem name="employee" onClick={() => navigate('/employees/edit')}>
+                      <Text message="Employee" />
+                    </MenuItem>
+                  ) : null}
+                  {canManageFunds(userPermissions()) ? (
+                    <MenuItem
+                      name="allocation"
+                      onClick={() =>
+                        navigate('/allocations/edit', { state: { parentAllocationId: currentAllocationId() } })
+                      }
+                    >
+                      <Text message="Allocation" />
+                    </MenuItem>
+                  ) : null}
+                  {canManageCards(userPermissions()) ? (
+                    <MenuItem
+                      name="card"
+                      onClick={() => navigate('/cards/edit', { state: { allocationId: currentAllocationId() } })}
+                    >
+                      <Text message="Card" />
+                    </MenuItem>
+                  ) : null}
+                </>
+              }
+            >
+              <Button id="add-new-button" size="lg" icon={{ name: 'chevron-down', pos: 'right' }}>
+                <Text message="Add new" />
+              </Button>
+            </Dropdown>
+          </Show>
         </div>
       }
     >
@@ -138,9 +160,11 @@ export default function Dashboard() {
           <Overview allocationId={allocation()} />
         </Match>
       </Switch>
-      <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
-        <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
-      </Drawer>
+      <Show when={canManageFunds(userPermissions())}>
+        <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
+          <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
+        </Drawer>
+      </Show>
     </Page>
   );
 }

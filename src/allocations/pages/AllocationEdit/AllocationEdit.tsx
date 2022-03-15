@@ -22,7 +22,7 @@ export default function AllocationEdit() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
-  const location = useLoc();
+  const location = useLoc<{ parentAllocationId: string }>();
 
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
@@ -92,6 +92,7 @@ export default function AllocationEdit() {
             onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
+            parentAllocationId={location.state?.parentAllocationId}
           />
         </Match>
       </Switch>

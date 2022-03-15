@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { createSignal, Show } from 'solid-js';
+import { createSignal, For, Show } from 'solid-js';
 
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
@@ -10,6 +10,10 @@ import { Icon } from '_common/components/Icon';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
 import { CancelConfirmationButton } from 'accounting/components/CancelConfirmationButton';
+import { canManageCards } from 'allocations/utils/permissions';
+import { wrapAction } from '_common/utils/wrapAction';
+
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './AddCreditCardForm.css';
 
@@ -20,30 +24,30 @@ interface AddCreditCardFormProps {
 
 export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
   const { onNext } = props;
-
+  const { permissions } = useBusiness();
   const [creditCards] = useResource(getCodatCreditCards);
-
   const [selectedCardName, setSelectedCardName] = createSignal<string>('');
-
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
-
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
+  const [loading, postCC] = wrapAction(postCodatCreditCard);
 
   const onClick = async () => {
     onNext();
   };
 
   const onClickNext = async () => {
-    // FIXME: use await and/or catch error
-    postCodatCreditCard({
-      accountName: selectedCardName(),
-      accountNumber: 'clearspend-credit',
-      accountType: 'Credit',
-      currency: 'USD',
-      institution: 'ClearSpend',
-    });
-
-    onNext();
+    try {
+      await postCC({
+        accountName: selectedCardName(),
+        accountNumber: 'clearspend-credit',
+        accountType: 'Credit',
+        currency: 'USD',
+        institution: 'ClearSpend',
+      });
+      onNext();
+    } catch {
+      // TODO: handle error
+    }
   };
 
   return (
@@ -63,20 +67,22 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
               position="bottom-right"
               menu={
                 <>
-                  <MenuItem
-                    name={'Create New Card'}
-                    onClick={() => {
-                      setCanEditNewCard(true);
-                      setSelectedCardName('ClearSpend card');
-                    }}
-                  >
-                    <div class={css.createNewCardContainer}>
-                      <Icon name={'add-circle-outline'} class={css.addCardIcon} />
-                      <Text message="Create New Card" />
-                    </div>
-                  </MenuItem>
-                  {creditCards() !== null &&
-                    creditCards()?.results.map((card) => (
+                  <Show when={canManageCards(permissions())}>
+                    <MenuItem
+                      name={'Create New Card'}
+                      onClick={() => {
+                        setCanEditNewCard(true);
+                        setSelectedCardName('ClearSpend card');
+                      }}
+                    >
+                      <div class={css.createNewCardContainer}>
+                        <Icon name={'add-circle-outline'} class={css.addCardIcon} />
+                        <Text message="Create New Card" />
+                      </div>
+                    </MenuItem>
+                  </Show>
+                  <For each={creditCards()?.results}>
+                    {(card) => (
                       <MenuItem
                         name={card.accountName}
                         onClick={() => {
@@ -86,7 +92,8 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
                       >
                         <Text message={card.accountName} />
                       </MenuItem>
-                    ))}
+                    )}
+                  </For>
                 </>
               }
             >
@@ -129,7 +136,7 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
         <Button onClick={onClick} class={css.nextButton}>
           <Text message="Skip Setup" />
         </Button>
-        <Button onClick={onClickNext} type="primary" class={css.nextButton}>
+        <Button onClick={onClickNext} type="primary" loading={loading()} class={css.nextButton}>
           <Text message="Next" />
         </Button>
       </div>

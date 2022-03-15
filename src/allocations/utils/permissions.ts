@@ -27,3 +27,7 @@ export function canManagePermissions(permissions: Permissions): boolean {
 export function canManageConnections(permissions: Permissions): boolean {
   return can(permissions, 'MANAGE_CONNECTIONS');
 }
+
+export function canRead(permissions: Permissions): boolean {
+  return can(permissions, 'READ');
+}

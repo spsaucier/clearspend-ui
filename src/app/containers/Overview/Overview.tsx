@@ -1,4 +1,4 @@
-import { createSignal, Index, Show, batch, createMemo } from 'solid-js';
+import { createSignal, Index, Show, batch, createMemo, createEffect } from 'solid-js';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
@@ -15,13 +15,15 @@ import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { TransactionsData } from 'transactions/components/TransactionsData';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
+import { getRootAllocation } from 'allocations/utils/getRootAllocation';
+import { useAllocations } from 'allocations/stores/allocations';
+import { canRead } from 'allocations/utils/permissions';
 
 import { SpendWidget } from '../../components/SpendWidget';
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpend } from '../../stores/spend';
 import { useSpending } from '../../stores/spending';
 import { useActivity } from '../../stores/activity';
-import { canManageFunds } from '../../../allocations/utils/permissions';
 import { useBusiness } from '../Main/context';
 
 import { TimePeriod, getTimePeriod, toISO, updateParams } from './utils';
@@ -49,13 +51,17 @@ export function Overview(props: Readonly<OverviewProps>) {
   const initPeriod = searchParams.period || TimePeriod.week;
   const PERIOD = toISO(getTimePeriod(initPeriod));
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
+  const allocations = useAllocations({ initValue: [] });
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   const allocationId = createMemo(() => {
     const id = props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
-    setAllocationIdForPermissions(id || '');
     return id;
+  });
+
+  createEffect(() => {
+    setAllocationIdForPermissions(allocationId() || getRootAllocation(allocations.data)?.allocationId || '');
   });
 
   const spendStore = useSpend({ params: { ...PERIOD, allocationId: allocationId() } });
@@ -107,7 +113,7 @@ export function Overview(props: Readonly<OverviewProps>) {
           <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
         </TabList>
       </Show>
-      <Show when={currentUser().type === 'BUSINESS_OWNER' || canManageFunds(userPermissions())}>
+      <Show when={currentUser().type === 'BUSINESS_OWNER' || canRead(userPermissions())}>
         <div class={css.top}>
           <Data
             error={spendStore.error}

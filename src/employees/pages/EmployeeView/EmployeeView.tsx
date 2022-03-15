@@ -13,12 +13,14 @@ import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
+import { canManageCards } from 'allocations/utils/permissions';
 
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
 import { Transactions } from '../../containers/Transactions';
 import { Cards } from '../../containers/Cards';
 import { getUser, editUser } from '../../services';
 import { formatName } from '../../utils/formatName';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './EmployeeView.css';
 
@@ -32,6 +34,7 @@ export default function EmployeeView() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNav();
+  const { permissions } = useBusiness();
 
   const params = useParams<{ id: string }>();
   const [tab, setTab] = createSignal(Tabs.transactions);
@@ -75,15 +78,17 @@ export default function EmployeeView() {
         </Show>
       }
       actions={
-        <Button
-          type="primary"
-          size="lg"
-          icon="add"
-          disabled={!user()}
-          onClick={() => navigate('/cards/edit', { state: { userId: user()?.userId } })}
-        >
-          <Text message="New Card" />
-        </Button>
+        <Show when={canManageCards(permissions())}>
+          <Button
+            type="primary"
+            size="lg"
+            icon="add"
+            disabled={!user()}
+            onClick={() => navigate('/cards/edit', { state: { userId: user()?.userId } })}
+          >
+            <Text message="New Card" />
+          </Button>
+        </Show>
       }
     >
       <Switch>

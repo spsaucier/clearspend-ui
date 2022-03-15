@@ -5,6 +5,7 @@ import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
 import { canSeeAccounting } from 'accounting/utils/canSeeAccounting';
 import { AllocationRoles } from 'allocations/types';
+import { canManageUsers } from 'allocations/utils/permissions';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -55,8 +56,9 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
         case TITLES.accounting:
-          return isAdmin && canSeeAccounting(currentUser());
+          return isAdmin || canSeeAccounting(currentUser());
         case TITLES.employees:
+          return isAdmin || canManageUsers(permissions());
         case TITLES.company:
           return isAdmin;
         default:

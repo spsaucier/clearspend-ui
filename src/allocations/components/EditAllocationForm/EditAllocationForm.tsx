@@ -48,6 +48,7 @@ interface EditAllocationFormProps {
   onChangeParent: (allocationId?: string) => void;
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
   onSave: (data: Readonly<CreateAllocationRequest>, roles: AllocationUserRole[]) => Promise<unknown>;
+  parentAllocationId?: string;
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
@@ -59,7 +60,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(
-    getFormOptions(props.mccCategories),
+    getFormOptions(props.mccCategories, props.parentAllocationId),
   );
 
   const [localRoles, setLocalRoles] = createSignal<AllocationUserRole[]>([]);
@@ -143,7 +144,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
       >
         <FormItem
           label={<Text message="Amount" />}
-          extra={<Text message="The amount can not exceed the balance of the parent allocation." />}
+          extra={<Text message="The amount cannot exceed the balance of the parent allocation." />}
           error={errors().amount}
           class={css.field}
         >

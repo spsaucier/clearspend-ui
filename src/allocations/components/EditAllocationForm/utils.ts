@@ -9,11 +9,11 @@ import { convertFormLimits } from '../../utils/convertFormLimits';
 
 import type { FormValues } from './types';
 
-export function getFormOptions(categories: readonly Readonly<MccGroup>[]): FormOptions<FormValues> {
+export function getFormOptions(categories: readonly Readonly<MccGroup>[], parent?: string): FormOptions<FormValues> {
   return {
     defaultValues: {
       name: '',
-      parent: '',
+      parent: parent || '',
       amount: '',
       categories: [...categories],
       channels: PAYMENT_TYPES.map((item) => item.key),
