@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSignal, Switch, Match, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate, useSearchParams } from 'solid-app-router';
@@ -34,6 +35,20 @@ export function AccountingTabs() {
   const step = business().accountingSetupStep as AccountSetupStep;
   const [params] = useSearchParams();
   const messages = useMessages();
+  const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
+
+  const onSelectTransaction = (id: string) => {
+    const newSelectedTransactions = selectedTransactions();
+    if (!newSelectedTransactions.includes(id)) {
+      newSelectedTransactions.push(id);
+      setSelectedTransactions(newSelectedTransactions);
+    }
+  };
+
+  const onDeselectTransaction = (id: string) => {
+    const newSelectedTransactions = selectedTransactions();
+    setSelectedTransactions(newSelectedTransactions.filter((transactionId) => transactionId !== id));
+  };
 
   const navigate = useNavigate();
 
@@ -86,6 +101,9 @@ export function AccountingTabs() {
               onReload={activityStore.reload}
               onChangeParams={activityStore.setParams}
               onUpdateData={activityStore.setData}
+              selectedTransactions={selectedTransactions}
+              onSelectTransaction={onSelectTransaction}
+              onDeselectTransaction={onDeselectTransaction}
             />
           </Match>
           <Match when={tab() === Tabs.log}>

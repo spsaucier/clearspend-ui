@@ -1,4 +1,4 @@
-import { createSignal, createMemo, type Setter } from 'solid-js';
+import { createSignal, createMemo, type Setter, Accessor } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
@@ -28,6 +28,9 @@ interface TransactionsDataProps {
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
   onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   showAccountingAdminView?: boolean;
+  selectedTransactions?: Accessor<string[]>;
+  onSelectTransaction?: (id: string) => void;
+  onDeselectTransaction?: (id: string) => void;
 }
 
 const [reportModalOpen, setReportModalOpen] = createSignal<boolean>(false);
@@ -57,6 +60,9 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}
         showAccountingAdminView={props.showAccountingAdminView}
+        selectedTransactions={props.selectedTransactions}
+        onSelectTransaction={props.onSelectTransaction}
+        onDeselectTransaction={props.onDeselectTransaction}
       />
       <Drawer
         noPadding

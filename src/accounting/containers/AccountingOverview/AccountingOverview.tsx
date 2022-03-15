@@ -1,4 +1,4 @@
-import type { Setter } from 'solid-js';
+import type { Accessor, Setter } from 'solid-js';
 
 import type {
   AccountActivityRequest,
@@ -21,6 +21,9 @@ interface AccountingOverviewProps {
   onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
   onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
+  selectedTransactions: Accessor<string[]>;
+  onSelectTransaction: (id: string) => void;
+  onDeselectTransaction: (id: string) => void;
 }
 
 export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
@@ -40,6 +43,9 @@ export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
         onUpdateData={props.onUpdateData}
         onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
         showAccountingAdminView
+        selectedTransactions={props.selectedTransactions}
+        onSelectTransaction={props.onSelectTransaction}
+        onDeselectTransaction={props.onDeselectTransaction}
       />
     </div>
   );

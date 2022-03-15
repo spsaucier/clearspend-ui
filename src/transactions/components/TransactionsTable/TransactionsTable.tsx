@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Accessor, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -44,6 +44,9 @@ interface TransactionsTableProps {
   onRowClick: (activityId: string) => void;
   onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
+  selectedTransactions?: Accessor<string[]>;
+  onSelectTransaction?: (id: string) => void;
+  onDeselectTransaction?: (id: string) => void;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
@@ -64,14 +67,19 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               <Icon name={'lock'} class={css.lock} />
             </div>
           );
-        } else if (item.expenseDetails?.iconRef !== undefined && item.accountActivityId !== undefined) {
+        } else if (
+          item.expenseDetails?.iconRef !== undefined &&
+          item.accountActivityId !== undefined &&
+          props.selectedTransactions &&
+          props.onSelectTransaction &&
+          props.onDeselectTransaction
+        ) {
           return (
             <SyncSelectIcon
               id={item.accountActivityId}
-              onChange={() => {
-                // TODO add form
-                return null;
-              }}
+              selectedTransactions={props.selectedTransactions}
+              onSelectTransaction={props.onSelectTransaction}
+              onDeselectTransaction={props.onDeselectTransaction}
             />
           );
         } else {

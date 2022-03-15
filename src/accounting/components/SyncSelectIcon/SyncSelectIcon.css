@@ -21,3 +21,27 @@
   align-items: center;
   justify-content: center;
 }
+
+.input {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+
+  &:focus + span {
+    outline: 2px solid var(--tw-gray-30);
+  }
+}
+
+.control {
+  background-color: transparent;
+  cursor: pointer;
+
+  @nest .input:checked + & {
+    background-color: var(--tw-light);
+    border: 0;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
