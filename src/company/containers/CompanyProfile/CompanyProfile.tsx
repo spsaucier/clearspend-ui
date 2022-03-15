@@ -6,6 +6,7 @@ import { Section } from 'app/components/Section';
 import { DataRow } from 'app/components/DataRow';
 import { CopyButton } from 'app/components/CopyButton';
 import type { Business } from 'generated/capital';
+import { BUSINESS_MCC } from 'app/types/mcc';
 
 import css from './CompanyProfile.css';
 
@@ -14,6 +15,8 @@ interface CompanyProfileProps {
 }
 
 export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
+  const mccValue = BUSINESS_MCC.find((category) => category.value === props.data.mcc);
+
   return (
     <div>
       <Section title={<Text message="Business details" />} class={css.section}>
@@ -57,7 +60,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Merchant category" />:
           </span>
-          <span class={css.dataValue}>{props.data.mcc}</span>
+          <span class={css.dataValue}>{`${mccValue?.name} (${mccValue?.value})`}</span>
         </DataRow>
       </Section>
       <Section

@@ -81,7 +81,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
     },
     {
       name: 'balance',
-      title: 'Balance',
+      title: 'Available to spend',
       render: (item) => (
         <div>
           <strong>{formatCurrency(item.balance?.amount || 0)}</strong>
