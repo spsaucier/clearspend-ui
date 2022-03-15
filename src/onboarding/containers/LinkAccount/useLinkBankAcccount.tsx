@@ -30,6 +30,7 @@ export default function useLinkBankAccount(
 
     if (loading() || typeof linkToken !== 'string') return undefined;
 
+    // Note: Use with caution, multiple uses of this hook will create multiple instances if not calling `.destroy()`
     const instance = Plaid.create({
       token: linkToken,
       receivedRedirectUri: null,

@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { onCleanup, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { wrapAction } from '_common/utils/wrapAction';
@@ -17,7 +17,13 @@ interface LinkAccountProps {
 
 export function LinkAccount(props: Readonly<LinkAccountProps>) {
   const [processing, onSuccess] = wrapAction(props.onSuccess);
-  const { handler, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
+  const { handler: plaidInstance, loading, hasError } = useLinkBankAccount(onSuccess, props.verifyOnLoad);
+
+  onCleanup(() => {
+    if (plaidInstance()) {
+      plaidInstance()?.destroy();
+    }
+  });
 
   return (
     <Show when={!hasError()} fallback={<Text message="Failed to load API" />}>
@@ -25,7 +31,7 @@ export function LinkAccount(props: Readonly<LinkAccountProps>) {
         loading={loading() || processing()}
         disabled={props.disabled}
         class={css.verify}
-        onVerifyClick={() => handler()?.open()}
+        onVerifyClick={() => plaidInstance()?.open()}
       />
     </Show>
   );

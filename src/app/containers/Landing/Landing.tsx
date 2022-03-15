@@ -30,7 +30,7 @@ export function Landing(props: Readonly<LandingProps>) {
   const navigate = useNav();
 
   const users = useUsersList({ initValue: [] });
-  const [accounts] = useResource(getBankAccounts);
+  const [accounts, , , , refetchAccounts] = useResource(getBankAccounts);
   const [isOpenCongratulationsModal, setIsOpenCongratulationsModal] = createSignal<boolean>(
     storage.get<boolean>(SHOW_ONBOARDING_MODAL, true),
   );
@@ -65,7 +65,7 @@ export function Landing(props: Readonly<LandingProps>) {
               />
             }
           />
-          <Show when={accounts.length === 0}>
+          <Show when={accounts()?.length === 0}>
             <LinkAccountButton
               onSuccess={async (token, accountName) => {
                 const bankAccounts = await linkBankAccounts(token);
@@ -74,7 +74,7 @@ export function Landing(props: Readonly<LandingProps>) {
                   : bankAccounts.filter((account) => account.businessBankAccountId);
                 await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
                 sendAnalyticsEvent({ name: Events.LINK_BANK });
-                location.reload();
+                refetchAccounts();
               }}
             />
           </Show>
