@@ -4,6 +4,7 @@
   height: 16px;
   margin: var(--pd-4);
   align-items: center;
+  flex-shrink: 0;
   justify-content: center;
   background: var(--tw-white);
   border: 1px solid var(--tw-gray-30);
