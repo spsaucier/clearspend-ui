@@ -26,7 +26,7 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
       <Select
         value={props.role}
         class={css.select}
-        disabled={props.inherited}
+        disabled={props.inherited || props.user.type === 'BUSINESS_OWNER'}
         onChange={(value) => props.onChange(props.user.userId!, value as AllocationRoles)}
       >
         <Option value={AllocationRoles.Admin}>

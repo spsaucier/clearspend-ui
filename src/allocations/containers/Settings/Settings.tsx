@@ -54,6 +54,7 @@ export function Settings(props: Readonly<SettingsProps>) {
 
   const [currentRoles, , , , reloadCurrentRoles] = useResource(getAllocationRoles, props.allocation.allocationId);
   const [updatedRoles, setUpdatedRoles] = createSignal<AllocationUserRole[]>([]);
+  const [removedRoles, setRemovedRoles] = createSignal<Record<string, Partial<AllocationUserRole>>>({});
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { name: props.allocation.name },
@@ -61,19 +62,31 @@ export function Settings(props: Readonly<SettingsProps>) {
   });
 
   const onAddRole = (userId: string) => {
+    if (removedRoles()[userId]) {
+      const newRemovedRoles = { ...removedRoles() };
+      delete newRemovedRoles[userId];
+      setRemovedRoles(newRemovedRoles);
+    }
     const user = users.data!.find((item) => item.userId === userId);
     if (user) setUpdatedRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.ViewOnly }]);
   };
 
   const onChangeRole = (userId: string, role: AllocationRoles) => {
     setUpdatedRoles((prev) => {
-      return prev.some((item) => item.user.userId === userId)
-        ? prev.map((item) => ({ ...item, role: item.user.userId === userId ? role : item.role }))
-        : [getAllocationUserRole(currentRoles()!.find((item) => item.user?.userId === userId)!), ...prev];
+      if (prev.some((item) => item.user.userId === userId)) {
+        return prev.map((item) => ({ ...item, role: item.user.userId === userId ? role : item.role }));
+      }
+      const roleToUpdate = { ...getAllocationUserRole(currentRoles()!.find((item) => item.user?.userId === userId)!) };
+      roleToUpdate.role = role;
+      return [roleToUpdate, ...prev];
     });
   };
 
   const onRemoveRole = (userId: string) => {
+    const roles = getRolesList(currentRoles() || [], updatedRoles());
+    let role = roles.find((item) => item.user.userId === userId);
+    if (!role) return;
+    setRemovedRoles((prev) => ({ ...prev, [userId]: { inherited: role?.inherited, user: role?.user } }));
     setUpdatedRoles((prev) => prev.filter((item) => item.user.userId !== userId));
   };
 
@@ -92,6 +105,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   const onReset = (updates?: Partial<FormValues>) => {
     reset(updates);
     setUpdatedRoles([]);
+    setRemovedRoles({});
   };
 
   const onSubmit = async () => {
@@ -103,7 +117,7 @@ export function Settings(props: Readonly<SettingsProps>) {
       await props.onReload();
 
       const allocationId = props.allocation.allocationId;
-      const roles = getRolesUpdates(currentRoles() || [], updatedRoles());
+      const roles = getRolesUpdates(currentRoles() || [], updatedRoles(), removedRoles());
 
       // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
       await Promise.all(roles.create.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
@@ -157,7 +171,10 @@ export function Settings(props: Readonly<SettingsProps>) {
           >
             <For each={users.data!}>
               {(item) => (
-                <Option value={item.userId!} disabled={roles().some((role) => role.user.userId === item.userId)}>
+                <Option
+                  value={item.userId!}
+                  disabled={roles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]}
+                >
                   {formatName(item)}
                 </Option>
               )}
@@ -166,21 +183,23 @@ export function Settings(props: Readonly<SettingsProps>) {
         </FormItem>
         <For each={roles()}>
           {(role) => (
-            <AllocationRole
-              user={role.user}
-              role={role.role}
-              inherited={role.inherited}
-              class={css.field}
-              onChange={onChangeRole}
-              onDelete={onRemoveRole}
-            />
+            <Show when={!removedRoles()[role.user.userId!]}>
+              <AllocationRole
+                user={role.user}
+                role={role.role}
+                inherited={role.inherited}
+                class={css.field}
+                onChange={onChangeRole}
+                onDelete={onRemoveRole}
+              />
+            </Show>
           )}
         </For>
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>
-      <Show when={isDirty() || Boolean(updatedRoles().length)}>
+      <Show when={isDirty() || Boolean(updatedRoles().length) || Boolean(Object.keys(removedRoles()).length)}>
         <PageActions action={<Text message="Update Allocation" />} onCancel={onReset} onSave={onSubmit} />
       </Show>
     </Form>

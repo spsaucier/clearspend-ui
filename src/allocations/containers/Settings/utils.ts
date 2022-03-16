@@ -24,9 +24,9 @@ export function getRolesList(
 export function getRolesUpdates(
   current: readonly UserRolesAndPermissionsRecord[],
   updated: readonly AllocationUserRole[],
+  removed: Record<string, Partial<AllocationUserRole>>,
 ) {
   const currentIds = current.map((item) => item.user?.userId);
-  const updatedIds = updated.map((item) => item.user.userId);
 
   const [update, create] = updated.reduce<[update: AllocationUserRole[], create: AllocationUserRole[]]>(
     (res, role) => {
@@ -39,7 +39,8 @@ export function getRolesUpdates(
 
   const remove = current.reduce<string[]>((res, item) => {
     const userId = item.user?.userId;
-    if (!item.inherited && userId && !updatedIds.includes(userId)) res.push(userId);
+    if (item.user?.type === 'BUSINESS_OWNER') return res;
+    if (!item.inherited && userId && removed[userId]) res.push(userId);
     return res;
   }, []);
 
