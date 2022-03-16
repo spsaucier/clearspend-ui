@@ -27,7 +27,7 @@ export default function LinkAccountStep(props: LinkAccountStepProps) {
     >
       <Show when={props.disabled}>
         <div class={css.wrapper}>
-          <Button type="primary" onClick={props.onCheckVerification}>
+          <Button type="primary" onClick={props.onCheckVerification} data-name="check-verification-status">
             <Text message="Check verification status" />
           </Button>
         </div>
