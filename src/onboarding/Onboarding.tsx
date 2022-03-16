@@ -242,10 +242,7 @@ export default function Onboarding() {
           <Show when={media.medium}>
             <div class={css.estimated}>
               <Icon size={'md'} name={'clock'} />
-              <Text
-                message="Estimated time remaining: {minutes} {minutes, plural, one {minute} other {minutes}}"
-                minutes={getMinutesRemaining(step())}
-              />
+              <Text message="Estimated time remaining: {minutes} minutes" minutes={getMinutesRemaining(step())} />
             </div>
             <div class={css.steps}>
               <SideSteps step={step()} />
