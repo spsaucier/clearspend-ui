@@ -21,6 +21,7 @@
 
 .card {
   @media (--bp-large) {
+    max-width: 480px;
     min-height: 208px;
     flex-basis: 320px;
     flex-grow: 1;
