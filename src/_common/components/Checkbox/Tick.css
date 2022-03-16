@@ -25,3 +25,9 @@
     opacity: 0;
   }
 }
+
+.dark {
+  &::after {
+    border-color: var(--tw-dark);
+  }
+}

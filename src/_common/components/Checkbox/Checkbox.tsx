@@ -39,7 +39,7 @@ export function Checkbox(props: Readonly<CheckboxProps>) {
         onChange={onChange}
       />
       <Show when={!group.empty} fallback={props.children}>
-        <Tick class={css.control} />
+        <Tick darkMode={props.darkMode} class={css.control} />
         <Show when={props.children}>
           <span class={css.label}>{props.children}</span>
         </Show>

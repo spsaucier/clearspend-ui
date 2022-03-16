@@ -14,6 +14,6 @@
 .icon {
   margin-top: -20px;
   margin-left: auto;
-  color: #44b96d;
+  color: var(--tw-primary-content);
   cursor: pointer;
 }

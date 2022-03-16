@@ -21,8 +21,8 @@
   cursor: pointer;
 
   @nest .input:checked + & {
-    background-color: var(--tw-green-80);
-    border-color: var(--tw-green-80);
+    background-color: var(--tw-primary-bg);
+    border-color: var(--tw-primary-bg);
 
     &::after {
       opacity: 1;

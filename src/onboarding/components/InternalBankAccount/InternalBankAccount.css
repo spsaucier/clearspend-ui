@@ -23,7 +23,7 @@
 
 .highlight {
   display: inline-block;
-  color: #44b96d;
+  color: var(--tw-primary-content);
   vertical-align: bottom;
   cursor: pointer;
 }

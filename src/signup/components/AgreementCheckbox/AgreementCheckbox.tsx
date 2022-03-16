@@ -10,7 +10,7 @@ interface AgreementCheckboxProps {
 
 export function AgreementCheckbox(props: Readonly<AgreementCheckboxProps>) {
   return (
-    <Checkbox checked={props.value} onChange={props.onChange}>
+    <Checkbox darkMode checked={props.value} onChange={props.onChange}>
       <Text
         message={
           'I am at least 18 years old and agree to ClearSpend’s ' +

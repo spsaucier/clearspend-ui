@@ -124,8 +124,8 @@
 :root,
 :root[theme='BLUE'] {
   --tw-primary-dark: var(--tw-accent-100);
-  --tw-primary-content: var(--tw-accent-80);
-  --tw-primary-bg: var(--tw-accent-70);
+  --tw-primary-content: var(--tw-green-30);
+  --tw-primary-bg: var(--tw-light);
   --tw-primary-border: var(--tw-accent-30);
   --tw-primary-light: var(--tw-accent-10);
 }
