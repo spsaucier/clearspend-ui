@@ -69,7 +69,7 @@
 
   @nest .dark &:-webkit-autofill {
     -webkit-text-fill-color: white;
-    background-color: var(--tw-medium) !important !important;
+    background-color: var(--tw-medium) !important;
   }
 
   @nest .dark &:-webkit-autofill:focus {

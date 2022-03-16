@@ -1,4 +1,4 @@
-import { JSXElement, onMount, Show } from 'solid-js';
+import { JSXElement, createMemo, onMount, Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
 import { callValue } from '_common/utils/callValue';
@@ -33,10 +33,12 @@ export function Page(props: Readonly<PageProps>) {
 
   onMount(() => window.scrollTo(0, 0));
 
+  const side = createMemo(() => props.side);
+
   return (
     <div class={join(css.root, props.class)}>
-      <Show when={props.side}>
-        <div class={css.side}>{props.side}</div>
+      <Show when={side()}>
+        <div class={css.side}>{side()}</div>
       </Show>
       <div class={css.wrapper}>
         <header class={css.header} classList={{ [css.stickyHeader!]: props.stickyHeader }}>

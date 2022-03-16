@@ -16,7 +16,6 @@ import { i18n } from '_common/api/intl';
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
-import { useAllocations } from '../../stores/allocations';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getParentsChain } from '../../utils/getParentsChain';
 
@@ -29,6 +28,7 @@ enum Tabs {
 
 interface ManageBalanceProps {
   allocationId: string;
+  allocations: readonly Readonly<Allocation>[];
   onReload: () => Promise<unknown>;
   onClose: () => void;
 }
@@ -37,25 +37,20 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
   const messages = useMessages();
 
-  const [current, setCurrent] = createSignal<Readonly<Allocation>>();
+  const current = createMemo(() => props.allocations.find(allocationWithID(props.allocationId))!);
   const [successManageData, setSuccessManageData] = createSignal<Readonly<ManageBalanceSuccessData>>();
 
-  const [accounts, accountsRequestStatus, , , reloadAccounts] = useResource(getBankAccounts, undefined, false);
-
-  const allocations = useAllocations({
-    initValue: [],
-    onSuccess: (data) => {
-      const found = data.find(allocationWithID(props.allocationId));
-      if (found && !found.parentAllocationId) reloadAccounts();
-      setCurrent(found);
-    },
-  });
+  const [accounts, accountsStatus, , , reloadAccounts] = useResource(
+    getBankAccounts,
+    undefined,
+    !current().parentAllocationId,
+  );
 
   const targets = createMemo(() => {
     const allocation = current();
     return [
-      ...getParentsChain(allocations.data!, allocation),
-      ...((!allocation?.parentAllocationId && accounts()) || []),
+      ...getParentsChain(props.allocations, allocation),
+      ...((!allocation.parentAllocationId && accounts()) || []),
     ];
   });
 
@@ -118,13 +113,10 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   return (
     <div class={css.root}>
       <Switch>
-        <Match when={allocations.error}>
-          <LoadingError onReload={allocations.reload} />
-        </Match>
-        <Match when={accountsRequestStatus().error}>
+        <Match when={accountsStatus().error}>
           <LoadingError onReload={reloadAccounts} />
         </Match>
-        <Match when={allocations.loading}>
+        <Match when={accountsStatus().loading}>
           <Loading />
         </Match>
         <Match when={current()}>

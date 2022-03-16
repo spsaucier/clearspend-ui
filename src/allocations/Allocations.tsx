@@ -1,4 +1,4 @@
-import { createSignal, createMemo, createEffect } from 'solid-js';
+import { createSignal, createMemo, createEffect, batch, on } from 'solid-js';
 import { Show, Switch, Match } from 'solid-js/web';
 import { useParams } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
@@ -59,13 +59,18 @@ export default function Allocations() {
   const [data, status, , setAllocationId, reload, mutate] = useResource(getAllocation, undefined, false);
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
-  createEffect(() => {
-    const id = current()?.allocationId;
-    if (id) {
-      setAllocationId(id);
-      setAllocationIdForPermissions(id);
-    }
-  });
+  createEffect(
+    on(
+      createMemo(() => current()?.allocationId),
+      (id) => {
+        if (!id) return;
+        batch(() => {
+          setAllocationId(id);
+          setAllocationIdForPermissions(id);
+        });
+      },
+    ),
+  );
 
   const onUpdateAllocation = async (allocationId: string, updates: Readonly<UpdateAllocationRequest>) => {
     mutate(await updateAllocation(allocationId, updates));
@@ -100,7 +105,14 @@ export default function Allocations() {
               </Show>
             </div>
           }
-          side={<AllocationsSide currentID={current()!.allocationId} items={allocations.data!} onSelect={onIdChange} />}
+          side={
+            <AllocationsSide
+              currentID={current()!.allocationId}
+              userPermissions={userPermissions()}
+              items={allocations.data!}
+              onSelect={onIdChange}
+            />
+          }
           contentClass={css.content}
         >
           <TabList value={tab()} onChange={setTab}>
@@ -143,7 +155,12 @@ export default function Allocations() {
             </Match>
           </Switch>
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
-            <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
+            <ManageBalance
+              allocationId={manageId()!}
+              allocations={allocations.data!}
+              onReload={allocations.reload}
+              onClose={() => setManageId()}
+            />
           </Drawer>
         </Page>
       </Show>

@@ -1,4 +1,4 @@
-import { createMemo, createSignal, createEffect, untrack } from 'solid-js';
+import { createMemo, createSignal, createEffect, on } from 'solid-js';
 import { Show } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
@@ -37,15 +37,29 @@ export function Cards(props: Readonly<CardsProps>) {
     allocationId: props.current.allocationId,
   });
 
-  createEffect(() => {
-    if (untrack(params).allocationId === props.current.allocationId) return;
+  createEffect(
+    on(
+      () => props.current,
+      (current, prev: Allocation | undefined) => {
+        if (
+          current.allocationId === prev?.allocationId &&
+          current.account.availableBalance?.amount !== prev.account.availableBalance?.amount
+        ) {
+          reload();
+        }
+      },
+    ),
+  );
 
-    setParams((prev) => ({
-      ...prev,
-      allocationId: props.current.allocationId,
-      searchText: '',
-    }));
-  });
+  createEffect(
+    on(
+      createMemo(() => props.current.allocationId),
+      (allocationId) => {
+        if (allocationId === params().allocationId) return;
+        setParams((data) => ({ ...data, allocationId, searchText: '' }));
+      },
+    ),
+  );
 
   return (
     <>

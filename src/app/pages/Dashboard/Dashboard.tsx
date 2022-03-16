@@ -162,7 +162,12 @@ export default function Dashboard() {
       </Switch>
       <Show when={canManageFunds(userPermissions())}>
         <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
-          <ManageBalance allocationId={manageId()!} onReload={allocations.reload} onClose={() => setManageId()} />
+          <ManageBalance
+            allocationId={manageId()!}
+            allocations={allocations.data!}
+            onReload={allocations.reload}
+            onClose={() => setManageId()}
+          />
         </Drawer>
       </Show>
     </Page>
