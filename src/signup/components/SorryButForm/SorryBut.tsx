@@ -27,7 +27,7 @@ export function SorryButForm(props: Readonly<SorryButFormProps>) {
       <Header>Sorry, but we need a company representative to open your account</Header>
       <Description>
         Please select the roles that best describe you. A company representative is a business owner with at least 25%
-        ownership or a senior manager or other invidual who controls and manages the business.
+        ownership or a senior manager or other individual who controls and manages the business.
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Share with an owner or manager" error={errors().ownerEmail}>

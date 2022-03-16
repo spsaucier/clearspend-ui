@@ -67,7 +67,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
                 <div class={css.side}>
                   <Tag size="sm" type={STATUS_TYPES[item.status!]}>
                     <Icon name={STATUS_ICONS[item.status!]} size="sm" />
-                    {formatCurrency(item.amount?.amount || 0)}
+                    {formatCurrency(item.requestedAmount?.amount || item.amount?.amount || 0)}
                   </Tag>
                   <div class={css.time}>
                     <DateTime date={date()} preset={DateFormat.time} />

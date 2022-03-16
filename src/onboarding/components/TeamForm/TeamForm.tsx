@@ -142,7 +142,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
                 <Icon name="information" />
               </div>
               <div>
-                At least one invidual whose role or title allows them to sign contracts for your business.
+                At least one individual whose role or title allows them to sign contracts for your business.
                 <div class={css.examples}>
                   Examples include: Chief Executive Officer, Chief Financial Officer, Chief Operating Officer,
                   Management Member, General Partner, President, Vice President, or Treasurer.

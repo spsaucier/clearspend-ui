@@ -152,7 +152,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount • Status" />,
-      render: (item) => <TransactionsTableAmount status={item.status!} amount={item.amount} />,
+      render: (item) => (
+        <TransactionsTableAmount status={item.status!} amount={item.amount} requestedAmount={item.requestedAmount} />
+      ),
     },
     {
       name: 'expense-category',

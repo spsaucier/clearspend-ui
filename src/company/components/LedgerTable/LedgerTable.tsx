@@ -77,7 +77,9 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
     {
       name: 'amount',
       title: <Text message="Amount" />,
-      render: (item) => <TransactionsTableAmount status={item.status!} amount={item.amount} />,
+      render: (item) => (
+        <TransactionsTableAmount status={item.status!} amount={item.amount} requestedAmount={item.requestedAmount} />
+      ),
     },
   ];
 
