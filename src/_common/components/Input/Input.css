@@ -26,6 +26,11 @@
   background-color: var(--tw-medium);
   border-color: var(--tw-medium);
   border-radius: var(--radius-4);
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--tw-primary-bg);
+  }
 }
 
 .error:not(.disabled) {
