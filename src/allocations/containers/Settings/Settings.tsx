@@ -113,9 +113,6 @@ export function Settings(props: Readonly<SettingsProps>) {
     const { name } = values();
 
     try {
-      const updated = await updateAllocation(props.allocation.allocationId, { name });
-      await props.onReload();
-
       const allocationId = props.allocation.allocationId;
       const roles = getRolesUpdates(currentRoles() || [], updatedRoles(), removedRoles());
 
@@ -124,8 +121,18 @@ export function Settings(props: Readonly<SettingsProps>) {
       await Promise.all(roles.update.map((item) => updateAllocationRole(allocationId, item.user.userId!, item.role)));
       await Promise.all(roles.remove.map((id) => removeAllocationRole(allocationId, id)));
 
+      let postSaveAllocationName = props.allocation.name;
+
+      if (props.allocation.name !== name) {
+        const updated = await updateAllocation(props.allocation.allocationId, { name });
+
+        postSaveAllocationName = updated.allocation.name;
+
+        await props.onReload();
+      }
+
       await reloadCurrentRoles();
-      onReset({ name: updated.allocation.name });
+      onReset({ name: postSaveAllocationName });
 
       messages.success({ title: i18n.t('The allocation has been successfully updated.') });
     } catch (error: unknown) {
