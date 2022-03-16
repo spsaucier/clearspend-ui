@@ -173,8 +173,8 @@ module.exports = (env, options) => {
         rel: 'preload',
         include: 'initial',
         fileWhitelist: [
-          /neue-400\..+?\.woff2$/,
-          /neue-700\..+?\.woff2$/,
+          /PPNeueMontreal-Regular\..+?\.woff2$/,
+          /PPNeueMontreal-Bold\..+?\.woff2$/,
           /pptelegraf-light-webfont\..+?\.woff2$/,
           /pptelegraf-regular-webfont\..+?\.woff2$/,
         ],
