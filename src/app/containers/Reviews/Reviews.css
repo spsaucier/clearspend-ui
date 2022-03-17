@@ -3,8 +3,8 @@
   height: 100%;
   padding: var(--pd-48) var(--pd-24);
   flex-direction: column;
-  color: #02302f;
-  background: #f3f2ef;
+  color: var(--tw-dark-green);
+  background: var(--tw-gray-20);
 
   @media (--bp-large) {
     padding-right: var(--pd-48);
@@ -34,7 +34,7 @@
   font-size: var(--text-32);
   font-weight: var(--font-300);
   line-height: 1.25;
-  border-bottom: 1px solid var(--tw-light);
+  border-bottom: 1px solid var(--tw-primary-border);
 }
 
 .text {

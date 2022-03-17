@@ -29,6 +29,6 @@
 
 .dark {
   &::after {
-    border-color: var(--tw-dark);
+    border-color: var(--tw-dark-green);
   }
 }

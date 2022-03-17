@@ -12,25 +12,20 @@
 
   &:hover,
   &:focus-within {
-    border-color: var(--tw-primary-bg);
+    border-color: var(--tw-primary-border);
   }
 }
 
-.root.auto-height {
+.auto-height {
   height: auto;
 }
 
-.root.dark {
+.dark {
   height: auto;
   color: var(--tw-white);
-  background-color: var(--tw-medium);
-  border-color: var(--tw-medium);
+  background-color: var(--tw-dark-lime-mint);
+  border-color: var(--tw-dark-lime-mint);
   border-radius: var(--radius-4);
-
-  &:hover,
-  &:focus-within {
-    border-color: var(--tw-primary-bg);
-  }
 }
 
 .error:not(.disabled) {
@@ -69,12 +64,12 @@
   @nest .dark & {
     padding: var(--pd-12) var(--pd-12);
     color: var(--tw-white);
-    background-color: var(--tw-medium);
+    background-color: var(--tw-dark-lime-mint);
   }
 
   @nest .dark &:-webkit-autofill {
     -webkit-text-fill-color: white;
-    background-color: var(--tw-medium) !important;
+    background-color: var(--tw-dark-lime-mint) !important;
   }
 
   @nest .dark &:-webkit-autofill:focus {

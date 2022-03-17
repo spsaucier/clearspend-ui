@@ -1,5 +1,7 @@
-import { Link, useParams } from 'solid-app-router';
+import { Text } from 'solid-i18n';
+import { useParams } from 'solid-app-router';
 
+import { Link } from '_common/components/Link';
 import { Header } from 'signup/components/Header';
 import { ResetPasswordForm } from 'app/components/ResetPasswordForm';
 import { PagePreAuth } from 'app/components/PagePreAuth';
@@ -17,8 +19,8 @@ export default function ResetPassword() {
         <ResetPasswordForm
           onSubmit={(newPassword: string) => resetPassword({ changePasswordId: params.token as string, newPassword })}
         />
-        <Link class={css.secondary} href="/login">
-          Log In
+        <Link darkMode href="/login" class={css.secondary}>
+          <Text message="Log In" />
         </Link>
       </>
     </PagePreAuth>

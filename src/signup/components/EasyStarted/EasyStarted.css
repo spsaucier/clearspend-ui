@@ -13,7 +13,7 @@
     left: 0;
     width: calc(100% - var(--pd-16));
     height: calc(100% - var(--pd-16));
-    border: 1px solid var(--tw-light);
+    border: 1px solid var(--tw-primary-border);
     border-radius: var(--radius-4);
   }
 }

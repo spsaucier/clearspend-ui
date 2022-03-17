@@ -24,14 +24,10 @@
 
 .button {
   margin-top: 10px;
-  color: var(--tw-green-30);
+  color: var(--tw-primary-content);
 }
 
 .row {
   display: flex;
   align-items: center;
-}
-
-.first-action {
-  margin-right: 10px;
 }

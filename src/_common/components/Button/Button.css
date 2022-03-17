@@ -14,6 +14,7 @@
   font: inherit;
   font-family: var(--font-header);
   vertical-align: middle;
+  text-decoration: none;
   background: var(--tw-gray-20);
   border: 0;
   border-radius: var(--radius-12);

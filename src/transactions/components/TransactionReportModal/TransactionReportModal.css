@@ -1,67 +1,16 @@
-.card {
-  display: flex;
-  box-sizing: border-box;
-  width: 443px;
-  max-width: 90%;
-  height: auto;
-  max-height: 90%;
-  padding: var(--pd-40);
-  align-items: flex-start;
-  flex-direction: column;
-  background: #fff;
-  border: 1px solid #f3f2ef;
-  border-radius: var(--radius-25);
-
-  & h4 {
-    margin: 0;
-    color: #000;
-    font-family: var(--font-header);
-    font-size: var(--text-32);
-    font-weight: bold;
-    font-style: normal;
-    line-height: var(--line-36);
-    letter-spacing: 0.01em;
-  }
-
-  & p {
-    margin: var(--pd-16) 0;
-    align-self: stretch;
-    flex-grow: 0;
-    color: #000;
-    font-family: var(--font-header);
-    font-size: var(--text-24);
-    font-weight: normal;
-    font-style: normal;
-    line-height: var(--line-32);
-  }
+.text {
+  font-family: var(--font-header);
+  font-size: var(--text-24);
+  line-height: 1.33;
 }
 
-.info {
-  display: flex;
-  margin: 0 var(--pd-4) var(--pd-24);
-  flex-direction: column;
-  flex-grow: 0;
-  color: #000;
-  font-family: var(--font-main);
-  font-size: var(--text-14);
-  font-weight: normal;
-  font-style: normal;
-  line-height: 20px;
+.links {
+  margin: var(--pd-24) 0;
 }
 
-.info > * {
-  display: flex;
-  margin-bottom: var(--pd-8);
-  align-items: center;
-  flex-direction: row;
-}
-
-.info * svg {
-  display: inline-flex;
-  margin-right: var(--pd-4);
-}
-
-.info a {
-  color: var(--tw-green-70);
-  text-decoration: underline;
+.link {
+  display: grid;
+  margin: var(--pd-8) 0;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pd-4);
 }

@@ -5,7 +5,7 @@ export default {
   component: Tag,
   argTypes: {
     type: {
-      options: ['default', 'success', 'danger'],
+      options: ['default', 'secondary', 'primary', 'success', 'danger', 'warning'],
       control: { type: 'radio' },
     },
     size: {

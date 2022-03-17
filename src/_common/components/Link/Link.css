@@ -1,0 +1,14 @@
+.root {
+  color: var(--tw-primary-content);
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover {
+    color: var(--tw-primary-bg);
+    text-decoration: underline;
+  }
+}
+
+.dark {
+  color: var(--tw-primary-bg);
+}

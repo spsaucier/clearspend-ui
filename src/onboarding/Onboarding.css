@@ -38,7 +38,7 @@
   padding: var(--pd-12);
   align-items: flex-start;
   flex-direction: row;
-  background: var(--tw-medium);
+  background: var(--tw-dark-lime-mint);
   border: 1px solid var(--tw-accent-70);
   border-radius: var(--radius-10);
 }
@@ -83,12 +83,12 @@
 
 .sand {
   flex: 1;
-  background: var(--tw-sand);
+  background: var(--tw-gray-20);
 }
 
 .border {
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--tw-light);
+  border-bottom: 1px solid var(--tw-primary-border);
 }
 
 .thin {

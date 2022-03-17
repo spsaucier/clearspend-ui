@@ -19,13 +19,13 @@
   margin-right: 8px;
 
   & * {
-    color: var(--tw-light);
+    color: var(--tw-primary-bg);
   }
 }
 
 .active {
-  background: var(--tw-medium);
-  border-right-color: var(--tw-light);
+  background: var(--tw-dark-lime-mint);
+  border-right-color: var(--tw-primary-border);
 
   & > *:first-child,
   & ~ * > *:first-child {

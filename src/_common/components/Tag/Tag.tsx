@@ -6,7 +6,7 @@ import css from './Tag.css';
 
 export interface TagProps {
   label?: string;
-  type?: 'default' | 'success' | 'danger' | 'warning';
+  type?: 'default' | 'secondary' | 'primary' | 'success' | 'danger' | 'warning';
   size?: 'md' | 'sm' | 'xs';
   class?: string;
   tabIndex?: number | string;
@@ -22,6 +22,8 @@ export function Tag(props: Readonly<TagProps>) {
       classList={{
         [css.sm!]: props.size === 'sm',
         [css.xs!]: props.size === 'xs',
+        [css.secondary!]: props.type === 'secondary',
+        [css.primary!]: props.type === 'primary',
         [css.success!]: props.type === 'success',
         [css.danger!]: props.type === 'danger',
         [css.warning!]: props.type === 'warning',

@@ -86,9 +86,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
           onUpdate={onUpdateTransaction}
         />
       </Modal>
-      <Modal isOpen={reportModalOpen()} close={() => setReportModalOpen(false)}>
-        <TransactionReportModal onGoBack={() => setReportModalOpen(false)} />
-      </Modal>
+      <TransactionReportModal open={reportModalOpen()} onClose={() => setReportModalOpen(false)} />
     </Data>
   );
 }

@@ -1,8 +1,9 @@
 import { createSignal, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
-import { Link, useNavigate } from 'solid-app-router';
+import { useNavigate } from 'solid-app-router';
 
 import { SignUp } from 'signup';
+import { Link } from '_common/components/Link';
 import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';
 import { PagePreAuth } from 'app/components/PagePreAuth';
 import { Header } from 'signup/components/Header';
@@ -45,16 +46,15 @@ export default function Login() {
         <LoginForm onSubmit={submit} />
         <br />
         <div class={css.text}>
-          <Text
-            message="<link>Forgot password?</link>"
-            link={(text) => (
-              <Link href={`/forgot-password${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
-            )}
-          />
+          <Link darkMode href={`/forgot-password${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>
+            <Text message="Forgot password?" />
+          </Link>
           <Text
             message="Need an account? <link>Sign up here</link>"
             link={(text) => (
-              <Link href={`/signup${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>{text}</Link>
+              <Link darkMode href={`/signup${email() ? `?email=${encodeURIComponent(email())}` : ''}`}>
+                {text}
+              </Link>
             )}
           />
         </div>

@@ -3,6 +3,7 @@ import { createSignal, Show, JSX, onMount, onCleanup, For } from 'solid-js';
 import { KEY_CODES } from '_common/constants/keyboard';
 
 import { Icon } from '../Icon';
+import { Tag } from '../Tag';
 import { Popover } from '../Popover';
 import { getOptions, isMatch } from '../Select/utils';
 import { join } from '../../utils/join';
@@ -107,20 +108,18 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
       <div class={join(css.root, props.class)} data-open={open()} data-view={open() || !selected() ? 'input' : ''}>
         <div class={css.inputWrapper} ref={inputWrapperElement}>
           <For each={props.value}>
-            {(v) => {
-              return (
-                <div class={css.selectedOption}>
-                  <span class={css.selectedOptionText}>{resultRender(v)}</span>
-                  <span class={css.selectedOptionX} onClick={() => onChange(v)}>
-                    <Icon name={'cancel'} class={css.icon} />
-                  </span>
-                </div>
-              );
-            }}
+            {(val) => (
+              <Tag size="xs" class={css.selectedOption}>
+                <span>{resultRender(val)}</span>
+                <span onClick={() => onChange(val)}>
+                  <Icon size="xs" name="cancel" class={css.remove} />
+                </span>
+              </Tag>
+            )}
           </For>
           <input
             value={searchString()}
-            class={css.searchOptionInput}
+            class={css.searchInput}
             ref={inputElement}
             name={props.name}
             placeholder={props.placeholder}

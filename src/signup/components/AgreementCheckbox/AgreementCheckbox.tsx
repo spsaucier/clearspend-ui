@@ -1,7 +1,7 @@
 import { Text } from 'solid-i18n';
 
 import { Checkbox } from '_common/components/Checkbox';
-import { ExternalLink } from '_common/components/ExternalLink';
+import { Link } from '_common/components/Link';
 
 interface AgreementCheckboxProps {
   value: boolean;
@@ -16,8 +16,16 @@ export function AgreementCheckbox(props: Readonly<AgreementCheckboxProps>) {
           'I am at least 18 years old and agree to ClearSpend’s ' +
           '<linkTS>Terms of Service</linkTS> and <linkPP>Privacy Policy</linkPP>.'
         }
-        linkTS={(text) => <ExternalLink to="https://www.clearspend.com/terms">{text}</ExternalLink>}
-        linkPP={(text) => <ExternalLink to="https://www.clearspend.com/privacy">{text}</ExternalLink>}
+        linkTS={(text) => (
+          <Link darkMode href="https://www.clearspend.com/terms">
+            {text}
+          </Link>
+        )}
+        linkPP={(text) => (
+          <Link darkMode href="https://www.clearspend.com/privacy">
+            {text}
+          </Link>
+        )}
       />
     </Checkbox>
   );

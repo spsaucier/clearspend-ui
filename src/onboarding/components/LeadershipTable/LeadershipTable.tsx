@@ -62,14 +62,13 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
       render: (leader) => (
         <div class={css.cell}>
           <div class={css.row}>
-            <a
-              onClick={() => {
-                props.onEditClick(leader.businessOwnerId || '');
-              }}
-              class={css.firstAction}
-            >
-              <Icon name="edit" />
-            </a>
+            <Button
+              size="sm"
+              icon="edit"
+              view="ghost"
+              type="primary"
+              onClick={() => props.onEditClick(leader.businessOwnerId || '')}
+            />
           </div>
         </div>
       ),

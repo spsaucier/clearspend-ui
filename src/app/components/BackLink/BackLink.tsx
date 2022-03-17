@@ -1,6 +1,6 @@
 import type { JSXElement } from 'solid-js';
-import { NavLink } from 'solid-app-router';
 
+import { Link } from '_common/components/Link';
 import { Icon } from '_common/components/Icon';
 import { join } from '_common/utils/join';
 
@@ -14,9 +14,9 @@ interface BackLinkProps {
 
 export function BackLink(props: Readonly<BackLinkProps>) {
   return (
-    <NavLink href={props.to} class={join(css.root, props.class)}>
+    <Link href={props.to} class={join(css.root, props.class)}>
       <Icon name="arrow-left" size="sm" class={css.icon} />
       {props.children}
-    </NavLink>
+    </Link>
   );
 }

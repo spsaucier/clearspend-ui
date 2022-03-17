@@ -1,40 +1,40 @@
 import { Text } from 'solid-i18n';
 
+import { Modal, ModalCard } from '_common/components/Modal';
 import { Button } from '_common/components/Button';
+import { Link } from '_common/components/Link';
 import { Icon } from '_common/components/Icon';
 
 import css from './TransactionReportModal.css';
 
 export interface ReportModalViewProps {
-  onGoBack: () => void;
+  open: boolean;
+  onClose: () => void;
 }
 
 export function TransactionReportModal(props: ReportModalViewProps) {
-  function preventClickBubbling(e: MouseEvent | TouchEvent) {
-    e.stopPropagation();
-  }
-
   return (
-    <div class={css.card} onClick={preventClickBubbling}>
-      <h4>
-        <Text message="Report an issue" />
-      </h4>
-      <p>
-        <Text message="See something wrong with a transaction? Let us know." />
-      </p>
-      <div class={css.info}>
-        <div>
-          <Icon size="xs" name="email" />
-          <a href="mailto:disputes@clearspend.com">disputes@clearspend.com</a>
+    <Modal isOpen={props.open} close={props.onClose}>
+      <ModalCard
+        title={<Text message="Report an issue" />}
+        actions={
+          <Button wide onClick={props.onClose}>
+            <Text message="Go back" />
+          </Button>
+        }
+      >
+        <Text message="See something wrong with a transaction? Let us know." class={css.text!} />
+        <div class={css.links}>
+          <div class={css.link}>
+            <Icon size="sm" name="email" />
+            <Link href="mailto:disputes@clearspend.com">disputes@clearspend.com</Link>
+          </div>
+          <div class={css.link}>
+            <Icon size="sm" name="phone" />
+            <Link href="tel:+18553700660">(855) 370-0660</Link>
+          </div>
         </div>
-        <div>
-          <Icon size="xs" name="phone" />
-          <a href="tel:+18553700660">(855) 370-0660</a>
-        </div>
-      </div>
-      <Button onClick={props.onGoBack} wide={true}>
-        <Text message="Go back" />
-      </Button>
-    </div>
+      </ModalCard>
+    </Modal>
   );
 }

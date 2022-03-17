@@ -37,7 +37,7 @@
   cursor: pointer;
 
   @nest .input:checked + & {
-    background-color: var(--tw-light);
+    background-color: var(--tw-primary-bg);
     border: 0;
 
     &::after {

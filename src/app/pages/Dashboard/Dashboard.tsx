@@ -150,7 +150,7 @@ export default function Dashboard() {
         <Match when={cardsStore.error}>
           <LoadingError onReload={cardsStore.reload} />
         </Match>
-        <Match when={allocations.loading || cardsStore.loading}>
+        <Match when={(allocations.loading && !allocations.data?.length) || (cardsStore.loading && !cardsStore.data)}>
           <Loading />
         </Match>
         <Match when={!cardsCount()}>

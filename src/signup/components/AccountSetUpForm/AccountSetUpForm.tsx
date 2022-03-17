@@ -1,7 +1,7 @@
 import { onMount } from 'solid-js';
-import { Link } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
+import { Link } from '_common/components/Link';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
@@ -114,7 +114,7 @@ export function AccountSetUpForm(props: Readonly<AccountSetUpFormProps>) {
           <Text
             message="Already have an account? <link>Log in here</link>."
             link={(text) => (
-              <Link href="/login">
+              <Link darkMode href="/login">
                 <b>{text}</b>
               </Link>
             )}

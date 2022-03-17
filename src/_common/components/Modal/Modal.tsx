@@ -34,7 +34,8 @@ export function Modal(props: ModalProps) {
   if (props.isOpen) onOpen();
   return (
     <Show when={props.isOpen}>
-      <div class={css.modal} onClick={props.close || getNoop}>
+      <div class={css.modal}>
+        <div class={css.overlay} onClick={props.close || getNoop} />
         {props.children}
       </div>
     </Show>

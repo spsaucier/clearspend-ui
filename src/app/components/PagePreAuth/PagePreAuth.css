@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: space-between;
   color: var(--tw-white);
-  background: var(--tw-dark);
+  background: var(--tw-dark-green);
 
   @media (--bp-large) {
     flex-direction: row;

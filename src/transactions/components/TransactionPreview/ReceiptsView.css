@@ -58,7 +58,7 @@
 }
 
 .current {
-  border: 3px solid var(--tw-green-30);
+  border: 3px solid var(--tw-primary-border);
   cursor: default;
 }
 

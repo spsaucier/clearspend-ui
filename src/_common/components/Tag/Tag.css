@@ -8,7 +8,7 @@
   padding: var(--pd-4) var(--pd-8);
   align-items: center;
   justify-content: center;
-  color: var(--tw-gray-60);
+  color: var(--tw-black);
   vertical-align: middle;
   background: var(--tw-gray-20);
   border: 1px solid var(--tw-gray-30);
@@ -17,24 +17,34 @@
 
 .sm {
   height: v-size-sm;
-  padding: var(--pd-10) var(--pd-8);
+  padding: var(--pd-2) var(--pd-8);
 }
 
 .xs {
   height: v-size-xs;
-  padding: var(--pd-2) var(--pd-4);
+  padding: var(--pd-2) var(--pd-8);
   font-size: var(--text-12);
   line-height: 1.33;
 }
 
+.secondary {
+  color: var(--tw-gray-60);
+}
+
+.primary {
+  color: var(--tw-accent-50);
+  background-color: var(--tw-accent-10);
+  border-color: var(--tw-accent-20);
+}
+
 .success {
-  color: var(--tw-green-70);
+  color: var(--tw-green-80);
   background-color: var(--tw-green-10);
   border-color: var(--tw-green-20);
 }
 
 .danger {
-  color: var(--tw-red-70);
+  color: var(--tw-red-80);
   background-color: var(--tw-red-10);
   border-color: var(--tw-red-20);
 }

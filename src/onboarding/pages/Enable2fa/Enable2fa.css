@@ -3,7 +3,7 @@
   min-height: 100vh;
   padding: var(--pd-48) 6vw;
   color: var(--tw-white);
-  background: var(--tw-dark);
+  background: var(--tw-dark-green);
 
   @media (--bp-large) {
     padding: var(--pd-48);
