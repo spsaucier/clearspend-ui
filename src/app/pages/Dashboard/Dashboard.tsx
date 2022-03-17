@@ -17,13 +17,13 @@ import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
-import { useUserCards } from 'employees/stores/userCards';
+import { useCards } from 'cards/stores/cards';
+import { DEFAULT_CARD_PARAMS } from 'cards/Cards';
 
 import { Page } from '../../components/Page';
 import { Landing } from '../../containers/Landing';
 import { Overview } from '../../containers/Overview';
 import { useBusiness } from '../../containers/Main/context';
-import { ALLOCATIONS_START_COUNT } from '../../constants/common';
 
 import css from './Dashboard.css';
 
@@ -36,10 +36,10 @@ export default function Dashboard() {
 
   const [manageId, setManageId] = createSignal<string>();
 
-  const userCards = useUserCards();
+  const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
   const allocations = useAllocations({ initValue: [] });
 
-  const cardsCount = createMemo(() => userCards.data?.length || 0);
+  const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
   const allocationCount = createMemo(() => allocations.data?.length || 0);
 
   const canAddBalance = createMemo(() => {
@@ -147,13 +147,13 @@ export default function Dashboard() {
         <Match when={allocations.error}>
           <LoadingError onReload={allocations.reload} />
         </Match>
-        <Match when={userCards.error}>
-          <LoadingError onReload={userCards.reload} />
+        <Match when={cardsStore.error}>
+          <LoadingError onReload={cardsStore.reload} />
         </Match>
-        <Match when={(allocations.loading && !allocations.data?.length) || (userCards.loading && !userCards.data)}>
+        <Match when={allocations.loading || cardsStore.loading}>
           <Loading />
         </Match>
-        <Match when={allocationCount() === ALLOCATIONS_START_COUNT && !cardsCount()}>
+        <Match when={!cardsCount()}>
           <Landing allocationsCount={allocationCount()} cardsCount={cardsCount()} showAddBalance={canAddBalance()} />
         </Match>
         <Match when={allocations.data}>
