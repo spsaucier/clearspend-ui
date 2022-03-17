@@ -21,6 +21,8 @@ import { events } from '_common/api/events';
 import { Button } from '_common/components/Button';
 import { completeOnboarding } from 'allocations/services';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { Modal } from '_common/components/Modal';
+import { LoadingPage } from '_common/components/LoadingPage/LoadingPage';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -48,6 +50,7 @@ export default function Onboarding() {
   const media = useMediaContext();
   const messages = useMessages();
   const navigate = useNavigate();
+  const [loadingModalOpen, setLoadingModalOpen] = createSignal(false);
 
   const { business, currentUser, refetch: refetchOnboardingState, mutate } = useOnboardingBusiness();
   const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['businessType'] }>();
@@ -106,6 +109,7 @@ export default function Onboarding() {
   }
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => {
+    setLoadingModalOpen(true);
     if (business()) {
       // update
       await updateBusinessInfo(data as UpdateBusiness);
@@ -117,12 +121,14 @@ export default function Onboarding() {
       mutate([{ ...currentUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
     }
     sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
+    setLoadingModalOpen(false);
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
   const onUpdateKYC = async (skipTrigger?: boolean) => {
+    setLoadingModalOpen(true);
+    sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
     try {
-      sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
       if (!skipTrigger) {
         await triggerBusinessOwners();
       }
@@ -153,6 +159,7 @@ export default function Onboarding() {
       messages.error({ title: 'Something went wrong' });
       setStep(OnboardingStep.BUSINESS_OWNERS);
     }
+    setLoadingModalOpen(false);
   };
 
   const onSoftFail = async (data: Readonly<{}>) => {
@@ -275,6 +282,7 @@ export default function Onboarding() {
                 onNext={onUpdateKYC}
                 onLeaderUpdate={onLeaderUpdate}
                 currentUser={currentUser()}
+                setLoadingModalOpen={setLoadingModalOpen}
               />
             </Page>
           </Match>
@@ -319,6 +327,9 @@ export default function Onboarding() {
           </Match>
         </Switch>
       </div>
+      <Modal isOpen={loadingModalOpen()}>
+        <LoadingPage />
+      </Modal>
     </MainLayout>
   );
 }

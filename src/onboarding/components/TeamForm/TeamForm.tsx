@@ -24,6 +24,7 @@ interface TeamFormProps {
   business: Business | null;
   kycErrors?: Readonly<{ [key: string]: string[] }>;
   onLeaderUpdate: (leaderId: string) => void;
+  setLoadingModalOpen: (loading: boolean) => void;
 }
 
 const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
@@ -87,8 +88,10 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
         <CurrentUserForm
           currentUser={props.currentUser}
           onNext={async (businessOwner: CreateOrUpdateBusinessOwnerRequest) => {
+            props.setLoadingModalOpen(true);
             await updateOwner({ ...businessOwner, id: props.currentUser.userId });
             await refetchOwnersList();
+            props.setLoadingModalOpen(false);
           }}
         />
       </Show>
@@ -97,6 +100,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           leader={leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           isCurrentUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
+            props.setLoadingModalOpen(true);
             if (editingLeaderId()) {
               await updateOwner({ ...leader, id: editingLeaderId() });
               props.onLeaderUpdate(editingLeaderId());
@@ -106,6 +110,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
 
             await refetchOwnersList();
             setShowAddingNewLeader(false);
+            props.setLoadingModalOpen(false);
           }}
           kycErrors={props.kycErrors?.[editingLeaderId()]}
         />

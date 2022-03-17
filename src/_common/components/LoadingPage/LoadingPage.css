@@ -1,0 +1,39 @@
+.root {
+  align-items: center;
+  flex-direction: column;
+}
+
+.ellipsis {
+  color: white;
+  font-family: var(--font-header);
+  font-size: 24px;
+  text-align: center;
+  user-select: none;
+}
+
+.ellipsis::after,
+.ellipsis::before {
+  content: '\2026'; /* ascii code for the ellipsis character */
+  display: inline-block;
+  width: 0;
+  text-align: left;
+  vertical-align: bottom;
+  animation: ellipsis steps(4, end) 3000ms infinite;
+  overflow: hidden;
+}
+
+.ellipsis::before {
+  color: transparent;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 0.7em;
+  }
+}
+
+.image-wrapper {
+  display: flex;
+  margin-bottom: var(--pd-40);
+  justify-content: center;
+}
