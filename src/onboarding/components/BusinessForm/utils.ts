@@ -1,5 +1,6 @@
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
+import { maxLength } from '_common/components/Form/rules/maxLength';
 import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
 import { cleanEIN } from '_common/formatters/ein';
 import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
@@ -7,6 +8,7 @@ import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'g
 import type { FormValues } from './types';
 import type { BusinessWithBusinessName } from './BusinessForm';
 
+export const BUSINESS_DESCRIPTION_MAX_LENGTH = 200;
 export function getFormOptions(
   type: Business['businessType'],
   prefill?: BusinessWithBusinessName,
@@ -37,6 +39,7 @@ export function getFormOptions(
       locality: [required],
       region: [required],
       postalCode: [required, validZipCode],
+      description: [maxLength(BUSINESS_DESCRIPTION_MAX_LENGTH)],
     },
   };
 }

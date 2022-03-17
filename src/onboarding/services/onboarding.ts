@@ -26,7 +26,7 @@ export async function getBusinessProspectInfo(businessProspectId: string) {
 }
 
 export async function confirmOTP(id: string, params: Readonly<ValidateBusinessProspectIdentifierRequest>) {
-  return service.post(`/business-prospects/${id}/validate-identifier`, params);
+  return service.post<{ emailExist?: boolean }>(`/business-prospects/${id}/validate-identifier`, params);
 }
 
 export async function setPhone(id: string, phone: string) {

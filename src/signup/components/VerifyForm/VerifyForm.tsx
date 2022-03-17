@@ -1,4 +1,4 @@
-import { JSXElement, onMount, Show } from 'solid-js';
+import { createEffect, JSXElement, onMount, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
@@ -26,6 +26,7 @@ interface VerifyFormProps {
   onResend?: () => Promise<unknown>;
   onConfirm: (code: string) => Promise<unknown>;
   darkMode?: boolean;
+  errors?: { code?: string };
 }
 
 export function VerifyForm(props: Readonly<VerifyFormProps>) {
@@ -57,6 +58,12 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
       });
     }
   };
+
+  createEffect(() => {
+    if (props.errors) {
+      setErrors(props.errors);
+    }
+  });
 
   return (
     <div>

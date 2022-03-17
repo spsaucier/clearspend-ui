@@ -9,7 +9,9 @@
 }
 
 .input-help {
+  display: flex;
   margin-top: 3px;
+  flex-direction: row;
   color: var(--tw-gray-60);
   font-size: 11px;
   line-height: 1.3;

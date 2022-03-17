@@ -24,8 +24,17 @@
   }
 }
 
-.header-font {
+.sign-out-btn {
+  width: auto;
+  margin-left: var(--pd-12);
+  color: var(--tw-accent-45);
   font-family: var(--font-header);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--tw-accent-45);
+    background-color: var(--tw-dark-lime-mint);
+  }
 }
 
 .steps {
@@ -63,13 +72,6 @@
 .footer > div {
   display: flex;
   align-items: center;
-}
-
-.footer > button {
-  width: auto;
-  margin-left: var(--pd-12);
-  color: var(--tw-accent-70);
-  white-space: nowrap;
 }
 
 .user {

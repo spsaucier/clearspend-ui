@@ -62,7 +62,7 @@ export function LoginForm(props: Readonly<LoginFormProps>) {
         />
       </FormItem>
       <FlatButton type="primary" htmlType="submit" loading={loading()}>
-        Login
+        Log in
       </FlatButton>
     </Form>
   );

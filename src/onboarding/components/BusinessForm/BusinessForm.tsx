@@ -17,7 +17,7 @@ import { BUSINESS_MCC } from 'app/types/mcc';
 
 import type { ExceptionData } from '../../types';
 
-import { getFormOptions, convertFormData } from './utils';
+import { getFormOptions, convertFormData, BUSINESS_DESCRIPTION_MAX_LENGTH } from './utils';
 import type { FormValues } from './types';
 
 import css from './BusinessForm.css';
@@ -113,7 +113,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               onChange={handlers.description}
             />
             <div class={css.inputHelp}>
-              <Text message="Briefly describe your business in 50 words or less." />
+              <Text message="Briefly describe your business" />
+              <div style={{ flex: '1' }} />
+              <Text message={`${values().description.length} / ${BUSINESS_DESCRIPTION_MAX_LENGTH}`} />
             </div>
           </FormItem>
           <FormItem label="Business website (optional)" error={errors().url}>

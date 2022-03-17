@@ -11,6 +11,7 @@ import { login } from 'app/services/auth';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
 import { Button } from '_common/components/Button';
 import type { BusinessProspectData } from 'generated/capital';
+import { i18n } from '_common/api/intl';
 
 import { Events, sendAnalyticsEvent, AnalyticsEventType } from '../app/utils/analytics';
 
@@ -25,7 +26,6 @@ import { EasyStarted } from './components/EasyStarted';
 
 // eslint-disable-next-line css-modules/no-unused-class
 import css from './SignUp.css';
-
 enum Step {
   AccountSetUpStep,
   EmailOtpStep, // TODO: move to after AccountSetUpStep when backend is ready
@@ -85,6 +85,7 @@ export default function SignUp() {
   } = useSignup();
 
   const [step, setStep] = createSignal<Step>(getInitStep(store));
+  const [emailExists, setEmailExists] = createSignal<boolean>(false);
 
   const next = (nextStep?: Step) => (nextStep ? setStep(nextStep) : setStep((prev) => prev + 1));
 
@@ -206,15 +207,23 @@ export default function SignUp() {
   };
 
   const onEmailCodeResend = async () => {
+    setEmailExists(false);
     sendAnalyticsEvent({ name: Events.RESEND_EMAIL_OTP });
-    return onSignup();
+    await onSignup();
+    next(Step.EmailOtpStep);
   };
 
   const onEmailConfirm = async (otp: string) => {
-    await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
-    setEmailVerified(true);
-    sendAnalyticsEvent({ name: Events.VERIFY_EMAIL });
-    next();
+    setEmailExists(false);
+    const result = await confirmOTP(store.pid!, { identifierType: IdentifierType.EMAIL, otp });
+    if (result.data.emailExist) {
+      // Not ideal since it seems there are two different ways a duplicate email error is returned, to be improved.
+      setEmailExists(true);
+    } else {
+      setEmailVerified(true);
+      sendAnalyticsEvent({ name: Events.VERIFY_EMAIL });
+      next();
+    }
   };
 
   const onPhoneUpdate = async (phone: string) => {
@@ -286,6 +295,7 @@ export default function SignUp() {
               }
               onResend={onEmailCodeResend}
               onConfirm={onEmailConfirm}
+              errors={emailExists() ? { code: String(i18n.t('Account already exists with this email.')) } : undefined}
               extraBtn={
                 <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.AccountSetUpStep)}>
                   <Text message="Use different email" />

@@ -249,7 +249,7 @@ export default function Onboarding() {
               onClick={logoutAction}
               type="default"
               view="ghost"
-              class={css.headerFont}
+              class={css.signOutBtn}
             >
               <Text message="Sign out" />
             </Button>
