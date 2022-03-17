@@ -5,6 +5,7 @@
   justify-content: flex-start;
   color: var(--tw-gray-60);
   white-space: nowrap;
+  text-decoration: none;
   background: transparent;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
