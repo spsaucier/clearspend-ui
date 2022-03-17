@@ -12,7 +12,6 @@ import { useMessages } from 'app/containers/Messages/context';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
 import type { BankAccount } from 'generated/capital';
 import { registerBankAccount } from 'onboarding/services/accounts';
-import { completeOnboarding } from 'allocations/services';
 
 import { BankAccounts } from '../BankAccounts';
 
@@ -65,10 +64,9 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
               )
             : error.data.message,
         });
+        setLoading(false);
         throw error;
       });
-      await completeOnboarding();
-      setLoading(false);
     } catch (e: unknown) {
       setLoading(false);
     }
@@ -123,7 +121,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
           class={css.button}
           data-name="authorize-deposit"
         >
-          <Text message="Authorize deposit" />
+          <Text message={`Authorize deposit`} />
         </Button>
       </Section>
     </Form>

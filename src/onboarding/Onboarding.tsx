@@ -49,7 +49,7 @@ export default function Onboarding() {
   const messages = useMessages();
   const navigate = useNavigate();
 
-  const { business, currentUser, refetch, mutate } = useOnboardingBusiness();
+  const { business, currentUser, refetch: refetchOnboardingState, mutate } = useOnboardingBusiness();
   const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['businessType'] }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
@@ -110,7 +110,7 @@ export default function Onboarding() {
       // update
       await updateBusinessInfo(data as UpdateBusiness);
       setKYBRequiredDocuments([]);
-      await refetch();
+      await refetchOnboardingState();
     } else {
       // create
       const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
@@ -120,30 +120,13 @@ export default function Onboarding() {
     setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
-  const getMinutesRemaining = (currentStep?: OnboardingStep) => {
-    switch (currentStep) {
-      case OnboardingStep.TRANSFER_MONEY:
-        return `2`;
-      case OnboardingStep.LINK_ACCOUNT:
-        return `4`;
-      case OnboardingStep.REVIEW:
-      case OnboardingStep.SOFT_FAIL:
-        return `6`;
-      case OnboardingStep.BUSINESS_OWNERS:
-        return `10`;
-      case OnboardingStep.BUSINESS:
-      default:
-        return `12`;
-    }
-  };
-
   const onUpdateKYC = async (skipTrigger?: boolean) => {
     try {
       sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
       if (!skipTrigger) {
         await triggerBusinessOwners();
       }
-      await refetch();
+      await refetchOnboardingState();
       const reviewRequirements = await getApplicationReviewRequirements();
 
       setKYBRequiredDocuments(reviewRequirements.kybRequiredDocuments);
@@ -179,7 +162,6 @@ export default function Onboarding() {
 
   const onGotVerifyToken = async (token: string, accountName?: string) => {
     const bankAccounts = await linkBankAccounts(token);
-
     batch(async () => {
       const matchedAccounts = accountName
         ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
@@ -192,36 +174,12 @@ export default function Onboarding() {
     });
   };
 
-  const onDeposit = async (accountId: string, amount: number) => {
-    await bankTransaction('DEPOSIT', accountId, amount);
-    await refetch();
-    storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
-    storage.set(ONBOARDING_LEADERS_KEY, []);
-    sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
-    sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
-    navigate('/');
-  };
-
   const checkReviewStatus = async () => {
-    await refetch();
+    await refetchOnboardingState();
     if (business()?.onboardingStep !== 'REVIEW') {
       setPendingVerification([]);
       setStep(business()?.onboardingStep as OnboardingStep);
     }
-  };
-
-  const skipDeposit = async () => {
-    // temp patch while backend resolves issue of pending verification to proper business step
-    if (pendingVerification().length > 0) {
-      await onUpdateKYC(true);
-      return;
-    }
-
-    await completeOnboarding();
-    await refetch();
-    sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
-    sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
-    navigate('/');
   };
 
   const onLeaderUpdate = (leaderId: string) => {
@@ -229,6 +187,31 @@ export default function Onboarding() {
       ...kycRequiredFields(),
       [leaderId]: [],
     });
+  };
+
+  const onDeposit = async (accountId: string, amount: number) => {
+    await bankTransaction('DEPOSIT', accountId, amount);
+    storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
+    storage.set(ONBOARDING_LEADERS_KEY, []);
+    sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+    triggerCompleteOnboarding();
+  };
+  const onSkipDeposit = async () => {
+    // temp patch while backend resolves issue of pending verification to proper business step
+    if (pendingVerification().length > 0) {
+      await onUpdateKYC(true);
+      return;
+    }
+
+    sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
+    triggerCompleteOnboarding();
+  };
+
+  const triggerCompleteOnboarding = async () => {
+    await completeOnboarding();
+    await refetchOnboardingState();
+    sendAnalyticsEvent({ name: Events.ONBOARDING_COMPLETE });
+    navigate('/');
   };
 
   return (
@@ -316,7 +299,7 @@ export default function Onboarding() {
               <LinkAccountStep
                 disabled={pendingVerification().length > 0}
                 onSuccess={onGotVerifyToken}
-                skipDeposit={skipDeposit}
+                skipDeposit={onSkipDeposit}
                 onCheckVerification={() => onUpdateKYC(true)}
               />
             </Page>
@@ -339,3 +322,20 @@ export default function Onboarding() {
     </MainLayout>
   );
 }
+
+const getMinutesRemaining = (currentStep?: OnboardingStep) => {
+  switch (currentStep) {
+    case OnboardingStep.TRANSFER_MONEY:
+      return `2`;
+    case OnboardingStep.LINK_ACCOUNT:
+      return `4`;
+    case OnboardingStep.REVIEW:
+    case OnboardingStep.SOFT_FAIL:
+      return `6`;
+    case OnboardingStep.BUSINESS_OWNERS:
+      return `10`;
+    case OnboardingStep.BUSINESS:
+    default:
+      return `12`;
+  }
+};
