@@ -58,7 +58,7 @@ export function ReceiptsView(props: {
     <div class={css.root}>
       <div class={css.top}>
         <Text message="{current} of {total}" current={currentReceiptIndex() + 1} total={visibleReceipts().length} />
-        <span class={css.close}>
+        <span class={css.close} onClick={props.onEmpty}>
           <Text message="Close" />
           <Icon name="cancel" />
         </span>
