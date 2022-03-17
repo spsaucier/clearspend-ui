@@ -1,9 +1,10 @@
-import { For } from 'solid-js';
+import { createMemo, For } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
 import { Select, Option } from '_common/components/Select';
 import type { UserData } from 'generated/capital';
 import { formatName } from 'employees/utils/formatName';
+import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
 
 import { NewEmployeeButton } from './NewEmployeeButton';
 
@@ -17,6 +18,11 @@ interface SelectEmployeeProps {
 
 export function SelectEmployee(props: Readonly<SelectEmployeeProps>) {
   const i18n = useI18n();
+
+  // TODO: Remove once we sort in BE: CAP-557
+  const sortedUsers = createMemo(() => {
+    return [...props.users].sort(byUserLastName);
+  });
 
   return (
     <Select
@@ -32,7 +38,7 @@ export function SelectEmployee(props: Readonly<SelectEmployeeProps>) {
       error={props.error}
       onChange={props.onChange}
     >
-      <For each={props.users}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
+      <For each={sortedUsers()}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
     </Select>
   );
 }

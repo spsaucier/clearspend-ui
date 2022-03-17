@@ -34,6 +34,7 @@ import { SwitchLimits } from '../SwitchLimits';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { AllocationRoles, AllocationUserRole } from '../../types';
+import { byUserLastName, byRoleLastName } from '../AllocationSelect/utils';
 
 import { convertFormData, getFormOptions } from './utils';
 import type { FormValues } from './types';
@@ -111,6 +112,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
     return [...props.parentRoles.map((role) => getAllocationUserRole(role, true)), ...localRoles()];
   });
 
+  // TODO: Remove once we sort in BE: CAP-557
+  const sortedUsers = createMemo(() => {
+    return [...props.users].sort(byUserLastName);
+  });
+
+  const sortedRoles = createMemo(() => {
+    return [...roles()].sort(byRoleLastName);
+  });
+
   return (
     <Form class={css.form}>
       <Section title={<Text message="Allocation details" />}>
@@ -180,7 +190,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             )}
             onChange={onAddRole}
           >
-            <For each={props.users}>
+            <For each={sortedUsers()}>
               {(item) => (
                 <Option value={item.userId!} disabled={roles().some((role) => role.user.userId === item.userId)}>
                   {formatName(item)}
@@ -189,7 +199,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             </For>
           </Select>
         </FormItem>
-        <For each={roles()}>
+        <For each={sortedRoles()}>
           {(role) => (
             <AllocationRole
               user={role.user}

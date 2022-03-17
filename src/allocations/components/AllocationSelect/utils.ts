@@ -1,4 +1,5 @@
-import type { Allocation } from 'generated/capital';
+import type { AllocationUserRole } from 'allocations/types';
+import type { Allocation, User } from 'generated/capital';
 
 interface AllocationWithChildNodes extends Allocation {
   childNodes: AllocationWithChildNodes[];
@@ -9,6 +10,12 @@ interface AllocationIndented extends Allocation {
 
 export const byName = (a: Allocation, b: Allocation) =>
   a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1;
+
+export const byUserLastName = (a: User, b: User) =>
+  (a.lastName || '').toLocaleLowerCase() > (b.lastName || '').toLocaleLowerCase() ? 1 : -1;
+
+export const byRoleLastName = (a: AllocationUserRole, b: AllocationUserRole) =>
+  (a.user.lastName || '').toLocaleLowerCase() > (b.user.lastName || '').toLocaleLowerCase() ? 1 : -1;
 
 const createTree = (dataset: Allocation[]) => {
   const hashTable = {} as { [key: string]: AllocationWithChildNodes };

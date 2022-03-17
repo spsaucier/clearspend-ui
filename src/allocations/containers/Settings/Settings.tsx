@@ -30,6 +30,7 @@ import {
 } from '../../services';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
+import { byUserLastName, byRoleLastName } from '../../components/AllocationSelect/utils';
 
 import { getRolesList, getRolesUpdates } from './utils';
 
@@ -142,6 +143,15 @@ export function Settings(props: Readonly<SettingsProps>) {
 
   const roles = createMemo(() => getRolesList(currentRoles() || [], updatedRoles()));
 
+  // TODO: Remove once we sort in BE: CAP-557
+  const sortedUsers = createMemo(() => {
+    return [...users.data!].sort(byUserLastName);
+  });
+
+  const sortedRoles = createMemo(() => {
+    return [...roles()].sort(byRoleLastName);
+  });
+
   return (
     <Form>
       <Section title={<Text message="Allocation details" />}>
@@ -176,7 +186,7 @@ export function Settings(props: Readonly<SettingsProps>) {
             )}
             onChange={onAddRole}
           >
-            <For each={users.data!}>
+            <For each={sortedUsers()}>
               {(item) => (
                 <Option
                   value={item.userId!}
@@ -188,7 +198,7 @@ export function Settings(props: Readonly<SettingsProps>) {
             </For>
           </Select>
         </FormItem>
-        <For each={roles()}>
+        <For each={sortedRoles()}>
           {(role) => (
             <Show when={!removedRoles()[role.user.userId!]}>
               <AllocationRole
