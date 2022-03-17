@@ -49,9 +49,9 @@ export function ReceiptsView(props: {
     e.stopPropagation();
     const remainingReceipts = visibleReceipts().filter((r) => r.receiptId !== currentReceipt().receiptId);
     await deleteReceiptAction(currentReceipt().receiptId!);
-    setVisibleReceipts(remainingReceipts);
     props.onUpdate(await getActivityById(props.accountActivityId));
     remainingReceipts.length ? setCurrentReceiptIndex(0) : props.onEmpty();
+    setVisibleReceipts(remainingReceipts);
   };
 
   return (
