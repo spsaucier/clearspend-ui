@@ -55,14 +55,14 @@ function getInitStep(store: SignupStore): Step {
       return Step.EmailOtpStep;
     case !businessTypeCategory || !businessType || !relationshipToBusiness:
       return Step.BusinessTypeCategoryStep;
-    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER):
-      return Step.SorryButStep;
     case !phone:
       return Step.PhoneStep;
     case !phoneVerified:
       return Step.PhoneOtpStep;
+    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER):
+      return Step.SorryButStep;
     default:
-      return Step.AccountSetUpStep;
+      return Step.PasswordStep;
   }
 }
 
@@ -107,7 +107,7 @@ export default function SignUp() {
     setBusinessType(businessType);
     const relationshipToBusiness = [];
 
-    if (isOwnerOf25) {
+    if (isOwnerOf25 || BusinessType.SOLE_PROPRIETORSHIP === businessType) {
       relationshipToBusiness.push(RelationshipToBusiness.OWNER);
     } else if (isExecutive) {
       relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
@@ -129,14 +129,14 @@ export default function SignUp() {
   };
 
   const onSignup = async () => {
-    const { first, last, businessType, email, relationshipToBusiness } = store;
+    const { first, last, email, emailVerified, businessType, relationshipToBusiness } = store;
 
     if (!first || !last || !email) {
       setStep(Step.AccountSetUpStep);
       return;
     }
 
-    if (!relationshipToBusiness) {
+    if (emailVerified && !relationshipToBusiness) {
       setStep(Step.BusinessTypeCategoryStep);
       return;
     }
@@ -146,8 +146,8 @@ export default function SignUp() {
       firstName: first,
       lastName: last,
       businessType: businessType as BusinessProspectData['businessType'],
-      relationshipOwner: relationshipToBusiness.includes(RelationshipToBusiness.OWNER),
-      relationshipExecutive: relationshipToBusiness.includes(RelationshipToBusiness.EXECUTIVE),
+      relationshipOwner: relationshipToBusiness?.includes(RelationshipToBusiness.OWNER),
+      relationshipExecutive: relationshipToBusiness?.includes(RelationshipToBusiness.EXECUTIVE),
       tosAndPrivacyPolicyAcceptance: true,
     } as BusinessProspectData & { tosAndPrivacyPolicyAcceptance: boolean });
 
@@ -263,16 +263,6 @@ export default function SignUp() {
           <Match when={step() === Step.AccountSetUpStep}>
             <AccountSetUpForm initialEmailValue={searchParams.email} onNext={onNameUpdate} />
           </Match>
-          <Match when={step() === Step.BusinessTypeCategoryStep}>
-            <BusinessDetailsForm onNext={onBusinessTypeCategoryUpdate} />
-          </Match>
-          <Match when={step() === Step.SorryButStep}>
-            <SorryButForm
-              onNext={() => {
-                // tbd
-              }}
-            />
-          </Match>
           <Match when={step() === Step.EmailOtpStep}>
             <VerifyForm
               header={<Text message="👋 Hey {first}, it's nice to meet you!" first={store.first!} />}
@@ -301,6 +291,16 @@ export default function SignUp() {
                   <Text message="Use different email" />
                 </Button>
               }
+            />
+          </Match>
+          <Match when={step() === Step.BusinessTypeCategoryStep}>
+            <BusinessDetailsForm onNext={onBusinessTypeCategoryUpdate} />
+          </Match>
+          <Match when={step() === Step.SorryButStep}>
+            <SorryButForm
+              onNext={() => {
+                // tbd
+              }}
             />
           </Match>
           <Match when={step() === Step.PhoneStep}>
