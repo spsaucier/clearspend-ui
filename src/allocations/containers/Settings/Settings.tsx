@@ -165,14 +165,19 @@ export function Settings(props: Readonly<SettingsProps>) {
         </FormItem>
       </Section>
       <Section
-        title={<Text message="Access" />}
-        description={
-          <Text
-            message={
-              'Add users who can view or manage this allocation. Managers can deposit funds, add employees, and issue cards to this allocation.'
-            }
-          />
-        }
+        title={<Text message="Manager(s)" />}
+        multiDescription={[
+          <p class={css.content}>Add employees who can view or manage this allocation.</p>,
+          <h5 class={css.subheader}>Manage</h5>,
+          <p class={css.content}>
+            Managers can deposit and withdraw funds, create additional allocations under this allocation, add employees,
+            and issue cards.
+          </p>,
+          <h5 class={css.subheader}>View only</h5>,
+          <p class={css.content}>
+            Viewers can see balances, employees, cards, and transactions, but cannot make changes.
+          </p>,
+        ]}
       >
         <FormItem label={<Text message="Add manager or viewer" />} class={css.field}>
           <Select
@@ -202,6 +207,7 @@ export function Settings(props: Readonly<SettingsProps>) {
           {(role) => (
             <Show when={!removedRoles()[role.user.userId!]}>
               <AllocationRole
+                allocation={props.allocation}
                 user={role.user}
                 role={role.role}
                 inherited={role.inherited}

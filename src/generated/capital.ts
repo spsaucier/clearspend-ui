@@ -1038,6 +1038,11 @@ export interface OwnersProvidedResponse {
   errorMessages?: string[];
 }
 
+export interface TwoFactorStartLoggedInResponse {
+  twoFactorId?: string;
+  methodId?: string;
+}
+
 export interface DeviceInfo {
   description?: string;
   lastAccessedAddress?: string;
@@ -1264,6 +1269,15 @@ export interface AccountActivityRequest {
   /** @format date-time */
   to?: string;
   statuses?: ('PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED')[];
+  amount?: FilterAmount;
+  categories?: string[];
+  withReceipt?: boolean;
+  withoutReceipt?: boolean;
+}
+
+export interface FilterAmount {
+  min?: number;
+  max?: number;
 }
 
 export interface AccountActivityResponse {

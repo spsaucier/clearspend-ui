@@ -8,6 +8,7 @@ import { Confirm } from '_common/components/Confirm';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
+import type { Allocation } from 'generated/capital';
 
 import { AllocationRoles, AllocationUserRole } from '../../types';
 
@@ -15,6 +16,7 @@ import css from './AllocationRole.css';
 
 interface AllocationRoleProps extends AllocationUserRole {
   class?: string;
+  allocation?: Allocation;
   onChange: (userId: string, role: AllocationRoles) => void;
   onDelete: (userId: string) => void;
 }
@@ -29,9 +31,11 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
         disabled={props.inherited || props.user.type === 'BUSINESS_OWNER'}
         onChange={(value) => props.onChange(props.user.userId!, value as AllocationRoles)}
       >
-        <Option value={AllocationRoles.Admin}>
-          <Text message="Admin" />
-        </Option>
+        <Show when={!Boolean(props.allocation?.parentAllocationId)}>
+          <Option value={AllocationRoles.Admin}>
+            <Text message="Admin" />
+          </Option>
+        </Show>
         <Option value={AllocationRoles.Manager}>
           <Text message="Manage" />
         </Option>
@@ -54,6 +58,26 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
             content={
               <div>
                 <Switch>
+                  <Match when={props.role === AllocationRoles.Admin}>
+                    <Text message="Administrator" class={css.popupTitle!} />
+                    <ul class={css.popupContent}>
+                      <li>
+                        <Text message="Add & update users" />
+                      </li>
+                      <li>
+                        <Text message="Create and manage all allocations & cards" />
+                      </li>
+                      <li>
+                        <Text message="Manage bank accounts, deposits, and withdrawals" />
+                      </li>
+                      <li>
+                        <Text message="View & update company information" />
+                      </li>
+                      <li>
+                        <Text message="Access accounting features" />
+                      </li>
+                    </ul>
+                  </Match>
                   <Match when={props.role === AllocationRoles.ViewOnly}>
                     <Text message="View only" class={css.popupTitle!} />
                     <ul class={css.popupContent}>
