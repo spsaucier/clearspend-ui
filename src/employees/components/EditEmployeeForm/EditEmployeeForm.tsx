@@ -53,7 +53,7 @@ export function EditEmployeeForm(props: Readonly<EditEmployeeFormProps>) {
   return (
     <Form autocomplete="off">
       <Section title={<Text message="Employee Info" />} description="What is your employee's name and contact info?">
-        <PersonalInfoFormItems values={values()} errors={errors()} handlers={handlers} />
+        <PersonalInfoFormItems values={values()} errors={errors()} handlers={handlers} isEdit={!!props.user} />
       </Section>
       <Section title={<Text message="Employee Address" />} description="What's your employee’s home address?">
         <AddressFormItems values={values} errors={errors()} handlers={handlers} />

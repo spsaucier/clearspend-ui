@@ -12,6 +12,7 @@ interface PersonalInfoFormItemsProps {
   values: FormValues;
   errors: Readonly<Partial<Record<keyof FormValues, string>>>;
   handlers: Readonly<FormHandlers<FormValues>>;
+  isEdit?: boolean;
 }
 
 export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps>) {
@@ -41,6 +42,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
         <Input
           name="email"
           type="email"
+          disabled={props.isEdit}
           value={props.values.email}
           placeholder={String(i18n.t('Enter email address'))}
           error={Boolean(props.errors.email)}

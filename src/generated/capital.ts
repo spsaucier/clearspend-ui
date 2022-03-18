@@ -2616,6 +2616,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'MANAGE_PERMISSIONS'
     | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
+    | 'LINK_BANK_ACCOUNTS'
   )[];
   globalUserPermissions?: (
     | 'BATCH_ONBOARD'
@@ -3170,6 +3171,7 @@ export interface AllocationRolePermissionRecord {
     | 'MANAGE_PERMISSIONS'
     | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
+    | 'LINK_BANK_ACCOUNTS'
   )[];
 }
 

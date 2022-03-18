@@ -110,7 +110,7 @@ export default function Dashboard() {
               menu={
                 <>
                   {canManageUsers(userPermissions()) ? (
-                    <MenuItem name="employee" onClick={() => navigate('/employees/edit')}>
+                    <MenuItem name="employee" onClick={() => navigate('/employees/add')}>
                       <Text message="Employee" />
                     </MenuItem>
                   ) : null}

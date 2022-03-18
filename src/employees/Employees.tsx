@@ -49,7 +49,7 @@ export default function Employees() {
       title={<Text message="Employees" />}
       actions={
         <Show when={canManageCards(permissions())}>
-          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/edit')}>
+          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/add')}>
             <Text message="New employee" />
           </Button>
         </Show>

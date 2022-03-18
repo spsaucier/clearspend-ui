@@ -85,7 +85,7 @@ export function Landing(props: Readonly<LandingProps>) {
           class={css.card}
           title={<Text message="Onboard your employees" />}
           actions={
-            <Button size="lg" icon="user" onClick={() => navigate('/employees/edit')} data-name="landing-add-employee">
+            <Button size="lg" icon="user" onClick={() => navigate('/employees/add')} data-name="landing-add-employee">
               <Text message="Onboard your employees" />
             </Button>
           }

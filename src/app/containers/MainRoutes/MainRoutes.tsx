@@ -35,7 +35,7 @@ export function MainRoutes() {
               <Route path="/" element={<Dashboard />} />
 
               <Route path="/employees" element={<Employees />} />
-              <Route path="/employees/edit" element={<EmployeeEdit />} />
+              <Route path="/employees/add" element={<EmployeeEdit />} />
               <Route path="/employees/view/:id" element={<EmployeeView />} />
 
               <Route path="/allocations" element={<Allocations />} />
