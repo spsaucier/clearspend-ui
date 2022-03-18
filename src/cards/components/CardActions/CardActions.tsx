@@ -43,9 +43,11 @@ export function CardActions(props: Readonly<CardActionsProps>) {
         </Show>
       </Match>
       <Match when={props.card.activated}>
-        <Button size="lg" icon="view" onClick={props.onShowDetails}>
-          <Text message="Card Details" />
-        </Button>
+        <Show when={canActivateCard(props.card, props.user)}>
+          <Button size="lg" icon="view" onClick={props.onShowDetails}>
+            <Text message="Card Details" />
+          </Button>
+        </Show>
         <Switch>
           <Match when={props.card.status === 'ACTIVE'}>
             <Confirm

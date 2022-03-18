@@ -13,6 +13,7 @@ import css from './Card.css';
 export interface CardProps {
   type: CardType;
   number?: string;
+  name?: string;
   status?: Required<ICard>['status'];
   activated?: boolean;
   class?: string;
@@ -77,7 +78,7 @@ export function Card(props: Readonly<CardProps>) {
           }
         />
       </Show>
-      <Show when={isPhysical() && isActivated() && !isFrozen()}>
+      <Show when={isPhysical() && isActivated() && !isFrozen() && props.number !== undefined}>
         <radialGradient id="a" cx="47.5" cy="101" r="21.4" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#fff" />
           <stop offset="1" stop-color="#dddcda" />
@@ -159,6 +160,11 @@ export function Card(props: Readonly<CardProps>) {
               {i18n.t('Frozen')}
             </text>
           </>
+        </Match>
+        <Match when={Boolean(props.name)}>
+          <text x="28" y="160" fill="000" class={css.name}>
+            {props.name}
+          </text>
         </Match>
       </Switch>
     </svg>

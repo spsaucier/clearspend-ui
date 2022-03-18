@@ -10,6 +10,7 @@ import css from './CardTypeSelect.css';
 
 interface CardTypeSelectProps {
   value: readonly CardType[];
+  name?: string;
   class?: string;
   onChange?: (value: CardType[]) => void;
 }
@@ -39,7 +40,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
       </Checkbox>
       <Checkbox value={CardType.PHYSICAL} class={css.item}>
         <div class={css.content}>
-          <Card type={CardType.PHYSICAL} number="1234" class={css.card} />
+          <Card type={CardType.PHYSICAL} number="1234" name={props.name} class={css.card} />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Physical card" />

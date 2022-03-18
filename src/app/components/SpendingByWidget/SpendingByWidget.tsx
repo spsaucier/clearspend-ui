@@ -15,7 +15,7 @@ import { TagSelect, TagOption } from '../TagSelect';
 import { NumberedItem } from './components/NumberedItem';
 import { Merchant } from './components/Merchant';
 import { MerchantCategory } from './components/MerchantCategory';
-import { calcPieChartData } from './utils';
+import { sortByAmount, calcPieChartData } from './utils';
 
 import css from './SpendingByWidget.css';
 
@@ -63,7 +63,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
             <ol class={css.list}>
               <Switch>
                 <Match when={props.params.chartFilter === 'ALLOCATION'}>
-                  <For each={props.data.allocationChartData || []}>
+                  <For each={sortByAmount(props.data.allocationChartData || [])}>
                     {(item, idx) => (
                       <NumberedItem
                         num={idx() + 1}
@@ -79,7 +79,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                   </For>
                 </Match>
                 <Match when={props.params.chartFilter === 'EMPLOYEE'}>
-                  <For each={props.data.userChartData || []}>
+                  <For each={sortByAmount(props.data.userChartData || [])}>
                     {(item, idx) => (
                       <NumberedItem
                         num={idx() + 1}
@@ -91,12 +91,12 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
                   </For>
                 </Match>
                 <Match when={props.params.chartFilter === 'MERCHANT'}>
-                  <For each={props.data.merchantChartData || []}>
+                  <For each={sortByAmount(props.data.merchantChartData || [])}>
                     {(item) => <Merchant merchant={item.merchant!} amount={item.amount!} />}
                   </For>
                 </Match>
                 <Match when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>
-                  <For each={props.data.merchantCategoryChartData || []}>
+                  <For each={sortByAmount(props.data.merchantCategoryChartData || [])}>
                     {(item, idx) => (
                       <MerchantCategory color={getChartColor(idx())} type={item.merchantType} amount={item.amount!} />
                     )}
@@ -107,7 +107,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
             <Show when={props.params.chartFilter === 'MERCHANT_CATEGORY'}>
               <PieChart
                 size={160}
-                data={calcPieChartData(props.data.merchantCategoryChartData || [])}
+                data={calcPieChartData(sortByAmount(props.data.merchantCategoryChartData || []))}
                 class={css.chart}
               />
             </Show>
