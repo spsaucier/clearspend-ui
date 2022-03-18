@@ -49,9 +49,6 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
 
   const onSearch = (value: string) => {
     setSearch(value);
-    if (!value) {
-      props.onChange(undefined);
-    }
   };
 
   const close = (maintainFocus = false) => {
@@ -72,6 +69,10 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
     setTimeout(() => {
       if (!list.contains(document.activeElement)) {
         close();
+
+        if (input.value === '') {
+          props.onChange(undefined);
+        }
       }
     });
   };
