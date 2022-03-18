@@ -33,11 +33,10 @@ interface TransactionsDataProps {
   onDeselectTransaction?: (id: string) => void;
 }
 
-const [reportModalOpen, setReportModalOpen] = createSignal<boolean>(false);
-
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
   const [previewId, setPreviewId] = createSignal<string>();
   const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
+  const [reportModalOpen, setReportModalOpen] = createSignal<boolean>(false);
 
   const previewTransaction = createMemo(() =>
     props.data?.content?.find((item) => item.accountActivityId === previewId()),

@@ -15,7 +15,7 @@ import { getPermissions } from '../../services/permissions';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
-import { BusinessContext } from './context';
+import { BusinessContext, type MutateContext } from './context';
 
 import css from './Main.css';
 
@@ -30,7 +30,13 @@ export default function Main() {
     Promise.all([getUsers(), getBusiness(), getPermissions()]),
   );
 
+  const currentUser = createMemo(() => data()?.[0] || null);
   const business = createMemo(() => data()?.[1] || null);
+  const permissions = createMemo(() => data()?.[2] || null);
+
+  const mutateContext = (updates: Partial<Readonly<MutateContext>>): void => {
+    mutate([updates.currentUser || currentUser(), updates.business || business(), permissions()]);
+  };
 
   events.sub(AppEvent.Logout, () => {
     mutate(null);
@@ -51,10 +57,10 @@ export default function Main() {
         <BusinessContext.Provider
           value={{
             business,
-            currentUser: createMemo(() => data()?.[0] || null),
-            permissions: createMemo(() => data()?.[2] || null),
+            currentUser,
+            permissions,
+            mutate: mutateContext,
             refetch,
-            mutate,
           }}
         >
           <Switch>

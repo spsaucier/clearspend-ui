@@ -7,7 +7,7 @@ import { useNav } from '_common/api/router';
 import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
-import type { GraphDataRequest, ChartDataRequest, AccountActivityRequest } from 'generated/capital';
+import type { Allocation, GraphDataRequest, ChartDataRequest, AccountActivityRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
@@ -16,7 +16,6 @@ import { TransactionsData } from 'transactions/components/TransactionsData';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-import { useAllocations } from 'allocations/stores/allocations';
 import { canRead } from 'allocations/utils/permissions';
 
 import { SpendWidget } from '../../components/SpendWidget';
@@ -40,6 +39,7 @@ const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
 
 interface OverviewProps {
   allocationId: string | undefined;
+  allocations: readonly Readonly<Allocation>[] | null;
 }
 
 export function Overview(props: Readonly<OverviewProps>) {
@@ -51,17 +51,15 @@ export function Overview(props: Readonly<OverviewProps>) {
   const initPeriod = searchParams.period || TimePeriod.week;
   const PERIOD = toISO(getTimePeriod(initPeriod));
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
-  const allocations = useAllocations({ initValue: [] });
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   const allocationId = createMemo(() => {
-    const id = props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
-    return id;
+    return props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
   });
 
   createEffect(() => {
-    setAllocationIdForPermissions(allocationId() || getRootAllocation(allocations.data)?.allocationId || '');
+    setAllocationIdForPermissions(allocationId() || getRootAllocation(props.allocations)?.allocationId || '');
   });
 
   const spendStore = useSpend({ params: { ...PERIOD, allocationId: allocationId() } });

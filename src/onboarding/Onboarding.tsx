@@ -118,7 +118,7 @@ export default function Onboarding() {
     } else {
       // create
       const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
-      mutate([{ ...currentUser(), userId: resp.businessOwnerId! }, resp.business as Business, null]);
+      mutate({ currentUser: { ...currentUser(), userId: resp.businessOwnerId! }, business: resp.business! });
     }
     sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
     setLoadingModalOpen(false);

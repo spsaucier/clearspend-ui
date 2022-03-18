@@ -12,6 +12,7 @@ import { useResource } from '_common/utils/useResource';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { FileTypes } from 'app/types/common';
+import { useAllocations } from 'allocations/stores/allocations';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import {
@@ -63,6 +64,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const transaction = createMemo(() => props.transaction);
   const displayAmount = createMemo(() => formatCurrency(transaction().amount?.amount || 0));
+
+  const allocations = useAllocations({ initValue: [] });
+  // TODO: Replace accountName with allocationId after CAP-721
+  const allocation = createMemo(() => allocations.data!.find((item) => item.name === transaction().accountName));
 
   const receiptIds = createMemo(() => transaction().receipt?.receiptId || []);
   const [receipts, receiptsStatus, , , reloadReceipts] = useResource(() => Promise.all(receiptIds().map(viewReceipt)));
@@ -292,6 +297,17 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               lastName: transaction().card?.ownerLastName!,
             })}
             onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}
+          />
+        </Show>
+        <Show when={allocation()}>
+          <h4 class={css.title}>
+            <Text message="Allocation" />
+          </h4>
+          <AccountCard
+            icon="allocations"
+            title={allocation()!.name}
+            text={formatCurrency(allocation()!.account.availableBalance?.amount || 0)}
+            onClick={() => navigate(`/allocations/${allocation()!.allocationId}`)}
           />
         </Show>
         <Show when={transaction().merchant}>

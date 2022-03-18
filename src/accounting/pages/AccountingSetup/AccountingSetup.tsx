@@ -14,7 +14,7 @@ import { AddCreditCardForm } from '../AddCreditCardForm';
 import { ChartOfAccounts } from '../ChartOfAccounts';
 
 export default function AccountingSetup() {
-  const { business, currentUser, mutate, permissions } = useBusiness();
+  const { business, mutate } = useBusiness();
 
   const [step, setStep] = createSignal<AccountSetupStep | undefined>(
     business().accountingSetupStep as AccountSetupStep,
@@ -43,7 +43,7 @@ export default function AccountingSetup() {
   const onCompleteChartOfAccounts = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
     setStep(AccountSetupStep.COMPLETE);
-    mutate([currentUser(), { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE }, permissions()]);
+    mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE } });
     navigate('/accounting?notification=setup');
   };
 

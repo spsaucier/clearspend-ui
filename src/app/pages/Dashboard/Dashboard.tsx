@@ -157,7 +157,7 @@ export default function Dashboard() {
           <Landing allocationsCount={allocationCount()} cardsCount={cardsCount()} showAddBalance={canAddBalance()} />
         </Match>
         <Match when={allocations.data}>
-          <Overview allocationId={allocation()} />
+          <Overview allocationId={allocation()} allocations={allocations.data} />
         </Match>
       </Switch>
       <Show when={canManageFunds(userPermissions())}>

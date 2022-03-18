@@ -5,11 +5,17 @@ import type { Business, User, UserRolesAndPermissionsRecord } from 'generated/ca
 type CurrentUser = Readonly<Required<User>>;
 type Permissions = Readonly<UserRolesAndPermissionsRecord>;
 
+export interface MutateContext {
+  currentUser: CurrentUser;
+  business: Business;
+  permissions: Permissions;
+}
+
 interface InitContext {
   currentUser: Accessor<CurrentUser | null>;
   business: Accessor<Readonly<Business> | null>;
   permissions: Accessor<Permissions | null>;
-  mutate: (business: [CurrentUser, Readonly<Business>, Permissions | null] | null) => void;
+  mutate: (updates: Partial<Readonly<MutateContext>>) => void;
   refetch: () => Promise<unknown>;
 }
 
