@@ -26,7 +26,7 @@ export function CardTypeSelect(props: Readonly<CardTypeSelectProps>) {
     >
       <Checkbox value={CardType.VIRTUAL} class={css.item}>
         <div class={css.content}>
-          <Card type={CardType.VIRTUAL} number="1234" class={css.card} />
+          <Card type={CardType.VIRTUAL} number="1234" name={props.name} class={css.card} />
           <div class={css.type}>
             <Tick class={css.control} />
             <Text message="Virtual card" />

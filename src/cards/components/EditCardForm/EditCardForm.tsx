@@ -100,8 +100,20 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const onSubmit = async () => {
     skipUpdates = true;
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(values(), props.mccCategories)).catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
+    await save(convertFormData(values(), props.mccCategories)).catch((e: { data?: { message?: string } }) => {
+      if (e.data?.message === 'Physical card issuance limit exceeded') {
+        messages.error({
+          title: i18n.t('Unable to create physical card'),
+          message:
+            values().types.length > 1 // Assume 1 was virtual & 1 was physical
+              ? i18n.t(
+                  'Your virtual card was successfully created, but you have reached the maximum of 10 physical cards.',
+                )
+              : i18n.t('You have reached the maximum of 10 physical cards. Please contact support if you need more.'),
+        });
+      } else {
+        messages.error({ title: i18n.t('Failed to create card') });
+      }
     });
     skipUpdates = false;
   };

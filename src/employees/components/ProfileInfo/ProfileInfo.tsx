@@ -19,7 +19,9 @@ export function ProfileInfo(props: Readonly<ProfileInfoProps>) {
     <div class={props.class}>
       <DataRow icon="user">{formatName(props.data)}</DataRow>
       <DataRow icon="email">{props.data.email}</DataRow>
-      <DataRow icon="phone">{formatPhone(props.data.phone)}</DataRow>
+      <Show when={props.data.phone}>
+        <DataRow icon="phone">{formatPhone(props.data.phone)}</DataRow>
+      </Show>
       <Show when={props.data.address.streetLine1}>
         <DataRow icon="pin" contentClass={css.address}>
           {formatAddress(props.data.address)}
