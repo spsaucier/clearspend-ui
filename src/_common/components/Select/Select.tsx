@@ -134,7 +134,7 @@ export function Select(props: Readonly<SelectProps>) {
           onKeyDown={onKeyDown}
           suffix={props.loading ? <Spin /> : null}
         />
-        <span class={css.value}>
+        <span class={css.value} classList={{ [css.valueDisabled!]: props.disabled }}>
           {typeof props.valueRender === 'function' && isString(props.value)
             ? props.valueRender(props.value, selected()!)
             : selected()}

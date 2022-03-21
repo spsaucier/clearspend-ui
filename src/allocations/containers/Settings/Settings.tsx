@@ -166,18 +166,28 @@ export function Settings(props: Readonly<SettingsProps>) {
       </Section>
       <Section
         title={<Text message="Manager(s)" />}
-        multiDescription={[
-          <p class={css.content}>Add employees who can view or manage this allocation.</p>,
-          <h5 class={css.subheader}>Manage</h5>,
-          <p class={css.content}>
-            Managers can deposit and withdraw funds, create additional allocations under this allocation, add employees,
-            and issue cards.
-          </p>,
-          <h5 class={css.subheader}>View only</h5>,
-          <p class={css.content}>
-            Viewers can see balances, employees, cards, and transactions, but cannot make changes.
-          </p>,
-        ]}
+        description={
+          <>
+            <Text message="Add employees who can view or manage this allocation." class={css.content!} />
+            <h5 class={css.subheader}>
+              <Text message="Manage" />
+            </h5>
+            <Text
+              message={
+                'Managers can deposit and withdraw funds, create additional allocations under this allocation, ' +
+                'add employees, and issue cards.'
+              }
+              class={css.content!}
+            />
+            <h5 class={css.subheader}>
+              <Text message="View only" />
+            </h5>
+            <Text
+              message="Viewers can see balances, employees, cards, and transactions, but cannot make changes."
+              class={css.content!}
+            />
+          </>
+        }
       >
         <FormItem label={<Text message="Add manager or viewer" />} class={css.field}>
           <Select

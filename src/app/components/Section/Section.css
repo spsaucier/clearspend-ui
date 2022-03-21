@@ -29,7 +29,6 @@
 }
 
 .description {
-  margin: 0;
   color: var(--tw-gray-60);
   font-size: var(--text-12);
   line-height: 1.33;

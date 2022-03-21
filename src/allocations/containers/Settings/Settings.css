@@ -6,14 +6,13 @@
 
 .subheader {
   margin: 0 0 var(--pd-4);
+  color: var(--tw-black);
   font-family: var(--font-header);
   font-size: var(--text-14);
   font-weight: var(--font-400);
 }
 
 .content {
+  display: block;
   margin: 0 0 var(--pd-8);
-  color: var(--tw-gray-60);
-  font-size: var(--text-12);
-  line-height: 1.33;
 }

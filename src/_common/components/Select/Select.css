@@ -38,6 +38,10 @@
   }
 }
 
+.value-disabled {
+  color: var(--tw-gray-60);
+}
+
 .icon,
 .chevron {
   position: absolute;
