@@ -1,5 +1,5 @@
 import { createEffect, For } from 'solid-js';
-import { Text } from 'solid-i18n';
+import { useI18n, Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
@@ -41,17 +41,20 @@ interface BusinessFormProps {
 }
 
 export function BusinessForm(props: Readonly<BusinessFormProps>) {
+  const i18n = useI18n();
   const media = useMediaContext();
   const messages = useMessages();
 
   const [loading, next] = wrapAction(props.onNext);
-  const { values, handlers, errors, setErrors, wrapSubmit } = createForm<FormValues>(
+
+  const { values, handlers, errors, isValid, setErrors, wrapSubmit } = createForm<FormValues>(
     getFormOptions(props.businessType, props.businessPrefills),
   );
+
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
       next(convertFormData(data)).catch((e: ExceptionData) => {
-        messages.error({ title: 'Something went wrong.', message: e.data.message });
+        messages.error({ title: i18n.t('Something went wrong'), message: e.data.message });
       });
     }
   };
@@ -69,12 +72,12 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
-      <Section title="Business details" class={css.section}>
+      <Section title={<Text message="Business details" />} class={css.section}>
         <div class={css.wrapper}>
-          <FormItem label="Legal entity name" error={errors().name}>
+          <FormItem label={<Text message="Legal entity name" />} error={errors().name}>
             <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
           </FormItem>
-          <FormItem label="Business EIN" error={errors().employerIdentificationNumber}>
+          <FormItem label={<Text message="Business EIN" />} error={errors().employerIdentificationNumber}>
             <Input
               name="business-ein"
               value={values().employerIdentificationNumber}
@@ -84,7 +87,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               formatter={formatEIN}
             />
           </FormItem>
-          <FormItem label="Corporate phone number" error={errors().phone}>
+          <FormItem label={<Text message="Corporate phone number" />} error={errors().phone}>
             <InputPhone
               name="corporate-phone-number"
               value={values().phone}
@@ -94,9 +97,9 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           </FormItem>
         </div>
       </Section>
-      <Section title="Business Description" class={css.section}>
+      <Section title={<Text message="Business Description" />} class={css.section}>
         <div class={css.wrapper}>
-          <FormItem label="Business DBA name" error={errors().businessName}>
+          <FormItem label={<Text message="Business DBA name" />} error={errors().businessName}>
             <Input
               name="business-dba-name"
               value={values().businessName}
@@ -104,7 +107,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               onChange={handlers.businessName}
             />
           </FormItem>
-          <FormItem label="Describe your business" error={errors().description}>
+          <FormItem label={<Text message="Describe your business" />} error={errors().description}>
             <Input
               useTextArea={true}
               name="business-description"
@@ -118,13 +121,13 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               <Text message={`${values().description.length} / ${BUSINESS_DESCRIPTION_MAX_LENGTH}`} />
             </div>
           </FormItem>
-          <FormItem label="Business website (optional)" error={errors().url}>
+          <FormItem label={<Text message="Business website (optional)" />} error={errors().url}>
             <Input name="business-website" value={values().url} error={Boolean(errors().url)} onChange={handlers.url} />
           </FormItem>
-          <FormItem label={'Merchant category'}>
+          <FormItem label={<Text message="Merchant category" />}>
             <Select
               valueRender={(val, txt) => `${txt} (${val})`}
-              placeholder="Search for merchant category"
+              placeholder={String(i18n.t('Search for merchant category'))}
               name="business-mcc"
               value={`${values().mcc}`}
               error={Boolean(errors().mcc)}
@@ -139,12 +142,20 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
         </div>
       </Section>
       <Section
-        title="Business address"
+        title={<Text message="Business address" />}
         class={css.section}
-        description="Please enter the address for your company's main office or headquarters. PO Boxes and virtual addresses are not allowed. This location will be used as the billing address for all cards issued to your employees."
+        description={
+          <Text
+            message={
+              "Please enter the address for your company's main office or headquarters. " +
+              'PO Boxes and virtual addresses are not allowed. ' +
+              'This location will be used as the billing address for all cards issued to your employees.'
+            }
+          />
+        }
       >
         <AddressFormItems values={values} errors={errors()} handlers={handlers} />
-        <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
+        <Button type="primary" htmlType="submit" wide={media.small} loading={loading()} disabled={!isValid()}>
           <Text message="Next" />
         </Button>
         <h3 class={css.tipTitle}>

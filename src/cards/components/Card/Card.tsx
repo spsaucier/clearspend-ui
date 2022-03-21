@@ -38,18 +38,18 @@ export function Card(props: Readonly<CardProps>) {
       class={join(css.root, props.class)}
       onClick={props.onClick}
     >
-      <linearGradient id="b" gradientUnits="userSpaceOnUse" x1="47.7" y1="117.2" x2="347.2" y2="59.8">
+      <linearGradient id="card-lg-a" gradientUnits="userSpaceOnUse" x1="47.7" y1="117.2" x2="347.2" y2="59.8">
         <stop offset="0" stop-color="#fff" />
         <stop offset="1" stop-color="#afffc6" />
       </linearGradient>
-      <path fill={isFrozen() ? '#02302F' : isPhysical() ? '#43fa76' : 'url(#b)'} d="M0 0h306v194H0z" />
+      <path fill={isFrozen() ? '#02302F' : isPhysical() ? '#43fa76' : 'url(#card-lg-a)'} d="M0 0h306v194H0z" />
       <Show when={!isPhysical() && !isFrozen()}>
-        <linearGradient id="c" gradientUnits="userSpaceOnUse" x1="153" y1="8.4" x2="153" y2="380.2">
+        <linearGradient id="card-lg-b" gradientUnits="userSpaceOnUse" x1="153" y1="8.4" x2="153" y2="380.2">
           <stop offset="0" stop-color="#fff" stop-opacity="0" />
           <stop offset=".2" stop-color="#effff4" stop-opacity=".2" />
           <stop offset="1" stop-color="#afffc6" />
         </linearGradient>
-        <path fill="url(#c)" d="M0 0h306v194H0z" />
+        <path fill="url(#card-lg-b)" d="M0 0h306v194H0z" />
       </Show>
       <Show when={!isFrozen()}>
         <path
@@ -79,11 +79,11 @@ export function Card(props: Readonly<CardProps>) {
         />
       </Show>
       <Show when={isPhysical() && isActivated() && !isFrozen() && props.number !== undefined}>
-        <radialGradient id="a" cx="47.5" cy="101" r="21.4" gradientUnits="userSpaceOnUse">
+        <radialGradient id="card-lg-c" cx="47.5" cy="101" r="21.4" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#fff" />
           <stop offset="1" stop-color="#dddcda" />
         </radialGradient>
-        <path d="M28 93a5 5 0 0 1 5-5h29a5 5 0 0 1 5 5v16a5 5 0 0 1-5 5H33a5 5 0 0 1-5-5V93z" fill="url(#a)" />
+        <path d="M28 93a5 5 0 0 1 5-5h29a5 5 0 0 1 5 5v16a5 5 0 0 1-5 5H33a5 5 0 0 1-5-5V93z" fill="url(#card-lg-c)" />
         <path
           fill="#fff"
           d={
