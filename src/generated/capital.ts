@@ -1695,6 +1695,7 @@ export interface ChartDataRequest {
 
   /** @format date-time */
   to: string;
+  sortDirection?: 'ASC' | 'DESC';
 }
 
 export interface AllocationChartData {

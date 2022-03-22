@@ -190,6 +190,15 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   // eslint-disable-next-line
   const onResetFilters = () => {};
 
+  const getSyncablePageTransactions = () => {
+    return [
+      ...new Set([
+        props.data.content?.filter((transaction) => transaction.syncStatus! === 'READY'),
+        props.selectedTransactions,
+      ]),
+    ];
+  };
+
   return (
     <div>
       <Filters
@@ -224,6 +233,15 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         >
           <Text message="Export" />
         </Button>
+        <Show when={props.showAccountingAdminView}>
+          <Button
+            type="primary"
+            disabled={getSyncablePageTransactions.length > 0}
+            icon={{ name: 'refresh', pos: 'right' }}
+          >
+            <Text message="Sync All Transactions" />
+          </Button>
+        </Show>
       </Filters>
       <Show
         when={props.data.content?.length}
