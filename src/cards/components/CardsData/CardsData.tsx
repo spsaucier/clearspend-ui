@@ -1,7 +1,6 @@
-import type { Setter } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { Data } from 'app/components/Data';
 import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 
@@ -19,7 +18,7 @@ interface CardsDataProps {
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
   onReload: () => Promise<unknown>;
-  onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
+  onChangeParams: Setter<Readonly<SearchCardRequest>>;
   params: SearchCardRequest;
 }
 

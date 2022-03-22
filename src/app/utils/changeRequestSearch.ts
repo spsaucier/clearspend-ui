@@ -1,13 +1,9 @@
-import type { Setter } from 'solid-js';
-
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 
 interface Generic {
   searchText?: string;
 }
 
-export function changeRequestSearch<T extends Readonly<Generic>>(setter: Setter<T> | StoreSetter<T>) {
-  return (searchText: string): void => {
-    (setter as (func: (state: T) => T) => void)((prev) => ({ ...prev, searchText }));
-  };
+export function changeRequestSearch<T extends Readonly<Generic>>(setter: Setter<T>) {
+  return (searchText: string): void => setter((prev) => ({ ...prev, searchText }));
 }

@@ -1,6 +1,6 @@
 import { Text } from 'solid-i18n';
 
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
@@ -21,7 +21,7 @@ interface FormValues {
 
 interface LedgerFiltersProps {
   params: AccountActivityRequest;
-  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onReset: () => void;
 }
 

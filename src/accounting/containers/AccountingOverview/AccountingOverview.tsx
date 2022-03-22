@@ -1,5 +1,6 @@
-import type { Accessor, Setter } from 'solid-js';
+import type { Accessor } from 'solid-js';
 
+import type { Setter, SetterFunc } from '_common/types/common';
 import type {
   AccountActivityRequest,
   AccountActivityResponse,
@@ -8,7 +9,6 @@ import type {
 import { TransactionsData } from 'transactions/components/TransactionsData';
 import { useMediaContext } from '_common/api/media/context';
 import { useNav } from '_common/api/router';
-import type { StoreSetter, StoreSetterFunc } from '_common/utils/store';
 
 interface AccountingOverviewProps {
   loading: boolean;
@@ -18,9 +18,9 @@ interface AccountingOverviewProps {
   onRowClick?: (transaction: AccountActivityResponse) => void;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
-  onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
-  onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
+  onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   selectedTransactions: Accessor<string[]>;
   onSelectTransaction: (id: string) => void;
   onDeselectTransaction: (id: string) => void;

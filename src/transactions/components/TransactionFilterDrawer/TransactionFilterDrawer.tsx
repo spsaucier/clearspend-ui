@@ -1,7 +1,7 @@
 import { For, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import type { AccountActivityRequest } from 'generated/capital';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
 import { CheckboxGroup, Checkbox } from '_common/components/Checkbox';
@@ -30,7 +30,7 @@ interface FormValues {
 interface TransactionFilterDrawerProps {
   params: AccountActivityRequest;
   showAccountingAdminView?: boolean;
-  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onReset: () => void;
 }
 

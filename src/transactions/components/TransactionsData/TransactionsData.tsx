@@ -1,8 +1,8 @@
-import { createSignal, createMemo, type Setter, Accessor } from 'solid-js';
+import { createSignal, createMemo, Accessor } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
-import type { StoreSetterFunc, StoreSetter } from '_common/utils/store';
+import type { Setter, SetterFunc } from '_common/types/common';
 import { Drawer } from '_common/components/Drawer';
 import { Modal } from '_common/components/Modal';
 import { Data } from 'app/components/Data';
@@ -25,8 +25,8 @@ interface TransactionsDataProps {
   data: Readonly<PagedDataAccountActivityResponse> | null;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
-  onChangeParams: Setter<Readonly<AccountActivityRequest>> | StoreSetter<Readonly<AccountActivityRequest>>;
-  onUpdateData: (setter: StoreSetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
+  onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   showAccountingAdminView?: boolean;
   selectedTransactions?: Accessor<string[]>;
   onSelectTransaction?: (id: string) => void;

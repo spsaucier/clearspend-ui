@@ -3,15 +3,18 @@ import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
+import { storage } from '_common/api/storage';
 import { useNav } from '_common/api/router';
 import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
+import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { useMediaContext } from '_common/api/media/context';
 import type { Allocation, GraphDataRequest, ChartDataRequest, AccountActivityRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { TagOption, TagSelect } from 'app/components/TagSelect';
+import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
-import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { TransactionsData } from 'transactions/components/TransactionsData';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
@@ -74,7 +77,7 @@ export function Overview(props: Readonly<OverviewProps>) {
 
   const activityStore = useActivity({
     params: {
-      ...DEFAULT_ACTIVITY_PARAMS,
+      ...extendPageSize(DEFAULT_ACTIVITY_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
       ...PERIOD,
       allocationId: allocationId(),
     },
@@ -168,7 +171,9 @@ export function Overview(props: Readonly<OverviewProps>) {
             params={activityStore.params}
             data={activityStore.data}
             onReload={activityStore.reload}
-            onChangeParams={activityStore.setParams}
+            onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
+              storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
+            )}
             onUpdateData={activityStore.setData}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
           />

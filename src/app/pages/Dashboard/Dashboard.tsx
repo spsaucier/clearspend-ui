@@ -18,7 +18,7 @@ import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/Allocat
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
-import { DEFAULT_CARD_PARAMS } from 'cards/Cards';
+import { DEFAULT_CARD_PARAMS } from 'cards/constants';
 
 import { Page } from '../../components/Page';
 import { Landing } from '../../containers/Landing';

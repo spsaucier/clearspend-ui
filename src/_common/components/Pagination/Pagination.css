@@ -1,5 +1,11 @@
 .root {
   display: inline-grid;
+  grid-auto-flow: column;
+  grid-gap: var(--pd-8);
+}
+
+.pagination {
+  display: inline-grid;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -40,4 +46,8 @@
     color: var(--tw-gray-40);
     background: transparent;
   }
+}
+
+.size {
+  width: 120px;
 }

@@ -3,7 +3,7 @@ import { Text } from 'solid-i18n';
 
 import { Input } from '_common/components/Input';
 import { Icon } from '_common/components/Icon';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest } from 'generated/capital';
 
@@ -14,7 +14,7 @@ import css from './EmployeesList.css';
 interface EmployeesListProps {
   data: PagedDataUserPageData;
   onClick: (uid: string) => void;
-  onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  onChangeParams: Setter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeesList(props: Readonly<EmployeesListProps>) {

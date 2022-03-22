@@ -1,6 +1,7 @@
 import { For, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
+import type { Setter } from '_common/types/common';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
@@ -9,7 +10,6 @@ import { FiltersControls } from 'app/components/FiltersControls';
 import type { SearchCardRequest } from 'generated/capital';
 import { Select, Option } from '_common/components/Select';
 import { useAllocations } from 'allocations/stores/allocations';
-import type { StoreSetter } from '_common/utils/store';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
 
@@ -26,7 +26,7 @@ interface CardsFilterDrawerProps {
   params: SearchCardRequest;
   omitFilters?: readonly CardFiltersFields[];
   onReset: () => void;
-  onChangeParams: StoreSetter<Readonly<SearchCardRequest>>;
+  onChangeParams: Setter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {

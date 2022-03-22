@@ -1,7 +1,7 @@
 import { For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import type { SearchUserRequest } from 'generated/capital';
 import { createForm, Form } from '_common/components/Form';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
@@ -26,7 +26,7 @@ interface FormValues {
 interface EmployeeFilterDrawerProps {
   params: SearchUserRequest;
   onReset: () => void;
-  onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  onChangeParams: Setter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>) {

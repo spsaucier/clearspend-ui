@@ -6,6 +6,8 @@ import type { AccountActivityRequest } from 'generated/capital';
 
 import type { ActivityStatus, MccGroup } from './types';
 
+export const ACTIVITY_PAGE_SIZE_STORAGE_KEY = 'activity_page_size';
+
 export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: {
     pageNumber: 0,

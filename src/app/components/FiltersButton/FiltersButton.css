@@ -5,6 +5,7 @@
 
 .text {
   margin-right: var(--pd-4);
+  white-space: nowrap;
 }
 
 .count {

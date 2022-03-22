@@ -8,7 +8,7 @@ import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
 import { download } from '_common/utils/download';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { Filters } from 'app/components/Filters';
 import { useMessages } from 'app/containers/Messages/context';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
@@ -33,7 +33,7 @@ interface EmployeesTableProps {
   params: Readonly<SearchUserRequest>;
   onClick: (uid: string) => void;
   onCardClick: (id: string) => void;
-  onChangeParams: StoreSetter<Readonly<SearchUserRequest>>;
+  onChangeParams: Setter<Readonly<SearchUserRequest>>;
 }
 
 export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
@@ -108,8 +108,8 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber || 0}
-            pageSize={props.data.pageSize || 0}
+            current={props.params.pageRequest?.pageNumber || 0}
+            pageSize={props.params.pageRequest?.pageSize || 0}
             total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />

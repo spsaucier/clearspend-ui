@@ -1,11 +1,10 @@
 import { createSignal, createMemo, Show } from 'solid-js';
-import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
@@ -41,7 +40,7 @@ interface CardsTableProps {
   omitFilters?: readonly CardFiltersFields[];
   onUserClick?: (id: string) => void;
   onCardClick: (id: string) => void;
-  onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
+  onChangeParams: Setter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsTable(props: Readonly<CardsTableProps>) {
@@ -122,8 +121,8 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber || 0}
-            pageSize={props.data.pageSize || 0}
+            current={props.params.pageRequest.pageNumber}
+            pageSize={props.params.pageRequest.pageSize}
             total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />

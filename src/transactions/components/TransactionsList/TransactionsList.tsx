@@ -2,7 +2,7 @@ import { Show, For, createMemo } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { DateFormat } from '_common/api/intl/types';
 import { InputSearch } from '_common/components/InputSearch';
 import { Tag, TagProps } from '_common/components/Tag';
@@ -30,7 +30,7 @@ interface TransactionsListProps {
   params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
   onRowClick?: (activityId: string) => void;
-  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
 }
 
 export function TransactionsList(props: Readonly<TransactionsListProps>) {

@@ -6,13 +6,11 @@ import { createStore } from 'solid-js/store';
 import { AppEvent } from 'app/types/common';
 
 import { events } from '../api/events';
+import type { Setter } from '../types/common';
 
 import { getNoop } from './getNoop';
 
-export type StoreSetterFunc<T> = (params: T) => T;
-export type StoreSetterArg<T> = T | StoreSetterFunc<T>;
-export type StoreSetter<T> = (setter: StoreSetterArg<T>) => void;
-
+export type StoreSetterArg<T> = Parameters<Setter<T>>[0];
 export type SuccessCallback<T> = (data: T) => void;
 
 export interface Store<T, P> {
@@ -21,8 +19,8 @@ export interface Store<T, P> {
   data: T | null;
   params: P;
   reload: () => Promise<unknown>;
-  setData: StoreSetter<T>;
-  setParams: StoreSetter<P>;
+  setData: Setter<T>;
+  setParams: Setter<P>;
 }
 
 export interface Options<T, P> {

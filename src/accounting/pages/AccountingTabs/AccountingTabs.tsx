@@ -3,15 +3,18 @@ import { createSignal, Switch, Match, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 
+import { storage } from '_common/api/storage';
+import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
 import { useActivity } from 'app/stores/activity';
+import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { Data } from 'app/components/Data';
 import { AccountingSettings } from 'accounting/containers/AccountingSettings';
 import { SyncLog } from 'accounting/containers/SyncLog';
 import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
 import { AccountingOverview } from 'accounting/containers/AccountingOverview';
-import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
@@ -66,7 +69,7 @@ export function AccountingTabs() {
 
   const activityStore = useActivity({
     params: {
-      ...DEFAULT_ACTIVITY_PARAMS,
+      ...extendPageSize(DEFAULT_ACTIVITY_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
       ...PERIOD,
       statuses: ['APPROVED'],
     },
@@ -99,7 +102,9 @@ export function AccountingTabs() {
               params={activityStore.params}
               data={activityStore.data}
               onReload={activityStore.reload}
-              onChangeParams={activityStore.setParams}
+              onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
+                storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
+              )}
               onUpdateData={activityStore.setData}
               selectedTransactions={selectedTransactions}
               onSelectTransaction={onSelectTransaction}

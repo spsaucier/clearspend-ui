@@ -2,31 +2,21 @@ import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
+import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
+import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { Button } from '_common/components/Button';
 import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
+import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
-import type { SearchCardRequest } from 'generated/capital';
 import { canManageCards } from 'allocations/utils/permissions';
 
 import { useBusiness } from '../app/containers/Main/context';
 
 import { CardsData } from './components/CardsData';
+import { CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_CARD_PARAMS } from './constants';
 import { useCards } from './stores/cards';
-
-export const DEFAULT_CARD_PARAMS: Readonly<SearchCardRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-    orderBy: [
-      {
-        item: 'activationDate',
-        direction: 'DESC',
-      },
-    ],
-  },
-};
 
 export default function Cards() {
   const navigate = useNavigate();
@@ -34,7 +24,9 @@ export default function Cards() {
   const { permissions } = useBusiness();
 
   const [uid, setUID] = createSignal<string | null>(null);
-  const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
+  const cardsStore = useCards({
+    params: extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
+  });
 
   return (
     <Page
@@ -56,7 +48,9 @@ export default function Cards() {
         params={cardsStore.params}
         onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
         onUserClick={setUID}
-        onChangeParams={cardsStore.setParams}
+        onChangeParams={onPageSizeChange(cardsStore.setParams, (size) =>
+          storage.set(CARDS_PAGE_SIZE_STORAGE_KEY, size),
+        )}
       />
       <Drawer
         open={Boolean(uid())}

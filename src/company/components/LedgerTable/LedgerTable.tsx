@@ -4,7 +4,7 @@ import { useI18n, Text, DateTime } from 'solid-i18n';
 import { DateFormat } from '_common/api/intl/types';
 import { useBool } from '_common/utils/useBool';
 import { wrapAction } from '_common/utils/wrapAction';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { InputSearch } from '_common/components/InputSearch';
@@ -32,7 +32,7 @@ interface LedgerTableProps {
   params: Readonly<AccountActivityRequest>;
   onRowClick: (activityId: string) => void;
   onExport: (params: Readonly<AccountActivityRequest>) => Promise<void>;
-  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
 }
 
 export function LedgerTable(props: Readonly<LedgerTableProps>) {
@@ -98,8 +98,8 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber || 0}
-            pageSize={props.data.pageSize || 0}
+            current={props.params.pageRequest.pageNumber}
+            pageSize={props.params.pageRequest.pageSize}
             total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />

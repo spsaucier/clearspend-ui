@@ -1,12 +1,11 @@
 import { For, Show } from 'solid-js';
-import type { Setter } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
+import type { Setter } from '_common/types/common';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { InputSearch } from '_common/components/InputSearch';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { Empty } from 'app/components/Empty';
-import type { StoreSetter } from '_common/utils/store';
 import type { PagedDataSearchCardData, SearchCardRequest } from 'generated/capital';
 import type { CardType as CardTypeType } from 'cards/types';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
@@ -20,7 +19,7 @@ interface CardsListProps {
   search?: string;
   data: PagedDataSearchCardData;
   onCardClick: (id: string) => void;
-  onChangeParams: Setter<Readonly<SearchCardRequest>> | StoreSetter<Readonly<SearchCardRequest>>;
+  onChangeParams: Setter<Readonly<SearchCardRequest>>;
 }
 
 export function CardsList(props: Readonly<CardsListProps>) {

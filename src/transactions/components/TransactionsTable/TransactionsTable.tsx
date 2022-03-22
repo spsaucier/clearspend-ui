@@ -5,7 +5,7 @@ import { join } from '_common/utils/join';
 import { useBool } from '_common/utils/useBool';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
-import type { StoreSetter } from '_common/utils/store';
+import type { Setter } from '_common/types/common';
 import { DateFormat } from '_common/api/intl/types';
 import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
@@ -42,7 +42,7 @@ interface TransactionsTableProps {
   params: Readonly<AccountActivityRequest>;
   onCardClick?: (id: string) => void;
   onRowClick: (activityId: string) => void;
-  onChangeParams: StoreSetter<Readonly<AccountActivityRequest>>;
+  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
   selectedTransactions?: Accessor<string[]>;
   onSelectTransaction?: (id: string) => void;
@@ -195,8 +195,8 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       <Filters
         side={
           <Pagination
-            current={props.data.pageNumber || 0}
-            pageSize={props.data.pageSize || 0}
+            current={props.params.pageRequest.pageNumber}
+            pageSize={props.params.pageRequest.pageSize}
             total={props.data.totalElements || 0}
             onChange={changeRequestPage(props.onChangeParams)}
           />
