@@ -88,7 +88,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
         <FilterBox title={<Text message="Expense Category" />}>
           <MultiSelect
             value={values().categories}
-            placeholder={String(i18n.t('Search for a category'))}
+            placeholder={String(i18n.t('Assign a category'))}
             valueRender={(name) => expenseCategories.data!.find((item) => item.categoryName === name)?.categoryName}
             onChange={handlers.categories}
           >

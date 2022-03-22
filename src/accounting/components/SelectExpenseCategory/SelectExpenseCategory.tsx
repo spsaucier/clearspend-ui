@@ -133,7 +133,7 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
           name="expenseCategory"
           value={props.value?.categoryName}
           error={props.error}
-          placeholder={String(i18n.t('Search for a category'))}
+          placeholder={String(i18n.t('Assign a category'))}
           disabled={props.disabled}
           inputClass={css.input}
           onChange={onSearch}
