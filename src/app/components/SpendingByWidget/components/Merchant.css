@@ -8,6 +8,12 @@
   line-height: 1.33;
 }
 
+.root > span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .amount {
   font-weight: var(--font-400);
   text-align: right;
