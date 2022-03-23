@@ -1,8 +1,8 @@
-// import { useI18n, Text } from 'solid-i18n';
+import { useI18n, Text } from 'solid-i18n';
 
-// import { wrapAction } from '_common/utils/wrapAction';
-// import { Button } from '_common/components/Button';
-// import { useMessages } from 'app/containers/Messages/context';
+import { wrapAction } from '_common/utils/wrapAction';
+import { Button } from '_common/components/Button';
+import { useMessages } from 'app/containers/Messages/context';
 import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 import type { BankAccount } from 'generated/capital';
 
@@ -14,16 +14,16 @@ interface AccountItemProps {
 }
 
 export function AccountItem(props: Readonly<AccountItemProps>) {
-  // const i18n = useI18n();
-  // const messages = useMessages();
+  const i18n = useI18n();
+  const messages = useMessages();
 
-  // const [loading, unlink] = wrapAction(props.onUnlink);
+  const [loading, unlink] = wrapAction(props.onUnlink);
 
-  // const onUnlink = () => {
-  //   unlink(props.data.businessBankAccountId).catch(() => {
-  //     messages.error({ title: i18n.t('Something went wrong') });
-  //   });
-  // };
+  const onUnlink = () => {
+    unlink(props.data.businessBankAccountId).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
+  };
 
   return (
     <div>
@@ -44,7 +44,7 @@ export function AccountItem(props: Readonly<AccountItemProps>) {
       </div> */}
 
       {/* TODO: unlink button - see CAP-578 */}
-      {/* <Button
+      <Button
         size="lg"
         icon="trash"
         type="danger"
@@ -54,7 +54,7 @@ export function AccountItem(props: Readonly<AccountItemProps>) {
         onClick={onUnlink}
       >
         <Text message="Unlink Account" />
-      </Button> */}
+      </Button>
     </div>
   );
 }

@@ -24,6 +24,10 @@ export async function registerBankAccount(accountId: string) {
   ).data;
 }
 
+export function unregisterBankAccount(businessBankAccountId: string) {
+  return service.post(`/business-bank-accounts/${businessBankAccountId}/unregister`);
+}
+
 export async function getBankAccounts() {
   return (await service.get<readonly Readonly<Required<BankAccount>>[]>('/business-bank-accounts')).data;
 }

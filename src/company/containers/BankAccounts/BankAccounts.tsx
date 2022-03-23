@@ -5,7 +5,7 @@ import { useResource } from '_common/utils/useResource';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { LinkAccount } from 'onboarding/containers/LinkAccount';
-import { getBankAccounts, linkBankAccounts } from 'onboarding/services/accounts';
+import { getBankAccounts, linkBankAccounts, unregisterBankAccount } from 'onboarding/services/accounts';
 
 import { AccountItem } from '../../components/AccountItem';
 
@@ -20,8 +20,9 @@ export function BankAccounts() {
     await reloadAccounts();
   };
 
-  const onRemoveAccount = async () => {
-    return Promise.resolve();
+  const onRemoveAccount = async (businessBankAccountId: string) => {
+    await unregisterBankAccount(businessBankAccountId);
+    await reloadAccounts();
   };
 
   return (
