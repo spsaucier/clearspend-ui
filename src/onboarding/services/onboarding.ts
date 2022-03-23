@@ -21,6 +21,15 @@ export async function signup(params: Readonly<BusinessProspectData>) {
   return (await service.post<Readonly<CreateBusinessProspectResponse>>('/business-prospects', params)).data;
 }
 
+export async function resendOtp(
+  params: Readonly<{
+    otpType: ValidateBusinessProspectIdentifierRequest['identifierType'];
+    businessProspectId: string;
+  }>,
+) {
+  return (await service.get(`/business-prospects/${params.businessProspectId}/${params.otpType}/resend-otp`)).data;
+}
+
 export async function getBusinessProspectInfo(businessProspectId: string) {
   return service.get(`/business-prospects/${businessProspectId}`);
 }

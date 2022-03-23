@@ -47,7 +47,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
 
   const [loading, next] = wrapAction(props.onNext);
 
-  const { values, handlers, errors, setErrors, wrapSubmit } = createForm<FormValues>(
+  const { values, handlers, errors, setErrors, isValid, wrapSubmit } = createForm<FormValues>(
     getFormOptions(props.businessType, props.businessPrefills),
   );
 
@@ -155,7 +155,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
         }
       >
         <AddressFormItems values={values} errors={errors()} handlers={handlers} />
-        <Button type="primary" htmlType="submit" wide={media.small} loading={loading()}>
+        <Button type="primary" htmlType="submit" wide={media.small} loading={loading()} disabled={!isValid()}>
           <Text message="Next" />
         </Button>
         <h3 class={css.tipTitle}>

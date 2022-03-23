@@ -5,7 +5,7 @@ import { Text } from 'solid-i18n';
 import logo from 'app/assets/logo-light.svg';
 import { useMediaContext } from '_common/api/media/context';
 import { formatPhone } from '_common/formatters/phone';
-import { confirmOTP, signup, setPhone, setPassword } from 'onboarding/services/onboarding';
+import { confirmOTP, signup, setPhone, setPassword, resendOtp } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
@@ -109,9 +109,13 @@ export default function SignUp() {
 
     if (isOwnerOf25 || BusinessType.SOLE_PROPRIETORSHIP === businessType) {
       relationshipToBusiness.push(RelationshipToBusiness.OWNER);
-    } else if (isExecutive) {
+    }
+
+    if (isExecutive) {
       relationshipToBusiness.push(RelationshipToBusiness.EXECUTIVE);
-    } else {
+    }
+
+    if (!isOwnerOf25 && !isExecutive) {
       relationshipToBusiness.push(RelationshipToBusiness.OTHER);
     }
 
@@ -209,7 +213,7 @@ export default function SignUp() {
   const onEmailCodeResend = async () => {
     setEmailExists(false);
     sendAnalyticsEvent({ name: Events.RESEND_EMAIL_OTP });
-    await onSignup();
+    await resendOtp({ otpType: 'EMAIL', businessProspectId: store.pid || '' });
     next(Step.EmailOtpStep);
   };
 
@@ -234,7 +238,8 @@ export default function SignUp() {
 
   const onPhoneCodeResend = async () => {
     sendAnalyticsEvent({ name: Events.RESEND_PHONE_OTP });
-    return onPhoneUpdate(store.phone!);
+    await resendOtp({ otpType: 'PHONE', businessProspectId: store.pid || '' });
+    next(Step.PhoneOtpStep);
   };
 
   const onPhoneConfirm = async (otp: string) => {
