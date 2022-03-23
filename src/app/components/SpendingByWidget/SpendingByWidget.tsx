@@ -21,7 +21,7 @@ export function SpendingByWidget(props: Readonly<SpendingByWidgetProps>) {
   const navigate = useNav();
   return (
     <div>
-      <div class={css.topCardWrapper} style={{ 'margin-bottom': '40px' }}>
+      <div class={css.topCardWrapper}>
         <Show when={props.data.merchantChartData && props.data.merchantChartData.length > 0}>
           <div class={css.categoryCard}>
             <div class={css.cardTitle}>{i18n.t('Merchant')}</div>
