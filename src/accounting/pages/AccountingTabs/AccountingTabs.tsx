@@ -18,6 +18,7 @@ import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transac
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
+import { syncMultipleTransactions } from 'accounting/services';
 
 enum Tabs {
   transactions,
@@ -41,10 +42,8 @@ export function AccountingTabs() {
   const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
 
   const onSelectTransaction = (id: string) => {
-    const newSelectedTransactions = selectedTransactions();
-    if (!newSelectedTransactions.includes(id)) {
-      newSelectedTransactions.push(id);
-      setSelectedTransactions(newSelectedTransactions);
+    if (!selectedTransactions().includes(id)) {
+      setSelectedTransactions([...selectedTransactions(), id]);
     }
   };
 

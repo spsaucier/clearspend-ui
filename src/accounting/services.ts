@@ -23,6 +23,10 @@ export async function syncTransaction(transactionId: string) {
   return (await service.post<Readonly<boolean>>(`/codat/sync/${transactionId}`)).data;
 }
 
+export async function syncMultipleTransactions(transactionIds: string[]) {
+  return (await service.post<Readonly<boolean>>(`/codat/sync`, transactionIds)).data;
+}
+
 export async function getCodatCreditCards() {
   return (await service.get<Readonly<CodatBankAccountResponse>>(`/codat/bank-accounts`)).data;
 }

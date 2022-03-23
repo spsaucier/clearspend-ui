@@ -1,4 +1,4 @@
-import { createSignal, createMemo, Accessor } from 'solid-js';
+import { createSignal, createMemo } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { Text } from 'solid-i18n';
 
@@ -28,7 +28,7 @@ interface TransactionsDataProps {
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   showAccountingAdminView?: boolean;
-  selectedTransactions?: Accessor<string[]>;
+  selectedTransactions?: string[];
   onSelectTransaction?: (id: string) => void;
   onDeselectTransaction?: (id: string) => void;
 }
@@ -62,6 +62,8 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         selectedTransactions={props.selectedTransactions}
         onSelectTransaction={props.onSelectTransaction}
         onDeselectTransaction={props.onDeselectTransaction}
+        onUpdate={onUpdateTransaction}
+        onReload={props.onReload}
       />
       <Drawer
         noPadding

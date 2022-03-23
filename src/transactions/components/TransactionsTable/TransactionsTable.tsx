@@ -1,4 +1,4 @@
-import { Accessor, Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -29,6 +29,7 @@ import { Drawer } from '_common/components/Drawer';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
+import { syncMultipleTransactions } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -44,9 +45,11 @@ interface TransactionsTableProps {
   onRowClick: (activityId: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   showAccountingAdminView?: boolean;
-  selectedTransactions?: Accessor<string[]>;
+  selectedTransactions?: string[];
   onSelectTransaction?: (id: string) => void;
   onDeselectTransaction?: (id: string) => void;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
+  onReload: () => Promise<unknown>;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
@@ -55,6 +58,33 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
 
   const [exporting, exportData] = wrapAction(exportAccountActivity);
   const [showFilters, toggleFilters] = useBool();
+
+  const transactionsSelected = createMemo(() => {
+    return props.selectedTransactions && props.selectedTransactions.length > 0;
+  });
+
+  const onSyncMultiple = () => {
+    if (props.selectedTransactions && props.selectedTransactions.length > 0) {
+      syncMultipleTransactions(props.selectedTransactions);
+      const selectedTransactionRecords = props.data.content?.filter(
+        (transaction) =>
+          transaction.accountActivityId &&
+          props.selectedTransactions &&
+          props.selectedTransactions.includes(transaction.accountActivityId),
+      );
+      if (selectedTransactionRecords) {
+        selectedTransactionRecords.forEach((transaction) =>
+          props.onUpdate({ ...transaction, syncStatus: 'SYNCED_LOCKED' }),
+        );
+      }
+      props.selectedTransactions.forEach((id) => {
+        if (props.onDeselectTransaction) {
+          props.onDeselectTransaction(id);
+        }
+      });
+      props.onReload();
+    }
+  };
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
@@ -238,8 +268,17 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             type="primary"
             disabled={getSyncablePageTransactions.length > 0}
             icon={{ name: 'refresh', pos: 'right' }}
+            onClick={onSyncMultiple}
           >
-            <Text message="Sync All Transactions" />
+            <Text
+              message={
+                transactionsSelected()
+                  ? `Sync ${props.selectedTransactions?.length} Transaction${
+                      props.selectedTransactions?.length && props.selectedTransactions.length > 1 ? 's' : ''
+                    }`
+                  : 'Sync All Transactions'
+              }
+            />
           </Button>
         </Show>
       </Filters>

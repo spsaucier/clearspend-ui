@@ -1,4 +1,4 @@
-import { Accessor, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 
 import { Tick } from '_common/components/Checkbox/Tick';
 import { Icon } from '_common/components/Icon';
@@ -7,14 +7,14 @@ import css from './SyncSelectIcon.css';
 
 interface SyncSelectIconProps {
   id: string;
-  selectedTransactions: Accessor<string[]>;
+  selectedTransactions: string[];
   onSelectTransaction: (id: string) => void;
   onDeselectTransaction: (id: string) => void;
 }
 
 export function SyncSelectIcon(props: SyncSelectIconProps) {
   const [hover, setHover] = createSignal(false);
-  const [selected, setSelected] = createSignal<boolean>(props.selectedTransactions().includes(props.id));
+  const [selected, setSelected] = createSignal<boolean>(props.selectedTransactions.includes(props.id));
 
   const onChange = () => {
     if (selected()) {

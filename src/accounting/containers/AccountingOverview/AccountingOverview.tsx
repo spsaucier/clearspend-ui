@@ -43,7 +43,7 @@ export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
         onUpdateData={props.onUpdateData}
         onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
         showAccountingAdminView
-        selectedTransactions={props.selectedTransactions}
+        selectedTransactions={props.selectedTransactions()}
         onSelectTransaction={props.onSelectTransaction}
         onDeselectTransaction={props.onDeselectTransaction}
       />
