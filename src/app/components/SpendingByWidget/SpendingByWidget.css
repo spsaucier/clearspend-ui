@@ -1,8 +1,10 @@
 .top-card-wrapper {
   display: flex;
   width: 100%;
+  padding-bottom: 3px;
   flex-direction: row;
   flex-wrap: nowrap;
+  overflow: auto;
   grid-gap: var(--pd-24);
 
   @media (--bp-medium) {
