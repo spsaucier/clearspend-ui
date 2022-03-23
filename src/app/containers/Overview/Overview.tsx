@@ -144,7 +144,7 @@ export function Overview(props: Readonly<OverviewProps>) {
       <Show when={showTopSpendingSection() && (currentUser().type === 'BUSINESS_OWNER' || canRead(userPermissions()))}>
         <div class={css.top}>
           <h3 class={css.transactionTitle}>
-            <Text message="Top Spending by Category" />
+            <Text message="Top Spending" />
           </h3>
           <Data
             data={spendStore.data}

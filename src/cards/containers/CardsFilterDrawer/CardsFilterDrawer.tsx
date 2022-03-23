@@ -1,7 +1,6 @@
 import { For, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
-import type { Setter } from '_common/types/common';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
@@ -14,21 +13,10 @@ import { useAllocations } from 'allocations/stores/allocations';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
 
-import type { CardFiltersFields } from '../../types';
+import { convertFormData } from './utils';
+import type { CardsFilterDrawerProps, FormValues } from './types';
 
 import css from './CardsFilterDrawer.css';
-
-interface FormValues {
-  allocations: string[];
-  users: string[];
-}
-
-interface CardsFilterDrawerProps {
-  params: SearchCardRequest;
-  omitFilters?: readonly CardFiltersFields[];
-  onReset: () => void;
-  onChangeParams: Setter<Readonly<SearchCardRequest>>;
-}
 
 export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
   const i18n = useI18n();
@@ -39,13 +27,17 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
     defaultValues: {
       allocations: props.params.allocations || [],
       users: props.params.users || [],
+      statuses: props.params.statuses || [],
+      types: props.params.types || [],
+      amountMin: props.params.balance?.min?.toString(),
+      amountMax: props.params.balance?.max?.toString(),
     },
   });
 
   const onApply = () => {
     props.onChangeParams((prev) => ({
       ...prev,
-      ...values(),
+      ...convertFormData(values()),
     }));
   };
 
@@ -58,40 +50,54 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               name="allocations"
               value={values().allocations}
               placeholder={String(i18n.t('Search by allocation name'))}
+              valueRender={(id) => allocations.data!.find((item) => item.allocationId === id)?.name}
               onChange={handlers.allocations}
             >
               <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
             </MultiSelect>
           </FilterBox>
         </Show>
-        <FilterBox title={<Text message="Balance" />}>
+        <FilterBox title={<Text message="Available to spend" />}>
           <div class={css.balance}>
             <FormItem label={<Text message="Min value" />}>
-              <InputCurrency placeholder="0.00" />
+              <InputCurrency
+                placeholder="0.00"
+                name="min-amount"
+                value={values().amountMin}
+                onChange={handlers.amountMin}
+              />
             </FormItem>
             <FormItem label={<Text message="Max value" />}>
-              <InputCurrency placeholder="0.00" />
+              <InputCurrency
+                placeholder="0.00"
+                name="max-amount"
+                value={values().amountMax}
+                onChange={handlers.amountMax}
+              />
             </FormItem>
           </div>
         </FilterBox>
         <FilterBox title={<Text message="Card Status" />}>
-          <CheckboxGroup>
-            <Checkbox value="frozen">
-              <Text message="Frozen" />
+          <CheckboxGroup
+            value={values().statuses}
+            onChange={(value) => handlers.statuses?.(value as SearchCardRequest['statuses'])}
+          >
+            <Checkbox value="INACTIVE">
+              <Text message="Frozen / Awaiting Activation" />
             </Checkbox>
-            <Checkbox value="unfrozen">
+            <Checkbox value="ACTIVE">
               <Text message="Not frozen" />
             </Checkbox>
-            <Checkbox value="awaiting">
-              <Text message="Awaiting activation" />
-            </Checkbox>
-            <Checkbox value="suspended">
+            <Checkbox value="CANCELLED">
               <Text message="Suspended" />
             </Checkbox>
           </CheckboxGroup>
         </FilterBox>
         <FilterBox title={<Text message="Card Type" />}>
-          <CheckboxGroup>
+          <CheckboxGroup
+            value={values().types}
+            onChange={(value) => handlers.types?.(value as SearchCardRequest['types'])}
+          >
             <Checkbox value="PHYSICAL">
               <Text message="Physical" />
             </Checkbox>
@@ -106,6 +112,10 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               name="employees"
               value={values().users}
               placeholder={String(i18n.t('Search by employee name'))}
+              valueRender={(id) => {
+                const user = users.data!.find((item) => item.userId === id);
+                return `${user?.firstName} ${user?.lastName}`;
+              }}
               onChange={handlers.users}
             >
               <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>

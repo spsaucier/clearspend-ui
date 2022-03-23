@@ -37,7 +37,7 @@ export function Cards(props: Readonly<CardsProps>) {
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
     ...extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
-    allocationId: props.current.allocationId,
+    allocations: [props.current.allocationId],
   } as SearchCardRequest);
 
   createEffect(

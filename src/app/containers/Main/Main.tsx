@@ -67,14 +67,14 @@ export default function Main() {
             <Match when={!business() || isStatus(business(), BusinessStatus.ONBOARDING)}>
               <Onboarding />
             </Match>
-            <Match when={isStatus(business(), BusinessStatus.ACTIVE)}>
-              <MainRoutes />
-            </Match>
             <Match when={isStatus(business(), BusinessStatus.SUSPENDED)}>
               <div>SUSPENDED</div>
             </Match>
             <Match when={isStatus(business(), BusinessStatus.CLOSED)}>
               <HardFail />
+            </Match>
+            <Match when={isStatus(business(), BusinessStatus.ACTIVE)}>
+              <MainRoutes />
             </Match>
           </Switch>
         </BusinessContext.Provider>
