@@ -144,18 +144,23 @@ export default function Onboarding() {
       setPendingVerification(reviewRequirements.pendingVerification);
 
       if (reviewRequirements.kybRequiredFields.length > 0) {
+        setLoadingModalOpen(false);
         setStep(OnboardingStep.BUSINESS);
       } else if (Object.keys(reviewRequirements.kycRequiredFields).length > 0) {
+        setLoadingModalOpen(false);
         setStep(OnboardingStep.BUSINESS_OWNERS);
       } else if (
         reviewRequirements.kycRequiredDocuments.length > 0 ||
         reviewRequirements.kybRequiredDocuments.length > 0
       ) {
+        setLoadingModalOpen(false);
         setStep(OnboardingStep.SOFT_FAIL);
       } else {
+        setLoadingModalOpen(false);
         setStep(OnboardingStep.LINK_ACCOUNT);
       }
     } catch (err: unknown) {
+      setLoadingModalOpen(false);
       messages.error({ title: 'Something went wrong' });
       setStep(OnboardingStep.BUSINESS_OWNERS);
     }
