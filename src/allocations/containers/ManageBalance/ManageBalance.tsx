@@ -95,6 +95,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
           ? 0
           : currentAmount
         : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
+      involvesBank: targetIsBankAccount,
     });
   };
 
