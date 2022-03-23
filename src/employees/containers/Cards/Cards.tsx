@@ -23,7 +23,7 @@ export function Cards(props: Readonly<CardsProps>) {
   const [cardID, setCardID] = createSignal<string | null>(null);
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
     ...extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
-    userId: props.userId,
+    users: [props.userId],
   } as SearchCardRequest);
 
   return (

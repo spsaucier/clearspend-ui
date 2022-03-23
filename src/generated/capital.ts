@@ -603,11 +603,8 @@ export interface SearchCardRequest {
   allocations?: string[];
   searchText?: string;
   balance?: FilterAmount;
-  activeCards?: boolean;
-  frozenCards?: boolean;
-  cancelledCards?: boolean;
-  physical?: boolean;
-  virtual?: boolean;
+  statuses?: ('ACTIVE' | 'INACTIVE' | 'CANCELLED')[];
+  types?: ('PHYSICAL' | 'VIRTUAL')[];
 }
 
 export interface ItemTypedIdAllocationId {
