@@ -33,7 +33,7 @@ export function Cards(props: Readonly<CardsProps>) {
         loading={status().loading}
         error={status().error}
         data={cards() as {}}
-        omitFilters={['userId']}
+        omitFilters={['users']}
         onReload={reload}
         onCardClick={setCardID}
         onChangeParams={onPageSizeChange(setParams, (size) => storage.set(CARDS_PAGE_SIZE_STORAGE_KEY, size))}

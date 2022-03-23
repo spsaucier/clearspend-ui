@@ -31,7 +31,7 @@ import type { CardType as CardTypeType, CardFiltersFields } from '../../types';
 
 import css from './CardsTable.css';
 
-const FILTERS_KEYS: readonly CardFiltersFields[] = ['allocationId', 'userId'];
+const FILTERS_KEYS: readonly CardFiltersFields[] = ['allocations', 'users'];
 
 interface CardsTableProps {
   search?: string;

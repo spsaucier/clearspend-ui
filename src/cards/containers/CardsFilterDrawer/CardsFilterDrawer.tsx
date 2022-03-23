@@ -8,7 +8,8 @@ import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
 import type { SearchCardRequest } from 'generated/capital';
-import { Select, Option } from '_common/components/Select';
+import { MultiSelect } from '_common/components/MultiSelect/MultiSelect';
+import { Option } from '_common/components/MultiSelect/Option';
 import { useAllocations } from 'allocations/stores/allocations';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
@@ -18,8 +19,8 @@ import type { CardFiltersFields } from '../../types';
 import css from './CardsFilterDrawer.css';
 
 interface FormValues {
-  allocation: string;
-  user: string;
+  allocations: string[];
+  users: string[];
 }
 
 interface CardsFilterDrawerProps {
@@ -36,34 +37,31 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
 
   const { values, handlers } = createForm<FormValues>({
     defaultValues: {
-      allocation: props.params.allocationId || '',
-      user: props.params.userId || '',
+      allocations: props.params.allocations || [],
+      users: props.params.users || [],
     },
   });
 
   const onApply = () => {
-    const { allocation, user } = values();
     props.onChangeParams((prev) => ({
       ...prev,
-      allocationId: allocation || undefined,
-      userId: user || undefined,
+      ...values(),
     }));
   };
 
   return (
     <Form class={css.root}>
       <div class={css.content}>
-        <Show when={!props.omitFilters?.includes('allocationId')}>
+        <Show when={!props.omitFilters?.includes('allocations')}>
           <FilterBox title={<Text message="Allocations" />}>
-            <Select
-              iconName="search"
-              name="allocation"
-              value={values().allocation}
+            <MultiSelect
+              name="allocations"
+              value={values().allocations}
               placeholder={String(i18n.t('Search by allocation name'))}
-              onChange={handlers.allocation}
+              onChange={handlers.allocations}
             >
               <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
-            </Select>
+            </MultiSelect>
           </FilterBox>
         </Show>
         <FilterBox title={<Text message="Balance" />}>
@@ -102,17 +100,16 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
             </Checkbox>
           </CheckboxGroup>
         </FilterBox>
-        <Show when={!props.omitFilters?.includes('userId')}>
+        <Show when={!props.omitFilters?.includes('users')}>
           <FilterBox title={<Text message="Employees" />}>
-            <Select
-              iconName="search"
-              name="employee"
-              value={values().user}
+            <MultiSelect
+              name="employees"
+              value={values().users}
               placeholder={String(i18n.t('Search by employee name'))}
-              onChange={handlers.user}
+              onChange={handlers.users}
             >
               <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
-            </Select>
+            </MultiSelect>
           </FilterBox>
         </Show>
       </div>

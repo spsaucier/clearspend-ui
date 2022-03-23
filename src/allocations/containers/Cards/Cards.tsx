@@ -58,8 +58,8 @@ export function Cards(props: Readonly<CardsProps>) {
     on(
       createMemo(() => props.current.allocationId),
       (allocationId) => {
-        if (allocationId === params().allocationId) return;
-        setParams((data) => ({ ...data, allocationId, searchText: '' }));
+        if (allocationId === params().allocations?.[0]) return;
+        setParams((data) => ({ ...data, allocations: [allocationId], searchText: '' }));
       },
     ),
   );
@@ -78,7 +78,7 @@ export function Cards(props: Readonly<CardsProps>) {
         error={status().error}
         search={params().searchText}
         data={cards()}
-        omitFilters={['allocationId']}
+        omitFilters={['allocations']}
         onReload={reload}
         onCardClick={setCardID}
         onUserClick={setUserID}

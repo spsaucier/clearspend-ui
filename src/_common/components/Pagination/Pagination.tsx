@@ -40,40 +40,6 @@ export function Pagination(props: Readonly<PaginationProps>) {
 
   return (
     <div class={css.root}>
-      <ul class={css.pagination}>
-        <li>
-          <Button
-            icon="chevron-left"
-            disabled={props.current === 0}
-            class={join(css.button, css.nav)}
-            onClick={() => props.onChange(props.current - 1, props.pageSize)}
-            data-name="Previous page"
-          />
-        </li>
-        <For each={buttons()}>
-          {(item) => (
-            <li>
-              <Button
-                disabled={item === undefined}
-                class={join(css.button, item === props.current && css.active)}
-                onClick={() => item !== undefined && props.onChange(item, props.pageSize)}
-                data-name={`Page ${(item || 0) + 1}`}
-              >
-                {typeof item === 'number' ? item + 1 : '...'}
-              </Button>
-            </li>
-          )}
-        </For>
-        <li>
-          <Button
-            icon="chevron-right"
-            disabled={!pages().length || props.current === pages().length - 1}
-            class={join(css.button, css.nav)}
-            onClick={() => props.onChange(props.current + 1, props.pageSize)}
-            data-name="Next page"
-          />
-        </li>
-      </ul>
       <Show when={props.total > DEFAULT_PAGE_SIZE}>
         <Select
           class={css.size}
@@ -88,6 +54,42 @@ export function Pagination(props: Readonly<PaginationProps>) {
             )}
           </Index>
         </Select>
+      </Show>
+      <Show when={pages().length > 1}>
+        <ul class={css.pagination}>
+          <li>
+            <Button
+              icon="chevron-left"
+              disabled={props.current === 0}
+              class={join(css.button, css.nav)}
+              onClick={() => props.onChange(props.current - 1, props.pageSize)}
+              data-name="Previous page"
+            />
+          </li>
+          <For each={buttons()}>
+            {(item) => (
+              <li>
+                <Button
+                  disabled={item === undefined}
+                  class={join(css.button, item === props.current && css.active)}
+                  onClick={() => item !== undefined && props.onChange(item, props.pageSize)}
+                  data-name={`Page ${(item || 0) + 1}`}
+                >
+                  {typeof item === 'number' ? item + 1 : '...'}
+                </Button>
+              </li>
+            )}
+          </For>
+          <li>
+            <Button
+              icon="chevron-right"
+              disabled={!pages().length || props.current === pages().length - 1}
+              class={join(css.button, css.nav)}
+              onClick={() => props.onChange(props.current + 1, props.pageSize)}
+              data-name="Next page"
+            />
+          </li>
+        </ul>
       </Show>
     </div>
   );

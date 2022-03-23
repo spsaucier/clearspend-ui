@@ -14,7 +14,7 @@ import css from './MainMenu.css';
 const TITLES = defineMessages({
   dashboard: { message: 'Dashboard' },
   allocations: { message: 'Allocations' },
-  card: { message: 'Card' },
+  card: { message: 'Cards' },
   employees: { message: 'Employees' },
   company: { message: 'Company Settings' },
   profile: { message: 'Account Settings' },
