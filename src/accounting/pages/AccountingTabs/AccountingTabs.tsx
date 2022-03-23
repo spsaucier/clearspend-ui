@@ -9,6 +9,7 @@ import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
 import { useActivity } from 'app/stores/activity';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
+import { dateRangeToISO } from 'app/utils/dateRangeToISO';
 import { Data } from 'app/components/Data';
 import { AccountingSettings } from 'accounting/containers/AccountingSettings';
 import { SyncLog } from 'accounting/containers/SyncLog';
@@ -24,13 +25,6 @@ enum Tabs {
   transactions,
   settings,
   log,
-}
-
-function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
-  return {
-    from: range[0].toISOString() as DateString,
-    to: range[1].toISOString() as DateString,
-  };
 }
 
 export function AccountingTabs() {
@@ -64,7 +58,7 @@ export function AccountingTabs() {
   });
 
   const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
-  const PERIOD = toISO(getAccountingTimePeriod(initPeriod));
+  const PERIOD = dateRangeToISO(getAccountingTimePeriod(initPeriod));
 
   const activityStore = useActivity({
     params: {

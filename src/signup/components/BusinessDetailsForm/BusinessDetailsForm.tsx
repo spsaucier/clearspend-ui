@@ -89,7 +89,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
           <RadioGroup
             name="business-type"
             value={values().businessTypeCategory}
-            onChange={(value) => handlers.businessTypeCategory(value as BusinessTypeCategory)}
+            onChange={handlers.businessTypeCategory}
           >
             <Radio value={BusinessTypeCategory.INDIVIDUAL}>Individual/Sole Proprietorship</Radio>
             <Radio value={BusinessTypeCategory.COMPANY}>Company</Radio>
@@ -125,11 +125,7 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
           }
         >
           <FormItem label="Are you owner with at least 25% ownership?" error={errors().isOwnerOf25} darkMode={true}>
-            <RadioGroup
-              name="is-owner"
-              value={values().isOwnerOf25}
-              onChange={(value) => handlers.isOwnerOf25?.(value as boolean)}
-            >
+            <RadioGroup name="is-owner" value={values().isOwnerOf25} onChange={handlers.isOwnerOf25}>
               <Radio value={true}>Yes</Radio>
               <Radio value={false}>No</Radio>
             </RadioGroup>

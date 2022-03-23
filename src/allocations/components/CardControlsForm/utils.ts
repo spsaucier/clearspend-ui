@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import type { FormOptions } from '_common/components/Form';
 import type { MccGroup } from 'transactions/types';
 
@@ -18,7 +16,6 @@ export function getFormOptions(
       channels: getChannels(data),
       purchasesLimits: getPurchasesLimits(data),
     },
-    rules: {},
   };
 }
 

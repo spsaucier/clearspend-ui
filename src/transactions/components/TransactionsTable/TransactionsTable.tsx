@@ -17,6 +17,7 @@ import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
+import { getResetFilters } from 'app/utils/getResetFilters';
 import { exportAccountActivity } from 'app/services/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
@@ -28,19 +29,24 @@ import type {
 import { Drawer } from '_common/components/Drawer';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import type { DateRange } from 'app/types/common';
 import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
 import { syncMultipleTransactions } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
+import { useDateFilterHandler } from '../../utils/useDateFilterHandler';
 import { MERCHANT_CATEGORIES } from '../../constants';
 
 import css from './TransactionsTable.css';
 
+const FILTERS_KEYS = ['amount', 'categories', 'statuses', 'withReceipt', 'withoutReceipt'] as const;
+
 interface TransactionsTableProps {
   data: PagedDataAccountActivityResponse;
   params: Readonly<AccountActivityRequest>;
+  dateRange?: Readonly<DateRange>;
   onCardClick?: (id: string) => void;
   onRowClick: (activityId: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
@@ -216,9 +222,18 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       });
   };
 
-  // TODO update when API is ready - CAP-305
-  // eslint-disable-next-line
-  const onResetFilters = () => {};
+  const [dateFilter, onChangeFilters] = useDateFilterHandler(props.onChangeParams, props.dateRange);
+  const filters = createMemo<Readonly<AccountActivityRequest>>(() => ({ ...props.params, ...dateFilter() }));
+
+  const filtersCount = createMemo(
+    () =>
+      FILTERS_KEYS.reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0) +
+      Number(Boolean(dateFilter().from)),
+  );
+
+  const onResetFilters = () => {
+    onChangeFilters((prev) => ({ ...prev, ...getResetFilters([...FILTERS_KEYS, 'from', 'to']) }));
+  };
 
   const getSyncablePageTransactions = () => {
     return [
@@ -250,8 +265,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         />
         <FiltersButton
           label={<Text message="More Filters" />}
-          // TODO update when API is ready - CAP-305
-          count={0}
+          count={filtersCount()}
           onReset={onResetFilters}
           onClick={toggleFilters}
         />
@@ -295,11 +309,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       </Show>
       <Drawer noPadding open={showFilters()} title={<Text message="Filter Transactions" />} onClose={toggleFilters}>
         <TransactionFilterDrawer
-          params={props.params}
+          params={filters()}
           showAccountingAdminView={props.showAccountingAdminView}
           onChangeParams={(params) => {
             toggleFilters();
-            props.onChangeParams(params);
+            onChangeFilters(params);
           }}
           onReset={() => {
             toggleFilters();

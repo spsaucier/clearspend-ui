@@ -15,17 +15,10 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 
 import type { ActivityStatus } from '../../types';
 
-import css from './TransactionFilterDrawer.css';
+import { getFormOptions, convertFormData } from './utils';
+import type { FormValues } from './types';
 
-interface FormValues {
-  amountMin: string;
-  amountMax: string;
-  categories: string[];
-  syncStatus: string[];
-  status: ActivityStatus[];
-  hasReceipt: boolean | undefined;
-  date: ReadonlyDate[];
-}
+import css from './TransactionFilterDrawer.css';
 
 interface TransactionFilterDrawerProps {
   params: AccountActivityRequest;
@@ -38,29 +31,8 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   const i18n = useI18n();
   const expenseCategories = useExpenseCategories({ initValue: [] });
 
-  const { values, handlers } = createForm<FormValues>({
-    // TODO update when API is ready - CAP-305
-    defaultValues: {
-      amountMin: '',
-      amountMax: '',
-      categories: [],
-      syncStatus: [],
-      status: [],
-      hasReceipt: undefined,
-      date: [],
-    },
-  });
-
-  // TODO: When search filter api is ready - CAP-305
-  const applyFilters = () => {
-    // eslint-disable-next-line
-    console.log(JSON.stringify(values(), null, ' '));
-    props.onChangeParams((prevParams) => {
-      return {
-        ...prevParams,
-      };
-    });
-  };
+  const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
+  const applyFilters = () => props.onChangeParams((prev) => ({ ...prev, ...convertFormData(values()) }));
 
   return (
     <div class={css.root}>
@@ -126,15 +98,11 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
           </CheckboxGroup>
         </FilterBox>
         <FilterBox title={<Text message="Receipt" />}>
-          <RadioGroup
-            name="receipt-filter-options"
-            value={values().hasReceipt}
-            onChange={(value) => handlers.hasReceipt(value === 'true')}
-          >
-            <Radio value="true">
+          <RadioGroup name="receipt-filter-options" value={values().hasReceipt} onChange={handlers.hasReceipt}>
+            <Radio value={true}>
               <Text message="Has receipt" />
             </Radio>
-            <Radio value="false">
+            <Radio value={false}>
               <Text message="Does not have receipt" />
             </Radio>
           </RadioGroup>

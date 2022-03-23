@@ -1,15 +1,12 @@
-export interface FormValues {
+import type { AddressValues } from 'employees/components/AddressFormItems/types';
+
+export interface FormValues extends AddressValues {
   firstName: string;
   lastName: string;
   birthdate: ReadonlyDate | undefined;
   ssn: string;
   email: string;
   phone: string;
-  streetLine1: string;
-  streetLine2: string;
-  locality: string;
-  region: string;
-  postalCode: string;
   percentageOwnership: number;
   title?: string;
   relationshipOwner?: boolean;

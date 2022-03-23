@@ -37,13 +37,6 @@ export function getTimePeriod(period: TimePeriod): [from: ReadonlyDate, to: Read
   }
 }
 
-export function toISO(range: [from: ReadonlyDate, to: ReadonlyDate]) {
-  return {
-    from: range[0].toISOString() as DateString,
-    to: range[1].toISOString() as DateString,
-  };
-}
-
 export function updateParams<T>(updates: Partial<T>) {
   return (prev: T): T => ({ ...prev, ...updates });
 }

@@ -1,4 +1,5 @@
-import { Show } from 'solid-js';
+import { createSignal, createEffect, Show, untrack } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
 import { createForm } from '_common/components/Form';
@@ -8,104 +9,80 @@ import { Button } from '_common/components/Button';
 import type { Address } from 'generated/capital';
 
 import { AddressFormItems, AddressValues } from '../AddressFormItems';
-
-import { getFormOptions } from './utils';
+import { getEmptyAddress } from '../AddressFormItems/utils';
 
 import css from './AddressSelect.css';
 
-interface AddressSelectProps {
-  value?: Address;
-  businessAddress?: Address;
-  employeeAddress?: Address;
-  class?: string;
-  onChange?: (value: Address) => void;
-}
-
-enum Selected {
+enum AddressType {
   Business = 'Business',
   Employee = 'Employee',
   New = 'New',
 }
 
-export function AddressSelect(props: Readonly<AddressSelectProps>) {
-  const { values, errors, handlers } = createForm<AddressValues>(getFormOptions());
+interface AddressSelectProps {
+  businessAddress: Address | undefined;
+  employeeAddress: Address | undefined;
+  class?: string;
+  onChange: (value: Address) => void;
+}
 
-  const chooseSelectedAddress = (val?: Selected) => {
+export function AddressSelect(props: Readonly<AddressSelectProps>) {
+  const [addressType, setAddressType] = createSignal<AddressType>();
+
+  const { values, errors, handlers } = createForm<AddressValues>({
+    defaultValues: getEmptyAddress(),
+  });
+
+  const onChangeAddressType = (val: AddressType): void => {
+    setAddressType(val);
     switch (val) {
-      case Selected.Business: {
-        if (props.businessAddress) {
-          props.onChange?.(props.businessAddress);
-        }
-        break;
-      }
-      case Selected.Employee: {
-        if (props.employeeAddress) {
-          props.onChange?.(props.employeeAddress);
-        }
-        break;
-      }
-      default: {
-        props.onChange?.(values()!);
-        break;
-      }
+      case AddressType.Business:
+        return props.onChange(props.businessAddress!);
+      case AddressType.Employee:
+        return props.onChange(props.employeeAddress!);
+      case AddressType.New:
+      default:
+        return props.onChange(values());
     }
   };
 
-  const handlersWithSave = {
-    ...handlers,
-    streetLine1: (value: string) => {
-      handlers.streetLine1(value);
-      setTimeout(() => chooseSelectedAddress());
-    },
-    streetLine2: (value: string) => {
-      handlers.streetLine2(value);
-      setTimeout(() => chooseSelectedAddress());
-    },
-    locality: (value: string) => {
-      handlers.locality(value);
-      setTimeout(() => chooseSelectedAddress());
-    },
-    region: (value: string) => {
-      handlers.region(value);
-      setTimeout(() => chooseSelectedAddress());
-    },
-    postalCode: (value: string) => {
-      handlers.postalCode(value);
-      setTimeout(() => chooseSelectedAddress());
-    },
-  };
+  createEffect(() => {
+    const formValues = { ...values() };
+    if (untrack(addressType) !== AddressType.New) return;
+    setTimeout(() => props.onChange(formValues));
+  });
 
   return (
     <RadioGroup
       empty
-      name="card-type"
-      value={props.value as string}
+      name="delivery-address-type"
+      value={addressType()}
       class={join(css.root, props.class)}
-      onChange={(val) => chooseSelectedAddress(val as Selected)}
+      onChange={onChangeAddressType}
     >
       <Show when={props.businessAddress}>
-        <Radio value={Selected.Business} class={css.item}>
+        <Radio value={AddressType.Business} class={css.item}>
           <div class={css.content}>
-            <AddressView address={props.businessAddress!} label="Business" icon="company" />
+            <AddressView address={props.businessAddress!} label={<Text message="Business" />} icon="company" />
           </div>
         </Radio>
       </Show>
       <Show when={props.employeeAddress?.streetLine1}>
-        <Radio value={Selected.Employee} class={css.item}>
+        <Radio value={AddressType.Employee} class={css.item}>
           <div class={css.content}>
-            <AddressView address={props.employeeAddress!} label="Employee" icon="user" />
+            <AddressView address={props.employeeAddress!} label={<Text message="Employee" />} icon="user" />
           </div>
         </Radio>
       </Show>
-      <Radio value={Selected.New} class={css.item}>
+      <Radio value={AddressType.New} class={css.item}>
         <div class={css.specialContent}>
           <div class={css.showWhenInactive}>
             <Button icon="add" type="primary" view="ghost" class={css.noTouch}>
-              New address
+              <Text message="New address" />
             </Button>
           </div>
           <div class={css.showWhenActive}>
-            <AddressFormItems values={values} errors={errors()} handlers={handlersWithSave} />
+            <AddressFormItems values={values} errors={errors()} handlers={handlers} />
           </div>
         </div>
       </Radio>

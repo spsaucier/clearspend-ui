@@ -6,6 +6,7 @@ import type { Setter, SetterFunc } from '_common/types/common';
 import { Drawer } from '_common/components/Drawer';
 import { Modal } from '_common/components/Modal';
 import { Data } from 'app/components/Data';
+import type { DateRange } from 'app/types/common';
 import type {
   AccountActivityRequest,
   AccountActivityResponse,
@@ -22,6 +23,7 @@ interface TransactionsDataProps {
   loading: boolean;
   error: unknown;
   params: Readonly<AccountActivityRequest>;
+  dateRange?: Readonly<DateRange>;
   data: Readonly<PagedDataAccountActivityResponse> | null;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
@@ -55,6 +57,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         component={props.table ? TransactionsTable : TransactionsList}
         data={props.data!}
         params={props.params}
+        dateRange={props.dateRange}
         onCardClick={props.onCardClick}
         onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}

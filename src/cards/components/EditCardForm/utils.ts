@@ -4,6 +4,7 @@ import { required } from '_common/components/Form/rules/required';
 import { isString } from '_common/utils/isString';
 import type { IssueCardRequest } from 'generated/capital';
 import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
+import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { MccGroup } from 'transactions/types';
 
 import { CardType } from '../../types';
@@ -36,11 +37,7 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       categories: [],
       channels: [],
       purchasesLimits: getDefaultLimits(),
-      streetLine1: '',
-      streetLine2: '',
-      locality: '',
-      region: '',
-      postalCode: '',
+      ...getEmptyAddress(),
     },
     rules: {
       allocationId: [required],

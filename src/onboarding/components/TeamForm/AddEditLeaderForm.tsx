@@ -80,7 +80,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
             <RadioGroup
               name="is-executive"
               value={values().relationshipExecutive}
-              onChange={(value) => handlers.relationshipExecutive?.(value as boolean)}
+              onChange={handlers.relationshipExecutive}
             >
               <Radio value={true}>Yes</Radio>
               <Radio value={false}>No</Radio>

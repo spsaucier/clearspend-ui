@@ -14,3 +14,8 @@ export interface FieldError {
 }
 
 export type FieldErrors = Readonly<Record<string, readonly Readonly<FieldError>[]>>;
+
+export interface DateRange {
+  from: string;
+  to: string;
+}

@@ -37,9 +37,10 @@ import { useMerchantCategorySpending } from 'app/stores/merchantCategorySpending
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpend } from '../../stores/spend';
 import { useActivity } from '../../stores/activity';
+import { dateRangeToISO } from '../../utils/dateRangeToISO';
 import { useBusiness } from '../Main/context';
 
-import { TimePeriod, getTimePeriod, toISO, updateParams } from './utils';
+import { TimePeriod, getTimePeriod, updateParams } from './utils';
 
 import css from './Overview.css';
 
@@ -63,7 +64,6 @@ export function Overview(props: Readonly<OverviewProps>) {
   const { currentUser } = useBusiness();
 
   const initPeriod = searchParams.period || TimePeriod.week;
-  const PERIOD = toISO(getTimePeriod(initPeriod));
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
@@ -72,46 +72,26 @@ export function Overview(props: Readonly<OverviewProps>) {
     return props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
   });
 
+  const DEFAULT_PARAMS = { ...dateRangeToISO(getTimePeriod(initPeriod)), allocationId: allocationId() };
+
   createEffect(() => {
     setAllocationIdForPermissions(allocationId() || getRootAllocation(props.allocations)?.allocationId || '');
   });
 
-  const spendStore = useSpend({ params: { ...PERIOD, allocationId: allocationId() } });
+  const spendStore = useSpend({
+    params: { ...dateRangeToISO(getTimePeriod(initPeriod)), allocationId: allocationId() },
+  });
 
   // TODO: Refactor once https://tranwall.atlassian.net/browse/CAP-747 is completed on backend to use 'ALL' filter
-  const employeeCategorySpendingStore = useEmployeeSpending({
-    params: {
-      ...PERIOD,
-      allocationId: allocationId(),
-    },
-  });
-
-  const merchantCategorySpendingStore = useMerchantCategorySpending({
-    params: {
-      ...PERIOD,
-      allocationId: allocationId(),
-    },
-  });
-
-  const merchantSpendingStore = useMerchantSpending({
-    params: {
-      ...PERIOD,
-      allocationId: allocationId(),
-    },
-  });
-
-  const allocationSpending = useAllocationSpending({
-    params: {
-      ...PERIOD,
-      allocationId: allocationId(),
-    },
-  });
+  const employeeCategorySpendingStore = useEmployeeSpending({ params: DEFAULT_PARAMS });
+  const merchantCategorySpendingStore = useMerchantCategorySpending({ params: DEFAULT_PARAMS });
+  const merchantSpendingStore = useMerchantSpending({ params: DEFAULT_PARAMS });
+  const allocationSpending = useAllocationSpending({ params: DEFAULT_PARAMS });
 
   const activityStore = useActivity({
     params: {
       ...extendPageSize(DEFAULT_ACTIVITY_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
-      ...PERIOD,
-      allocationId: allocationId(),
+      ...DEFAULT_PARAMS,
     },
   });
 
@@ -135,7 +115,7 @@ export function Overview(props: Readonly<OverviewProps>) {
     setSearchParams({ period: value });
 
     batch(() => {
-      const range = toISO(getTimePeriod(value));
+      const range = dateRangeToISO(getTimePeriod(value));
       spendStore.setParams(updateParams<GraphDataRequest>(range));
       allocationSpending.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
       merchantSpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
@@ -199,6 +179,7 @@ export function Overview(props: Readonly<OverviewProps>) {
             loading={activityStore.loading}
             error={activityStore.error}
             params={activityStore.params}
+            dateRange={dateRangeToISO(getTimePeriod(period()))}
             data={activityStore.data}
             onReload={activityStore.reload}
             onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>

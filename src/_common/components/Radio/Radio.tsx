@@ -1,20 +1,14 @@
-import { createMemo, Show, JSXElement } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { join } from '../../utils/join';
 
 import { useGroupContext } from './context';
+import type { RadioProps } from './types';
 
 import css from './Radio.css';
 
-export interface RadioProps {
-  value: string | boolean;
-  class?: string;
-  disabled?: boolean;
-  children?: JSXElement;
-}
-
-export function Radio(props: Readonly<RadioProps>) {
-  const group = useGroupContext();
+export function Radio<T>(props: Readonly<RadioProps<T>>) {
+  const group = useGroupContext<T>();
 
   const onChange = () => group.onChange?.(props.value);
 

@@ -7,7 +7,7 @@ import type { RadioGroupProps } from './types';
 
 import css from './RadioGroup.css';
 
-export function RadioGroup(props: Readonly<RadioGroupProps>) {
+export function RadioGroup<T>(props: Readonly<RadioGroupProps<T>>) {
   const [local, others] = splitProps(props, ['class', 'children']);
 
   return (

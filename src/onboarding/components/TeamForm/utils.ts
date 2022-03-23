@@ -3,6 +3,7 @@ import { required } from '_common/components/Form/rules/required';
 import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
+import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 
 import type { FormValues } from './types';
@@ -44,11 +45,7 @@ export function getFormOptions({ currentUser, leader }: Props): FormOptions<Form
     relationshipOwner,
     percentageOwnership: 0,
     title: '',
-    streetLine1: '',
-    streetLine2: '',
-    locality: '',
-    region: '',
-    postalCode: '',
+    ...getEmptyAddress(),
   };
   if (!leader) return { defaultValues, rules };
 

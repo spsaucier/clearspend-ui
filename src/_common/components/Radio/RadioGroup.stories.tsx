@@ -11,7 +11,7 @@ export default {
   },
 };
 
-export const Default = (args: RadioGroupProps) => (
+export const Default = (args: RadioGroupProps<string>) => (
   <RadioGroup {...args} name="group-name">
     <Radio value="red">Red</Radio>
     <Radio value="green">Green</Radio>

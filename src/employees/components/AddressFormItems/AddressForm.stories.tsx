@@ -3,9 +3,8 @@ import { createForm } from 'solid-create-form';
 import { Button } from '_common/components/Button';
 import { Form } from '_common/components/Form';
 
-import { getFormOptions } from '../AddressSelect/utils';
-
 import { AddressFormItems } from './AddressFormItems';
+import { getEmptyAddress } from './utils';
 import type { AddressValues } from './types';
 
 export default {
@@ -14,7 +13,9 @@ export default {
 };
 
 export const UserForm = () => {
-  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<AddressValues>(getFormOptions());
+  const { values, errors, isDirty, handlers, wrapSubmit } = createForm<AddressValues>({
+    defaultValues: getEmptyAddress(),
+  });
 
   const onSubmit = (data: Readonly<AddressValues>) => {
     // eslint-disable-next-line no-console

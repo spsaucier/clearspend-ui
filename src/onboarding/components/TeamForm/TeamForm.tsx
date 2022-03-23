@@ -159,7 +159,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
         <Show when={showOtherOwnersQuestion()}>
           <div class={css.field}>
             <Text message="Is there anyone else who owns 25% or more of the company?" />
-            <RadioGroup value={hasOtherOwners()} name="more-owners" onChange={(v) => setHasOtherOwners(v as boolean)}>
+            <RadioGroup value={hasOtherOwners()} name="more-owners" onChange={setHasOtherOwners}>
               <Radio value={true}>
                 <Text message="Yes" />
               </Radio>
