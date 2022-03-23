@@ -21,6 +21,7 @@ import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
+import { canActivateCard } from 'cards/utils/canActivateCard';
 
 import { Card } from '../../components/Card';
 import { CardActions } from '../../components/CardActions';
@@ -117,7 +118,12 @@ export default function CardView() {
             when={card()!.issueDate}
             fallback={<Text message="This card will be mailed out in 1-2 business days." />}
           >
-            <Text message="When this card arrives in the mail, follow the instructions provided to activate it." />
+            <Show
+              when={canActivateCard({ ...card() }, currentUser())}
+              fallback={<Text message="This card can be activated only by the cardholder. " />}
+            >
+              <Text message="When this card arrives in the mail, follow the instructions provided to activate it." />
+            </Show>
           </Show>
         </Show>
       }
