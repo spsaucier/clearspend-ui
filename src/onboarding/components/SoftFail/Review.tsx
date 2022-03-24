@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { createEffect, createSignal, onCleanup, Show } from 'solid-js';
+import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 
 import { Description } from 'signup/components/Description';
 
@@ -18,18 +18,16 @@ const MAX_REFETCH_MS_CHECK_APPLICATION_STATUS = 60000; // 60 seconds
 export function Review(props: Readonly<ReviewDetails>) {
   const [totalWaitTime, setTotalWaitTime] = createSignal<number>(0);
 
-  let refetchInterval: number;
-  createEffect(() => {
-    refetchInterval = setInterval(() => {
+  onMount(() => {
+    const refetchInterval = setInterval(() => {
       setTotalWaitTime(totalWaitTime() + REFETCH_MS_CHECK_APPLICATION_STATUS);
       if (totalWaitTime() < MAX_REFETCH_MS_CHECK_APPLICATION_STATUS) {
         props.refetch();
       }
     }, REFETCH_MS_CHECK_APPLICATION_STATUS);
-  });
-
-  onCleanup(() => {
-    clearInterval(refetchInterval);
+    onCleanup(() => {
+      clearInterval(refetchInterval);
+    });
   });
 
   return (

@@ -1,4 +1,4 @@
-import { Show, createSignal, JSXElement } from 'solid-js';
+import { Show, createSignal, JSXElement, onCleanup, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -16,9 +16,25 @@ interface InternalBankAccountProps {
   numberLinesOnly?: boolean;
 }
 
+const REFETCH_BUSINESS_MS = 10000;
+
 export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
-  const { business } = useBusiness();
+  const { business, refetch } = useBusiness();
   const [showAccountNumber, setShowAccountNumber] = createSignal(false);
+
+  onMount(() => {
+    if (!business().accountNumber) {
+      refetch();
+      const refetchInterval = setInterval(() => {
+        refetch();
+      }, REFETCH_BUSINESS_MS);
+
+      onCleanup(() => {
+        clearInterval(refetchInterval);
+      });
+    }
+  });
+
   return (
     <div class={join(!props.numberLinesOnly && css.box, css.root, props.class)}>
       <Show when={props.heading}>
