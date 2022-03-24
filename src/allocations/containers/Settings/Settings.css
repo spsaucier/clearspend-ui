@@ -16,3 +16,7 @@
   display: block;
   margin: 0 0 var(--pd-8);
 }
+
+.role-description {
+  margin-top: 18px;
+}

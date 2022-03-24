@@ -86,6 +86,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   const onRemoveRole = (userId: string) => {
     const roles = getRolesList(currentRoles() || [], updatedRoles());
     let role = roles.find((item) => item.user.userId === userId);
+    if (role?.user.type === 'BUSINESS_OWNER') return;
     if (!role) return;
     setRemovedRoles((prev) => ({ ...prev, [userId]: { inherited: role?.inherited, user: role?.user } }));
     setUpdatedRoles((prev) => prev.filter((item) => item.user.userId !== userId));
@@ -165,31 +166,60 @@ export function Settings(props: Readonly<SettingsProps>) {
         </FormItem>
       </Section>
       <Section
-        title={<Text message="Manager(s)" />}
+        title={<Text message="Access" />}
         description={
           <>
-            <Text message="Add employees who can view or manage this allocation." class={css.content!} />
-            <h5 class={css.subheader}>
-              <Text message="Manage" />
-            </h5>
-            <Text
-              message={
-                'Managers can deposit and withdraw funds, create additional allocations under this allocation, ' +
-                'add employees, and issue cards.'
-              }
-              class={css.content!}
-            />
-            <h5 class={css.subheader}>
-              <Text message="View only" />
-            </h5>
-            <Text
-              message="Viewers can see balances, employees, cards, and transactions, but cannot make changes."
-              class={css.content!}
-            />
+            <Text message="Add users who can view or manage this allocation." class={css.content!} />
+            <Show when={!Boolean(props.allocation.parentAllocationId)}>
+              <div class={css.roleDescription}>
+                <h5 class={css.subheader}>
+                  <Text message="Admin" />
+                </h5>
+                <Text
+                  message={
+                    'Admins can deposit, withdraw, and reallocate funds, view and manage all allocations, company settings, and ' +
+                    'accounting details, create additional allocations, add employees, and issue cards.'
+                  }
+                  class={css.content!}
+                />
+              </div>
+            </Show>
+            <div class={css.roleDescription}>
+              <h5 class={css.subheader}>
+                <Text message="Manage" />
+              </h5>
+              <Text
+                message={
+                  'Managers can reallocate funds, create additional allocations under this allocation, ' +
+                  'and issue cards.'
+                }
+                class={css.content!}
+              />
+            </div>
+            <div class={css.roleDescription}>
+              <h5 class={css.subheader}>
+                <Text message="Employee" />
+              </h5>
+              <Text
+                message={
+                  'Employees can view and manage their own cards and transactions only. This is the base role for all cardholders.'
+                }
+                class={css.content!}
+              />
+            </div>
+            <div class={css.roleDescription}>
+              <h5 class={css.subheader}>
+                <Text message="View only" />
+              </h5>
+              <Text
+                message="Viewers can see balances, employees, cards, and transactions, but cannot make changes (even to their own)."
+                class={css.content!}
+              />
+            </div>
           </>
         }
       >
-        <FormItem label={<Text message="Add manager or viewer" />} class={css.field}>
+        <FormItem label={<Text message="Add a user role" />} class={css.field}>
           <Select
             name="employee"
             placeholder={String(i18n.t('Search by employee name'))}

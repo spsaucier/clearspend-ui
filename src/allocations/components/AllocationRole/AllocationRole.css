@@ -2,7 +2,7 @@
 
 .root {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: 1fr auto auto auto;
   grid-gap: var(--pd-12);
   align-items: center;
 
@@ -34,6 +34,14 @@
   align-items: center;
   justify-content: center;
   color: var(--tw-primary-content);
+}
+
+.delete-icon-container {
+  width: v-icon-size;
+}
+
+.info-icon-container {
+  width: 24px;
 }
 
 .remove {
