@@ -13,6 +13,7 @@ import { BackLink } from 'app/components/BackLink';
 import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { getAllocationPermissions } from 'app/services/permissions';
+import { usePageTabs } from 'app/utils/usePageTabs';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
@@ -36,10 +37,10 @@ import type { CardType } from '../../types';
 import css from './CardView.css';
 
 enum Tabs {
-  transactions,
-  controls,
-  info,
-  statements,
+  transactions = 'transactions',
+  controls = 'controls',
+  info = 'info',
+  statements = 'statements',
 }
 
 export default function CardView() {
@@ -49,7 +50,7 @@ export default function CardView() {
   const media = useMediaContext();
   const params = useParams<{ id: string }>();
 
-  const [tab, setTab] = createSignal(Tabs.transactions);
+  const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
 
   const { currentUser } = useBusiness();

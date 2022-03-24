@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSignal, Switch, Match, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate, useSearchParams } from 'solid-app-router';
@@ -11,6 +10,7 @@ import { useActivity } from 'app/stores/activity';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { dateRangeToISO } from 'app/utils/dateRangeToISO';
 import { Data } from 'app/components/Data';
+import { usePageTabs } from 'app/utils/usePageTabs';
 import { AccountingSettings } from 'accounting/containers/AccountingSettings';
 import { SyncLog } from 'accounting/containers/SyncLog';
 import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
@@ -19,20 +19,20 @@ import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transac
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
-import { syncMultipleTransactions } from 'accounting/services';
+// import { syncMultipleTransactions } from 'accounting/services';
 
 enum Tabs {
-  transactions,
-  settings,
-  log,
+  transactions = 'transactions',
+  settings = 'settings',
+  log = 'log',
 }
 
 export function AccountingTabs() {
-  const [tab, setTab] = createSignal<Tabs>(Tabs.transactions);
-  const { business } = useBusiness();
-  const step = business().accountingSetupStep as AccountSetupStep;
-  const [params] = useSearchParams();
   const messages = useMessages();
+  const [params] = useSearchParams();
+  const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
+
+  const { business } = useBusiness();
   const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
 
   const onSelectTransaction = (id: string) => {
@@ -49,7 +49,7 @@ export function AccountingTabs() {
   const navigate = useNavigate();
 
   onMount(() => {
-    if (step !== AccountSetupStep.COMPLETE) {
+    if (business().accountingSetupStep !== AccountSetupStep.COMPLETE) {
       navigate('/accounting-setup');
     }
     if (params.notification === 'setup') {

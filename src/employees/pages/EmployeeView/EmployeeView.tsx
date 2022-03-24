@@ -1,4 +1,4 @@
-import { createSignal, Show, Switch, Match } from 'solid-js';
+import { Show, Switch, Match } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 import { useParams } from 'solid-app-router';
 
@@ -12,6 +12,7 @@ import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
+import { usePageTabs } from 'app/utils/usePageTabs';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
 import { canManageCards } from 'allocations/utils/permissions';
 
@@ -25,9 +26,9 @@ import { useBusiness } from '../../../app/containers/Main/context';
 import css from './EmployeeView.css';
 
 enum Tabs {
-  transactions,
-  cards,
-  settings,
+  transactions = 'transactions',
+  cards = 'cards',
+  settings = 'settings',
 }
 
 export default function EmployeeView() {
@@ -37,7 +38,7 @@ export default function EmployeeView() {
   const { permissions } = useBusiness();
 
   const params = useParams<{ id: string }>();
-  const [tab, setTab] = createSignal(Tabs.transactions);
+  const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
 
   const [user, status, , , reload, mutate] = useResource(getUser, params.id);
 

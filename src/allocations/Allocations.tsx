@@ -13,6 +13,7 @@ import { Page } from 'app/components/Page';
 import { Drawer } from '_common/components/Drawer';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useMessages } from 'app/containers/Messages/context';
+import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
 
 import { AllocationsSide } from './components/AllocationsSide';
@@ -31,10 +32,10 @@ import { getAllocation, updateAllocation } from './services';
 import css from './Allocations.css';
 
 enum Tabs {
-  cards,
-  transactions,
-  controls,
-  settings,
+  cards = 'cards',
+  transactions = 'transactions',
+  controls = 'controls',
+  settings = 'settings',
 }
 
 export default function Allocations() {
@@ -43,7 +44,7 @@ export default function Allocations() {
   const messages = useMessages();
   const params = useParams<{ id?: string }>();
 
-  const [tab, setTab] = createSignal(Tabs.cards);
+  const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
 

@@ -1,9 +1,10 @@
-import { createSignal, Switch, Match } from 'solid-js';
+import { Switch, Match } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
 import { useBusiness } from 'app/containers/Main/context';
+import { usePageTabs } from 'app/utils/usePageTabs';
 
 import { CompanyProfile } from './containers/CompanyProfile';
 import { Ledger } from './containers/Ledger';
@@ -11,14 +12,14 @@ import { BankAccounts } from './containers/BankAccounts';
 import { FinancialInfo } from './containers/FinancialInfo';
 
 enum Tabs {
-  profile,
-  ledger,
-  accounts,
-  financial,
+  profile = 'profile',
+  ledger = 'ledger',
+  accounts = 'accounts',
+  financial = 'financial',
 }
 
 export default function CompanySettings() {
-  const [tab, setTab] = createSignal(Tabs.profile);
+  const [tab, setTab] = usePageTabs<Tabs>(Tabs.profile);
   const { business } = useBusiness();
 
   return (
