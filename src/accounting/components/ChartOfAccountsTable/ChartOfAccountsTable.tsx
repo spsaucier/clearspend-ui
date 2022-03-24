@@ -33,7 +33,7 @@ interface ChartOfAccountsTableProps {
   onSkip?: () => void;
   setShowRoadblock?: (newValue: boolean) => void;
   setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
-  setUnselectedCategories?: (newValue: (number | undefined)[]) => void;
+  setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   saveOnChange: boolean;
 }
 
@@ -43,7 +43,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
 
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
-  const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.categoryIconRef));
+  const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
   const flattenedData = createMemo(() => {
     return flattenNestedIntegrationAccounts(props.data);
   });
@@ -51,7 +51,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const handleSave = async () => {
     const requestParams = Object.values(state).filter((value) => value != null);
     const unmappedCategories = expenseCategories.data?.filter(
-      (category) => !selectedCategories().includes(category.iconRef),
+      (category) => !selectedCategories().includes(category.expenseCategoryId),
     );
     if (
       unmappedCategories !== undefined &&
@@ -61,7 +61,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       props.setShowRoadblock
     ) {
       props.setShowRoadblock(true);
-      props.setUnselectedCategories(unmappedCategories.map((category) => category.iconRef));
+      props.setUnselectedCategories(unmappedCategories.map((category) => category.expenseCategoryId));
       props.setRoadblockRequestParameters(requestParams);
     } else {
       await props.onSave(requestParams);
@@ -137,9 +137,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         const existingMap = props.mappings?.find((mapping) => mapping.accountRef === item.id);
         const initValue = existingMap
-          ? expenseCategories.data?.find((ec) => ec.iconRef === existingMap.categoryIconRef)
+          ? expenseCategories.data?.find((ec) => ec.expenseCategoryId === existingMap.expenseCategoryId)
           : undefined;
-        if (initValue) setState(item.id, { accountRef: item.id, categoryIconRef: initValue.iconRef });
+        if (initValue) setState(item.id, { accountRef: item.id, expenseCategoryId: initValue.expenseCategoryId });
         const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(initValue);
         if (item.hasChildren) {
           return <></>;
@@ -154,7 +154,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                   setExpenseCategory(ec);
                   setState(item.id, {
                     accountRef: item.id,
-                    categoryIconRef: ec?.iconRef,
+                    expenseCategoryId: ec?.expenseCategoryId,
                   });
                 });
                 if (props.saveOnChange) {
@@ -164,7 +164,10 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
             >
               <For each={expenseCategories.data}>
                 {(ec) => (
-                  <SelectExpenseCategoryOption value={ec} disabled={selectedCategories().includes(ec.iconRef)}>
+                  <SelectExpenseCategoryOption
+                    value={ec}
+                    disabled={selectedCategories().includes(ec.expenseCategoryId)}
+                  >
                     {ec.categoryName}
                   </SelectExpenseCategoryOption>
                 )}

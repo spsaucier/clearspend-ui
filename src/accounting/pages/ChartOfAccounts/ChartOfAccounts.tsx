@@ -26,7 +26,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
   const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
   const [showRoadblock, setShowRoadblock] = createSignal(false);
-  const [unselectedCategories, setUnselectedCategories] = createSignal<(number | undefined)[]>([]);
+  const [unselectedCategories, setUnselectedCategories] = createSignal<(string | undefined)[]>([]);
   const [roadblockRequestParameters, setRoadblockRequestParameters] =
     createSignal<DeepReadonly<IntegrationAccountMapping | null>[]>();
   const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) => {

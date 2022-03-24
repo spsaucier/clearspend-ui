@@ -11,7 +11,7 @@ import type { IntegrationAccountMapping } from '../ChartOfAccountsTable/types';
 import css from './UnselectedCategoriesRoadblock.css';
 
 interface UnselectedCategoriesRoadblockProps {
-  unusedCategories: Accessor<(number | undefined)[]>;
+  unusedCategories: Accessor<(string | undefined)[]>;
   onBack: () => void;
   onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
   roadblockRequestParameters?: DeepReadonly<IntegrationAccountMapping | null>[];
@@ -22,7 +22,8 @@ export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblo
   const unusedCategoriesMap = createMemo(
     () =>
       expenseCategories.data?.filter(
-        (category) => category.iconRef !== undefined && props.unusedCategories().includes(category.iconRef),
+        (category) =>
+          category.expenseCategoryId !== undefined && props.unusedCategories().includes(category.expenseCategoryId),
       ),
     [props.unusedCategories],
   );

@@ -17,7 +17,7 @@ interface ChartOfAccountsDataProps {
   onCancel?: () => void;
   onSkip?: () => void;
   setShowRoadblock?: (newValue: boolean) => void;
-  setUnselectedCategories?: (newValue: (number | undefined)[]) => void;
+  setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
   saveOnChange?: boolean;
 }

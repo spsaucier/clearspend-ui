@@ -25,6 +25,7 @@ export interface FlattenedIntegrationAccount {
 export interface IntegrationExpenseAccountMapping {
   accountRef: string;
   categoryIconRef: number;
+  expenseCategoryId: string;
 }
 
 export interface IntegrationExpenseAccountMappingResponse {

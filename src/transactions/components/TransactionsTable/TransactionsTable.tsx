@@ -104,7 +104,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             </div>
           );
         } else if (
-          item.expenseDetails?.iconRef !== undefined &&
           item.accountActivityId !== undefined &&
           props.selectedTransactions &&
           props.onSelectTransaction &&

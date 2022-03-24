@@ -11,7 +11,7 @@ import css from './SelectExpenseCategoryOption.css';
 export function SelectExpenseCategoryOption(props: Readonly<SelectExpenseCategoryOptionProps>) {
   const context = useContext(SelectExpenseCategoryContext);
 
-  const active = createMemo(() => props.value.iconRef === context.value?.iconRef);
+  const active = createMemo(() => props.value.expenseCategoryId === context.value?.expenseCategoryId);
 
   const onKeyDown = (e: KeyboardEvent) => {
     if ([KEY_CODES.Enter, KEY_CODES.Space].includes(e.keyCode)) {
