@@ -9,6 +9,7 @@ const NUMBER_FORMATS: Readonly<Record<NumberFormat, NumberOptions>> = {
 
 const DATE_FORMATS: Readonly<Record<DateFormat, Intl.DateTimeFormatOptions>> = {
   [DateFormat.default]: { day: 'numeric', month: 'short', year: 'numeric' },
+  [DateFormat.withTime]: { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric' },
   [DateFormat.full]: { day: 'numeric', month: 'long', year: 'numeric' },
   [DateFormat.date]: { day: 'numeric', month: 'numeric', year: 'numeric' },
   [DateFormat.month]: { month: 'short', year: 'numeric' },

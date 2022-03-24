@@ -2,10 +2,6 @@
   width: 320px;
 }
 
-.row {
-  cursor: pointer;
-}
-
 .source,
 .destination {
   width: 25%;

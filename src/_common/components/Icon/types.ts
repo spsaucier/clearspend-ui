@@ -15,6 +15,7 @@ export enum IconName {
   allocations = 'allocations',
   alert = 'alert',
   approvals = 'approvals',
+  'arrow-down' = 'arrow-down',
   'arrow-left' = 'arrow-left',
   'arrow-right' = 'arrow-right',
   'audit-logs' = 'audit-logs',

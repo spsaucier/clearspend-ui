@@ -15,6 +15,7 @@ import { getAllocationPermissions } from 'app/services/permissions';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
+import { Ledger } from 'company/containers/Ledger';
 
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -35,6 +36,7 @@ enum Tabs {
   cards = 'cards',
   transactions = 'transactions',
   controls = 'controls',
+  ledger = 'ledger',
   settings = 'settings',
 }
 
@@ -128,6 +130,11 @@ export default function Allocations() {
                 <Text message="Card Controls" />
               </Tab>
             </Show>
+            <Show when={canManagePermissions(userPermissions())}>
+              <Tab value={Tabs.ledger}>
+                <Text message="Ledger" />
+              </Tab>
+            </Show>
             <Show when={canManageUsers(userPermissions())}>
               <Tab value={Tabs.settings}>
                 <Text message="Settings" />
@@ -150,6 +157,9 @@ export default function Allocations() {
                   onSave={onUpdateAllocation}
                 />
               </Data>
+            </Match>
+            <Match when={tab() === Tabs.ledger}>
+              <Ledger allocationId={current()!.allocationId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
               <Settings allocation={current()!} onReload={allocations.reload} />

@@ -1,0 +1,6 @@
+<svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M12 4c.4 0 .8.3.8.8v12.6l4-4.2a.8.8 0 0 1 1 1l-5.3 5.6a.8.8 0 0 1-1 0l-5.3-5.5a.8.8 0 0 1 1-1l4 4V4.8c0-.4.4-.7.8-.7Z"
+    fill="currentColor"
+  />
+</svg>

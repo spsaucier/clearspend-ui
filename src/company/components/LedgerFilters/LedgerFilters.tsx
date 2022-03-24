@@ -1,4 +1,5 @@
 import { Text } from 'solid-i18n';
+import { For } from 'solid-js';
 
 import type { Setter } from '_common/types/common';
 import { createForm, Form, FormItem } from '_common/components/Form';
@@ -7,35 +8,23 @@ import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
 import { SelectDateRange } from '_common/components/SelectDateRange';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
-import type { ActivityStatus } from 'transactions/types';
-import type { AccountActivityRequest } from 'generated/capital';
+import type { LedgerActivityRequest } from 'generated/capital';
+import { LEDGER_ACTIVITY_TYPES } from 'transactions/constants';
+
+import { convertFormData, getFormOptions } from './utils';
+import type { FormValues } from './types';
 
 import css from './LedgerFilters.css';
 
-interface FormValues {
-  amountMin: string;
-  amountMax: string;
-  status: ActivityStatus[];
-  date: ReadonlyDate[];
-}
-
 interface LedgerFiltersProps {
-  params: AccountActivityRequest;
-  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
+  params: LedgerActivityRequest;
+  onChangeParams: Setter<Readonly<LedgerActivityRequest>>;
   onReset: () => void;
 }
 
 export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
-  const { values, handlers } = createForm<FormValues>({
-    // TODO update when API is ready
-    defaultValues: { amountMin: '', amountMax: '', status: [], date: [] },
-  });
-
-  const onApply = () => {
-    // TODO update when API is ready
-    // eslint-disable-next-line
-    console.log(JSON.stringify(values(), null, ' '));
-  };
+  const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
+  const applyFilters = () => props.onChangeParams((prev) => ({ ...prev, ...convertFormData(values()) }));
 
   return (
     <div class={css.root}>
@@ -61,23 +50,17 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
           </div>
         </FilterBox>
         <FilterBox title={<Text message="Payment Status" />}>
-          <CheckboxGroup value={values().status} onChange={(value) => handlers.status(value as ActivityStatus[])}>
-            <Checkbox value="APPROVED">
-              <Text message="Approved" />
-            </Checkbox>
-            <Checkbox value="DECLINED">
-              <Text message="Declined" />
-            </Checkbox>
-            <Checkbox value="PENDING">
-              <Text message="Pending" />
-            </Checkbox>
+          <CheckboxGroup value={values().types} onChange={(value) => handlers.types(value)}>
+            <For each={Object.entries(LEDGER_ACTIVITY_TYPES)}>
+              {(type) => <Checkbox value={type[0]}>{type[1]}</Checkbox>}
+            </For>
           </CheckboxGroup>
         </FilterBox>
-        <FilterBox title={<Text message="Ledger Entry Date" />}>
+        <FilterBox title={<Text message="Date Range" />}>
           <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
         </FilterBox>
       </Form>
-      <FiltersControls onReset={props.onReset} onConfirm={onApply} />
+      <FiltersControls onReset={props.onReset} onConfirm={applyFilters} />
     </div>
   );
 }

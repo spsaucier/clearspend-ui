@@ -7,6 +7,8 @@ import type {
   ChartDataResponse,
   DashboardGraphData,
   GraphDataRequest,
+  LedgerActivityRequest,
+  PagedDataLedgerActivityResponse,
   PagedDataAccountActivityResponse,
   UpdateAccountActivityRequest,
 } from 'generated/capital';
@@ -14,6 +16,10 @@ import type { ReceiptVideModel } from 'transactions/components/TransactionPrevie
 
 export async function getAccountActivity(params: Readonly<AccountActivityRequest>) {
   return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;
+}
+
+export async function getLedgerActivity(params: Readonly<LedgerActivityRequest>) {
+  return (await service.post<PagedDataLedgerActivityResponse>('/account-activity/ledger', params)).data;
 }
 
 export async function exportAccountActivity(params: Readonly<AccountActivityRequest>) {
@@ -38,11 +44,11 @@ export async function setActivityNote(activityId: string, activityUpdate: Update
   ).data;
 }
 
-export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: number | null, notes: string) {
+export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: string | null, notes: string) {
   return (
     await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, {
       notes,
-      iconRef: expenseCategoryId,
+      expenseCategoryId,
     })
   ).data;
 }

@@ -90,7 +90,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const onSaveNote = () => {
     saveNote(props.transaction.accountActivityId!, {
       notes: note()!,
-      iconRef: props.transaction.expenseDetails?.iconRef,
+      expenseCategoryId: props.transaction.expenseDetails?.expenseCategoryId,
     })
       .then((data) => {
         batch(() => {
@@ -112,7 +112,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
 
   const onSaveExpenseCategory = (ec: ExpenseCategory | undefined) => {
-    saveExpenseCategory(props.transaction.accountActivityId!, ec?.iconRef!, notes() || '')
+    saveExpenseCategory(props.transaction.accountActivityId!, ec?.expenseCategoryId!, notes() || '')
       .then((data) => {
         batch(() => {
           props.onUpdate({ ...data, syncStatus: 'READY' });

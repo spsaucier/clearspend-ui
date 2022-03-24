@@ -92,7 +92,7 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
     return from && to ? (
       <span class={css.value}>{i18n.t('{from} – {to}', { from: from as Date, to: to as Date })}</span>
     ) : (
-      i18n.t('Choose Date')
+      i18n.t('Choose Dates')
     );
   });
 

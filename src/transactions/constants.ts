@@ -4,7 +4,7 @@ import { i18n } from '_common/api/intl';
 import type { IconName } from '_common/components/Icon';
 import type { AccountActivityRequest } from 'generated/capital';
 
-import type { ActivityStatus, MccGroup } from './types';
+import type { ActivityStatus, ActivityType, MccGroup, LedgerActivityType } from './types';
 
 export const ACTIVITY_PAGE_SIZE_STORAGE_KEY = 'activity_page_size';
 
@@ -34,6 +34,32 @@ export const STATUS_FILL_ICONS: Record<ActivityStatus, keyof typeof IconName> = 
   CREDIT: 'card-fill',
 };
 
+export const LEDGER_ACTIVITY_TYPES: Partial<Readonly<Record<LedgerActivityType, JSXElement>>> = {
+  BANK_DEPOSIT: i18n.t('Deposit'),
+  BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
+  BANK_LINK: i18n.t('Link'),
+  BANK_UNLINK: i18n.t('Unlink'),
+  BANK_WITHDRAWAL: i18n.t('Withdrawal'),
+  BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
+  MANUAL: i18n.t('Transfer'),
+  REALLOCATE: i18n.t('Reallocation'),
+  FEE: i18n.t('Fee'),
+};
+
+export const ACTIVITY_TYPES: Readonly<Record<ActivityType, JSXElement>> = {
+  BANK_DEPOSIT: i18n.t('Deposit'),
+  BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
+  BANK_LINK: i18n.t('Link'),
+  BANK_UNLINK: i18n.t('Unlink'),
+  BANK_WITHDRAWAL: i18n.t('Withdrawal'),
+  BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
+  MANUAL: i18n.t('Transfer'),
+  NETWORK_AUTHORIZATION: i18n.t('Payment Hold'),
+  NETWORK_CAPTURE: i18n.t('Payment Capture'),
+  REALLOCATE: i18n.t('Reallocation'),
+  FEE: i18n.t('Fee'),
+};
+
 export const MERCHANT_CATEGORIES: Readonly<Record<MccGroup, { icon: keyof typeof IconName; name: JSXElement }>> = {
   CHILD_CARE: { icon: 'mcc-child-care', name: i18n.t('Child Care') },
   DIGITAL_GOODS: { icon: 'mcc-digital-goods', name: i18n.t('Digital Goods') },
@@ -49,5 +75,5 @@ export const MERCHANT_CATEGORIES: Readonly<Record<MccGroup, { icon: keyof typeof
   SHOPPING: { icon: 'mcc-shopping', name: i18n.t('Shopping') },
   TRAVEL: { icon: 'mcc-travel', name: i18n.t('Travel') },
   UTILITIES: { icon: 'mcc-utilities', name: i18n.t('Utilities') },
-  OTHER: { icon: 'mcc-utilities', name: i18n.t('Other') }, // TODO Update icon
+  OTHER: { icon: 'merchant-services', name: i18n.t('Other') },
 };

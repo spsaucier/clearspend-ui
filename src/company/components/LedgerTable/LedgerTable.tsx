@@ -1,7 +1,10 @@
-import { Show } from 'solid-js';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { createMemo, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { DateFormat } from '_common/api/intl/types';
+import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { useBool } from '_common/utils/useBool';
 import { wrapAction } from '_common/utils/wrapAction';
 import type { Setter } from '_common/types/common';
@@ -16,24 +19,64 @@ import { Empty } from 'app/components/Empty';
 import { useMessages } from 'app/containers/Messages/context';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import { TransactionsTableAmount } from 'transactions/components/TransactionsTableAmount';
-import type {
-  PagedDataAccountActivityResponse,
-  AccountActivityRequest,
-  AccountActivityResponse,
-} from 'generated/capital';
+import { LEDGER_ACTIVITY_TYPES } from 'transactions/constants';
+import type { LedgerActivityRequest, LedgerActivityResponse, PagedDataLedgerActivityResponse } from 'generated/capital';
+import { getResetFilters } from 'app/utils/getResetFilters';
 
+import { Account } from '../Account';
 import { LedgerFilters } from '../LedgerFilters';
+import type { LedgerFiltersFields } from '../LedgerFilters/types';
 
 import css from './LedgerTable.css';
 
+const FILTERS_KEYS: readonly LedgerFiltersFields[] = ['amount', 'from'];
+
 interface LedgerTableProps {
-  data: PagedDataAccountActivityResponse;
-  params: Readonly<AccountActivityRequest>;
-  onRowClick: (activityId: string) => void;
-  onExport: (params: Readonly<AccountActivityRequest>) => Promise<void>;
-  onChangeParams: Setter<Readonly<AccountActivityRequest>>;
+  data: PagedDataLedgerActivityResponse;
+  params: Readonly<LedgerActivityRequest>;
+  onExport: (params: Readonly<LedgerActivityRequest>) => Promise<void>;
+  onChangeParams: Setter<Readonly<LedgerActivityRequest>>;
 }
+
+export const renderAccount = (
+  account: LedgerActivityResponse['sourceAccount'] | LedgerActivityResponse['targetAccount'],
+  inline?: boolean,
+) => {
+  if (account) {
+    switch (account.type) {
+      case 'ALLOCATION':
+        if ('allocationInfo' in account) {
+          return <Account inline={inline} icon="allocations" name={account.allocationInfo!.name} />;
+        }
+        break;
+      case 'BANK':
+        if ('bankInfo' in account) {
+          return (
+            <Account
+              inline={inline}
+              icon="payment-bank"
+              name={account.bankInfo!.name}
+              extra={`•••• ${account.bankInfo?.accountNumberLastFour}`}
+            />
+          );
+        }
+        break;
+      case 'CARD':
+        if ('cardInfo' in account) {
+          return <Account inline={inline} icon="card" name={account.cardInfo?.lastFour} />;
+        }
+        break;
+      case 'MERCHANT':
+        if ('merchantInfo' in account) {
+          return <Account inline={inline} icon="merchant-services" name={account.merchantInfo!.name} />;
+        }
+        break;
+      default:
+        return '--';
+    }
+  }
+  return '--';
+};
 
 export function LedgerTable(props: Readonly<LedgerTableProps>) {
   const i18n = useI18n();
@@ -42,7 +85,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
   const [showFilters, toggleFilters] = useBool();
   const [exporting, exportData] = wrapAction(props.onExport);
 
-  const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
+  const columns: readonly Readonly<TableColumn<LedgerActivityResponse>>[] = [
     {
       name: 'date',
       title: <Text message="Date & Time" />,
@@ -58,39 +101,56 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
       },
     },
     {
-      name: 'owner',
-      title: <Text message="Allocation Owner" />,
-      render: () => '--',
+      name: 'expiration',
+      title: <Text message="Expiration" />,
+      render: (item) => (item.hold?.expirationDate ? <DateTime date={item.hold.expirationDate} /> : '--'),
+    },
+    {
+      name: 'type',
+      title: <Text message="Transaction" />,
+      render: (item) => LEDGER_ACTIVITY_TYPES[item.type!],
+    },
+    {
+      name: 'user',
+      title: <Text message="User" />,
+      render: (item) =>
+        item.user?.userInfo?.firstName ? (
+          <div>{`${item.user.userInfo.firstName} ${item.user.userInfo.lastName}`}</div>
+        ) : (
+          '--'
+        ),
     },
     {
       name: 'source',
-      title: <Text message="Source" />,
+      title: <Text message="Initiating Account" />,
       class: css.source,
-      render: () => '--',
+      render: (item) => renderAccount(item.sourceAccount),
     },
     {
       name: 'destination',
-      title: <Text message="Destination" />,
+      title: <Text message="Target Account" />,
       class: css.destination,
-      render: (item) => item.accountName,
+      render: (item) => renderAccount(item.targetAccount),
     },
     {
       name: 'amount',
       title: <Text message="Amount" />,
-      render: (item) => (
-        <TransactionsTableAmount status={item.status!} amount={item.amount} requestedAmount={item.requestedAmount} />
-      ),
+      render: (item) => formatCurrency(item.amount?.amount || 0),
     },
   ];
-
-  // TODO update when API is ready
-  // eslint-disable-next-line
-  const onResetFilters = () => {};
 
   const onExport = () => {
     return exportData(props.params).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
+  };
+
+  const filtersCount = createMemo(() =>
+    FILTERS_KEYS.reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0),
+  );
+
+  const onResetFilters = () => {
+    props.onChangeParams((prev) => ({ ...prev, ...getResetFilters(FILTERS_KEYS) }));
   };
 
   return (
@@ -108,36 +168,32 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
         <InputSearch
           delay={400}
           value={props.params.searchText}
-          placeholder={String(i18n.t('Search ledger...'))}
+          placeholder={String(i18n.t('Search ledger entries...'))}
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <FiltersButton
           label={<Text message="More Filters" />}
-          // TODO update when API is ready
-          count={0}
+          count={filtersCount()}
           onReset={onResetFilters}
           onClick={toggleFilters}
         />
-        <Button
-          loading={exporting()}
-          disabled={!props.data.content?.length}
-          icon={{ name: 'download', pos: 'right' }}
-          onClick={onExport}
-        >
-          <Text message="Export" />
-        </Button>
+        <Show when={false}>
+          <Button
+            loading={exporting()}
+            disabled={!props.data.content?.length}
+            icon={{ name: 'download', pos: 'right' }}
+            onClick={onExport}
+          >
+            <Text message="Export" />
+          </Button>
+        </Show>
       </Filters>
       <Show
         when={props.data.content?.length}
         fallback={<Empty message={<Text message="There are no ledger entries" />} />}
       >
-        <Table
-          columns={columns}
-          data={props.data.content!}
-          rowClass={css.row}
-          onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
-        />
+        <Table columns={columns} data={props.data.content!} />
       </Show>
       <Drawer noPadding open={showFilters()} title={<Text message="Filter Ledger" />} onClose={toggleFilters}>
         <LedgerFilters
