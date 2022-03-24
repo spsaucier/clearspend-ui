@@ -7,7 +7,7 @@ import { ReviewingImage } from '../ReviewingImage';
 
 import css from './Review.css';
 
-interface ReviewDetails {
+export interface ReviewDetails {
   ownerEmail: string;
   refetch: () => Promise<unknown>;
 }

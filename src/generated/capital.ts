@@ -1312,6 +1312,9 @@ export interface AccountActivityResponse {
 export interface ExpenseDetails {
   /** @format int32 */
   iconRef?: number;
+
+  /** @format uuid */
+  expenseCategoryId?: string;
   categoryName?: string;
 }
 
@@ -1647,6 +1650,118 @@ export interface ReceiptDetails {
   receiptId?: string[];
 }
 
+export interface LedgerActivityRequest {
+  /** @format uuid */
+  allocationId?: string;
+  searchText?: string;
+  types?: (
+    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_RETURN'
+    | 'BANK_LINK'
+    | 'BANK_UNLINK'
+    | 'BANK_WITHDRAWAL'
+    | 'BANK_WITHDRAWAL_RETURN'
+    | 'MANUAL'
+    | 'NETWORK_AUTHORIZATION'
+    | 'NETWORK_CAPTURE'
+    | 'REALLOCATE'
+    | 'FEE'
+  )[];
+
+  /** @format date-time */
+  from?: string;
+
+  /** @format date-time */
+  to?: string;
+  statuses?: ('PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED')[];
+  amount?: FilterAmount;
+  pageRequest: PageRequest;
+}
+
+export interface AllocationInfo {
+  /** @format uuid */
+  allocationId?: string;
+  name?: string;
+}
+
+export interface BankInfo {
+  name?: string;
+  accountNumberLastFour?: string;
+}
+
+export interface LedgerAccount {
+  type?: 'BANK' | 'MERCHANT' | 'ALLOCATION' | 'CARD';
+}
+
+export interface LedgerActivityResponse {
+  /** @format uuid */
+  accountActivityId?: string;
+
+  /** @format date-time */
+  activityTime?: string;
+  type?:
+    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_RETURN'
+    | 'BANK_LINK'
+    | 'BANK_UNLINK'
+    | 'BANK_WITHDRAWAL'
+    | 'BANK_WITHDRAWAL_RETURN'
+    | 'MANUAL'
+    | 'NETWORK_AUTHORIZATION'
+    | 'NETWORK_CAPTURE'
+    | 'REALLOCATE'
+    | 'FEE';
+  status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
+  user?: LedgerUser;
+  amount?: Amount;
+  hold?: LedgerHoldInfo;
+  sourceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+  targetAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+}
+
+export type LedgerAllocationAccount = LedgerAccount & {
+  allocationInfo?: AllocationInfo;
+};
+
+export type LedgerBankAccount = LedgerAccount & { bankInfo?: BankInfo };
+
+export type LedgerCardAccount = LedgerAccount & { cardInfo?: CardInfo };
+
+export interface LedgerHoldInfo {
+  /** @format uuid */
+  holdId?: string;
+
+  /** @format date-time */
+  expirationDate?: string;
+}
+
+export type LedgerMerchantAccount = LedgerAccount & { merchantInfo?: Merchant };
+
+export interface LedgerUser {
+  type?: 'USER' | 'SYSTEM' | 'EXTERNAL';
+  userInfo?: UserInfo;
+}
+
+export interface PagedDataLedgerActivityResponse {
+  /** @format int32 */
+  pageNumber?: number;
+
+  /** @format int32 */
+  pageSize?: number;
+
+  /** @format int64 */
+  totalElements?: number;
+  content?: LedgerActivityResponse[];
+}
+
+export interface UserInfo {
+  /** @format uuid */
+  userId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
 export interface GraphDataRequest {
   /** @format uuid */
   allocationId?: string;
@@ -1700,12 +1815,6 @@ export interface ChartDataRequest {
 export interface AllocationChartData {
   allocation?: AllocationInfo;
   amount?: Amount;
-}
-
-export interface AllocationInfo {
-  /** @format uuid */
-  allocationId?: string;
-  name?: string;
 }
 
 export interface ChartDataResponse {
@@ -2429,8 +2538,8 @@ export interface UpdateCardAccountRequest {
 export interface UpdateAccountActivityRequest {
   notes: string;
 
-  /** @format int32 */
-  iconRef?: number;
+  /** @format uuid */
+  expenseCategoryId?: string;
 }
 
 export interface UpdateCardRequest {
@@ -2667,19 +2776,7 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -2929,9 +3026,21 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -2962,6 +3071,7 @@ export interface ExpenseCategory {
   /** @format int32 */
   iconRef?: number;
   categoryName?: string;
+  expenseCategoryId?: string;
 }
 
 export interface CodatAccountNested {
