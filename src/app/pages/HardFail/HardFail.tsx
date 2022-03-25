@@ -4,7 +4,7 @@ import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 
-import logo from '../../assets/logo-name.svg';
+import logo from '../../assets/Logo_Tagline_Black.png';
 
 import css from './HardFail.css';
 
@@ -12,7 +12,7 @@ export function HardFail() {
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={logo} alt="Company logo" width={120} height={34} />
+        <img src={logo} alt="Company logo" width={200} height={70} />
       </header>
       <div class={css.content}>
         <Box>

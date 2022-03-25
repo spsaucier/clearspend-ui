@@ -2,7 +2,7 @@ import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import logo from 'app/assets/logo-light.svg';
+import logo from 'app/assets/Logo_Tagline_White.png';
 import { formatPhone } from '_common/formatters/phone';
 import { complete2faEnrollment, send2faEnrollmentCode } from 'app/services/auth';
 import { PhoneForm } from 'signup/components/PhoneForm';
@@ -67,7 +67,7 @@ export default function Enable2fa() {
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={logo} alt="Company logo" width={120} height={34} />
+        <img src={logo} alt="Company logo" width={200} height={70} />
       </header>
       <div class={css.content}>
         <Show when={number()} fallback={<PhoneForm onNext={onPhoneUpdate} />}>

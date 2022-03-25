@@ -1,6 +1,6 @@
 import { createMemo, Show, type JSXElement } from 'solid-js';
 
-import logo from 'app/assets/logo-light.svg';
+import logo from 'app/assets/Logo_Tagline_White.png';
 
 import css from './PagePreAuth.css';
 
@@ -16,7 +16,7 @@ export function PagePreAuth(props: Readonly<PagePreAuthProps>) {
     <div class={css.root}>
       <div class={css.main}>
         <header class={css.header}>
-          <img src={logo} alt="Company logo" width={120} height={34} />
+          <img src={logo} alt="Company logo" width={200} height={70} />
         </header>
         <div class={css.content}>{props.children}</div>
       </div>

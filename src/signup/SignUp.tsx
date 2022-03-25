@@ -2,7 +2,7 @@ import { createSignal, Match, Switch, Show, onMount } from 'solid-js';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import logo from 'app/assets/logo-light.svg';
+import logo from 'app/assets/Logo_Tagline_White.png';
 import { useMediaContext } from '_common/api/media/context';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword, resendOtp } from 'onboarding/services/onboarding';
@@ -263,7 +263,7 @@ export default function SignUp() {
   return (
     <section class={css.root}>
       <header class={css.header}>
-        <img src={logo} alt="Company logo" width={120} height={34} />
+        <img src={logo} alt="Company logo" width={200} height={70} />
       </header>
       <div class={css.content}>
         <Switch>

@@ -12,7 +12,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForApplicationReview } from 'app/services/review';
-import logoLight from 'app/assets/logo-light.svg';
+import logoLight from 'app/assets/Logo_Tagline_White.png';
 import type { BankAccount, Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
@@ -236,7 +236,7 @@ export default function Onboarding() {
       side={
         <div class={css.sidebar}>
           <header class={css.header}>
-            <img src={logoLight} alt="Company logo" width={120} height={34} />
+            <img src={logoLight} alt="Company logo" width={200} height={70} />
           </header>
           <Show when={media.medium}>
             <div class={css.estimated}>
