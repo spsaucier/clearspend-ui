@@ -43,6 +43,7 @@ import { getBusiness } from 'app/services/businesses';
 import { getUser } from 'employees/services';
 import type { MccGroup } from 'transactions/types';
 import { CardType } from 'cards/types';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
@@ -100,21 +101,33 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const onSubmit = async () => {
     skipUpdates = true;
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(values(), props.mccCategories)).catch((e: { data?: { message?: string } }) => {
-      if (e.data?.message === 'Physical card issuance limit exceeded') {
-        messages.error({
-          title: i18n.t('Unable to create physical card'),
-          message:
-            values().types.length > 1 // Assume 1 was virtual & 1 was physical
-              ? i18n.t(
-                  'Your virtual card was successfully created, but you have reached the maximum of 10 physical cards.',
-                )
-              : i18n.t('You have reached the maximum of 10 physical cards. Please contact support if you need more.'),
-        });
-      } else {
-        messages.error({ title: i18n.t('Failed to create card') });
-      }
-    });
+    await save(convertFormData(values(), props.mccCategories))
+      .then((data) => {
+        const hasVirtualCard = values().types.some((cardType) => cardType === CardType.VIRTUAL);
+        const hasPhysicalCard = values().types.some((cardType) => cardType === CardType.PHYSICAL);
+
+        if (hasVirtualCard && hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_BOTH_PHYSICAL_VIRTUAL });
+
+        if (hasVirtualCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_VIRTUAL });
+        if (hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_PHYSICAL });
+
+        return data;
+      })
+      .catch((e: { data?: { message?: string } }) => {
+        if (e.data?.message === 'Physical card issuance limit exceeded') {
+          messages.error({
+            title: i18n.t('Unable to create physical card'),
+            message:
+              values().types.length > 1 // Assume 1 was virtual & 1 was physical
+                ? i18n.t(
+                    'Your virtual card was successfully created, but you have reached the maximum of 10 physical cards.',
+                  )
+                : i18n.t('You have reached the maximum of 10 physical cards. Please contact support if you need more.'),
+          });
+        } else {
+          messages.error({ title: i18n.t('Failed to create card') });
+        }
+      });
     skipUpdates = false;
   };
 
