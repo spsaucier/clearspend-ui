@@ -54,12 +54,6 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
         >
           <Text message="Employee" />
         </Option>
-        <Option
-          disabled={props.inherited && rolesByLevel[props.role] > rolesByLevel[AllocationRoles.ViewOnly]}
-          value={AllocationRoles.ViewOnly}
-        >
-          <Text message="View only" />
-        </Option>
       </Select>
 
       <div class={css.infoIconContainer}>
@@ -89,17 +83,6 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
                     </li>
                     <li>
                       <Text message="Access accounting features" />
-                    </li>
-                  </ul>
-                </Match>
-                <Match when={props.role === AllocationRoles.ViewOnly}>
-                  <Text message="View only" class={css.popupTitle!} />
-                  <ul class={css.popupContent}>
-                    <li>
-                      <Text message="View balances, transactions, receipts, etc." />
-                    </li>
-                    <li>
-                      <Text message="Warning: Cannot manage their own cards or transactions" />
                     </li>
                   </ul>
                 </Match>

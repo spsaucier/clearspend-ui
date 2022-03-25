@@ -68,7 +68,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const onAddRole = (userId: string) => {
     const user = props.users.find((item) => item.userId === userId);
-    if (user) setLocalRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.ViewOnly }]);
+    if (user) setLocalRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.Manager }]);
   };
 
   const onChangeRole = (userId: string, role: AllocationRoles) => {

@@ -207,7 +207,7 @@ export function Settings(props: Readonly<SettingsProps>) {
                 class={css.content!}
               />
             </div>
-            <div class={css.roleDescription}>
+            {/* <div class={css.roleDescription}>
               <h5 class={css.subheader}>
                 <Text message="View only" />
               </h5>
@@ -215,7 +215,7 @@ export function Settings(props: Readonly<SettingsProps>) {
                 message="Viewers can see balances, employees, cards, and transactions, but cannot make changes (even to their own)."
                 class={css.content!}
               />
-            </div>
+            </div> */}
           </>
         }
       >
