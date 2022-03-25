@@ -1,9 +1,10 @@
 import type { AccountActivityRequest } from 'generated/capital';
 
 import type { ActivityStatus } from '../../types';
-import type { AmountRange } from '../../utils/filters';
 
-export interface FormValues extends AmountRange {
+export interface FormValues {
+  amountMin: string;
+  amountMax: string;
   categories: string[];
   syncStatus: string[]; // TODO: still need API?
   status: ActivityStatus[];

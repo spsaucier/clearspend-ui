@@ -1,23 +1,21 @@
-import type { JSXElement } from 'solid-js';
+import type { JSX } from 'solid-js';
 
-export type CheckboxValue = string;
-
-export interface CheckboxGroupProps<T> {
+export interface CheckboxGroupProps {
   name?: string;
-  value?: T[];
+  value?: string[];
   class?: string;
   empty?: boolean;
   disabled?: boolean;
-  children: JSXElement;
-  onChange?: (value: T[]) => void;
+  children: JSX.Element;
+  onChange?: (value: string[]) => void;
 }
 
-export interface CheckboxProps<T> {
-  value?: T;
+export interface CheckboxProps {
+  value?: string;
   checked?: boolean;
   class?: string;
   disabled?: boolean;
-  children?: JSXElement;
+  children?: JSX.Element;
   onChange?: (checked: boolean) => void;
   darkMode?: boolean;
 }
