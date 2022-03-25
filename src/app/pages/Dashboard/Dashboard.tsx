@@ -16,6 +16,7 @@ import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
+import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
@@ -42,9 +43,9 @@ export default function Dashboard() {
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
   const allocationCount = createMemo(() => allocations.data?.length || 0);
 
-  const canAddBalance = createMemo(() => {
+  const canAddBalance = createMemo<boolean>(() => {
     const root = getRootAllocation(allocations.data);
-    return currentUser().type === 'BUSINESS_OWNER' && root?.account.availableBalance?.amount === 0;
+    return currentUser().type === 'BUSINESS_OWNER' && !!root && getAvailableBalance(root) === 0;
   });
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);

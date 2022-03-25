@@ -6,6 +6,7 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
+import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import type { Allocation, User } from 'generated/capital';
 
 import { BalanceInfo } from '../BalanceInfo';
@@ -27,7 +28,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <Text message="Available Balance" />
         </h4>
         <div class={css.value}>
-          <strong>{formatCurrency(props.allocation.account.availableBalance?.amount || 0)}</strong>
+          <strong>{formatCurrency(getAvailableBalance(props.allocation))}</strong>
           <BalanceInfo />
         </div>
         <Text message="Monthly limit: {amount}" amount={formatCurrency(0)} class={css.note!} />

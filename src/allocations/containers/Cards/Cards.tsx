@@ -16,13 +16,14 @@ import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import type { Allocation, SearchCardRequest } from 'generated/capital';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { allocationWithID } from '../../utils/allocationWithID';
 
 import css from './Cards.css';
 
 interface CardsProps {
   current: Readonly<Allocation>;
-  items: readonly Readonly<Allocation>[];
+  allocations: readonly Readonly<Allocation>[];
 }
 
 export function Cards(props: Readonly<CardsProps>) {
@@ -32,7 +33,7 @@ export function Cards(props: Readonly<CardsProps>) {
   const [userID, setUserID] = createSignal<string | null>(null);
 
   const children = createMemo(() =>
-    props.current.childrenAllocationIds?.map((id) => props.items.find(allocationWithID(id))!),
+    props.current.childrenAllocationIds?.map((id) => props.allocations.find(allocationWithID(id))!),
   );
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
@@ -44,10 +45,7 @@ export function Cards(props: Readonly<CardsProps>) {
     on(
       () => props.current,
       (current, prev: Allocation | undefined) => {
-        if (
-          current.allocationId === prev?.allocationId &&
-          current.account.availableBalance?.amount !== prev.account.availableBalance?.amount
-        ) {
+        if (current.allocationId === prev?.allocationId && getAvailableBalance(current) !== getAvailableBalance(prev)) {
           reload();
         }
       },
@@ -67,7 +65,7 @@ export function Cards(props: Readonly<CardsProps>) {
   return (
     <>
       <Show when={children()?.length}>
-        <AllocationBalances current={props.current} items={children() || []} />
+        <AllocationBalances current={props.current} childAllocations={children() || []} />
         <h3 class={css.title}>
           <Text message="Cards" />
         </h3>

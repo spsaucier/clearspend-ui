@@ -5,15 +5,13 @@ import type { Allocation } from 'generated/capital';
 import { i18n } from '_common/api/intl';
 
 import { allocationWithID } from '../../utils/allocationWithID';
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
+import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 import { AllocationView } from '../AllocationView';
 
 import { createSortedNestedArray } from './utils';
 
 import css from './AllocationSelect.css';
-
-function getTotalAmount(items: readonly Readonly<Allocation>[]): number {
-  return items.reduce<number>((sum, item) => sum + (item.account.availableBalance?.amount || 0), 0);
-}
 
 interface AllocationSelectProps {
   items: readonly Readonly<Allocation>[];
@@ -32,12 +30,12 @@ const PX_INDENT = 10;
 export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
   const renderValue = (id: string) => {
     if (!id || id === ALL_ALLOCATIONS)
-      return <AllocationView name={String(i18n.t('All allocations'))} amount={getTotalAmount(props.items)} />;
+      return <AllocationView name={String(i18n.t('All allocations'))} amount={getTotalAvailableBalance(props.items)} />;
 
     const found = props.items.find(allocationWithID(id));
     if (!found) return null;
 
-    return <AllocationView name={found.name} amount={found.account.availableBalance?.amount || 0} />;
+    return <AllocationView name={found.name} amount={getAvailableBalance(found)} />;
   };
 
   const allocations = createMemo(() => {

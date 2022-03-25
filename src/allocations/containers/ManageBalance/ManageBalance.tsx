@@ -14,6 +14,7 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getParentsChain } from '../../utils/getParentsChain';
 
@@ -79,7 +80,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
       sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
     }
 
-    const currentAmount = current()!.account.availableBalance?.amount || 0;
+    const currentAmount = getAvailableBalance(current()!);
 
     setSuccessManageData({
       amount,
@@ -109,11 +110,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
           <Loading />
         </Match>
         <Match when={current()}>
-          <AllocationView
-            name={current()!.name}
-            amount={current()!.account.availableBalance?.amount || 0}
-            class={css.allocation}
-          />
+          <AllocationView name={current()!.name} amount={getAvailableBalance(current()!)} class={css.allocation} />
           <Show
             when={!successManageData()}
             fallback={

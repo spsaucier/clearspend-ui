@@ -25,6 +25,7 @@ import { Ledger } from './containers/Ledger';
 import { Settings } from './containers/Settings';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
+import { getAvailableBalance } from './utils/getAvailableBalance';
 import { getRootAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
 import { canManageFunds, canManageCards, canManagePermissions, canManageUsers } from './utils/permissions';
@@ -87,7 +88,7 @@ export default function Allocations() {
     <Data data={allocations.data} loading={allocations.loading} error={allocations.error} onReload={allocations.reload}>
       <Show when={current()}>
         <Page
-          title={formatCurrency(current()!.account.availableBalance?.amount || 0)}
+          title={formatCurrency(getAvailableBalance(current()!))}
           titleClass={css.title}
           breadcrumbs={<Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
@@ -143,7 +144,7 @@ export default function Allocations() {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.cards}>
-              <Cards current={current()!} items={allocations.data!} />
+              <Cards current={current()!} allocations={allocations.data!} />
             </Match>
             <Match when={tab() === Tabs.transactions}>
               <Transactions allocationId={current()!.allocationId} />

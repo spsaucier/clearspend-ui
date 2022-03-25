@@ -4,6 +4,7 @@ import { Text } from 'solid-i18n';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { RadioGroup, Radio } from '_common/components/Radio';
 import { Icon } from '_common/components/Icon';
+import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 import type { BankAccount, Allocation } from 'generated/capital';
 
@@ -45,7 +46,7 @@ export function BankAccounts(props: Readonly<BankAccountsProps>) {
                     fallback={
                       <Text
                         message="Balance: {amount}"
-                        amount={formatCurrency((item as Allocation).account.availableBalance?.amount || 0)}
+                        amount={formatCurrency(getAvailableBalance(item as Allocation))}
                       />
                     }
                   >

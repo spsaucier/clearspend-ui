@@ -2,6 +2,8 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Tag } from '_common/components/Tag';
 import type { Allocation } from 'generated/capital';
 
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
+
 import css from './AllocationTag.css';
 
 interface AllocationTagProps {
@@ -14,7 +16,7 @@ export function AllocationTag(props: Readonly<AllocationTagProps>) {
     <Tag class={props.class}>
       {props.data.name}
       <span>&nbsp;|&nbsp;</span>
-      <strong class={css.amount}>{formatCurrency(props.data.account.availableBalance?.amount || 0)}</strong>
+      <strong class={css.amount}>{formatCurrency(getAvailableBalance(props.data))}</strong>
     </Tag>
   );
 }

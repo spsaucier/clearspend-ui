@@ -13,6 +13,7 @@ import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { FileTypes } from 'app/types/common';
 import { useAllocations } from 'allocations/stores/allocations';
+import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
 import {
@@ -306,7 +307,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <AccountCard
             icon="allocations"
             title={allocation()!.name}
-            text={formatCurrency(allocation()!.account.availableBalance?.amount || 0)}
+            text={formatCurrency(getAvailableBalance(allocation()!))}
             onClick={() => navigate(`/allocations/${allocation()!.allocationId}`)}
           />
         </Show>

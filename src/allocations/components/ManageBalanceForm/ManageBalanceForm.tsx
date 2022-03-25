@@ -13,6 +13,7 @@ import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts'
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 
 import { BankTransferNotice } from '../BankTransferNotice';
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
 
 import css from './ManageBalanceForm.css';
 
@@ -51,8 +52,8 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
 
           return (
             !target ||
-            (props.withdraw && amount <= (props.current.account.availableBalance?.amount || 0)) ||
-            (!props.withdraw && (isBankAccount(target) || amount <= (target.account.availableBalance?.amount || 0))) ||
+            (props.withdraw && amount <= getAvailableBalance(props.current)) ||
+            (!props.withdraw && (isBankAccount(target) || amount <= getAvailableBalance(target))) ||
             String(i18n.t('Insufficient funds.'))
           );
         },
