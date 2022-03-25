@@ -190,7 +190,7 @@ export function Settings(props: Readonly<SettingsProps>) {
               </h5>
               <Text
                 message={
-                  'Managers can reallocate funds, create additional allocations under this allocation, ' +
+                  'Managers can reallocate funds between allocations that they manage, create additional sub-allocations, ' +
                   'and issue cards.'
                 }
                 class={css.content!}
