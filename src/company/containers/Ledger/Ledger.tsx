@@ -7,13 +7,12 @@ import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { Data } from 'app/components/Data';
 import { exportAccountActivity } from 'app/services/activity';
 import type { AccountActivityRequest } from 'generated/capital';
+import { useLedger } from 'app/stores/ledger';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
-
-import { LedgerTable } from '../../components/LedgerTable';
-import { LedgerList } from '../../components/LedgerList';
-import { LEDGER_PAGE_SIZE_STORAGE_KEY, DEFAULT_LEDGER_PARAMS } from '../../constants';
-import { useLedger } from '../../stores/ledger';
+import { LedgerTable } from 'transactions/components/LedgerTable';
+import { LedgerList } from 'transactions/components/LedgerList';
+import { LEDGER_PAGE_SIZE_STORAGE_KEY, DEFAULT_LEDGER_PARAMS } from 'transactions/constants';
 
 export function Ledger(props: { allocationId?: string }) {
   const media = useMediaContext();

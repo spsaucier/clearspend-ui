@@ -7,6 +7,7 @@ import type { AccountActivityRequest } from 'generated/capital';
 import type { ActivityStatus, ActivityType, MccGroup, LedgerActivityType } from './types';
 
 export const ACTIVITY_PAGE_SIZE_STORAGE_KEY = 'activity_page_size';
+export const LEDGER_PAGE_SIZE_STORAGE_KEY = 'ledger_page_size';
 
 export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: {
@@ -14,6 +15,24 @@ export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
     pageSize: 10,
   },
   types: ['NETWORK_CAPTURE', 'NETWORK_AUTHORIZATION'],
+};
+
+export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
+  pageRequest: {
+    pageNumber: 0,
+    pageSize: 10,
+  },
+  types: [
+    'BANK_DEPOSIT',
+    'BANK_DEPOSIT_RETURN',
+    'BANK_LINK',
+    'BANK_UNLINK',
+    'BANK_WITHDRAWAL',
+    'BANK_WITHDRAWAL_RETURN',
+    'MANUAL',
+    'REALLOCATE',
+    'FEE',
+  ],
 };
 
 export const STATUS_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
