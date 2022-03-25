@@ -17,4 +17,4 @@ export default {
   },
 };
 
-export const Default = (args: CheckboxProps) => <Checkbox {...args} />;
+export const Default = (args: CheckboxProps<string>) => <Checkbox {...args} />;

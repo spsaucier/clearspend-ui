@@ -15,13 +15,13 @@ import { getAllocationPermissions } from 'app/services/permissions';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
-import { Ledger } from 'company/containers/Ledger';
 
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
 import { CardControls } from './containers/CardControls';
+import { Ledger } from './containers/Ledger';
 import { Settings } from './containers/Settings';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
