@@ -2,6 +2,7 @@ import mixpanel from 'mixpanel-browser';
 
 export const Events = {
   ACTIVATE_CARD: 'Activate Card',
+  APPLICATION_APPROVED: 'Application Approved',
   CREATE_ALLOCATION: 'Create Allocation',
   CREATE_CARD: 'Create Card',
   CREATE_EMPLOYEE: 'Create Employee',
@@ -31,6 +32,8 @@ export const Events = {
   SUBMIT_NAME_EMAIL: 'Submit Name and Email',
   SUBMIT_BUSINESS_DETAILS: 'Submit Business Details',
   SUBMIT_BUSINESS_LEADERSHIP: 'Submit Business Leadership',
+  SUPPLEMENTAL_INFO_REQUIRED: 'Supplemental Info Required',
+  SUPPLEMENTAL_INFO_SUBMITTED: 'Supplemental Info Submitted',
   UPDATE_ALLOCATION: 'Update Allocation',
   UPDATE_CARD: 'Update Card',
   UPDATE_EMPLOYEE: 'Update Employee',

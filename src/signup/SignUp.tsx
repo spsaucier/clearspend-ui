@@ -1,4 +1,4 @@
-import { createSignal, Match, Switch, Show } from 'solid-js';
+import { createSignal, Match, Switch, Show, onMount } from 'solid-js';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
@@ -257,6 +257,8 @@ export default function SignUp() {
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: store.email });
     navigate('/onboarding');
   };
+
+  onMount(() => sendAnalyticsEvent({ name: Events.VIEW_SIGNUP }));
 
   return (
     <section class={css.root}>

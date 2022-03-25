@@ -127,7 +127,6 @@ export default function Onboarding() {
 
   const onUpdateKYC = async (skipTrigger?: boolean) => {
     setLoadingModalOpen(true);
-    sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
     try {
       if (!skipTrigger) {
         await triggerBusinessOwners();
@@ -154,9 +153,11 @@ export default function Onboarding() {
         reviewRequirements.kybRequiredDocuments.length > 0
       ) {
         setLoadingModalOpen(false);
+        sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_REQUIRED });
         setStep(OnboardingStep.SOFT_FAIL);
       } else {
         setLoadingModalOpen(false);
+        sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
         setStep(OnboardingStep.LINK_ACCOUNT);
       }
     } catch (err: unknown) {
@@ -169,6 +170,7 @@ export default function Onboarding() {
 
   const onSoftFail = async (data: Readonly<{}>) => {
     await uploadForApplicationReview(data);
+    sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_SUBMITTED });
     setStep(OnboardingStep.REVIEW);
   };
 
@@ -206,6 +208,7 @@ export default function Onboarding() {
     storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, []);
     storage.set(ONBOARDING_LEADERS_KEY, []);
     sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+    sendAnalyticsEvent({ name: Events.APPLICATION_APPROVED });
     triggerCompleteOnboarding();
   };
   const onSkipDeposit = async () => {
@@ -216,6 +219,7 @@ export default function Onboarding() {
     }
 
     sendAnalyticsEvent({ name: Events.SKIP_DEPOSIT });
+    sendAnalyticsEvent({ name: Events.APPLICATION_APPROVED });
     triggerCompleteOnboarding();
   };
 
