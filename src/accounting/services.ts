@@ -4,7 +4,7 @@ import type {
   CodatCreateCreditCardResponse,
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
-import type { ExpenseCategory } from 'generated/capital';
+import type { ExpenseCategory, SyncTransactionResponse } from 'generated/capital';
 
 import type {
   IntegrationAccountResponse,
@@ -20,11 +20,15 @@ export async function getCompanyConnection(): Promise<boolean> {
 }
 
 export async function syncTransaction(transactionId: string) {
-  return (await service.post<Readonly<boolean>>(`/codat/sync/${transactionId}`)).data;
+  return (await service.post<Readonly<SyncTransactionResponse>>(`/codat/sync/${transactionId}`)).data;
 }
 
 export async function syncMultipleTransactions(transactionIds: string[]) {
-  return (await service.post<Readonly<boolean>>(`/codat/sync`, transactionIds)).data;
+  return (await service.post<Readonly<SyncTransactionResponse[]>>(`/codat/sync`, transactionIds)).data;
+}
+
+export async function syncAllTransactions() {
+  return (await service.post<Readonly<SyncTransactionResponse[]>>('/codat/sync-all')).data;
 }
 
 export async function getCodatCreditCards() {

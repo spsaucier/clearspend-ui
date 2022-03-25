@@ -31,7 +31,7 @@ import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
-import { syncMultipleTransactions } from 'accounting/services';
+import { syncAllTransactions, syncMultipleTransactions } from 'accounting/services';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -88,7 +88,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           props.onDeselectTransaction(id);
         }
       });
-      props.onReload();
+    } else {
+      syncAllTransactions();
+      const syncableTransactions = props.data.content?.filter((transaction) => transaction.syncStatus === 'READY');
+      if (syncableTransactions) {
+        syncableTransactions.forEach((transaction) => props.onUpdate({ ...transaction, syncStatus: 'SYNCED_LOCKED' }));
+      }
     }
   };
 
@@ -104,6 +109,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             </div>
           );
         } else if (
+          item.expenseDetails?.expenseCategoryId !== undefined &&
           item.accountActivityId !== undefined &&
           props.selectedTransactions &&
           props.onSelectTransaction &&
