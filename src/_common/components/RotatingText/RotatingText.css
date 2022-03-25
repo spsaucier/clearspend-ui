@@ -1,0 +1,53 @@
+.root {
+  position: relative;
+  height: 100px;
+}
+
+.slide {
+  position: absolute;
+  top: 50px;
+  width: 100%;
+  padding-bottom: 10px;
+  text-align: center;
+  transition: 0.5s all ease-in-out;
+  opacity: 0;
+}
+
+.slide[data-show] {
+  transform: translateY(-100%);
+  opacity: 1;
+}
+
+.slide[data-up] {
+  transform: translateY(-200%);
+  opacity: 0;
+}
+
+.ellipsis {
+  color: black;
+  font-family: var(--font-header);
+  font-size: 24px;
+  text-align: center;
+  user-select: none;
+}
+
+.ellipsis::after,
+.ellipsis::before {
+  content: '\2026'; /* ascii code for the ellipsis character */
+  display: inline-block;
+  width: 0;
+  text-align: left;
+  vertical-align: bottom;
+  animation: ellipsis steps(4, end) 3500ms infinite;
+  overflow: hidden;
+}
+
+.ellipsis::before {
+  color: transparent;
+}
+
+@keyframes ellipsis {
+  to {
+    width: 0.7em;
+  }
+}

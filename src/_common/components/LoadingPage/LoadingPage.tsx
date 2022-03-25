@@ -1,6 +1,6 @@
-import { Text } from 'solid-i18n';
-
 import { ReviewingImage } from 'onboarding/components/ReviewingImage';
+
+import { RotatingText } from '../RotatingText/RotatingText';
 
 import css from './LoadingPage.css';
 
@@ -10,8 +10,8 @@ export function LoadingPage() {
       <div class={css.imageWrapper}>
         <ReviewingImage />
       </div>
-      <div class={css.ellipsis}>
-        <Text message="Submitting & verifying your info" />
+      <div class={css.textWrapper}>
+        <RotatingText class={css.text} />
       </div>
     </div>
   );
