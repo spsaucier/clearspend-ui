@@ -13,10 +13,10 @@ import type {
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
 
-import { TransactionsList } from '../TransactionsList';
-import { TransactionsTable } from '../TransactionsTable';
+import { TransactionsList } from '../../components/TransactionsList';
+import { TransactionsTable } from '../../components/TransactionsTable';
+import { TransactionReportModal } from '../../components/TransactionReportModal';
 import { TransactionPreview, ReceiptsView, type ReceiptVideModel } from '../TransactionPreview';
-import { TransactionReportModal } from '../TransactionReportModal';
 
 interface TransactionsDataProps {
   table?: boolean;

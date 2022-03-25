@@ -24,7 +24,7 @@ import type { TagOption } from 'app/components/TagSelect';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
-import { TransactionsData } from 'transactions/components/TransactionsData';
+import { TransactionsData } from 'transactions/containers/TransactionsData';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';

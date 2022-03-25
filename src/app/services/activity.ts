@@ -12,7 +12,7 @@ import type {
   PagedDataAccountActivityResponse,
   UpdateAccountActivityRequest,
 } from 'generated/capital';
-import type { ReceiptVideModel } from 'transactions/components/TransactionPreview/ReceiptsView';
+import type { ReceiptVideModel } from 'transactions/containers/TransactionPreview/ReceiptsView';
 
 export async function getAccountActivity(params: Readonly<AccountActivityRequest>) {
   return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;

@@ -6,7 +6,7 @@ import { useResource } from '_common/utils/useResource';
 import { getAccountActivity } from 'app/services/activity';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
-import { TransactionsData } from 'transactions/components/TransactionsData';
+import { TransactionsData } from 'transactions/containers/TransactionsData';
 import type { PagedDataAccountActivityResponse, AccountActivityRequest } from 'generated/capital';
 
 interface TransactionsProps {

@@ -6,7 +6,7 @@ import type {
   AccountActivityResponse,
   PagedDataAccountActivityResponse,
 } from 'generated/capital';
-import { TransactionsData } from 'transactions/components/TransactionsData';
+import { TransactionsData } from 'transactions/containers/TransactionsData';
 import { useMediaContext } from '_common/api/media/context';
 import { useNav } from '_common/api/router';
 

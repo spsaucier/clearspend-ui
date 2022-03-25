@@ -29,9 +29,9 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory, SelectExpenseCategoryOption } from 'accounting/components/SelectExpenseCategory';
 import { syncTransaction } from 'accounting/services';
 
-import { MerchantLogo } from '../MerchantLogo';
-import { TransactionPreviewStatus } from '../TransactionPreviewStatus';
-import { TransactionDateTime } from '../TransactionDateTime';
+import { MerchantLogo } from '../../components/MerchantLogo';
+import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
+import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
 
