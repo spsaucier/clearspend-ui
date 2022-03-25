@@ -49,7 +49,7 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
             </FormItem>
           </div>
         </FilterBox>
-        <FilterBox title={<Text message="Payment Status" />}>
+        <FilterBox title={<Text message="Activity Type" />}>
           <CheckboxGroup value={values().types} onChange={(value) => handlers.types(value)}>
             <For each={Object.entries(LEDGER_ACTIVITY_TYPES)}>
               {(type) => <Checkbox value={type[0]}>{type[1]}</Checkbox>}
