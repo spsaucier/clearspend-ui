@@ -2,7 +2,7 @@ import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import logo from 'app/assets/Logo_Tagline_White.png';
+import logo from 'app/assets/Tagline_Lockup_White.svg';
 import { formatPhone } from '_common/formatters/phone';
 import { complete2faEnrollment, send2faEnrollmentCode } from 'app/services/auth';
 import { PhoneForm } from 'signup/components/PhoneForm';

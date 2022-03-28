@@ -1,6 +1,6 @@
 import { createMemo, Show, type JSXElement } from 'solid-js';
 
-import logo from 'app/assets/Logo_Tagline_White.png';
+import logo from 'app/assets/Tagline_Lockup_White.svg';
 
 import css from './PagePreAuth.css';
 

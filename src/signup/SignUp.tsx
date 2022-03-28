@@ -2,7 +2,7 @@ import { createSignal, Match, Switch, Show, onMount } from 'solid-js';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
-import logo from 'app/assets/Logo_Tagline_White.png';
+import logo from 'app/assets/Tagline_Lockup_White.svg';
 import { useMediaContext } from '_common/api/media/context';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword, resendOtp } from 'onboarding/services/onboarding';

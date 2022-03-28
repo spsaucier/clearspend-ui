@@ -4,7 +4,7 @@ import { Box } from 'signup/components/Box';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
 
-import logo from '../../assets/Logo_Tagline_Black.png';
+import logo from '../../assets/Tagline_Lockup_Black.svg';
 
 import css from './HardFail.css';
 

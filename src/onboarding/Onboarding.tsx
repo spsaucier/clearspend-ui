@@ -2,6 +2,7 @@ import { createSignal, batch, Show, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
+import logoLight from 'app/assets/Tagline_Lockup_White.svg';
 import { Icon } from '_common/components/Icon';
 import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
@@ -12,7 +13,6 @@ import { useMessages } from 'app/containers/Messages/context';
 import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForApplicationReview } from 'app/services/review';
-import logoLight from 'app/assets/Logo_Tagline_White.png';
 import type { BankAccount, Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
