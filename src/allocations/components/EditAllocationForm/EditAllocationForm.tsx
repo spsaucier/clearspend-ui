@@ -138,11 +138,11 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             onChange={onParentChange}
           />
         </FormItem>
-        <FormItem label={<Text message="Label" />} error={errors().name} class={css.field}>
+        <FormItem label={<Text message="Name" />} error={errors().name} class={css.field}>
           <Input
             name="allocation-label"
             value={values().name}
-            placeholder={String(i18n.t('Enter allocation label (e.g. Marketing Team)'))}
+            placeholder={String(i18n.t('Enter allocation name (e.g. Marketing Team)'))}
             error={Boolean(errors().name)}
             onChange={handlers.name}
           />
