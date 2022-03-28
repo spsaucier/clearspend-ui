@@ -1,16 +1,18 @@
-import { createMemo, Show, type JSXElement } from 'solid-js';
+import { mergeProps } from 'solid-js';
+import type { JSX, JSXElement } from 'solid-js';
 
-import type { JSXEvent } from '../../types/common';
 import { join } from '../../utils/join';
 
 import css from './Input.css';
 
-const DEFAULT_TEXT_ROWS = 3;
-
-interface SharedProps {
+export interface InputProps {
+  ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
+  textareaRef?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
   name?: string;
-  value?: string; // string only!!!
+  value?: string | number;
   maxLength?: number;
+  rows?: number;
+  type?: 'text' | 'password' | 'email' | 'tel' | 'file' | 'number';
   inputMode?: 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
   formatter?: (value: string) => string;
   parser?: (value: string) => string;
@@ -22,83 +24,98 @@ interface SharedProps {
   disabled?: boolean;
   class?: string;
   inputClass?: string;
-  darkMode?: boolean;
   onClick?: (event: MouseEvent) => void;
+  onChange?: (value: string, event: InputEvent) => void;
   onKeyDown?: (event: KeyboardEvent) => void;
   onPaste?: (event: ClipboardEvent) => void;
   onFocusIn?: (event: FocusEvent) => void;
   onFocusOut?: (event: FocusEvent) => void;
+  darkMode?: boolean;
+  useTextArea?: boolean;
 }
 
-export interface InputProps extends SharedProps {
-  ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
-  type?: 'text' | 'password' | 'email' | 'tel' | 'file' | 'number';
-  onChange?: (value: string, event: JSXEvent<HTMLInputElement, InputEvent>) => void;
-}
+export function Input(props: Readonly<InputProps>) {
+  let input!: HTMLInputElement;
+  let textarea!: HTMLTextAreaElement;
 
-export interface TextAreaProps extends SharedProps {
-  useTextArea: true;
-  rows?: number;
-  ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
-  onChange?: (value: string, event: JSXEvent<HTMLTextAreaElement, InputEvent>) => void;
-}
+  const merged = mergeProps({ type: 'text' }, props);
 
-export function Input(props: Readonly<InputProps | TextAreaProps>) {
-  let input!: HTMLInputElement | HTMLTextAreaElement;
-
-  const setInputRef = (element: HTMLInputElement | HTMLTextAreaElement) => {
-    if (typeof props.ref === 'function') props.ref(element as HTMLInputElement & HTMLTextAreaElement);
+  const setInputRef = (element: HTMLInputElement) => {
+    if (typeof merged.ref === 'function') merged.ref(element);
     input = element;
   };
 
-  const value = createMemo<string>(() => {
-    const text = props.value || '';
-    return typeof props.formatter === 'function' ? props.formatter(text) : text;
-  });
-
-  const onChange = (event: JSXEvent<HTMLInputElement | HTMLTextAreaElement, InputEvent>) => {
-    let text = event.currentTarget.value;
-    if (typeof props.parser === 'function') text = props.parser(text);
-    props.onChange?.(text, event as JSXEvent<HTMLInputElement & HTMLTextAreaElement, InputEvent>);
+  const setTextareaRef = (element: HTMLTextAreaElement) => {
+    if (typeof merged.textareaRef === 'function') merged.textareaRef(element);
+    textarea = element;
   };
 
-  const shared = createMemo(() => ({
-    ref: setInputRef,
-    name: props.name,
-    'data-name': props.name,
-    value: value(),
-    maxLength: props.maxLength,
-    inputmode: props.inputMode,
-    autocomplete: props.autoComplete,
-    placeholder: props.placeholder,
-    disabled: props.disabled,
-    class: join(css.input, props.inputClass),
-    onInput: onChange,
-    onClick: props.onClick,
-    onKeyDown: props.onKeyDown,
-    onPaste: props.onPaste,
-    onFocusIn: props.onFocusIn,
-    onFocusOut: props.onFocusOut,
-  }));
+  const onChange: JSX.EventHandler<HTMLInputElement | HTMLTextAreaElement, InputEvent> = (event) => {
+    if (typeof merged.parser === 'function') {
+      merged.onChange?.(merged.parser(event.currentTarget.value), event);
+    } else {
+      merged.onChange?.(event.currentTarget.value, event);
+    }
+  };
+
+  const applyFormatter = (text?: string | number) => {
+    if (typeof merged.formatter === 'function') {
+      return merged.formatter(`${text}`);
+    } else {
+      return text;
+    }
+  };
 
   return (
     <div
-      class={join(css.root, props.class)}
-      classList={{
-        [css.dark!]: props.darkMode,
-        [css.autoHeight!]: (props as TextAreaProps).useTextArea,
-        [css.error!]: props.error,
-        [css.disabled!]: props.disabled,
-      }}
+      class={join(css.root, merged.class, props.darkMode && css.dark, props.useTextArea && css.autoHeight)}
+      classList={{ [css.error!]: merged.error, [css.disabled!]: merged.disabled }}
     >
-      {props.prefix && <div class={css.prefix}>{props.prefix}</div>}
-      <Show
-        when={!('useTextArea' in props)}
-        fallback={<textarea rows={(props as TextAreaProps).rows ?? DEFAULT_TEXT_ROWS} {...shared()} />}
-      >
-        <input type={(props as InputProps).type || 'text'} {...shared()} />
-      </Show>
-      {props.suffix && <div class={css.suffix}>{props.suffix}</div>}
+      {merged.prefix && <div class={css.prefix}>{merged.prefix}</div>}
+      {!merged.useTextArea && (
+        <input
+          ref={setInputRef}
+          name={merged.name}
+          data-name={merged.name}
+          value={applyFormatter(merged.value || '')}
+          maxLength={merged.maxLength}
+          type={merged.type}
+          inputmode={merged.inputMode}
+          autocomplete={merged.autoComplete}
+          placeholder={merged.placeholder}
+          disabled={merged.disabled}
+          class={join(css.input, merged.inputClass)}
+          onInput={onChange}
+          onClick={merged.onClick}
+          onKeyDown={merged.onKeyDown}
+          onPaste={merged.onPaste}
+          onFocusIn={merged.onFocusIn}
+          onFocusOut={merged.onFocusOut}
+        />
+      )}
+      {merged.useTextArea && (
+        <textarea
+          ref={setTextareaRef}
+          // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+          rows={merged.rows ?? 3}
+          name={merged.name}
+          data-name={merged.name}
+          value={applyFormatter(merged.value || '')}
+          maxLength={merged.maxLength}
+          inputmode={merged.inputMode}
+          autocomplete={merged.autoComplete}
+          placeholder={merged.placeholder}
+          disabled={merged.disabled}
+          class={join(css.input, merged.inputClass)}
+          onInput={onChange}
+          onClick={merged.onClick}
+          onKeyDown={merged.onKeyDown}
+          onPaste={merged.onPaste}
+          onFocusIn={merged.onFocusIn}
+          onFocusOut={merged.onFocusOut}
+        />
+      )}
+      {merged.suffix && <div class={css.suffix}>{merged.suffix}</div>}
     </div>
   );
 }

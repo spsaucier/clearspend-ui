@@ -18,10 +18,15 @@ export function EditCardNameForm(props: Readonly<EditCardNameFormProps>) {
       <div>
         <h1 class={css.title}>Edit Card</h1>
         <Text message="Card name" />
-        <Input name="first-name" value={newCardName()} onChange={setNewCardName} error={newCardName() === ''} />
+        <Input
+          name="first-name"
+          value={newCardName()}
+          onChange={(value) => setNewCardName(value)}
+          error={newCardName() === ''}
+        />
       </div>
       <Button onClick={() => props.onSave(newCardName())} disabled={newCardName() === ''}>
-        <Text message="Save" />
+        Save
       </Button>
     </div>
   );

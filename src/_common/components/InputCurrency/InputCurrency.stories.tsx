@@ -1,4 +1,6 @@
-import { InputCurrency, type InputCurrencyProps } from './InputCurrency';
+import type { InputProps } from '../Input';
+
+import { InputCurrency } from './InputCurrency';
 
 export default {
   title: 'Common/InputCurrency',
@@ -18,4 +20,4 @@ export default {
   },
 };
 
-export const Default = (args: InputCurrencyProps) => <InputCurrency {...args} />;
+export const Default = (args: InputProps) => <InputCurrency {...args} />;

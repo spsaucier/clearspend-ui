@@ -1,15 +1,15 @@
 import { i18n } from '../api/intl';
 
-function cleanAmount(val: string): string {
-  return val.replace(/[^\d.]/g, '');
+export function cleanAmount(val: string): string {
+  return val.replace(/[^\d]/g, '');
 }
 
 export function parseAmount(val: string): number {
-  return parseFloat(cleanAmount(val));
+  return parseInt(cleanAmount(val), 10);
 }
 
-export function formatAmount(val: string): string {
+export function formatAmount(val: string | number): string {
   const num = parseAmount(val.toString());
   if (Number.isNaN(num)) return '';
-  return i18n.formatNumber(num, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  return i18n.formatNumber(num, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 }
