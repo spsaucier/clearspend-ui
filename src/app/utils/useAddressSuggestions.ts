@@ -25,7 +25,7 @@ export function useAddressSuggestions(values: Accessor<SuggestionsRequest>) {
     }
   });
 
-  const [trigger, clear] = createDebounce(getAddressData, DEBOUNCE_MS);
+  const trigger = createDebounce(getAddressData, DEBOUNCE_MS);
 
   createEffect(() => {
     const prefix = values().address_prefix;
@@ -33,7 +33,7 @@ export function useAddressSuggestions(values: Accessor<SuggestionsRequest>) {
       trigger();
     } else {
       setSuggestions([]);
-      clear();
+      trigger.clear();
     }
   });
 
