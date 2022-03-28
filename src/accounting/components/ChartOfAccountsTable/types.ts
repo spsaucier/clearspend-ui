@@ -1,6 +1,7 @@
 export interface IntegrationAccountMapping {
   accountRef: string;
-  expenseCategoryId: string;
+  expenseCategoryId?: string;
+  expenseCategoryName?: string;
 }
 
 export type IntegrationAccountMap = Record<string, Readonly<IntegrationAccountMapping> | null>;

@@ -49,7 +49,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   });
 
   const handleSave = async () => {
-    const requestParams = Object.values(state).filter((value) => value != null);
+    const requestParams = Object.values(state).filter(
+      (value) => value != null && (value.expenseCategoryId || value.expenseCategoryName),
+    );
     const unmappedCategories = expenseCategories.data?.filter(
       (category) => !selectedCategories().includes(category.expenseCategoryId),
     );
@@ -155,6 +157,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                   setState(item.id, {
                     accountRef: item.id,
                     expenseCategoryId: ec?.expenseCategoryId,
+                    expenseCategoryName: ec?.categoryName,
                   });
                 });
                 if (props.saveOnChange) {

@@ -111,7 +111,7 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
         <li
           class={css.addNew}
           onClick={() => {
-            // TODO
+            onChange({ categoryName: props.createNewName });
           }}
         >
           <Icon class={css.icon} name="add-circle-outline" />
