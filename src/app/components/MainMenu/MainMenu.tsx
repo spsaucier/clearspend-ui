@@ -50,13 +50,15 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
   const itemClass = createMemo(() => (props.view === MenuView.mobile ? css.mobileItem : undefined));
 
+  const isNotProd = window.location.host !== 'app.clearspend.com';
+
   const mainItems = createMemo(() => {
     const isAdmin = permissions().allocationRole === AllocationRoles.Admin;
 
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
         case TITLES.accounting:
-          return isAdmin || canSeeAccounting(currentUser());
+          return isNotProd && (isAdmin || canSeeAccounting(currentUser()));
         case TITLES.employees:
           return isAdmin || canManageUsers(permissions());
         case TITLES.company:

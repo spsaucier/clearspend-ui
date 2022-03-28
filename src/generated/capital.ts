@@ -437,6 +437,13 @@ export interface CreateReceiptResponse {
   receiptId?: string;
 }
 
+export interface ExpenseCategory {
+  /** @format int32 */
+  iconRef?: number;
+  categoryName?: string;
+  expenseCategoryId?: string;
+}
+
 export interface CodatError {
   itemId?: string;
   message?: string;
@@ -2776,7 +2783,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -3026,21 +3045,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -3065,13 +3072,6 @@ export interface BusinessRecord {
 
 export interface NullableEncryptedString {
   encrypted?: string;
-}
-
-export interface ExpenseCategory {
-  /** @format int32 */
-  iconRef?: number;
-  categoryName?: string;
-  expenseCategoryId?: string;
 }
 
 export interface CodatAccountNested {
