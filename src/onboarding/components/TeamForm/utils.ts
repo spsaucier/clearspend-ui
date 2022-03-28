@@ -43,18 +43,19 @@ export function getFormOptions({ currentUser, leader }: Props): FormOptions<Form
     phone: currentUser?.phone || '',
     relationshipExecutive,
     relationshipOwner,
-    percentageOwnership: 0,
+    percentageOwnership: '0',
     title: '',
     ...getEmptyAddress(),
   };
   if (!leader) return { defaultValues, rules };
 
-  const { address, dateOfBirth, taxIdentificationNumber, ...rest } = leader;
+  const { address, dateOfBirth, taxIdentificationNumber, percentageOwnership, ...rest } = leader;
   return {
     defaultValues: {
       ...defaultValues,
       ssn: taxIdentificationNumber,
       birthdate: stringToDate(dateOfBirth),
+      percentageOwnership: percentageOwnership?.toString() || '',
       ...address,
       ...rest,
     },
@@ -83,7 +84,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     taxIdentificationNumber: cleanSSN(ssn),
     email,
     phone,
-    percentageOwnership,
+    percentageOwnership: parseInt(percentageOwnership, 10),
     title,
     relationshipOwner,
     relationshipExecutive,

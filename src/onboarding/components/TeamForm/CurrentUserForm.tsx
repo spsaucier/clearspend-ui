@@ -127,7 +127,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
                 name="percentage-ownership"
                 value={values().percentageOwnership}
                 error={Boolean(errors().percentageOwnership)}
-                onChange={(value) => handlers.percentageOwnership(parseInt(value, 10))}
+                onChange={handlers.percentageOwnership}
               />
             </FormItem>
           </div>

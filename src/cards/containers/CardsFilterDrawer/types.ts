@@ -5,8 +5,8 @@ import type { Setter } from '_common/types/common';
 export type FormResult = Omit<SearchCardRequest, 'pageRequest'>;
 
 export interface FormValues extends FormResult {
-  amountMin?: string;
-  amountMax?: string;
+  amountMin: string;
+  amountMax: string;
 }
 
 export interface CardsFilterDrawerProps {

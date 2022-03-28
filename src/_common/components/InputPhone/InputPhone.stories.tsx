@@ -1,6 +1,4 @@
-import type { InputProps } from '../Input';
-
-import { InputPhone } from './InputPhone';
+import { InputPhone, type InputPhoneProps } from './InputPhone';
 
 export default {
   title: 'Common/InputPhone',
@@ -21,4 +19,4 @@ export default {
   },
 };
 
-export const Default = (args: InputProps) => <InputPhone {...args} />;
+export const Default = (args: InputPhoneProps) => <InputPhone {...args} />;

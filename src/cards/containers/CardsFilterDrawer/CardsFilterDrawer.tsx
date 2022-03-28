@@ -29,8 +29,8 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
       users: props.params.users || [],
       statuses: props.params.statuses || [],
       types: props.params.types || [],
-      amountMin: props.params.balance?.min?.toString(),
-      amountMax: props.params.balance?.max?.toString(),
+      amountMin: props.params.balance?.min?.toString() || '',
+      amountMax: props.params.balance?.max?.toString() || '',
     },
   });
 
