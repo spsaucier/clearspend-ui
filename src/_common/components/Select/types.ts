@@ -26,7 +26,6 @@ export interface SelectProps {
   loading?: boolean;
   iconName?: keyof typeof IconName;
   darkMode?: boolean;
-  blurOnSelect?: boolean;
 }
 
 export interface SelectContextProps {

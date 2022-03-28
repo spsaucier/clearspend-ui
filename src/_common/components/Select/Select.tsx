@@ -54,7 +54,7 @@ export function Select(props: Readonly<SelectProps>) {
       setOpen(false);
       input.focus();
       // Both below & above are required to keep focus position on page
-      if (props.blurOnSelect) input.blur();
+      input.blur();
     });
   };
 

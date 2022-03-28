@@ -63,7 +63,6 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
             error={Boolean(props.errors.streetLine1)}
             onChange={onChangeStreetLine1}
             changeOnSearch
-            blurOnSelect
             loading={loading()}
           >
             <For each={suggestions()}>
