@@ -31,7 +31,7 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
 
   const [cards, cardsStatus, params, setParams, reloadCards] = useResource(searchCards, {
     ...DEFAULT_PARAMS,
-    userId: props.uid,
+    users: [props.uid],
   } as SearchCardRequest);
 
   return (
