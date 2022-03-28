@@ -40,7 +40,7 @@ export const KeyboardAccessibility = () => {
         <InputDate value={date()} onChange={setDate} />
       </FormItem>
       <FormItem>
-        <InputPhone placeholder="Phone" />
+        <InputPhone placeholder="Mobile" />
       </FormItem>
       <FormItem>
         <Select

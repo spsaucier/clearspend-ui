@@ -103,7 +103,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
               disabled={isOwner}
             />
           </FormItem>
-          <FormItem label="Phone" error={errors().phone}>
+          <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
               name="phone"
               value={values().phone}

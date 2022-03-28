@@ -163,7 +163,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               disabled={props.isCurrentUser}
             />
           </FormItem>
-          <FormItem label="Phone" error={errors().phone}>
+          <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
               name="phone"
               value={values().phone}

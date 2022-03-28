@@ -49,12 +49,11 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
           onChange={props.handlers.email}
         />
       </FormItem>
-      <FormItem label={<Text message="Phone number" />} error={props.errors.phone} class={css.item}>
+      <FormItem label={<Text message="Mobile number" />} error={props.errors.phone} class={css.item}>
         <InputPhone
           name="phone"
           type="tel"
           value={props.values.phone}
-          placeholder={String(i18n.t('Phone number'))}
           error={Boolean(props.errors.phone)}
           onChange={props.handlers.phone}
         />
