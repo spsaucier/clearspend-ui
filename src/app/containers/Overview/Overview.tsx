@@ -9,18 +9,8 @@ import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
 import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { useMediaContext } from '_common/api/media/context';
-import type {
-  Allocation,
-  GraphDataRequest,
-  AccountActivityRequest,
-  MerchantCategoryChartData,
-  AllocationChartData,
-  MerchantChartData,
-  UserChartData,
-  ChartDataRequest,
-} from 'generated/capital';
+import type { Allocation, AccountActivityRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
-import type { TagOption } from 'app/components/TagSelect';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
@@ -29,22 +19,19 @@ import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import { canRead } from 'allocations/utils/permissions';
-import { useEmployeeSpending } from 'app/stores/employeeSpending';
-import { useMerchantSpending } from 'app/stores/merchantSpending';
-import { useAllocationSpending } from 'app/stores/allocationSpending';
-import { useMerchantCategorySpending } from 'app/stores/merchantCategorySpending';
 
 import { SpendingByWidget } from '../../components/SpendingByWidget';
-import { useSpend } from '../../stores/spend';
+import { useSpending } from '../../stores/spending';
 import { useActivity } from '../../stores/activity';
 import { dateRangeToISO } from '../../utils/dateRangeToISO';
+import type { ChartDataRequest } from '../../types/spending';
 import { useBusiness } from '../Main/context';
 
 import { TimePeriod, getTimePeriod, updateParams } from './utils';
 
 import css from './Overview.css';
 
-const PERIOD_OPTIONS: readonly Readonly<TagOption>[] = [
+const PERIOD_OPTIONS = [
   { key: TimePeriod.today, text: i18n.t('Today') },
   { key: TimePeriod.week, text: i18n.t('This Week') },
   { key: TimePeriod.month, text: i18n.t('This Month') },
@@ -78,15 +65,7 @@ export function Overview(props: Readonly<OverviewProps>) {
     setAllocationIdForPermissions(allocationId() || getRootAllocation(props.allocations)?.allocationId || '');
   });
 
-  const spendStore = useSpend({
-    params: { ...dateRangeToISO(getTimePeriod(initPeriod)), allocationId: allocationId() },
-  });
-
-  // TODO: Refactor once https://tranwall.atlassian.net/browse/CAP-747 is completed on backend to use 'ALL' filter
-  const employeeCategorySpendingStore = useEmployeeSpending({ params: DEFAULT_PARAMS });
-  const merchantCategorySpendingStore = useMerchantCategorySpending({ params: DEFAULT_PARAMS });
-  const merchantSpendingStore = useMerchantSpending({ params: DEFAULT_PARAMS });
-  const allocationSpending = useAllocationSpending({ params: DEFAULT_PARAMS });
+  const spendingStore = useSpending({ params: { ...DEFAULT_PARAMS, sortDirection: 'ASC' } });
 
   const activityStore = useActivity({
     params: {
@@ -99,11 +78,7 @@ export function Overview(props: Readonly<OverviewProps>) {
     () => {
       batch(() => {
         const updates = { allocationId: allocationId() };
-        spendStore.setParams(updateParams<GraphDataRequest>(updates));
-        allocationSpending.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(updates));
-        merchantSpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(updates));
-        merchantCategorySpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(updates));
-        employeeCategorySpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(updates));
+        spendingStore.setParams(updateParams<ChartDataRequest>(updates));
         activityStore.setParams(updateParams<AccountActivityRequest>(updates));
       });
     },
@@ -116,22 +91,19 @@ export function Overview(props: Readonly<OverviewProps>) {
 
     batch(() => {
       const range = dateRangeToISO(getTimePeriod(value));
-      spendStore.setParams(updateParams<GraphDataRequest>(range));
-      allocationSpending.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
-      merchantSpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
-      merchantCategorySpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
-      employeeCategorySpendingStore.setParams(updateParams<Omit<ChartDataRequest, 'chartFilter'>>(range));
+      spendingStore.setParams(updateParams<ChartDataRequest>(range));
       activityStore.setParams(updateParams<AccountActivityRequest>(range));
     });
   };
 
-  const showTopSpendingSection = createMemo(
-    () =>
-      (merchantCategorySpendingStore.data?.merchantCategoryChartData ?? []).length +
-        (allocationSpending.data?.allocationChartData ?? []).length +
-        (employeeCategorySpendingStore.data?.userChartData ?? []).length +
-        (merchantSpendingStore.data?.merchantChartData ?? []).length >
-      0,
+  const showTopSpendingSection = createMemo(() =>
+    Boolean(
+      spendingStore.data &&
+        spendingStore.data.merchantChartData.length +
+          spendingStore.data.merchantCategoryChartData.length +
+          spendingStore.data.userChartData.length +
+          spendingStore.data.allocationChartData.length,
+    ),
   );
 
   return (
@@ -142,30 +114,22 @@ export function Overview(props: Readonly<OverviewProps>) {
         </TabList>
       </Show>
       <Show when={showTopSpendingSection() && (currentUser().type === 'BUSINESS_OWNER' || canRead(userPermissions()))}>
-        <div class={css.top}>
-          <h3 class={css.transactionTitle}>
+        <div class={css.section}>
+          <h3 class={css.title}>
             <Text message="Top Spending" />
           </h3>
           <Data
-            data={spendStore.data}
-            error={spendStore.error}
-            loading={spendStore.loading}
-            onReload={spendStore.reload}
+            data={spendingStore.data}
+            error={spendingStore.error}
+            loading={spendingStore.loading}
+            onReload={spendingStore.reload}
           >
-            <SpendingByWidget
-              data={{
-                merchantCategoryChartData: merchantCategorySpendingStore.data
-                  ?.merchantCategoryChartData! as MerchantCategoryChartData[],
-                allocationChartData: allocationSpending.data?.allocationChartData as AllocationChartData[],
-                userChartData: employeeCategorySpendingStore.data?.userChartData as UserChartData[],
-                merchantChartData: merchantSpendingStore.data?.merchantChartData as MerchantChartData[],
-              }}
-            />
+            <SpendingByWidget data={spendingStore.data!} />
           </Data>
         </div>
       </Show>
-      <div>
-        <h3 class={css.transactionTitle}>
+      <div class={css.section}>
+        <h3 class={css.title}>
           <Text message="Recent Transactions" />
         </h3>
         <Data
@@ -181,6 +145,7 @@ export function Overview(props: Readonly<OverviewProps>) {
             params={activityStore.params}
             dateRange={dateRangeToISO(getTimePeriod(period()))}
             data={activityStore.data}
+            class={css.transactions}
             onReload={activityStore.reload}
             onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
               storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),

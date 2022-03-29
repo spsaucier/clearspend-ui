@@ -3,8 +3,6 @@ import { RespType, service } from 'app/utils/service';
 import type {
   AccountActivityRequest,
   AccountActivityResponse,
-  ChartDataRequest,
-  ChartDataResponse,
   DashboardGraphData,
   GraphDataRequest,
   LedgerActivityRequest,
@@ -13,6 +11,8 @@ import type {
   UpdateAccountActivityRequest,
 } from 'generated/capital';
 import type { ReceiptVideModel } from 'transactions/containers/TransactionPreview/ReceiptsView';
+
+import type { ChartDataRequest, ChartDataResponse } from '../types/spending';
 
 export async function getAccountActivity(params: Readonly<AccountActivityRequest>) {
   return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;
@@ -30,8 +30,23 @@ export async function getGraphData(params: Readonly<GraphDataRequest>) {
   return (await service.post<Readonly<DashboardGraphData>>('/account-activity/graph-data', params)).data;
 }
 
-export async function getSpendingByCategory(params: Readonly<ChartDataRequest>) {
-  return (await service.post<Readonly<ChartDataResponse>>('/account-activity/category-spend', params)).data;
+export async function getSpending(params: Readonly<ChartDataRequest>) {
+  // TODO: Refactor once https://tranwall.atlassian.net/browse/CAP-747 is completed
+  const url = '/account-activity/category-spend';
+
+  const resp = await Promise.all([
+    service.post<ChartDataResponse>(url, { ...params, chartFilter: 'MERCHANT' }),
+    service.post<ChartDataResponse>(url, { ...params, chartFilter: 'MERCHANT_CATEGORY' }),
+    service.post<ChartDataResponse>(url, { ...params, chartFilter: 'EMPLOYEE' }),
+    service.post<ChartDataResponse>(url, { ...params, chartFilter: 'ALLOCATION' }),
+  ]);
+
+  return {
+    merchantChartData: resp[0].data.merchantChartData,
+    merchantCategoryChartData: resp[1].data.merchantCategoryChartData,
+    userChartData: resp[2].data.userChartData,
+    allocationChartData: resp[3].data.allocationChartData,
+  } as Readonly<ChartDataResponse>;
 }
 
 export async function getActivityById(activityId: string) {

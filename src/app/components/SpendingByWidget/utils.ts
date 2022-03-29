@@ -1,11 +1,7 @@
 import type { IPieChartData } from 'micro-charts/lib/piechart/types';
 
 import { getChartColor } from '_common/components/Charts/utils';
-import type { Amount, MerchantCategoryChartData } from 'generated/capital';
-
-export function sortByAmount<T extends { amount?: Amount }>(items: readonly T[]): readonly T[] {
-  return [...items].sort((a, b) => Math.abs(b.amount?.amount || 0) - Math.abs(a.amount?.amount || 0));
-}
+import type { MerchantCategoryChartData } from 'generated/capital';
 
 const TOTAL_PERCENT = 100;
 

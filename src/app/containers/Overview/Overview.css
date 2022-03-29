@@ -7,25 +7,18 @@
   }
 }
 
-.top {
-  display: flex;
-  flex-direction: column;
-
-  @media (--bp-large) {
-    flex-direction: column;
-  }
-
-  & > *:nth-child(1) {
-    @media (--bp-large) {
-      flex-grow: 1;
-    }
-  }
+.section {
+  margin: var(--pd-32) 0;
 }
 
-.transaction-title {
-  margin: var(--pd-16) 0;
+.title {
+  margin: 0 0 var(--pd-16);
   font-family: var(--font-header);
   font-size: var(--text-20);
   font-weight: var(--font-400);
   cursor: default;
+}
+
+.transactions {
+  margin: var(--pd-32) 0;
 }

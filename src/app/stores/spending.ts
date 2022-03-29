@@ -1,5 +1,5 @@
 import { create } from '_common/utils/store';
 
-import { getSpendingByCategory } from '../services/activity';
+import { getSpending } from '../services/activity';
 
-export const useSpending = create(getSpendingByCategory);
+export const useSpending = create(getSpending);

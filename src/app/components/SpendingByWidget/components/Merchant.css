@@ -1,20 +1,19 @@
 .root {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  padding: var(--pd-10) var(--pd-8);
+  padding: var(--pd-8) 0;
   align-items: center;
   grid-gap: var(--pd-10);
   font-size: var(--text-12);
   line-height: 1.33;
 }
 
-.root > span {
+.name {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
 .amount {
-  font-weight: var(--font-400);
   text-align: right;
 }

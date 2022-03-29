@@ -96,6 +96,7 @@
 
 .child {
   visibility: visible;
+  white-space: nowrap;
 }
 
 .absolute {

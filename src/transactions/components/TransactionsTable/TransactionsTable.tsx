@@ -44,6 +44,7 @@ import css from './TransactionsTable.css';
 const FILTERS_KEYS = ['amount', 'categories', 'statuses', 'withReceipt', 'withoutReceipt'] as const;
 
 interface TransactionsTableProps {
+  class?: string;
   data: PagedDataAccountActivityResponse;
   params: Readonly<AccountActivityRequest>;
   dateRange?: Readonly<DateRange>;
@@ -250,7 +251,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   };
 
   return (
-    <div>
+    <div class={props.class}>
       <Filters
         side={
           <Pagination

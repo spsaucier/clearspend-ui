@@ -27,6 +27,7 @@ const STATUS_TYPES: Record<ActivityStatus, Required<TagProps>['type']> = {
 };
 
 interface TransactionsListProps {
+  class?: string;
   params: Readonly<AccountActivityRequest>;
   data: PagedDataAccountActivityResponse;
   onRowClick?: (activityId: string) => void;
@@ -37,7 +38,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
   const i18n = useI18n();
 
   return (
-    <div>
+    <div class={props.class}>
       <InputSearch
         delay={400}
         value={props.params.searchText}

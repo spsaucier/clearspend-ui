@@ -25,6 +25,7 @@ interface TransactionsDataProps {
   params: Readonly<AccountActivityRequest>;
   dateRange?: Readonly<DateRange>;
   data: Readonly<PagedDataAccountActivityResponse> | null;
+  class?: string;
   onCardClick?: (id: string) => void;
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
@@ -58,6 +59,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         data={props.data!}
         params={props.params}
         dateRange={props.dateRange}
+        class={props.class}
         onCardClick={props.onCardClick}
         onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}

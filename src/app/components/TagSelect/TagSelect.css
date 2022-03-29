@@ -1,15 +1,17 @@
 .tag {
+  width: 100%;
   cursor: pointer;
 }
 
 .popup {
-  width: 100%;
+  min-width: 100%;
 }
 
 .option {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  white-space: nowrap;
 }
 
 .icon {

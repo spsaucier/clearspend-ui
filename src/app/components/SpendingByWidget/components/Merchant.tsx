@@ -13,8 +13,8 @@ interface MerchantProps {
 export function Merchant(props: Readonly<MerchantProps>) {
   return (
     <li class={css.root}>
-      <MerchantLogo size="sm" data={props.merchant} />
-      <span>{props.merchant.name}</span>
+      <MerchantLogo data={props.merchant} />
+      <span class={css.name}>{props.merchant.name}</span>
       <span class={css.amount}>{formatCurrency(props.amount.amount)}</span>
     </li>
   );

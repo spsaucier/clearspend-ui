@@ -1,35 +1,5 @@
-.top-card-wrapper {
-  display: flex;
-  width: 100%;
-  margin-bottom: 20px;
-  padding-bottom: 3px;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  overflow: auto;
+.root {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: var(--pd-24);
-
-  @media (--bp-medium) {
-    flex-wrap: wrap;
-  }
-}
-
-.category-card {
-  display: flex;
-  min-width: 263px;
-  max-width: 340px;
-  padding: var(--pd-16);
-  flex: 1;
-  flex-direction: column;
-  background: var(--tw-gray-10);
-  border: 1px solid var(--tw-gray-20);
-  border-radius: var(--radius-10);
-}
-
-.card-title {
-  margin: 0 0 var(--pd-8);
-  font-family: var(--font-header);
-  font-size: var(--text-12);
-  font-weight: var(--font-400);
-  text-transform: uppercase;
-  cursor: default;
 }

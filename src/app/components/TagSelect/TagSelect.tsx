@@ -7,19 +7,19 @@ import { Dropdown, MenuItem } from '_common/components/Dropdown';
 
 import css from './TagSelect.css';
 
-export interface TagOption {
-  key: string;
+export interface TagOption<T extends string> {
+  key: T;
   text: JSXElement;
 }
 
-interface TagSelectProps {
-  value: string;
-  options: readonly Readonly<TagOption>[];
-  onChange: (value: string) => void;
+interface TagSelectProps<T extends string> {
+  value: T;
+  options: readonly Readonly<TagOption<T>>[];
+  onChange: (value: T) => void;
   class?: string;
 }
 
-export function TagSelect(props: Readonly<TagSelectProps>) {
+export function TagSelect<T extends string>(props: Readonly<TagSelectProps<T>>) {
   const value = createMemo(() => props.options.find((opt) => opt.key === props.value));
 
   return (
