@@ -7,7 +7,7 @@ export interface FormValues extends AddressValues {
   ssn: string;
   email: string;
   phone: string;
-  percentageOwnership: number;
+  percentageOwnership: string;
   title?: string;
   relationshipOwner?: boolean;
   relationshipExecutive?: boolean;

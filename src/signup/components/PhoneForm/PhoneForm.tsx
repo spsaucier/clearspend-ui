@@ -3,7 +3,6 @@ import { onMount } from 'solid-js';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { validPhone } from '_common/components/Form/rules/patterns';
 import { InputPhone } from '_common/components/InputPhone';
-import { cleanPhone } from '_common/formatters/phone';
 import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
@@ -26,12 +25,12 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
 
   const { values, errors, handlers, setErrors, wrapSubmit } = createForm<FormValues>({
     defaultValues: { phone: '' },
-    rules: { phone: [(val) => validPhone(cleanPhone(val))] },
+    rules: { phone: [(val) => validPhone(val)] },
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      next(cleanPhone(data.phone)).catch(() => setErrors({ phone: 'Something went wrong' }));
+      next(data.phone).catch(() => setErrors({ phone: 'Something went wrong' }));
     }
   };
 

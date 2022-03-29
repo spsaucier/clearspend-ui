@@ -6,10 +6,10 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Button } from '_common/components/Button';
-import { Input } from '_common/components/Input';
+import { InputCurrency } from '_common/components/InputCurrency';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
-import { parseAmount, formatAmount } from '_common/formatters/amount';
+import { parseAmount } from '_common/formatters/amount';
 import type { BankAccount } from 'generated/capital';
 import { registerBankAccount } from 'onboarding/services/accounts';
 
@@ -86,11 +86,10 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
       >
         <div class={css.wrapper}>
           <FormItem label={<Text message="Amount to deposit" />} error={errors().amount}>
-            <Input
+            <InputCurrency
               name="amount"
-              placeholder={formatCurrency(0)}
+              placeholder="0.00"
               value={values().amount}
-              formatter={formatAmount}
               error={Boolean(errors().amount)}
               onChange={handlers.amount}
             />

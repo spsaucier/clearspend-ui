@@ -52,7 +52,6 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
       <FormItem label={<Text message="Mobile number" />} error={props.errors.phone} class={css.item}>
         <InputPhone
           name="phone"
-          type="tel"
           value={props.values.phone}
           error={Boolean(props.errors.phone)}
           onChange={props.handlers.phone}

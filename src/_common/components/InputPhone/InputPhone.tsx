@@ -1,30 +1,33 @@
-import { cleanPhone, formatPhone } from '_common/formatters/phone';
+import { createMemo } from 'solid-js';
 
-import type { InputProps } from '../Input';
-import { Input } from '../Input/Input';
+import { parsePhone, preparePhone, formatPhone } from '_common/formatters/phone';
 
-export function InputPhone(props: Readonly<InputProps>) {
-  const defaultPrefix = '1'; // USA
-  let prefix = defaultPrefix;
-  let value = props.value || '';
-  const PHONE_LENGTH_WITHOUT_COUNTRY = 10;
-  const DIGITS_OF_PREFIX = 2;
-  if (value.toString().length > PHONE_LENGTH_WITHOUT_COUNTRY) {
-    prefix = value.toString().slice(1, DIGITS_OF_PREFIX);
-    value = value.toString().slice(DIGITS_OF_PREFIX);
-  }
+import { Input, type InputProps } from '../Input';
+
+const DEFAULT_COUNTRY_CODE = '1';
+const PHONE_LENGTH_WITHOUT_COUNTRY = 10;
+
+export interface InputPhoneProps
+  extends Omit<InputProps, 'prefix' | 'type' | 'maxLength' | 'formatter' | 'parser' | 'onChange'> {
+  onChange: (value: string) => void;
+}
+
+export function InputPhone(props: Readonly<InputPhoneProps>) {
+  const onChange = (value: string) => props.onChange(value);
+  const phone = createMemo(() => parsePhone(props.value || `+${DEFAULT_COUNTRY_CODE}`));
+
   return (
     <>
-      <input name="phone-prefix" type="hidden" value={prefix} />
+      <input name="phone-prefix" type="hidden" value={phone().code} />
       <Input
         {...props}
-        value={formatPhone(value.toString() || '')}
-        prefix={<span>+{prefix}</span>}
+        value={phone().value}
+        prefix={<span>+{phone().code}</span>}
         type="tel"
-        maxLength={10}
+        maxLength={PHONE_LENGTH_WITHOUT_COUNTRY}
         formatter={formatPhone}
-        parser={(val) => cleanPhone(prefix + val)}
-        onChange={(val, e) => props.onChange?.(val.length > DIGITS_OF_PREFIX ? val : '', e)}
+        parser={(value) => preparePhone(phone().code + value)}
+        onChange={onChange}
       />
     </>
   );

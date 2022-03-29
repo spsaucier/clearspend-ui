@@ -8,6 +8,7 @@ export default {
     error: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
     codeLength: { control: { type: 'number' } },
+    onChange: { action: 'changed', table: { disable: true } },
   },
   args: {
     value: '',
