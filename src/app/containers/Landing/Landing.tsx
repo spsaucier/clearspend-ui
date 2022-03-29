@@ -12,7 +12,7 @@ import { LinkAccountButton } from 'onboarding/containers/LinkAccount/LinkAccount
 import { getBankAccounts, linkBankAccounts, registerBankAccount } from 'onboarding/services/accounts';
 import { useUsersList } from 'employees/stores/usersList';
 
-import { ALLOCATIONS_START_COUNT, USERS_START_COUNT } from '../../constants/common';
+import { USERS_START_COUNT } from '../../constants/common';
 
 import { LandingCard } from './LandingCard';
 
@@ -21,9 +21,10 @@ import css from './Landing.css';
 const SHOW_ONBOARDING_MODAL = 'SHOW_ONBOARDING_MODAL';
 
 interface LandingProps {
-  allocationsCount: number;
   cardsCount: number;
   showAddBalance: boolean;
+  showCreateAllocation: boolean;
+  showIssueCard: boolean;
 }
 
 export function Landing(props: Readonly<LandingProps>) {
@@ -93,7 +94,7 @@ export function Landing(props: Readonly<LandingProps>) {
           <Text message="Give employees access! Create and manage your team member accounts here." />
         </LandingCard>
       </Show>
-      <Show when={!props.showAddBalance && props.allocationsCount === ALLOCATIONS_START_COUNT}>
+      <Show when={props.showCreateAllocation}>
         <LandingCard
           class={css.card}
           title={<Text message="Set up allocations" />}
@@ -111,7 +112,7 @@ export function Landing(props: Readonly<LandingProps>) {
           <Text message="Create and fund budgets for specific business purposes." />
         </LandingCard>
       </Show>
-      <Show when={!props.cardsCount}>
+      <Show when={props.showIssueCard}>
         <LandingCard
           class={css.card}
           title={<Text message="Issue your first card" />}

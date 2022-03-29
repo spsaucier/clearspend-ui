@@ -16,10 +16,11 @@ import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
+import { getTotalAvailableBalance } from 'allocations/utils/getTotalAvailableBalance';
+import { ALLOCATIONS_START_COUNT } from 'app/constants/common';
 
 import { Page } from '../../components/Page';
 import { Landing } from '../../containers/Landing';
@@ -31,7 +32,7 @@ import css from './Dashboard.css';
 export default function Dashboard() {
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
-  const { currentUser } = useBusiness();
+  const { currentUser, permissions } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
 
@@ -42,11 +43,6 @@ export default function Dashboard() {
 
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
   const allocationCount = createMemo(() => allocations.data?.length || 0);
-
-  const canAddBalance = createMemo<boolean>(() => {
-    const root = getRootAllocation(allocations.data);
-    return currentUser().type === 'BUSINESS_OWNER' && !!root && getAvailableBalance(root) === 0;
-  });
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
@@ -64,6 +60,9 @@ export default function Dashboard() {
     setAllocation(id);
     setSearchParams({ allocation: id });
   };
+
+  const totalAllocationBalance = createMemo(() => getTotalAvailableBalance(allocations.data || []));
+  const showAddBalance = createMemo(() => canManageFunds(permissions()) && totalAllocationBalance() === 0);
 
   return (
     <Page
@@ -155,7 +154,12 @@ export default function Dashboard() {
           <Loading />
         </Match>
         <Match when={!cardsCount()}>
-          <Landing allocationsCount={allocationCount()} cardsCount={cardsCount()} showAddBalance={canAddBalance()} />
+          <Landing
+            cardsCount={cardsCount()}
+            showAddBalance={showAddBalance()}
+            showCreateAllocation={!showAddBalance() && allocationCount() === ALLOCATIONS_START_COUNT}
+            showIssueCard={!cardsCount() && totalAllocationBalance() > 0}
+          />
         </Match>
         <Match when={allocations.data}>
           <Overview allocationId={allocation()} allocations={allocations.data} />
