@@ -1,5 +1,7 @@
 import type { JSXElement } from 'solid-js';
 
+export type RadioValue = string | boolean;
+
 export interface RadioProps<T> {
   value: T;
   class?: string;

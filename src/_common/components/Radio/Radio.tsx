@@ -3,11 +3,11 @@ import { createMemo, Show } from 'solid-js';
 import { join } from '../../utils/join';
 
 import { useGroupContext } from './context';
-import type { RadioProps } from './types';
+import type { RadioValue, RadioProps } from './types';
 
 import css from './Radio.css';
 
-export function Radio<T>(props: Readonly<RadioProps<T>>) {
+export function Radio<T extends RadioValue>(props: Readonly<RadioProps<T>>) {
   const group = useGroupContext<T>();
 
   const onChange = () => group.onChange?.(props.value);

@@ -3,11 +3,11 @@ import { splitProps } from 'solid-js';
 import { join } from '../../utils/join';
 
 import { GroupContext } from './context';
-import type { RadioGroupProps } from './types';
+import type { RadioValue, RadioGroupProps } from './types';
 
 import css from './RadioGroup.css';
 
-export function RadioGroup<T>(props: Readonly<RadioGroupProps<T>>) {
+export function RadioGroup<T extends RadioValue>(props: Readonly<RadioGroupProps<T>>) {
   const [local, others] = splitProps(props, ['class', 'children']);
 
   return (

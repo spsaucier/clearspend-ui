@@ -50,7 +50,7 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
           </div>
         </FilterBox>
         <FilterBox title={<Text message="Activity Type" />}>
-          <CheckboxGroup value={values().types} onChange={(value) => handlers.types(value)}>
+          <CheckboxGroup value={values().types} onChange={handlers.types}>
             <For each={Object.entries(LEDGER_ACTIVITY_TYPES)}>
               {(type) => <Checkbox value={type[0]}>{type[1]}</Checkbox>}
             </For>

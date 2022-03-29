@@ -14,7 +14,7 @@ export default {
   },
 };
 
-export const Default = (args: CheckboxGroupProps) => (
+export const Default = (args: CheckboxGroupProps<string>) => (
   <CheckboxGroup {...args}>
     <Checkbox value="red">Red</Checkbox>
     <Checkbox value="green">Green</Checkbox>
