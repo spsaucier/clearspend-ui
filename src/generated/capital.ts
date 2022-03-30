@@ -15,6 +15,7 @@ export interface LimitTypeMap {
 
 export interface ControllerError {
   message?: string;
+  param?: string;
 }
 
 export interface Address {
@@ -443,6 +444,7 @@ export interface ExpenseCategory {
   categoryName?: string;
   expenseCategoryId?: string;
   status?: string;
+  pathSegments?: string[];
 }
 
 export interface CodatError {
@@ -527,6 +529,7 @@ export interface AddChartOfAccountsMappingRequest {
   /** @format uuid */
   expenseCategoryId?: string;
   expenseCategoryName?: string;
+  fullyQualifiedCategory?: string;
 }
 
 export interface ChartOfAccountsMappingResponse {
@@ -952,6 +955,21 @@ export interface ConvertBusinessProspectResponse {
   errorMessages?: string[];
 }
 
+export interface OwnersProvidedRequest {
+  /** No other owners to provide */
+  noOtherOwnersToProvide?: boolean;
+
+  /** No executive to provide */
+  noExecutiveToProvide?: boolean;
+}
+
+export interface OwnersProvidedResponse {
+  business: Business;
+
+  /** Error message for any records that failed. Will be null if successful */
+  errorMessages?: string[];
+}
+
 export interface CreateOrUpdateBusinessOwnerRequest {
   /** @format uuid */
   id?: string;
@@ -1030,21 +1048,6 @@ export interface CreateOrUpdateBusinessOwnerRequest {
 export interface CreateBusinessOwnerResponse {
   /** @format uuid */
   businessOwnerId: string;
-
-  /** Error message for any records that failed. Will be null if successful */
-  errorMessages?: string[];
-}
-
-export interface OwnersProvidedRequest {
-  /** No other owners to provide */
-  noOtherOwnersToProvide?: boolean;
-
-  /** No executive to provide */
-  noExecutiveToProvide?: boolean;
-}
-
-export interface OwnersProvidedResponse {
-  business: Business;
 
   /** Error message for any records that failed. Will be null if successful */
   errorMessages?: string[];
@@ -2784,7 +2787,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -3034,21 +3049,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
