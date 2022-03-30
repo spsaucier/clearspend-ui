@@ -75,3 +75,7 @@ export async function getSyncLogs(params: Readonly<SyncLogRequest>) {
 export async function deleteCompanyConnection() {
   return (await service.remove<Readonly<boolean>>(`/codat/connection`)).data;
 }
+
+export async function disableCategories(expenseCategoryIds: (string | undefined)[]) {
+  return (await service.post<Readonly<ExpenseCategory>[]>('/expense-categories/disable', expenseCategoryIds)).data;
+}

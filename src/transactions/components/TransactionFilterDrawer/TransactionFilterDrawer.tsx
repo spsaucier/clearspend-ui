@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import type { Setter } from '_common/types/common';
@@ -33,6 +33,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
 
   const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
   const applyFilters = () => props.onChangeParams((prev) => ({ ...prev, ...convertFormData(values()) }));
+  const activeCategories = createMemo(() => expenseCategories.data?.filter((category) => category.status === 'ACTIVE'));
 
   return (
     <div class={css.root}>
@@ -64,8 +65,12 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             valueRender={(name) => expenseCategories.data!.find((item) => item.categoryName === name)?.categoryName}
             onChange={handlers.categories}
           >
-            <For each={expenseCategories.data}>
-              {(item) => <Option value={item.categoryName || ''}>{item.categoryName || ''}</Option>}
+            <For each={activeCategories()}>
+              {(item) => (
+                <Option value={item.categoryName || ''}>
+                  {item.status === 'DISABLED' ? 'LOCKED' : item.categoryName || ''}
+                </Option>
+              )}
             </For>
           </MultiSelect>
         </FilterBox>

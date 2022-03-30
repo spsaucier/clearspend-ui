@@ -5,6 +5,7 @@ import type { DeepReadonly } from 'solid-js/store';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
+import { disableCategories } from 'accounting/services';
 
 import type { IntegrationAccountMapping } from '../ChartOfAccountsTable/types';
 
@@ -31,6 +32,10 @@ export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblo
   const handleSave = async () => {
     if (props.roadblockRequestParameters) {
       await props.onSave(props.roadblockRequestParameters);
+      const unusedIds = unusedCategoriesMap()?.map((category) => category.expenseCategoryId);
+      if (unusedIds) {
+        disableCategories(unusedIds);
+      }
     }
   };
 

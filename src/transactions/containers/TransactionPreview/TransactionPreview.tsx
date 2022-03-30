@@ -111,6 +111,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const expenseCategories = useExpenseCategories({ initValue: [] });
   const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(transaction().expenseDetails);
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
+  const activeCategories = createMemo(() => expenseCategories.data?.filter((category) => category.status === 'ACTIVE'));
 
   const onSaveExpenseCategory = (ec: ExpenseCategory | undefined) => {
     saveExpenseCategory(props.transaction.accountActivityId!, ec?.expenseCategoryId!, notes() || '')
@@ -250,7 +251,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               onChange={(ec) => onSaveExpenseCategory(ec)}
               disabled={savingExpenseCategory()}
             >
-              <For each={expenseCategories.data}>
+              <For each={activeCategories()}>
                 {(item) => <SelectExpenseCategoryOption value={item}>{item.categoryName}</SelectExpenseCategoryOption>}
               </For>
             </SelectExpenseCategory>
