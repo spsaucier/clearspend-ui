@@ -7,6 +7,7 @@ import { DataRow } from 'app/components/DataRow';
 import { CopyButton } from 'app/components/CopyButton';
 import type { Business } from 'generated/capital';
 import { BUSINESS_MCC } from 'app/types/mcc';
+import { BusinessTypeI18n } from 'app/types/businesses';
 
 import css from './CompanyProfile.css';
 
@@ -31,7 +32,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Legal entity type" />:
           </span>
-          <span class={css.dataValue}>{props.data.businessType}</span>
+          <span class={css.dataValue}>{BusinessTypeI18n[props.data.businessType!]}</span>
           <CopyButton value={props.data.businessType!} class={css.copy} />
         </DataRow>
         <DataRow icon="payment-bank" class={css.data}>

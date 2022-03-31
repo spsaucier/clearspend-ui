@@ -6,7 +6,6 @@ import { useBool } from '_common/utils/useBool';
 import { useResource } from '_common/utils/useResource';
 import { Form, FormItem, createForm, hasErrors } from '_common/components/Form';
 import { Drawer } from '_common/components/Drawer';
-import { useMessages } from 'app/containers/Messages/context';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
@@ -43,7 +42,6 @@ import { getBusiness } from 'app/services/businesses';
 import { getUser } from 'employees/services';
 import type { MccGroup } from 'transactions/types';
 import { CardType } from 'cards/types';
-import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
@@ -66,7 +64,6 @@ interface EditCardFormProps {
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
   let skipUpdates = false;
 
-  const messages = useMessages();
   const [showEmployee, toggleShowEmployee] = useBool();
   const [loading, save] = wrapAction(props.onSave);
   const [employee, setEmployee] = createSignal<User>();
@@ -101,33 +98,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const onSubmit = async () => {
     skipUpdates = true;
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(values(), props.mccCategories))
-      .then((data) => {
-        const hasVirtualCard = values().types.some((cardType) => cardType === CardType.VIRTUAL);
-        const hasPhysicalCard = values().types.some((cardType) => cardType === CardType.PHYSICAL);
-
-        if (hasVirtualCard && hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_BOTH_PHYSICAL_VIRTUAL });
-
-        if (hasVirtualCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_VIRTUAL });
-        if (hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_PHYSICAL });
-
-        return data;
-      })
-      .catch((e: { data?: { message?: string } }) => {
-        if (e.data?.message === 'Physical card issuance limit exceeded') {
-          messages.error({
-            title: i18n.t('Unable to create physical card'),
-            message:
-              values().types.length > 1 // Assume 1 was virtual & 1 was physical
-                ? i18n.t(
-                    'Your virtual card was successfully created, but you have reached the maximum of 10 physical cards.',
-                  )
-                : i18n.t('You have reached the maximum of 10 physical cards. Please contact support if you need more.'),
-          });
-        } else {
-          messages.error({ title: i18n.t('Failed to create card') });
-        }
-      });
+    await save(convertFormData(values(), props.mccCategories));
     skipUpdates = false;
   };
 
