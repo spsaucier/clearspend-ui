@@ -1,10 +1,15 @@
-import { lazy as solidLazy, Component, ErrorBoundary } from 'solid-js';
+import { lazy as solidLazy, ErrorBoundary, Show, createMemo, type Component } from 'solid-js';
 
 import { Fault } from '../components/Fault';
 
 import { reload } from './reload';
 
-const ERRORS = ['ChunkLoadError', 'CSS_CHUNK_LOAD_FAILED'] as const;
+const RELOAD_LIMIT_MS = 3000;
+const CHUNK_ERRORS = ['ChunkLoadError', 'CSS_CHUNK_LOAD_FAILED'] as const;
+
+interface ReloadState {
+  lastReload: number | null;
+}
 
 interface ChunkError extends Error {
   code?: string;
@@ -25,7 +30,21 @@ export function lazy<T extends {}>(loader: () => Promise<{ default: Component<T>
         fallback={(error: ChunkError) => {
           // eslint-disable-next-line no-console
           console.log({ error });
-          return <Fault onReload={ERRORS.some(isMatched(error)) ? onReload : undefined} />;
+
+          const state = history.state as Partial<ReloadState> | null;
+          const isChunkError = createMemo(() => CHUNK_ERRORS.some(isMatched(error)));
+          const canReload = createMemo(() => !state?.lastReload || Date.now() - state.lastReload > RELOAD_LIMIT_MS);
+
+          if (isChunkError() && canReload()) {
+            history.replaceState({ ...state, lastReload: Date.now() }, '', `${location.pathname}${location.search}`);
+            reload();
+          }
+
+          return (
+            <Show when={!isChunkError() || !canReload()} fallback={null}>
+              <Fault onReload={onReload} />;
+            </Show>
+          );
         }}
       >
         <Comp {...props} />
