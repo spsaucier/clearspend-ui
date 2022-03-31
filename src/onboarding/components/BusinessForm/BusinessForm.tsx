@@ -14,6 +14,7 @@ import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'g
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { Select, Option } from '_common/components/Select';
 import { BUSINESS_MCC } from 'app/types/mcc';
+import { BusinessTypeI18n, BusinessType } from 'app/types/businesses';
 
 import type { ExceptionData } from '../../types';
 
@@ -76,6 +77,13 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
         <div class={css.wrapper}>
           <FormItem label={<Text message="Legal entity name" />} error={errors().name}>
             <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
+          </FormItem>
+          <FormItem label={<Text message="Legal entity type" />}>
+            <Input
+              name="business-type"
+              value={(BusinessTypeI18n[values().type as BusinessType] as string) || values().type}
+              disabled
+            />
           </FormItem>
           <FormItem label={<Text message="Business EIN" />} error={errors().employerIdentificationNumber}>
             <Input

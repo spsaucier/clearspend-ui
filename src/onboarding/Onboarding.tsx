@@ -343,7 +343,7 @@ export default function Onboarding() {
               <p>
                 <Text message="Please contact " />
                 <Link href="mailto:help@clearspend.com">help@clearspend.com</Link>
-                <Text message=" and let us know about your issue. We'll get right to work getting you back on track!" />
+                <Text message=" and let us know about this issue. We'll get you back on track!" />
               </p>
             </Page>
           </Match>

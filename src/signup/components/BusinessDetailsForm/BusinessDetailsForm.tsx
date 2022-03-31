@@ -3,7 +3,7 @@ import { Show } from 'solid-js';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Radio, RadioGroup } from '_common/components/Radio';
-import { BusinessType, BusinessTypeCategory } from 'app/types/businesses';
+import { BusinessType, BusinessTypeCategory, BusinessTypeI18n } from 'app/types/businesses';
 import { Select, Option } from '_common/components/Select';
 import { Icon } from '_common/components/Icon';
 
@@ -108,13 +108,21 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
               value={values().businessType}
               onChange={(value: string) => handlers.businessType(value as BusinessType)}
             >
-              <Option value={BusinessType.SINGLE_MEMBER_LLC}>Single-member LLC</Option>
-              <Option value={BusinessType.MULTI_MEMBER_LLC}>Multi-member LLC</Option>
-              <Option value={BusinessType.PRIVATE_PARTNERSHIP}>Private partnership</Option>
-              <Option value={BusinessType.PUBLIC_PARTNERSHIP}>Public partnership</Option>
-              <Option value={BusinessType.PRIVATE_CORPORATION}>Private corporation</Option>
-              <Option value={BusinessType.PUBLIC_CORPORATION}>Public corporation</Option>
-              <Option value={BusinessType.OTHER}>Other/I’m not sure</Option>
+              <Option value={BusinessType.SINGLE_MEMBER_LLC}>{BusinessTypeI18n[BusinessType.SINGLE_MEMBER_LLC]}</Option>
+              <Option value={BusinessType.MULTI_MEMBER_LLC}>{BusinessTypeI18n[BusinessType.MULTI_MEMBER_LLC]}</Option>
+              <Option value={BusinessType.PRIVATE_PARTNERSHIP}>
+                {BusinessTypeI18n[BusinessType.PRIVATE_PARTNERSHIP]}
+              </Option>
+              <Option value={BusinessType.PUBLIC_PARTNERSHIP}>
+                {BusinessTypeI18n[BusinessType.PUBLIC_PARTNERSHIP]}
+              </Option>
+              <Option value={BusinessType.PRIVATE_CORPORATION}>
+                {BusinessTypeI18n[BusinessType.PRIVATE_CORPORATION]}
+              </Option>
+              <Option value={BusinessType.PUBLIC_CORPORATION}>
+                {BusinessTypeI18n[BusinessType.PUBLIC_CORPORATION]}
+              </Option>
+              <Option value={BusinessType.OTHER}>{BusinessTypeI18n[BusinessType.OTHER]}</Option>
             </Select>
           </FormItem>
         </Show>
