@@ -127,3 +127,13 @@
 .sync-tag-icon {
   margin-right: var(--pd-4);
 }
+
+.expense-category-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.expense-category-hierarchy {
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+}

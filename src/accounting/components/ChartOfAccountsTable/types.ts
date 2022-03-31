@@ -2,6 +2,7 @@ export interface IntegrationAccountMapping {
   accountRef: string;
   expenseCategoryId?: string;
   expenseCategoryName?: string;
+  fullyQualifiedCategory?: string;
 }
 
 export type IntegrationAccountMap = Record<string, Readonly<IntegrationAccountMapping> | null>;

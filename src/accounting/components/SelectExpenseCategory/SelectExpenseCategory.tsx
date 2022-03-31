@@ -10,7 +10,7 @@ import { Spin } from '_common/components/Spin';
 import { isString } from '_common/utils/isString';
 import { Divider } from '_common/components/Divider';
 
-import { getOptions, getSelected, isMatch } from './utils';
+import { getOptions, isMatch } from './utils';
 import { SelectExpenseCategoryContext } from './context';
 
 import css from './SelectExpenseCategory.css';
@@ -43,9 +43,7 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
     return !text ? items : items.filter(isMatch(text));
   };
 
-  const selected = createMemo(() =>
-    isString(props.value?.categoryName) ? getSelected(props.value?.categoryName!, props.children) : undefined,
-  );
+  const selected = createMemo(() => (isString(props.value?.categoryName) ? props.value?.categoryName : undefined));
 
   const onSearch = (value: string) => {
     setSearch(value);

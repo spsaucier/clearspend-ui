@@ -158,6 +158,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                     accountRef: item.id,
                     expenseCategoryId: ec?.expenseCategoryId,
                     expenseCategoryName: ec?.categoryName,
+                    fullyQualifiedCategory: item.fullyQualifiedCategory,
                   });
                 });
                 if (props.saveOnChange) {

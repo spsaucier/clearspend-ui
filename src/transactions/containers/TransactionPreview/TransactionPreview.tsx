@@ -252,7 +252,18 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               disabled={savingExpenseCategory()}
             >
               <For each={activeCategories()}>
-                {(item) => <SelectExpenseCategoryOption value={item}>{item.categoryName}</SelectExpenseCategoryOption>}
+                {(item) => (
+                  <SelectExpenseCategoryOption value={item}>
+                    <div class={css.expenseCategoryContainer}>
+                      <Text message={item.categoryName ? item.categoryName : ''} />
+                      {item.pathSegments && item.pathSegments.length > 0 && (
+                        <div class={css.expenseCategoryHierarchy}>
+                          <Text message={`in ${item.pathSegments.join(' > ')}`} />
+                        </div>
+                      )}
+                    </div>
+                  </SelectExpenseCategoryOption>
+                )}
               </For>
             </SelectExpenseCategory>
           </div>
