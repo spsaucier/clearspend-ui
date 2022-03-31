@@ -5,7 +5,7 @@ import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
 import { canSeeAccounting } from 'accounting/utils/canSeeAccounting';
 import { AllocationRoles } from 'allocations/types';
-import { canManageUsers } from 'allocations/utils/permissions';
+import { canManageCards } from 'allocations/utils/permissions';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -60,7 +60,7 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
         case TITLES.accounting:
           return isNotProd && (isAdmin || canSeeAccounting(currentUser()));
         case TITLES.employees:
-          return isAdmin || canManageUsers(permissions());
+          return isAdmin || canManageCards(permissions()); // TODO: change to canViewEmployees based on Manage+ permissions at any allocation
         case TITLES.company:
           return isAdmin;
         default:

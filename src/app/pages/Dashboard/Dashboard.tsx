@@ -16,7 +16,7 @@ import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-import { canManageFunds, canManageUsers, canManageCards } from 'allocations/utils/permissions';
+import { canManageFunds, canManageUsers, canManageCards, canLinkBankAccounts } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
 import { getTotalAvailableBalance } from 'allocations/utils/getTotalAvailableBalance';
@@ -86,7 +86,13 @@ export default function Dashboard() {
       }
       actions={
         <div class={css.actions}>
-          <Show when={canManageFunds(userPermissions())}>
+          <Show
+            when={
+              currentAllocationId() === getRootAllocation(allocations.data)?.allocationId
+                ? canLinkBankAccounts(userPermissions())
+                : canManageFunds(userPermissions())
+            }
+          >
             <Button
               id="add-balance-button"
               type="primary"

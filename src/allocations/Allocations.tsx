@@ -28,7 +28,7 @@ import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
 import { getRootAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import { canManageFunds, canManageCards, canManagePermissions, canManageUsers } from './utils/permissions';
+import { canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
 import { getAllocation, updateAllocation } from './services';
 
 import css from './Allocations.css';
@@ -131,12 +131,12 @@ export default function Allocations() {
                 <Text message="Card Controls" />
               </Tab>
             </Show>
-            <Show when={canManagePermissions(userPermissions())}>
+            <Show when={canManageFunds(userPermissions())}>
               <Tab value={Tabs.ledger}>
                 <Text message="Ledger" />
               </Tab>
             </Show>
-            <Show when={canManageUsers(userPermissions())}>
+            <Show when={canManageCards(userPermissions())}>
               <Tab value={Tabs.settings}>
                 <Text message="Settings" />
               </Tab>
@@ -163,7 +163,7 @@ export default function Allocations() {
               <Ledger allocationId={current()!.allocationId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
-              <Settings allocation={current()!} onReload={allocations.reload} />
+              <Settings allocation={current()!} onReload={allocations.reload} permissions={userPermissions} />
             </Match>
           </Switch>
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>

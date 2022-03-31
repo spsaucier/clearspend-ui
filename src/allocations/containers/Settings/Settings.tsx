@@ -1,4 +1,4 @@
-import { createSignal, createMemo, Show, For } from 'solid-js';
+import { createSignal, createMemo, Show, For, Accessor } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useBool } from '_common/utils/useBool';
@@ -17,7 +17,7 @@ import { NewEmployeeButton } from 'employees/components/SelectEmployee';
 import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
 import { formatName } from 'employees/utils/formatName';
-import type { Allocation, CreateUserRequest } from 'generated/capital';
+import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { AllocationRole } from '../../components/AllocationRole';
@@ -31,6 +31,7 @@ import {
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName } from '../../components/AllocationSelect/utils';
+import { canManageUsers } from '../../utils/permissions';
 
 import { getRolesList, getRolesUpdates } from './utils';
 
@@ -43,6 +44,7 @@ interface FormValues {
 interface SettingsProps {
   allocation: Readonly<Allocation>;
   onReload: () => Promise<unknown>;
+  permissions: Accessor<Readonly<UserRolesAndPermissionsRecord> | null>;
 }
 
 export function Settings(props: Readonly<SettingsProps>) {
@@ -156,7 +158,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   return (
     <Form>
       <Section title={<Text message="Allocation details" />}>
-        <FormItem label={<Text message="Label" />} class={css.field} error={errors().name}>
+        <FormItem label={<Text message="Name" />} class={css.field} error={errors().name}>
           <Input
             name="allocation-label"
             value={values().name}
@@ -165,49 +167,50 @@ export function Settings(props: Readonly<SettingsProps>) {
           />
         </FormItem>
       </Section>
-      <Section
-        title={<Text message="Access" />}
-        description={
-          <>
-            <Text message="Add users who can view or manage this allocation." class={css.content!} />
-            <Show when={!Boolean(props.allocation.parentAllocationId)}>
+      <Show when={canManageUsers(props.permissions())}>
+        <Section
+          title={<Text message="Access" />}
+          description={
+            <>
+              <Text message="Add users who can view or manage this allocation." class={css.content!} />
+              <Show when={!Boolean(props.allocation.parentAllocationId)}>
+                <div class={css.roleDescription}>
+                  <h5 class={css.subheader}>
+                    <Text message="Admin" />
+                  </h5>
+                  <Text
+                    message={
+                      'Admins can deposit, withdraw, and reallocate funds, view and manage all allocations, company settings, and ' +
+                      'accounting details, create additional allocations, add employees, and issue cards.'
+                    }
+                    class={css.content!}
+                  />
+                </div>
+              </Show>
               <div class={css.roleDescription}>
                 <h5 class={css.subheader}>
-                  <Text message="Admin" />
+                  <Text message="Manage" />
                 </h5>
                 <Text
                   message={
-                    'Admins can deposit, withdraw, and reallocate funds, view and manage all allocations, company settings, and ' +
-                    'accounting details, create additional allocations, add employees, and issue cards.'
+                    'Managers can reallocate funds between allocations that they manage, create additional sub-allocations, ' +
+                    'and issue cards.'
                   }
                   class={css.content!}
                 />
               </div>
-            </Show>
-            <div class={css.roleDescription}>
-              <h5 class={css.subheader}>
-                <Text message="Manage" />
-              </h5>
-              <Text
-                message={
-                  'Managers can reallocate funds between allocations that they manage, create additional sub-allocations, ' +
-                  'and issue cards.'
-                }
-                class={css.content!}
-              />
-            </div>
-            <div class={css.roleDescription}>
-              <h5 class={css.subheader}>
-                <Text message="Employee" />
-              </h5>
-              <Text
-                message={
-                  'Employees can view and manage their own cards and transactions only. This is the base role for all cardholders.'
-                }
-                class={css.content!}
-              />
-            </div>
-            {/* <div class={css.roleDescription}>
+              <div class={css.roleDescription}>
+                <h5 class={css.subheader}>
+                  <Text message="Employee" />
+                </h5>
+                <Text
+                  message={
+                    'Employees can view and manage their own cards and transactions only. This is the base role for all cardholders.'
+                  }
+                  class={css.content!}
+                />
+              </div>
+              {/* <div class={css.roleDescription}>
               <h5 class={css.subheader}>
                 <Text message="View only" />
               </h5>
@@ -216,49 +219,50 @@ export function Settings(props: Readonly<SettingsProps>) {
                 class={css.content!}
               />
             </div> */}
-          </>
-        }
-      >
-        <FormItem label={<Text message="Add a user role" />} class={css.field}>
-          <Select
-            name="employee"
-            placeholder={String(i18n.t('Search by employee name'))}
-            popupRender={(list) => (
-              <>
-                {list}
-                <NewEmployeeButton onClick={toggleEmployeeDrawer} />
-              </>
-            )}
-            onChange={onAddRole}
-          >
-            <For each={sortedUsers()}>
-              {(item) => (
-                <Option
-                  value={item.userId!}
-                  disabled={roles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]}
-                >
-                  {formatName(item)}
-                </Option>
+            </>
+          }
+        >
+          <FormItem label={<Text message="Add a user role" />} class={css.field}>
+            <Select
+              name="employee"
+              placeholder={String(i18n.t('Search by employee name'))}
+              popupRender={(list) => (
+                <>
+                  {list}
+                  <NewEmployeeButton onClick={toggleEmployeeDrawer} />
+                </>
               )}
-            </For>
-          </Select>
-        </FormItem>
-        <For each={sortedRoles()}>
-          {(role) => (
-            <Show when={!removedRoles()[role.user.userId!]}>
-              <AllocationRole
-                allocation={props.allocation}
-                user={role.user}
-                role={role.role}
-                inherited={role.inherited}
-                class={css.field}
-                onChange={onChangeRole}
-                onDelete={onRemoveRole}
-              />
-            </Show>
-          )}
-        </For>
-      </Section>
+              onChange={onAddRole}
+            >
+              <For each={sortedUsers()}>
+                {(item) => (
+                  <Option
+                    value={item.userId!}
+                    disabled={roles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]}
+                  >
+                    {formatName(item)}
+                  </Option>
+                )}
+              </For>
+            </Select>
+          </FormItem>
+          <For each={sortedRoles()}>
+            {(role) => (
+              <Show when={!removedRoles()[role.user.userId!]}>
+                <AllocationRole
+                  allocation={props.allocation}
+                  user={role.user}
+                  role={role.role}
+                  inherited={role.inherited}
+                  class={css.field}
+                  onChange={onChangeRole}
+                  onDelete={onRemoveRole}
+                />
+              </Show>
+            )}
+          </For>
+        </Section>
+      </Show>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>

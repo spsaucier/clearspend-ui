@@ -14,7 +14,7 @@ import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
-import { canManageCards } from 'allocations/utils/permissions';
+import { canManageCards, canManageUsers } from 'allocations/utils/permissions';
 
 import { EditEmployeeForm } from '../../components/EditEmployeeForm';
 import { Transactions } from '../../containers/Transactions';
@@ -107,9 +107,11 @@ export default function EmployeeView() {
             <Tab value={Tabs.cards}>
               <Text message="Cards" />
             </Tab>
-            <Tab value={Tabs.settings}>
-              <Text message="Edit Employee" />
-            </Tab>
+            <Show when={canManageUsers(permissions())}>
+              <Tab value={Tabs.settings}>
+                <Text message="Edit Employee" />
+              </Tab>
+            </Show>
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.transactions}>
@@ -119,8 +121,9 @@ export default function EmployeeView() {
               <Cards userId={user()!.userId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
-              {/* TODO: Add 'Archive Employee button - CAP-580  */}
-              <EditEmployeeForm user={user()!} onSave={onEdit} />
+              <Show when={canManageUsers(permissions())}>
+                <EditEmployeeForm user={user()!} onSave={onEdit} />
+              </Show>
             </Match>
           </Switch>
         </Match>

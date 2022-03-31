@@ -8,6 +8,10 @@ function can(permissions: Permissions, permission: AllocationPermissions) {
   return Boolean(permissions?.allocationPermissions?.includes(permission));
 }
 
+export function canLinkBankAccounts(permissions: Permissions): boolean {
+  return can(permissions, 'LINK_BANK_ACCOUNTS');
+}
+
 export function canManageFunds(permissions: Permissions): boolean {
   return can(permissions, 'MANAGE_FUNDS');
 }

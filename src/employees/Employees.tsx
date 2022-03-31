@@ -13,7 +13,7 @@ import { Data } from 'app/components/Data';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
-import { canManageCards } from 'allocations/utils/permissions';
+import { canManageUsers } from 'allocations/utils/permissions';
 
 import { useBusiness } from '../app/containers/Main/context';
 
@@ -55,7 +55,7 @@ export default function Employees() {
     <Page
       title={<Text message="Employees" />}
       actions={
-        <Show when={canManageCards(permissions())}>
+        <Show when={canManageUsers(permissions())}>
           <Button type="primary" size="lg" icon="add" onClick={() => navigate('/employees/add')}>
             <Text message="New employee" />
           </Button>
