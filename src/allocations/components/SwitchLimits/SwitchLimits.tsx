@@ -23,7 +23,7 @@ interface SwitchLimitsProps {
 
 export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
   const i18n = useI18n();
-  const maxAmount = createMemo(() => formatCurrency(props.maxAmount.amount));
+  const maxAmount = createMemo(() => formatCurrency(props.maxAmount.amount || 0));
 
   const onEnableChange = (name: LimitPeriod) => {
     return (enabled: boolean) => {

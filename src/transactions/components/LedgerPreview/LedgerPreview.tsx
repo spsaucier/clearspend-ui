@@ -18,7 +18,7 @@ export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
       <TransactionPreviewStatus status={props.data.status!} />
       <div class={css.scroll}>
         <div class={css.header}>
-          <div class={css.amount}>{formatCurrency(props.data.amount!.amount)}</div>
+          <div class={css.amount}>{formatCurrency(props.data.amount?.amount || 0)}</div>
           <TransactionDateTime date={props.data.activityTime} class={css.date} />
         </div>
         <h4 class={css.title}>
@@ -34,7 +34,7 @@ export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
         </div>
         <div class={css.detail}>
           <Text message="Posted Amount" />
-          <span>{formatCurrency(props.data.amount!.amount)}</span>
+          <span>{formatCurrency(props.data.amount?.amount || 0)}</span>
         </div>
       </div>
     </div>

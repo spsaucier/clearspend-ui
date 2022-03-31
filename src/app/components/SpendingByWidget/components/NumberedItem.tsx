@@ -17,7 +17,7 @@ export function NumberedItem(props: Readonly<NumberedItemProps>) {
       <span class={css.title} classList={{ [css.clickable!]: Boolean(props.onClick) }} onClick={props.onClick}>
         {props.name}
       </span>
-      <span class={css.amount}>{formatCurrency(props.amount.amount)}</span>
+      <span class={css.amount}>{formatCurrency(props.amount.amount || 0)}</span>
     </li>
   );
 }

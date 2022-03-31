@@ -15,7 +15,7 @@ export function Merchant(props: Readonly<MerchantProps>) {
     <li class={css.root}>
       <MerchantLogo data={props.merchant} />
       <span class={css.name}>{props.merchant.name}</span>
-      <span class={css.amount}>{formatCurrency(props.amount.amount)}</span>
+      <span class={css.amount}>{formatCurrency(props.amount.amount || 0)}</span>
     </li>
   );
 }
