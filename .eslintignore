@@ -2,5 +2,6 @@
 /scripts
 .eslintrc.js
 .stylelintrc.js
+solid-register-config.js
 webpack.config.js
 changelog.config*

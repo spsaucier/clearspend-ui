@@ -1,7 +1,6 @@
 import { createMemo } from 'solid-js';
 
-import { parsePhone, preparePhone, formatPhone } from '_common/formatters/phone';
-
+import { parsePhone, preparePhone, formatPhone } from '../../formatters/phone';
 import { Input, type InputProps } from '../Input';
 
 const DEFAULT_COUNTRY_CODE = '1';
