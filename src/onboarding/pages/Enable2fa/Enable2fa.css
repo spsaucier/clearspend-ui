@@ -11,7 +11,7 @@
 }
 
 .content form > div:not(:global(.fullwidth)) {
-  max-width: 392px;
+  max-width: 363px;
 }
 
 .header {
