@@ -14,7 +14,7 @@ export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
     pageNumber: 0,
     pageSize: 10,
   },
-  types: ['NETWORK_CAPTURE', 'NETWORK_AUTHORIZATION'],
+  types: ['NETWORK_AUTHORIZATION', 'NETWORK_CAPTURE', 'NETWORK_REFUND'],
 };
 
 export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
@@ -23,10 +23,10 @@ export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
     pageSize: 10,
   },
   types: [
-    'BANK_DEPOSIT',
+    'BANK_DEPOSIT_ACH',
+    'BANK_DEPOSIT_STRIPE',
+    'BANK_DEPOSIT_WIRE',
     'BANK_DEPOSIT_RETURN',
-    'BANK_LINK',
-    'BANK_UNLINK',
     'BANK_WITHDRAWAL',
     'BANK_WITHDRAWAL_RETURN',
     'MANUAL',
@@ -54,10 +54,10 @@ export const STATUS_FILL_ICONS: Record<ActivityStatus, keyof typeof IconName> = 
 };
 
 export const LEDGER_ACTIVITY_TYPES: Partial<Readonly<Record<LedgerActivityType, JSXElement>>> = {
-  BANK_DEPOSIT: i18n.t('Deposit'),
+  BANK_DEPOSIT_ACH: i18n.t('Deposit (ACH push)'),
+  BANK_DEPOSIT_STRIPE: i18n.t('Deposit (ACH pull)'),
+  BANK_DEPOSIT_WIRE: i18n.t('Deposit (Wire)'),
   BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
-  BANK_LINK: i18n.t('Link'),
-  BANK_UNLINK: i18n.t('Unlink'),
   BANK_WITHDRAWAL: i18n.t('Withdrawal'),
   BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
   MANUAL: i18n.t('Transfer'),
@@ -66,15 +66,17 @@ export const LEDGER_ACTIVITY_TYPES: Partial<Readonly<Record<LedgerActivityType, 
 };
 
 export const ACTIVITY_TYPES: Readonly<Record<ActivityType, JSXElement>> = {
-  BANK_DEPOSIT: i18n.t('Deposit'),
+  BANK_DEPOSIT_ACH: i18n.t('Deposit (ACH pull)'),
+  BANK_DEPOSIT_STRIPE: i18n.t('Deposit (ACH push)'),
+  BANK_DEPOSIT_WIRE: i18n.t('Deposit (Wire)'),
   BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
-  BANK_LINK: i18n.t('Link'),
-  BANK_UNLINK: i18n.t('Unlink'),
   BANK_WITHDRAWAL: i18n.t('Withdrawal'),
   BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
+  CARD_FUND_RETURN: i18n.t('Card Funding Return'),
   MANUAL: i18n.t('Transfer'),
   NETWORK_AUTHORIZATION: i18n.t('Payment Hold'),
   NETWORK_CAPTURE: i18n.t('Payment Capture'),
+  NETWORK_REFUND: i18n.t('Payment Refund'),
   REALLOCATE: i18n.t('Reallocation'),
   FEE: i18n.t('Fee'),
 };

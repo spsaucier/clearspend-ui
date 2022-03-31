@@ -1265,17 +1265,19 @@ export interface AccountActivityRequest {
   cardId?: string;
   searchText?: string;
   types?: (
-    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_STRIPE'
+    | 'BANK_DEPOSIT_ACH'
+    | 'BANK_DEPOSIT_WIRE'
     | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_LINK'
-    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
     | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE'
+    | 'NETWORK_REFUND'
     | 'REALLOCATE'
     | 'FEE'
+    | 'CARD_FUND_RETURN'
   )[];
 
   /** @format date-time */
@@ -1300,17 +1302,19 @@ export interface AccountActivityResponse {
   card?: CardInfo;
   merchant?: Merchant;
   type?:
-    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_STRIPE'
+    | 'BANK_DEPOSIT_ACH'
+    | 'BANK_DEPOSIT_WIRE'
     | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_LINK'
-    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
     | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE'
+    | 'NETWORK_REFUND'
     | 'REALLOCATE'
-    | 'FEE';
+    | 'FEE'
+    | 'CARD_FUND_RETURN';
   status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
   amount?: Amount;
   requestedAmount?: Amount;
@@ -1666,17 +1670,19 @@ export interface LedgerActivityRequest {
   allocationId?: string;
   searchText?: string;
   types?: (
-    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_STRIPE'
+    | 'BANK_DEPOSIT_ACH'
+    | 'BANK_DEPOSIT_WIRE'
     | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_LINK'
-    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
     | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE'
+    | 'NETWORK_REFUND'
     | 'REALLOCATE'
     | 'FEE'
+    | 'CARD_FUND_RETURN'
   )[];
 
   /** @format date-time */
@@ -1711,17 +1717,19 @@ export interface LedgerActivityResponse {
   /** @format date-time */
   activityTime?: string;
   type?:
-    | 'BANK_DEPOSIT'
+    | 'BANK_DEPOSIT_STRIPE'
+    | 'BANK_DEPOSIT_ACH'
+    | 'BANK_DEPOSIT_WIRE'
     | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_LINK'
-    | 'BANK_UNLINK'
     | 'BANK_WITHDRAWAL'
     | 'BANK_WITHDRAWAL_RETURN'
     | 'MANUAL'
     | 'NETWORK_AUTHORIZATION'
     | 'NETWORK_CAPTURE'
+    | 'NETWORK_REFUND'
     | 'REALLOCATE'
-    | 'FEE';
+    | 'FEE'
+    | 'CARD_FUND_RETURN';
   status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
   user?: LedgerUser;
   amount?: Amount;
