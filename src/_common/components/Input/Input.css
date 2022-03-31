@@ -62,7 +62,7 @@
   }
 
   @nest .dark & {
-    padding: var(--pd-12) var(--pd-16);
+    padding: var(--pd-12) var(--pd-12);
     color: var(--tw-white);
     background-color: var(--tw-dark-lime-mint);
   }

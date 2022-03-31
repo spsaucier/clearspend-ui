@@ -1,4 +1,5 @@
 import { onMount } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { validPhone } from '_common/components/Form/rules/patterns';
@@ -38,8 +39,7 @@ export function PhoneForm(props: Readonly<PhoneFormProps>) {
     <div>
       <Header>Where should we send a text to verify your mobile phone number?</Header>
       <Description>
-        We promise your phone number will only be used for security and verification purposes and definitely not to call
-        you when we get lonely
+        <Text message="We promise your phone number will only be used for security and verification purposes and definitely not to call you when we get lonely." />
       </Description>
       <Form onSubmit={wrapSubmit(onSubmit)}>
         <FormItem label="Enter mobile phone number" error={errors().phone} extra={'US numbers only'} darkMode={true}>
