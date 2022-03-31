@@ -1,6 +1,7 @@
 import { createSignal, createMemo, batch, Switch, Match, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
+import { isString } from '_common/utils/isString';
 import { useResource } from '_common/utils/useResource';
 import { Tab, TabList } from '_common/components/Tabs';
 import { Loading } from 'app/components/Loading';
@@ -10,6 +11,8 @@ import { isBankAccount } from 'onboarding/components/BankAccounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { useMessages } from 'app/containers/Messages/context';
+import { isFetchError } from '_common/api/fetch/isFetchError';
 
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
@@ -34,6 +37,7 @@ interface ManageBalanceProps {
 
 export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
+  const messages = useMessages();
 
   const current = createMemo(() => props.allocations.find(allocationWithID(props.allocationId))!);
   const [successManageData, setSuccessManageData] = createSignal<Readonly<ManageBalanceSuccessData>>();
@@ -55,49 +59,84 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const onUpdate = async (id: string, amount: number) => {
     const target = targets().find(targetById(id))!;
     const targetIsBankAccount = isBankAccount(target) as boolean;
-    const isWithdraw = tab() === Tabs.remove;
+    const isWithdrawal = tab() === Tabs.remove;
 
     const { name: targetName, allocationId: targetAllocationId } = target as Allocation;
     const { name: currentName, allocationId: sourceAllocationId } = current()!;
+    try {
+      const transactionResult = targetIsBankAccount
+        ? await bankTransaction(isWithdrawal ? 'WITHDRAW' : 'DEPOSIT', id, amount).catch((e: unknown) => {
+            if (isFetchError<{ message?: string }>(e)) {
+              const message = e.data.message;
+              if (isString(message)) {
+                const withdrawalOrDeposit = isWithdrawal ? 'withdrawal' : 'deposit';
+                if (message.indexOf('exceeded allowed operation amount of limitType') > -1) {
+                  const period = message.split('for period ')[1] || '';
+                  messages.error({
+                    title: `Unable to complete ${withdrawalOrDeposit}`,
+                    message: `You have reached your ${period.toLowerCase()} ACH ${withdrawalOrDeposit} limit`,
+                  });
+                } else {
+                  messages.error({
+                    title: `Unable to complete ${withdrawalOrDeposit}`,
+                    message,
+                  });
+                }
+              }
+            }
+            throw new Error('Unable to complete bank transaction');
+          })
+        : await makeTransaction({
+            allocationIdFrom: isWithdrawal ? sourceAllocationId : targetAllocationId,
+            allocationIdTo: isWithdrawal ? targetAllocationId : sourceAllocationId,
+            amount: { currency: 'USD', amount },
+          }).catch((e: unknown) => {
+            if (isFetchError<{ message?: string }>(e)) {
+              const message = e.data.message;
+              if (isString(message)) {
+                messages.error({
+                  title: `Unable to complete reallocation`,
+                  message,
+                });
+              }
+            }
+            throw new Error('Unable to complete reallocation');
+          });
 
-    const transactionResult = targetIsBankAccount
-      ? await bankTransaction(isWithdraw ? 'WITHDRAW' : 'DEPOSIT', id, amount)
-      : await makeTransaction({
-          allocationIdFrom: isWithdraw ? sourceAllocationId : targetAllocationId,
-          allocationIdTo: isWithdraw ? targetAllocationId : sourceAllocationId,
-          amount: { currency: 'USD', amount },
-        });
+      await props.onReload();
 
-    await props.onReload();
-
-    if (targetIsBankAccount) {
-      if (isWithdraw) {
-        sendAnalyticsEvent({ name: Events.WITHDRAW_CASH, data: { amount } });
+      if (targetIsBankAccount) {
+        if (isWithdrawal) {
+          sendAnalyticsEvent({ name: Events.WITHDRAW_CASH, data: { amount } });
+        } else {
+          sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+        }
       } else {
-        sendAnalyticsEvent({ name: Events.DEPOSIT_CASH, data: { amount } });
+        sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
       }
-    } else {
-      sendAnalyticsEvent({ name: Events.REALLOCATE_FUNDS, data: { amount } });
+
+      const currentAmount = getAvailableBalance(current()!);
+
+      setSuccessManageData({
+        amount,
+        fromAmount: targetIsBankAccount
+          ? isWithdrawal
+            ? currentAmount
+            : 0
+          : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceFrom?.amount!,
+        fromName: isWithdrawal ? currentName : targetName,
+        toName: isWithdrawal ? targetName : currentName,
+        toAmount: targetIsBankAccount
+          ? isWithdrawal
+            ? 0
+            : currentAmount
+          : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
+        involvesBank: targetIsBankAccount,
+      });
+    } catch (e: unknown) {
+      // eslint-disable-next-line no-console
+      console.error(e);
     }
-
-    const currentAmount = getAvailableBalance(current()!);
-
-    setSuccessManageData({
-      amount,
-      fromAmount: targetIsBankAccount
-        ? isWithdraw
-          ? currentAmount
-          : 0
-        : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceFrom?.amount!,
-      fromName: isWithdraw ? currentName : targetName,
-      toName: isWithdraw ? targetName : currentName,
-      toAmount: targetIsBankAccount
-        ? isWithdraw
-          ? 0
-          : currentAmount
-        : (transactionResult as BusinessFundAllocationResponse).ledgerBalanceTo?.amount!,
-      involvesBank: targetIsBankAccount,
-    });
   };
 
   return (

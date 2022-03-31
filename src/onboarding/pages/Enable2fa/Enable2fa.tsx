@@ -16,7 +16,7 @@ import { useBusiness } from '../../../app/containers/Main/context';
 import css from './Enable2fa.css';
 
 export default function Enable2fa() {
-  const message = useMessages();
+  const messages = useMessages();
   const navigate = useNavigate();
   const { currentUser } = useBusiness();
   const [number, setNumber] = createSignal('');
@@ -27,11 +27,11 @@ export default function Enable2fa() {
         sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
         await send2faEnrollmentCode({ destination: phone, method: 'sms' });
         setNumber(phone);
-        message.success({ title: `Sent a code to ${formatPhone(phone)}` });
+        messages.success({ title: `Sent a code to ${formatPhone(phone)}` });
       } catch (e: unknown) {
         // eslint-disable-next-line no-console
         console.error(e);
-        message.error({ title: 'Error sending code' });
+        messages.error({ title: 'Error sending code' });
       }
     } else {
       navigate('/');
@@ -45,7 +45,7 @@ export default function Enable2fa() {
     } catch (e: unknown) {
       // eslint-disable-next-line no-console
       console.error(e);
-      message.error({ title: 'Error re-sending code' });
+      messages.error({ title: 'Error re-sending code' });
     }
   };
 
@@ -54,12 +54,12 @@ export default function Enable2fa() {
       await complete2faEnrollment({ destination: number(), code: otp, method: 'sms' });
       await updateCurrentUser({ ...currentUser, phone: number() });
       sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
-      message.success({ title: `${formatPhone(number())} set as authentication method` });
+      messages.success({ title: `${formatPhone(number())} set as authentication method` });
       navigate('/');
     } catch (e: unknown) {
       // eslint-disable-next-line no-console
       console.error(e);
-      message.error({ title: 'Error setting authentication method' });
+      messages.error({ title: 'Error setting authentication method' });
       navigate('/');
     }
   };
