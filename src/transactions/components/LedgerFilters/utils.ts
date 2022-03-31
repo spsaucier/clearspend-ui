@@ -3,6 +3,7 @@ import type { LedgerActivityRequest } from 'generated/capital';
 
 import { DEFAULT_LEDGER_PARAMS } from '../../constants';
 import { getAmountFilter, getDateFilter, toFilterAmount, toFilterDate } from '../../utils/filters';
+import type { LedgerActivityType } from '../../types';
 
 import type { FormResult, FormValues } from './types';
 
@@ -11,7 +12,7 @@ export function getFormOptions(params: Readonly<LedgerActivityRequest>): FormOpt
     defaultValues: {
       ...getAmountFilter(params.amount),
       date: getDateFilter(params),
-      types: params.types || DEFAULT_LEDGER_PARAMS.types || [],
+      types: (params.types || DEFAULT_LEDGER_PARAMS.types || []) as LedgerActivityType[],
     },
   };
 }

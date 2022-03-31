@@ -26,6 +26,7 @@ import { getResetFilters } from 'app/utils/getResetFilters';
 import { Account } from '../Account';
 import { LedgerFilters } from '../LedgerFilters';
 import type { LedgerFiltersFields } from '../LedgerFilters/types';
+import type { LedgerActivityType } from '../../types';
 
 import css from './LedgerTable.css';
 
@@ -108,7 +109,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
     {
       name: 'type',
       title: <Text message="Transaction" />,
-      render: (item) => LEDGER_ACTIVITY_TYPES[item.type!],
+      render: (item) => LEDGER_ACTIVITY_TYPES[item.type as LedgerActivityType],
     },
     {
       name: 'user',

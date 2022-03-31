@@ -9,12 +9,31 @@ import type { ActivityStatus, ActivityType, MccGroup, LedgerActivityType } from 
 export const ACTIVITY_PAGE_SIZE_STORAGE_KEY = 'activity_page_size';
 export const LEDGER_PAGE_SIZE_STORAGE_KEY = 'ledger_page_size';
 
+const ACTIVITY_TYPES: readonly ActivityType[] = [
+  'NETWORK_CAPTURE',
+  'NETWORK_AUTHORIZATION',
+  'NETWORK_REFUND',
+  'CARD_FUND_RETURN',
+];
+
+const LEDGER_TYPES: readonly LedgerActivityType[] = [
+  'BANK_DEPOSIT_STRIPE',
+  'BANK_DEPOSIT_ACH',
+  'BANK_DEPOSIT_WIRE',
+  'BANK_DEPOSIT_RETURN',
+  'BANK_WITHDRAWAL',
+  'BANK_WITHDRAWAL_RETURN',
+  'MANUAL',
+  'REALLOCATE',
+  'FEE',
+];
+
 export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: {
     pageNumber: 0,
     pageSize: 10,
   },
-  types: ['NETWORK_AUTHORIZATION', 'NETWORK_CAPTURE', 'NETWORK_REFUND'],
+  types: [...ACTIVITY_TYPES],
 };
 
 export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
@@ -22,17 +41,7 @@ export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
     pageNumber: 0,
     pageSize: 10,
   },
-  types: [
-    'BANK_DEPOSIT_ACH',
-    'BANK_DEPOSIT_STRIPE',
-    'BANK_DEPOSIT_WIRE',
-    'BANK_DEPOSIT_RETURN',
-    'BANK_WITHDRAWAL',
-    'BANK_WITHDRAWAL_RETURN',
-    'MANUAL',
-    'REALLOCATE',
-    'FEE',
-  ],
+  types: [...LEDGER_TYPES],
 };
 
 export const STATUS_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
@@ -61,22 +70,6 @@ export const LEDGER_ACTIVITY_TYPES: Partial<Readonly<Record<LedgerActivityType, 
   BANK_WITHDRAWAL: i18n.t('Withdrawal'),
   BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
   MANUAL: i18n.t('Transfer'),
-  REALLOCATE: i18n.t('Reallocation'),
-  FEE: i18n.t('Fee'),
-};
-
-export const ACTIVITY_TYPES: Readonly<Record<ActivityType, JSXElement>> = {
-  BANK_DEPOSIT_ACH: i18n.t('Deposit (ACH pull)'),
-  BANK_DEPOSIT_STRIPE: i18n.t('Deposit (ACH push)'),
-  BANK_DEPOSIT_WIRE: i18n.t('Deposit (Wire)'),
-  BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
-  BANK_WITHDRAWAL: i18n.t('Withdrawal'),
-  BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
-  CARD_FUND_RETURN: i18n.t('Card Funding Return'),
-  MANUAL: i18n.t('Transfer'),
-  NETWORK_AUTHORIZATION: i18n.t('Payment Hold'),
-  NETWORK_CAPTURE: i18n.t('Payment Capture'),
-  NETWORK_REFUND: i18n.t('Payment Refund'),
   REALLOCATE: i18n.t('Reallocation'),
   FEE: i18n.t('Fee'),
 };
