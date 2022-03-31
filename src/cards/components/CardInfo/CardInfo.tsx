@@ -1,5 +1,6 @@
 import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
+import { Link } from 'solid-app-router';
 
 import { join } from '_common/utils/join';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
@@ -37,10 +38,10 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
         <h4 class={css.title}>
           <Text message="Allocation" />
         </h4>
-        <div class={css.value}>
+        <Link class={css.value} href={`/allocations/${props.allocation.allocationId}`}>
           <strong class={css.name}>{props.allocation.name}</strong>
           <Icon name="chevron-right" class={css.chevron} />
-        </div>
+        </Link>
         <Show when={props.allocation.parentAllocationId}>
           <span class={css.note}>
             {props.allocations.find(allocationWithID(props.allocation.parentAllocationId))?.name}
@@ -51,10 +52,10 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
         <h4 class={css.title}>
           <Text message="Employee" />
         </h4>
-        <div class={css.value}>
+        <Link class={css.value} href={`/employees/view/${props.user.userId}`}>
           <strong class={css.name}>{formatName(props.user)}</strong>
           <Icon name="chevron-right" class={css.chevron} />
-        </div>
+        </Link>
         <span class={css.note}>{props.user.email}</span>
       </div>
     </div>
