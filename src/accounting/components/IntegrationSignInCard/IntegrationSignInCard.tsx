@@ -16,15 +16,15 @@ export function IntegrationSignInCard(props: IntegrationSignInCardProps) {
   return (
     <div class={css.root}>
       <h4 class={css.title}>
-        <Text message={`Sign into ${name}`} />
+        <Text message="Sign into {name}" name={name} />
       </h4>
       <p class={css.text}>
-        <Text message={`Sign into ${name} and connect to your ClearSpend account`} />
+        <Text message="Sign into {name} and connect to your ClearSpend account" name={name} />
       </p>
       <Button class={css.button} size="lg" onClick={onClick}>
         <div class={css.buttonContent}>
           <img class={css.buttonIcon} src={smallLogo} />
-          <Text message={`Sign into ${name}`} />
+          <Text message="Sign into {name}" name={name} />
         </div>
       </Button>
     </div>

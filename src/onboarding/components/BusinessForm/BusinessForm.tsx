@@ -99,7 +99,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
       </Section>
       <Section title={<Text message="Business Description" />} class={css.section}>
         <div class={css.wrapper}>
-          <FormItem label={<Text message="Business DBA name" />} error={errors().businessName}>
+          <FormItem label={<Text message="Business DBA name (optional)" />} error={errors().businessName}>
             <Input
               name="business-dba-name"
               value={values().businessName}

@@ -23,6 +23,7 @@ import { completeOnboarding } from 'allocations/services';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { Modal } from '_common/components/Modal';
 import { LoadingPage } from '_common/components/LoadingPage/LoadingPage';
+import { Link } from '_common/components/Link';
 
 import { SideSteps } from './components/SideSteps';
 import { BusinessForm } from './components/BusinessForm';
@@ -133,6 +134,7 @@ export default function Onboarding() {
       }
       await refetchOnboardingState();
       const reviewRequirements = await getApplicationReviewRequirements();
+      setLoadingModalOpen(false);
 
       setKYBRequiredDocuments(reviewRequirements.kybRequiredDocuments);
       setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
@@ -143,20 +145,16 @@ export default function Onboarding() {
       setPendingVerification(reviewRequirements.pendingVerification);
 
       if (reviewRequirements.kybRequiredFields.length > 0) {
-        setLoadingModalOpen(false);
         setStep(OnboardingStep.BUSINESS);
       } else if (Object.keys(reviewRequirements.kycRequiredFields).length > 0) {
-        setLoadingModalOpen(false);
         setStep(OnboardingStep.BUSINESS_OWNERS);
       } else if (
         reviewRequirements.kycRequiredDocuments.length > 0 ||
         reviewRequirements.kybRequiredDocuments.length > 0
       ) {
-        setLoadingModalOpen(false);
         sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_REQUIRED });
         setStep(OnboardingStep.SOFT_FAIL);
       } else {
-        setLoadingModalOpen(false);
         sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
         setStep(OnboardingStep.LINK_ACCOUNT);
       }
@@ -170,6 +168,7 @@ export default function Onboarding() {
 
   const onSoftFail = async (data: Readonly<{}>) => {
     await uploadForApplicationReview(data);
+    setLoadingModalOpen(false);
     sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_SUBMITTED });
     setStep(OnboardingStep.REVIEW);
   };
@@ -301,6 +300,7 @@ export default function Onboarding() {
                 kybRequiredDocuments={kybRequiredDocuments()}
                 kycRequiredDocuments={kycRequiredDocuments()}
                 onNext={onSoftFail}
+                setLoadingModalOpen={setLoadingModalOpen}
               />
             </Page>
           </Match>
@@ -332,6 +332,19 @@ export default function Onboarding() {
               <Show when={accounts()}>
                 <TransferMoney accounts={accounts()} onDeposit={onDeposit} />
               </Show>
+            </Page>
+          </Match>
+          <Match when={!step()}>
+            <Page
+              title={<Text message="Hmm... something isn't right here." />}
+              headerClass={css.border}
+              titleClass={css.thin}
+            >
+              <p>
+                <Text message="Please contact " />
+                <Link href="mailto:help@clearspend.com">help@clearspend.com</Link>
+                <Text message=" and let us know about your issue. We'll get right to work getting you back on track!" />
+              </p>
             </Page>
           </Match>
         </Switch>

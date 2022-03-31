@@ -1,5 +1,5 @@
 import type { FormOptions } from '_common/components/Form';
-import { required } from '_common/components/Form/rules/required';
+import { required, requiredIf } from '_common/components/Form/rules/required';
 import { validEmail, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
@@ -29,6 +29,7 @@ export function getFormOptions({ currentUser, leader }: Props): FormOptions<Form
     locality: [required],
     region: [required],
     postalCode: [required, validZipCode],
+    percentageOwnership: [(value: string, values: FormValues) => requiredIf(value, values.relationshipOwner)],
   };
 
   const relationshipExecutive = currentUser?.relationshipToBusiness?.executive;

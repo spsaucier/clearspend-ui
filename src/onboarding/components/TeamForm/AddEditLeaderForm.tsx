@@ -67,7 +67,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
             label={
               <div>
                 <div class={css.radioLabel}>
-                  Does their title or role allow you to sign contracts for your business?
+                  Does their title or role allow them to sign contracts for your business?
                 </div>
                 <div class={css.radioExtra}>
                   Examples include: Chief Executive Officer, Chief Financial Officer, Chief Operating Officer,

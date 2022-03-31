@@ -13,7 +13,7 @@ export function IntegrateApp(props: IntegrateAppProps) {
   const { name } = props.integrationApp;
 
   return (
-    <Page title={<Text message={`${name} integration`} />}>
+    <Page title={<Text message="{name} integration" name={name} />}>
       <Section
         title={<Text message="Connect your account" />}
         description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}

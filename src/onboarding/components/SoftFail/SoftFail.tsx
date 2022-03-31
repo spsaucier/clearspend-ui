@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createEffect, createSignal, For, Show } from 'solid-js';
 
 import { useMessages } from 'app/containers/Messages/context';
 import { FormItem } from '_common/components/Form';
@@ -17,6 +17,7 @@ export interface SoftFailProps {
   kybRequiredDocuments: readonly Readonly<RequiredDocument>[] | undefined;
   kycRequiredDocuments: readonly Readonly<KycDocuments>[] | undefined;
   onNext: (data: Readonly<FormData>) => Promise<unknown>;
+  setLoadingModalOpen: (open: boolean) => void;
 }
 
 export function SoftFail(props: Readonly<SoftFailProps>) {
@@ -24,6 +25,10 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
   const media = useMediaContext();
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
+
+  createEffect(() => {
+    props.setLoadingModalOpen(loading());
+  });
 
   let formElement: HTMLFormElement;
 
