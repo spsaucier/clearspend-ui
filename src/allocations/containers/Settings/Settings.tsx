@@ -85,15 +85,6 @@ export function Settings(props: Readonly<SettingsProps>) {
     });
   };
 
-  const onRemoveRole = (userId: string) => {
-    const roles = getRolesList(currentRoles() || [], updatedRoles());
-    let role = roles.find((item) => item.user.userId === userId);
-    if (role?.user.type === 'BUSINESS_OWNER') return;
-    if (!role) return;
-    setRemovedRoles((prev) => ({ ...prev, [userId]: { inherited: role?.inherited, user: role?.user } }));
-    setUpdatedRoles((prev) => prev.filter((item) => item.user.userId !== userId));
-  };
-
   const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
     const resp = await addUser(data);
     await users.reload();
@@ -256,7 +247,6 @@ export function Settings(props: Readonly<SettingsProps>) {
                   inherited={role.inherited}
                   class={css.field}
                   onChange={onChangeRole}
-                  onDelete={onRemoveRole}
                 />
               </Show>
             )}

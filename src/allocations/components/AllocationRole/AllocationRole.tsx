@@ -4,8 +4,6 @@ import { Text } from 'solid-i18n';
 import { join } from '_common/utils/join';
 import { Select, Option } from '_common/components/Select';
 import { Popover } from '_common/components/Popover';
-import { Confirm } from '_common/components/Confirm';
-import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import type { Allocation } from 'generated/capital';
@@ -17,8 +15,7 @@ import css from './AllocationRole.css';
 interface AllocationRoleProps extends AllocationUserRole {
   class?: string;
   allocation?: Allocation;
-  onChange: (userId: string, role: AllocationRoles) => void;
-  onDelete: (userId: string) => void;
+  onChange?: (userId: string, role: AllocationRoles) => void;
 }
 
 export function AllocationRole(props: Readonly<AllocationRoleProps>) {
@@ -34,8 +31,8 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
       <Select
         value={props.role}
         class={css.select}
-        disabled={props.user.type === 'BUSINESS_OWNER'}
-        onChange={(value) => props.onChange(props.user.userId!, value as AllocationRoles)}
+        disabled={props.user.type === 'BUSINESS_OWNER' || !props.onChange}
+        onChange={(value) => props.onChange?.(props.user.userId!, value as AllocationRoles)}
       >
         <Show when={!Boolean(props.allocation?.parentAllocationId)}>
           <Option value={AllocationRoles.Admin}>
@@ -127,32 +124,6 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
             </span>
           )}
         </Popover>
-      </div>
-
-      <div class={css.deleteIconContainer}>
-        <Show when={!props.inherited}>
-          <Show when={props.user.type !== 'BUSINESS_OWNER'}>
-            <Confirm
-              position="bottom-center"
-              question={
-                <div>
-                  <Text message="Are you sure you want to remove this owner?" class={css.popupTitle!} />
-                  <Text
-                    message={
-                      'Removing this owner will prevent them from viewing or managing the cards ' +
-                      'and transactions from your allocation.'
-                    }
-                    class={css.popupContent!}
-                  />
-                </div>
-              }
-              confirmText={<Text message="Remove owner" />}
-              onConfirm={() => props.onDelete(props.user.userId!)}
-            >
-              {(args) => <Button view="ghost" icon="trash" class={css.remove} {...args} />}
-            </Confirm>
-          </Show>
-        </Show>
       </div>
     </div>
   );

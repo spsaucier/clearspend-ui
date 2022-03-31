@@ -36,16 +36,6 @@
   color: var(--tw-primary-content);
 }
 
-.delete-icon-container {
-  width: v-icon-size;
-}
-
 .info-icon-container {
   width: 24px;
-}
-
-.remove {
-  width: v-icon-size;
-  height: v-icon-size;
-  color: var(--tw-primary-content);
 }

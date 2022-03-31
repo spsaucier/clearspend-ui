@@ -64,19 +64,23 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
     getFormOptions(props.mccCategories, props.parentAllocationId),
   );
 
-  const [localRoles, setLocalRoles] = createSignal<AllocationUserRole[]>([]);
+  const [localUserRoles, setLocalUserRoles] = createSignal<AllocationUserRole[]>([]);
+  const [parentChangedUserRoles, setParentChangedUserRoles] = createSignal<AllocationUserRole[]>([]);
 
   const onAddRole = (userId: string) => {
     const user = props.users.find((item) => item.userId === userId);
-    if (user) setLocalRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.Manager }]);
+    if (user) setLocalUserRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.Manager }]);
   };
 
-  const onChangeRole = (userId: string, role: AllocationRoles) => {
-    setLocalRoles((prev) => prev.map((item) => ({ ...item, role: item.user.userId === userId ? role : item.role })));
+  const onChangeUserRole = (userId: string, role: AllocationRoles) => {
+    setLocalUserRoles((prev) =>
+      prev.map((item) => ({ ...item, role: item.user.userId === userId ? role : item.role })),
+    );
   };
 
-  const onRemoveRole = (userId: string) => {
-    setLocalRoles((prev) => prev.filter((item) => item.user.userId !== userId));
+  const onChangeParentUserRole = (userId: string, role: AllocationRoles) => {
+    const user = props.users.find((item) => item.userId === userId);
+    if (user) setParentChangedUserRoles((prev) => [...prev, { user, inherited: false, role }]);
   };
 
   const onParentChange = (id: string) => {
@@ -93,12 +97,15 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const onReset = () => {
     reset();
     props.onChangeParent();
-    setLocalRoles([]);
+    setLocalUserRoles([]);
   };
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(currentUser().userId, values(), props.mccCategories), localRoles()).catch(() => {
+    await save(convertFormData(currentUser().userId, values(), props.mccCategories), [
+      ...localUserRoles(),
+      ...parentChangedUserRoles(),
+    ]).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
@@ -108,17 +115,30 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
     return parent?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
   });
 
-  const roles = createMemo<AllocationUserRole[]>(() => {
-    return [...props.parentRoles.map((role) => getAllocationUserRole(role, true)), ...localRoles()];
+  const userRoles = createMemo<AllocationUserRole[]>(() => {
+    return [
+      ...localUserRoles().sort(byRoleLastName),
+      ...props.parentRoles
+        .map((role) => getAllocationUserRole(role, true))
+        .map((parentRole) => {
+          const localParentUserRoleChanges = parentChangedUserRoles().find(
+            (parentChangedUserRole) => parentChangedUserRole.user.userId === parentRole.user.userId,
+          );
+          if (localParentUserRoleChanges) {
+            return {
+              ...parentRole,
+              role: localParentUserRoleChanges.role,
+            };
+          }
+          return parentRole;
+        })
+        .sort(byRoleLastName),
+    ];
   });
 
   // TODO: Remove once we sort in BE: CAP-557
   const sortedUsers = createMemo(() => {
     return [...props.users].sort(byUserLastName);
-  });
-
-  const sortedRoles = createMemo(() => {
-    return [...roles()].sort(byRoleLastName);
   });
 
   return (
@@ -192,24 +212,33 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           >
             <For each={sortedUsers()}>
               {(item) => (
-                <Option value={item.userId!} disabled={roles().some((role) => role.user.userId === item.userId)}>
+                <Option value={item.userId!} disabled={userRoles().some((role) => role.user.userId === item.userId)}>
                   {formatName(item)}
                 </Option>
               )}
             </For>
           </Select>
         </FormItem>
-        <For each={sortedRoles()}>
-          {(role) => (
-            <AllocationRole
-              user={role.user}
-              role={role.role}
-              inherited={role.inherited}
-              class={css.field}
-              onChange={onChangeRole}
-              onDelete={onRemoveRole}
-            />
-          )}
+        <For each={userRoles()}>
+          {(userRole) => {
+            const isLocalRole = localUserRoles()
+              .map((localRole) => localRole.user.userId)
+              .includes(userRole.user.userId);
+
+            const isEmployeeRole = userRole.role === AllocationRoles.Employee;
+            const parentChangedRole = parentChangedUserRoles().find((p) => p.user.userId === userRole.user.userId);
+            const allowParentChangeRole = parentChangedRole || isEmployeeRole;
+
+            return (
+              <AllocationRole
+                user={userRole.user}
+                role={parentChangedRole?.role ?? userRole.role}
+                inherited={userRole.inherited}
+                class={css.field}
+                onChange={isLocalRole ? onChangeUserRole : allowParentChangeRole ? onChangeParentUserRole : undefined}
+              />
+            );
+          }}
         </For>
       </Section>
       <Section

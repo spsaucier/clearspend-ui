@@ -1,4 +1,4 @@
-import { Switch, Match } from 'solid-js';
+import { Switch, Match, createEffect } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
@@ -33,6 +33,12 @@ export default function AllocationEdit() {
     undefined,
     false,
   );
+
+  createEffect(() => {
+    if (allocations.data?.[0]) {
+      setRolesId(allocations.data[0].allocationId);
+    }
+  });
 
   const onChangeParent = (allocationId?: string) => {
     allocationId ? setRolesId(allocationId) : mutateRoles([], true);
@@ -83,12 +89,12 @@ export default function AllocationEdit() {
         <Match when={allocations.loading || mcc.loading || (users.loading && !users.data?.length)}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length && mcc.data?.length}>
+        <Match when={allocations.data?.length && mcc.data?.length && !rolesStatus().loading}>
           <EditAllocationForm
             users={users.data!}
             mccCategories={mcc.data!}
             allocations={allocations.data!}
-            parentRoles={parentRoles() || []}
+            parentRoles={parentRoles() ?? []}
             onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
