@@ -93,7 +93,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           onChange={props.handlers.locality}
         />
       </FormItem>
-      <FormItem label={<Text message="State" />} error={props.errors.postalCode} class={css.item}>
+      <FormItem label={<Text message="State" />} error={props.errors.region} class={css.item}>
         <SelectState
           value={props.values().region}
           error={Boolean(props.errors.region)}
