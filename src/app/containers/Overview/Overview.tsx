@@ -12,12 +12,13 @@ import { useMediaContext } from '_common/api/media/context';
 import type { Allocation, AccountActivityRequest } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
-import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
+import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { TransactionsData } from 'transactions/containers/TransactionsData';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { useResource } from '_common/utils/useResource';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
+import { onAllocationChange } from 'allocations/utils/onAllocationChange';
 import { canRead } from 'allocations/utils/permissions';
 
 import { SpendingByWidget } from '../../components/SpendingByWidget';
@@ -42,6 +43,7 @@ const PERIOD_OPTIONS = [
 interface OverviewProps {
   allocationId: string | undefined;
   allocations: readonly Readonly<Allocation>[] | null;
+  onAllocationChange: (id: string) => void;
 }
 
 export function Overview(props: Readonly<OverviewProps>) {
@@ -139,6 +141,7 @@ export function Overview(props: Readonly<OverviewProps>) {
           onReload={activityStore.reload}
         >
           <TransactionsData
+            showAllocationFilter
             table={media.large}
             loading={activityStore.loading}
             error={activityStore.error}
@@ -147,8 +150,9 @@ export function Overview(props: Readonly<OverviewProps>) {
             data={activityStore.data}
             class={css.transactions}
             onReload={activityStore.reload}
-            onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
-              storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
+            onChangeParams={onAllocationChange(
+              onPageSizeChange(activityStore.setParams, (size) => storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size)),
+              (id: string | undefined) => props.onAllocationChange(id || ALL_ALLOCATIONS),
             )}
             onUpdateData={activityStore.setData}
             onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}

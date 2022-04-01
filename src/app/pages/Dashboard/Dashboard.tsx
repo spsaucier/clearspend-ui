@@ -11,10 +11,9 @@ import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
 import { getAllocationPermissions } from 'app/services/permissions';
 import { AllocationTag } from 'allocations/components/AllocationTag';
-import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import { ALL_ALLOCATIONS, AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
-import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect/AllocationSelect';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import { canManageFunds, canManageUsers, canManageCards, canLinkBankAccounts } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
@@ -168,7 +167,11 @@ export default function Dashboard() {
           />
         </Match>
         <Match when={allocations.data}>
-          <Overview allocationId={allocation()} allocations={allocations.data} />
+          <Overview
+            allocationId={allocation()}
+            allocations={allocations.data}
+            onAllocationChange={onAllocationChange}
+          />
         </Match>
       </Switch>
       <Show when={canManageFunds(userPermissions())}>

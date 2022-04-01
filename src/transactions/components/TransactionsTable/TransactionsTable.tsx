@@ -51,6 +51,7 @@ interface TransactionsTableProps {
   onCardClick?: (id: string) => void;
   onRowClick: (activityId: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
+  showAllocationFilter?: boolean;
   showAccountingAdminView?: boolean;
   selectedTransactions?: string[];
   onSelectTransaction?: (id: string) => void;
@@ -316,6 +317,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       <Drawer noPadding open={showFilters()} title={<Text message="Filter Transactions" />} onClose={toggleFilters}>
         <TransactionFilterDrawer
           params={filters()}
+          showAllocationFilter={props.showAllocationFilter}
           showAccountingAdminView={props.showAccountingAdminView}
           onChangeParams={(params) => {
             toggleFilters();

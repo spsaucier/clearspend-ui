@@ -1,1 +1,1 @@
-export { AllocationSelect } from './AllocationSelect';
+export { ALL_ALLOCATIONS, AllocationSelect } from './AllocationSelect';

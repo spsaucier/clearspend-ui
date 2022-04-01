@@ -26,6 +26,7 @@ export interface Store<T, P> {
 export interface Options<T, P> {
   params?: P;
   initValue?: T;
+  skip?: boolean;
   onSuccess?: SuccessCallback<T>;
 }
 
@@ -77,7 +78,7 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
     };
 
     init();
-    store.reload().catch(getNoop());
+    if (!options?.skip) store.reload().catch(getNoop());
 
     onCleanup(() => {
       init();

@@ -30,6 +30,7 @@ interface TransactionsDataProps {
   onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
+  showAllocationFilter?: boolean;
   showAccountingAdminView?: boolean;
   selectedTransactions?: string[];
   onSelectTransaction?: (id: string) => void;
@@ -63,6 +64,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onCardClick={props.onCardClick}
         onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}
+        showAllocationFilter={props.showAllocationFilter}
         showAccountingAdminView={props.showAccountingAdminView}
         selectedTransactions={props.selectedTransactions}
         onSelectTransaction={props.onSelectTransaction}

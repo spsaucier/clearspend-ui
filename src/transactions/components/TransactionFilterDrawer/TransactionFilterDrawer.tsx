@@ -11,6 +11,8 @@ import { Radio, RadioGroup } from '_common/components/Radio';
 import { SelectDateRange } from '_common/components/SelectDateRange';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
+import { AllocationSelect } from 'allocations/components/AllocationSelect';
+import { useAllocations } from 'allocations/stores/allocations';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 
 import type { ActivityStatus } from '../../types';
@@ -22,6 +24,7 @@ import css from './TransactionFilterDrawer.css';
 
 interface TransactionFilterDrawerProps {
   params: AccountActivityRequest;
+  showAllocationFilter?: boolean;
   showAccountingAdminView?: boolean;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onReset: () => void;
@@ -29,6 +32,8 @@ interface TransactionFilterDrawerProps {
 
 export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerProps>) {
   const i18n = useI18n();
+
+  const allocations = useAllocations({ initValue: [], skip: !props.showAllocationFilter });
   const expenseCategories = useExpenseCategories({ initValue: [] });
 
   const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
@@ -38,6 +43,16 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   return (
     <div class={css.root}>
       <Form class={css.filters}>
+        <Show when={props.showAllocationFilter}>
+          <FilterBox title={<Text message="Allocation" />}>
+            <AllocationSelect
+              showAllAsOption
+              items={allocations.data!}
+              value={values().allocation}
+              onChange={handlers.allocation}
+            />
+          </FilterBox>
+        </Show>
         <FilterBox title={<Text message="Amount" />}>
           <div class={css.minMaxInputWrapper}>
             <FormItem label={<Text message="Min value" />} class={css.inputAmount}>
