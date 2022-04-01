@@ -2,7 +2,6 @@ import { createEffect, For } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { Section } from 'app/components/Section';
-import { useMessages } from 'app/containers/Messages/context';
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { InputPhone } from '_common/components/InputPhone';
@@ -10,13 +9,12 @@ import { Button } from '_common/components/Button';
 import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
+import { getNoop } from '_common/utils/getNoop';
 import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { Select, Option } from '_common/components/Select';
 import { BUSINESS_MCC } from 'app/types/mcc';
 import { BusinessTypeI18n, BusinessType } from 'app/types/businesses';
-
-import type { ExceptionData } from '../../types';
 
 import { getFormOptions, convertFormData, BUSINESS_DESCRIPTION_MAX_LENGTH } from './utils';
 import type { FormValues } from './types';
@@ -44,7 +42,6 @@ interface BusinessFormProps {
 export function BusinessForm(props: Readonly<BusinessFormProps>) {
   const i18n = useI18n();
   const media = useMediaContext();
-  const messages = useMessages();
 
   const [loading, next] = wrapAction(props.onNext);
 
@@ -54,9 +51,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      next(convertFormData(data)).catch((e: ExceptionData) => {
-        messages.error({ title: i18n.t('Something went wrong'), message: e.data.message });
-      });
+      next(convertFormData(data)).catch(getNoop());
     }
   };
 

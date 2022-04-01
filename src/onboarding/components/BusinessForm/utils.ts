@@ -8,7 +8,9 @@ import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'g
 import type { FormValues } from './types';
 import type { BusinessWithBusinessName } from './BusinessForm';
 
+const BUSINESS_NAME_MAX_LENGTH = 100;
 export const BUSINESS_DESCRIPTION_MAX_LENGTH = 200;
+
 export function getFormOptions(
   type: Business['businessType'],
   prefill?: BusinessWithBusinessName,
@@ -30,7 +32,7 @@ export function getFormOptions(
       businessName: prefill?.businessName ?? '',
     },
     rules: {
-      name: [required],
+      name: [required, maxLength(BUSINESS_NAME_MAX_LENGTH)],
       type: [required],
       mcc: [required],
       employerIdentificationNumber: [required, (val) => validEIN(cleanEIN(val))],

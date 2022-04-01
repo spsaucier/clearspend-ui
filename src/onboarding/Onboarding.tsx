@@ -1,10 +1,11 @@
 import { createSignal, batch, Show, Switch, Match } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
-import { Text } from 'solid-i18n';
+import { useI18n, Text } from 'solid-i18n';
 
 import logoLight from 'app/assets/Tagline_Lockup_White.svg';
 import { Icon } from '_common/components/Icon';
 import { storage } from '_common/api/storage';
+import { isFetchError } from '_common/api/fetch/isFetchError';
 import { useMediaContext } from '_common/api/media/context';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
@@ -13,7 +14,13 @@ import { useMessages } from 'app/containers/Messages/context';
 import { OnboardingStep } from 'app/types/businesses';
 import { formatName } from 'employees/utils/formatName';
 import { uploadForApplicationReview } from 'app/services/review';
-import type { BankAccount, Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
+import type {
+  BankAccount,
+  Business,
+  ConvertBusinessProspectRequest,
+  UpdateBusiness,
+  ControllerError,
+} from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
 import { AppEvent } from 'app/types/common';
@@ -48,6 +55,7 @@ import css from './Onboarding.css';
 const ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY = 'ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY';
 
 export default function Onboarding() {
+  const i18n = useI18n();
   const media = useMediaContext();
   const messages = useMessages();
   const navigate = useNavigate();
@@ -110,20 +118,28 @@ export default function Onboarding() {
   }
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => {
-    setLoadingModalOpen(true);
-    if (business()) {
-      // update
-      await updateBusinessInfo(data as UpdateBusiness);
-      setKYBRequiredDocuments([]);
-      await refetchOnboardingState();
-    } else {
-      // create
-      const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
-      mutate({ currentUser: { ...currentUser(), userId: resp.businessOwnerId! }, business: resp.business! });
+    try {
+      setLoadingModalOpen(true);
+      if (business()) {
+        // update
+        await updateBusinessInfo(data as UpdateBusiness);
+        setKYBRequiredDocuments([]);
+        await refetchOnboardingState();
+      } else {
+        // create
+        const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
+        mutate({ currentUser: { ...currentUser(), userId: resp.businessOwnerId! }, business: resp.business! });
+      }
+      sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
+      setLoadingModalOpen(false);
+      setStep(OnboardingStep.BUSINESS_OWNERS);
+    } catch (e: unknown) {
+      setLoadingModalOpen(false);
+      messages.error({
+        title: i18n.t('Something went wrong'),
+        message: isFetchError<ControllerError>(e) ? e.data.message : undefined,
+      });
     }
-    sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });
-    setLoadingModalOpen(false);
-    setStep(OnboardingStep.BUSINESS_OWNERS);
   };
 
   const onUpdateKYC = async (skipTrigger?: boolean) => {
