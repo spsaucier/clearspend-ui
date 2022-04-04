@@ -10,7 +10,22 @@
  */
 
 export interface LimitTypeMap {
-  limitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE' | 'ATM_WITHDRAW';
+  ACH_DEPOSIT?: LimitPeriodMap;
+  ACH_WITHDRAW?: LimitPeriodMap;
+  PURCHASE?: LimitPeriodMap;
+  ATM_WITHDRAW?: LimitPeriodMap;
+}
+
+export interface LimitPeriodMap {
+  INSTANT?: LimitPeriod;
+  DAILY?: LimitPeriod;
+  WEEKLY?: LimitPeriod;
+  MONTHLY?: LimitPeriod;
+}
+
+export interface LimitPeriod {
+  amount?: number;
+  usedAmount?: number;
 }
 
 export interface ControllerError {
