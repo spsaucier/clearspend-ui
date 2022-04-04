@@ -27,6 +27,7 @@ export default function Login() {
     const user = await login(username, password);
     if (user.userId) {
       sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
+      sendAnalyticsEvent({ type: AnalyticsEventType.AddUserProperties, data: user });
       sendAnalyticsEvent({ name: Events.LOGIN });
     }
     user.changePasswordId

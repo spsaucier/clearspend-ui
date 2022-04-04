@@ -1,4 +1,4 @@
-import mixpanel from 'mixpanel-browser';
+import mixpanel, { Config, Dict } from 'mixpanel-browser';
 
 export const Events = {
   ACTIVATE_CARD: 'Activate Card',
@@ -49,7 +49,7 @@ export const Events = {
 export interface AnalyticsEvent {
   name?: string;
   type?: AnalyticsEventType;
-  data?: {} | string;
+  data?: Dict | Partial<Config>;
 }
 
 export interface VendorAnalyticsEvent extends AnalyticsEvent {
@@ -79,13 +79,26 @@ const vendorActions = {
   [AnalyticsVendor.Mixpanel]: async ({ name, type, data }: AnalyticsEvent) => {
     switch (type) {
       case AnalyticsEventType.Identify:
-        await mixpanel.identify(name);
+        mixpanel.identify(name);
+        break;
+      case AnalyticsEventType.AddUserProperties:
+        if (typeof data === 'object') {
+          mixpanel.people.set(data);
+          if ('businessId' in data && data.businessId) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            mixpanel.register({ businessId: data.businessId });
+          }
+        }
         break;
       case AnalyticsEventType.Init:
-        await mixpanel.init(name || '', data || {});
+        if (typeof data === 'object' && 'api_host' in data) {
+          mixpanel.init(name || '', data);
+        } else {
+          mixpanel.init(name || '', {});
+        }
         break;
       default:
-        await mixpanel.track(name || '', data || {});
+        mixpanel.track(name || '', data || {});
         break;
     }
   },
