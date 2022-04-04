@@ -1,5 +1,9 @@
 .root {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: var(--pd-24);
+  grid-template-columns: auto auto;
+
+  @media (min-width: 920px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, calc(25% - 18px)));
+  }
 }

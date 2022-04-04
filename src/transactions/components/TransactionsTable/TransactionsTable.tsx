@@ -82,7 +82,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       (category) => category.expenseCategoryId === categoryId,
     )?.pathSegments;
 
-    if (pathSegments === undefined || pathSegments.length === 0) {
+    if (!pathSegments || pathSegments.length === 0) {
       return <></>;
     }
 
