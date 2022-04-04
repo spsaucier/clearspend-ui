@@ -76,3 +76,8 @@
 .error {
   color: var(--tw-amber-80);
 }
+
+.expense-category-hierarchy {
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+}

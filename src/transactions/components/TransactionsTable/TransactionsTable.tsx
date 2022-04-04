@@ -32,6 +32,7 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
 import { syncAllTransactions, syncMultipleTransactions } from 'accounting/services';
+import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -70,6 +71,27 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const transactionsSelected = createMemo(() => {
     return props.selectedTransactions && props.selectedTransactions.length > 0;
   });
+
+  const expenseCategories = useExpenseCategories({ initValue: [] });
+
+  const formatHierarchyFromCategory = (categoryId: string | undefined) => {
+    if (categoryId === undefined) {
+      return <></>;
+    }
+    const pathSegments = expenseCategories.data?.find(
+      (category) => category.expenseCategoryId === categoryId,
+    )?.pathSegments;
+
+    if (pathSegments === undefined || pathSegments.length === 0) {
+      return <></>;
+    }
+
+    return (
+      <div class={css.expenseCategoryHierarchy}>
+        <Text message={`In ${pathSegments.join(' > ')}`} />
+      </div>
+    );
+  };
 
   const onSyncMultiple = () => {
     if (props.selectedTransactions && props.selectedTransactions.length > 0) {
@@ -202,7 +224,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'expense-category',
       title: <Text message="Expense Category" />,
-      render: (item) => <div data-name="expense-category">{item.expenseDetails?.categoryName}</div>,
+      render: (item) => (
+        <div data-name="expense-category">
+          {item.expenseDetails?.categoryName}
+          {formatHierarchyFromCategory(item.expenseDetails?.expenseCategoryId)}
+        </div>
+      ),
     },
     {
       name: 'receipt',

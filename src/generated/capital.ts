@@ -459,11 +459,40 @@ export interface AccountActivityResponse {
 
   /** @format date-time */
   lastSyncTime?: string;
+  declineDetails?: DeclineDetails | AddressPostalCodeMismatch;
 }
+
+export type AddressPostalCodeMismatch = DeclineDetails & {
+  postalCode?: string;
+};
 
 export interface Amount {
   currency?: 'UNSPECIFIED' | 'USD';
   amount?: number;
+}
+
+export interface DeclineDetails {
+  reason?:
+    | 'INSUFFICIENT_FUNDS'
+    | 'INVALID_CARD_STATUS'
+    | 'CARD_NOT_FOUND'
+    | 'LIMIT_EXCEEDED'
+    | 'ADDRESS_POSTAL_CODE_MISMATCH'
+    | 'CVC_MISMATCH'
+    | 'EXPIRY_MISMATCH'
+    | 'ST_ACCOUNT_CLOSED'
+    | 'ST_ACCOUNT_FROZEN'
+    | 'ST_BANK_ACCOUNT_RESTRICTED'
+    | 'ST_BANK_OWNERSHIP_CHANGED'
+    | 'ST_COULD_NOT_PROCESS'
+    | 'ST_INVALID_ACCOUNT_NUMBER'
+    | 'ST_INCORRECT_ACCOUNT_HOLDER_NAME'
+    | 'ST_INVALID_CURRENCY'
+    | 'ST_NO_ACCOUNT'
+    | 'ST_DECLINED'
+    | 'ST_FAILED'
+    | 'ST_CANCELLED'
+    | 'ST_UNKNOWN';
 }
 
 export interface ExpenseDetails {
@@ -1738,6 +1767,7 @@ export interface LedgerActivityResponse {
   hold?: LedgerHoldInfo;
   sourceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
   targetAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+  declineDetails?: DeclineDetails | AddressPostalCodeMismatch;
 }
 
 export type LedgerAllocationAccount = LedgerAccount & {
@@ -2797,7 +2827,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -3047,21 +3089,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
