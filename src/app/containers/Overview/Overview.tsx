@@ -52,7 +52,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
   const { currentUser } = useBusiness();
 
-  const initPeriod = searchParams.period || TimePeriod.week;
+  const initPeriod = searchParams.period || TimePeriod.year;
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
   const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
