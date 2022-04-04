@@ -170,7 +170,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 </Tag>
               }
             >
-              <Match when={!expenseCategory()}>
+              <Match when={transaction().syncStatus !== 'READY'}>
                 <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
                   <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
                   <span>Not ready to sync</span>
@@ -190,20 +190,21 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               <Text message="Status" />
               {/* TODO: establish enum in BE, use it for rendering & delete below function */}
               <Switch fallback={<span>Ready to sync</span>}>
-                <Match when={!expenseCategory()}>
+                <Match when={transaction().syncStatus !== 'READY'}>
                   <span>Not ready to sync</span>
                 </Match>
               </Switch>
             </div>
             <div class={css.detail}>
               <Text message="Last Sync" />
-              {/* TODO: get last sync time from BE when available */}
-              <span>N/A</span>
+              <span>
+                {props.transaction.lastSyncTime ? new Date(props.transaction.lastSyncTime).toLocaleString() : 'N/A'}
+              </span>
             </div>
             <Button
               wide
               icon="sync"
-              disabled={!expenseCategory() || syncingTransaction()}
+              disabled={transaction().syncStatus !== 'READY' || syncingTransaction()}
               onClick={onSyncTransaction}
               data-name="sync-transaction-button"
             >
