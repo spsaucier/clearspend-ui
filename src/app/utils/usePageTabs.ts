@@ -7,9 +7,9 @@ export function usePageTabs<T extends string>(initTab: T) {
   const [searchParams, setSearchParams] = useSearchParams<Params<T>>();
   const [tab, setTab] = createSignal<T>(searchParams.tab || initTab);
 
-  const onChangeTab = (value: T): void => {
+  const onChangeTab = (value: T, skipParams = false): void => {
     batch(() => {
-      setSearchParams({ tab: value });
+      if (!skipParams) setSearchParams({ tab: value });
       setTab(() => value);
     });
   };

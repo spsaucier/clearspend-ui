@@ -251,7 +251,7 @@ export default function Onboarding() {
       side={
         <div class={css.sidebar}>
           <header class={css.header}>
-            <img src={logoLight} alt="Company logo" width={200} height={70} />
+            <img src={logoLight} alt="Company logo" width={189} height={70} />
           </header>
           <Show when={media.medium}>
             <div class={css.estimated}>

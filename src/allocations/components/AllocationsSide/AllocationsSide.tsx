@@ -20,7 +20,7 @@ interface AllocationsSideProps {
   currentID: string;
   userPermissions: Readonly<UserRolesAndPermissionsRecord> | null;
   items: readonly Readonly<Allocation>[];
-  onSelect: (id: string) => void;
+  onAllocationChange: () => void;
 }
 
 export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
@@ -54,7 +54,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                       data={item}
                       active={props.currentID === item.allocationId}
                       class={css.item}
-                      onClick={props.onSelect}
+                      onClick={props.onAllocationChange}
                     />
                   )}
                 </For>
@@ -65,7 +65,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                 data={data}
                 active={props.currentID === data.allocationId}
                 class={css.item}
-                onClick={props.onSelect}
+                onClick={props.onAllocationChange}
               />
               <Show when={Boolean(data.childrenAllocationIds?.length)}>
                 <Divider class={css.divider} />
@@ -75,12 +75,11 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                 parentID={data.allocationId}
                 items={[...props.items].sort(byName)}
                 itemClass={css.item}
-                onSelect={props.onSelect}
+                onSelect={props.onAllocationChange}
               />
             </Show>
             <Show when={canManageFunds(props.userPermissions)}>
               <Button
-                wide
                 type="primary"
                 icon="add"
                 onClick={() => navigate('/allocations/edit', { state: { parentAllocationId: props.currentID } })}

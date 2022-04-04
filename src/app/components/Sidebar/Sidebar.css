@@ -6,6 +6,7 @@
   padding: var(--pd-24) 0 0;
   align-items: center;
   justify-content: space-between;
+  background: var(--tw-dark-green);
   transition: width 0.3s ease-in-out;
 
   @media (--bp-medium) {
@@ -62,10 +63,17 @@
   width: auto;
   height: auto;
   padding: 22px;
+  color: var(--tw-primary-bg);
+
+  &:hover {
+    color: var(--tw-primary-bg);
+    background-color: var(--tw-dark-lime-mint);
+  }
 }
 
 .menu-popup {
   padding: 0;
+  background: var(--tw-dark-green);
   overflow: hidden;
 }
 
@@ -77,15 +85,17 @@
   height: auto;
   padding: var(--pd-16) 36px;
   justify-content: flex-start;
+  color: var(--tw-white);
   border-radius: 0;
 
   &:hover {
-    background-color: var(--tw-gray-10);
+    color: var(--tw-white);
+    background-color: var(--tw-dark-lime-mint);
   }
 }
 
 .toggle-icon {
-  background: var(--tw-gray-10);
+  background: var(--tw-dark-lime-mint);
   border-radius: var(--radius-4);
   transition: transform 0.3s ease-in-out;
   transform-origin: center;

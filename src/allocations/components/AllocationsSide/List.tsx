@@ -1,6 +1,5 @@
 import { createMemo, createSignal, For, Show } from 'solid-js';
 
-import { Button } from '_common/components/Button';
 import type { Allocation } from 'generated/capital';
 
 import { allocationWithID } from '../../utils/allocationWithID';
@@ -10,10 +9,13 @@ import { Item } from './Item';
 
 import css from './List.css';
 
+const CHILD_PADDING_PX = 16;
+
 interface ListProps {
   currentID: string;
   parentID: string;
   items: readonly Readonly<Allocation>[];
+  padding?: number;
   itemClass?: string;
   onSelect: (id: string) => void;
 }
@@ -42,27 +44,24 @@ export function List(props: Readonly<ListProps>) {
 
         return (
           <div class={props.itemClass} classList={{ [css.withBorder!]: withBorder() }}>
-            <div class={css.itemWrapper} data-expanded={expanded()[item.allocationId]}>
-              <Item data={item} active={props.currentID === item.allocationId} onClick={props.onSelect} />
-              <Show when={hasChildren()}>
-                <Button
-                  view="ghost"
-                  icon={{ pos: 'left', name: 'chevron-right', class: css.moreIcon }}
-                  class={css.more}
-                  onClick={() => onSwitch(item.allocationId)}
-                />
-              </Show>
-            </div>
+            <Item
+              data={item}
+              active={props.currentID === item.allocationId}
+              padding={props.padding}
+              expanded={expanded()[item.allocationId]}
+              hasChildren={hasChildren()}
+              onClick={props.onSelect}
+              onSwitch={onSwitch}
+            />
             <Show when={showSubmenu()}>
-              <div class={css.children}>
-                <List
-                  currentID={props.currentID}
-                  parentID={item.allocationId}
-                  items={props.items}
-                  itemClass={props.itemClass}
-                  onSelect={props.onSelect}
-                />
-              </div>
+              <List
+                currentID={props.currentID}
+                parentID={item.allocationId}
+                items={props.items}
+                padding={(props.padding || 0) + CHILD_PADDING_PX}
+                itemClass={props.itemClass}
+                onSelect={props.onSelect}
+              />
             </Show>
           </div>
         );

@@ -51,10 +51,7 @@ export default function Allocations() {
   const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
 
-  const onIdChange = (id: string) => {
-    setTab(Tabs.cards);
-    navigate(`/allocations/${id}`);
-  };
+  const onAllocationChange = () => setTab(Tabs.cards, true);
 
   const current = createMemo(() => {
     return params.id ? allocations.data?.find(allocationWithID(params.id)) : getRootAllocation(allocations.data);
@@ -114,7 +111,7 @@ export default function Allocations() {
               currentID={current()!.allocationId}
               userPermissions={userPermissions()}
               items={allocations.data!}
-              onSelect={onIdChange}
+              onAllocationChange={onAllocationChange}
             />
           }
           contentClass={css.content}

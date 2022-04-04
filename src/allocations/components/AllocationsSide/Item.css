@@ -1,28 +1,50 @@
-.item {
+.root {
   display: flex;
-  width: 100%;
-  padding: var(--pd-8);
   align-items: center;
   color: var(--tw-gray-60);
-  font: inherit;
-  line-height: var(--line-24);
-  text-align: left;
-  background: transparent;
-  border: 0;
-  border-radius: var(--radius-10);
-  transition: background-color 0.3s;
-  cursor: pointer;
+  font-size: var(--text-14);
+  border-right: 2px solid transparent;
+  transition: background-color 0.3s, border-right-color 0.3s;
 
   &:hover:not(.active) {
     color: var(--tw-black);
-    background-color: var(--tw-primary-light);
+    background-color: var(--tw-gray-10);
+    border-right-color: var(--tw-gray-10);
   }
+}
+
+.small {
+  font-size: var(--text-12);
 }
 
 .active {
   color: var(--tw-black);
-  background-color: var(--tw-gray-20);
-  cursor: default;
+  font-weight: var(--font-700);
+  background-color: var(--tw-white);
+  border-right-color: var(--tw-primary-border);
+}
+
+.expanded {
+  display: flex;
+}
+
+.item {
+  display: flex;
+  width: 100%;
+  min-height: 40px;
+  padding: var(--pd-10) var(--pd-12);
+  align-items: center;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  @nest .active & {
+    cursor: default;
+  }
 }
 
 .icon {
@@ -36,4 +58,25 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.more {
+  width: auto;
+  height: auto;
+  margin-left: var(--pd-8);
+  padding: var(--pd-8);
+
+  &:hover {
+    color: var(--tw-black);
+    background: transparent;
+  }
+}
+
+.more-icon {
+  transition: transform 0.3s;
+  transform-origin: center;
+
+  @nest .expanded & {
+    transform: rotate(90deg);
+  }
 }

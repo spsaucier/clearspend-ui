@@ -1,12 +1,12 @@
 import { createSignal, Show } from 'solid-js';
 
-import fullLogo from 'app/assets/Tagline_Lockup_Black.svg';
 import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
 import { useBool } from '_common/utils/useBool';
 import { Popover } from '_common/components/Popover';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
+import fullLogo from 'app/assets/Tagline_Lockup_White.svg';
 import smallLogo from 'app/assets/logo.svg';
 
 import { MainMenu } from '../MainMenu';

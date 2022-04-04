@@ -11,7 +11,7 @@
 .side {
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--tw-gray-30);
+  background: var(--tw-gray-20);
 
   @media (--bp-large) {
     position: sticky;
