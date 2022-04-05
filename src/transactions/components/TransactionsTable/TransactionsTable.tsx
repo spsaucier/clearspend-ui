@@ -1,4 +1,4 @@
-import { createMemo, Show } from 'solid-js';
+import { createMemo, createSignal, onMount, Show } from 'solid-js';
 import { useI18n, Text, DateTime } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -31,8 +31,9 @@ import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
-import { syncAllTransactions, syncMultipleTransactions } from 'accounting/services';
+import { getSyncableTransactionCount, syncAllTransactions, syncMultipleTransactions } from 'accounting/services';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
+import { Popover } from '_common/components/Popover';
 
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
@@ -65,8 +66,17 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
   const messages = useMessages();
 
+  const [syncConfirmationOpen, setSyncConfirmationOpen] = createSignal(false);
+  const [syncableCount, setSyncableCount] = createSignal(0);
   const [exporting, exportData] = wrapAction(exportAccountActivity);
   const [showFilters, toggleFilters] = useBool();
+
+  onMount(async () => {
+    const res = await getSyncableTransactionCount();
+    if (res.count) {
+      setSyncableCount(res.count);
+    }
+  });
 
   const transactionsSelected = createMemo(() => {
     return props.selectedTransactions && props.selectedTransactions.length > 0;
@@ -94,6 +104,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   };
 
   const onSyncMultiple = () => {
+    setSyncConfirmationOpen(false);
     if (props.selectedTransactions && props.selectedTransactions.length > 0) {
       syncMultipleTransactions(props.selectedTransactions);
       const selectedTransactionRecords = props.data.content?.filter(
@@ -118,6 +129,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       if (syncableTransactions) {
         syncableTransactions.forEach((transaction) => props.onUpdate({ ...transaction, syncStatus: 'SYNCED_LOCKED' }));
       }
+    }
+  };
+
+  const onClickSync = () => {
+    if (props.selectedTransactions && props.selectedTransactions.length > 0) {
+      onSyncMultiple();
+    } else {
+      setSyncConfirmationOpen(true);
     }
   };
 
@@ -312,22 +331,45 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           <Text message="Export" />
         </Button>
         <Show when={props.showAccountingAdminView}>
-          <Button
-            type="primary"
-            disabled={getSyncablePageTransactions.length > 0}
-            icon={{ name: 'refresh', pos: 'right' }}
-            onClick={onSyncMultiple}
+          <Popover
+            balloon
+            open={syncConfirmationOpen()}
+            onClickOutside={() => setSyncConfirmationOpen(false)}
+            class={css.syncPopupRoot}
+            content={
+              <div class={css.syncPopupContainer}>
+                <div class={css.syncPopupTextContainer}>
+                  <strong>Sync transactions?</strong>
+                  <Text message={`You have ${syncableCount()} transactions ready to sync.`} />
+                </div>
+                <div class={css.syncButtonContainer}>
+                  <Button type="default" view="ghost" onClick={() => setSyncConfirmationOpen(false)}>
+                    No, cancel
+                  </Button>
+                  <Button type="primary" onClick={onSyncMultiple}>
+                    Yes, sync transactions
+                  </Button>
+                </div>
+              </div>
+            }
           >
-            <Text
-              message={
-                transactionsSelected()
-                  ? `Sync ${props.selectedTransactions?.length} Transaction${
-                      props.selectedTransactions?.length && props.selectedTransactions.length > 1 ? 's' : ''
-                    }`
-                  : 'Sync All Transactions'
-              }
-            />
-          </Button>
+            <Button
+              type="primary"
+              disabled={getSyncablePageTransactions.length > 0}
+              icon={{ name: 'refresh', pos: 'right' }}
+              onClick={onClickSync}
+            >
+              <Text
+                message={
+                  transactionsSelected()
+                    ? `Sync ${props.selectedTransactions?.length} Transaction${
+                        props.selectedTransactions?.length && props.selectedTransactions.length > 1 ? 's' : ''
+                      }`
+                    : 'Sync All Transactions'
+                }
+              />
+            </Button>
+          </Popover>
         </Show>
       </Filters>
       <Show

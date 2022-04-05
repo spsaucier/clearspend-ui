@@ -81,3 +81,30 @@
   color: var(--tw-gray-60);
   font-size: var(--text-12);
 }
+
+.sync-popup-container {
+  display: flex;
+  width: 310;
+  height: 120px;
+  padding: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sync-button-container {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.sync-popup-text-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.sync-popup-root {
+  width: 310px;
+  height: 120px;
+  padding: 8px;
+}

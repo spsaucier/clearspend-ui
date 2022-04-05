@@ -4,7 +4,7 @@ import type {
   CodatCreateCreditCardResponse,
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
-import type { ExpenseCategory, SyncTransactionResponse } from 'generated/capital';
+import type { ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
 
 import type {
   IntegrationAccountResponse,
@@ -58,6 +58,10 @@ export async function getIntegrationExpenseCategories() {
 
 export async function getIntegrationExpenseCategoryMappings() {
   return (await service.get<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings')).data;
+}
+
+export async function getSyncableTransactionCount() {
+  return (await service.get<Readonly<SyncCountResponse>>('/codat/sync-count')).data;
 }
 
 export async function postIntegrationExpenseCategoryMappings(params: Readonly<IntegrationAccountMapping | null>[]) {
