@@ -11,7 +11,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { InputPhone } from '_common/components/InputPhone';
 import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
 import { formatSSN } from '_common/formatters/ssn';
-import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import type { Business, CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { InputPercentage } from '_common/components/InputPercentage';
 import { RadioGroup, Radio } from '_common/components/Radio';
@@ -29,6 +29,7 @@ interface AddEditLeaderFormProps {
   leader?: Readonly<BusinessOwner>;
   isCurrentUser?: boolean;
   kycErrors?: readonly Readonly<string>[];
+  business: Business;
 }
 
 export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
@@ -37,7 +38,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
   const [loading, next] = wrapAction(props.onNext);
 
   const { values, errors, setErrors, handlers, wrapSubmit } = createForm<FormValues>(
-    getFormOptions({ leader: props.leader }),
+    getFormOptions({ leader: props.leader, business: props.business }),
   );
 
   createEffect(() => {
@@ -86,16 +87,18 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               <Radio value={false}>No</Radio>
             </RadioGroup>
           </FormItem>
-          <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
-            <RadioGroup
-              name="is-owner"
-              value={values().relationshipOwner}
-              onChange={(value) => handlers.relationshipOwner?.(value as boolean)}
-            >
-              <Radio value={true}>Yes</Radio>
-              <Radio value={false}>No</Radio>
-            </RadioGroup>
-          </FormItem>
+          <Show when={props.business.businessType !== 'SOLE_PROPRIETORSHIP'}>
+            <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
+              <RadioGroup
+                name="is-owner"
+                value={values().relationshipOwner}
+                onChange={(value) => handlers.relationshipOwner?.(value as boolean)}
+              >
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Show>
         </div>
       </Section>
       <Show when={values().relationshipOwner}>

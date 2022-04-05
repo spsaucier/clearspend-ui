@@ -27,13 +27,17 @@ function init(): SignupStore {
 export function useSignup() {
   const [store, setStore] = createStore<SignupStore>(init());
 
-  function update(data: Partial<SignupStore>) {
+  const update = (data: Partial<SignupStore>) => {
     setStore((state) => {
       const updated = { ...state, ...data };
       storage.set(STORAGE_KEY, updated);
       return updated;
     });
-  }
+  };
+
+  const resetStore = () => {
+    storage.set(STORAGE_KEY, {});
+  };
 
   return {
     store,
@@ -50,5 +54,6 @@ export function useSignup() {
       storage.remove(STORAGE_KEY);
       setStore({});
     },
+    resetStore,
   };
 }

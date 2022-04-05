@@ -134,6 +134,15 @@ export default function Onboarding() {
       setLoadingModalOpen(false);
       setStep(OnboardingStep.BUSINESS_OWNERS);
     } catch (e: unknown) {
+      const error = e as { data?: { message?: string; param?: string } };
+      if (error.data?.param) {
+        // TODO: Update/re-test once @B.George syncs on fields
+        setKybRequiredFields([error.data.param]);
+      } // TODO: Improve once field data comes through
+      else if (error.data?.message?.includes('Duplicate employer identification number')) {
+        setKybRequiredFields(['employerIdentificationNumber']);
+      }
+
       setLoadingModalOpen(false);
       messages.error({
         title: i18n.t('Something went wrong'),

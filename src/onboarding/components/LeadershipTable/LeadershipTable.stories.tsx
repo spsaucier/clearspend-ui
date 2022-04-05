@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { createSignal } from 'solid-js';
 
+import type { Business } from 'generated/capital';
+
 import { BusinessOwner, LeadershipTable } from './LeadershipTable';
 
 export default {
@@ -52,6 +54,7 @@ export const KeyboardAccessibility = () => {
   return (
     <div style={{ 'max-width': '800px' }}>
       <LeadershipTable
+        business={{} as Business}
         leaders={leaders()}
         onEditClick={onEditClick}
         onAddClick={onAddClick}

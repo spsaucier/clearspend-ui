@@ -4,20 +4,22 @@ import { validEmail, validPhone, validZipCode } from '_common/components/Form/ru
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
 import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
-import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 
 import type { FormValues } from './types';
 
 interface Props {
   currentUser?: Partial<User>;
   leader?: CreateOrUpdateBusinessOwnerRequest;
+  business: Business;
 }
 
 const stringToDate = (dateString: string) => {
-  return new Date(new Date(dateString).setMinutes(new Date(dateString).getMinutes() + new Date().getTimezoneOffset()));
+  const utcDate = new Date(dateString);
+  return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
 };
 
-export function getFormOptions({ currentUser, leader }: Props): FormOptions<FormValues> {
+export function getFormOptions({ currentUser, leader, business }: Props): FormOptions<FormValues> {
   const rules = {
     firstName: [required],
     lastName: [required],
@@ -29,7 +31,10 @@ export function getFormOptions({ currentUser, leader }: Props): FormOptions<Form
     locality: [required],
     region: [required],
     postalCode: [required, validZipCode],
-    percentageOwnership: [(value: string, values: FormValues) => requiredIf(value, values.relationshipOwner)],
+    percentageOwnership: [
+      (value: string, values: FormValues) =>
+        requiredIf(value, values.relationshipOwner && business.businessType !== 'SOLE_PROPRIETORSHIP'),
+    ],
   };
 
   const relationshipExecutive = currentUser?.relationshipToBusiness?.executive;

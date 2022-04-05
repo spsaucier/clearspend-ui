@@ -1,9 +1,11 @@
 import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
+import { useNavigate } from 'solid-app-router';
 
 import { Form, FormItem, createForm } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { Input } from '_common/components/Input';
+import { useSignup } from 'signup/store';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
@@ -22,8 +24,15 @@ export function SorryButForm(props: Readonly<SorryButFormProps>) {
     defaultValues: { ownerEmail: '' },
     rules: { ownerEmail: [required] },
   });
+  const { resetStore } = useSignup();
+  const navigate = useNavigate();
 
   const onSubmit = (data: Readonly<SorryButFormValues>) => props.onNext(data.ownerEmail);
+
+  const onStartOver = () => {
+    resetStore();
+    navigate('/login');
+  };
 
   return (
     <div>
@@ -33,6 +42,12 @@ export function SorryButForm(props: Readonly<SorryButFormProps>) {
       <Description>
         <Text message="A company representative is a business owner with at least 25% ownership, a senior manager, or any other individual that controls and manages the business." />
       </Description>
+      <Description size="small">
+        <Text message="If a company representative is available to sign up your company, they can restart the sign up process by clicking below." />
+      </Description>
+      <FlatButton type="primary" htmlType="submit" hideIcon={true} onClick={onStartOver}>
+        <Text message="Start over" />
+      </FlatButton>
       {/* TODO: Re-add this form when CAP-718 done */}
       <Show when={false}>
         <Form onSubmit={wrapSubmit(onSubmit)}>

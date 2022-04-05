@@ -11,7 +11,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { InputPhone } from '_common/components/InputPhone';
 import { SelectDateOfBirth } from '_common/components/SelectDateOfBirth';
 import { formatSSN } from '_common/formatters/ssn';
-import type { CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { InputPercentage } from '_common/components/InputPercentage';
 
@@ -26,6 +26,7 @@ import css from './LeaderForm.css';
 interface UserFormProps {
   onNext: (data: Readonly<CreateOrUpdateBusinessOwnerRequest>) => Promise<unknown>;
   currentUser: User;
+  business: Business;
 }
 
 export function CurrentUserForm(props: Readonly<UserFormProps>) {
@@ -33,9 +34,10 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
   const isOwner = props.currentUser.relationshipToBusiness?.owner;
+  console.log('CURRENT USER?', props.currentUser);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
-    getFormOptions({ currentUser: props.currentUser }),
+    getFormOptions({ currentUser: props.currentUser, business: props.business }),
   );
 
   const onSubmit = (data: Readonly<FormValues>) => {
@@ -115,7 +117,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         </div>
       </Section>
-      <Show when={isOwner}>
+      <Show when={isOwner && props.business.businessType !== 'SOLE_PROPRIETORSHIP'}>
         <Section
           title="Your ownership stake"
           description="Please disclose your company ownership amount via percentage."

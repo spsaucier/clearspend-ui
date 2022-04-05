@@ -55,6 +55,10 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   });
 
   createEffect(() => {
+    if (props.business?.businessType === 'SOLE_PROPRIETORSHIP') {
+      setHasOtherOwners(false);
+      setShowOtherOwnersQuestion(false);
+    }
     if (leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber) {
       props.setTitle(
         props.currentUser.relationshipToBusiness?.owner
@@ -86,6 +90,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
     <Show when={!fetchingOwnersList().loading}>
       <Show when={leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber}>
         <CurrentUserForm
+          business={props.business!}
           currentUser={props.currentUser}
           onNext={async (businessOwner: CreateOrUpdateBusinessOwnerRequest) => {
             props.setLoadingModalOpen(true);
@@ -97,6 +102,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
       </Show>
       <Show when={showAddingNewLeader()}>
         <AddEditLeaderForm
+          business={props.business!}
           leader={leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           isCurrentUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
@@ -118,6 +124,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
       <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
         <div class={css.tableWrapper}>
           <LeadershipTable
+            business={props.business!}
             currentUserEmail={props.currentUser.email}
             leaders={leaders()}
             leaderIdsWithError={
@@ -136,12 +143,14 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           />
           <div class={css.rightContent}>
             <div class={css.title}>You must include:</div>
-            <div class={css.copy}>
-              <div>
-                <Icon name="information" />
+            <Show when={props.business?.businessType !== 'SOLE_PROPRIETORSHIP'}>
+              <div class={css.copy}>
+                <div>
+                  <Icon name="information" />
+                </div>
+                <div>Everyone who owns 25% or more of the company.</div>
               </div>
-              <div>Everyone who owns 25% or more of the company.</div>
-            </div>
+            </Show>
             <div class={css.copy}>
               <div>
                 <Icon name="information" />

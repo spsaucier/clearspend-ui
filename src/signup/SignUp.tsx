@@ -59,7 +59,7 @@ function getInitStep(store: SignupStore): Step {
       return Step.PhoneStep;
     case !phoneVerified:
       return Step.PhoneOtpStep;
-    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER):
+    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER) && relationshipToBusiness.length === 1:
       return Step.SorryButStep;
     default:
       return Step.PasswordStep;

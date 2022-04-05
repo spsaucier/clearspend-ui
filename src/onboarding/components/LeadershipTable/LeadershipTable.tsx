@@ -4,7 +4,7 @@ import { Text } from 'solid-i18n';
 import { Button } from '_common/components/Button';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
-import type { CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import type { Business, CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
 
 import css from './LeadershipTable.css';
 
@@ -15,11 +15,21 @@ interface LeadershipTableProps {
   onAddClick: () => void;
   currentUserEmail?: string;
   leaderIdsWithError?: string[];
+  business: Business;
 }
 
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+  const ownershipColumn: TableColumn<BusinessOwner> =
+    props.business.businessType !== 'SOLE_PROPRIETORSHIP'
+      ? {
+          name: 'percentage',
+          title: <Text message="Ownership (25% or more)" />,
+          render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
+        }
+      : ({} as TableColumn<BusinessOwner>);
+
   const columns: readonly Readonly<TableColumn<BusinessOwner>>[] = [
     {
       name: 'name',
@@ -51,11 +61,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         );
       },
     },
-    {
-      name: 'percentage',
-      title: <Text message="Ownership (25% or more)" />,
-      render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
-    },
+    { ...ownershipColumn },
     {
       name: 'actions',
       title: <Text message="Actions" />,
