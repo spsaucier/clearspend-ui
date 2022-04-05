@@ -1,4 +1,4 @@
-import type { AllocationUserRole } from 'allocations/types';
+import { AllocationRoles, AllocationUserRole } from 'allocations/types';
 import type { Allocation, User } from 'generated/capital';
 
 interface AllocationWithChildNodes extends Allocation {
@@ -16,6 +16,8 @@ export const byUserLastName = (a: User, b: User) =>
 
 export const byRoleLastName = (a: AllocationUserRole, b: AllocationUserRole) =>
   (a.user.lastName || '').toLocaleLowerCase() > (b.user.lastName || '').toLocaleLowerCase() ? 1 : -1;
+
+export const hideEmployees = (a: AllocationUserRole) => a.role !== AllocationRoles.Employee;
 
 const createTree = (dataset: Allocation[]) => {
   const hashTable = {} as { [key: string]: AllocationWithChildNodes };

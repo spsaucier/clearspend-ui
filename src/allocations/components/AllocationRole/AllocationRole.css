@@ -39,3 +39,13 @@
 .info-icon-container {
   width: 24px;
 }
+
+.delete-icon-container {
+  width: v-icon-size;
+}
+
+.remove {
+  width: v-icon-size;
+  height: v-icon-size;
+  color: var(--tw-primary-content);
+}

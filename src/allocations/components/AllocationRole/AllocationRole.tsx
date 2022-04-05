@@ -4,6 +4,8 @@ import { Text } from 'solid-i18n';
 import { join } from '_common/utils/join';
 import { Select, Option } from '_common/components/Select';
 import { Popover } from '_common/components/Popover';
+import { Confirm } from '_common/components/Confirm';
+import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import type { Allocation } from 'generated/capital';
@@ -16,6 +18,7 @@ interface AllocationRoleProps extends AllocationUserRole {
   class?: string;
   allocation?: Allocation;
   onChange?: (userId: string, role: AllocationRoles) => void;
+  onDelete: (userId: string) => void;
 }
 
 export function AllocationRole(props: Readonly<AllocationRoleProps>) {
@@ -46,10 +49,10 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
           <Text message="Manage" />
         </Option>
         <Option
-          disabled={props.inherited && rolesByLevel[props.role] > rolesByLevel[AllocationRoles.Employee]}
-          value={AllocationRoles.Employee}
+          disabled={props.inherited && rolesByLevel[props.role] > rolesByLevel[AllocationRoles.ViewOnly]}
+          value={AllocationRoles.ViewOnly}
         >
-          <Text message="Employee" />
+          <Text message="View only" />
         </Option>
       </Select>
 
@@ -100,17 +103,11 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
                     </li>
                   </ul>
                 </Match>
-                <Match when={props.role === AllocationRoles.Employee}>
-                  <Text message="Employee (cardholder)" class={css.popupTitle!} />
+                <Match when={props.role === AllocationRoles.ViewOnly}>
+                  <Text message="View only" class={css.popupTitle!} />
                   <ul class={css.popupContent}>
                     <li>
-                      <Text message="Access their own cards" />
-                    </li>
-                    <li>
-                      <Text message="View their own transactions" />
-                    </li>
-                    <li>
-                      <Text message="Add receipts and expense categories" />
+                      <Text message="View balances, transactions, receipts, etc." />
                     </li>
                   </ul>
                 </Match>
@@ -124,6 +121,31 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
             </span>
           )}
         </Popover>
+      </div>
+
+      <div class={css.deleteIconContainer}>
+        <Show when={!props.inherited && props.user.type !== 'BUSINESS_OWNER'}>
+          <Confirm
+            position="bottom-center"
+            question={
+              <div>
+                <Text message="Are you sure you want to remove this role?" class={css.popupTitle!} />
+                <Text
+                  message={
+                    "Removing this role will prevent {name} from viewing or managing this allocation's " +
+                    'cards and transactions.'
+                  }
+                  name={props.user.firstName || 'this user'}
+                  class={css.popupContent!}
+                />
+              </div>
+            }
+            confirmText={<Text message="Remove role" />}
+            onConfirm={() => props.onDelete(props.user.userId!)}
+          >
+            {(args) => <Button view="ghost" icon="trash" class={css.remove} {...args} />}
+          </Confirm>
+        </Show>
       </div>
     </div>
   );

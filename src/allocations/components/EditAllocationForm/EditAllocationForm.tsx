@@ -34,7 +34,7 @@ import { SwitchLimits } from '../SwitchLimits';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { AllocationRoles, AllocationUserRole } from '../../types';
-import { byUserLastName, byRoleLastName } from '../AllocationSelect/utils';
+import { byUserLastName, byRoleLastName, hideEmployees } from '../AllocationSelect/utils';
 
 import { convertFormData, getFormOptions } from './utils';
 import type { FormValues } from './types';
@@ -81,6 +81,10 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const onChangeParentUserRole = (userId: string, role: AllocationRoles) => {
     const user = props.users.find((item) => item.userId === userId);
     if (user) setParentChangedUserRoles((prev) => [...prev, { user, inherited: false, role }]);
+  };
+
+  const onRemoveRole = (userId: string) => {
+    setLocalUserRoles((prev) => prev.filter((item) => item.user.userId !== userId));
   };
 
   const onParentChange = (id: string) => {
@@ -132,6 +136,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           }
           return parentRole;
         })
+        .filter(hideEmployees)
         .sort(byRoleLastName),
     ];
   });
@@ -236,6 +241,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
                 inherited={userRole.inherited}
                 class={css.field}
                 onChange={isLocalRole ? onChangeUserRole : allowParentChangeRole ? onChangeParentUserRole : undefined}
+                onDelete={onRemoveRole}
               />
             );
           }}

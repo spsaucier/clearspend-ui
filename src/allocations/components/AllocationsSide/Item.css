@@ -3,7 +3,7 @@
   align-items: center;
   color: var(--tw-gray-60);
   font-size: var(--text-14);
-  border-right: 2px solid transparent;
+  border-right: 3px solid transparent;
   transition: background-color 0.3s, border-right-color 0.3s;
 
   &:hover:not(.active) {

@@ -19,18 +19,13 @@ import { saveUser } from 'employees/services';
 import { formatName } from 'employees/utils/formatName';
 import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { Loading } from 'app/components/Loading';
 
 import { AllocationRole } from '../../components/AllocationRole';
-import {
-  updateAllocation,
-  getAllocationRoles,
-  addAllocationRole,
-  updateAllocationRole,
-  removeAllocationRole,
-} from '../../services';
+import { updateAllocation, getAllocationRoles, addAllocationRole, updateAllocationRole } from '../../services';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
-import { byUserLastName, byRoleLastName } from '../../components/AllocationSelect/utils';
+import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
 import { canManageUsers } from '../../utils/permissions';
 
 import { getRolesList, getRolesUpdates } from './utils';
@@ -55,7 +50,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const users = useUsersList({ initValue: [] });
 
-  const [currentRoles, , , , reloadCurrentRoles] = useResource(getAllocationRoles, props.allocation.allocationId);
+  const [currentRoles, status, , , reloadCurrentRoles] = useResource(getAllocationRoles, props.allocation.allocationId);
   const [updatedRoles, setUpdatedRoles] = createSignal<AllocationUserRole[]>([]);
   const [removedRoles, setRemovedRoles] = createSignal<Record<string, Partial<AllocationUserRole>>>({});
 
@@ -71,7 +66,7 @@ export function Settings(props: Readonly<SettingsProps>) {
       setRemovedRoles(newRemovedRoles);
     }
     const user = users.data!.find((item) => item.userId === userId);
-    if (user) setUpdatedRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.ViewOnly }]);
+    if (user) setUpdatedRoles((prev) => [...prev, { user, inherited: false, role: AllocationRoles.Manager }]);
   };
 
   const onChangeRole = (userId: string, role: AllocationRoles) => {
@@ -97,6 +92,15 @@ export function Settings(props: Readonly<SettingsProps>) {
     toggleEmployeeDrawer();
   };
 
+  const onRemoveRole = (userId: string) => {
+    const roles = getRolesList(currentRoles() || [], updatedRoles());
+    let role = roles.find((item) => item.user.userId === userId);
+    if (role?.user.type === 'BUSINESS_OWNER') return;
+    if (!role) return;
+    setRemovedRoles((prev) => ({ ...prev, [userId]: { inherited: role?.inherited, user: role?.user } }));
+    setUpdatedRoles((prev) => prev.filter((item) => item.user.userId !== userId));
+  };
+
   const onReset = (updates?: Partial<FormValues>) => {
     reset(updates);
     setUpdatedRoles([]);
@@ -114,7 +118,8 @@ export function Settings(props: Readonly<SettingsProps>) {
       // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
       await Promise.all(roles.create.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
       await Promise.all(roles.update.map((item) => updateAllocationRole(allocationId, item.user.userId!, item.role)));
-      await Promise.all(roles.remove.map((id) => removeAllocationRole(allocationId, id)));
+      // We don't delete roles; we demote them back to Employee (the base company user)
+      await Promise.all(roles.remove.map((id) => updateAllocationRole(allocationId, id, AllocationRoles.Employee)));
 
       let postSaveAllocationName = props.allocation.name;
 
@@ -143,8 +148,10 @@ export function Settings(props: Readonly<SettingsProps>) {
   });
 
   const sortedRoles = createMemo(() => {
-    return [...roles()].sort(byRoleLastName);
+    return [...roles()].sort(byRoleLastName).filter(hideEmployees);
   });
+
+  const allocationHasParent = Boolean(props.allocation.parentAllocationId);
 
   return (
     <Form>
@@ -164,7 +171,7 @@ export function Settings(props: Readonly<SettingsProps>) {
           description={
             <>
               <Text message="Add users who can view or manage this allocation." class={css.content!} />
-              <Show when={!Boolean(props.allocation.parentAllocationId)}>
+              <Show when={!allocationHasParent}>
                 <div class={css.roleDescription}>
                   <h5 class={css.subheader}>
                     <Text message="Admin" />
@@ -192,24 +199,10 @@ export function Settings(props: Readonly<SettingsProps>) {
               </div>
               <div class={css.roleDescription}>
                 <h5 class={css.subheader}>
-                  <Text message="Employee" />
+                  <Text message="View only" />
                 </h5>
-                <Text
-                  message={
-                    'Employees can view and manage their own cards and transactions only. This is the base role for all cardholders.'
-                  }
-                  class={css.content!}
-                />
+                <Text message="Viewers can see balances, employees, cards, and transactions." class={css.content!} />
               </div>
-              {/* <div class={css.roleDescription}>
-              <h5 class={css.subheader}>
-                <Text message="View only" />
-              </h5>
-              <Text
-                message="Viewers can see balances, employees, cards, and transactions, but cannot make changes (even to their own)."
-                class={css.content!}
-              />
-            </div> */}
             </>
           }
         >
@@ -229,7 +222,9 @@ export function Settings(props: Readonly<SettingsProps>) {
                 {(item) => (
                   <Option
                     value={item.userId!}
-                    disabled={roles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]}
+                    disabled={
+                      sortedRoles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]
+                    }
                   >
                     {formatName(item)}
                   </Option>
@@ -237,20 +232,37 @@ export function Settings(props: Readonly<SettingsProps>) {
               </For>
             </Select>
           </FormItem>
-          <For each={sortedRoles()}>
-            {(role) => (
-              <Show when={!removedRoles()[role.user.userId!]}>
-                <AllocationRole
-                  allocation={props.allocation}
-                  user={role.user}
-                  role={role.role}
-                  inherited={role.inherited}
-                  class={css.field}
-                  onChange={onChangeRole}
-                />
-              </Show>
-            )}
-          </For>
+          <Show
+            when={!status().loading}
+            fallback={
+              <div class={css.field}>
+                <Loading />
+              </div>
+            }
+          >
+            <For each={sortedRoles()}>
+              {(role) => {
+                const cannotBePromoted =
+                  role.inherited &&
+                  [AllocationRoles.Admin, allocationHasParent ? AllocationRoles.Manager : undefined].includes(
+                    role.role,
+                  );
+                return (
+                  <Show when={!removedRoles()[role.user.userId!]}>
+                    <AllocationRole
+                      allocation={props.allocation}
+                      user={role.user}
+                      role={role.role}
+                      inherited={role.inherited}
+                      class={css.field}
+                      onChange={cannotBePromoted ? undefined : onChangeRole}
+                      onDelete={onRemoveRole}
+                    />
+                  </Show>
+                );
+              }}
+            </For>
+          </Show>
         </Section>
       </Show>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
