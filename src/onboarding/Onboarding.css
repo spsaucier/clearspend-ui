@@ -27,12 +27,12 @@
 .sign-out-btn {
   width: auto;
   margin-left: var(--pd-12);
-  color: var(--tw-accent-45);
+  color: var(--tw-primary-bg);
   font-family: var(--font-header);
   white-space: nowrap;
 
   &:hover {
-    color: var(--tw-accent-45);
+    color: var(--tw-primary-bg);
     background-color: var(--tw-dark-lime-mint);
   }
 }
