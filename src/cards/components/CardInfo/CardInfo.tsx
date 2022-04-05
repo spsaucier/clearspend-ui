@@ -8,13 +8,14 @@ import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
-import type { Allocation, User } from 'generated/capital';
+import type { Allocation, CurrencyLimit, User } from 'generated/capital';
 
 import { BalanceInfo } from '../BalanceInfo';
 
 import css from './CardInfo.css';
 
 interface CardInfoProps {
+  limits?: CurrencyLimit[];
   user: Readonly<User>;
   allocation: Readonly<Allocation>;
   allocations: readonly Readonly<Allocation>[];
@@ -22,6 +23,7 @@ interface CardInfoProps {
 }
 
 export function CardInfo(props: Readonly<CardInfoProps>) {
+  const limits = props.limits?.[0]?.typeMap.PURCHASE;
   return (
     <div class={join(css.root, props.class)}>
       <div class={css.item}>
@@ -32,7 +34,27 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <strong>{formatCurrency(getAvailableBalance(props.allocation))}</strong>
           <BalanceInfo />
         </div>
-        <Text message="Monthly limit: {amount}" amount={formatCurrency(0)} class={css.note!} />
+        <div class={css.note}>
+          <Show when={limits?.INSTANT?.amount}>
+            <Text message="Transaction limit: {amount}" amount={formatCurrency(limits?.INSTANT?.amount || 0)} />
+          </Show>
+          <Show when={limits?.DAILY?.amount}>
+            <div>
+              <Text message="Daily limit: " />
+              <span>{`${
+                limits?.DAILY?.usedAmount ? `${formatCurrency(limits.DAILY.usedAmount || 0)} / ` : ''
+              }${formatCurrency(limits?.DAILY?.amount || 0)}`}</span>
+            </div>
+          </Show>
+          <Show when={limits?.MONTHLY?.amount}>
+            <div>
+              <Text message="Monthly limit: " />
+              <span>{`${
+                limits?.MONTHLY?.usedAmount ? `${formatCurrency(limits.MONTHLY.usedAmount || 0)} / ` : ''
+              }${formatCurrency(limits?.MONTHLY?.amount || 0)}`}</span>
+            </div>
+          </Show>
+        </div>
       </div>
       <div class={css.item}>
         <h4 class={css.title}>

@@ -100,7 +100,12 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
               </Data>
             </Match>
             <Match when={tab() === Tabs.details}>
-              <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} />
+              <CardInfo
+                limits={data()?.limits}
+                user={user()!}
+                allocation={allocation()!}
+                allocations={allocations.data!}
+              />
             </Match>
           </Switch>
         </div>

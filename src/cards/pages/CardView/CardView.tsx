@@ -97,7 +97,13 @@ export default function CardView() {
       error={allocations.error || uStatus().error}
       onReload={() => Promise.all([allocations.reload(), reloadUser()]).catch(getNoop())}
     >
-      <CardInfo user={user()!} allocation={allocation()!} allocations={allocations.data!} class={css.info} />
+      <CardInfo
+        user={user()!}
+        allocation={allocation()!}
+        allocations={allocations.data!}
+        class={css.info}
+        limits={data()?.limits}
+      />
     </Data>
   );
 
