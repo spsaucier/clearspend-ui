@@ -15,6 +15,7 @@ import { getAllocationPermissions } from 'app/services/permissions';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
+import { useMediaContext } from '_common/api/media/context';
 
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -46,6 +47,7 @@ export default function Allocations() {
   const navigate = useNav();
   const messages = useMessages();
   const params = useParams<{ id?: string }>();
+  const media = useMediaContext();
 
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
@@ -85,9 +87,9 @@ export default function Allocations() {
     <Data data={allocations.data} loading={allocations.loading} error={allocations.error} onReload={allocations.reload}>
       <Show when={current()}>
         <Page
-          title={formatCurrency(getAvailableBalance(current()!))}
+          title={media.medium && formatCurrency(getAvailableBalance(current()!))}
           titleClass={css.title}
-          breadcrumbs={<Breadcrumbs current={current()!} items={allocations.data!} />}
+          breadcrumbs={media.medium && <Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
             <div class={css.actions}>
               <Show when={canManageFunds(userPermissions())}>

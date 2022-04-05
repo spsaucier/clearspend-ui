@@ -10,6 +10,8 @@ import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capita
 import { getRootAllocation } from '../../utils/getRootAllocation';
 import { byName } from '../AllocationSelect/utils';
 import { canManageFunds } from '../../utils/permissions';
+import { useMediaContext } from '../../../_common/api/media/context';
+import { AllocationSelect } from '../AllocationSelect';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -26,6 +28,7 @@ interface AllocationsSideProps {
 export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
   const i18n = useI18n();
   const navigate = useNavigate();
+  const media = useMediaContext();
 
   const [search, setSearch] = createSignal('');
   const root = createMemo(() => getRootAllocation(props.items));
@@ -37,58 +40,77 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
 
   return (
     <section class={css.root}>
-      <header class={css.header}>
-        <h3 class={css.title}>Allocations</h3>
-        <InputSearch delay={300} placeholder={String(i18n.t('Search Allocations...'))} onSearch={setSearch} />
-      </header>
-      <Show when={root()}>
-        {(data) => (
-          <div class={css.content}>
-            <Show
-              when={!search()}
-              fallback={
-                <For each={found()}>
-                  {(item) => (
-                    <Item
-                      root={!item.parentAllocationId}
-                      data={item}
-                      active={props.currentID === item.allocationId}
-                      class={css.item}
-                      onClick={props.onAllocationChange}
-                    />
-                  )}
-                </For>
-              }
-            >
-              <Item
-                root
-                data={data}
-                active={props.currentID === data.allocationId}
-                class={css.item}
-                onClick={props.onAllocationChange}
-              />
-              <Show when={Boolean(data.childrenAllocationIds?.length)}>
-                <Divider class={css.divider} />
-              </Show>
-              <List
-                currentID={props.currentID}
-                parentID={data.allocationId}
-                items={[...props.items].sort(byName)}
-                itemClass={css.item}
-                onSelect={props.onAllocationChange}
-              />
-            </Show>
-            <Show when={canManageFunds(props.userPermissions)}>
-              <Button
-                type="primary"
-                icon="add"
-                onClick={() => navigate('/allocations/edit', { state: { parentAllocationId: props.currentID } })}
-              >
-                <Text message="New Allocation" />
-              </Button>
-            </Show>
-          </div>
-        )}
+      <Show
+        when={media.medium}
+        fallback={
+          <header class={css.header}>
+            <h3 class={css.title}>Allocations</h3>
+            <AllocationSelect
+              items={props.items}
+              value={props.currentID}
+              onChange={(id) => {
+                props.onAllocationChange();
+                navigate(`/allocations/${id}`);
+              }}
+            />
+          </header>
+        }
+      >
+        <>
+          <header class={css.header}>
+            <h3 class={css.title}>Allocations</h3>
+            <InputSearch delay={300} placeholder={String(i18n.t('Search Allocations...'))} onSearch={setSearch} />
+          </header>
+          <Show when={root()}>
+            {(data) => (
+              <div class={css.content}>
+                <Show
+                  when={!search()}
+                  fallback={
+                    <For each={found()}>
+                      {(item) => (
+                        <Item
+                          root={!item.parentAllocationId}
+                          data={item}
+                          active={props.currentID === item.allocationId}
+                          class={css.item}
+                          onClick={props.onAllocationChange}
+                        />
+                      )}
+                    </For>
+                  }
+                >
+                  <Item
+                    root
+                    data={data}
+                    active={props.currentID === data.allocationId}
+                    class={css.item}
+                    onClick={props.onAllocationChange}
+                  />
+                  <Show when={Boolean(data.childrenAllocationIds?.length)}>
+                    <Divider class={css.divider} />
+                  </Show>
+                  <List
+                    currentID={props.currentID}
+                    parentID={data.allocationId}
+                    items={[...props.items].sort(byName)}
+                    itemClass={css.item}
+                    onSelect={props.onAllocationChange}
+                  />
+                </Show>
+                <Show when={canManageFunds(props.userPermissions)}>
+                  <Button
+                    type="primary"
+                    icon="add"
+                    onClick={() => navigate('/allocations/edit', { state: { parentAllocationId: props.currentID } })}
+                  >
+                    <Text message="New Allocation" />
+                  </Button>
+                </Show>
+              </div>
+            )}
+          </Show>
+        </>
       </Show>
     </section>
   );
