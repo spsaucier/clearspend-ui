@@ -113,6 +113,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
   const activeCategories = createMemo(() => expenseCategories.data?.filter((category) => category.status === 'ACTIVE'));
 
+  const categoryIsActive = (categoryId: string | undefined) => {
+    if (categoryId === undefined) {
+      return true;
+    }
+    return activeCategories()?.find((category) => category.expenseCategoryId === categoryId) !== undefined;
+  };
+
   const onSaveExpenseCategory = (ec: ExpenseCategory | undefined) => {
     saveExpenseCategory(props.transaction.accountActivityId!, ec?.expenseCategoryId!, notes() || '')
       .then((data) => {
@@ -204,7 +211,11 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <Button
               wide
               icon="sync"
-              disabled={transaction().syncStatus !== 'READY' || syncingTransaction()}
+              disabled={
+                transaction().syncStatus !== 'READY' ||
+                syncingTransaction() ||
+                !categoryIsActive(expenseCategory()?.expenseCategoryId)
+              }
               onClick={onSyncTransaction}
               data-name="sync-transaction-button"
             >
@@ -248,6 +259,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               <Text message="Expense Category" />
             </div>
             <SelectExpenseCategory
+              error={!categoryIsActive(expenseCategory()?.expenseCategoryId)}
               value={expenseCategory()}
               onChange={(ec) => onSaveExpenseCategory(ec)}
               disabled={savingExpenseCategory()}
@@ -257,7 +269,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                   <SelectExpenseCategoryOption value={item}>
                     <div class={css.expenseCategoryContainer}>
                       <Text message={item.categoryName ? item.categoryName : ''} />
-                      {item.pathSegments && item.pathSegments.length > 0 && (
+                      {item.pathSegments && item.pathSegments.length > 0 && item.pathSegments[0] !== '' && (
                         <div class={css.expenseCategoryHierarchy}>
                           <Text message={`in ${item.pathSegments.join(' > ')}`} />
                         </div>
@@ -267,6 +279,9 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 )}
               </For>
             </SelectExpenseCategory>
+            <Show when={!categoryIsActive(expenseCategory()?.expenseCategoryId)}>
+              <div class={css.unmappedCategoryWarning}>Please choose a new expense category</div>
+            </Show>
           </div>
           <div class={css.comments}>
             <div class={css.optionTitle}>

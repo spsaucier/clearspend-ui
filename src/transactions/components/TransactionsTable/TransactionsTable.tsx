@@ -93,7 +93,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       (category) => category.expenseCategoryId === categoryId,
     )?.pathSegments;
 
-    if (!pathSegments || pathSegments.length === 0) {
+    if (!pathSegments || pathSegments.length === 0 || pathSegments[0] === '') {
       return <></>;
     }
 

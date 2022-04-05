@@ -137,3 +137,8 @@
   color: var(--tw-gray-60);
   font-size: var(--text-12);
 }
+
+.unmapped-category-warning {
+  color: var(--tw-red-70);
+  font-size: var(--text-12);
+}
