@@ -115,7 +115,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               useTextArea={true}
               name="business-description"
               value={values().description}
-              error={Boolean(errors().description)}
+              error={Boolean(errors().description) || values().description.length > BUSINESS_DESCRIPTION_MAX_LENGTH}
               onChange={handlers.description}
             />
             <div class={css.inputHelp}>
