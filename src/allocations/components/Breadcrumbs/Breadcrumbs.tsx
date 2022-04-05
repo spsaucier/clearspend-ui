@@ -1,8 +1,8 @@
-import { createMemo, Show } from 'solid-js';
+import { createMemo, For } from 'solid-js';
 
 import type { Allocation } from 'generated/capital';
 
-import { allocationWithID } from '../../utils/allocationWithID';
+import { getParentsChain } from '../../utils/getParentsChain';
 
 import css from './Breadcrumbs.css';
 
@@ -12,14 +12,11 @@ interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs(props: Readonly<BreadcrumbsProps>) {
-  const parent = createMemo(() => {
-    const id = props.current.parentAllocationId;
-    return id ? props.items.find(allocationWithID(id)) : undefined;
-  });
+  const parents = createMemo(() => getParentsChain(props.items, props.current));
 
   return (
     <span>
-      <Show when={parent()}>{(item) => <span class={css.parent}>{item.name}</span>}</Show>
+      <For each={parents()}>{(item) => <span class={css.parent}>{item.name}</span>}</For>
       <span class={css.current}>{props.current.name}</span>
     </span>
   );

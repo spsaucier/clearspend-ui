@@ -6,26 +6,29 @@ import { PieChart } from '_common/components/Charts';
 import { getChartColor } from '_common/components/Charts/utils';
 import type { Allocation } from 'generated/capital';
 
+import { getAllChildren } from '../../utils/getAllChildren';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 
-import { calcPieChartData } from './utils';
+import type { AllocationData, OtherData } from './types';
+import { isAllocationData, getRenderList, calcPieChartData } from './utils';
 
 import css from './AllocationBalances.css';
 
 interface AllocationBalancesProps {
   current: Readonly<Allocation>;
-  childAllocations: readonly Readonly<Allocation>[];
+  allocations: readonly Readonly<Allocation>[];
 }
 
 export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
-  const allocations = createMemo(() =>
-    [...props.childAllocations].sort((a, b) => getAvailableBalance(b) - getAvailableBalance(a)),
+  const items = createMemo<readonly Allocation[]>(() =>
+    getAllChildren(props.allocations, props.current, true).sort(
+      (a, b) => getAvailableBalance(b) - getAvailableBalance(a),
+    ),
   );
 
-  const totalBalance = createMemo(
-    () => getTotalAvailableBalance(props.childAllocations) + getAvailableBalance(props.current),
-  );
+  const renderList = createMemo(() => getRenderList(props.allocations, items()));
+  const totalBalance = createMemo(() => getTotalAvailableBalance(items()));
 
   return (
     <section>
@@ -39,23 +42,34 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
       <div class={css.wrapper}>
         <Show when={Boolean(totalBalance())}>
           <div class={css.chart}>
-            <PieChart size={160} data={calcPieChartData(allocations())} />
+            <PieChart size={160} data={calcPieChartData(renderList(), totalBalance())} />
           </div>
         </Show>
         <div class={css.items}>
-          <For each={allocations()}>
+          <For each={renderList()}>
             {(item, idx) => (
               <div class={css.item}>
                 <div class={css.header}>
                   <div class={css.point} style={{ background: getChartColor(idx()) }} />
-                  <h4 class={css.name}>{item.name}</h4>
+                  <h4 class={css.name}>
+                    <Show when={isAllocationData(item)} fallback={<Text message="Other Allocations" />}>
+                      {(item as AllocationData).allocation.name}
+                    </Show>
+                  </h4>
                 </div>
-                <strong class={css.amount}>{formatCurrency(getAvailableBalance(item))}</strong>
+                <strong class={css.amount}>{formatCurrency(item.balance)}</strong>
                 <div class={css.children}>
-                  <Text
-                    message="{count, plural, =0 {No allocations} one {{count} allocation} other {{count} allocations}}"
-                    count={item.childrenAllocationIds?.length || 0}
-                  />
+                  <Show
+                    when={isAllocationData(item)}
+                    fallback={
+                      <Text
+                        message="{count} other {count, plural, one {allocation} other {allocations}}"
+                        count={(item as OtherData).allocations.length}
+                      />
+                    }
+                  >
+                    {(item as AllocationData).path}
+                  </Show>
                 </div>
               </div>
             )}

@@ -17,7 +17,6 @@ import type { Allocation, SearchCardRequest } from 'generated/capital';
 
 import { AllocationBalances } from '../../components/AllocationBalances';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
-import { allocationWithID } from '../../utils/allocationWithID';
 
 import css from './Cards.css';
 
@@ -31,10 +30,6 @@ export function Cards(props: Readonly<CardsProps>) {
 
   const [cardID, setCardID] = createSignal<string | null>(null);
   const [userID, setUserID] = createSignal<string | null>(null);
-
-  const children = createMemo(() =>
-    props.current.childrenAllocationIds?.map((id) => props.allocations.find(allocationWithID(id))!),
-  );
 
   const [cards, status, params, setParams, reload] = useResource(searchCards, {
     ...extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
@@ -64,8 +59,8 @@ export function Cards(props: Readonly<CardsProps>) {
 
   return (
     <>
-      <Show when={children()?.length}>
-        <AllocationBalances current={props.current} childAllocations={children() || []} />
+      <Show when={Boolean(props.current.childrenAllocationIds?.length)}>
+        <AllocationBalances current={props.current} allocations={props.allocations} />
         <h3 class={css.title}>
           <Text message="Cards" />
         </h3>
