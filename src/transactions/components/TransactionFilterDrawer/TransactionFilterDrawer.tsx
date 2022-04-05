@@ -14,6 +14,10 @@ import { FiltersControls } from 'app/components/FiltersControls';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { useAllocations } from 'allocations/stores/allocations';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
+import { useUsersList } from 'employees/stores/usersList';
+import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
+import { formatName } from 'employees/utils/formatName';
+import { Select, Option as SelectOption } from '_common/components/Select';
 
 import type { ActivityStatus } from '../../types';
 
@@ -23,11 +27,12 @@ import type { FormValues } from './types';
 import css from './TransactionFilterDrawer.css';
 
 interface TransactionFilterDrawerProps {
-  params: AccountActivityRequest;
-  showAllocationFilter?: boolean;
-  showAccountingAdminView?: boolean;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onReset: () => void;
+  params: AccountActivityRequest;
+  showAccountingAdminView?: boolean;
+  showAllocationFilter?: boolean;
+  showUserFilter?: boolean;
 }
 
 export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerProps>) {
@@ -39,6 +44,12 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
   const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
   const applyFilters = () => props.onChangeParams((prev) => ({ ...prev, ...convertFormData(values()) }));
   const activeCategories = createMemo(() => expenseCategories.data?.filter((category) => category.status === 'ACTIVE'));
+
+  const users = useUsersList({ initValue: [] });
+  // TODO: Remove once we sort in BE: CAP-557
+  const sortedUsers = createMemo(() => {
+    return [...users.data!].sort(byUserLastName);
+  });
 
   return (
     <div class={css.root}>
@@ -130,6 +141,20 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
         <FilterBox title={<Text message="Transaction Date" />}>
           <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
         </FilterBox>
+        <Show when={props.showUserFilter}>
+          <FilterBox title={<Text message="Employees" />}>
+            <Select
+              name="userId"
+              placeholder={String(i18n.t('Search by employee name'))}
+              value={values().userId}
+              onChange={handlers.userId}
+            >
+              <For each={sortedUsers()}>
+                {(item) => <SelectOption value={item.userId!}>{formatName(item)}</SelectOption>}
+              </For>
+            </Select>
+          </FilterBox>
+        </Show>
       </Form>
       <FiltersControls onReset={props.onReset} onConfirm={applyFilters} />
     </div>

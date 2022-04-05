@@ -19,22 +19,23 @@ import { TransactionReportModal } from '../../components/TransactionReportModal'
 import { TransactionPreview, ReceiptsView, type ReceiptVideModel } from '../TransactionPreview';
 
 interface TransactionsDataProps {
-  table?: boolean;
-  loading: boolean;
-  error: unknown;
-  params: Readonly<AccountActivityRequest>;
-  dateRange?: Readonly<DateRange>;
-  data: Readonly<PagedDataAccountActivityResponse> | null;
   class?: string;
+  data: Readonly<PagedDataAccountActivityResponse> | null;
+  dateRange?: Readonly<DateRange>;
+  error: unknown;
+  loading: boolean;
   onCardClick?: (id: string) => void;
-  onReload: () => Promise<unknown>;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
-  showAllocationFilter?: boolean;
-  showAccountingAdminView?: boolean;
-  selectedTransactions?: string[];
-  onSelectTransaction?: (id: string) => void;
   onDeselectTransaction?: (id: string) => void;
+  onReload: () => Promise<unknown>;
+  onSelectTransaction?: (id: string) => void;
+  onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
+  params: Readonly<AccountActivityRequest>;
+  selectedTransactions?: string[];
+  showAccountingAdminView?: boolean;
+  showAllocationFilter?: boolean;
+  showUserFilter?: boolean;
+  table?: boolean;
 }
 
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
@@ -56,21 +57,22 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
   return (
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
       <Dynamic
+        class={props.class}
         component={props.table ? TransactionsTable : TransactionsList}
         data={props.data!}
-        params={props.params}
         dateRange={props.dateRange}
-        class={props.class}
         onCardClick={props.onCardClick}
-        onRowClick={setPreviewId}
         onChangeParams={props.onChangeParams}
-        showAllocationFilter={props.showAllocationFilter}
-        showAccountingAdminView={props.showAccountingAdminView}
-        selectedTransactions={props.selectedTransactions}
-        onSelectTransaction={props.onSelectTransaction}
         onDeselectTransaction={props.onDeselectTransaction}
-        onUpdate={onUpdateTransaction}
         onReload={props.onReload}
+        onRowClick={setPreviewId}
+        onSelectTransaction={props.onSelectTransaction}
+        onUpdate={onUpdateTransaction}
+        params={props.params}
+        selectedTransactions={props.selectedTransactions}
+        showAccountingAdminView={props.showAccountingAdminView}
+        showAllocationFilter={props.showAllocationFilter}
+        showUserFilter={props.showUserFilter}
       />
       <Drawer
         noPadding

@@ -43,23 +43,24 @@ import { MERCHANT_CATEGORIES } from '../../constants';
 
 import css from './TransactionsTable.css';
 
-const FILTERS_KEYS = ['amount', 'categories', 'statuses', 'withReceipt', 'withoutReceipt'] as const;
+const FILTERS_KEYS = ['amount', 'categories', 'statuses', 'userId', 'withReceipt', 'withoutReceipt'] as const;
 
 interface TransactionsTableProps {
   class?: string;
   data: PagedDataAccountActivityResponse;
-  params: Readonly<AccountActivityRequest>;
   dateRange?: Readonly<DateRange>;
   onCardClick?: (id: string) => void;
-  onRowClick: (activityId: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  showAllocationFilter?: boolean;
-  showAccountingAdminView?: boolean;
-  selectedTransactions?: string[];
-  onSelectTransaction?: (id: string) => void;
   onDeselectTransaction?: (id: string) => void;
-  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onReload: () => Promise<unknown>;
+  onRowClick: (activityId: string) => void;
+  onSelectTransaction?: (id: string) => void;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
+  params: Readonly<AccountActivityRequest>;
+  selectedTransactions?: string[];
+  showAccountingAdminView?: boolean;
+  showAllocationFilter?: boolean;
+  showUserFilter?: boolean;
 }
 
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
@@ -139,6 +140,10 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       setSyncConfirmationOpen(true);
     }
   };
+
+  const filtersKeys = createMemo(() =>
+    props.showUserFilter ? [...FILTERS_KEYS] : [...FILTERS_KEYS.filter((f) => f !== 'userId')],
+  );
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
@@ -280,12 +285,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
 
   const filtersCount = createMemo(
     () =>
-      FILTERS_KEYS.reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0) +
+      filtersKeys().reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0) +
       Number(Boolean(dateFilter().from)),
   );
 
   const onResetFilters = () => {
-    onChangeFilters((prev) => ({ ...prev, ...getResetFilters([...FILTERS_KEYS, 'from', 'to']) }));
+    onChangeFilters((prev) => ({ ...prev, ...getResetFilters([...filtersKeys(), 'from', 'to']) }));
   };
 
   const getSyncablePageTransactions = () => {
@@ -388,6 +393,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           params={filters()}
           showAllocationFilter={props.showAllocationFilter}
           showAccountingAdminView={props.showAccountingAdminView}
+          showUserFilter={props.showUserFilter}
           onChangeParams={(params) => {
             toggleFilters();
             onChangeFilters(params);

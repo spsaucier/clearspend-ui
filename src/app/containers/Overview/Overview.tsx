@@ -141,21 +141,22 @@ export function Overview(props: Readonly<OverviewProps>) {
           onReload={activityStore.reload}
         >
           <TransactionsData
-            showAllocationFilter
-            table={media.large}
-            loading={activityStore.loading}
-            error={activityStore.error}
-            params={activityStore.params}
-            dateRange={dateRangeToISO(getTimePeriod(period()))}
-            data={activityStore.data}
             class={css.transactions}
+            data={activityStore.data}
+            dateRange={dateRangeToISO(getTimePeriod(period()))}
+            error={activityStore.error}
+            loading={activityStore.loading}
             onReload={activityStore.reload}
+            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
             onChangeParams={onAllocationChange(
               onPageSizeChange(activityStore.setParams, (size) => storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size)),
               (id: string | undefined) => props.onAllocationChange(id || ALL_ALLOCATIONS),
             )}
             onUpdateData={activityStore.setData}
-            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
+            params={activityStore.params}
+            showAllocationFilter
+            showUserFilter
+            table={media.large}
           />
         </Data>
       </div>

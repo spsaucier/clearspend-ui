@@ -10,9 +10,10 @@ export interface FormValues extends AmountRange {
   status: ActivityStatus[];
   hasReceipt: boolean | undefined;
   date: ReadonlyDate[];
+  userId: string | undefined;
 }
 
 export type FormResult = Pick<
   AccountActivityRequest,
-  'allocationId' | 'amount' | 'categories' | 'statuses' | 'withReceipt' | 'withoutReceipt' | 'from' | 'to'
+  'allocationId' | 'amount' | 'categories' | 'statuses' | 'withReceipt' | 'withoutReceipt' | 'from' | 'to' | 'userId'
 >;
