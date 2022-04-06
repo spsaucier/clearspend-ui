@@ -56,6 +56,10 @@
   text-transform: uppercase;
 }
 
+.note-input {
+  padding-left: 0;
+}
+
 .note-button {
   width: 40px;
   height: 100%;
@@ -115,7 +119,7 @@
   margin-top: 0;
   font: inherit;
   font-size: var(--text-12);
-  line-height: var(--line-16);
+  line-height: 1.33;
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
@@ -126,16 +130,6 @@
 
 .sync-tag-icon {
   margin-right: var(--pd-4);
-}
-
-.expense-category-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.expense-category-hierarchy {
-  color: var(--tw-gray-60);
-  font-size: var(--text-12);
 }
 
 .unmapped-category-warning {

@@ -1,6 +1,6 @@
 import type { JSXElement } from 'solid-js';
 
-import type { IconName } from '../Icon/types';
+import type { IconName } from '../Icon';
 
 export interface OptionProps {
   value: string;
@@ -23,6 +23,7 @@ export interface SelectProps {
   children: JSXElement;
   onChange?: (value: string) => void;
   changeOnSearch?: boolean;
+  closeOnClear?: boolean;
   loading?: boolean;
   iconName?: keyof typeof IconName;
   darkMode?: boolean;

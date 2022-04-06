@@ -1,4 +1,4 @@
-import { createSignal, createMemo, batch, Show } from 'solid-js';
+import { createSignal, createMemo, batch, Show, type JSXElement } from 'solid-js';
 
 import { Icon } from '../Icon';
 import { Input } from '../Input';
@@ -37,13 +37,28 @@ export function Select(props: Readonly<SelectProps>) {
     if (props.changeOnSearch) {
       props.onChange?.(value);
     } else {
-      setSearch(value);
-      if (!value) {
-        props.onChange?.('');
-        return;
-      }
-      const exact = options().find((el) => el.innerText === value);
-      if (exact) props.onChange?.(exact.dataset.value!);
+      batch(() => {
+        if (!value) {
+          props.onChange?.('');
+          setSearch('');
+          if (props.closeOnClear) setOpen(false);
+          return;
+        }
+
+        const searchValue = value.toLowerCase();
+        const exact = getOptions(props.children)
+          .filter(isMatch(searchValue))
+          .find((el) => el.innerText.toLowerCase() === searchValue);
+
+        if (exact) {
+          props.onChange?.(exact.dataset.value!);
+          setSearch('');
+          setOpen(false);
+          return;
+        }
+
+        setSearch(value);
+      });
     }
   };
 
@@ -105,6 +120,12 @@ export function Select(props: Readonly<SelectProps>) {
     </ul>
   );
 
+  const renderedValue = createMemo<JSXElement>(() =>
+    typeof props.valueRender === 'function' && isString(props.value)
+      ? props.valueRender(props.value, selected()!)
+      : selected(),
+  );
+
   return (
     <Popover
       open={open()}
@@ -116,12 +137,16 @@ export function Select(props: Readonly<SelectProps>) {
         class={join(css.root, props.class, props.darkMode && css.dark)}
         data-open={open()}
         data-view={open() || !selected() ? 'input' : ''}
+        data-loading={props.loading ? 'true' : ''}
       >
         <Input
           ref={input}
           darkMode={props.darkMode}
           name={props.name}
-          value={selected()}
+          value={createMemo(() => {
+            const value = renderedValue();
+            return isString(value) ? value : selected();
+          })()}
           error={props.error}
           placeholder={props.placeholder}
           autoComplete={props.autoComplete ?? 'off'}
@@ -135,9 +160,7 @@ export function Select(props: Readonly<SelectProps>) {
           suffix={props.loading ? <Spin /> : null}
         />
         <span class={css.value} classList={{ [css.valueDisabled!]: props.disabled }}>
-          {typeof props.valueRender === 'function' && isString(props.value)
-            ? props.valueRender(props.value, selected()!)
-            : selected()}
+          {renderedValue()}
         </span>
         <Show when={!props.changeOnSearch}>
           <Icon name={props.iconName ?? 'chevron-down'} size="sm" class={props.iconName ? css.icon : css.chevron} />

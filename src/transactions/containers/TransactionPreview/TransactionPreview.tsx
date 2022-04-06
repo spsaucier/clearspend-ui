@@ -1,8 +1,8 @@
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
-import { createSignal, createMemo, batch, Show, For, Switch, Match } from 'solid-js';
+import { createSignal, createMemo, batch, Show, Switch, Match } from 'solid-js';
 
-import type { AccountActivityResponse, ExpenseCategory } from 'generated/capital';
+import type { AccountActivityResponse } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
@@ -27,7 +27,7 @@ import {
 import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
-import { SelectExpenseCategory, SelectExpenseCategoryOption } from 'accounting/components/SelectExpenseCategory';
+import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
 import { syncTransaction } from 'accounting/services';
 
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -109,23 +109,20 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   };
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
-  const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(transaction().expenseDetails);
+  const [expenseCategory, setExpenseCategory] = createSignal(transaction().expenseDetails?.expenseCategoryId);
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
-  const activeCategories = createMemo(() => expenseCategories.data?.filter((category) => category.status === 'ACTIVE'));
+  const activeCategories = createMemo(() => expenseCategories.data!.filter((category) => category.status === 'ACTIVE'));
 
-  const categoryIsActive = (categoryId: string | undefined) => {
-    if (categoryId === undefined) {
-      return true;
-    }
-    return activeCategories()?.find((category) => category.expenseCategoryId === categoryId) !== undefined;
+  const categoryIsActive = (categoryId: string | undefined): boolean => {
+    return !categoryId || activeCategories().some((category) => category.expenseCategoryId === categoryId);
   };
 
-  const onSaveExpenseCategory = (ec: ExpenseCategory | undefined) => {
-    saveExpenseCategory(props.transaction.accountActivityId!, ec?.expenseCategoryId!, notes() || '')
+  const onSaveExpenseCategory = (categoryId: string | undefined) => {
+    saveExpenseCategory(props.transaction.accountActivityId!, categoryId || null, notes() || '')
       .then((data) => {
         batch(() => {
           props.onUpdate({ ...data, syncStatus: 'READY' });
-          setExpenseCategory(ec);
+          setExpenseCategory(categoryId);
           messages.success({
             title: i18n.t('Success'),
             message: i18n.t('Your changes have been successfully saved.'),
@@ -212,9 +209,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               wide
               icon="sync"
               disabled={
-                transaction().syncStatus !== 'READY' ||
-                syncingTransaction() ||
-                !categoryIsActive(expenseCategory()?.expenseCategoryId)
+                transaction().syncStatus !== 'READY' || syncingTransaction() || !categoryIsActive(expenseCategory())
               }
               onClick={onSyncTransaction}
               data-name="sync-transaction-button"
@@ -259,28 +254,18 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               <Text message="Expense Category" />
             </div>
             <SelectExpenseCategory
-              error={!categoryIsActive(expenseCategory()?.expenseCategoryId)}
+              icon="search"
               value={expenseCategory()}
-              onChange={(ec) => onSaveExpenseCategory(ec)}
-              disabled={savingExpenseCategory()}
-            >
-              <For each={activeCategories()}>
-                {(item) => (
-                  <SelectExpenseCategoryOption value={item}>
-                    <div class={css.expenseCategoryContainer}>
-                      <Text message={item.categoryName ? item.categoryName : ''} />
-                      {item.pathSegments && item.pathSegments.length > 0 && item.pathSegments[0] !== '' && (
-                        <div class={css.expenseCategoryHierarchy}>
-                          <Text message={`in ${item.pathSegments.join(' > ')}`} />
-                        </div>
-                      )}
-                    </div>
-                  </SelectExpenseCategoryOption>
-                )}
-              </For>
-            </SelectExpenseCategory>
-            <Show when={!categoryIsActive(expenseCategory()?.expenseCategoryId)}>
-              <div class={css.unmappedCategoryWarning}>Please choose a new expense category</div>
+              items={activeCategories()}
+              placeholder={String(i18n.t('Assign a category'))}
+              error={!categoryIsActive(expenseCategory())}
+              loading={savingExpenseCategory()}
+              onChange={onSaveExpenseCategory}
+            />
+            <Show when={!categoryIsActive(expenseCategory())}>
+              <div class={css.unmappedCategoryWarning}>
+                <Text message="Please choose a new expense category" />
+              </div>
             </Show>
           </div>
           <div class={css.comments}>
@@ -289,6 +274,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             </div>
             <Input
               prefix={<Icon name="file" size="sm" />}
+              inputClass={css.noteInput}
               suffix={
                 <Show when={canSubmitNote()}>
                   <Button

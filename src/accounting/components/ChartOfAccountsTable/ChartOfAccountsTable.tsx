@@ -1,11 +1,10 @@
 import { Text, useI18n } from 'solid-i18n';
-import { batch, createMemo, createSignal, For, Show } from 'solid-js';
+import { batch, createMemo, createSignal, Show } from 'solid-js';
 import { createStore, DeepReadonly } from 'solid-js/store';
 
 import { Empty } from 'app/components/Empty';
 import { InputSearch } from '_common/components/InputSearch';
 import { Table, TableColumn } from '_common/components/Table';
-import type { ExpenseCategory } from 'generated/capital';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
@@ -17,7 +16,7 @@ import type {
   IntegrationAccount,
   IntegrationExpenseAccountMapping,
 } from '../ChartOfAccountsData/types';
-import { SelectExpenseCategory, SelectExpenseCategoryOption } from '../SelectExpenseCategory';
+import { SelectExpenseCategory } from '../SelectExpenseCategory';
 import { CancelConfirmationButton } from '../CancelConfirmationButton';
 
 import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
@@ -39,7 +38,7 @@ interface ChartOfAccountsTableProps {
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
   const i18n = useI18n();
-  const expenseCategories = useExpenseCategories({ initValue: [] });
+  const categories = useExpenseCategories({ initValue: [] });
 
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
@@ -52,7 +51,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
     const requestParams = Object.values(state).filter(
       (value) => value != null && (value.expenseCategoryId || value.expenseCategoryName),
     );
-    const unmappedCategories = expenseCategories.data?.filter(
+    const unmappedCategories = categories.data?.filter(
       (category) => !selectedCategories().includes(category.expenseCategoryId),
     );
     if (
@@ -137,46 +136,37 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         </div>
       ),
       render: (item) => {
-        const existingMap = props.mappings?.find((mapping) => mapping.accountRef === item.id);
-        const initValue = existingMap
-          ? expenseCategories.data?.find((ec) => ec.expenseCategoryId === existingMap.expenseCategoryId)
-          : undefined;
-        if (initValue) setState(item.id, { accountRef: item.id, expenseCategoryId: initValue.expenseCategoryId });
-        const [expenseCategory, setExpenseCategory] = createSignal<ExpenseCategory | undefined>(initValue);
-        if (item.hasChildren) {
-          return <></>;
+        const target = props.mappings?.find((mapping) => mapping.accountRef === item.id)?.expenseCategoryId;
+        const initId = target && categories.data?.some((ec) => ec.expenseCategoryId === target) ? target : undefined;
+        if (initId) setState(item.id, { accountRef: item.id, expenseCategoryId: initId });
+        const [expenseCategory, setExpenseCategory] = createSignal<string | undefined>(initId);
+
+        if (item.hasChildren) return null;
+
+        function onChange(id: string | undefined, name?: string) {
+          batch(() => {
+            setExpenseCategory(id);
+            setState(item.id, {
+              accountRef: item.id,
+              expenseCategoryId: id,
+              expenseCategoryName: name || categories.data?.find((ec) => ec.expenseCategoryId === id)?.categoryName,
+              fullyQualifiedCategory: item.fullyQualifiedCategory,
+            });
+          });
+          if (props.saveOnChange) saveMapping();
         }
+
         return (
           <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory
+              createName={item.name}
               value={expenseCategory()}
-              createNewName={item.name}
-              onChange={(ec) => {
-                batch(() => {
-                  setExpenseCategory(ec);
-                  setState(item.id, {
-                    accountRef: item.id,
-                    expenseCategoryId: ec?.expenseCategoryId,
-                    expenseCategoryName: ec?.categoryName,
-                    fullyQualifiedCategory: item.fullyQualifiedCategory,
-                  });
-                });
-                if (props.saveOnChange) {
-                  saveMapping();
-                }
-              }}
-            >
-              <For each={expenseCategories.data}>
-                {(ec) => (
-                  <SelectExpenseCategoryOption
-                    value={ec}
-                    disabled={selectedCategories().includes(ec.expenseCategoryId)}
-                  >
-                    {ec.categoryName}
-                  </SelectExpenseCategoryOption>
-                )}
-              </For>
-            </SelectExpenseCategory>
+              items={categories.data || []}
+              placeholder={String(i18n.t('Assign expense category'))}
+              isDisableCategory={(id) => selectedCategories().includes(id)}
+              onCreate={() => onChange(undefined, item.name)}
+              onChange={onChange}
+            />
             <div class={css.cancel}>
               <Show when={expenseCategory() !== undefined}>
                 <Button

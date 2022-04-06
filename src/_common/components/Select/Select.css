@@ -57,6 +57,10 @@
   @nest .dark & {
     color: var(--tw-white);
   }
+
+  @nest .root[data-loading='true'] & {
+    opacity: 0;
+  }
 }
 
 .chevron {
@@ -68,6 +72,7 @@
 .popup {
   width: 100%;
   padding: 0;
+  overflow: hidden;
 }
 
 .list {
