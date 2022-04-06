@@ -34,7 +34,6 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
   const messages = useMessages();
   const [loading, next] = wrapAction(props.onNext);
   const isOwner = props.currentUser.relationshipToBusiness?.owner;
-  console.log('CURRENT USER?', props.currentUser);
 
   const { values, errors, handlers, wrapSubmit } = createForm<FormValues>(
     getFormOptions({ currentUser: props.currentUser, business: props.business }),

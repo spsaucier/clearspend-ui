@@ -16,6 +16,7 @@ interface Props {
 
 const stringToDate = (dateString: string) => {
   const utcDate = new Date(dateString);
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   return new Date(utcDate.getTime() + utcDate.getTimezoneOffset() * 60000);
 };
 
