@@ -1,8 +1,9 @@
-import { onCleanup, type JSXElement } from 'solid-js';
+import { createMemo, type JSXElement } from 'solid-js';
 import { Show, Portal } from 'solid-js/web';
 import { Transition } from 'solid-transition-group';
 
-import { useDeferEffect } from '../../utils/useDeferEffect';
+import { useDisableBodyScroll } from '_common/utils/useDisableBodyScroll';
+
 import { Button } from '../Button';
 
 import css from './Drawer.css';
@@ -16,24 +17,7 @@ interface DrawerProps {
 }
 
 export function Drawer(props: Readonly<DrawerProps>) {
-  const body = document.body;
-
-  const onOpen = () => {
-    const width = body.clientWidth;
-    body.style.overflow = 'hidden';
-    body.style.width = `${width}px`;
-  };
-
-  const onClose = () => {
-    body.style.overflow = '';
-    body.style.width = '';
-  };
-
-  useDeferEffect(
-    (open) => (open ? onOpen() : onClose()),
-    () => props.open,
-  );
-  onCleanup(() => onClose());
+  useDisableBodyScroll(createMemo(() => props.open));
 
   return (
     <Portal>
