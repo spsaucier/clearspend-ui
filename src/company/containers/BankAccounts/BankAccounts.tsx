@@ -47,7 +47,7 @@ export function BankAccounts() {
         error={accountsStatus().error}
         onReload={reloadAccounts}
       >
-        <Show when={accounts()![0]} fallback={<LinkAccount disabled onSuccess={onAddAccount} />}>
+        <Show when={accounts()![0]} fallback={<LinkAccount onSuccess={onAddAccount} />}>
           {(account) => <AccountItem data={account} onUnlink={onRemoveAccount} />}
         </Show>
       </Data>
