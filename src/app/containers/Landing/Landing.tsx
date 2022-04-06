@@ -13,6 +13,7 @@ import { getBankAccounts, linkBankAccounts, registerBankAccount } from 'onboardi
 import { useUsersList } from 'employees/stores/usersList';
 
 import { USERS_START_COUNT } from '../../constants/common';
+import { useMessages } from '../Messages/context';
 
 import { LandingCard } from './LandingCard';
 
@@ -29,6 +30,7 @@ interface LandingProps {
 
 export function Landing(props: Readonly<LandingProps>) {
   const navigate = useNav();
+  const messages = useMessages();
 
   const users = useUsersList({ initValue: [] });
   const [accounts, , , , refetchAccounts] = useResource(getBankAccounts);
@@ -39,6 +41,23 @@ export function Landing(props: Readonly<LandingProps>) {
   const dismissModal = () => {
     storage.set(SHOW_ONBOARDING_MODAL, false);
     setIsOpenCongratulationsModal(false);
+  };
+
+  const onAddAccount = async (token: string, accountName?: string) => {
+    try {
+      const bankAccounts = await linkBankAccounts(token);
+      const matchedAccounts = accountName
+        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+        : bankAccounts.filter((account) => account.businessBankAccountId);
+      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+      sendAnalyticsEvent({ name: Events.LINK_BANK });
+      messages.success({ title: 'Bank account linked successfully' });
+    } catch (e: unknown) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      messages.error({ title: 'Unable to link bank account' });
+    }
+    refetchAccounts();
   };
 
   return (
@@ -67,17 +86,7 @@ export function Landing(props: Readonly<LandingProps>) {
             }
           />
           <Show when={accounts()?.length === 0}>
-            <LinkAccountButton
-              onSuccess={async (token, accountName) => {
-                const bankAccounts = await linkBankAccounts(token);
-                const matchedAccounts = accountName
-                  ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
-                  : bankAccounts.filter((account) => account.businessBankAccountId);
-                await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
-                sendAnalyticsEvent({ name: Events.LINK_BANK });
-                refetchAccounts();
-              }}
-            />
+            <LinkAccountButton onSuccess={onAddAccount} />
           </Show>
         </LandingCard>
       </Show>

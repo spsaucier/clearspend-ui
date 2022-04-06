@@ -22,13 +22,7 @@ export function VerifyAccount(props: Readonly<VerifyAccountProps>) {
         Our instant bank verification process uses the best security protocols to ensure your information is always safe
         and secure. No prying eyes here.
       </p>
-      <Button
-        wide
-        type="primary"
-        loading={props.loading}
-        disabled={props.disabled || props.loading}
-        onClick={props.onVerifyClick}
-      >
+      <Button wide type="primary" loading={props.loading} disabled={props.disabled} onClick={props.onVerifyClick}>
         <Text message="Link Bank" />
       </Button>
     </div>

@@ -5,24 +5,45 @@ import { useResource } from '_common/utils/useResource';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { LinkAccount } from 'onboarding/containers/LinkAccount';
-import { getBankAccounts, linkBankAccounts, unregisterBankAccount } from 'onboarding/services/accounts';
+import {
+  getBankAccounts,
+  linkBankAccounts,
+  registerBankAccount,
+  unregisterBankAccount,
+} from 'onboarding/services/accounts';
+import { useMessages } from 'app/containers/Messages/context';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { AccountItem } from '../../components/AccountItem';
 
 import css from './BankAccounts.css';
 
-// TODO: waiting for backend update CAP-537
 export function BankAccounts() {
-  const [accounts, accountsStatus, , , reloadAccounts] = useResource(getBankAccounts);
+  const [accounts, accountsStatus, , , refetchAccounts] = useResource(getBankAccounts);
+  const messages = useMessages();
 
-  const onAddAccount = async (token: string) => {
-    await linkBankAccounts(token);
-    await reloadAccounts();
+  const onAddAccount = async (token: string, accountName?: string) => {
+    try {
+      const bankAccounts = await linkBankAccounts(token);
+      const matchedAccounts = accountName
+        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+        : bankAccounts.filter((account) => account.businessBankAccountId);
+      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+      sendAnalyticsEvent({ name: Events.LINK_BANK });
+      messages.success({ title: 'Bank account linked successfully' });
+    } catch (e: unknown) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      messages.error({ title: 'Unable to link bank account' });
+    }
+    refetchAccounts();
   };
 
   const onRemoveAccount = async (businessBankAccountId: string) => {
-    await unregisterBankAccount(businessBankAccountId);
-    await reloadAccounts();
+    await unregisterBankAccount(businessBankAccountId).catch((e: { data?: { message: string } }) => {
+      messages.error({ title: 'Unable to unlink bank account', message: e.data?.message });
+    });
+    await refetchAccounts();
   };
 
   return (
@@ -45,7 +66,7 @@ export function BankAccounts() {
         data={accounts()}
         loading={accountsStatus().loading}
         error={accountsStatus().error}
-        onReload={reloadAccounts}
+        onReload={refetchAccounts}
       >
         <Show when={accounts()![0]} fallback={<LinkAccount onSuccess={onAddAccount} />}>
           {(account) => <AccountItem data={account} onUnlink={onRemoveAccount} />}
