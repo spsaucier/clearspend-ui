@@ -45,18 +45,6 @@ export function Select(props: Readonly<SelectProps>) {
           return;
         }
 
-        const searchValue = value.toLowerCase();
-        const exact = getOptions(props.children)
-          .filter(isMatch(searchValue))
-          .find((el) => el.innerText.toLowerCase() === searchValue);
-
-        if (exact) {
-          props.onChange?.(exact.dataset.value!);
-          setSearch('');
-          setOpen(false);
-          return;
-        }
-
         setSearch(value);
       });
     }
