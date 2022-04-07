@@ -106,6 +106,9 @@ export default function Onboarding() {
         setKYCRequiredDocuments(data.kycRequiredDocuments);
         setKybRequiredFields(data.kybRequiredFields);
         setKycRequiredFields(data.kycRequiredFields);
+
+        setPendingVerification(data.pendingVerification);
+
         if (data.kybRequiredFields.length > 0) {
           setStep(OnboardingStep.BUSINESS);
         } else if (Object.keys(data.kycRequiredFields).length > 0) {
@@ -180,8 +183,12 @@ export default function Onboarding() {
         sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_REQUIRED });
         setStep(OnboardingStep.SOFT_FAIL);
       } else {
-        sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
-        setStep(OnboardingStep.LINK_ACCOUNT);
+        if (reviewRequirements.pendingVerification.length === 0) {
+          sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
+          setStep(OnboardingStep.LINK_ACCOUNT);
+        } else {
+          setStep(OnboardingStep.REVIEW);
+        }
       }
     } catch (err: unknown) {
       setLoadingModalOpen(false);
