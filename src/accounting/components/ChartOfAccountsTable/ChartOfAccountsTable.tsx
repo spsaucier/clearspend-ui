@@ -159,8 +159,6 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         if (initId) setState(item.id, { accountRef: item.id, expenseCategoryId: initId });
         const [expenseCategory, setExpenseCategory] = createSignal<string | undefined>(initId);
 
-        if (item.hasChildren) return null;
-
         function onChange(id: string | undefined, name?: string) {
           batch(() => {
             setExpenseCategory(id);
