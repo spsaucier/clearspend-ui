@@ -85,6 +85,24 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
 
   const columns: readonly Readonly<TableColumn<FlattenedIntegrationAccount>>[] = [
     {
+      name: 'mappedIcon',
+      title: <></>,
+      render: (item) => {
+        const categoryMapped = Object.values(state).find((mapping) => mapping?.accountRef === item.id) !== undefined;
+        return (
+          <div>
+            {categoryMapped ? (
+              <div class={css.mappedIcon}>
+                <Icon name="confirm-circle-filled" />
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        );
+      },
+    },
+    {
       name: 'accountName',
       title: (
         <div class={css.columnTitle}>

@@ -80,3 +80,7 @@
 .cancel-icon {
   color: var(--tw-primary-content);
 }
+
+.mapped-icon {
+  color: var(--tw-accent-30);
+}
