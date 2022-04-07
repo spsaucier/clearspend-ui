@@ -19,7 +19,7 @@ import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
 import { formatName } from 'employees/utils/formatName';
 import { Select, Option as SelectOption } from '_common/components/Select';
 
-import type { ActivityStatus } from '../../types';
+import type { ActivityStatus, SyncStatus } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -102,14 +102,19 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
         </FilterBox>
         <Show when={props.showAccountingAdminView}>
           <FilterBox title={<Text message="Sync Status" />}>
-            <CheckboxGroup value={values().syncStatus} onChange={handlers.syncStatus}>
+            <CheckboxGroup
+              value={values().syncStatus}
+              onChange={(value) => {
+                handlers.syncStatus(value as SyncStatus[]);
+              }}
+            >
               <Checkbox value="NOT_READY">
                 <Text message="Not Ready" />
               </Checkbox>
               <Checkbox value="READY">
                 <Text message="Ready" />
               </Checkbox>
-              <Checkbox value="SYNCED">
+              <Checkbox value="SYNCED_LOCKED">
                 <Text message="Synced and Locked" />
               </Checkbox>
             </CheckboxGroup>

@@ -1,12 +1,12 @@
 import type { AmountRange } from 'app/utils/filters';
 import type { AccountActivityRequest } from 'generated/capital';
 
-import type { ActivityStatus } from '../../types';
+import type { ActivityStatus, SyncStatus } from '../../types';
 
 export interface FormValues extends AmountRange {
   allocation: string | undefined;
   categories: string[];
-  syncStatus: string[]; // TODO: still need API?
+  syncStatus: SyncStatus[];
   status: ActivityStatus[];
   hasReceipt: boolean | undefined;
   date: ReadonlyDate[];
@@ -15,5 +15,14 @@ export interface FormValues extends AmountRange {
 
 export type FormResult = Pick<
   AccountActivityRequest,
-  'allocationId' | 'amount' | 'categories' | 'statuses' | 'withReceipt' | 'withoutReceipt' | 'from' | 'to' | 'userId'
+  | 'allocationId'
+  | 'amount'
+  | 'categories'
+  | 'syncStatus'
+  | 'statuses'
+  | 'withReceipt'
+  | 'withoutReceipt'
+  | 'from'
+  | 'to'
+  | 'userId'
 >;

@@ -43,7 +43,15 @@ import { MERCHANT_CATEGORIES } from '../../constants';
 
 import css from './TransactionsTable.css';
 
-const FILTERS_KEYS = ['amount', 'categories', 'statuses', 'userId', 'withReceipt', 'withoutReceipt'] as const;
+const FILTERS_KEYS = [
+  'amount',
+  'categories',
+  'syncStatus',
+  'statuses',
+  'userId',
+  'withReceipt',
+  'withoutReceipt',
+] as const;
 
 interface TransactionsTableProps {
   class?: string;
