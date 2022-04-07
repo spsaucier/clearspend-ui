@@ -55,12 +55,12 @@ function getInitStep(store: SignupStore): Step {
       return Step.EmailOtpStep;
     case !businessTypeCategory || !businessType || !relationshipToBusiness:
       return Step.BusinessTypeCategoryStep;
+    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER) && relationshipToBusiness.length === 1:
+      return Step.SorryButStep;
     case !phone:
       return Step.PhoneStep;
     case !phoneVerified:
       return Step.PhoneOtpStep;
-    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER) && relationshipToBusiness.length === 1:
-      return Step.SorryButStep;
     default:
       return Step.PasswordStep;
   }
