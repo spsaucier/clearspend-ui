@@ -136,3 +136,17 @@
   color: var(--tw-red-70);
   font-size: var(--text-12);
 }
+
+.decline-reason {
+  display: flex;
+  width: 100%;
+  margin-top: -13px;
+  margin-bottom: 10px;
+  padding: 5px 7px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-red-80);
+  background: var(--tw-red-20);
+  border: 1px solid var(--tw-red-60);
+  border-radius: var(--radius-8);
+}

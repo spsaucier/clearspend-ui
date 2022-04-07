@@ -1,8 +1,8 @@
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
-import { createSignal, createMemo, batch, Show, Switch, Match } from 'solid-js';
+import { createSignal, createMemo, batch, Show, Switch, Match, JSXElement } from 'solid-js';
 
-import type { AccountActivityResponse } from 'generated/capital';
+import type { AccountActivityResponse, DeclineDetails, AddressPostalCodeMismatch } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
@@ -34,7 +34,8 @@ import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
 import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
-import { MERCHANT_CATEGORIES } from '../../constants';
+import { MERCHANT_CATEGORIES, STATUS_ICONS } from '../../constants';
+import { declineReasons } from '../constants';
 
 import type { ReceiptVideModel } from './ReceiptsView';
 
@@ -55,6 +56,13 @@ interface TransactionPreviewProps {
   onReport: () => void;
   showAccountingAdminView?: boolean;
 }
+
+const ErrorIndicator = (props: { text: JSXElement }) => (
+  <div class={css.declineReason}>
+    <Icon name={STATUS_ICONS.DECLINED} size="sm" />
+    <span>{props.text}</span>
+  </div>
+);
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
@@ -147,10 +155,21 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
 
+  const getErrorText = (details: DeclineDetails | AddressPostalCodeMismatch) => {
+    const reason = declineReasons[details.reason!] || details.reason || '';
+    if ('postalCode' in details && details.postalCode) {
+      return i18n.t('{reason} ({postalCode} entered)', { reason: String(reason), postalCode: details.postalCode });
+    }
+    return reason;
+  };
+
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
       <div class={css.summary}>
+        <Show when={transaction().declineDetails}>
+          <ErrorIndicator text={getErrorText(transaction().declineDetails!)} />
+        </Show>
         <Show when={transaction().merchant}>
           <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
         </Show>
