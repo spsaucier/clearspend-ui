@@ -14,6 +14,7 @@ import type { BusinessProspectData } from 'generated/capital';
 import { i18n } from '_common/api/intl';
 
 import { Events, sendAnalyticsEvent, AnalyticsEventType } from '../app/utils/analytics';
+import { useMessages } from '../app/containers/Messages/context';
 
 import { AccountSetUpForm } from './components/AccountSetUpForm';
 import { PhoneForm } from './components/PhoneForm';
@@ -70,6 +71,7 @@ export default function SignUp() {
   const [searchParams] = useSearchParams<{ email?: string }>();
   const navigate = useNavigate();
   const media = useMediaContext();
+  const messages = useMessages();
 
   const {
     store,
@@ -95,6 +97,13 @@ export default function SignUp() {
     sendEmailVerification(firstName, lastName, email);
     sendAnalyticsEvent({ name: Events.SUBMIT_NAME_EMAIL });
     next();
+  };
+
+  const accountAlreadyExists = () => {
+    messages.success({
+      title: i18n.t('You already have an account'),
+      message: i18n.t('We have redirected you back to the login page.'),
+    });
   };
 
   const onBusinessTypeCategoryUpdate = async (
@@ -162,6 +171,7 @@ export default function SignUp() {
     switch (resp.businessProspectStatus) {
       case ProspectStatus.COMPLETED:
         cleanup();
+        accountAlreadyExists();
         navigate('/login');
         break;
       case ProspectStatus.EMAIL_VERIFIED:
@@ -196,6 +206,7 @@ export default function SignUp() {
     switch (resp.businessProspectStatus) {
       case ProspectStatus.COMPLETED:
         cleanup();
+        accountAlreadyExists();
         navigate('/login');
         break;
       case ProspectStatus.EMAIL_VERIFIED:
@@ -294,7 +305,15 @@ export default function SignUp() {
               onConfirm={onEmailConfirm}
               errors={emailExists() ? { code: String(i18n.t('Account already exists with this email.')) } : undefined}
               extraBtn={
-                <Button class={css.secondBtn} size={'lg'} view="ghost" onClick={() => setStep(Step.AccountSetUpStep)}>
+                <Button
+                  class={css.secondBtn}
+                  size={'lg'}
+                  view="ghost"
+                  onClick={() => {
+                    setEmailExists(false);
+                    setStep(Step.AccountSetUpStep);
+                  }}
+                >
                   <Text message="Use different email" />
                 </Button>
               }
