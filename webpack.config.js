@@ -61,7 +61,7 @@ module.exports = (env, options) => {
           target: process.env.DEV_API || '',
           changeOrigin: true,
           logLevel: 'debug',
-          // pathRewrite: { '^/api': '' },
+          pathRewrite: process.env.USE_API_REWRITE ? { '^/api': '' } : undefined,
         },
       },
     },

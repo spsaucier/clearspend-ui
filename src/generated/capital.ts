@@ -1152,6 +1152,34 @@ export interface CodatWebhookConnectionChangedRequest {
   Data?: CodatWebhookConnectionChangedData;
 }
 
+export interface ChartOfAccounts {
+  /** @format uuid */
+  businessId?: string;
+  nestedAccounts?: CodatAccountNested[];
+
+  /** @format int64 */
+  version?: number;
+
+  /** @format date-time */
+  created?: string;
+
+  /** @format date-time */
+  updated?: string;
+
+  /** @format uuid */
+  id?: string;
+}
+
+export interface CodatAccountNested {
+  id?: string;
+  name?: string;
+  status?: string;
+  fullyQualifiedCategory?: string;
+  fullyQualifiedName?: string;
+  type?: string;
+  children?: CodatAccountNested[];
+}
+
 export interface AddChartOfAccountsMappingRequest {
   accountRef?: string;
 
@@ -3634,16 +3662,6 @@ export interface NullableEncryptedString {
 export interface SyncCountResponse {
   /** @format int32 */
   count?: number;
-}
-
-export interface CodatAccountNested {
-  id?: string;
-  name?: string;
-  status?: string;
-  fullyQualifiedCategory?: string;
-  fullyQualifiedName?: string;
-  type?: string;
-  children?: CodatAccountNested[];
 }
 
 export interface CodatAccountNestedResponse {
