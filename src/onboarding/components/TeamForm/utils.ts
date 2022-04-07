@@ -24,6 +24,7 @@ export function getFormOptions({ currentUser, leader, business }: Props): FormOp
   const rules = {
     firstName: [required],
     lastName: [required],
+    title: [required],
     birthdate: [required],
     ssn: [required],
     email: [required, validEmail],
