@@ -109,7 +109,7 @@ export function Select(props: Readonly<SelectProps>) {
   );
 
   const renderedValue = createMemo<JSXElement>(() =>
-    typeof props.valueRender === 'function' && isString(props.value)
+    typeof props.valueRender === 'function' && props.value && isString(props.value)
       ? props.valueRender(props.value, selected()!)
       : selected(),
   );
