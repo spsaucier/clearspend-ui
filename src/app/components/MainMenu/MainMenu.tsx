@@ -48,7 +48,6 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
   const { currentUser, permissions } = useBusiness();
 
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
-  const itemClass = createMemo(() => (props.view === MenuView.mobile ? css.mobileItem : undefined));
 
   const isNotProd = window.location.host !== 'app.clearspend.com';
 
@@ -70,12 +69,17 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
   });
 
   const renderItem = (item: Accessor<MenuItemOptions>) => (
-    <MenuItem {...item()} expanded={expanded()} class={itemClass()} onClick={props.onItemClick} />
+    <MenuItem {...item()} expanded={expanded()} onClick={props.onItemClick} />
   );
 
   return (
     <nav class={join(css.root, props.class)}>
-      <div classList={{ [css.mainGrow!]: props.view !== MenuView.mobile }}>
+      <div
+        classList={{
+          [css.mainMobile!]: props.view === MenuView.mobile,
+          [css.mainGrow!]: props.view !== MenuView.mobile,
+        }}
+      >
         <Index each={mainItems()}>{renderItem}</Index>
       </div>
       <div>

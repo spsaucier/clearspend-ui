@@ -1,8 +1,10 @@
+@value v-height-mobile-header: 92px;
 @value v-width-collapsed: 96px;
 @value v-width-expanded: 260px;
 
 .root {
   display: flex;
+  height: v-height-mobile-header;
   padding: var(--pd-24) 0 0;
   align-items: center;
   justify-content: space-between;
@@ -43,8 +45,8 @@
 }
 
 .logo-mobile {
-  height: 34px;
-  margin-top: -6px;
+  width: 126px;
+  height: auto;
 }
 
 .logo {
@@ -63,18 +65,32 @@
   width: auto;
   height: auto;
   padding: 22px;
-  color: var(--tw-primary-bg);
+  color: var(--tw-white);
 
   &:hover {
-    color: var(--tw-primary-bg);
-    background-color: var(--tw-dark-lime-mint);
+    color: var(--tw-white);
+    background-color: transparent;
   }
 }
 
+.menu-mask {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  cursor: pointer;
+}
+
 .menu-popup {
-  padding: 0;
+  position: absolute;
+  top: v-height-mobile-header;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  min-height: calc(100% - v-height-mobile-header);
+  padding: var(--pd-16) 0;
   background: var(--tw-dark-green);
-  overflow: hidden;
 }
 
 .side-menu {

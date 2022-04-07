@@ -1,9 +1,9 @@
 import { createSignal, Show } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 import { storage } from '_common/api/storage';
 import { useMediaContext } from '_common/api/media/context';
 import { useBool } from '_common/utils/useBool';
-import { Popover } from '_common/components/Popover';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import fullLogo from 'app/assets/Tagline_Lockup_White.svg';
@@ -38,15 +38,18 @@ export function Sidebar() {
         </Show>
       </div>
       <Show when={media.small}>
-        <Popover
-          open={menuOpen()}
-          position="bottom-right"
-          class={css.menuPopup}
-          content={<MainMenu view="mobile" onItemClick={toggleMenu} />}
-          onClickOutside={toggleMenu}
-        >
-          <Button view="ghost" icon="more-vertical" class={css.menuButton} onClick={toggleMenu} />
-        </Popover>
+        <Button
+          view="ghost"
+          icon={menuOpen() ? 'cancel' : 'more-vertical'}
+          class={css.menuButton}
+          onClick={toggleMenu}
+        />
+        <Show when={menuOpen()}>
+          <Portal>
+            <div class={css.menuMask} onClick={toggleMenu} />
+            <MainMenu view="mobile" class={css.menuPopup} onItemClick={toggleMenu} />
+          </Portal>
+        </Show>
       </Show>
       <Show when={media.medium}>
         <MainMenu view={expand() ? 'expanded' : 'collapsed'} class={css.sideMenu} />

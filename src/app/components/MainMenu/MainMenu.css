@@ -5,11 +5,10 @@
   flex-grow: 1;
 }
 
-.main-grow {
-  flex-grow: 1;
+.main-mobile {
+  padding-bottom: 56px;
 }
 
-.mobile-item {
-  padding: var(--pd-16) var(--pd-24);
-  border: 0;
+.main-grow {
+  flex-grow: 1;
 }
