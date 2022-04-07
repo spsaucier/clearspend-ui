@@ -137,6 +137,12 @@
   font-size: var(--text-12);
 }
 
+.synced-locked-tag {
+  color: var(--tw-gray-20);
+  background: var(--tw-gray-80);
+  border: 1px solid var(--tw-gray-60);
+}
+
 .decline-reason {
   display: flex;
   width: 100%;

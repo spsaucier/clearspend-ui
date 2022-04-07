@@ -193,10 +193,16 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 </Tag>
               }
             >
+              <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
+                <Tag size="sm" type={SYNC_STATUS_TYPES.SYNCED_LOCKED} class={css.syncedLockedTag}>
+                  <Icon class={css.syncTagIcon} size="sm" name="lock" />
+                  <Text message="Synced and locked" />
+                </Tag>
+              </Match>
               <Match when={transaction().syncStatus !== 'READY'}>
                 <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
                   <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
-                  <span>Not ready to sync</span>
+                  <Text message="Not ready to sync" />
                 </Tag>
               </Match>
             </Switch>
