@@ -6,15 +6,14 @@ import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
-import type { SearchCardRequest } from 'generated/capital';
 import { MultiSelect } from '_common/components/MultiSelect/MultiSelect';
 import { Option } from '_common/components/MultiSelect/Option';
 import { useAllocations } from 'allocations/stores/allocations';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
 
-import { convertFormData } from './utils';
-import type { CardsFilterDrawerProps, FormValues } from './types';
+import { getFormOptions, convertFormData } from './utils';
+import type { CardsFilterDrawerProps } from './types';
 
 import css from './CardsFilterDrawer.css';
 
@@ -23,16 +22,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
 
-  const { values, handlers } = createForm<FormValues>({
-    defaultValues: {
-      allocations: props.params.allocations || [],
-      users: props.params.users || [],
-      statuses: props.params.statuses || [],
-      types: props.params.types || [],
-      amountMin: props.params.balance?.min?.toString() || '',
-      amountMax: props.params.balance?.max?.toString() || '',
-    },
-  });
+  const { values, handlers } = createForm(getFormOptions(props.params));
 
   const onApply = () => {
     props.onChangeParams((prev) => ({
@@ -78,10 +68,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
           </div>
         </FilterBox>
         <FilterBox title={<Text message="Card Status" />}>
-          <CheckboxGroup
-            value={values().statuses}
-            onChange={(value) => handlers.statuses?.(value as SearchCardRequest['statuses'])}
-          >
+          <CheckboxGroup value={values().statuses} onChange={handlers.statuses}>
             <Checkbox value="INACTIVE">
               <Text message="Frozen / Awaiting Activation" />
             </Checkbox>
@@ -94,10 +81,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
           </CheckboxGroup>
         </FilterBox>
         <FilterBox title={<Text message="Card Type" />}>
-          <CheckboxGroup
-            value={values().types}
-            onChange={(value) => handlers.types?.(value as SearchCardRequest['types'])}
-          >
+          <CheckboxGroup value={values().types} onChange={handlers.types}>
             <Checkbox value="PHYSICAL">
               <Text message="Physical" />
             </Checkbox>

@@ -1,18 +1,27 @@
-import { parseAmount } from '_common/formatters/amount';
+import type { FormOptions } from '_common/components/Form';
+import { getAmountFilter, toFilterAmount, toFilterArray } from 'app/utils/filters';
+import type { SearchCardRequest } from 'generated/capital';
 
 import type { FormResult, FormValues } from './types';
 
-export function convertFormData(data: Readonly<FormValues>): Readonly<FormResult> {
-  const { amountMin, amountMax, ...rest } = data;
-  const min = parseAmount(amountMin || '');
-  const max = parseAmount(amountMax || '');
+export function getFormOptions(params: Readonly<SearchCardRequest>): FormOptions<FormValues> {
   return {
-    ...rest,
-    ...((!Number.isNaN(min) || !Number.isNaN(max)) && {
-      balance: {
-        min: !Number.isNaN(min) ? min : undefined,
-        max: !Number.isNaN(max) ? max : undefined,
-      },
-    }),
+    defaultValues: {
+      ...getAmountFilter(params.balance),
+      allocations: [...(params.allocations || [])],
+      users: [...(params.users || [])],
+      statuses: [...(params.statuses || [])],
+      types: [...(params.types || [])],
+    },
+  };
+}
+
+export function convertFormData(data: Readonly<FormValues>): Readonly<FormResult> {
+  return {
+    balance: toFilterAmount(data) || undefined,
+    allocations: toFilterArray(data.allocations),
+    statuses: toFilterArray(data.statuses),
+    types: toFilterArray(data.types),
+    users: toFilterArray(data.users),
   };
 }

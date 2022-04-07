@@ -1,8 +1,7 @@
 import type { FormOptions } from '_common/components/Form';
+import { getAmountFilter, getDateFilter, toFilterAmount, toFilterDate, toFilterArray } from 'app/utils/filters';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
 import type { AccountActivityRequest } from 'generated/capital';
-
-import { getAmountFilter, getDateFilter, toFilterAmount, toFilterDate } from '../../utils/filters';
 
 import type { FormValues, FormResult } from './types';
 
@@ -23,11 +22,11 @@ export function getFormOptions(params: Readonly<AccountActivityRequest>): FormOp
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<FormResult> {
   return {
-    ...toFilterAmount(data),
+    amount: toFilterAmount(data) || undefined,
     ...toFilterDate(data.date),
     allocationId: data.allocation === ALL_ALLOCATIONS ? undefined : data.allocation,
-    categories: data.categories.length ? [...data.categories] : undefined,
-    statuses: data.status.length ? [...data.status] : undefined,
+    categories: toFilterArray(data.categories),
+    statuses: toFilterArray(data.status),
     withReceipt: data.hasReceipt || undefined,
     withoutReceipt: data.hasReceipt === false || undefined,
     userId: data.userId || undefined,

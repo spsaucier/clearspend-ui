@@ -1,7 +1,7 @@
+import type { AmountRange } from 'app/utils/filters';
 import type { AccountActivityRequest } from 'generated/capital';
 
 import type { ActivityStatus } from '../../types';
-import type { AmountRange } from '../../utils/filters';
 
 export interface FormValues extends AmountRange {
   allocation: string | undefined;

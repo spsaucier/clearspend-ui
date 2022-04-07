@@ -1,7 +1,7 @@
+import type { AmountRange } from 'app/utils/filters';
 import type { LedgerActivityRequest } from 'generated/capital';
 
 import type { LedgerActivityType } from '../../types';
-import type { AmountRange } from '../../utils/filters';
 
 export type LedgerFiltersFields = keyof Omit<LedgerActivityRequest, 'pageRequest' | 'searchText'>;
 

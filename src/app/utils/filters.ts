@@ -15,18 +15,14 @@ export function getAmountFilter(amount: Readonly<FilterAmount> | undefined): Rea
   };
 }
 
-export function toFilterAmount<T extends Readonly<AmountRange>>(
-  data: Readonly<T>,
-): Readonly<{ amount: Readonly<FilterAmount> }> | false {
+export function toFilterAmount<T extends Readonly<AmountRange>>(data: Readonly<T>): Readonly<FilterAmount> | false {
   const min = parseAmount(data.amountMin);
   const max = parseAmount(data.amountMax);
 
   return (
     (!Number.isNaN(min) || !Number.isNaN(max)) && {
-      amount: {
-        min: !Number.isNaN(min) ? min : undefined,
-        max: !Number.isNaN(max) ? max : undefined,
-      },
+      min: !Number.isNaN(min) ? min : undefined,
+      max: !Number.isNaN(max) ? max : undefined,
     }
   );
 }
@@ -37,4 +33,8 @@ export function getDateFilter<T extends Partial<DateRange>>(params: Readonly<T>)
 
 export function toFilterDate(range: ReadonlyDate[]): Readonly<Partial<DateRange>> {
   return Boolean(range.length) ? dateRangeToISO([range[0]!, range[1]!]) : { from: undefined, to: undefined };
+}
+
+export function toFilterArray<T extends unknown>(value: T[]): T[] | undefined {
+  return value.length ? [...value] : undefined;
 }
