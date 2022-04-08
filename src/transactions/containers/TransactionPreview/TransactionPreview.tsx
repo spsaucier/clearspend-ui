@@ -121,8 +121,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
   const activeCategories = createMemo(() => expenseCategories.data!.filter((category) => category.status === 'ACTIVE'));
 
-  const categoryIsActive = (categoryId: string | undefined): boolean => {
-    return !categoryId || activeCategories().some((category) => category.expenseCategoryId === categoryId);
+  const categoryIsActive = (categoryId: string | undefined | null): boolean => {
+    return categoryId === undefined || activeCategories().some((category) => category.expenseCategoryId === categoryId);
   };
 
   const onSaveExpenseCategory = (categoryId: string | undefined) => {
