@@ -97,6 +97,17 @@ export default function Allocations() {
                   <Text message="Manage Balance" />
                 </Button>
               </Show>
+              <Show when={canManageFunds(userPermissions())}>
+                <Button
+                  size="lg"
+                  icon="add"
+                  onClick={() =>
+                    navigate('/allocations/edit', { state: { parentAllocationId: current()?.allocationId } })
+                  }
+                >
+                  <Text message="New Allocation" />
+                </Button>
+              </Show>
               <Show when={canManageCards(userPermissions())}>
                 <Button
                   icon="add"
@@ -111,7 +122,6 @@ export default function Allocations() {
           side={
             <AllocationsSide
               currentID={current()!.allocationId}
-              userPermissions={userPermissions()}
               items={allocations.data!}
               onAllocationChange={onAllocationChange}
             />

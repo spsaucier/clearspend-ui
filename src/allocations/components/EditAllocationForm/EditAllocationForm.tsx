@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { Accessor, createMemo, createSignal, For, Show } from 'solid-js';
 import { Text, useI18n } from 'solid-i18n';
 
 import { useBool } from '_common/utils/useBool';
@@ -49,7 +49,7 @@ interface EditAllocationFormProps {
   onChangeParent: (allocationId?: string) => void;
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
   onSave: (data: Readonly<CreateAllocationRequest>, roles: AllocationUserRole[]) => Promise<unknown>;
-  parentAllocationId?: string;
+  parentAllocationId?: Accessor<string>;
 }
 
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
@@ -61,7 +61,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const [showEmployeeDrawer, toggleEmployeeDrawer] = useBool();
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>(
-    getFormOptions(props.mccCategories, props.parentAllocationId),
+    getFormOptions(props.mccCategories, props.parentAllocationId?.()),
   );
 
   const [localUserRoles, setLocalUserRoles] = createSignal<AllocationUserRole[]>([]);

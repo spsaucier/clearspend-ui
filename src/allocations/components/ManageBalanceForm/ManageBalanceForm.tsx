@@ -101,7 +101,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
       </Form>
       <div class={css.footer}>
         <Show when={currentUser().type === 'BUSINESS_OWNER'}>
-          <InternalBankAccount heading={<Text message="Want to wire money?" />} />
+          <InternalBankAccount heading={<Text message="Add funds via ACH or wire" />} />
         </Show>
         <Show when={isBankAccount(selectedTarget())}>
           <BankTransferNotice withdraw={Boolean(props.withdraw)} class={css.notice} />

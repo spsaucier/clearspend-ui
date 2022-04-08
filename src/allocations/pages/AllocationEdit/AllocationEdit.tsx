@@ -1,4 +1,4 @@
-import { Switch, Match, createEffect } from 'solid-js';
+import { Switch, Match, createEffect, createSignal } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
@@ -23,25 +23,27 @@ export default function AllocationEdit() {
   const messages = useMessages();
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
+  const [hasSetRolesId, setHasSetRolesId] = createSignal(false);
 
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
 
-  const [parentRoles, rolesStatus, , setRolesId, reloadRoles, mutateRoles] = useResource(
+  const [parentRoles, rolesStatus, params, setRolesId, reloadRoles, mutateRoles] = useResource(
     getAllocationRoles,
     undefined,
     false,
   );
 
   createEffect(() => {
-    if (allocations.data?.[0]) {
-      setRolesId(allocations.data[0].allocationId);
+    if (allocations.data?.[0] && !hasSetRolesId()) {
+      setRolesId(location.state?.parentAllocationId || allocations.data[0].allocationId);
+      setHasSetRolesId(true);
     }
   });
 
   const onChangeParent = (allocationId?: string) => {
-    allocationId ? setRolesId(allocationId) : mutateRoles([], true);
+    allocationId && allocationId !== params() ? setRolesId(allocationId) : mutateRoles([], true);
   };
 
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
@@ -56,19 +58,31 @@ export default function AllocationEdit() {
   };
 
   const onSave = async (allocation: CreateAllocationRequest, userRoles: AllocationUserRole[]) => {
-    const allocationId = await saveAllocation(allocation);
-    sendAnalyticsEvent({ name: Events.CREATE_ALLOCATION });
-    messages.success({ title: i18n.t('The new allocation has been successfully added.') });
-
     try {
-      // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
-      await Promise.all(userRoles.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
-    } catch (error: unknown) {
-      messages.error({ title: i18n.t('Updating users permissions failed.') });
-    }
+      const allocationId = await saveAllocation(allocation).catch((e: { data: { message: string } }) => {
+        if (e.data.message.indexOf('xxx') > -1) {
+          // {"message":"ALLOCATION USD account (89925532-9177-4964-84f5-d655427cb8e1) does not have sufficient funds for 1000USD REALLOCATE adjustment","param":""}
+          messages.error({ title: 'Insufficient funds' });
+        } else {
+          messages.error({ title: e.data.message });
+        }
+        throw e;
+      });
+      sendAnalyticsEvent({ name: Events.CREATE_ALLOCATION });
+      messages.success({ title: i18n.t('The new allocation has been successfully added.') });
 
-    const prevRoute = location.state?.prev;
-    navigate(prevRoute && !prevRoute.match(/^\/allocations/) ? prevRoute : `/allocations/${allocationId}`);
+      try {
+        // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
+        await Promise.all(userRoles.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
+      } catch (error: unknown) {
+        messages.error({ title: i18n.t('Updating users permissions failed.') });
+      }
+
+      const prevRoute = location.state?.prev;
+      navigate(prevRoute && !prevRoute.match(/^\/allocations/) ? prevRoute : `/allocations/${allocationId}`);
+    } catch {
+      // do nothing
+    }
   };
 
   return (
@@ -89,7 +103,7 @@ export default function AllocationEdit() {
         <Match when={allocations.loading || mcc.loading || (users.loading && !users.data?.length)}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length && mcc.data?.length && !rolesStatus().loading}>
+        <Match when={allocations.data?.length && mcc.data?.length}>
           <EditAllocationForm
             users={users.data!}
             mccCategories={mcc.data!}
@@ -98,7 +112,7 @@ export default function AllocationEdit() {
             onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
-            parentAllocationId={location.state?.parentAllocationId}
+            parentAllocationId={params}
           />
         </Match>
       </Switch>

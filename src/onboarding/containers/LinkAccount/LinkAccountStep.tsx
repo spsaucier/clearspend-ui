@@ -38,7 +38,7 @@ export default function LinkAccountStep(props: LinkAccountStepProps) {
         <Text message="Don’t want to connect a bank account now?" />
       </h3>
       <p>
-        <Text message="You can connect your back later, or we'll set up a virtual account that you can fund via ACH or wire transfer." />
+        <Text message="You can connect your bank later, or we'll set up a virtual account that you can fund via ACH or wire transfer." />
       </p>
       <p>
         <Text message="Note: Your virtual account will be ready in about 30 minutes." />

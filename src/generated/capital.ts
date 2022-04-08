@@ -13,7 +13,6 @@ export interface LimitTypeMap {
   ACH_DEPOSIT?: LimitPeriodMap;
   ACH_WITHDRAW?: LimitPeriodMap;
   PURCHASE?: LimitPeriodMap;
-  ATM_WITHDRAW?: LimitPeriodMap;
 }
 
 export interface LimitPeriodMap {
@@ -474,7 +473,7 @@ export interface AccountActivityResponse {
 
   /** @format date-time */
   lastSyncTime?: string;
-  declineDetails?: DeclineDetails | AddressPostalCodeMismatch;
+  declineDetails?: DeclineDetails | AddressPostalCodeMismatch | LimitExceeded | SpendControlViolated;
 }
 
 export type AddressPostalCodeMismatch = DeclineDetails & {
@@ -656,6 +655,7 @@ export interface DeclineDetails {
     | 'INVALID_CARD_STATUS'
     | 'CARD_NOT_FOUND'
     | 'LIMIT_EXCEEDED'
+    | 'SPEND_CONTROL_VIOLATED'
     | 'ADDRESS_POSTAL_CODE_MISMATCH'
     | 'CVC_MISMATCH'
     | 'EXPIRY_MISMATCH'
@@ -682,6 +682,14 @@ export interface ExpenseDetails {
   expenseCategoryId?: string;
   categoryName?: string;
 }
+
+export type LimitExceeded = DeclineDetails & {
+  entityId?: string;
+  entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
+  limitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
+  limitPeriod?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  exceededAmount?: number;
+};
 
 export interface Merchant {
   name?: string;
@@ -1016,6 +1024,28 @@ export interface ReceiptDetails {
   receiptId?: string[];
 }
 
+export type SpendControlViolated = DeclineDetails & {
+  entityId?: string;
+  entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
+  mccGroup?:
+    | 'CHILD_CARE'
+    | 'DIGITAL_GOODS'
+    | 'EDUCATION'
+    | 'ENTERTAINMENT'
+    | 'FOOD_BEVERAGE'
+    | 'GAMBLING'
+    | 'GOVERNMENT'
+    | 'HEALTH'
+    | 'MEMBERSHIPS'
+    | 'MONEY_TRANSFER'
+    | 'SERVICES'
+    | 'SHOPPING'
+    | 'TRAVEL'
+    | 'UTILITIES'
+    | 'OTHER';
+  paymentType?: 'POS' | 'ONLINE' | 'MANUAL_ENTRY';
+};
+
 export interface NetworkMessageRequest {
   /** @format uuid */
   cardId?: string;
@@ -1142,6 +1172,15 @@ export interface CodatWebhookPushStatusData {
   pushOperationKey?: string;
 }
 
+export interface CodatWebhookDataSyncCompleteRequest {
+  CompanyId?: string;
+  Data?: CodatWebhookSyncData;
+}
+
+export interface CodatWebhookSyncData {
+  dataType?: string;
+}
+
 export interface CodatWebhookConnectionChangedData {
   dataConnectionId?: string;
   newStatus?: string;
@@ -1177,6 +1216,7 @@ export interface CodatAccountNested {
   fullyQualifiedCategory?: string;
   fullyQualifiedName?: string;
   type?: string;
+  updateStatus?: 'NOT_CHANGED' | 'NEW' | 'DELETED';
   children?: CodatAccountNested[];
 }
 
@@ -2235,6 +2275,12 @@ export interface AllocationFundCardResponse {
 export interface LedgerActivityRequest {
   /** @format uuid */
   allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  cardId?: string;
   searchText?: string;
   types?: (
     | 'BANK_DEPOSIT_STRIPE'
@@ -2259,6 +2305,11 @@ export interface LedgerActivityRequest {
   to?: string;
   statuses?: ('PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED')[];
   amount?: FilterAmount;
+  categories?: string[];
+  withReceipt?: boolean;
+  withoutReceipt?: boolean;
+  syncStatus?: ('SYNCED_LOCKED' | 'READY' | 'NOT_READY')[];
+  missingExpenseCategory?: boolean;
   pageRequest: PageRequest;
 }
 
@@ -2300,10 +2351,18 @@ export interface LedgerActivityResponse {
   status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
   user?: LedgerUser;
   amount?: Amount;
+  requestedAmount?: Amount;
+  syncStatus?: 'SYNCED_LOCKED' | 'READY' | 'NOT_READY';
   hold?: LedgerHoldInfo;
   sourceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
   targetAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
-  declineDetails?: DeclineDetails | AddressPostalCodeMismatch;
+  receipt?: ReceiptDetails;
+  notes?: string;
+  expenseDetails?: ExpenseDetails;
+
+  /** @format date-time */
+  lastSyncTime?: string;
+  declineDetails?: DeclineDetails | AddressPostalCodeMismatch | LimitExceeded | SpendControlViolated;
 }
 
 export type LedgerAllocationAccount = LedgerAccount & {

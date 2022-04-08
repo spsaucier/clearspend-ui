@@ -1,15 +1,13 @@
 import { createSignal, createMemo, Show, For } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
-import { useI18n, Text } from 'solid-i18n';
+import { useI18n } from 'solid-i18n';
 
 import { InputSearch } from '_common/components/InputSearch';
 import { Divider } from '_common/components/Divider';
-import { Button } from '_common/components/Button';
-import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { Allocation } from 'generated/capital';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
 import { byName } from '../AllocationSelect/utils';
-import { canManageFunds } from '../../utils/permissions';
 import { useMediaContext } from '../../../_common/api/media/context';
 import { AllocationSelect } from '../AllocationSelect';
 
@@ -20,7 +18,6 @@ import css from './AllocationsSide.css';
 
 interface AllocationsSideProps {
   currentID: string;
-  userPermissions: Readonly<UserRolesAndPermissionsRecord> | null;
   items: readonly Readonly<Allocation>[];
   onAllocationChange: () => void;
 }
@@ -97,15 +94,6 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                     itemClass={css.item}
                     onSelect={props.onAllocationChange}
                   />
-                </Show>
-                <Show when={canManageFunds(props.userPermissions)}>
-                  <Button
-                    type="primary"
-                    icon="add"
-                    onClick={() => navigate('/allocations/edit', { state: { parentAllocationId: props.currentID } })}
-                  >
-                    <Text message="New Allocation" />
-                  </Button>
                 </Show>
               </div>
             )}

@@ -13,6 +13,7 @@ import type { Allocation, BusinessFundAllocationResponse } from 'generated/capit
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { useMessages } from 'app/containers/Messages/context';
 import { isFetchError } from '_common/api/fetch/isFetchError';
+import { i18n } from '_common/api/intl';
 
 import { ManageBalanceSuccess, ManageBalanceSuccessData } from '../../components/ManageBalanceSuccess';
 import { AllocationView } from '../../components/AllocationView';
@@ -69,12 +70,14 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
             if (isFetchError<{ message?: string }>(e)) {
               const message = e.data.message;
               if (isString(message)) {
-                const withdrawalOrDeposit = isWithdrawal ? 'withdrawal' : 'deposit';
+                const withdrawalOrDeposit = isWithdrawal ? i18n.t('withdrawal') : i18n.t('deposit');
                 if (message.indexOf('exceeded allowed operation amount of limitType') > -1) {
                   const period = message.split('for period ')[1] || '';
                   messages.error({
-                    title: `Unable to complete ${withdrawalOrDeposit}`,
-                    message: `You have reached your ${period.toLowerCase()} ACH ${withdrawalOrDeposit} limit`,
+                    title: i18n.t('Unable to complete {withdrawalOrDeposit}', {
+                      withdrawalOrDeposit: String(withdrawalOrDeposit),
+                    }),
+                    message: `You have reached your ${period.toLowerCase()} ACH ${withdrawalOrDeposit} limit. Please contact help@clearspend.com for assistance.`,
                   });
                 } else {
                   messages.error({
