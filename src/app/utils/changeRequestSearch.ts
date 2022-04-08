@@ -5,5 +5,5 @@ interface Generic {
 }
 
 export function changeRequestSearch<T extends Readonly<Generic>>(setter: Setter<T>) {
-  return (searchText: string): void => setter((prev) => ({ ...prev, searchText }));
+  return (searchText: string): void => setter((prev) => ({ ...prev, searchText: searchText || undefined }));
 }
