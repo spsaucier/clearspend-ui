@@ -1,4 +1,4 @@
-import { Switch, Match } from 'solid-js';
+import { Switch, Match, createSignal } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
@@ -22,6 +22,7 @@ export default function CardEdit() {
   const messages = useMessages();
   const navigate = useNav();
   const location = useLoc<{ userId: string; allocationId: string }>();
+  const [errorLevel, setErrorLevel] = createSignal('');
 
   const mcc = useMCC({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
@@ -40,45 +41,57 @@ export default function CardEdit() {
 
   const onSave = async (data: Readonly<IssueCardRequest>) => {
     await saveCard(data).catch((e: { data?: { message?: string } }) => {
+      setErrorLevel('WARNING');
       if (e.data?.message === 'Physical card issuance limit exceeded') {
+        let message = i18n.t(
+          'Your virtual card was successfully created, but you have reached the maximum of physical cards. Please contact help@clearspend.com if you need more.',
+        );
+        if (data.cardType.length === 1) {
+          setErrorLevel('ERROR');
+          message = i18n.t(
+            'You have reached the maximum of physical cards. Please contact help@clearspend.com if you need more.',
+          );
+        }
         messages.error({
           title: i18n.t('Unable to create physical card'),
-          message:
-            data.cardType.length > 1 // Assume 1 was virtual & 1 was physical
-              ? i18n.t(
-                  'Your virtual card was successfully created, but you have reached the maximum of 10 physical cards.',
-                )
-              : i18n.t('You have reached the maximum of 10 physical cards. Please contact support if you need more.'),
+          message,
         });
       } else {
+        setErrorLevel('ERROR');
         messages.error({ title: i18n.t('Failed to create card') });
       }
     });
 
-    sendAnalyticsEvent({ name: Events.CREATE_CARD });
-    const hasVirtualCard = data.cardType.includes(CardType.VIRTUAL);
-    const hasPhysicalCard = data.cardType.includes(CardType.PHYSICAL);
-    if (hasVirtualCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_VIRTUAL });
-    if (hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_PHYSICAL });
-    if (hasVirtualCard && hasPhysicalCard) {
-      sendAnalyticsEvent({ name: Events.CREATE_CARD_BOTH_PHYSICAL_VIRTUAL });
-      messages.success({
-        title: i18n.t('Cards created successfully'),
-        message: i18n.t('The virtual card is available now. Please allow 5-10 days for the physical card to arrive.'),
-      });
-    } else if (hasVirtualCard) {
-      messages.success({
-        title: i18n.t('Virtual card issued successfully'),
-        message: i18n.t('This card is immediately available inside the ClearSpend app.'),
-      });
-    } else if (hasPhysicalCard) {
-      messages.success({
-        title: i18n.t('Physical card issued successfully'),
-        message: i18n.t('Please allow 5-10 days for this card to arrive.'),
-      });
+    if (errorLevel() !== 'ERROR') {
+      sendAnalyticsEvent({ name: Events.CREATE_CARD });
+      const hasVirtualCard = data.cardType.includes(CardType.VIRTUAL);
+      const hasPhysicalCard = data.cardType.includes(CardType.PHYSICAL);
+      if (hasVirtualCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_VIRTUAL });
+      if (errorLevel() !== 'WARNING') {
+        if (hasPhysicalCard) sendAnalyticsEvent({ name: Events.CREATE_CARD_PHYSICAL });
+        if (hasVirtualCard && hasPhysicalCard) {
+          sendAnalyticsEvent({ name: Events.CREATE_CARD_BOTH_PHYSICAL_VIRTUAL });
+          messages.success({
+            title: i18n.t('Cards created successfully'),
+            message: i18n.t(
+              'The virtual card is available now. Please allow 5-10 days for the physical card to arrive.',
+            ),
+          });
+        } else if (hasVirtualCard) {
+          messages.success({
+            title: i18n.t('Virtual card issued successfully'),
+            message: i18n.t('This card is immediately available inside the ClearSpend app.'),
+          });
+        } else if (hasPhysicalCard) {
+          messages.success({
+            title: i18n.t('Physical card issued successfully'),
+            message: i18n.t('Please allow 5-10 days for this card to arrive.'),
+          });
+        }
+      }
+      // TODO: after CAP-842, redirect to created card if possible
+      navigate(location.state?.prev || '/cards');
     }
-    // TODO: after CAP-842, redirect to created card if possible
-    navigate(location.state?.prev || '/cards');
   };
 
   return (

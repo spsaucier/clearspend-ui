@@ -102,11 +102,6 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
       },
     },
     {
-      name: 'expiration',
-      title: <Text message="Expiration" />,
-      render: (item) => (item.hold?.expirationDate ? <DateTime date={item.hold.expirationDate} /> : '--'),
-    },
-    {
       name: 'type',
       title: <Text message="Transaction" />,
       render: (item) => LEDGER_ACTIVITY_TYPES[item.type as LedgerActivityType],
