@@ -1,4 +1,4 @@
-import { Switch, Match, createEffect, createSignal } from 'solid-js';
+import { Switch, Match, createEffect } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
@@ -23,7 +23,6 @@ export default function AllocationEdit() {
   const messages = useMessages();
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
-  const [hasSetRolesId, setHasSetRolesId] = createSignal(false);
 
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
@@ -36,9 +35,8 @@ export default function AllocationEdit() {
   );
 
   createEffect(() => {
-    if (allocations.data?.[0] && !hasSetRolesId()) {
+    if (allocations.data?.[0]) {
       setRolesId(location.state?.parentAllocationId || allocations.data[0].allocationId);
-      setHasSetRolesId(true);
     }
   });
 

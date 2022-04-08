@@ -29,6 +29,7 @@ import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
 import { syncTransaction } from 'accounting/services';
+import { getNoop } from '_common/utils/getNoop';
 
 import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
@@ -322,6 +323,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 }
               }}
               onChange={setNote}
+              onFocusOut={canSubmitNote() ? onSaveNote : getNoop}
             />
           </div>
         </div>
