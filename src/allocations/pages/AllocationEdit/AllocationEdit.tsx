@@ -60,9 +60,17 @@ export default function AllocationEdit() {
   const onSave = async (allocation: CreateAllocationRequest, userRoles: AllocationUserRole[]) => {
     try {
       const allocationId = await saveAllocation(allocation).catch((e: { data: { message: string } }) => {
-        if (e.data.message.indexOf('xxx') > -1) {
-          // {"message":"ALLOCATION USD account (89925532-9177-4964-84f5-d655427cb8e1) does not have sufficient funds for 1000USD REALLOCATE adjustment","param":""}
-          messages.error({ title: 'Insufficient funds' });
+        if (e.data.message.indexOf('does not have sufficient funds') > -1) {
+          const parentAllocation = allocations.data?.find((a) => a.allocationId === allocation.parentAllocationId);
+          messages.error({
+            title: i18n.t('{parent} has insufficient funds', {
+              parent: parentAllocation?.name ? `"${parentAllocation.name}"` : 'Parent allocation',
+            }),
+            message: i18n.t(
+              'To proceed, either decrease the amount in this new allocation or add funds to the {parent} allocation.',
+              { parent: parentAllocation?.name ? `"${parentAllocation.name}"` : 'parent' },
+            ),
+          });
         } else {
           messages.error({ title: e.data.message });
         }
