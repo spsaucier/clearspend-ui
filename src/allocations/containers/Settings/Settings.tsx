@@ -42,6 +42,8 @@ interface SettingsProps {
   permissions: Accessor<Readonly<UserRolesAndPermissionsRecord> | null>;
 }
 
+const IDLE_MS = 100;
+
 export function Settings(props: Readonly<SettingsProps>) {
   const i18n = useI18n();
   const messages = useMessages();
@@ -110,31 +112,66 @@ export function Settings(props: Readonly<SettingsProps>) {
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
     const { name } = values();
+    const [hideSuccess, setHideSuccess] = createSignal(false);
 
     try {
       const allocationId = props.allocation.allocationId;
       const roles = getRolesUpdates(currentRoles() || [], updatedRoles(), removedRoles());
 
       // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
-      await Promise.all(roles.create.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
-      await Promise.all(roles.update.map((item) => updateAllocationRole(allocationId, item.user.userId!, item.role)));
+      await roles.create.forEach((item) => {
+        return addAllocationRole(allocationId, item.user.userId!, item.role).catch(
+          (e: { data: { message: string } }) => {
+            messages.error({
+              title: i18n.t('Unable to add {user}', { user: formatName(item.user) }),
+              message: e.data.message,
+            });
+            setHideSuccess(true);
+          },
+        );
+      });
+      await roles.update.forEach((item) => {
+        return updateAllocationRole(allocationId, item.user.userId!, item.role).catch(
+          (e: { data: { message: string } }) => {
+            messages.error({
+              title: i18n.t('Unable to update {user}', { user: formatName(item.user) }),
+              message: e.data.message,
+            });
+            setHideSuccess(true);
+          },
+        );
+      });
       // We don't delete roles; we demote them back to Employee (the base company user)
-      await Promise.all(roles.remove.map((id) => updateAllocationRole(allocationId, id, AllocationRoles.Employee)));
+      await roles.remove.forEach((id) => {
+        return updateAllocationRole(allocationId, id, AllocationRoles.Employee).catch(
+          (e: { data: { message: string } }) => {
+            messages.error({
+              title: i18n.t('Unable to demote {user}', { user: formatName(users.data?.find((u) => u.userId === id)) }),
+              message: e.data.message,
+            });
+            setHideSuccess(true);
+          },
+        );
+      });
 
       let postSaveAllocationName = props.allocation.name;
-
       if (props.allocation.name !== name) {
         const updated = await updateAllocation(props.allocation.allocationId, { name });
-
         postSaveAllocationName = updated.allocation.name;
-
         await props.onReload();
       }
 
-      await reloadCurrentRoles();
+      await new Promise<void>((resolve) => {
+        setTimeout(async () => {
+          await reloadCurrentRoles();
+          return resolve();
+        }, IDLE_MS); // There's a race condition on the backend, so we wait to reload
+      });
       onReset({ name: postSaveAllocationName });
 
-      messages.success({ title: i18n.t('The allocation has been successfully updated.') });
+      if (!hideSuccess()) {
+        messages.success({ title: i18n.t('The allocation has been successfully updated.') });
+      }
     } catch (error: unknown) {
       messages.error({ title: i18n.t('Something went wrong') });
     }
