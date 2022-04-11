@@ -1,4 +1,4 @@
-import { createSignal, Switch, Match, onMount } from 'solid-js';
+import { createSignal, Switch, Match, onMount, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate, useSearchParams } from 'solid-app-router';
 
@@ -19,7 +19,8 @@ import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transac
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
-// import { syncMultipleTransactions } from 'accounting/services';
+import { getChartOfAccountsChangeNumber } from 'accounting/services';
+import { ChartOfAccountsUpdateBar } from 'accounting/components/ChartOfAccountsUpdateBar';
 
 enum Tabs {
   transactions = 'transactions',
@@ -34,6 +35,7 @@ export function AccountingTabs() {
 
   const { business } = useBusiness();
   const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
+  const [chartOfAccountsChanges, setChartOfAccountsChanges] = createSignal(0);
 
   const onSelectTransaction = (id: string) => {
     if (!selectedTransactions().includes(id)) {
@@ -48,13 +50,15 @@ export function AccountingTabs() {
 
   const navigate = useNavigate();
 
-  onMount(() => {
+  onMount(async () => {
     if (business().accountingSetupStep !== AccountSetupStep.COMPLETE) {
       navigate('/accounting-setup');
     }
     if (params.notification === 'setup') {
       messages.success({ title: 'Settings update complete', message: 'Ready to sync transactions.' });
     }
+    const totalChanges = await getChartOfAccountsChangeNumber();
+    setChartOfAccountsChanges(totalChanges);
   });
 
   const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
@@ -69,49 +73,54 @@ export function AccountingTabs() {
   });
 
   return (
-    <Page title={<Text message="Accounting" />}>
-      <TabList value={tab()} onChange={setTab}>
-        <Tab value={Tabs.transactions}>
-          <Text message="Sync Transactions" />
-        </Tab>
-        <Tab value={Tabs.log}>
-          <Text message="Sync Log" />
-        </Tab>
-        <Tab value={Tabs.settings}>
-          <Text message="Settings" />
-        </Tab>
-      </TabList>
-      <Data
-        data={activityStore.data}
-        loading={activityStore.loading}
-        error={activityStore.error}
-        onReload={activityStore.reload}
-      >
-        <Switch>
-          <Match when={tab() === Tabs.transactions}>
-            <AccountingOverview
-              loading={activityStore.loading}
-              error={activityStore.error}
-              params={activityStore.params}
-              data={activityStore.data}
-              onReload={activityStore.reload}
-              onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
-                storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
-              )}
-              onUpdateData={activityStore.setData}
-              selectedTransactions={selectedTransactions}
-              onSelectTransaction={onSelectTransaction}
-              onDeselectTransaction={onDeselectTransaction}
-            />
-          </Match>
-          <Match when={tab() === Tabs.log}>
-            <SyncLog />
-          </Match>
-          <Match when={tab() === Tabs.settings}>
-            <AccountingSettings data={activityStore.data} />
-          </Match>
-        </Switch>
-      </Data>
-    </Page>
+    <div>
+      <Show when={chartOfAccountsChanges() > 0}>
+        <ChartOfAccountsUpdateBar count={chartOfAccountsChanges()} />
+      </Show>
+      <Page title={<Text message="Accounting" />}>
+        <TabList value={tab()} onChange={setTab}>
+          <Tab value={Tabs.transactions}>
+            <Text message="Sync Transactions" />
+          </Tab>
+          <Tab value={Tabs.log}>
+            <Text message="Sync Log" />
+          </Tab>
+          <Tab value={Tabs.settings}>
+            <Text message="Settings" />
+          </Tab>
+        </TabList>
+        <Data
+          data={activityStore.data}
+          loading={activityStore.loading}
+          error={activityStore.error}
+          onReload={activityStore.reload}
+        >
+          <Switch>
+            <Match when={tab() === Tabs.transactions}>
+              <AccountingOverview
+                loading={activityStore.loading}
+                error={activityStore.error}
+                params={activityStore.params}
+                data={activityStore.data}
+                onReload={activityStore.reload}
+                onChangeParams={onPageSizeChange(activityStore.setParams, (size) =>
+                  storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
+                )}
+                onUpdateData={activityStore.setData}
+                selectedTransactions={selectedTransactions}
+                onSelectTransaction={onSelectTransaction}
+                onDeselectTransaction={onDeselectTransaction}
+              />
+            </Match>
+            <Match when={tab() === Tabs.log}>
+              <SyncLog />
+            </Match>
+            <Match when={tab() === Tabs.settings}>
+              <AccountingSettings data={activityStore.data} />
+            </Match>
+          </Switch>
+        </Data>
+      </Page>
+    </div>
   );
 }

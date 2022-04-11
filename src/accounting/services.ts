@@ -4,7 +4,7 @@ import type {
   CodatCreateCreditCardResponse,
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
-import type { ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
+import type { ChartOfAccounts, ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
 
 import type {
   IntegrationAccountResponse,
@@ -82,4 +82,16 @@ export async function deleteCompanyConnection() {
 
 export async function disableCategories(expenseCategoryIds: (string | undefined)[]) {
   return (await service.post<Readonly<ExpenseCategory>[]>('/expense-categories/disable', expenseCategoryIds)).data;
+}
+
+export async function updateChartOfAccounts() {
+  return (await service.post<Readonly<ChartOfAccounts>>('/chart-of-accounts/update')).data;
+}
+
+export async function getSavedChartOfAccounts() {
+  return (await service.get<Readonly<IntegrationAccountResponse>>('/chart-of-accounts/stored')).data;
+}
+
+export async function getChartOfAccountsChangeNumber() {
+  return (await service.get<Readonly<number>>('/chart-of-accounts/total-changes')).data;
 }

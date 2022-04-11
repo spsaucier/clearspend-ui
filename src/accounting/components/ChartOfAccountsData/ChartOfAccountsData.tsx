@@ -20,6 +20,7 @@ interface ChartOfAccountsDataProps {
   setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
   saveOnChange?: boolean;
+  showDeleted?: boolean;
 }
 
 export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
@@ -34,6 +35,7 @@ export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
         setUnselectedCategories={props.setUnselectedCategories}
         setRoadblockRequestParameters={props.setRoadblockRequestParameters}
         saveOnChange={props.saveOnChange || false}
+        showDeleted={props.showDeleted}
       />
     </Data>
   );

@@ -9,6 +9,7 @@ export interface IntegrationAccount {
   type: string; // TODO: enum
   status: string; // TODO: enum
   children: IntegrationAccount[];
+  updateStatus: string;
 }
 
 export interface FlattenedIntegrationAccount {

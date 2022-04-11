@@ -34,6 +34,7 @@ interface ChartOfAccountsTableProps {
   setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
   setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   saveOnChange: boolean;
+  showDeleted?: boolean;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -44,7 +45,10 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const [state, setState] = createStore(initialState);
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
   const flattenedData = createMemo(() => {
-    return flattenNestedIntegrationAccounts(props.data);
+    if (props.showDeleted) {
+      return flattenNestedIntegrationAccounts(props.data);
+    }
+    return flattenNestedIntegrationAccounts(props.data.filter((category) => category.updateStatus !== 'DELETED'));
   });
 
   const handleSave = async () => {

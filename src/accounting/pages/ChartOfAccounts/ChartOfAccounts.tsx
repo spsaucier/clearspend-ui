@@ -9,7 +9,7 @@ import {
 } from 'accounting/stores/integrationExpenseCategories';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
-import { postIntegrationExpenseCategoryMappings } from 'accounting/services';
+import { postIntegrationExpenseCategoryMappings, updateChartOfAccounts } from 'accounting/services';
 import { useMessages } from 'app/containers/Messages/context';
 import { i18n } from '_common/api/intl';
 import { UnselectedCategoriesRoadblock } from 'accounting/components/UnselectedCategoriesRoadblock/UnselectedCategoriesRoadblock';
@@ -31,6 +31,9 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
     createSignal<DeepReadonly<IntegrationAccountMapping | null>[]>();
   const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) => {
     postIntegrationExpenseCategoryMappings(mappings).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
+    updateChartOfAccounts().catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
     props.onNext();

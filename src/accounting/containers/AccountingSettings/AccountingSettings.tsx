@@ -12,8 +12,8 @@ import { postIntegrationExpenseCategoryMappings, deleteCompanyConnection } from 
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
 import {
-  useIntegrationExpenseCategories,
   useIntegrationExpenseCategoryMappings,
+  useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
 
 import css from './AccountingSettings.css';
@@ -29,7 +29,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const [open, setOpen] = createSignal(false);
   const [unlinkingIntegration, setUnlinkingIntegration] = createSignal(false);
 
-  const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
+  const integrationExpenseCategoryStore = useStoredIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
   const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) =>
     postIntegrationExpenseCategoryMappings(mappings);
@@ -73,6 +73,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
             integrationExpenseCategoryMappingStore.reload();
           }}
           saveOnChange={true}
+          showDeleted={false}
         />
       </Section>
       <Section
