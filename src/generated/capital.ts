@@ -3236,6 +3236,377 @@ export interface CardDetailsResponse {
   disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
 }
 
+export interface BusinessLimit {
+  limits?: LimitRecord[];
+  operationLimits?: LimitOperationRecord[];
+
+  /** @format int32 */
+  issuedPhysicalCardsLimit?: number;
+
+  /** @format int32 */
+  issuedPhysicalCardsTotal?: number;
+}
+
+export interface BusinessLimitOperationRecord {
+  businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
+  limitOperationPeriods?: LimitPeriodOperationRecord[];
+}
+
+export interface BusinessLimitRecord {
+  businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
+  limitPeriods?: LimitPeriodRecord[];
+}
+
+export interface LimitOperationRecord {
+  currency?:
+    | 'UNSPECIFIED'
+    | 'AED'
+    | 'AFN'
+    | 'ALL'
+    | 'AMD'
+    | 'ANG'
+    | 'AOA'
+    | 'ARS'
+    | 'AUD'
+    | 'AWG'
+    | 'AZN'
+    | 'BAM'
+    | 'BBD'
+    | 'BDT'
+    | 'BGN'
+    | 'BHD'
+    | 'BIF'
+    | 'BMD'
+    | 'BND'
+    | 'BOB'
+    | 'BRL'
+    | 'BSD'
+    | 'BTN'
+    | 'BWP'
+    | 'BYN'
+    | 'BYR'
+    | 'BZD'
+    | 'CAD'
+    | 'CDF'
+    | 'CHF'
+    | 'CLP'
+    | 'CNY'
+    | 'COP'
+    | 'CRC'
+    | 'CUC'
+    | 'CUP'
+    | 'CVE'
+    | 'CZK'
+    | 'DJF'
+    | 'DKK'
+    | 'DOP'
+    | 'DZD'
+    | 'EGP'
+    | 'ERN'
+    | 'ETB'
+    | 'EUR'
+    | 'FJD'
+    | 'FKP'
+    | 'GBP'
+    | 'GEL'
+    | 'GHS'
+    | 'GIP'
+    | 'GMD'
+    | 'GNF'
+    | 'GTQ'
+    | 'GYD'
+    | 'HKD'
+    | 'HNL'
+    | 'HRK'
+    | 'HTG'
+    | 'HUF'
+    | 'IDR'
+    | 'ILS'
+    | 'INR'
+    | 'IQD'
+    | 'IRR'
+    | 'ISK'
+    | 'JMD'
+    | 'JOD'
+    | 'JPY'
+    | 'KES'
+    | 'KGS'
+    | 'KHR'
+    | 'KMF'
+    | 'KPW'
+    | 'KRW'
+    | 'KWD'
+    | 'KYD'
+    | 'KZT'
+    | 'LAK'
+    | 'LBP'
+    | 'LKR'
+    | 'LRD'
+    | 'LSL'
+    | 'LTL'
+    | 'LYD'
+    | 'MAD'
+    | 'MDL'
+    | 'MGA'
+    | 'MKD'
+    | 'MMK'
+    | 'MNT'
+    | 'MOP'
+    | 'MRO'
+    | 'MRU'
+    | 'MUR'
+    | 'MVR'
+    | 'MWK'
+    | 'MXN'
+    | 'MYR'
+    | 'MZN'
+    | 'NAD'
+    | 'NGN'
+    | 'NIO'
+    | 'NOK'
+    | 'NPR'
+    | 'NZD'
+    | 'OMR'
+    | 'PAB'
+    | 'PEN'
+    | 'PGK'
+    | 'PHP'
+    | 'PKR'
+    | 'PLN'
+    | 'PYG'
+    | 'QAR'
+    | 'RON'
+    | 'RSD'
+    | 'RUB'
+    | 'RUR'
+    | 'RWF'
+    | 'SAR'
+    | 'SBD'
+    | 'SCR'
+    | 'SDG'
+    | 'SEK'
+    | 'SGD'
+    | 'SHP'
+    | 'SLL'
+    | 'SOS'
+    | 'SRD'
+    | 'SSP'
+    | 'STD'
+    | 'STN'
+    | 'SVC'
+    | 'SYP'
+    | 'SZL'
+    | 'THB'
+    | 'TJS'
+    | 'TMT'
+    | 'TND'
+    | 'TOP'
+    | 'TRY'
+    | 'TTD'
+    | 'TWD'
+    | 'TZS'
+    | 'UAH'
+    | 'UGX'
+    | 'USD'
+    | 'UYU'
+    | 'UZS'
+    | 'VEF'
+    | 'VES'
+    | 'VND'
+    | 'VUV'
+    | 'WST'
+    | 'XAF'
+    | 'XCD'
+    | 'XOF'
+    | 'XPF'
+    | 'YER'
+    | 'ZAR'
+    | 'ZMW'
+    | 'ZWL';
+  businessLimitOperations?: BusinessLimitOperationRecord[];
+}
+
+export interface LimitPeriodOperationRecord {
+  period?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+
+  /** @format int32 */
+  value?: number;
+}
+
+export interface LimitPeriodRecord {
+  period?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  value?: number;
+}
+
+export interface LimitRecord {
+  currency?:
+    | 'UNSPECIFIED'
+    | 'AED'
+    | 'AFN'
+    | 'ALL'
+    | 'AMD'
+    | 'ANG'
+    | 'AOA'
+    | 'ARS'
+    | 'AUD'
+    | 'AWG'
+    | 'AZN'
+    | 'BAM'
+    | 'BBD'
+    | 'BDT'
+    | 'BGN'
+    | 'BHD'
+    | 'BIF'
+    | 'BMD'
+    | 'BND'
+    | 'BOB'
+    | 'BRL'
+    | 'BSD'
+    | 'BTN'
+    | 'BWP'
+    | 'BYN'
+    | 'BYR'
+    | 'BZD'
+    | 'CAD'
+    | 'CDF'
+    | 'CHF'
+    | 'CLP'
+    | 'CNY'
+    | 'COP'
+    | 'CRC'
+    | 'CUC'
+    | 'CUP'
+    | 'CVE'
+    | 'CZK'
+    | 'DJF'
+    | 'DKK'
+    | 'DOP'
+    | 'DZD'
+    | 'EGP'
+    | 'ERN'
+    | 'ETB'
+    | 'EUR'
+    | 'FJD'
+    | 'FKP'
+    | 'GBP'
+    | 'GEL'
+    | 'GHS'
+    | 'GIP'
+    | 'GMD'
+    | 'GNF'
+    | 'GTQ'
+    | 'GYD'
+    | 'HKD'
+    | 'HNL'
+    | 'HRK'
+    | 'HTG'
+    | 'HUF'
+    | 'IDR'
+    | 'ILS'
+    | 'INR'
+    | 'IQD'
+    | 'IRR'
+    | 'ISK'
+    | 'JMD'
+    | 'JOD'
+    | 'JPY'
+    | 'KES'
+    | 'KGS'
+    | 'KHR'
+    | 'KMF'
+    | 'KPW'
+    | 'KRW'
+    | 'KWD'
+    | 'KYD'
+    | 'KZT'
+    | 'LAK'
+    | 'LBP'
+    | 'LKR'
+    | 'LRD'
+    | 'LSL'
+    | 'LTL'
+    | 'LYD'
+    | 'MAD'
+    | 'MDL'
+    | 'MGA'
+    | 'MKD'
+    | 'MMK'
+    | 'MNT'
+    | 'MOP'
+    | 'MRO'
+    | 'MRU'
+    | 'MUR'
+    | 'MVR'
+    | 'MWK'
+    | 'MXN'
+    | 'MYR'
+    | 'MZN'
+    | 'NAD'
+    | 'NGN'
+    | 'NIO'
+    | 'NOK'
+    | 'NPR'
+    | 'NZD'
+    | 'OMR'
+    | 'PAB'
+    | 'PEN'
+    | 'PGK'
+    | 'PHP'
+    | 'PKR'
+    | 'PLN'
+    | 'PYG'
+    | 'QAR'
+    | 'RON'
+    | 'RSD'
+    | 'RUB'
+    | 'RUR'
+    | 'RWF'
+    | 'SAR'
+    | 'SBD'
+    | 'SCR'
+    | 'SDG'
+    | 'SEK'
+    | 'SGD'
+    | 'SHP'
+    | 'SLL'
+    | 'SOS'
+    | 'SRD'
+    | 'SSP'
+    | 'STD'
+    | 'STN'
+    | 'SVC'
+    | 'SYP'
+    | 'SZL'
+    | 'THB'
+    | 'TJS'
+    | 'TMT'
+    | 'TND'
+    | 'TOP'
+    | 'TRY'
+    | 'TTD'
+    | 'TWD'
+    | 'TZS'
+    | 'UAH'
+    | 'UGX'
+    | 'USD'
+    | 'UYU'
+    | 'UZS'
+    | 'VEF'
+    | 'VES'
+    | 'VND'
+    | 'VUV'
+    | 'WST'
+    | 'XAF'
+    | 'XCD'
+    | 'XOF'
+    | 'XPF'
+    | 'YER'
+    | 'ZAR'
+    | 'ZMW'
+    | 'ZWL';
+  businessLimits?: BusinessLimitRecord[];
+}
+
 export interface UpdateAllocationRequest {
   /**
    * name of the department/ allocation
@@ -3427,7 +3798,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -3677,21 +4060,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -3734,14 +4105,6 @@ export interface CodatBankAccount {
 
 export interface CodatBankAccountsResponse {
   results?: CodatBankAccount[];
-}
-
-export interface BusinessLimit {
-  /** @format int32 */
-  issuedPhysicalCardsLimit?: number;
-
-  /** @format int32 */
-  issuedPhysicalCardsTotal?: number;
 }
 
 export interface BusinessProspectData {
