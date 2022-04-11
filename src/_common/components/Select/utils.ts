@@ -26,3 +26,7 @@ export function isMatch(search: string) {
 export function getSelected(value: string, elements: JSXElement): string | undefined {
   return getOptions(elements).find((el) => el.dataset.value === value)?.innerText || value;
 }
+
+export function isAutofillEvent<E extends Event>(event: E): boolean {
+  return !('data' in event);
+}

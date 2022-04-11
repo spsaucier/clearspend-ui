@@ -9,7 +9,7 @@ import { KEY_CODES } from '../../constants/keyboard';
 import { Spin } from '../Spin';
 
 import { SelectContext } from './context';
-import { getOptions, getSelected, isMatch } from './utils';
+import { getOptions, getSelected, isMatch, isAutofillEvent } from './utils';
 import type { SelectProps } from './types';
 
 import css from './Select.css';
@@ -33,7 +33,7 @@ export function Select(props: Readonly<SelectProps>) {
     return !text ? items : items.filter(isMatch(text));
   };
 
-  const onSearch = (value: string) => {
+  const onSearch = (value: string, event: InputEvent) => {
     if (props.changeOnSearch) {
       props.onChange?.(value);
     } else {
@@ -43,6 +43,20 @@ export function Select(props: Readonly<SelectProps>) {
           setSearch('');
           if (props.closeOnClear) setOpen(false);
           return;
+        }
+
+        if (isAutofillEvent(event)) {
+          const searchValue = value.toLowerCase();
+          const exact = getOptions(props.children)
+            .filter(isMatch(searchValue))
+            .find((el) => el.innerText.toLowerCase() === searchValue);
+
+          if (exact) {
+            props.onChange?.(exact.dataset.value!);
+            setSearch('');
+            setOpen(false);
+            return;
+          }
         }
 
         setSearch(value);
