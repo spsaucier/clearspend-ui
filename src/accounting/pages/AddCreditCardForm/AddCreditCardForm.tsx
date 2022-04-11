@@ -31,10 +31,6 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
   const [loading, postCC] = wrapAction(postCodatCreditCard);
 
-  const onClick = async () => {
-    onNext();
-  };
-
   const onClickNext = async () => {
     try {
       await postCC({
@@ -133,9 +129,6 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
       </Page>
       <div class={css.footer}>
         <CancelConfirmationButton onCancel={props.onCancel} />
-        <Button onClick={onClick} class={css.nextButton}>
-          <Text message="Skip Setup" />
-        </Button>
         <Button onClick={onClickNext} type="primary" loading={loading()} class={css.nextButton}>
           <Text message="Next" />
         </Button>
