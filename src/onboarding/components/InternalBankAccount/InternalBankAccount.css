@@ -13,6 +13,7 @@
   margin: 0 0 var(--pd-4);
   font-family: var(--font-header);
   font-size: var(--text-14);
+  font-weight: var(--font-400);
   letter-spacing: var(--ls-2);
   text-transform: uppercase;
 }
