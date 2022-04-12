@@ -7,12 +7,13 @@ import { PagePreAuth } from 'app/components/PagePreAuth';
 import { VerifyForm } from 'signup/components/VerifyForm';
 import { useLoc } from '_common/api/router';
 import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analytics';
+import { onSuccessLogin } from 'app/utils/onSuccessLogin';
 
 import { loginWith2fa } from '../../services/auth';
 
 export default function Login2fa() {
   const navigate = useNavigate();
-  const { state } = useLoc<{ twoFactorId: string }>();
+  const { state } = useLoc<{ twoFactorId: string; returnUrl?: string }>();
 
   onMount(() => SignUp.preload());
 
@@ -20,7 +21,7 @@ export default function Login2fa() {
     const user = await loginWith2fa({ code, twoFactorId: state?.twoFactorId as string });
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
     sendAnalyticsEvent({ name: Events.LOGIN });
-    navigate('/');
+    onSuccessLogin(user, navigate, state?.returnUrl);
   };
 
   return (

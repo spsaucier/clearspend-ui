@@ -35,9 +35,9 @@ export default function Main() {
     if (current) mutate({ ...current, ...(await getPermissions(current.business, getAllPermissions)) });
   };
 
-  events.sub(AppEvent.Logout, () => {
+  events.sub(AppEvent.Logout, (returnUrl: string) => {
     mutate(null);
-    navigate('/login');
+    navigate('/login', { state: { returnUrl: returnUrl } });
   });
 
   return (

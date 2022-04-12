@@ -8,6 +8,7 @@ import { sendAnalyticsEvent, AnalyticsEventType, Events } from 'app/utils/analyt
 import { PagePreAuth } from 'app/components/PagePreAuth';
 import { Header } from 'signup/components/Header';
 import { Description } from 'signup/components/Description';
+import { useLoc } from '_common/api/router';
 
 import { LoginForm } from '../../components/LoginForm';
 import { Reviews } from '../../containers/Reviews';
@@ -19,6 +20,7 @@ import css from './Login.css';
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = createSignal('');
+  const location = useLoc<{ returnUrl?: string }>();
 
   onMount(() => SignUp.preload());
 
@@ -30,9 +32,13 @@ export default function Login() {
       sendAnalyticsEvent({ type: AnalyticsEventType.AddUserProperties, data: user });
       sendAnalyticsEvent({ name: Events.LOGIN });
     }
-    user.changePasswordId
-      ? navigate('/set-password', { state: { username, password, changePasswordId: user.changePasswordId } })
-      : onSuccessLogin(user, navigate);
+    if (user.changePasswordId) {
+      navigate('/set-password', {
+        state: { username, password, changePasswordId: user.changePasswordId, returnUrl: location.state?.returnUrl },
+      });
+    } else {
+      onSuccessLogin(user, navigate, location.state?.returnUrl);
+    }
   };
 
   return (
