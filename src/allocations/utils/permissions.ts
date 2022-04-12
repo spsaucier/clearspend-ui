@@ -2,7 +2,16 @@ import type { UserRolesAndPermissionsRecord } from 'generated/capital';
 
 import type { AllocationPermissions } from '../types';
 
+import { allocationWithID } from './allocationWithID';
+
 type Permissions = Readonly<UserRolesAndPermissionsRecord> | null;
+
+export function getAllocationPermissions(
+  roles: Readonly<UserRolesAndPermissionsRecord>[],
+  id: string | undefined,
+): Readonly<UserRolesAndPermissionsRecord> | null {
+  return roles.find(allocationWithID(id)) || null;
+}
 
 function can(permissions: Permissions, permission: AllocationPermissions) {
   return Boolean(permissions?.allocationPermissions?.includes(permission));

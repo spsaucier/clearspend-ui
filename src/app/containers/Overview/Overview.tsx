@@ -1,4 +1,4 @@
-import { createSignal, Index, Show, batch, createMemo, createEffect } from 'solid-js';
+import { createSignal, Index, Show, batch, createMemo } from 'solid-js';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
@@ -9,15 +9,12 @@ import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
 import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { useMediaContext } from '_common/api/media/context';
-import type { Allocation, AccountActivityRequest } from 'generated/capital';
+import type { Allocation, AccountActivityRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
 import { TransactionsData } from 'transactions/containers/TransactionsData';
-import { getAllocationPermissions } from 'app/services/permissions';
-import { useResource } from '_common/utils/useResource';
-import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import { onAllocationChange } from 'allocations/utils/onAllocationChange';
 import { canRead } from 'allocations/utils/permissions';
 
@@ -43,6 +40,7 @@ const PERIOD_OPTIONS = [
 interface OverviewProps {
   allocationId: string | undefined;
   allocations: readonly Readonly<Allocation>[] | null;
+  userPermissions: Readonly<UserRolesAndPermissionsRecord> | null;
   onAllocationChange: (id: string) => void;
 }
 
@@ -55,17 +53,11 @@ export function Overview(props: Readonly<OverviewProps>) {
   const initPeriod = searchParams.period || TimePeriod.year;
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
 
-  const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
-
   const allocationId = createMemo(() => {
     return props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
   });
 
   const DEFAULT_PARAMS = { ...dateRangeToISO(getTimePeriod(initPeriod)), allocationId: allocationId() };
-
-  createEffect(() => {
-    setAllocationIdForPermissions(allocationId() || getRootAllocation(props.allocations)?.allocationId || '');
-  });
 
   const spendingStore = useSpending({ params: { ...DEFAULT_PARAMS, sortDirection: 'ASC' } });
 
@@ -115,7 +107,9 @@ export function Overview(props: Readonly<OverviewProps>) {
           <Index each={PERIOD_OPTIONS}>{(option) => <Tab value={option().key}>{option().text}</Tab>}</Index>
         </TabList>
       </Show>
-      <Show when={showTopSpendingSection() && (currentUser().type === 'BUSINESS_OWNER' || canRead(userPermissions()))}>
+      <Show
+        when={showTopSpendingSection() && (currentUser().type === 'BUSINESS_OWNER' || canRead(props.userPermissions))}
+      >
         <div class={css.section}>
           <h3 class={css.title}>
             <Text message="Top Spending" />

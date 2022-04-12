@@ -1,6 +1,6 @@
 import { createContext, useContext, Accessor } from 'solid-js';
 
-import type { Business, User, UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { Business, User, Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 type CurrentUser = Readonly<Required<User>>;
 type Permissions = Readonly<UserRolesAndPermissionsRecord>;
@@ -8,14 +8,16 @@ type Permissions = Readonly<UserRolesAndPermissionsRecord>;
 export interface MutateContext {
   currentUser: CurrentUser;
   business: Business;
-  permissions: Permissions;
 }
 
 interface InitContext {
   currentUser: Accessor<CurrentUser | null>;
   business: Accessor<Readonly<Business> | null>;
   permissions: Accessor<Permissions | null>;
+  allocations: Accessor<Allocation[]>;
+  currentUserRoles: Accessor<Permissions[]>;
   mutate: (updates: Partial<Readonly<MutateContext>>) => void;
+  reloadPermissions: () => Promise<void>;
   refetch: () => Promise<unknown>;
 }
 

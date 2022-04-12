@@ -8,34 +8,31 @@ import { events } from '_common/api/events';
 import { useResource } from '_common/utils/useResource';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
-import type { Business } from 'generated/capital';
 
 import { getUsers, getBusiness } from '../../services/businesses';
-import { getPermissions } from '../../services/permissions';
+import { getAllPermissions } from '../../services/permissions';
 import { AppEvent } from '../../types/common';
 import { MainRoutes } from '../MainRoutes';
 
 import { BusinessContext, type MutateContext } from './context';
+import { isStatus, getPermissions } from './utils';
 
 import css from './Main.css';
-
-function isStatus(business: Readonly<Business> | null, status: BusinessStatus): boolean {
-  return business?.status === status;
-}
 
 export default function Main() {
   const navigate = useNavigate();
 
-  const [data, status, , , refetch, mutate] = useResource(() =>
-    Promise.all([getUsers(), getBusiness(), getPermissions()]),
-  );
+  const [data, status, , , refetch, mutate] = useResource(async () => {
+    const [currentUser, business] = await Promise.all([getUsers(), getBusiness()]);
+    return { currentUser, business, ...(await getPermissions(business, getAllPermissions)) };
+  });
 
-  const currentUser = createMemo(() => data()?.[0] || null);
-  const business = createMemo(() => data()?.[1] || null);
-  const permissions = createMemo(() => data()?.[2] || null);
+  const business = createMemo(() => data()?.business || null);
+  const mutateContext = (updates: Partial<Readonly<MutateContext>>): void => mutate({ ...data()!, ...updates });
 
-  const mutateContext = (updates: Partial<Readonly<MutateContext>>): void => {
-    mutate([updates.currentUser || currentUser(), updates.business || business(), permissions()]);
+  const reloadPermissions = async () => {
+    const current = data();
+    if (current) mutate({ ...current, ...(await getPermissions(current.business, getAllPermissions)) });
   };
 
   events.sub(AppEvent.Logout, () => {
@@ -57,9 +54,12 @@ export default function Main() {
         <BusinessContext.Provider
           value={{
             business,
-            currentUser,
-            permissions,
+            currentUser: createMemo(() => data()?.currentUser || null),
+            permissions: createMemo(() => data()?.permissions || null),
+            allocations: createMemo(() => data()?.allocations || []),
+            currentUserRoles: createMemo(() => data()?.roles || []),
             mutate: mutateContext,
+            reloadPermissions,
             refetch,
           }}
         >

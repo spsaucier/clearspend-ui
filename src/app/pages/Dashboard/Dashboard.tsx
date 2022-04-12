@@ -1,21 +1,25 @@
-import { createSignal, createMemo, createEffect, Show, Switch, Match } from 'solid-js';
+import { createSignal, createMemo, Show, Switch, Match } from 'solid-js';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { useNav } from '_common/api/router';
-import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
 import { Dropdown, MenuItem } from '_common/components/Dropdown';
 import { Drawer } from '_common/components/Drawer';
 import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
-import { getAllocationPermissions } from 'app/services/permissions';
 import { AllocationTag } from 'allocations/components/AllocationTag';
 import { ALL_ALLOCATIONS, AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
-import { canManageFunds, canManageUsers, canManageCards, canLinkBankAccounts } from 'allocations/utils/permissions';
+import {
+  getAllocationPermissions,
+  canManageFunds,
+  canManageUsers,
+  canManageCards,
+  canLinkBankAccounts,
+} from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
 import { getTotalAvailableBalance } from 'allocations/utils/getTotalAvailableBalance';
@@ -31,7 +35,7 @@ import css from './Dashboard.css';
 export default function Dashboard() {
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
-  const { currentUser, permissions } = useBusiness();
+  const { currentUser, permissions, currentUserRoles } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
 
@@ -43,17 +47,12 @@ export default function Dashboard() {
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
   const allocationCount = createMemo(() => allocations.data?.length || 0);
 
-  const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
-
   const currentAllocationId = createMemo(() => {
     // TODO: Check and update for single allocation manager view (when it's not the root allocation): CAP-410
     return allocation() === ALL_ALLOCATIONS ? getRootAllocation(allocations.data)?.allocationId : allocation();
   });
 
-  createEffect(() => {
-    const allocationId = currentAllocationId();
-    if (allocationId) setAllocationIdForPermissions(allocationId);
-  });
+  const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), currentAllocationId()));
 
   const onAllocationChange = (id: string) => {
     setAllocation(id);
@@ -170,6 +169,7 @@ export default function Dashboard() {
           <Overview
             allocationId={allocation()}
             allocations={allocations.data}
+            userPermissions={userPermissions()}
             onAllocationChange={onAllocationChange}
           />
         </Match>

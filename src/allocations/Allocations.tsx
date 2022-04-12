@@ -1,4 +1,4 @@
-import { createSignal, createMemo, createEffect, batch, on } from 'solid-js';
+import { createSignal, createMemo, createEffect, on } from 'solid-js';
 import { Show, Switch, Match } from 'solid-js/web';
 import { useParams } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
@@ -11,8 +11,8 @@ import { Tab, TabList } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
 import { Page } from 'app/components/Page';
 import { Drawer } from '_common/components/Drawer';
-import { getAllocationPermissions } from 'app/services/permissions';
 import { useMessages } from 'app/containers/Messages/context';
+import { useBusiness } from 'app/containers/Main/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
 import { useMediaContext } from '_common/api/media/context';
@@ -29,7 +29,7 @@ import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
 import { getRootAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import { canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
+import { getAllocationPermissions, canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
 import { getAllocation, updateAllocation } from './services';
 
 import css from './Allocations.css';
@@ -48,6 +48,7 @@ export default function Allocations() {
   const messages = useMessages();
   const params = useParams<{ id?: string }>();
   const media = useMediaContext();
+  const { currentUserRoles } = useBusiness();
 
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
@@ -60,17 +61,13 @@ export default function Allocations() {
   });
 
   const [data, status, , setAllocationId, reload, mutate] = useResource(getAllocation, undefined, false);
-  const [userPermissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
+  const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), current()?.allocationId));
 
   createEffect(
     on(
       createMemo(() => current()?.allocationId),
       (id) => {
-        if (!id) return;
-        batch(() => {
-          setAllocationId(id);
-          setAllocationIdForPermissions(id);
-        });
+        if (id && canManagePermissions(userPermissions())) setAllocationId(id);
       },
     ),
   );

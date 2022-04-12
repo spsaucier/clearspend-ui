@@ -1,5 +1,7 @@
-import type { Allocation } from 'generated/capital';
+interface Allocation {
+  parentAllocationId?: string;
+}
 
-export function getRootAllocation(items: readonly Readonly<Allocation>[] | null): Readonly<Allocation> | undefined {
+export function getRootAllocation<T extends Allocation>(items: readonly Readonly<T>[] | null): Readonly<T> | undefined {
   return items?.find((item) => !item.parentAllocationId);
 }

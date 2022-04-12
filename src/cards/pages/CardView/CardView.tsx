@@ -12,12 +12,11 @@ import { Page } from 'app/components/Page';
 import { BackLink } from 'app/components/BackLink';
 import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
-import { getAllocationPermissions } from 'app/services/permissions';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import { CardControls } from 'allocations/containers/CardControls';
 import { useAllocations } from 'allocations/stores/allocations';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import { canManagePermissions } from 'allocations/utils/permissions';
+import { getAllocationPermissions, canManagePermissions } from 'allocations/utils/permissions';
 import { getUser } from 'employees/services';
 import type { Allocation, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
@@ -53,20 +52,19 @@ export default function CardView() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
 
-  const { currentUser } = useBusiness();
+  const { currentUser, currentUserRoles } = useBusiness();
   const allocations = useAllocations();
 
   const [data, status, , , reload, mutate] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
-  const [permissions, , , setAllocationIdForPermissions] = useResource(getAllocationPermissions, undefined, false);
 
   const card = createMemo(() => data()?.card);
+  const permissions = createMemo(() => getAllocationPermissions(currentUserRoles(), card()?.allocationId));
 
   createEffect(() => {
     const cardData = card();
     if (cardData) {
       setUserID(cardData.userId!);
-      setAllocationIdForPermissions(cardData.allocationId!);
     }
   });
 

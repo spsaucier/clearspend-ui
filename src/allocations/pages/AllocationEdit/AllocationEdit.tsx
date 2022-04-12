@@ -3,6 +3,7 @@ import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
 import { useResource } from '_common/utils/useResource';
+import { getNoop } from '_common/utils/getNoop';
 import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
@@ -11,6 +12,7 @@ import { useMCC } from 'app/stores/mcc';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
 import type { CreateAllocationRequest, CreateUserRequest } from 'generated/capital';
+import { useBusiness } from 'app/containers/Main/context';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
@@ -24,6 +26,7 @@ export default function AllocationEdit() {
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
 
+  const { reloadPermissions } = useBusiness();
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
@@ -76,6 +79,8 @@ export default function AllocationEdit() {
       });
       sendAnalyticsEvent({ name: Events.CREATE_ALLOCATION });
       messages.success({ title: i18n.t('The new allocation has been successfully added.') });
+
+      await reloadPermissions().catch(getNoop());
 
       try {
         // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
