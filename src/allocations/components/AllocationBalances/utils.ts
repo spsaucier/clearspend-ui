@@ -11,6 +11,7 @@ import type { AllocationData, OtherData, RenderList } from './types';
 
 const MAX_ITEMS = 6;
 const TOTAL_PERCENT = 100;
+const OTHER_ID = 'other';
 
 export function isAllocationData(item: AllocationData | OtherData): item is AllocationData {
   return 'allocation' in item;
@@ -45,9 +46,19 @@ export function getRenderList(
   return result;
 }
 
+export function getRenderListItem(
+  items: RenderList,
+  id: string | undefined,
+): Readonly<AllocationData | OtherData> | undefined {
+  if (!id) return undefined;
+  return id !== OTHER_ID
+    ? items.find((item) => isAllocationData(item) && item.allocation.allocationId === id)
+    : items.find((item) => !isAllocationData(item));
+}
+
 export function calcPieChartData(items: RenderList, total: number): readonly Readonly<IPieChartData>[] {
   return items.map((item, idx) => ({
-    id: isAllocationData(item) ? item.allocation.allocationId : 'other',
+    id: isAllocationData(item) ? item.allocation.allocationId : OTHER_ID,
     percent: (item.balance * TOTAL_PERCENT) / total,
     color: getChartColor(idx),
   }));

@@ -36,6 +36,25 @@
   }
 }
 
+.chart-content {
+  display: flex;
+  width: 80%;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.chart-name {
+  font-size: var(--text-12);
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.chart-amount {
+  display: block;
+  margin-top: var(--pd-4);
+}
+
 .items {
   display: grid;
   margin: var(--pd-8) 0;

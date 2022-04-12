@@ -12,8 +12,12 @@
   position: absolute;
   top: 10%;
   left: 10%;
+  display: flex;
   width: 80%;
   height: 80%;
+  align-items: center;
+  justify-content: center;
   background: var(--tw-white);
   border-radius: 50%;
+  pointer-events: none;
 }

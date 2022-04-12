@@ -11,7 +11,7 @@ import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 
 import type { AllocationData, OtherData } from './types';
-import { isAllocationData, getRenderList, calcPieChartData } from './utils';
+import { isAllocationData, getRenderList, getRenderListItem, calcPieChartData } from './utils';
 
 import css from './AllocationBalances.css';
 
@@ -42,7 +42,23 @@ export function AllocationBalances(props: Readonly<AllocationBalancesProps>) {
       <div class={css.wrapper}>
         <Show when={Boolean(totalBalance())}>
           <div class={css.chart}>
-            <PieChart size={160} data={calcPieChartData(renderList(), totalBalance())} />
+            <PieChart size={160} data={calcPieChartData(renderList(), totalBalance())}>
+              {(activeId) => {
+                const item = getRenderListItem(renderList(), activeId);
+                return (
+                  <Show when={item}>
+                    <div class={css.chartContent}>
+                      <div class={css.chartName}>
+                        <Show when={isAllocationData(item!)} fallback={<Text message="Other Allocations" />}>
+                          {(item as AllocationData).allocation.name}
+                        </Show>
+                      </div>
+                      <strong class={css.chartAmount}>{formatCurrency(item!.balance)}</strong>
+                    </div>
+                  </Show>
+                );
+              }}
+            </PieChart>
           </div>
         </Show>
         <div class={css.items}>
