@@ -54,7 +54,7 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
             <h2 class={css.addCardFormTitle}>
               <Text message="Credit Card Account" />
             </h2>
-            <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+            {/* <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." /> */}
           </div>
           <div class={css.innerWrap}>
             <Text message="Select card" />

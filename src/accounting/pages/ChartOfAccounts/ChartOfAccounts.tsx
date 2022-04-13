@@ -56,7 +56,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
               <Text message="Chart of accounts" />
             </h3>
             <p class={css.description}>
-              <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+              {/* <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." /> */}
             </p>
           </div>
           <ChartOfAccountsData

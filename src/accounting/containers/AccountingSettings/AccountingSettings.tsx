@@ -59,7 +59,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     <div>
       <Section
         title={<Text message="Chart of Accounts" />}
-        description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
+        // description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
         class={css.section}
       >
         <ChartOfAccountsData
@@ -78,7 +78,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       </Section>
       <Section
         title={<Text message="Unlink Account" />}
-        description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
+        // description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
         class={css.section}
       >
         <Popover
@@ -88,7 +88,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
           class={css.popoverRoot}
           content={
             <div>
-              <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />
+              {/* <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." /> */}
               <div class={css.popoverButtons}>
                 <Button view="ghost" onClick={() => setOpen(false)}>
                   <Text message="Cancel" />
