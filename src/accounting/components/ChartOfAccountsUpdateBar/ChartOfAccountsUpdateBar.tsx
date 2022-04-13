@@ -18,7 +18,7 @@ export function ChartOfAccountsUpdateBar(props: UpdateBarProps) {
             <Icon name="information" />
             <Text
               message={`There ${props.count > 1 ? `are ${props.count} new updates` : `is 1 new update`}
-            to your Quickbooks chart of accounts`}
+            to your QuickBooks Online chart of accounts`}
             />
           </div>
         </div>

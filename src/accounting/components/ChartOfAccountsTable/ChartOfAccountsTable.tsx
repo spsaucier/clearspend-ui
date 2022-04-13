@@ -110,7 +110,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       name: 'accountName',
       title: (
         <div class={css.columnTitle}>
-          <Text message="Quickbooks chart of Accounts" />
+          <Text message="QuickBooks Online chart of Accounts" />
         </div>
       ),
       render: (item) => {

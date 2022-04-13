@@ -13,7 +13,7 @@ import css from './IntegrationOptions.css';
 
 const integrationOptionCards: IntegrationOptionCardValues[] = [
   {
-    name: 'QuickBook Online',
+    name: 'QuickBooks Online',
     description: 'Sync your transactions and receipts with QBO',
     largeLogo: quickbooksLargeLogo,
     smallLogo: quickbooksSmallLogo,

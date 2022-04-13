@@ -50,7 +50,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
         />
       </Match>
       <Match when={!showRoadblock()}>
-        <Page title={<Text message="Set up your Quickbooks integration" />}>
+        <Page title={<Text message="Set up your QuickBooks Online integration" />}>
           <div class={css.header}>
             <h3 class={css.title}>
               <Text message="Chart of accounts" />

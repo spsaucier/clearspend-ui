@@ -48,7 +48,7 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
 
   return (
     <div class={css.root}>
-      <Page title={<Text message="Set Up your Quickbooks Integration" />} class={css.pageWrapper}>
+      <Page title={<Text message="Set Up your QuickBooks Online Integration" />} class={css.pageWrapper}>
         <div class={css.formWrapper}>
           <div class={css.innerWrap}>
             <h2 class={css.addCardFormTitle}>
