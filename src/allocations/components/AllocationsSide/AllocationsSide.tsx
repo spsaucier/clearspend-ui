@@ -38,7 +38,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
   return (
     <section class={css.root}>
       <Show
-        when={media.medium}
+        when={media.large}
         fallback={
           <header class={css.header}>
             <h3 class={css.title}>Allocations</h3>

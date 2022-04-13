@@ -2,8 +2,11 @@
   padding: 0 var(--pd-24);
 
   @media (--bp-large) {
+    display: flex;
     width: 260px;
+    height: 100%;
     padding: 0 var(--pd-16);
+    flex-direction: column;
   }
 }
 
@@ -25,6 +28,12 @@
 
 .content {
   padding: var(--pd-16) 0;
+
+  @media (--bp-large) {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .item {
