@@ -16,7 +16,7 @@ import { useBusiness } from 'app/containers/Main/context';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
-import { saveAllocation, getAllocationRoles, addAllocationRole } from '../../services';
+import { saveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
 import { useAllocations } from '../../stores/allocations';
 import type { AllocationUserRole } from '../../types';
 
@@ -84,7 +84,9 @@ export default function AllocationEdit() {
 
       try {
         // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
-        await Promise.all(userRoles.map((item) => addAllocationRole(allocationId, item.user.userId!, item.role)));
+        await Promise.all(
+          userRoles.map((item) => createOrUpdateAllocationRole(allocationId, item.user.userId!, item.role)),
+        );
       } catch (error: unknown) {
         messages.error({ title: i18n.t('Updating users permissions failed.') });
       }

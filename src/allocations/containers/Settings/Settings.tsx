@@ -22,7 +22,7 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { Loading } from 'app/components/Loading';
 
 import { AllocationRole } from '../../components/AllocationRole';
-import { updateAllocation, getAllocationRoles, addAllocationRole, updateAllocationRole } from '../../services';
+import { updateAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
@@ -119,8 +119,8 @@ export function Settings(props: Readonly<SettingsProps>) {
       const roles = getRolesUpdates(currentRoles() || [], updatedRoles(), removedRoles());
 
       // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
-      await roles.create.forEach((item) => {
-        return addAllocationRole(allocationId, item.user.userId!, item.role).catch(
+      const createPromises = roles.create.map((item) => {
+        return createOrUpdateAllocationRole(allocationId, item.user.userId!, item.role).catch(
           (e: { data: { message: string } }) => {
             messages.error({
               title: i18n.t('Unable to add {user}', { user: formatName(item.user) }),
@@ -130,8 +130,8 @@ export function Settings(props: Readonly<SettingsProps>) {
           },
         );
       });
-      await roles.update.forEach((item) => {
-        return updateAllocationRole(allocationId, item.user.userId!, item.role).catch(
+      const updatePromises = roles.update.map((item) => {
+        return createOrUpdateAllocationRole(allocationId, item.user.userId!, item.role).catch(
           (e: { data: { message: string } }) => {
             messages.error({
               title: i18n.t('Unable to update {user}', { user: formatName(item.user) }),
@@ -142,8 +142,8 @@ export function Settings(props: Readonly<SettingsProps>) {
         );
       });
       // We don't delete roles; we demote them back to Employee (the base company user)
-      await roles.remove.forEach((id) => {
-        return updateAllocationRole(allocationId, id, AllocationRoles.Employee).catch(
+      const removePromises = roles.remove.map((id) => {
+        return createOrUpdateAllocationRole(allocationId, id, AllocationRoles.Employee).catch(
           (e: { data: { message: string } }) => {
             messages.error({
               title: i18n.t('Unable to demote {user}', { user: formatName(users.data?.find((u) => u.userId === id)) }),
@@ -153,6 +153,7 @@ export function Settings(props: Readonly<SettingsProps>) {
           },
         );
       });
+      await Promise.all([...createPromises, ...updatePromises, ...removePromises]);
 
       let postSaveAllocationName = props.allocation.name;
       if (props.allocation.name !== name) {
