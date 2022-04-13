@@ -4,14 +4,14 @@ import { Navigate } from 'solid-app-router';
 import { Loading } from 'app/components/Loading';
 
 import { useBusiness } from '../app/containers/Main/context';
+import { canManageConnections } from '../allocations/utils/permissions';
 
-import { canSeeAccounting } from './utils/canSeeAccounting';
 import { AccountingTabs } from './pages/AccountingTabs';
 import { Integrations } from './pages/Integrations';
 import { getCompanyConnection } from './services';
 
 export default function Accounting() {
-  const { currentUser } = useBusiness();
+  const { permissions } = useBusiness();
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
 
   onMount(async () => {
@@ -24,7 +24,7 @@ export default function Accounting() {
   };
 
   return (
-    <Show when={canSeeAccounting(currentUser())} fallback={<Navigate href="/" />}>
+    <Show when={canManageConnections(permissions())} fallback={<Navigate href="/" />}>
       <Switch>
         <Match when={hasIntegrationConnection() == null}>
           <Loading />

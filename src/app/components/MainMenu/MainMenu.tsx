@@ -3,9 +3,7 @@ import { defineMessages } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
-import { canSeeAccounting } from 'accounting/utils/canSeeAccounting';
-import { AllocationRoles } from 'allocations/types';
-import { canManageCards } from 'allocations/utils/permissions';
+import { canManageCards, canManageConnections } from 'allocations/utils/permissions';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -45,23 +43,18 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
-  const { currentUser, permissions } = useBusiness();
-
+  const { permissions } = useBusiness();
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
-
   const isNotProd = window.location.host !== 'app.clearspend.com';
-
   const mainItems = createMemo(() => {
-    const isAdmin = permissions().allocationRole === AllocationRoles.Admin;
-
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
-        case TITLES.accounting:
-          return isNotProd && (isAdmin || canSeeAccounting(currentUser()));
         case TITLES.employees:
-          return isAdmin || canManageCards(permissions()); // TODO: change to canViewEmployees based on Manage+ permissions at any allocation
+          return canManageCards(permissions()); // TODO: change to canViewEmployees based on Manage+ permissions at any allocation
+        case TITLES.accounting:
+          return canManageConnections(permissions()) && isNotProd;
         case TITLES.company:
-          return isAdmin;
+          return canManageConnections(permissions());
         default:
           return true;
       }
