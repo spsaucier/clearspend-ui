@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import mixpanel, { Config, Dict } from 'mixpanel-browser';
+
+import { formatName } from '../../employees/utils/formatName';
 
 export const Events = {
   ACTIVATE_CARD: 'Activate Card',
@@ -82,10 +85,9 @@ const vendorActions = {
         mixpanel.identify(name);
         break;
       case AnalyticsEventType.AddUserProperties:
-        if (typeof data === 'object') {
-          mixpanel.people.set(data);
+        if (typeof data === 'object' && 'email' in data) {
+          mixpanel.people.set({ ...data, $email: data.email, $name: formatName(data) });
           if ('businessId' in data && data.businessId) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             mixpanel.register({ businessId: data.businessId });
           }
         }
