@@ -7,7 +7,7 @@ import { BusinessStatus } from 'app/types/businesses';
 export async function onSuccessLogin(user: Readonly<UserLoginResponse>, navigate: Navigator, overridePath?: string) {
   if (user.userId) {
     if (overridePath) {
-      navigate(overridePath);
+      location.assign(overridePath);
     } else {
       navigate(
         user.phone !== '+11111111111' && !user.twoFactorId && (await getBusiness())?.status === BusinessStatus.ACTIVE

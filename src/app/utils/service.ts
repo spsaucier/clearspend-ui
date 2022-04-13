@@ -33,7 +33,9 @@ function parseError(message: string): unknown {
 
 function errorHandler<T = unknown>(error: FetchResponse): Promise<FetchResponse<T>> {
   if (error.status === HttpStatus.AccessDenied) {
-    events.emit(AppEvent.Logout, window.location.toString().split(window.location.host)[1]);
+    if (window.location.toString().split(window.location.host)[1] !== '/login') {
+      events.emit(AppEvent.Logout, window.location.toString().split(window.location.host)[1]);
+    }
     // eslint-disable-next-line prefer-promise-reject-errors
     return Promise.reject(null);
   }
