@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import mixpanel, { Config, Dict } from 'mixpanel-browser';
 
+import { formatAddress } from '_common/formatters/address';
+
 import { formatName } from '../../employees/utils/formatName';
 
 export const Events = {
@@ -86,7 +88,12 @@ const vendorActions = {
         break;
       case AnalyticsEventType.AddUserProperties:
         if (typeof data === 'object' && 'email' in data) {
-          mixpanel.people.set({ ...data, $email: data.email, $name: formatName(data) });
+          mixpanel.people.set({
+            ...data,
+            $email: data.email,
+            $name: formatName(data),
+            address: formatAddress(data.address),
+          });
           if ('businessId' in data && data.businessId) {
             mixpanel.register({ businessId: data.businessId });
           }
