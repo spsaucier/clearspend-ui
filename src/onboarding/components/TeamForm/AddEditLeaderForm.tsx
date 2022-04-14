@@ -15,6 +15,7 @@ import type { Business, CreateOrUpdateBusinessOwnerRequest } from 'generated/cap
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { InputPercentage } from '_common/components/InputPercentage';
 import { RadioGroup, Radio } from '_common/components/Radio';
+import { BusinessType } from 'app/types/businesses';
 
 import type { ExceptionData } from '../../types';
 import type { BusinessOwner } from '../LeadershipTable/LeadershipTable';
@@ -90,7 +91,13 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               <Radio value={false}>No</Radio>
             </RadioGroup>
           </FormItem>
-          <Show when={props.business.type !== 'SOLE_PROPRIETORSHIP'}>
+          <Show
+            when={
+              ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+                props.business.type as BusinessType,
+              )
+            }
+          >
             <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
               <RadioGroup
                 name="is-owner"

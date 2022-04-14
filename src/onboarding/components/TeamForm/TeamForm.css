@@ -24,6 +24,10 @@
   font-size: var(--text-14);
 }
 
+.error {
+  color: var(--tw-red-70);
+}
+
 .examples {
   color: var(--tw-gray-60);
   font-size: var(--text-12);

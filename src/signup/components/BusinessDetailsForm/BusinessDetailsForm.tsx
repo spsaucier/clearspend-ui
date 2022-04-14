@@ -141,8 +141,9 @@ export function BusinessDetailsForm(props: Readonly<BusinessDetailsFormProps>) {
         </Show>
         <Show
           when={
-            values().businessTypeCategory === BusinessTypeCategory.COMPANY &&
-            values().businessType !== BusinessType.UNKNOWN
+            values().businessTypeCategory === BusinessTypeCategory.NONPROFIT ||
+            (values().businessTypeCategory === BusinessTypeCategory.COMPANY &&
+              values().businessType !== BusinessType.UNKNOWN)
           }
         >
           <FormItem

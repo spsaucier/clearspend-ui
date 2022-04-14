@@ -9,11 +9,14 @@ import { Radio, RadioGroup } from '_common/components/Radio';
 import { createBusinessOwner, listBusinessOwners, updateBusinessOwner } from 'onboarding/services/onboarding';
 import { useResource } from '_common/utils/useResource';
 import { Icon } from '_common/components/Icon';
+import { BusinessType } from 'app/types/businesses';
+import { join } from '_common/utils/join';
 
 import { LeadershipTable } from '../LeadershipTable';
 
 import { CurrentUserForm } from './CurrentUserForm';
 import { AddEditLeaderForm } from './AddEditLeaderForm';
+import { kycHasExecutiveError } from './utils';
 
 import css from './TeamForm.css';
 
@@ -37,6 +40,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const [loading, next] = wrapAction(props.onNext);
   const [showAddingNewLeader, setShowAddingNewLeader] = createSignal(false);
   const [showOtherOwnersQuestion, setShowOtherOwnersQuestion] = createSignal(true);
+  const [missingExecutiveError, setMissingExecutiveError] = createSignal(false);
   const [editingLeaderId, setEditingLeaderId] = createSignal('');
 
   const [ownersList, fetchingOwnersList, , , refetchOwnersList] = useResource(listBusinessOwners, []);
@@ -55,7 +59,13 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   });
 
   createEffect(() => {
-    if (props.business?.type === 'SOLE_PROPRIETORSHIP') {
+    setMissingExecutiveError(kycHasExecutiveError(props.kycErrors));
+
+    if (
+      [BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+        props.business?.type as BusinessType,
+      )
+    ) {
       setHasOtherOwners(false);
       setShowOtherOwnersQuestion(false);
     }
@@ -128,7 +138,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             currentUserEmail={props.currentUser.email}
             leaders={leaders()}
             leaderIdsWithError={
-              props.kycErrors
+              props.kycErrors && !missingExecutiveError()
                 ? Object.keys(props.kycErrors).filter((key) => (props.kycErrors?.[key] as string[]).length > 0)
                 : []
             }
@@ -146,7 +156,13 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           />
           <div class={css.rightContent}>
             <div class={css.title}>You must include:</div>
-            <Show when={props.business?.type !== 'SOLE_PROPRIETORSHIP'}>
+            <Show
+              when={
+                ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+                  props.business?.type as BusinessType,
+                )
+              }
+            >
               <div class={css.copy}>
                 <div>
                   <Icon name="information" />
@@ -154,7 +170,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
                 <div>Everyone who owns 25% or more of the company.</div>
               </div>
             </Show>
-            <div class={css.copy}>
+            <div class={missingExecutiveError() ? join(css.copy, css.error) : css.copy}>
               <div>
                 <Icon name="information" />
               </div>

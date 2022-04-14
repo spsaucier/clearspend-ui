@@ -5,6 +5,7 @@ import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
 import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
+import { BusinessType } from 'app/types/businesses';
 
 import type { FormValues } from './types';
 
@@ -35,7 +36,13 @@ export function getFormOptions({ currentUser, leader, business }: Props): FormOp
     postalCode: [required, validZipCode],
     percentageOwnership: [
       (value: string, values: FormValues) =>
-        requiredIf(value, values.relationshipOwner && business.type !== 'SOLE_PROPRIETORSHIP'),
+        requiredIf(
+          value,
+          values.relationshipOwner &&
+            ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+              business.type as BusinessType,
+            ),
+        ),
     ],
   };
 
@@ -98,4 +105,16 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     relationshipExecutive,
     address: { ...address, country: 'USA' },
   };
+}
+
+export function kycHasExecutiveError(kycErrors?: Readonly<{ [key: string]: string[] }>): boolean {
+  let hasExecutiveError = false;
+  if (kycErrors) {
+    Object.keys(kycErrors).forEach((key) => {
+      if (kycErrors[key]?.includes('relationshipExecutive')) {
+        hasExecutiveError = true;
+      }
+    });
+  }
+  return hasExecutiveError;
 }

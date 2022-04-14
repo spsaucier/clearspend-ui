@@ -14,6 +14,7 @@ import { formatSSN } from '_common/formatters/ssn';
 import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { InputPercentage } from '_common/components/InputPercentage';
+import { BusinessType } from 'app/types/businesses';
 
 import type { ExceptionData } from '../../types';
 
@@ -116,7 +117,14 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         </div>
       </Section>
-      <Show when={isOwner && props.business.type !== 'SOLE_PROPRIETORSHIP'}>
+      <Show
+        when={
+          isOwner &&
+          ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+            props.business.type as BusinessType,
+          )
+        }
+      >
         <Section
           title="Your ownership stake"
           description="Please disclose your company ownership amount via percentage."

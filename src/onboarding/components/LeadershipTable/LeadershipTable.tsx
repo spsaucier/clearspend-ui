@@ -5,6 +5,7 @@ import { Button } from '_common/components/Button';
 import { Table, TableColumn } from '_common/components/Table';
 import { Icon } from '_common/components/Icon';
 import type { Business, CreateOrUpdateBusinessOwnerRequest } from 'generated/capital';
+import { BusinessType } from 'app/types/businesses';
 
 import css from './LeadershipTable.css';
 
@@ -21,14 +22,16 @@ interface LeadershipTableProps {
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-  const ownershipColumn: TableColumn<BusinessOwner> =
-    props.business.type !== 'SOLE_PROPRIETORSHIP'
-      ? {
-          name: 'percentage',
-          title: <Text message="Ownership (25% or more)" />,
-          render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
-        }
-      : ({} as TableColumn<BusinessOwner>);
+  const ownershipColumn: TableColumn<BusinessOwner> = ![
+    BusinessType.SOLE_PROPRIETORSHIP,
+    BusinessType.INCORPORATED_NON_PROFIT,
+  ].includes(props.business.type as BusinessType)
+    ? {
+        name: 'percentage',
+        title: <Text message="Ownership (25% or more)" />,
+        render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
+      }
+    : ({} as TableColumn<BusinessOwner>);
 
   const columns: readonly Readonly<TableColumn<BusinessOwner>>[] = [
     {
@@ -54,6 +57,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         let roles = [];
         if (leader.relationshipOwner) roles.push('Owner');
         if (leader.relationshipExecutive) roles.push('Executive');
+        if (props.business.type === BusinessType.INCORPORATED_NON_PROFIT) roles.push('Representative');
         return (
           <div class={css.cell}>
             <Text message={roles.length ? formatter.format(roles) : 'No roles selected'} />
