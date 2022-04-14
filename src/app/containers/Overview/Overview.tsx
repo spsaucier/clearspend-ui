@@ -61,8 +61,8 @@ export function Overview(props: Readonly<OverviewProps>) {
   });
 
   useDeferEffect(
-    (id) => {
-      spendingStore.setParams((prev) => ({ ...prev, allocationId: id }));
+    () => {
+      spendingStore.setParams((prev) => ({ ...prev, allocationId: allocationId() }));
     },
     () => props.allocationId,
   );
