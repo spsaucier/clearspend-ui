@@ -1,31 +1,26 @@
 import { createSignal, Index, Show, batch, createMemo } from 'solid-js';
+import { Dynamic } from 'solid-js/web';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
-import { storage } from '_common/api/storage';
 import { useNav } from '_common/api/router';
 import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
-import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { useMediaContext } from '_common/api/media/context';
-import type { Allocation, AccountActivityRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Data } from 'app/components/Data';
-import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
-import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
-import { TransactionsData } from 'transactions/containers/TransactionsData';
-import { onAllocationChange } from 'allocations/utils/onAllocationChange';
-import { canRead } from 'allocations/utils/permissions';
+import { canManageFunds, canRead } from 'allocations/utils/permissions';
 
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpending } from '../../stores/spending';
-import { useActivity } from '../../stores/activity';
 import { dateRangeToISO } from '../../utils/dateRangeToISO';
-import type { ChartDataRequest } from '../../types/spending';
 import { useBusiness } from '../Main/context';
+import { Transactions } from '../Transactions';
+import { Ledger } from '../Ledger';
 
-import { TimePeriod, getTimePeriod, updateParams } from './utils';
+import { TimePeriod, getTimePeriod } from './utils';
 
 import css from './Overview.css';
 
@@ -57,36 +52,26 @@ export function Overview(props: Readonly<OverviewProps>) {
     return props.allocationId === ALL_ALLOCATIONS ? undefined : props.allocationId;
   });
 
-  const DEFAULT_PARAMS = { ...dateRangeToISO(getTimePeriod(initPeriod)), allocationId: allocationId() };
-
-  const spendingStore = useSpending({ params: { ...DEFAULT_PARAMS, sortDirection: 'ASC' } });
-
-  const activityStore = useActivity({
+  const spendingStore = useSpending({
     params: {
-      ...extendPageSize(DEFAULT_ACTIVITY_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
-      ...DEFAULT_PARAMS,
+      ...dateRangeToISO(getTimePeriod(initPeriod)),
+      allocationId: allocationId(),
+      sortDirection: 'ASC',
     },
   });
 
   useDeferEffect(
-    () => {
-      batch(() => {
-        const updates = { allocationId: allocationId() };
-        spendingStore.setParams(updateParams<ChartDataRequest>(updates));
-        activityStore.setParams(updateParams<AccountActivityRequest>(updates));
-      });
+    (id) => {
+      spendingStore.setParams((prev) => ({ ...prev, allocationId: id }));
     },
     () => props.allocationId,
   );
 
   const changePeriod = (value: TimePeriod) => {
-    setPeriod(value);
-    setSearchParams({ period: value });
-
     batch(() => {
-      const range = dateRangeToISO(getTimePeriod(value));
-      spendingStore.setParams(updateParams<ChartDataRequest>(range));
-      activityStore.setParams(updateParams<AccountActivityRequest>(range));
+      setPeriod(value);
+      setSearchParams({ period: value });
+      spendingStore.setParams((prev) => ({ ...prev, ...dateRangeToISO(getTimePeriod(value)) }));
     });
   };
 
@@ -128,31 +113,15 @@ export function Overview(props: Readonly<OverviewProps>) {
         <h3 class={css.title}>
           <Text message="Recent Transactions" />
         </h3>
-        <Data
-          data={activityStore.data}
-          loading={activityStore.loading}
-          error={activityStore.error}
-          onReload={activityStore.reload}
-        >
-          <TransactionsData
-            class={css.transactions}
-            data={activityStore.data}
-            dateRange={dateRangeToISO(getTimePeriod(period()))}
-            error={activityStore.error}
-            loading={activityStore.loading}
-            onReload={activityStore.reload}
-            onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
-            onChangeParams={onAllocationChange(
-              onPageSizeChange(activityStore.setParams, (size) => storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size)),
-              (id: string | undefined) => props.onAllocationChange(id || ALL_ALLOCATIONS),
-            )}
-            onUpdateData={activityStore.setData}
-            params={activityStore.params}
-            showAllocationFilter
-            showUserFilter
-            table={media.large}
-          />
-        </Data>
+        <Dynamic
+          component={canManageFunds(props.userPermissions) ? Ledger : Transactions}
+          table={media.large}
+          allocationId={allocationId()}
+          dateRange={dateRangeToISO(getTimePeriod(period()))}
+          class={css.transactions}
+          onCardClick={(cardId: string) => navigate(`/cards/view/${cardId}`)}
+          onAllocationChange={props.onAllocationChange}
+        />
       </div>
     </div>
   );

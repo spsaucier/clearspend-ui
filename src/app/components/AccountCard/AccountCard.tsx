@@ -7,7 +7,7 @@ import css from './AccountCard.css';
 interface AccountCardProps {
   icon: keyof typeof IconName;
   title: JSXElement;
-  text: JSXElement;
+  text?: JSXElement;
   onClick?: () => void;
 }
 
@@ -21,7 +21,9 @@ export function AccountCard(props: Readonly<AccountCardProps>) {
       </div>
       <div>
         <div class={css.name}>{props.title}</div>
-        <div class={css.number}>{props.text}</div>
+        <Show when={props.text}>
+          <div class={css.number}>{props.text}</div>
+        </Show>
       </div>
       <Show when={interactive()}>
         <Icon name="chevron-right" />

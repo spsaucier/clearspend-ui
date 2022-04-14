@@ -22,16 +22,16 @@ test('it returns correct id and data for items from preloaded list', () => {
     return null;
   });
 
-  assert.is(result[0](), undefined);
-  assert.is(result[1](), undefined);
+  assert.is(result.id(), undefined);
+  assert.is(result.transaction(), undefined);
 
-  result[2]('a');
-  assert.equal(result[0](), 'a');
-  assert.equal(result[1](), { accountActivityId: 'a' });
+  result.changeID('a');
+  assert.equal(result.id(), 'a');
+  assert.equal(result.transaction(), { accountActivityId: 'a' });
 
-  result[2]();
-  assert.is(result[0](), undefined);
-  assert.is(result[1](), undefined);
+  result.changeID();
+  assert.is(result.id(), undefined);
+  assert.is(result.transaction(), undefined);
 
   dispose();
 });
@@ -46,12 +46,12 @@ test('', () => {
     return null;
   });
 
-  result[2]('c');
-  assert.equal(result[0](), 'c');
-  assert.is(result[1](), undefined);
+  result.changeID('c');
+  assert.equal(result.id(), 'c');
+  assert.is(result.transaction(), undefined);
 
   signal[1]([{ accountActivityId: 'c' }]);
-  assert.equal(result[1](), { accountActivityId: 'c' });
+  assert.equal(result.transaction(), { accountActivityId: 'c' });
 
   dispose();
 });

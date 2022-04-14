@@ -1,5 +1,5 @@
 import { createSignal, createMemo, createEffect, on } from 'solid-js';
-import { Show, Switch, Match } from 'solid-js/web';
+import { Show, Switch, Match, Dynamic } from 'solid-js/web';
 import { useParams } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
 
@@ -21,8 +21,8 @@ import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
-import { CardControls } from './containers/CardControls';
 import { Ledger } from './containers/Ledger';
+import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
@@ -38,7 +38,6 @@ enum Tabs {
   cards = 'cards',
   transactions = 'transactions',
   controls = 'controls',
-  ledger = 'ledger',
   settings = 'settings',
 }
 
@@ -137,11 +136,6 @@ export default function Allocations() {
                 <Text message="Card Controls" />
               </Tab>
             </Show>
-            <Show when={canManageFunds(userPermissions())}>
-              <Tab value={Tabs.ledger}>
-                <Text message="Ledger" />
-              </Tab>
-            </Show>
             <Show when={canManageCards(userPermissions())}>
               <Tab value={Tabs.settings}>
                 <Text message="Settings" />
@@ -153,7 +147,10 @@ export default function Allocations() {
               <Cards current={current()!} allocations={allocations.data!} />
             </Match>
             <Match when={tab() === Tabs.transactions}>
-              <Transactions allocationId={current()!.allocationId} />
+              <Dynamic
+                component={canManageFunds(userPermissions()) ? Ledger : Transactions}
+                allocationId={current()!.allocationId}
+              />
             </Match>
             <Match when={tab() === Tabs.controls}>
               <Data error={status().error} loading={status().loading} data={data()} onReload={reload}>
@@ -164,9 +161,6 @@ export default function Allocations() {
                   onSave={onUpdateAllocation}
                 />
               </Data>
-            </Match>
-            <Match when={tab() === Tabs.ledger}>
-              <Ledger allocationId={current()!.allocationId} />
             </Match>
             <Match when={tab() === Tabs.settings}>
               <Settings allocation={current()!} onReload={allocations.reload} permissions={userPermissions} />

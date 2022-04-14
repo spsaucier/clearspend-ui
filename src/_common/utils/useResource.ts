@@ -1,7 +1,10 @@
 import { createSignal, onMount, createMemo } from 'solid-js';
 
+import type { SetterFunc } from '../types/common';
+
 import { cloneObject } from './cloneObject';
 import { useDeferEffect } from './useDeferEffect';
+import { isFunction } from './isFunction';
 import { getNoop } from './getNoop';
 
 export interface DataState<T> {
@@ -32,8 +35,8 @@ export function useResource<T, P>(fetcher: (params: P) => Promise<T>, initParams
       });
   };
 
-  const mutate = (data: T | null, reset?: boolean) => {
-    setState((prev) => ({ ...prev, data: data }));
+  const mutate = (setter: SetterFunc<T> | T | null, reset?: boolean) => {
+    setState((prev) => ({ ...prev, data: isFunction(setter) ? setter(prev.data!) : setter }));
 
     if (reset) {
       skipUpdates = true;

@@ -31,8 +31,3 @@
 .amount {
   font-weight: var(--font-700);
 }
-
-.sub {
-  margin-top: var(--pd-2);
-  color: var(--tw-gray-60);
-}

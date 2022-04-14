@@ -8,7 +8,7 @@ import { InputSearch } from '_common/components/InputSearch';
 import { Icon } from '_common/components/Icon';
 import { Empty } from 'app/components/Empty';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import { LEDGER_ACTIVITY_TYPES } from 'transactions/constants';
+import { ACTIVITY_TYPE_TITLES } from 'transactions/constants';
 import type { PagedDataLedgerActivityResponse, LedgerActivityRequest } from 'generated/capital';
 
 import { renderAccount } from '../LedgerTable/LedgerTable';
@@ -53,7 +53,7 @@ export function LedgerList(props: Readonly<LedgerListProps>) {
                       ? `${item.user.userInfo.firstName} ${item.user.userInfo.lastName}`
                       : '--'}
                   </div>
-                  <div class={css.gray}>{LEDGER_ACTIVITY_TYPES[item.type as LedgerActivityType]}</div>
+                  <div class={css.gray}>{ACTIVITY_TYPE_TITLES[item.type as LedgerActivityType]}</div>
                 </div>
               </div>
               <div class={css.extra}>

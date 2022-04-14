@@ -19,7 +19,7 @@ import { Empty } from 'app/components/Empty';
 import { useMessages } from 'app/containers/Messages/context';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import { LEDGER_ACTIVITY_TYPES } from 'transactions/constants';
+import { ACTIVITY_TYPE_TITLES } from 'transactions/constants';
 import type { LedgerActivityRequest, LedgerActivityResponse, PagedDataLedgerActivityResponse } from 'generated/capital';
 import { getResetFilters } from 'app/utils/getResetFilters';
 
@@ -104,7 +104,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
     {
       name: 'type',
       title: <Text message="Transaction" />,
-      render: (item) => LEDGER_ACTIVITY_TYPES[item.type as LedgerActivityType],
+      render: (item) => ACTIVITY_TYPE_TITLES[item.type as LedgerActivityType],
     },
     {
       name: 'user',

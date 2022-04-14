@@ -4,8 +4,11 @@ import { Icon, IconName } from '_common/components/Icon';
 
 import css from './Account.css';
 
+type IconType = keyof typeof IconName;
+
 interface AccountProps {
-  icon: keyof typeof IconName;
+  icon: IconType | JSXElement;
+  noWrapIcon?: boolean;
   name: JSXElement;
   extra?: JSXElement;
   inline?: boolean;
@@ -14,8 +17,10 @@ interface AccountProps {
 export function Account(props: Readonly<AccountProps>) {
   return (
     <div class={css.root}>
-      <div class={css.iconWrap}>
-        <Icon name={props.icon} class={css.icon} />
+      <div classList={{ [css.iconWrap!]: !props.noWrapIcon }}>
+        <Show when={typeof props.icon === 'string'} fallback={props.icon}>
+          <Icon name={props.icon as IconType} class={css.icon} />
+        </Show>
       </div>
       <div class={css.content} classList={{ [css.inline!]: props.inline }}>
         <div>{props.name}</div>

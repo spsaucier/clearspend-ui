@@ -8,7 +8,6 @@ import type {
 } from 'generated/capital';
 import { TransactionsData } from 'transactions/containers/TransactionsData';
 import { useMediaContext } from '_common/api/media/context';
-import { useNav } from '_common/api/router';
 
 interface AccountingOverviewProps {
   loading: boolean;
@@ -28,7 +27,6 @@ interface AccountingOverviewProps {
 
 export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
   const media = useMediaContext();
-  const navigate = useNav();
 
   return (
     <div>
@@ -41,7 +39,6 @@ export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {
         onReload={props.onReload}
         onChangeParams={props.onChangeParams}
         onUpdateData={props.onUpdateData}
-        onCardClick={(cardId) => navigate(`/cards/view/${cardId}`)}
         showAccountingAdminView
         selectedTransactions={props.selectedTransactions()}
         onSelectTransaction={props.onSelectTransaction}

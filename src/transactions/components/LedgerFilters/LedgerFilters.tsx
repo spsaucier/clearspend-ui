@@ -9,7 +9,7 @@ import { SelectDateRange } from '_common/components/SelectDateRange';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
 import type { LedgerActivityRequest } from 'generated/capital';
-import { LEDGER_ACTIVITY_TYPES } from 'transactions/constants';
+import { ACTIVITY_TYPE_TITLES } from 'transactions/constants';
 
 import { convertFormData, getFormOptions } from './utils';
 import type { FormValues } from './types';
@@ -51,7 +51,7 @@ export function LedgerFilters(props: Readonly<LedgerFiltersProps>) {
         </FilterBox>
         <FilterBox title={<Text message="Activity Type" />}>
           <CheckboxGroup value={values().types} onChange={handlers.types}>
-            <For each={Object.entries(LEDGER_ACTIVITY_TYPES)}>
+            <For each={Object.entries(ACTIVITY_TYPE_TITLES)}>
               {(type) => <Checkbox value={type[0]}>{type[1]}</Checkbox>}
             </For>
           </CheckboxGroup>

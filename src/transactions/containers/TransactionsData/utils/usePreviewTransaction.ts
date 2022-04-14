@@ -5,31 +5,37 @@ import { useSearchParams } from 'solid-app-router';
 import { useMessages } from 'app/containers/Messages/context';
 import type { AccountActivityResponse } from 'generated/capital';
 
-export function usePreviewTransaction(
-  transactions: Accessor<AccountActivityResponse[] | undefined>,
+import { activityToLedger } from '../../../utils/converTypes';
+import { ACTIVITY_TYPES } from '../../../constants';
+import type { ActivityType, TransactionType } from '../../../types';
+
+export function usePreviewTransaction<T extends { accountActivityId?: string; type?: ActivityType }>(
+  transactions: Accessor<T[] | undefined>,
   fetchTransactions: (id: string) => Promise<Readonly<AccountActivityResponse>>,
+  convert?: boolean, // TODO: waiting for an API
 ) {
   const i18n = useI18n();
   const messages = useMessages();
 
-  const [previewId, setPreviewId] = createSignal<string>();
+  const [selectID, setSelectID] = createSignal<string>();
   const [searchParams, setSearchParams] = useSearchParams<{ transaction?: string }>();
-  const [cacheTransaction, setCacheTransaction] = createSignal<AccountActivityResponse>();
+  const [cacheTransaction, setCacheTransaction] = createSignal<T>();
 
   onMount(() => {
     const activityId = searchParams.transaction;
     if (!activityId) return;
 
     if (transactions()?.some((item) => item.accountActivityId === activityId)) {
-      setPreviewId(activityId);
+      setSelectID(activityId);
       return;
     }
 
     fetchTransactions(activityId)
       .then((data) => {
         batch(() => {
-          setCacheTransaction(data);
-          setPreviewId(activityId);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          setCacheTransaction((convert ? activityToLedger(data) : data) as any);
+          setSelectID(activityId);
         });
       })
       .catch(() => {
@@ -37,22 +43,27 @@ export function usePreviewTransaction(
       });
   });
 
-  const onChangePreviewId = (id?: string) => {
+  const changeID = (id?: string) => {
     batch(() => {
-      setPreviewId(id);
+      setSelectID(id);
       setSearchParams({ transaction: id });
       if (!id) setCacheTransaction(undefined);
     });
   };
 
-  const previewTransaction = createMemo(() => {
-    const id = previewId();
+  const transaction = createMemo(() => {
+    const id = selectID();
     const cache = cacheTransaction();
 
     return !cache || cache.accountActivityId !== id
-      ? transactions()?.find((item) => item.accountActivityId === previewId())
+      ? transactions()?.find((item) => item.accountActivityId === id)
       : cache;
   });
 
-  return [previewId, previewTransaction, onChangePreviewId] as const;
+  const isActivity = createMemo(() => {
+    const item = transaction();
+    return item && ACTIVITY_TYPES.includes(item.type as TransactionType);
+  });
+
+  return { id: selectID, transaction, isActivity, changeID };
 }

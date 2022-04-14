@@ -1,0 +1,12 @@
+.search {
+  width: 320px;
+}
+
+.row {
+  cursor: pointer;
+}
+
+.sub {
+  margin-top: var(--pd-2);
+  color: var(--tw-gray-60);
+}

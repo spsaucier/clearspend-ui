@@ -10,6 +10,7 @@ import { Drawer } from '_common/components/Drawer';
 import { Button } from '_common/components/Button';
 import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
+import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
@@ -25,8 +26,7 @@ export const EMPLOYEES_PAGE_SIZE_STORAGE_KEY = 'employees_page_size';
 
 export const DEFAULT_EMPLOYEE_PARAMS: Readonly<SearchUserRequest> = {
   pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
+    ...DEFAULT_PAGE_REQUEST,
     orderBy: [
       {
         item: 'lastName',

@@ -5,6 +5,7 @@ import { formatPhone } from '_common/formatters/phone';
 import { useResource } from '_common/utils/useResource';
 import { Button } from '_common/components/Button';
 import { Data } from 'app/components/Data';
+import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
 import { CardsList } from 'cards/components/CardsList';
 import { searchCards } from 'cards/services';
 import type { SearchCardRequest } from 'generated/capital';
@@ -15,10 +16,7 @@ import { formatName } from '../../utils/formatName';
 import css from './EmployeePreview.css';
 
 const DEFAULT_PARAMS: Readonly<SearchCardRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
+  pageRequest: { ...DEFAULT_PAGE_REQUEST },
 };
 
 interface EmployeePreviewProps {

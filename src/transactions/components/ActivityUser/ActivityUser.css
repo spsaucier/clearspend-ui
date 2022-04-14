@@ -1,0 +1,14 @@
+.link {
+  color: var(--tw-primary-content);
+  transition: color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--tw-primary-bg);
+  }
+}
+
+.email {
+  margin-top: var(--pd-2);
+  color: var(--tw-gray-60);
+}

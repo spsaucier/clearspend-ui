@@ -14,14 +14,25 @@
 
 .header {
   display: flex;
-  padding: var(--pd-48) 0 64px;
+  padding: 0 0 var(--pd-24);
   align-items: center;
   flex-direction: column;
   text-align: center;
   border-bottom: 1px dashed var(--tw-gray-40);
 }
 
+.frame {
+  display: flex;
+  width: 58px;
+  height: 58px;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid var(--tw-gray-20);
+  border-radius: var(--radius-12);
+}
+
 .amount {
+  margin-top: var(--pd-14);
   font-family: var(--font-header);
   font-size: var(--text-28);
   font-weight: var(--font-700);
@@ -54,4 +65,8 @@
   & > span:first-child {
     color: var(--tw-gray-60);
   }
+}
+
+.actions {
+  padding: var(--pd-24);
 }

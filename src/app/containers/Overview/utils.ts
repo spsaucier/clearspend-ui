@@ -36,7 +36,3 @@ export function getTimePeriod(period: TimePeriod): [from: ReadonlyDate, to: Read
       return [startOfDay(today), endOfDay(today)];
   }
 }
-
-export function updateParams<T>(updates: Partial<T>) {
-  return (prev: T): T => ({ ...prev, ...updates });
-}

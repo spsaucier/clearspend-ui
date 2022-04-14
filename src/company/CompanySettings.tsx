@@ -7,13 +7,11 @@ import { useBusiness } from 'app/containers/Main/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 
 import { CompanyProfile } from './containers/CompanyProfile';
-import { Ledger } from './containers/Ledger';
 import { BankAccounts } from './containers/BankAccounts';
 import { FinancialInfo } from './containers/FinancialInfo';
 
 enum Tabs {
   profile = 'profile',
-  ledger = 'ledger',
   accounts = 'accounts',
   financial = 'financial',
 }
@@ -28,9 +26,6 @@ export default function CompanySettings() {
         <Tab value={Tabs.profile}>
           <Text message="Company Profile" />
         </Tab>
-        <Tab value={Tabs.ledger}>
-          <Text message="Ledger" />
-        </Tab>
         <Tab value={Tabs.accounts}>
           <Text message="Bank Accounts" />
         </Tab>
@@ -41,9 +36,6 @@ export default function CompanySettings() {
       <Switch>
         <Match when={tab() === Tabs.profile}>
           <CompanyProfile data={business()} />
-        </Match>
-        <Match when={tab() === Tabs.ledger}>
-          <Ledger />
         </Match>
         <Match when={tab() === Tabs.accounts}>
           <BankAccounts />

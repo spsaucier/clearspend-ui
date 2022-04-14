@@ -2,21 +2,22 @@ import type { JSXElement } from 'solid-js';
 
 import { i18n } from '_common/api/intl';
 import type { IconName } from '_common/components/Icon';
-import type { AccountActivityRequest } from 'generated/capital';
+import type { AccountActivityRequest, LedgerActivityRequest } from 'generated/capital';
+import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
 
-import type { ActivityStatus, ActivityType, MccGroup, LedgerActivityType } from './types';
+import type { ActivityStatus, ActivityType, TransactionType, LedgerActivityType, MccGroup } from './types';
 
 export const ACTIVITY_PAGE_SIZE_STORAGE_KEY = 'activity_page_size';
 export const LEDGER_PAGE_SIZE_STORAGE_KEY = 'ledger_page_size';
 
-const ACTIVITY_TYPES: readonly ActivityType[] = [
+export const ACTIVITY_TYPES: readonly TransactionType[] = [
   'NETWORK_CAPTURE',
   'NETWORK_AUTHORIZATION',
   'NETWORK_REFUND',
   'CARD_FUND_RETURN',
 ];
 
-const LEDGER_TYPES: readonly LedgerActivityType[] = [
+export const LEDGER_TYPES: readonly LedgerActivityType[] = [
   'BANK_DEPOSIT_STRIPE',
   'BANK_DEPOSIT_ACH',
   'BANK_DEPOSIT_WIRE',
@@ -28,20 +29,18 @@ const LEDGER_TYPES: readonly LedgerActivityType[] = [
   'FEE',
 ];
 
-export const DEFAULT_ACTIVITY_PARAMS: Readonly<AccountActivityRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
+export const DEFAULT_TRANSACTIONS_PARAMS: Readonly<AccountActivityRequest> = {
+  pageRequest: { ...DEFAULT_PAGE_REQUEST },
   types: [...ACTIVITY_TYPES],
 };
 
-export const DEFAULT_LEDGER_PARAMS: Readonly<AccountActivityRequest> = {
-  pageRequest: {
-    pageNumber: 0,
-    pageSize: 10,
-  },
+export const DEFAULT_LEDGER_PARAMS: Readonly<LedgerActivityRequest> = {
+  pageRequest: { ...DEFAULT_PAGE_REQUEST },
   types: [...LEDGER_TYPES],
+};
+
+export const DEFAULT_ACTIVITY_PARAMS: Readonly<LedgerActivityRequest> = {
+  pageRequest: { ...DEFAULT_PAGE_REQUEST },
 };
 
 export const STATUS_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
@@ -62,7 +61,11 @@ export const STATUS_FILL_ICONS: Record<ActivityStatus, keyof typeof IconName> = 
   CREDIT: 'card-fill',
 };
 
-export const LEDGER_ACTIVITY_TYPES: Partial<Readonly<Record<LedgerActivityType, JSXElement>>> = {
+export const ACTIVITY_TYPE_TITLES: Partial<Readonly<Record<ActivityType, JSXElement>>> = {
+  NETWORK_CAPTURE: i18n.t('Payment Capture'),
+  NETWORK_AUTHORIZATION: i18n.t('Payment Hold'),
+  NETWORK_REFUND: i18n.t('Refund'),
+  CARD_FUND_RETURN: i18n.t('Card Funding Return'),
   BANK_DEPOSIT_ACH: i18n.t('Deposit (ACH push)'),
   BANK_DEPOSIT_STRIPE: i18n.t('Deposit (ACH pull)'),
   BANK_DEPOSIT_WIRE: i18n.t('Deposit (Wire)'),

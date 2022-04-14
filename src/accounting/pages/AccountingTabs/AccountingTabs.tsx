@@ -15,7 +15,7 @@ import { AccountingSettings } from 'accounting/containers/AccountingSettings';
 import { SyncLog } from 'accounting/containers/SyncLog';
 import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
 import { AccountingOverview } from 'accounting/containers/AccountingOverview';
-import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_TRANSACTIONS_PARAMS } from 'transactions/constants';
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
@@ -66,7 +66,7 @@ export function AccountingTabs() {
 
   const activityStore = useActivity({
     params: {
-      ...extendPageSize(DEFAULT_ACTIVITY_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
+      ...extendPageSize(DEFAULT_TRANSACTIONS_PARAMS, storage.get(ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
       ...PERIOD,
       statuses: ['APPROVED'],
     },

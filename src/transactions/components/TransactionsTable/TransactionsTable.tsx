@@ -1,12 +1,10 @@
 import { createMemo, createSignal, onMount, Show } from 'solid-js';
-import { useI18n, Text, DateTime } from 'solid-i18n';
+import { useI18n, Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
-import { useBool } from '_common/utils/useBool';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { Setter } from '_common/types/common';
-import { DateFormat } from '_common/api/intl/types';
 import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
@@ -17,7 +15,6 @@ import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
-import { getResetFilters } from 'app/utils/getResetFilters';
 import { exportAccountActivity } from 'app/services/activity';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
@@ -35,23 +32,15 @@ import { getSyncableTransactionCount, syncAllTransactions, syncMultipleTransacti
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Popover } from '_common/components/Popover';
 
+import { ActivityDate } from '../ActivityDate';
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
-import { TransactionFilterDrawer } from '../TransactionFilterDrawer/TransactionFilterDrawer';
-import { useDateFilterHandler } from '../../utils/useDateFilterHandler';
+import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
 
-import css from './TransactionsTable.css';
+import { useTransactionsFilters } from './utils/useTransactionsFilters';
 
-const FILTERS_KEYS = [
-  'amount',
-  'categories',
-  'syncStatus',
-  'statuses',
-  'userId',
-  'withReceipt',
-  'withoutReceipt',
-] as const;
+import css from './TransactionsTable.css';
 
 interface TransactionsTableProps {
   class?: string;
@@ -78,7 +67,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const [syncConfirmationOpen, setSyncConfirmationOpen] = createSignal(false);
   const [syncableCount, setSyncableCount] = createSignal(0);
   const [exporting, exportData] = wrapAction(exportAccountActivity);
-  const [showFilters, toggleFilters] = useBool();
 
   onMount(async () => {
     const res = await getSyncableTransactionCount();
@@ -149,8 +137,11 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     }
   };
 
-  const filtersKeys = createMemo(() =>
-    props.showUserFilter ? [...FILTERS_KEYS] : [...FILTERS_KEYS.filter((f) => f !== 'userId')],
+  const filters = useTransactionsFilters(
+    createMemo(() => props.params),
+    props.dateRange,
+    props.onChangeParams,
+    props.showUserFilter,
   );
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
@@ -191,16 +182,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'date',
       title: <Text message="Date & Time" />,
-      render: (item) => {
-        const date = new Date(item.activityTime || '');
-        return (
-          <>
-            <DateTime date={date} />
-            <br />
-            <DateTime date={date} preset={DateFormat.time} class={css.sub} />
-          </>
-        );
-      },
+      render: (item) => <ActivityDate date={item.activityTime} />,
     },
     {
       name: 'card',
@@ -208,7 +190,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       render: (item) => (
         <div>
           <Show when={item.card} fallback="--">
-            <div class={css.card} onClick={() => props.onCardClick?.(item.card?.cardId!)}>
+            <div
+              class={css.card}
+              onClick={(event) => {
+                event.stopPropagation();
+                props.onCardClick?.(item.card?.cardId!);
+              }}
+            >
               {formatCardNumber(item.card!.lastFour, true)}
             </div>
             <div class={css.sub}>
@@ -250,7 +238,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       name: 'amount',
       title: <Text message="Amount • Status" />,
       render: (item) => (
-        <TransactionsTableAmount status={item.status!} amount={item.amount} requestedAmount={item.requestedAmount} />
+        <TransactionsTableAmount status={item.status} amount={item.amount} requestedAmount={item.requestedAmount} />
       ),
     },
     {
@@ -288,19 +276,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       });
   };
 
-  const [dateFilter, onChangeFilters] = useDateFilterHandler(props.onChangeParams, props.dateRange);
-  const filters = createMemo<Readonly<AccountActivityRequest>>(() => ({ ...props.params, ...dateFilter() }));
-
-  const filtersCount = createMemo(
-    () =>
-      filtersKeys().reduce((sum, key) => sum + Number(props.params[key] !== undefined), 0) +
-      Number(Boolean(dateFilter().from)),
-  );
-
-  const onResetFilters = () => {
-    onChangeFilters((prev) => ({ ...prev, ...getResetFilters([...filtersKeys(), 'from', 'to']) }));
-  };
-
   const getSyncablePageTransactions = () => {
     return [
       ...new Set([
@@ -331,9 +306,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         />
         <FiltersButton
           label={<Text message="More Filters" />}
-          count={filtersCount()}
-          onReset={onResetFilters}
-          onClick={toggleFilters}
+          count={filters.filtersCount()}
+          onReset={filters.onResetFilters}
+          onClick={filters.toggleFilters}
         />
         <Button
           loading={exporting()}
@@ -396,19 +371,24 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>
-      <Drawer noPadding open={showFilters()} title={<Text message="Filter Transactions" />} onClose={toggleFilters}>
+      <Drawer
+        noPadding
+        open={filters.showFilters()}
+        title={<Text message="Filter Transactions" />}
+        onClose={filters.toggleFilters}
+      >
         <TransactionFilterDrawer
-          params={filters()}
+          params={filters.filters()}
           showAllocationFilter={props.showAllocationFilter}
           showAccountingAdminView={props.showAccountingAdminView}
           showUserFilter={props.showUserFilter}
           onChangeParams={(params) => {
-            toggleFilters();
-            onChangeFilters(params);
+            filters.toggleFilters();
+            filters.onChangeFilters(params);
           }}
           onReset={() => {
-            toggleFilters();
-            onResetFilters();
+            filters.toggleFilters();
+            filters.onResetFilters();
           }}
         />
       </Drawer>
