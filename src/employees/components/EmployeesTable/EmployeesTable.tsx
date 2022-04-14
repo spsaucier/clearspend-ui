@@ -1,8 +1,6 @@
 import { Show, For, createSignal, createMemo } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
-import { Input } from '_common/components/Input';
-import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
@@ -12,12 +10,14 @@ import type { Setter } from '_common/types/common';
 import { Filters } from 'app/components/Filters';
 import { useMessages } from 'app/containers/Messages/context';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
+import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { getResetFilters } from 'app/utils/getResetFilters';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest, UserPageData } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { Checkbox } from '_common/components/Checkbox';
 import { FiltersButton } from 'app/components/FiltersButton';
+import { InputSearch } from '_common/components/InputSearch';
 
 import { formatName } from '../../utils/formatName';
 import { exportUsers } from '../../services';
@@ -115,11 +115,11 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           />
         }
       >
-        <Input
-          disabled
+        <InputSearch
+          delay={400}
           placeholder={String(i18n.t('Search employees...'))}
-          suffix={<Icon name="search" size="sm" />}
           class={css.search}
+          onSearch={changeRequestSearch(props.onChangeParams)}
         />
         <FiltersButton count={filtersCount()} onReset={resetFilters} onClick={() => setFilterPanelOpen(true)} />
         <Checkbox
