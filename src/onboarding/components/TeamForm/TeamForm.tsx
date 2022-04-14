@@ -55,7 +55,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   });
 
   createEffect(() => {
-    if (props.business?.businessType === 'SOLE_PROPRIETORSHIP') {
+    if (props.business?.type === 'SOLE_PROPRIETORSHIP') {
       setHasOtherOwners(false);
       setShowOtherOwnersQuestion(false);
     }
@@ -143,7 +143,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           />
           <div class={css.rightContent}>
             <div class={css.title}>You must include:</div>
-            <Show when={props.business?.businessType !== 'SOLE_PROPRIETORSHIP'}>
+            <Show when={props.business?.type !== 'SOLE_PROPRIETORSHIP'}>
               <div class={css.copy}>
                 <div>
                   <Icon name="information" />

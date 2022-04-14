@@ -22,7 +22,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
   const ownershipColumn: TableColumn<BusinessOwner> =
-    props.business.businessType !== 'SOLE_PROPRIETORSHIP'
+    props.business.type !== 'SOLE_PROPRIETORSHIP'
       ? {
           name: 'percentage',
           title: <Text message="Ownership (25% or more)" />,

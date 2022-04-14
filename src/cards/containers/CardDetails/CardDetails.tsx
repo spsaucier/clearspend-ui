@@ -66,7 +66,7 @@ export function CardDetails(props: CardDetailsProps) {
   init();
   createEffect(() => retrieve().catch(getNoop()));
 
-  const address = createMemo(() => (props.card.address?.streetLine1 ? props.card.address : business().address!));
+  const address = createMemo(() => (props.card.address?.streetLine1 ? props.card.address : business().clearAddress!));
 
   return (
     <Switch>

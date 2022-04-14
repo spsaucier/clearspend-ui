@@ -78,7 +78,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
           />
           <TabList value={tab()} onChange={setTab}>
             <Tab value={Tabs.transactions}>
-              <Text message="Recent transactions" />
+              <Text message="Recent Transactions" />
             </Tab>
             <Tab value={Tabs.details}>
               <Text message="Details" />

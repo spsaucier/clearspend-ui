@@ -53,7 +53,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     },
     {
       name: 'type',
-      title: <Text message="Transaction" />,
+      title: <Text message="Activity Type" />,
       render: (item) => (
         <>
           <div>{ACTIVITY_TYPE_TITLES[item.type!]}</div>
@@ -68,12 +68,12 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     },
     {
       name: 'source',
-      title: <Text message="Initiating Account" />,
+      title: <Text message="Source" />,
       render: (item) => <ActivityAccount account={item.sourceAccount} onCardClick={props.onCardClick} />,
     },
     {
       name: 'destination',
-      title: <Text message="Target Account" />,
+      title: <Text message="Target" />,
       render: (item) => <ActivityAccount account={item.targetAccount} onCardClick={props.onCardClick} />,
     },
     {

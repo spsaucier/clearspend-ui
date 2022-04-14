@@ -116,7 +116,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           <AddressFormItems values={values} errors={errors()} handlers={handlers} />
         </div>
       </Section>
-      <Show when={isOwner && props.business.businessType !== 'SOLE_PROPRIETORSHIP'}>
+      <Show when={isOwner && props.business.type !== 'SOLE_PROPRIETORSHIP'}>
         <Section
           title="Your ownership stake"
           description="Please disclose your company ownership amount via percentage."

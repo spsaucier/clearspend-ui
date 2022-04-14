@@ -35,7 +35,7 @@ export function getFormOptions({ currentUser, leader, business }: Props): FormOp
     postalCode: [required, validZipCode],
     percentageOwnership: [
       (value: string, values: FormValues) =>
-        requiredIf(value, values.relationshipOwner && business.businessType !== 'SOLE_PROPRIETORSHIP'),
+        requiredIf(value, values.relationshipOwner && business.type !== 'SOLE_PROPRIETORSHIP'),
     ],
   };
 

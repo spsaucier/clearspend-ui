@@ -62,7 +62,7 @@ export default function Onboarding() {
   const [loadingModalOpen, setLoadingModalOpen] = createSignal(false);
 
   const { business, currentUser, refetch: refetchOnboardingState, mutate } = useOnboardingBusiness();
-  const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['businessType'] }>();
+  const [businessProspectInfo, setBusinessProspectInfo] = createSignal<{ businessType: Business['type'] }>();
   const [teamTitle, setTeamTitle] = createSignal('');
 
   const [logoutLoading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
@@ -70,7 +70,7 @@ export default function Onboarding() {
   const fillBusinessProspectInfo = async () => {
     const result = await getBusinessProspectInfo(currentUser().userId!);
     if (result.data) {
-      setBusinessProspectInfo(result.data as { businessType: Business['businessType'] });
+      setBusinessProspectInfo(result.data as { businessType: Business['type'] });
     }
   };
 
@@ -307,7 +307,7 @@ export default function Onboarding() {
             >
               <BusinessForm
                 onNext={onUpdateKYB}
-                businessType={businessProspectInfo()?.businessType ?? business()?.businessType!}
+                businessType={businessProspectInfo()?.businessType ?? business()?.type!}
                 businessPrefills={business()! as BusinessWithBusinessName}
                 kybErrors={kybRequiredFields()}
               />

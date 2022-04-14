@@ -87,7 +87,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
               <Radio value={false}>No</Radio>
             </RadioGroup>
           </FormItem>
-          <Show when={props.business.businessType !== 'SOLE_PROPRIETORSHIP'}>
+          <Show when={props.business.type !== 'SOLE_PROPRIETORSHIP'}>
             <FormItem label="Are they an owner with at least 25% ownership?" error={errors().relationshipOwner}>
               <RadioGroup
                 name="is-owner"

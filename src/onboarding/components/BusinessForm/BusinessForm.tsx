@@ -34,7 +34,7 @@ export type BusinessWithBusinessName = Business & { businessName: string };
 
 interface BusinessFormProps {
   onNext: (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
-  businessType: Business['businessType'];
+  businessType: Business['type'];
   businessPrefills?: BusinessWithBusinessName;
   kybErrors?: readonly Readonly<string>[];
 }

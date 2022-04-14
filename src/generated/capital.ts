@@ -32,6 +32,501 @@ export interface ControllerError {
   param?: string;
 }
 
+export interface SetCreditCardRequest {
+  accountId?: string;
+}
+
+export interface Business {
+  legalName?: string;
+  type?:
+    | 'INDIVIDUAL'
+    | 'SOLE_PROPRIETORSHIP'
+    | 'SINGLE_MEMBER_LLC'
+    | 'MULTI_MEMBER_LLC'
+    | 'PRIVATE_PARTNERSHIP'
+    | 'PUBLIC_PARTNERSHIP'
+    | 'PRIVATE_CORPORATION'
+    | 'PUBLIC_CORPORATION'
+    | 'INCORPORATED_NON_PROFIT';
+  clearAddress?: ClearAddress;
+  employerIdentificationNumber?: string;
+  currency?:
+    | 'UNSPECIFIED'
+    | 'AED'
+    | 'AFN'
+    | 'ALL'
+    | 'AMD'
+    | 'ANG'
+    | 'AOA'
+    | 'ARS'
+    | 'AUD'
+    | 'AWG'
+    | 'AZN'
+    | 'BAM'
+    | 'BBD'
+    | 'BDT'
+    | 'BGN'
+    | 'BHD'
+    | 'BIF'
+    | 'BMD'
+    | 'BND'
+    | 'BOB'
+    | 'BRL'
+    | 'BSD'
+    | 'BTN'
+    | 'BWP'
+    | 'BYN'
+    | 'BYR'
+    | 'BZD'
+    | 'CAD'
+    | 'CDF'
+    | 'CHF'
+    | 'CLP'
+    | 'CNY'
+    | 'COP'
+    | 'CRC'
+    | 'CUC'
+    | 'CUP'
+    | 'CVE'
+    | 'CZK'
+    | 'DJF'
+    | 'DKK'
+    | 'DOP'
+    | 'DZD'
+    | 'EGP'
+    | 'ERN'
+    | 'ETB'
+    | 'EUR'
+    | 'FJD'
+    | 'FKP'
+    | 'GBP'
+    | 'GEL'
+    | 'GHS'
+    | 'GIP'
+    | 'GMD'
+    | 'GNF'
+    | 'GTQ'
+    | 'GYD'
+    | 'HKD'
+    | 'HNL'
+    | 'HRK'
+    | 'HTG'
+    | 'HUF'
+    | 'IDR'
+    | 'ILS'
+    | 'INR'
+    | 'IQD'
+    | 'IRR'
+    | 'ISK'
+    | 'JMD'
+    | 'JOD'
+    | 'JPY'
+    | 'KES'
+    | 'KGS'
+    | 'KHR'
+    | 'KMF'
+    | 'KPW'
+    | 'KRW'
+    | 'KWD'
+    | 'KYD'
+    | 'KZT'
+    | 'LAK'
+    | 'LBP'
+    | 'LKR'
+    | 'LRD'
+    | 'LSL'
+    | 'LTL'
+    | 'LYD'
+    | 'MAD'
+    | 'MDL'
+    | 'MGA'
+    | 'MKD'
+    | 'MMK'
+    | 'MNT'
+    | 'MOP'
+    | 'MRO'
+    | 'MRU'
+    | 'MUR'
+    | 'MVR'
+    | 'MWK'
+    | 'MXN'
+    | 'MYR'
+    | 'MZN'
+    | 'NAD'
+    | 'NGN'
+    | 'NIO'
+    | 'NOK'
+    | 'NPR'
+    | 'NZD'
+    | 'OMR'
+    | 'PAB'
+    | 'PEN'
+    | 'PGK'
+    | 'PHP'
+    | 'PKR'
+    | 'PLN'
+    | 'PYG'
+    | 'QAR'
+    | 'RON'
+    | 'RSD'
+    | 'RUB'
+    | 'RUR'
+    | 'RWF'
+    | 'SAR'
+    | 'SBD'
+    | 'SCR'
+    | 'SDG'
+    | 'SEK'
+    | 'SGD'
+    | 'SHP'
+    | 'SLL'
+    | 'SOS'
+    | 'SRD'
+    | 'SSP'
+    | 'STD'
+    | 'STN'
+    | 'SVC'
+    | 'SYP'
+    | 'SZL'
+    | 'THB'
+    | 'TJS'
+    | 'TMT'
+    | 'TND'
+    | 'TOP'
+    | 'TRY'
+    | 'TTD'
+    | 'TWD'
+    | 'TZS'
+    | 'UAH'
+    | 'UGX'
+    | 'USD'
+    | 'UYU'
+    | 'UZS'
+    | 'VEF'
+    | 'VES'
+    | 'VND'
+    | 'VUV'
+    | 'WST'
+    | 'XAF'
+    | 'XCD'
+    | 'XOF'
+    | 'XPF'
+    | 'YER'
+    | 'ZAR'
+    | 'ZMW'
+    | 'ZWL';
+  onboardingStep?:
+    | 'BUSINESS'
+    | 'BUSINESS_OWNERS'
+    | 'SOFT_FAIL'
+    | 'REVIEW'
+    | 'LINK_ACCOUNT'
+    | 'TRANSFER_MONEY'
+    | 'COMPLETE';
+  knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  statusReason?: 'NONE';
+  mcc?: string;
+  stripeData?: StripeData;
+  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+
+  /** @format int64 */
+  version?: number;
+
+  /** @format date-time */
+  created?: string;
+
+  /** @format date-time */
+  updated?: string;
+
+  /** @format uuid */
+  id?: string;
+  businessName?: string;
+  businessEmail?: string;
+  businessPhone?: string;
+  description?: string;
+  url?: string;
+  codatCompanyRef?: string;
+  codatConnectionId?: string;
+  codatCreditCardId?: string;
+
+  /** @format uuid */
+  businessId?: string;
+}
+
+export interface ClearAddress {
+  streetLine1?: string;
+  streetLine2?: string;
+  locality?: string;
+  region?: string;
+  postalCode?: string;
+  country?:
+    | 'UNSPECIFIED'
+    | 'ABW'
+    | 'AFG'
+    | 'AGO'
+    | 'AIA'
+    | 'ALA'
+    | 'ALB'
+    | 'AND'
+    | 'ANT'
+    | 'ARE'
+    | 'ARG'
+    | 'ARM'
+    | 'ASM'
+    | 'ATA'
+    | 'ATF'
+    | 'ATG'
+    | 'AUS'
+    | 'AUT'
+    | 'AZE'
+    | 'BDI'
+    | 'BEL'
+    | 'BEN'
+    | 'BFA'
+    | 'BGD'
+    | 'BGR'
+    | 'BHR'
+    | 'BHS'
+    | 'BIH'
+    | 'BLM'
+    | 'BLR'
+    | 'BLZ'
+    | 'BMU'
+    | 'BOL'
+    | 'BRA'
+    | 'BRB'
+    | 'BRN'
+    | 'BTN'
+    | 'BVT'
+    | 'BWA'
+    | 'CAF'
+    | 'CAN'
+    | 'CCK'
+    | 'CHE'
+    | 'CHL'
+    | 'CHN'
+    | 'CIV'
+    | 'CMR'
+    | 'COD'
+    | 'COG'
+    | 'COK'
+    | 'COL'
+    | 'COM'
+    | 'CPV'
+    | 'CRI'
+    | 'CUB'
+    | 'CXR'
+    | 'CYM'
+    | 'CYP'
+    | 'CZE'
+    | 'DEU'
+    | 'DJI'
+    | 'DMA'
+    | 'DNK'
+    | 'DOM'
+    | 'DZA'
+    | 'ECU'
+    | 'EGY'
+    | 'ERI'
+    | 'ESH'
+    | 'ESP'
+    | 'EST'
+    | 'ETH'
+    | 'FIN'
+    | 'FJI'
+    | 'FLK'
+    | 'FRA'
+    | 'FRO'
+    | 'FSM'
+    | 'GAB'
+    | 'GBR'
+    | 'GEO'
+    | 'GGY'
+    | 'GHA'
+    | 'GIB'
+    | 'GIN'
+    | 'GLP'
+    | 'GMB'
+    | 'GNB'
+    | 'GNQ'
+    | 'GRC'
+    | 'GRD'
+    | 'GRL'
+    | 'GTM'
+    | 'GUF'
+    | 'GUM'
+    | 'GUY'
+    | 'HKG'
+    | 'HMD'
+    | 'HND'
+    | 'HRV'
+    | 'HTI'
+    | 'HUN'
+    | 'IDN'
+    | 'IMN'
+    | 'IND'
+    | 'IOT'
+    | 'IRL'
+    | 'IRN'
+    | 'IRQ'
+    | 'ISL'
+    | 'ISR'
+    | 'ITA'
+    | 'JAM'
+    | 'JEY'
+    | 'JOR'
+    | 'JPN'
+    | 'KAZ'
+    | 'KEN'
+    | 'KGZ'
+    | 'KHM'
+    | 'KIR'
+    | 'KNA'
+    | 'KOR'
+    | 'KWT'
+    | 'LAO'
+    | 'LBN'
+    | 'LBR'
+    | 'LBY'
+    | 'LCA'
+    | 'LIE'
+    | 'LKA'
+    | 'LSO'
+    | 'LTU'
+    | 'LUX'
+    | 'LVA'
+    | 'MAC'
+    | 'MAF'
+    | 'MAR'
+    | 'MCO'
+    | 'MDA'
+    | 'MDG'
+    | 'MDV'
+    | 'MEX'
+    | 'MHL'
+    | 'MKD'
+    | 'MLI'
+    | 'MLT'
+    | 'MMR'
+    | 'MNE'
+    | 'MNG'
+    | 'MNP'
+    | 'MOZ'
+    | 'MRT'
+    | 'MSR'
+    | 'MTQ'
+    | 'MUS'
+    | 'MWI'
+    | 'MYS'
+    | 'MYT'
+    | 'NAM'
+    | 'NCL'
+    | 'NER'
+    | 'NFK'
+    | 'NGA'
+    | 'NIC'
+    | 'NIU'
+    | 'NLD'
+    | 'NOR'
+    | 'NPL'
+    | 'NRU'
+    | 'NZL'
+    | 'OMN'
+    | 'PAK'
+    | 'PAN'
+    | 'PCN'
+    | 'PER'
+    | 'PHL'
+    | 'PLW'
+    | 'PNG'
+    | 'POL'
+    | 'PRI'
+    | 'PRK'
+    | 'PRT'
+    | 'PRY'
+    | 'PSE'
+    | 'PYF'
+    | 'QAT'
+    | 'REU'
+    | 'ROU'
+    | 'RUS'
+    | 'RWA'
+    | 'SAU'
+    | 'SDN'
+    | 'SEN'
+    | 'SGP'
+    | 'SGS'
+    | 'SHN'
+    | 'SJM'
+    | 'SLB'
+    | 'SLE'
+    | 'SLV'
+    | 'SMR'
+    | 'SOM'
+    | 'SPM'
+    | 'SRB'
+    | 'SSD'
+    | 'STP'
+    | 'SUR'
+    | 'SVK'
+    | 'SVN'
+    | 'SWE'
+    | 'SWZ'
+    | 'SYC'
+    | 'SYR'
+    | 'TCA'
+    | 'TCD'
+    | 'TGO'
+    | 'THA'
+    | 'TJK'
+    | 'TKL'
+    | 'TKM'
+    | 'TLS'
+    | 'TON'
+    | 'TTO'
+    | 'TUN'
+    | 'TUR'
+    | 'TUV'
+    | 'TWN'
+    | 'TZA'
+    | 'UGA'
+    | 'UKR'
+    | 'UMI'
+    | 'URY'
+    | 'USA'
+    | 'UZB'
+    | 'VAT'
+    | 'VCT'
+    | 'VEN'
+    | 'VGB'
+    | 'VIR'
+    | 'VNM'
+    | 'VUT'
+    | 'WLF'
+    | 'WSM'
+    | 'YEM'
+    | 'ZAF'
+    | 'ZMB'
+    | 'ZWE';
+}
+
+export interface StripeData {
+  financialAccountState?: 'NOT_READY' | 'READY';
+  tosAcceptance?: TosAcceptance;
+  accountRef?: string;
+  financialAccountRef?: string;
+  bankAccountNumber?: string;
+  bankRoutingNumber?: string;
+}
+
+export interface TosAcceptance {
+  /** @format date-time */
+  date?: string;
+  ip?: string;
+  userAgent?: string;
+}
+
 export interface Address {
   streetLine1?: string;
   streetLine2?: string;
@@ -1797,47 +2292,6 @@ export interface Allocation {
 
 export interface UpdateBusinessAccountingStepRequest {
   accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
-}
-
-export interface Business {
-  /** @format uuid */
-  businessId?: string;
-  legalName?: string;
-  businessType?:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
-  employerIdentificationNumber?: string;
-
-  /**
-   * Phone number in e.164 format
-   * @example +1234567890
-   */
-  businessPhone?: string;
-  address?: Address;
-  onboardingStep?:
-    | 'BUSINESS'
-    | 'BUSINESS_OWNERS'
-    | 'SOFT_FAIL'
-    | 'REVIEW'
-    | 'LINK_ACCOUNT'
-    | 'TRANSFER_MONEY'
-    | 'COMPLETE';
-  knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
-  accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
-  mcc?: string;
-  businessName?: string;
-  accountNumber?: string;
-  routingNumber?: string;
-  description?: string;
-  url?: string;
 }
 
 export interface CreateOrUpdateBusinessProspectRequest {

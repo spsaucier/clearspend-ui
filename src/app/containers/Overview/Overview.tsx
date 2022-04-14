@@ -111,7 +111,7 @@ export function Overview(props: Readonly<OverviewProps>) {
       </Show>
       <div class={css.section}>
         <h3 class={css.title}>
-          <Text message="Recent Transactions" />
+          <Text message="Recent Activity" />
         </h3>
         <Dynamic
           component={canManageFunds(props.userPermissions) ? Ledger : Transactions}

@@ -103,7 +103,7 @@ export function LedgerTable(props: Readonly<LedgerTableProps>) {
     },
     {
       name: 'type',
-      title: <Text message="Transaction" />,
+      title: <Text message="Type" />,
       render: (item) => ACTIVITY_TYPE_TITLES[item.type as LedgerActivityType],
     },
     {

@@ -9,7 +9,10 @@
 }
 
 .head {
-  border-bottom: 1px solid var(--tw-gray-30);
+  position: sticky;
+  top: 0;
+  background: white;
+  box-shadow: 0 1px 0 var(--tw-gray-30);
 }
 
 .th {

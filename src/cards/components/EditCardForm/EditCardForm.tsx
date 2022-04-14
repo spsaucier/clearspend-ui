@@ -206,7 +206,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           <FormItem error={errors().streetLine1 || errors().locality || errors().region || errors().postalCode}>
             <AddressSelect
               onChange={handleAddressChange}
-              businessAddress={business()?.address}
+              businessAddress={business()?.clearAddress}
               employeeAddress={employee()?.address}
             />
           </FormItem>
