@@ -45,7 +45,10 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
     const kycErrors: { [key: string]: string } = {};
     props.kycErrors?.forEach((fieldError) => {
       const fieldKey = fieldError.includes('.') ? fieldError.split(/[.]+/)[1] : fieldError;
-      if (fieldKey) {
+      if (fieldKey === 'ssn_last_4') {
+        // Temporary until new UI/UX is complete for doc+field optional issue fix for ssn
+        kycErrors.ssn = 'Invalid. This value does not match the provided documentation.';
+      } else if (fieldKey) {
         kycErrors[fieldKey] = `Invalid value`;
       }
     });

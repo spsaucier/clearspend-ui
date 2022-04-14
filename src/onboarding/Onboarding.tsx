@@ -105,6 +105,7 @@ export default function Onboarding() {
         setKYBRequiredDocuments(data.kybRequiredDocuments);
         setKYCRequiredDocuments(data.kycRequiredDocuments);
         setKybRequiredFields(data.kybRequiredFields);
+
         setKycRequiredFields(data.kycRequiredFields);
 
         setPendingVerification(data.pendingVerification);

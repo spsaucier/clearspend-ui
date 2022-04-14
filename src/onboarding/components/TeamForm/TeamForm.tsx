@@ -132,7 +132,10 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
                 ? Object.keys(props.kycErrors).filter((key) => (props.kycErrors?.[key] as string[]).length > 0)
                 : []
             }
-            onAddClick={() => setShowAddingNewLeader(true)}
+            onAddClick={() => {
+              setEditingLeaderId('');
+              setShowAddingNewLeader(true);
+            }}
             // FIXME
             // eslint-disable-next-line
             onDeleteClick={() => console.log('tbd')}
