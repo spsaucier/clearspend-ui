@@ -23,7 +23,7 @@ export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
   const [showAccountNumber, setShowAccountNumber] = createSignal(false);
 
   onMount(() => {
-    if (!business().stripeData?.bankAccountNumber) {
+    if (!business().accountNumber) {
       refetch();
       const refetchInterval = setInterval(() => {
         refetch();
@@ -41,7 +41,7 @@ export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
         <h4 class={css.title}>{props.heading}</h4>
       </Show>
       <Show
-        when={business().stripeData?.bankAccountNumber}
+        when={business().accountNumber}
         fallback={
           <div class={css.row}>
             <Icon size="sm" name="information" class={join(css.icon, css.red)} />
@@ -61,12 +61,12 @@ export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
               when={showAccountNumber()}
               fallback={
                 <span onClick={() => setShowAccountNumber(true)} class={css.highlight}>
-                  {formatAccountNumber(business().stripeData?.bankAccountNumber || '')}{' '}
+                  {formatAccountNumber(business().accountNumber || '')}{' '}
                   <Icon size="sm" class={css.highlight} name="view" />
                 </span>
               }
             >
-              <div class={css.darkContent}>{business().stripeData?.bankAccountNumber}</div>
+              <div class={css.darkContent}>{business().accountNumber}</div>
             </Show>
           </div>
         </div>
@@ -74,7 +74,7 @@ export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
           <Icon size="sm" name="channel-subscription" class={join(css.icon, css.darkContent)} />
           <div class={css.text}>
             <Text message="Routing number: " />
-            <span class={css.darkContent}>{formatRoutingNumber(business().stripeData?.bankRoutingNumber || '')}</span>
+            <span class={css.darkContent}>{formatRoutingNumber(business().routingNumber || '')}</span>
           </div>
         </div>
       </Show>

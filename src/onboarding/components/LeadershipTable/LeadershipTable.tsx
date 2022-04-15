@@ -25,7 +25,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   const ownershipColumn: TableColumn<BusinessOwner> = ![
     BusinessType.SOLE_PROPRIETORSHIP,
     BusinessType.INCORPORATED_NON_PROFIT,
-  ].includes(props.business.type as BusinessType)
+  ].includes(props.business.businessType as BusinessType)
     ? {
         name: 'percentage',
         title: <Text message="Ownership (25% or more)" />,
@@ -57,7 +57,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         let roles = [];
         if (leader.relationshipOwner) roles.push('Owner');
         if (leader.relationshipExecutive) roles.push('Executive');
-        if (props.business.type === BusinessType.INCORPORATED_NON_PROFIT) roles.push('Representative');
+        if (props.business.businessType === BusinessType.INCORPORATED_NON_PROFIT) roles.push('Representative');
         return (
           <div class={css.cell}>
             <Text message={roles.length ? formatter.format(roles) : 'No roles selected'} />

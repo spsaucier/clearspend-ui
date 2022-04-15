@@ -11,7 +11,10 @@ import type { BusinessWithBusinessName } from './BusinessForm';
 const BUSINESS_NAME_MAX_LENGTH = 100;
 export const BUSINESS_DESCRIPTION_MAX_LENGTH = 200;
 
-export function getFormOptions(type: Business['type'], prefill?: BusinessWithBusinessName): FormOptions<FormValues> {
+export function getFormOptions(
+  type: Business['businessType'],
+  prefill?: BusinessWithBusinessName,
+): FormOptions<FormValues> {
   return {
     defaultValues: {
       name: prefill?.legalName ?? '',
@@ -21,11 +24,11 @@ export function getFormOptions(type: Business['type'], prefill?: BusinessWithBus
       description: prefill?.description ?? '',
       employerIdentificationNumber: prefill?.employerIdentificationNumber ?? '',
       phone: prefill?.businessPhone ?? '',
-      streetLine1: prefill?.clearAddress?.streetLine1 ?? '',
-      streetLine2: prefill?.clearAddress?.streetLine2 ?? '',
-      locality: prefill?.clearAddress?.locality ?? '',
-      region: prefill?.clearAddress?.region ?? '',
-      postalCode: prefill?.clearAddress?.postalCode ?? '',
+      streetLine1: prefill?.address?.streetLine1 ?? '',
+      streetLine2: prefill?.address?.streetLine2 ?? '',
+      locality: prefill?.address?.locality ?? '',
+      region: prefill?.address?.region ?? '',
+      postalCode: prefill?.address?.postalCode ?? '',
       businessName: prefill?.businessName ?? '',
     },
     rules: {

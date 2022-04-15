@@ -85,7 +85,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
 
     if (
       [BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
-        props.business?.type as BusinessType,
+        props.business?.businessType as BusinessType,
       )
     ) {
       setHasOtherOwners(false);
@@ -170,7 +170,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             <Show
               when={
                 ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
-                  props.business?.type as BusinessType,
+                  props.business?.businessType as BusinessType,
                 )
               }
             >

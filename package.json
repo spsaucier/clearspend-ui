@@ -23,6 +23,7 @@
   "dependencies": {
     "@formatjs/intl-listformat": "6.5.3",
     "@formatjs/intl-locale": "2.4.47",
+    "@fullstory/browser": "^1.5.1",
     "@solid-primitives/debounce": "1.2.0",
     "@stripe/stripe-js": "^1.22.0",
     "colord": "2.9.2",

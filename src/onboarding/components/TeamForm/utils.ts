@@ -40,7 +40,7 @@ export function getFormOptions({ currentUser, leader, business }: Props): FormOp
           value,
           values.relationshipOwner &&
             ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
-              business.type as BusinessType,
+              business.businessType as BusinessType,
             ),
         ),
     ],

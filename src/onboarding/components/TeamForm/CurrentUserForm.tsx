@@ -121,7 +121,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
         when={
           isOwner &&
           ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
-            props.business.type as BusinessType,
+            props.business.businessType as BusinessType,
           )
         }
       >

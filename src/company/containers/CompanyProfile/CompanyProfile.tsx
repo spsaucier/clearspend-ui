@@ -32,8 +32,8 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Legal entity type" />:
           </span>
-          <span class={css.dataValue}>{BusinessTypeI18n[props.data.type!]}</span>
-          <CopyButton value={props.data.type!} class={css.copy} />
+          <span class={css.dataValue}>{BusinessTypeI18n[props.data.businessType!]}</span>
+          <CopyButton value={props.data.businessType!} class={css.copy} />
         </DataRow>
         <DataRow icon="payment-bank" class={css.data}>
           <span class={css.dataLabel}>
@@ -78,7 +78,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
         class={css.section}
       >
         <DataRow icon="pin" class={css.data} contentClass={css.address}>
-          {formatAddress(props.data.clearAddress!)}
+          {formatAddress(props.data.address!)}
         </DataRow>
       </Section>
     </div>
