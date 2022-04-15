@@ -5,7 +5,9 @@
 }
 
 .input {
-  position: absolute;
+  width: 0;
+  height: 0;
+  margin: 0;
   pointer-events: none;
   opacity: 0;
 
