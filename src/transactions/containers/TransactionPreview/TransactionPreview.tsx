@@ -2,7 +2,14 @@ import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
 import { createSignal, createMemo, batch, Show, Switch, Match, JSXElement } from 'solid-js';
 
-import type { AccountActivityResponse, DeclineDetails, AddressPostalCodeMismatch } from 'generated/capital';
+import type {
+  AccountActivityResponse,
+  DeclineDetails,
+  AddressPostalCodeMismatch,
+  OperationLimitExceeded,
+  LimitExceeded,
+  SpendControlViolated,
+} from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
@@ -159,10 +166,69 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const allowReceiptUpload = createMemo(() => isAllowedReceipts(transaction().merchant, transaction().status));
 
-  const getErrorText = (details: DeclineDetails | AddressPostalCodeMismatch) => {
+  const getErrorText = (
+    details: DeclineDetails | AddressPostalCodeMismatch | LimitExceeded | OperationLimitExceeded | SpendControlViolated,
+  ) => {
+    /*
+      entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
+      mccGroup?:
+        | "CHILD_CARE"
+        | "DIGITAL_GOODS"
+        | "EDUCATION"
+        | "ENTERTAINMENT"
+        | "FOOD_BEVERAGE"
+        | "GAMBLING"
+        | "GOVERNMENT"
+        | "HEALTH"
+        | "MEMBERSHIPS"
+        | "MONEY_TRANSFER"
+        | "SERVICES"
+        | "SHOPPING"
+        | "TRAVEL"
+        | "UTILITIES"
+        | "OTHER",
+      paymentType?: "POS" | "ONLINE" | "MANUAL_ENTRY",
+
+      entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
+      limitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE",
+      limitPeriod?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY",
+      
+      exceededAmount?: number,
+    */
     const reason = declineReasons[details.reason!] || details.reason || '';
     if ('postalCode' in details && details.postalCode) {
       return i18n.t('{reason} ({postalCode} entered)', { reason: String(reason), postalCode: details.postalCode });
+    }
+    if ('mccGroup' in details) {
+      if (details.mccGroup) {
+        return i18n.t('{reason}: {mccGroup} not permitted on this {entityType}', {
+          reason: String(reason),
+          mccGroup: details.mccGroup.toLowerCase().replace(/_/g, ''),
+          entityType: details.entityType?.toLowerCase() || 'card',
+        });
+      } else if (details.paymentType) {
+        return i18n.t('{reason}: {paymentType} not permitted on this {entityType}', {
+          reason: String(reason),
+          paymentType: details.paymentType.toLowerCase().replace(/_/g, ''),
+          entityType: details.entityType?.toLowerCase() || 'card',
+        });
+      }
+    }
+    if ('limitType' in details && details.limitType) {
+      if ('exceededAmount' in details && details.exceededAmount) {
+        return i18n.t('{reason}: {limitType} {period} limit exceeded by {amount}', {
+          reason: String(reason),
+          limitType: details.limitType.toLowerCase().replace(/_/g, ''),
+          period: details.limitPeriod?.toLowerCase() || '',
+          amount: details.exceededAmount,
+        });
+      } else {
+        return i18n.t('{reason}: {limitType} {period} limit exceeded', {
+          reason: String(reason),
+          limitType: details.limitType.toLowerCase().replace(/_/g, ''),
+          period: details.limitPeriod?.toLowerCase() || '',
+        });
+      }
     }
     return reason;
   };
