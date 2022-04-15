@@ -52,3 +52,18 @@ export interface SyncLog {
   status: SyncLogStatus;
   transactionId: string;
 }
+
+export enum BusinessNotificationType {
+  CHART_OF_ACCOUNTS_CREATED = 'CHART_OF_ACCOUNTS_CREATED',
+  CHART_OF_ACCOUNTS_DELETED = 'CHART_OF_ACCOUNTS_DELETED',
+  CHART_OF_ACCOUNTS_RENAMED = 'CHART_OF_ACCOUNTS_RENAMED',
+  USER_ACCEPTED_COA_CHANGES = 'USER_ACCEPTED_COA_CHANGES',
+}
+export interface BusinessNotificationData {
+  oldValue: string;
+  newValue: string;
+}
+export interface BusinessNotification {
+  type: BusinessNotificationType;
+  data: BusinessNotificationData;
+}

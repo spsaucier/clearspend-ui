@@ -1,0 +1,12 @@
+.root {
+  padding: 4px 24px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtext {
+  color: var(--tw-gray-60);
+}

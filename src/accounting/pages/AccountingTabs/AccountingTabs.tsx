@@ -19,8 +19,14 @@ import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, DEFAULT_TRANSACTIONS_PARAMS } from 'tra
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
 import { useMessages } from 'app/containers/Messages/context';
-import { getChartOfAccountsChangeNumber } from 'accounting/services';
+import { acceptChartOfAccountsNotifications } from 'accounting/services';
 import { ChartOfAccountsUpdateBar } from 'accounting/components/ChartOfAccountsUpdateBar';
+import { Drawer } from '_common/components/Drawer';
+import { useUpdateNotifications } from 'accounting/stores/updateNotifications';
+import { ChartOfAccountsUpdateText } from 'accounting/components/ChartOfAccountsUpdateText';
+import { Button } from '_common/components/Button';
+
+import css from './AccountingTabs.css';
 
 enum Tabs {
   transactions = 'transactions',
@@ -35,12 +41,19 @@ export function AccountingTabs() {
 
   const { business } = useBusiness();
   const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
-  const [chartOfAccountsChanges, setChartOfAccountsChanges] = createSignal(0);
+  const [viewingUpdateDetailsDrawer, setViewingUpdateDetailsDrawer] = createSignal(false);
+  const updateNotifications = useUpdateNotifications();
 
   const onSelectTransaction = (id: string) => {
     if (!selectedTransactions().includes(id)) {
       setSelectedTransactions([...selectedTransactions(), id]);
     }
+  };
+
+  const onDismissNotifications = () => {
+    acceptChartOfAccountsNotifications();
+    updateNotifications.setData([]);
+    setViewingUpdateDetailsDrawer(false);
   };
 
   const onDeselectTransaction = (id: string) => {
@@ -57,8 +70,6 @@ export function AccountingTabs() {
     if (params.notification === 'setup') {
       messages.success({ title: 'Settings update complete', message: 'Ready to sync transactions.' });
     }
-    const totalChanges = await getChartOfAccountsChangeNumber();
-    setChartOfAccountsChanges(totalChanges);
   });
 
   const initPeriod = AccountingTimePeriod.year; // TODO: revise period as necessary
@@ -74,8 +85,14 @@ export function AccountingTabs() {
 
   return (
     <div>
-      <Show when={chartOfAccountsChanges() > 0}>
-        <ChartOfAccountsUpdateBar count={chartOfAccountsChanges()} />
+      <Show when={updateNotifications.data && updateNotifications.data.length > 0}>
+        <ChartOfAccountsUpdateBar
+          count={updateNotifications.data ? updateNotifications.data.length : 0}
+          setViewingDetailsDrawer={(open: boolean) => {
+            setViewingUpdateDetailsDrawer(open);
+          }}
+          onDismiss={onDismissNotifications}
+        />
       </Show>
       <Page title={<Text message="Accounting" />}>
         <TabList value={tab()} onChange={setTab}>
@@ -119,6 +136,27 @@ export function AccountingTabs() {
               <AccountingSettings data={activityStore.data} />
             </Match>
           </Switch>
+          <Drawer
+            open={viewingUpdateDetailsDrawer()}
+            title={<Text message={'Accounts Updates'} />}
+            onClose={() => {
+              setViewingUpdateDetailsDrawer(false);
+            }}
+          >
+            <div class={css.notificationContainer}>
+              <div>
+                {updateNotifications.data &&
+                  updateNotifications.data.map((notification) => (
+                    <ChartOfAccountsUpdateText notification={notification} />
+                  ))}
+              </div>
+              <div class={css.notificationButton}>
+                <Button onClick={onDismissNotifications}>
+                  <Text message={'Ok'} />
+                </Button>
+              </div>
+            </div>
+          </Drawer>
         </Data>
       </Page>
     </div>

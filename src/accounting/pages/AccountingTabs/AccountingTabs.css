@@ -1,0 +1,12 @@
+.notification-container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.notification-button {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}

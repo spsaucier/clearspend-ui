@@ -7,6 +7,8 @@ import css from './ChartOfAccountsUpdateBar.css';
 
 interface UpdateBarProps {
   count: number;
+  setViewingDetailsDrawer: (open: boolean) => void;
+  onDismiss: () => void;
 }
 
 export function ChartOfAccountsUpdateBar(props: UpdateBarProps) {
@@ -25,17 +27,12 @@ export function ChartOfAccountsUpdateBar(props: UpdateBarProps) {
         <div>
           <Button
             onClick={() => {
-              return null;
+              props.setViewingDetailsDrawer(true);
             }}
           >
             <Text message={'View Updates'} />
           </Button>
-          <Button
-            onClick={() => {
-              return null;
-            }}
-            view={'ghost'}
-          >
+          <Button onClick={props.onDismiss} view={'ghost'}>
             <Text message={'Dismiss'} />
           </Button>
         </div>

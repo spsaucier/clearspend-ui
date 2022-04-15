@@ -7,6 +7,7 @@ import { service } from 'app/utils/service';
 import type { ChartOfAccounts, ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
 
 import type {
+  BusinessNotification,
   IntegrationAccountResponse,
   IntegrationExpenseAccountMappingResponse,
   SyncLogRequest,
@@ -94,4 +95,12 @@ export async function getSavedChartOfAccounts() {
 
 export async function getChartOfAccountsChangeNumber() {
   return (await service.get<Readonly<number>>('/chart-of-accounts/total-changes')).data;
+}
+
+export async function getUpdateNotifications() {
+  return (await service.get<Readonly<BusinessNotification[]>>('/business-notification/chart-of-accounts')).data;
+}
+
+export async function acceptChartOfAccountsNotifications() {
+  return (await service.post<Readonly<BusinessNotification>>('/business-notification/accept-chart-of-accounts')).data;
 }

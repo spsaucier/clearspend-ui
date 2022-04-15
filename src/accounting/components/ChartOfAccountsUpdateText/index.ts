@@ -1,0 +1,1 @@
+export { ChartOfAccountsUpdateText } from './ChartOfAccountsUpdateText';
