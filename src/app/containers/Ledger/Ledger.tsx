@@ -1,6 +1,5 @@
 import { storage } from '_common/api/storage';
 import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
-import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
 import { onAllocationChange } from 'allocations/utils/onAllocationChange';
 import { ActivityData } from 'transactions/containers/ActivityData';
@@ -27,21 +26,8 @@ export function Ledger(props: Readonly<LedgerProps>) {
       ...props.dateRange,
       allocationId: props.allocationId,
     },
+    deps: () => ({ allocationId: props.allocationId, ...props.dateRange }),
   });
-
-  useDeferEffect(
-    (allocationId) => {
-      store.setParams((prev) => ({ ...prev, allocationId }));
-    },
-    () => props.allocationId,
-  );
-
-  useDeferEffect(
-    (range) => {
-      store.setParams((prev) => ({ ...prev, ...range }));
-    },
-    () => props.dateRange,
-  );
 
   return (
     <Data data={store.data} loading={store.loading} error={store.error} onReload={store.reload}>

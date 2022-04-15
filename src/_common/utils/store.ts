@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment */
 
-import { onCleanup, batch } from 'solid-js';
+import { onCleanup, batch, type Accessor } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import { AppEvent } from 'app/types/common';
@@ -9,6 +9,8 @@ import { events } from '../api/events';
 import type { Setter } from '../types/common';
 
 import { getNoop } from './getNoop';
+import { useDeferEffect } from './useDeferEffect';
+import { isFunction } from './isFunction';
 
 export type StoreSetterArg<T> = Parameters<Setter<T>>[0];
 export type SuccessCallback<T> = (data: T) => void;
@@ -27,6 +29,7 @@ export interface Options<T, P> {
   params?: P;
   initValue?: T;
   skip?: boolean;
+  deps?: Accessor<Partial<P>>;
   onSuccess?: SuccessCallback<T>;
 }
 
@@ -53,12 +56,12 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
         });
     },
     setData: (arg: StoreSetterArg<T>) => {
-      setStore((prev) => ({ ...prev, data: typeof arg === 'function' ? (arg as Function)(prev.data) : arg }));
+      setStore((prev) => ({ ...prev, data: (isFunction(arg) ? arg(prev.data as T) : arg) as any }));
     },
     setParams: (arg: StoreSetterArg<P>) => {
       setStore((prev) => ({
         ...prev,
-        params: typeof arg === 'function' ? (arg as Function)(prev.params) : arg,
+        params: (isFunction(arg) ? arg(prev.params as P) : arg) as any,
       }));
       store.reload().catch(getNoop());
     },
@@ -79,6 +82,10 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
 
     init();
     if (!options?.skip) store.reload().catch(getNoop());
+
+    if (options?.deps) {
+      useDeferEffect((params) => store.setParams((prev) => ({ ...prev, ...params })), options.deps);
+    }
 
     onCleanup(() => {
       init();

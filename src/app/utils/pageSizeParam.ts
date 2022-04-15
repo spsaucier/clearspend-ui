@@ -1,3 +1,4 @@
+import { isFunction } from '_common/utils/isFunction';
 import type { Setter, SetterFunc } from '_common/types/common';
 import type { PageRequest } from 'generated/capital';
 
@@ -15,7 +16,7 @@ export function onPageSizeChange<T extends Readonly<Generic>>(
 ): Setter<T> {
   return (updates: T | SetterFunc<T>): void => {
     setter((prev) => {
-      const next = typeof updates === 'function' ? updates(prev) : updates;
+      const next = isFunction(updates) ? updates(prev) : updates;
 
       const pageSize = next.pageRequest?.pageSize;
       if (pageSize !== undefined && prev.pageRequest?.pageSize !== pageSize) callback(pageSize);

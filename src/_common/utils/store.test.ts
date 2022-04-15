@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+
 import { suite } from 'uvu';
 import { snoop } from 'snoop';
-import { createRoot } from 'solid-js';
+import { createRoot, createSignal, type Signal } from 'solid-js';
 import * as assert from 'uvu/assert';
 
 import { create, type Store } from './store';
@@ -136,7 +138,6 @@ test('it should handle params', async () => {
   assert.equal(store.params, { id: '#bar' });
   await wait(0);
   assert.equal(store.data, '#bar');
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   assert.is(fetcher.callCount, 3);
 
   dispose();
@@ -157,6 +158,34 @@ test('it should skip fetching', async () => {
 
   await wait(0);
   assert.not(store.data);
+
+  dispose();
+});
+
+test('it should handle dependencies', async () => {
+  type Params = { test: string };
+
+  let dispose!: () => void;
+  let signal!: Signal<string>;
+  let store!: Store<string, Params>;
+
+  const fetcher = snoop((params: Params) => Promise.resolve(params.test));
+
+  createRoot((d) => {
+    dispose = d;
+    signal = createSignal('a');
+    store = create(fetcher.fn)({ params: { test: signal[0]() }, deps: () => ({ test: signal[0]() }) });
+  });
+
+  assert.equal(store.params, { test: 'a' });
+  await wait(0);
+  assert.equal(store.data, 'a');
+
+  signal[1]('b');
+  assert.equal(store.params, { test: 'b' });
+  await wait(0);
+  assert.is(fetcher.callCount, 2);
+  assert.equal(store.data, 'b');
 
   dispose();
 });

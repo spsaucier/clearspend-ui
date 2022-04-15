@@ -5,7 +5,6 @@ import { Text } from 'solid-i18n';
 
 import { i18n } from '_common/api/intl';
 import { useNav } from '_common/api/router';
-import { useDeferEffect } from '_common/utils/useDeferEffect';
 import { Tab, TabList } from '_common/components/Tabs';
 import { useMediaContext } from '_common/api/media/context';
 import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
@@ -58,14 +57,8 @@ export function Overview(props: Readonly<OverviewProps>) {
       allocationId: allocationId(),
       sortDirection: 'ASC',
     },
+    deps: () => ({ allocationId: allocationId() }),
   });
-
-  useDeferEffect(
-    () => {
-      spendingStore.setParams((prev) => ({ ...prev, allocationId: allocationId() }));
-    },
-    () => props.allocationId,
-  );
 
   const changePeriod = (value: TimePeriod) => {
     batch(() => {
