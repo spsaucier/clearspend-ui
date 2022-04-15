@@ -1,8 +1,10 @@
-import { Switch, Match, Show } from 'solid-js';
+import { Switch, Match, Show, createEffect, useContext, onCleanup, createUniqueId } from 'solid-js';
 import type { JSX } from 'solid-js';
 
 import { join } from '../../utils/join';
 import { ConditionalWrapper } from '../ConditionalWrapper';
+
+import { FormContext } from './Form';
 
 import css from './FormItem.css';
 
@@ -17,8 +19,26 @@ export interface FormItemProps {
 }
 
 export function FormItem(props: Readonly<FormItemProps>) {
+  const context = useContext(FormContext);
+  const key = createUniqueId();
+  let formItemRef: HTMLDivElement | undefined;
+
+  createEffect(() => {
+    if (props.error && formItemRef) {
+      context.addErrorRefYPosition?.(key, formItemRef);
+    } else {
+      context.removeErrorRefYPosition?.(key);
+    }
+  });
+
+  onCleanup(() => {
+    if (formItemRef) {
+      context.removeErrorRefYPosition?.(key);
+    }
+  });
+
   return (
-    <div class={join(css.root, props.class, props.darkMode && css.dark)}>
+    <div class={join(css.root, props.class, props.darkMode && css.dark)} ref={formItemRef}>
       <ConditionalWrapper
         condition={!!props.label && !props.multiple}
         wrapper={(children) => <label>{children}</label>}

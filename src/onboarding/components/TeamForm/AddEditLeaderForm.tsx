@@ -30,6 +30,7 @@ interface AddEditLeaderFormProps {
   leader?: Readonly<BusinessOwner>;
   isCurrentUser?: boolean;
   kycErrors?: readonly Readonly<string>[];
+  errors?: string[];
   business: Business;
 }
 
@@ -43,17 +44,17 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
   );
 
   createEffect(() => {
-    const kycErrors: { [key: string]: string } = {};
-    props.kycErrors?.forEach((fieldError) => {
+    const errorsFromProps: { [key: string]: string } = {};
+    [...(props.kycErrors ?? []), ...(props.errors ?? [])].forEach((fieldError) => {
       const fieldKey = fieldError.includes('.') ? fieldError.split(/[.]+/)[1] : fieldError;
       if (fieldKey === 'ssn_last_4') {
         // Temporary until new UI/UX is complete for doc+field optional issue fix for ssn
-        kycErrors.ssn = 'Invalid. This value does not match the provided documentation.';
+        errorsFromProps.ssn = 'Invalid. This value does not match the provided documentation.';
       } else if (fieldKey) {
-        kycErrors[fieldKey] = `Invalid value`;
+        errorsFromProps[fieldKey] = `Invalid value`;
       }
     });
-    setErrors(kycErrors);
+    setErrors(errorsFromProps);
   });
 
   const onSubmit = (data: Readonly<FormValues>) => {

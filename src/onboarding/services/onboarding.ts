@@ -8,6 +8,7 @@ import type {
   ConvertBusinessProspectResponse,
   CreateOrUpdateBusinessOwnerRequest,
   UpdateBusiness,
+  ControllerError,
 } from 'generated/capital';
 import type { BusinessOwner } from 'onboarding/components/LeadershipTable/LeadershipTable';
 
@@ -60,7 +61,7 @@ export async function setBusinessOwner(ownerId: string, params: Readonly<CreateO
 }
 
 export async function createBusinessOwner(params: Readonly<CreateOrUpdateBusinessOwnerRequest>) {
-  return service.post(`/business-owners/create`, params);
+  return service.post<ControllerError>(`/business-owners/create`, params);
 }
 
 export async function updateBusinessOwner(params: Readonly<CreateOrUpdateBusinessOwnerRequest>) {

@@ -40,8 +40,11 @@ function errorHandler<T = unknown>(error: FetchResponse): Promise<FetchResponse<
     return Promise.reject(null);
   }
 
-  const message = (error.data as ControllerError | null)?.message;
-  return Promise.reject(typeof message === 'string' ? { ...error, data: { message: parseError(message) } } : error);
+  const data = error.data as ControllerError | null;
+  const message = data?.message;
+  return Promise.reject(
+    typeof message === 'string' ? { ...error, data: { message: parseError(message), ...data } } : error,
+  );
 }
 
 function wrapFetch<T = unknown>(fetcher: Promise<FetchResponse<T>>): Promise<FetchResponse<T>> {

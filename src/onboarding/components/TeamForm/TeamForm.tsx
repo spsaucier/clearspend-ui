@@ -42,6 +42,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const [showOtherOwnersQuestion, setShowOtherOwnersQuestion] = createSignal(true);
   const [missingExecutiveError, setMissingExecutiveError] = createSignal(false);
   const [editingLeaderId, setEditingLeaderId] = createSignal('');
+  const [errors, setErrors] = createSignal<string[]>([]);
 
   const [ownersList, fetchingOwnersList, , , refetchOwnersList] = useResource(listBusinessOwners, []);
   const [updating, updateOwner] = wrapAction(updateBusinessOwner);
@@ -57,6 +58,27 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const complete = createMemo(() => {
     return leaders().length && !hasOtherOwners() && leaders().some(hasOwner);
   });
+
+  const createUpdateLeader = async (leader: CreateOrUpdateBusinessOwnerRequest) => {
+    props.setLoadingModalOpen(true);
+    try {
+      if (editingLeaderId()) {
+        await updateOwner({ ...leader, id: editingLeaderId() });
+        props.onLeaderUpdate(editingLeaderId());
+      } else {
+        await createBusinessOwner(leader);
+      }
+
+      await refetchOwnersList();
+      setShowAddingNewLeader(false);
+    } catch (err: unknown) {
+      const error = err as { data?: { message?: string; param?: string } };
+      if (error.data?.param) {
+        setErrors([error.data.param]);
+      }
+    }
+    props.setLoadingModalOpen(false);
+  };
 
   createEffect(() => {
     setMissingExecutiveError(kycHasExecutiveError(props.kycErrors));
@@ -115,20 +137,9 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           business={props.business!}
           leader={leaders().find((l) => l.businessOwnerId === editingLeaderId())}
           isCurrentUser={!!leaders().find((l) => l.businessOwnerId === editingLeaderId())}
-          onNext={async (leader: CreateOrUpdateBusinessOwnerRequest) => {
-            props.setLoadingModalOpen(true);
-            if (editingLeaderId()) {
-              await updateOwner({ ...leader, id: editingLeaderId() });
-              props.onLeaderUpdate(editingLeaderId());
-            } else {
-              await createBusinessOwner(leader);
-            }
-
-            await refetchOwnersList();
-            setShowAddingNewLeader(false);
-            props.setLoadingModalOpen(false);
-          }}
+          onNext={createUpdateLeader}
           kycErrors={props.kycErrors?.[editingLeaderId()]}
+          errors={errors()}
         />
       </Show>
       <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
