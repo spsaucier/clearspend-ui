@@ -22,6 +22,7 @@ import { ActivityDate } from '../ActivityDate';
 import { ActivityUser } from '../ActivityUser';
 import { ActivityAccount } from '../ActivityAccount';
 import { ActivityAmount } from '../ActivityAmount';
+import { MissingDetails } from '../MissingDetails';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { useTransactionsFilters } from '../TransactionsTable/utils/useTransactionsFilters';
 
@@ -83,12 +84,11 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
         <ActivityAmount status={item.status} amount={item.amount} requestedAmount={item.requestedAmount} />
       ),
     },
-    // TODO
-    // {
-    //   name: 'missing',
-    //   title: <Text message="Missing Details" />,
-    //   render: () => <div />,
-    // },
+    {
+      name: 'missing',
+      title: <Text message="Missing Details" />,
+      render: (item) => <MissingDetails data={item} />,
+    },
   ];
 
   const [exporting, exportData] = wrapAction(props.onExport);

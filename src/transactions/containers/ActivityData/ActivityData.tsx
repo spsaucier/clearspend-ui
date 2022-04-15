@@ -27,7 +27,7 @@ import { usePreviewTransaction } from '../TransactionsData/utils/usePreviewTrans
 import type { ReceiptVideModel } from '../TransactionPreview';
 import { ReceiptsView, TransactionPreview } from '../TransactionPreview';
 import { LedgerPreview } from '../LedgerPreview';
-import { activityToLedger, ledgerToActivity } from '../../utils/converTypes';
+import { activityToLedger, ledgerToActivity } from '../../utils/convertTypes';
 
 interface ActivityDataProps {
   table: boolean;

@@ -34,6 +34,7 @@ import { getNoop } from '_common/utils/getNoop';
 import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
 import { TransactionDateTime } from '../../components/TransactionDateTime';
+import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES, STATUS_ICONS } from '../../constants';
 import { declineReasons } from '../constants';
@@ -156,6 +157,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
 
+  const allowReceiptUpload = createMemo(() => isAllowedReceipts(transaction().merchant, transaction().status));
+
   const getErrorText = (details: DeclineDetails | AddressPostalCodeMismatch) => {
     const reason = declineReasons[details.reason!] || details.reason || '';
     if ('postalCode' in details && details.postalCode) {
@@ -263,12 +266,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 <Text message="View Receipt" />
               </Button>
             </Show>
-            <Show when={!receiptIds().length && allowReceiptUpload(transaction())}>
+            <Show when={allowReceiptUpload() && !receiptIds().length}>
               <Button wide icon="add-receipt" loading={uploading()} onClick={onUploadClick}>
                 <Text message="Add Receipt" />
               </Button>
             </Show>
-            <Show when={receiptIds().length && allowReceiptUpload(transaction())}>
+            <Show when={allowReceiptUpload() && receiptIds().length}>
               <Button wide icon="receipt" loading={uploading()} onClick={onUploadClick}>
                 <Text message="Upload more images" />
               </Button>
@@ -389,7 +392,3 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     </div>
   );
 }
-
-const allowReceiptUpload = (transaction: AccountActivityResponse) => {
-  return transaction.merchant && ['PENDING', 'APPROVED', 'PROCESSED'].includes(transaction.status!);
-};

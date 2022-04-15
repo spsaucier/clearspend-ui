@@ -1,0 +1,1 @@
+export { MissingDetails } from './MissingDetails';

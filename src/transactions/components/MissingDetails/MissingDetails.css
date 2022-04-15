@@ -1,0 +1,20 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  cursor: default;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  & + .icon {
+    margin-left: -4px;
+  }
+}
+
+.expense {
+  transform: rotate(-50deg);
+}

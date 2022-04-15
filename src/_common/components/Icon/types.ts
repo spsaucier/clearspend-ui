@@ -89,6 +89,7 @@ export enum IconName {
   settings = 'settings',
   sync = 'sync',
   'table-columns' = 'table-columns',
+  tag = 'tag',
   transaction = 'transaction',
   trash = 'trash',
   upload = 'upload',

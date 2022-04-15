@@ -44,6 +44,7 @@ export function ActivityAccount(props: Readonly<ActivityAccountProps>) {
                 icon="card"
                 name={
                   <div
+                    class={css.user}
                     classList={{ [css.link!]: !!props.onCardClick }}
                     onClick={(event) => {
                       event.stopPropagation();

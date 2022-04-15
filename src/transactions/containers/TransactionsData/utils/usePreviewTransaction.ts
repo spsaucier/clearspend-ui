@@ -5,9 +5,9 @@ import { useSearchParams } from 'solid-app-router';
 import { useMessages } from 'app/containers/Messages/context';
 import type { AccountActivityResponse } from 'generated/capital';
 
-import { activityToLedger } from '../../../utils/converTypes';
-import { ACTIVITY_TYPES } from '../../../constants';
-import type { ActivityType, TransactionType } from '../../../types';
+import { activityToLedger } from '../../../utils/convertTypes';
+import { isActivityType } from '../../../utils/isActivityType';
+import type { ActivityType } from '../../../types';
 
 export function usePreviewTransaction<T extends { accountActivityId?: string; type?: ActivityType }>(
   transactions: Accessor<T[] | undefined>,
@@ -60,9 +60,9 @@ export function usePreviewTransaction<T extends { accountActivityId?: string; ty
       : cache;
   });
 
-  const isActivity = createMemo(() => {
+  const isActivity = createMemo<boolean | undefined>(() => {
     const item = transaction();
-    return item && ACTIVITY_TYPES.includes(item.type as TransactionType);
+    return item && isActivityType(item.type);
   });
 
   return { id: selectID, transaction, isActivity, changeID };

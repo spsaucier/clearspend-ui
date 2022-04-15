@@ -20,6 +20,7 @@ export function ActivityUser(props: Readonly<ActivityUserProps>) {
             {(user) => (
               <>
                 <div
+                  class={css.user}
                   classList={{ [css.link!]: !!props.onUserClick }}
                   onClick={(event) => {
                     event.stopPropagation();

@@ -1,7 +1,6 @@
-import type { LedgerActivityResponse, AccountActivityResponse } from 'generated/capital';
+import { ACTIVITY_TYPES } from '../constants';
+import type { ActivityType, TransactionType } from '../types';
 
-export function isActivityType(
-  data: LedgerActivityResponse | AccountActivityResponse,
-): data is AccountActivityResponse {
-  return 'accountName' in data;
+export function isActivityType(type: ActivityType | undefined): boolean {
+  return ACTIVITY_TYPES.includes(type as TransactionType);
 }
