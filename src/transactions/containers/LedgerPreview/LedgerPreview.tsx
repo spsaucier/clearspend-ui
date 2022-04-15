@@ -43,7 +43,7 @@ export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
           <TransactionDateTime date={props.data.activityTime} class={css.date} />
         </div>
         <h4 class={css.title}>
-          <Text message="Initiating Account" />
+          <Text message="Source Account" />
         </h4>
         <LedgerAccount account={props.data.sourceAccount} />
         <h4 class={css.title}>
