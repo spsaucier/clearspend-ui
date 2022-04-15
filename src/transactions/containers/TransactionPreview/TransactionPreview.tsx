@@ -82,6 +82,18 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const transaction = createMemo(() => props.transaction);
   const displayAmount = createMemo(() => formatCurrency(transaction().amount?.amount || 0));
+  const originalAmount = createMemo(() => {
+    if (
+      !transaction().merchant?.amount?.amount ||
+      !transaction().merchant?.amount?.currency ||
+      transaction().merchant?.amount?.currency === 'USD'
+    ) {
+      return null;
+    }
+    return formatCurrency(transaction().merchant?.amount?.amount || 0, {
+      currency: transaction().merchant?.amount?.currency,
+    });
+  });
 
   const allocations = useAllocations({ initValue: [] });
   // TODO: Replace accountName with allocationId after CAP-721
@@ -169,32 +181,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const getErrorText = (
     details: DeclineDetails | AddressPostalCodeMismatch | LimitExceeded | OperationLimitExceeded | SpendControlViolated,
   ) => {
-    /*
-      entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
-      mccGroup?:
-        | "CHILD_CARE"
-        | "DIGITAL_GOODS"
-        | "EDUCATION"
-        | "ENTERTAINMENT"
-        | "FOOD_BEVERAGE"
-        | "GAMBLING"
-        | "GOVERNMENT"
-        | "HEALTH"
-        | "MEMBERSHIPS"
-        | "MONEY_TRANSFER"
-        | "SERVICES"
-        | "SHOPPING"
-        | "TRAVEL"
-        | "UTILITIES"
-        | "OTHER",
-      paymentType?: "POS" | "ONLINE" | "MANUAL_ENTRY",
-
-      entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
-      limitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE",
-      limitPeriod?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY",
-      
-      exceededAmount?: number,
-    */
     const reason = declineReasons[details.reason!] || details.reason || '';
     if ('postalCode' in details && details.postalCode) {
       return i18n.t('{reason} ({postalCode} entered)', { reason: String(reason), postalCode: details.postalCode });
@@ -449,6 +435,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <Text message="Posted Amount" />
           <span>{displayAmount()}</span>
         </div>
+        <Show when={originalAmount()}>
+          <div class={css.detail}>
+            <Text message="Original Amount" />
+            <span>{originalAmount()}</span>
+          </div>
+        </Show>
       </div>
       <div class={css.actions}>
         <Button onClick={() => props.onReport()} wide icon={{ name: 'alert', pos: 'right' }}>
