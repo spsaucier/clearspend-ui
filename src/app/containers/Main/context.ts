@@ -1,4 +1,5 @@
 import { createContext, useContext, Accessor } from 'solid-js';
+import type * as LDClient from 'launchdarkly-js-client-sdk';
 
 import type { Business, User, Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 
@@ -19,6 +20,7 @@ interface InitContext {
   mutate: (updates: Partial<Readonly<MutateContext>>) => void;
   reloadPermissions: () => Promise<void>;
   refetch: () => Promise<unknown>;
+  ldClient: Accessor<LDClient.LDClient | null>;
 }
 
 interface OnboardingContext extends InitContext {

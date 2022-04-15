@@ -1,5 +1,6 @@
-import { createMemo, Switch, Match } from 'solid-js';
+import { createMemo, Switch, Match, createEffect, createSignal } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
+import * as LDClient from 'launchdarkly-js-client-sdk';
 
 import { BusinessStatus } from 'app/types/businesses';
 import { Spin } from '_common/components/Spin';
@@ -21,6 +22,7 @@ import css from './Main.css';
 
 export default function Main() {
   const navigate = useNavigate();
+  const [ldClient, setLdClient] = createSignal<LDClient.LDClient | null>(null);
 
   const [data, status, , , refetch, mutate] = useResource(async () => {
     const [currentUser, business] = await Promise.all([getUsers(), getBusiness()]);
@@ -38,6 +40,19 @@ export default function Main() {
   events.sub(AppEvent.Logout, (returnUrl: string) => {
     mutate(null);
     navigate('/login', { state: { returnUrl: returnUrl } });
+  });
+
+  createEffect(async () => {
+    if (!data()?.currentUser?.userId) return null;
+    const client = await LDClient.initialize(
+      (window as CSWindow).clearspend_env?.LAUNCHDARKLY_CLIENT_ID || process.env.LAUNCHDARKLY_CLIENT_ID,
+      {
+        key: data()?.currentUser?.userId,
+      },
+    );
+    await client.waitForInitialization();
+    setLdClient(client);
+    return client;
   });
 
   return (
@@ -61,6 +76,7 @@ export default function Main() {
             mutate: mutateContext,
             reloadPermissions,
             refetch,
+            ldClient,
           }}
         >
           <Switch>

@@ -28,6 +28,7 @@
     "colord": "2.9.2",
     "core-js": "3.21.1",
     "date-func": "0.3.0",
+    "launchdarkly-js-client-sdk": "^2.21.0",
     "micro-charts": "7.3.0",
     "mixpanel-browser": "^2.42.0",
     "nanoid": "3.3.2",

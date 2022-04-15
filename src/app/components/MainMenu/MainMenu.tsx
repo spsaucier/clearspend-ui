@@ -43,16 +43,15 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
-  const { permissions } = useBusiness();
+  const { permissions, ldClient } = useBusiness();
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
-  const isNotProd = window.location.host !== 'app.clearspend.com';
   const mainItems = createMemo(() => {
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
         case TITLES.employees:
           return canManageCards(permissions()); // TODO: change to canViewEmployees based on Manage+ permissions at any allocation
         case TITLES.accounting:
-          return canManageConnections(permissions()) && isNotProd;
+          return canManageConnections(permissions()) && ldClient()?.variation('menu.accounting', false);
         case TITLES.company:
           return canManageConnections(permissions());
         default:

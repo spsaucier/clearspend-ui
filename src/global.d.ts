@@ -3,6 +3,7 @@ interface ProcessEnv {
   MIXPANEL_PROJECT_TOKEN: string;
   STRIPE_PUB_KEY: string;
   STRIPE_ACCOUNT: string;
+  LAUNCHDARKLY_CLIENT_ID: string;
 }
 
 declare const process: {
