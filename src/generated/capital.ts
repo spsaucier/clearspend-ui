@@ -2527,6 +2527,37 @@ export interface CreateBusinessOwnerResponse {
   errorMessages?: string[];
 }
 
+export interface BusinessNotification {
+  /** @format uuid */
+  businessId?: string;
+
+  /** @format uuid */
+  userId?: string;
+  type?:
+    | 'CHART_OF_ACCOUNTS_CREATED'
+    | 'CHART_OF_ACCOUNTS_DELETED'
+    | 'CHART_OF_ACCOUNTS_RENAMED'
+    | 'USER_ACCEPTED_COA_CHANGES';
+  data?: BusinessNotificationData;
+
+  /** @format int64 */
+  version?: number;
+
+  /** @format date-time */
+  created?: string;
+
+  /** @format date-time */
+  updated?: string;
+
+  /** @format uuid */
+  id?: string;
+}
+
+export interface BusinessNotificationData {
+  oldValue?: string;
+  newValue?: string;
+}
+
 export interface TwoFactorStartLoggedInResponse {
   twoFactorId?: string;
   methodId?: string;
@@ -4236,7 +4267,6 @@ export interface CreateUpdateUserRecord {
 
 export interface TestBusiness {
   business?: Business;
-  users?: User[];
   allocations?: Allocation[];
   cards?: Card[];
   createUserRecords?: CreateUpdateUserRecord[];

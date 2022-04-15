@@ -50,6 +50,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           when={suggestions()}
           fallback={
             <Input
+              autoComplete="off"
               name="streetLine1"
               value={props.values().streetLine1}
               error={Boolean(props.errors.streetLine1)}
@@ -58,6 +59,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           }
         >
           <Select
+            autoComplete="off"
             name="streetLine1"
             value={props.values().streetLine1}
             error={Boolean(props.errors.streetLine1)}
@@ -77,6 +79,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
         class={css.item}
       >
         <Input
+          autoComplete="off"
           name="streetLine2"
           type="text"
           value={props.values().streetLine2}
@@ -86,6 +89,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
       </FormItem>
       <FormItem label={<Text message="City" />} error={props.errors.locality} class={css.item}>
         <Input
+          autoComplete="off"
           name="locality"
           type="text"
           value={props.values().locality}
@@ -95,6 +99,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
       </FormItem>
       <FormItem label={<Text message="State" />} error={props.errors.region} class={css.item}>
         <SelectState
+          autoComplete="off"
           value={props.values().region}
           error={Boolean(props.errors.region)}
           onChange={props.handlers.region}
@@ -102,6 +107,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
       </FormItem>
       <FormItem label={<Text message="ZIP Code" />} error={props.errors.postalCode} class={css.item}>
         <Input
+          autoComplete="off"
           name="postalCode"
           type="text"
           value={props.values().postalCode}
