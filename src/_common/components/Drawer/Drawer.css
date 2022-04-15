@@ -79,6 +79,8 @@
   align-items: center;
   grid-template-columns: 1fr auto;
   grid-gap: var(--pd-8);
+  color: var(--tw-white);
+  background: var(--tw-dark-green);
 }
 
 .title {
@@ -89,8 +91,17 @@
   line-height: 1.33;
 }
 
+.close {
+  color: var(--tw-white);
+
+  &:hover {
+    color: var(--tw-white);
+    background-color: var(--tw-dark-lime-mint);
+  }
+}
+
 .content {
-  padding: 0 var(--pd-24) var(--pd-24);
+  padding: var(--pd-20) var(--pd-24) var(--pd-24);
   overflow: hidden;
 }
 

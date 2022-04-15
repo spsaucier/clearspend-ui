@@ -15,6 +15,7 @@ export function getFormOptions(params: Readonly<AccountActivityRequest>): FormOp
       syncStatus: [...(params.syncStatus || [])],
       status: [...(params.statuses || [])],
       hasReceipt: params.withReceipt || (params.withoutReceipt ? false : undefined),
+      types: [...(params.types || [])],
       userId: params.userId || undefined,
     },
   };
@@ -30,6 +31,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<FormResult
     statuses: toFilterArray(data.status),
     withReceipt: data.hasReceipt || undefined,
     withoutReceipt: data.hasReceipt === false || undefined,
+    types: toFilterArray(data.types),
     userId: data.userId || undefined,
   };
 }

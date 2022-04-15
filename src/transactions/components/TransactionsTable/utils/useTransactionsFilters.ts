@@ -13,6 +13,7 @@ const FILTERS_KEYS = [
   'categories',
   'syncStatus',
   'statuses',
+  'types',
   'userId',
   'withReceipt',
   'withoutReceipt',

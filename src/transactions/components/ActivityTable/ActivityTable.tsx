@@ -158,6 +158,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
         onClose={filters.toggleFilters}
       >
         <TransactionFilterDrawer
+          showTypeFilter
           params={filters.filters()}
           showAllocationFilter={props.showAllocationFilter}
           showUserFilter={props.showUserFilter}

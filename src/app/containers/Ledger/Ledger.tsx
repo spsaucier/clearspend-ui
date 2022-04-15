@@ -32,6 +32,8 @@ export function Ledger(props: Readonly<LedgerProps>) {
   return (
     <Data data={store.data} loading={store.loading} error={store.error} onReload={store.reload}>
       <ActivityData
+        showUserFilter
+        showAllocationFilter
         table={props.table}
         loading={store.loading}
         error={store.error}

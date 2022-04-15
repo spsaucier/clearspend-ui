@@ -19,6 +19,7 @@ import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
 import { formatName } from 'employees/utils/formatName';
 import { Select, Option as SelectOption } from '_common/components/Select';
 
+import { ACTIVITY_TYPE_TITLES } from '../../constants';
 import type { ActivityStatus, SyncStatus } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
@@ -32,6 +33,7 @@ interface TransactionFilterDrawerProps {
   params: AccountActivityRequest;
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;
+  showTypeFilter?: boolean;
   showUserFilter?: boolean;
 }
 
@@ -143,6 +145,15 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             </Radio>
           </RadioGroup>
         </FilterBox>
+        <Show when={props.showTypeFilter}>
+          <FilterBox title={<Text message="Transaction Type" />}>
+            <CheckboxGroup value={values().types} onChange={handlers.types}>
+              <For each={Object.entries(ACTIVITY_TYPE_TITLES)}>
+                {([value, title]) => <Checkbox value={value}>{title}</Checkbox>}
+              </For>
+            </CheckboxGroup>
+          </FilterBox>
+        </Show>
         <FilterBox title={<Text message="Transaction Date" />}>
           <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
         </FilterBox>

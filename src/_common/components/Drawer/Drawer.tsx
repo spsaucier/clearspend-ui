@@ -28,7 +28,7 @@ export function Drawer(props: Readonly<DrawerProps>) {
             <section class={css.section}>
               <header class={css.header}>
                 <h3 class={css.title}>{props.title}</h3>
-                <Button view="ghost" size="sm" icon="cancel" onClick={() => props.onClose()} />
+                <Button view="ghost" size="sm" icon="cancel" class={css.close} onClick={() => props.onClose()} />
               </header>
               <div class={css.content} classList={{ [css.noPadding!]: props.noPadding }}>
                 {props.children}
