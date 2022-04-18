@@ -23,6 +23,7 @@ import css from './Cards.css';
 interface CardsProps {
   current: Readonly<Allocation>;
   allocations: readonly Readonly<Allocation>[];
+  setCardsCount?: (count: number | undefined) => void;
 }
 
 export function Cards(props: Readonly<CardsProps>) {
@@ -35,6 +36,10 @@ export function Cards(props: Readonly<CardsProps>) {
     ...extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
     allocations: [props.current.allocationId],
   } as SearchCardRequest);
+
+  createEffect(() => {
+    props.setCardsCount?.(cards()?.totalElements);
+  });
 
   createEffect(
     on(

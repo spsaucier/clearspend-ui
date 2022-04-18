@@ -16,6 +16,7 @@ import { useBusiness } from 'app/containers/Main/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { UpdateAllocationRequest } from 'generated/capital';
 import { useMediaContext } from '_common/api/media/context';
+import { Tag } from '_common/components/Tag';
 
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -48,6 +49,7 @@ export default function Allocations() {
   const params = useParams<{ id?: string }>();
   const media = useMediaContext();
   const { currentUserRoles } = useBusiness();
+  const [cardsCount, setCardsCount] = createSignal<number>();
 
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
@@ -66,7 +68,11 @@ export default function Allocations() {
     on(
       createMemo(() => current()?.allocationId),
       (id) => {
-        if (id && canManagePermissions(userPermissions())) setAllocationId(id);
+        if (id) {
+          if (canManagePermissions(userPermissions())) {
+            setAllocationId(id);
+          }
+        }
       },
     ),
   );
@@ -127,6 +133,9 @@ export default function Allocations() {
           <TabList value={tab()} onChange={setTab}>
             <Tab value={Tabs.cards}>
               <Text message="Cards" />
+              <Show when={typeof cardsCount() !== 'undefined'}>
+                <Tag class={css.tabTag} size="xs" label={`${cardsCount()}`} />
+              </Show>
             </Tab>
             <Tab value={Tabs.transactions}>
               <Text message="Activity" />
@@ -144,7 +153,7 @@ export default function Allocations() {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.cards}>
-              <Cards current={current()!} allocations={allocations.data!} />
+              <Cards current={current()!} allocations={allocations.data!} setCardsCount={setCardsCount} />
             </Match>
             <Match when={tab() === Tabs.transactions}>
               <Dynamic
