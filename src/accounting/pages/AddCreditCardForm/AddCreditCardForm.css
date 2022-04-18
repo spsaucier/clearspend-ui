@@ -27,39 +27,10 @@
   flex-direction: row;
 }
 
-.dropdown {
-  width: 312px;
-  height: 36px;
-  flex-direction: row;
-  justify-content: space-between;
-  background: var(--tw-white);
-  border: 1px solid var(--tw-gray-30);
-}
-
 .inner-wrap {
   display: flex;
   padding: 0 30px 0 0;
   flex-direction: column;
-}
-
-.create-new-card-container {
-  display: flex;
-  margin: 0;
-  align-items: center;
-  color: var(--tw-black);
-  font: inherit;
-  vertical-align: middle;
-  background: transparent;
-  border-bottom: 1px solid var(--tw-gray-30);
-  cursor: default;
-}
-
-.add-card-icon {
-  margin: 4px;
-}
-
-.edit-button {
-  margin-top: var(--pd-24);
 }
 
 .next-button {
@@ -73,4 +44,8 @@
   justify-content: flex-end;
   background-color: var(--tw-gray-10);
   border-top: 2px solid var(--tw-gray-70);
+}
+
+.edit-button {
+  margin-top: var(--pd-24);
 }

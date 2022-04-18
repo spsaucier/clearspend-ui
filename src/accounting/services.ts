@@ -2,6 +2,7 @@ import type {
   CodatBankAccountResponse,
   CodatCreateCreditCardRequest,
   CodatCreateCreditCardResponse,
+  CodatSetCreditCardRequest,
 } from 'app/types/creditCard';
 import { service } from 'app/utils/service';
 import type { ChartOfAccounts, ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
@@ -38,6 +39,10 @@ export async function getCodatCreditCards() {
 
 export async function postCodatCreditCard(params: Readonly<CodatCreateCreditCardRequest>) {
   return (await service.post<Readonly<CodatCreateCreditCardResponse>>(`/codat/bank-accounts`, params)).data;
+}
+
+export async function setCodatCreditCardforBusiness(params: Readonly<CodatSetCreditCardRequest>) {
+  return (await service.put<Readonly<Boolean>>(`/codat/bank-accounts`, params)).data;
 }
 
 export async function postAccountingStepToBusiness(params: Readonly<UpdateBusinessAccountingStepRequest>) {

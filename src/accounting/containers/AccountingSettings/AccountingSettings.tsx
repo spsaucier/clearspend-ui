@@ -1,5 +1,5 @@
 import { Text, useI18n } from 'solid-i18n';
-import { createSignal } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import { Section } from 'app/components/Section';
@@ -7,10 +7,19 @@ import { setActivityExpenseCategory } from 'app/services/activity';
 import { useMessages } from 'app/containers/Messages/context';
 import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
-import type { PagedDataAccountActivityResponse } from 'generated/capital';
-import { postIntegrationExpenseCategoryMappings, deleteCompanyConnection } from 'accounting/services';
+import { CreditCardSelect } from '_common/components/CreditCardSelect/CreditCardSelect';
+import {
+  postIntegrationExpenseCategoryMappings,
+  deleteCompanyConnection,
+  postCodatCreditCard,
+  setCodatCreditCardforBusiness,
+} from 'accounting/services';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
+import { Drawer } from '_common/components/Drawer';
+import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
+import type { PagedDataAccountActivityResponse } from 'generated/capital';
 import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
+import type { CodatCreditCard } from 'app/types/creditCard';
 import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
@@ -28,6 +37,9 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const messages = useMessages();
   const [open, setOpen] = createSignal(false);
   const [unlinkingIntegration, setUnlinkingIntegration] = createSignal(false);
+  const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
+  const [selectedCardName, setSelectedCardName] = createSignal<string>('');
+  const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
 
   const integrationExpenseCategoryStore = useStoredIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
@@ -55,6 +67,29 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     }
   };
 
+  const saveSelectedCreditCard = async (card: CodatCreditCard) => {
+    try {
+      await setCodatCreditCardforBusiness({
+        accountId: card.id,
+      });
+    } catch {
+      // TODO: handle error
+    }
+  };
+
+  const saveNewCreditCard = async (cardName: string) => {
+    setSelectedCardName(cardName);
+    setEditingNewCardName(false);
+
+    try {
+      await postCodatCreditCard({
+        accountName: cardName,
+      });
+    } catch {
+      // TODO: handle error
+    }
+  };
+
   return (
     <div>
       <Section
@@ -75,6 +110,39 @@ export function AccountingSettings(props: AccountingSettingsProps) {
           saveOnChange={true}
           showDeleted={false}
         />
+      </Section>
+      <Section
+        title={<Text message="Credit Card account" />}
+        description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
+        class={css.section}
+      >
+        <CreditCardSelect
+          selectedCardName={selectedCardName}
+          onChange={(card: CodatCreditCard) => saveSelectedCreditCard(card)}
+          setCanEditNewCard={setCanEditNewCard}
+          setSelectedCardName={setSelectedCardName}
+        ></CreditCardSelect>
+        <Show when={canEditNewCard()}>
+          <Button
+            class={css.editButton}
+            onClick={() => setEditingNewCardName(true)}
+            icon={{ name: 'edit', pos: 'left' }}
+          >
+            <Text message="Edit Card Name" />
+          </Button>
+        </Show>
+        <Drawer
+          open={editingNewCardName()}
+          title={<Text message="New Card" />}
+          onClose={() => setEditingNewCardName(false)}
+        >
+          <EditCardNameForm
+            oldCardName={selectedCardName}
+            onSave={(data: string) => {
+              saveNewCreditCard(data);
+            }}
+          />
+        </Drawer>
       </Section>
       <Section
         title={<Text message="Unlink Account" />}

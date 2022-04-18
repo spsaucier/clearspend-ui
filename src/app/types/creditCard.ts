@@ -9,10 +9,10 @@ export interface CodatBankAccountResponse {
 
 export interface CodatCreateCreditCardRequest {
   accountName: string;
-  accountNumber: string;
-  accountType: string;
-  currency: string;
-  institution: string;
+}
+
+export interface CodatSetCreditCardRequest {
+  accountId: string;
 }
 
 export interface CodatCreateCreditCardResponse {
