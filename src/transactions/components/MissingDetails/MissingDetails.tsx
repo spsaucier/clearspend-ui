@@ -28,7 +28,7 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
   });
 
   return (
-    <Show when={isActivityType(props.data.type) && (receipts() || expense())}>
+    <Show when={isActivityType(props.data.type) && (receipts() || expense()) && props.data.status !== 'DECLINED'}>
       <Popover
         balloon
         trigger="hover"
@@ -36,10 +36,10 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
         content={
           <div class={css.popupContent}>
             <Show when={expense()}>
-              <Text message="Receipt is missing." />
+              <Text message="Expense category is missing." />
             </Show>
             <Show when={receipts()}>
-              <Text message="Expense category is missing." />
+              <Text message="Receipt is missing." />
             </Show>
           </div>
         }

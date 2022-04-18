@@ -74,7 +74,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     },
     {
       name: 'destination',
-      title: <Text message="Target" />,
+      title: <Text message="Destination" />,
       render: (item) => <ActivityAccount account={item.targetAccount} onCardClick={props.onCardClick} />,
     },
     {

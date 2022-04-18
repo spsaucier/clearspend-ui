@@ -4,6 +4,7 @@ import { Text } from 'solid-i18n';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Tooltip } from '_common/components/Tooltip';
 import type { LedgerActivityResponse, Amount } from 'generated/capital';
+import { join } from '_common/utils/join';
 
 import { formatActivityStatus } from '../../utils/formatActivityStatus';
 
@@ -30,7 +31,9 @@ export function ActivityAmount(props: Readonly<ActivityAmountProps>) {
             {formatCurrency(props.requestedAmount?.amount || props.amount?.amount || 0)}
           </div>
           <Show when={VISIBLE_STATUSES.includes(props.status)}>
-            <div class={css.status}>{formatActivityStatus(props.status)}</div>
+            <div class={join(css.status, props.status === 'DECLINED' ? css.statusError : '')}>
+              {formatActivityStatus(props.status)}
+            </div>
           </Show>
         </div>
       )}

@@ -47,7 +47,7 @@ export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
         </h4>
         <LedgerAccount account={props.data.sourceAccount} />
         <h4 class={css.title}>
-          <Text message="Target Account" />
+          <Text message="Destination Account" />
         </h4>
         <LedgerAccount account={props.data.targetAccount} />
         <h4 class={css.title}>

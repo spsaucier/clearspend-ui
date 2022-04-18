@@ -17,7 +17,7 @@ export function ActivityUser(props: Readonly<ActivityUserProps>) {
     <Show when={props.data}>
       {(data) => (
         <Switch>
-          <Match when={data.type === 'USER' && data.userInfo}>
+          <Match when={data.userInfo}>
             {(user) => (
               <>
                 <div

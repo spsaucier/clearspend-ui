@@ -2,3 +2,7 @@
   margin-top: var(--pd-2);
   color: var(--tw-gray-60);
 }
+
+.status-error {
+  color: var(--tw-red-70);
+}
