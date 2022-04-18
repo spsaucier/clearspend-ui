@@ -28,10 +28,6 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
     try {
       await postCC({
         accountName: cardName,
-        accountNumber: 'clearspend-credit',
-        accountType: 'Credit',
-        currency: 'USD',
-        institution: 'ClearSpend',
       });
     } catch {
       // TODO: handle error
