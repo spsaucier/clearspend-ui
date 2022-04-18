@@ -16,7 +16,7 @@ import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm'
 import { NewEmployeeButton } from 'employees/components/SelectEmployee';
 import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
-import { formatName } from 'employees/utils/formatName';
+import { formatName, formatNameString } from 'employees/utils/formatName';
 import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { Loading } from 'app/components/Loading';
@@ -123,7 +123,7 @@ export function Settings(props: Readonly<SettingsProps>) {
         return createOrUpdateAllocationRole(allocationId, item.user.userId!, item.role).catch(
           (e: { data: { message: string } }) => {
             messages.error({
-              title: i18n.t('Unable to add {user}', { user: formatName(item.user) }),
+              title: i18n.t('Unable to add {user}', { user: formatNameString(item.user) }),
               message: e.data.message,
             });
             setHideSuccess(true);
@@ -134,7 +134,7 @@ export function Settings(props: Readonly<SettingsProps>) {
         return createOrUpdateAllocationRole(allocationId, item.user.userId!, item.role).catch(
           (e: { data: { message: string } }) => {
             messages.error({
-              title: i18n.t('Unable to update {user}', { user: formatName(item.user) }),
+              title: i18n.t('Unable to update {user}', { user: formatNameString(item.user) }),
               message: e.data.message,
             });
             setHideSuccess(true);
@@ -146,7 +146,9 @@ export function Settings(props: Readonly<SettingsProps>) {
         return createOrUpdateAllocationRole(allocationId, id, AllocationRoles.Employee).catch(
           (e: { data: { message: string } }) => {
             messages.error({
-              title: i18n.t('Unable to demote {user}', { user: formatName(users.data?.find((u) => u.userId === id)) }),
+              title: i18n.t('Unable to demote {user}', {
+                user: formatNameString(users.data?.find((u) => u.userId === id)),
+              }),
               message: e.data.message,
             });
             setHideSuccess(true);

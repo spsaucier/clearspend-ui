@@ -1,4 +1,4 @@
-import { createMemo, Show, Switch, Match } from 'solid-js';
+import { createMemo, Show, Switch, Match, JSXElement } from 'solid-js';
 import { useI18n } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -13,7 +13,7 @@ import css from './Card.css';
 export interface CardProps {
   type: CardType;
   number?: string;
-  name?: string;
+  name?: JSXElement;
   status?: Required<ICard>['status'];
   activated?: boolean;
   class?: string;

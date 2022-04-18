@@ -109,7 +109,6 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           </FormItem>
           <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
-              class="fs-mask"
               name="phone"
               value={values().phone}
               error={Boolean(errors().phone)}

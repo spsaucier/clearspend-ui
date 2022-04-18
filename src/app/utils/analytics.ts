@@ -4,7 +4,7 @@ import * as FS from '@fullstory/browser';
 
 import { formatAddress } from '_common/formatters/address';
 
-import { formatName } from '../../employees/utils/formatName';
+import { formatNameString } from '../../employees/utils/formatName';
 
 export const Events = {
   ACTIVATE_CARD: 'Activate Card',
@@ -92,7 +92,7 @@ const vendorActions = {
         mixpanel.people.set({
           ...data,
           $email: data?.email,
-          $name: formatName(data),
+          $name: formatNameString(data),
           address: formatAddress(data?.address),
         });
         if (data?.businessId) {
@@ -111,7 +111,7 @@ const vendorActions = {
     switch (type) {
       case AnalyticsEventType.AddUserProperties:
         FS.identify(data?.userId, {
-          displayName: formatName(data),
+          displayName: formatNameString(data),
           email: data?.email,
         });
         FS.setUserVars({

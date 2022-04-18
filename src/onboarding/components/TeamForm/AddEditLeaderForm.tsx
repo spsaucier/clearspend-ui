@@ -183,7 +183,6 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
-              class="fs-mask"
               name="phone"
               value={values().phone}
               error={Boolean(errors().phone)}

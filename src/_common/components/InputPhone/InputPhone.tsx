@@ -1,5 +1,7 @@
 import { createMemo } from 'solid-js';
 
+import { join } from '_common/utils/join';
+
 import { parsePhone, preparePhone, formatPhone } from '../../formatters/phone';
 import { Input, type InputProps } from '../Input';
 
@@ -20,6 +22,7 @@ export function InputPhone(props: Readonly<InputPhoneProps>) {
       <input name="phone-prefix" type="hidden" value={phone().code} />
       <Input
         {...props}
+        class={join(props.class, 'fs-mask')}
         value={phone().value}
         prefix={<span>+{phone().code}</span>}
         type="tel"

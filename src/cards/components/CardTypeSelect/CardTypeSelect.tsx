@@ -1,4 +1,5 @@
 import { Text } from 'solid-i18n';
+import type { JSXElement } from 'solid-js';
 
 import { Checkbox, CheckboxGroup, Tick } from '_common/components/Checkbox';
 import { join } from '_common/utils/join';
@@ -10,7 +11,7 @@ import css from './CardTypeSelect.css';
 
 interface CardTypeSelectProps {
   value: readonly CardType[];
-  name?: string;
+  name?: JSXElement;
   class?: string;
   onChange?: (value: CardType[]) => void;
 }

@@ -1,3 +1,5 @@
+import type { JSXElement } from 'solid-js';
+
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import type { Amount } from 'generated/capital';
 
@@ -5,7 +7,7 @@ import css from './NumberedItem.css';
 
 interface NumberedItemProps {
   num: number;
-  name: string;
+  name: JSXElement;
   amount: Readonly<Amount>;
   onClick?: () => void;
 }
