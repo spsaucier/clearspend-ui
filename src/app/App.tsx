@@ -26,7 +26,7 @@ export function App() {
       orgId: 'o-19RE1Q-na1',
       debug: (window as CSWindow).clearspend_env?.NODE_ENV !== 'production',
       // TODO: disable on dev/UAT after PoC
-      devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
+      // devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
     });
   });
   return (
