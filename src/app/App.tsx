@@ -13,21 +13,23 @@ import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 
 export function App() {
-  createEffect(() => {
-    mixpanel.init(
-      (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',
-      {
-        debug: false,
-        ignore_dnt: true,
-      },
-    );
-    FS.init({
-      orgId: 'o-19RE1Q-na1',
-      debug: (window as CSWindow).clearspend_env?.NODE_ENV !== 'production',
-      // TODO: disable on dev/UAT after PoC
-      // devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
+  if (location.hostname !== 'localhost') {
+    createEffect(() => {
+      mixpanel.init(
+        (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',
+        {
+          debug: false,
+          ignore_dnt: true,
+        },
+      );
+      FS.init({
+        orgId: 'o-19RE1Q-na1',
+        debug: (window as CSWindow).clearspend_env?.NODE_ENV !== 'production',
+        // TODO: disable on dev/UAT after PoC
+        // devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
+      });
     });
-  });
+  }
   return (
     <div>
       <Routes>
