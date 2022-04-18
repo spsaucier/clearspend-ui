@@ -84,3 +84,17 @@
 .mapped-icon {
   color: var(--tw-accent-30);
 }
+
+.category-name-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-primary-name {
+  display: flex;
+  flex-direction: row;
+}
+
+.new-account-text {
+  color: var(--tw-gray-60);
+}

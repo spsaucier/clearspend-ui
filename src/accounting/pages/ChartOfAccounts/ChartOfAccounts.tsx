@@ -25,6 +25,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
   const messages = useMessages();
   const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
+
   const [showRoadblock, setShowRoadblock] = createSignal(false);
   const [unselectedCategories, setUnselectedCategories] = createSignal<(string | undefined)[]>([]);
   const [roadblockRequestParameters, setRoadblockRequestParameters] =
@@ -61,6 +62,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
           </div>
           <ChartOfAccountsData
             loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
+            newCategories={[]}
             error={integrationExpenseCategoryStore.error}
             data={integrationExpenseCategoryStore.data}
             mappings={integrationExpenseCategoryMappingStore.data}

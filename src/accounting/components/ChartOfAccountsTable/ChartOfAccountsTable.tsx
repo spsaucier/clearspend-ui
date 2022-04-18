@@ -12,6 +12,7 @@ import { join } from '_common/utils/join';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   AddChartOfAccountsMappingRequest,
+  BusinessNotification,
   ChartOfAccountsMappingResponse,
   CodatAccountNested,
 } from 'generated/capital';
@@ -27,6 +28,7 @@ import css from './ChartOfAccountsTable.css';
 
 interface ChartOfAccountsTableProps {
   data: CodatAccountNested[];
+  newCategories: Readonly<BusinessNotification[]>;
   onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
   mappings?: ChartOfAccountsMappingResponse[] | undefined;
   onCancel?: () => void;
@@ -47,9 +49,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
   const flattenedData = createMemo(() => {
     if (props.showDeleted) {
-      return flattenNestedIntegrationAccounts(props.data);
+      return flattenNestedIntegrationAccounts(props.data, props.newCategories);
     }
-    return flattenNestedIntegrationAccounts(props.data.filter((category) => category.updateStatus !== 'DELETED'));
+    return flattenNestedIntegrationAccounts(
+      props.data.filter((category) => category.updateStatus !== 'DELETED'),
+      props.newCategories,
+    );
   });
 
   const handleSave = async () => {
@@ -117,8 +122,19 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         return (
           <div class={join(css.nestedLevel, getNestedCSSlevel(item))}>
-            {item.level > 1 && <Icon name="l-tab" style={{ color: 'transparent' }} />}
-            <Text message={item.name || ''} />
+            <div class={css.categoryPrimaryName}>
+              {item.level > 1 && <Icon name="l-tab" style={{ color: 'transparent' }} />}
+              <div class={css.categoryNameContainer}>
+                <Text message={item.name || ''} />
+                {item.isNew ? (
+                  <div class={css.newAccountText}>
+                    <Text message={'New Account'} />
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
           </div>
         );
       },
