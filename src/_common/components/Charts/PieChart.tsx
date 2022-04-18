@@ -9,7 +9,7 @@ import { join } from '../../utils/join';
 
 import css from './PieChart.css';
 
-const WAIT_MS = 50;
+const WAIT_MS = 0;
 
 interface PieChartProps {
   size: number;
