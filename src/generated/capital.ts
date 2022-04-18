@@ -3804,7 +3804,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'GLOBAL_READ'
     | 'CUSTOMER_SERVICE'
     | 'CUSTOMER_SERVICE_MANAGER'
-    | 'SYSTEM'
+    | 'APPLICATION'
   )[];
 }
 

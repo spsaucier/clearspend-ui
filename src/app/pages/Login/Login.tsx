@@ -37,7 +37,7 @@ export default function Login() {
         state: { username, password, changePasswordId: user.changePasswordId, returnUrl: location.state?.returnUrl },
       });
     } else {
-      onSuccessLogin(user, navigate, location.state?.returnUrl);
+      onSuccessLogin({ user, navigate, overridePath: location.state?.returnUrl });
     }
   };
 

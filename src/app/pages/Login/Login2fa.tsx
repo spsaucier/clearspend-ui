@@ -21,7 +21,7 @@ export default function Login2fa() {
     const user = await loginWith2fa({ code, twoFactorId: state?.twoFactorId as string });
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: user.userId });
     sendAnalyticsEvent({ name: Events.LOGIN });
-    onSuccessLogin(user, navigate, state?.returnUrl);
+    onSuccessLogin({ user, navigate, overridePath: state?.returnUrl, already2fa: true });
   };
 
   return (
