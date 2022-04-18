@@ -83,6 +83,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
           <FormItem label={<Text message="Business EIN" />} error={errors().employerIdentificationNumber}>
             <Input
               name="business-ein"
+              class="fs-mask"
               value={values().employerIdentificationNumber}
               maxLength={9}
               error={Boolean(errors().employerIdentificationNumber)}
