@@ -23,6 +23,10 @@ export function Form(props: Readonly<FormProps>) {
   const onSubmit = (event: SubmitEvent) => {
     event.preventDefault();
     local.onSubmit?.();
+    scrollToErrors();
+  };
+
+  const scrollToErrors = () => {
     const errorRefYPositionValues = Array.from(errorRefYPositions.values());
     if (errorRefYPositionValues.length > 0) {
       window.scrollTo({
@@ -34,7 +38,7 @@ export function Form(props: Readonly<FormProps>) {
   };
 
   return (
-    <FormContext.Provider value={{ addErrorRefYPosition, removeErrorRefYPosition }}>
+    <FormContext.Provider value={{ addErrorRefYPosition, removeErrorRefYPosition, scrollToErrors }}>
       <form {...others} onSubmit={onSubmit}>
         {local.children}
       </form>
@@ -45,5 +49,6 @@ export function Form(props: Readonly<FormProps>) {
 interface FormContextProps {
   addErrorRefYPosition?: (key: string, element: HTMLDivElement) => void;
   removeErrorRefYPosition?: (key: string) => void;
+  scrollToErrors?: () => void;
 }
 export const FormContext = createContext<FormContextProps>({});

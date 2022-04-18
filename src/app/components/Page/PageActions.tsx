@@ -1,7 +1,8 @@
-import type { JSXElement } from 'solid-js';
+import { JSXElement, useContext } from 'solid-js';
 
 import { Button } from '_common/components/Button';
 import { wrapAction } from '_common/utils/wrapAction';
+import { FormContext } from '_common/components/Form/Form';
 
 import { PagePortal } from './PagePortal';
 
@@ -15,6 +16,7 @@ interface PageActionsProps {
 
 export function PageActions(props: Readonly<PageActionsProps>) {
   const [loading, action] = wrapAction(props.onSave);
+  const formContext = useContext(FormContext);
 
   return (
     <PagePortal>
@@ -23,7 +25,17 @@ export function PageActions(props: Readonly<PageActionsProps>) {
           <Button view="ghost" disabled={loading()} onClick={props.onCancel}>
             Cancel
           </Button>
-          <Button type="primary" icon={{ name: 'confirm', pos: 'right' }} loading={loading()} onClick={action}>
+          <Button
+            type="primary"
+            icon={{ name: 'confirm', pos: 'right' }}
+            loading={loading()}
+            onClick={() => {
+              action();
+              if (formContext.scrollToErrors) {
+                formContext.scrollToErrors();
+              }
+            }}
+          >
             {props.action || 'Apply Changes'}
           </Button>
         </div>
