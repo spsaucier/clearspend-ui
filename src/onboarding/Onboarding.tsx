@@ -342,7 +342,7 @@ export default function Onboarding() {
           </Match>
           <Match when={step() === OnboardingStep.LINK_ACCOUNT}>
             <Page
-              title={<Text message="Show us the money! Well...kind of. It's time to link your bank account 💰" />}
+              title={<Text message="Show us the money! Well... kind of. It's time to link your bank account 💰" />}
               headerClass={css.border}
               titleClass={css.thin}
             >

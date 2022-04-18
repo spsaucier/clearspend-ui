@@ -4,6 +4,7 @@ import { onCleanup, batch, type Accessor } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import { AppEvent } from 'app/types/common';
+import { AnalyticsEventType, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { events } from '../api/events';
 import type { Setter } from '../types/common';
@@ -98,6 +99,7 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
   }
 
   events.sub(AppEvent.Logout, () => {
+    sendAnalyticsEvent({ type: AnalyticsEventType.Logout });
     setStore((prev) => ({ ...prev, data: null }));
   });
 
