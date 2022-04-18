@@ -71,7 +71,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
     {
       name: 'email',
       title: <Text message="Email Address" />,
-      render: (item) => <span>{item.email}</span>,
+      render: (item) => <span class="fs-mask">{item.email}</span>,
     },
   ];
 

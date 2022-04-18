@@ -78,7 +78,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <strong class={css.name}>{formatName(props.user)}</strong>
           <Icon name="chevron-right" class={css.chevron} />
         </Link>
-        <span class={css.note}>{props.user.email}</span>
+        <span class={join(css.note, 'fs-mask')}>{props.user.email}</span>
       </div>
     </div>
   );

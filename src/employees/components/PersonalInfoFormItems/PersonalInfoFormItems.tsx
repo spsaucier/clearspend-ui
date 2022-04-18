@@ -31,6 +31,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
       </FormItem>
       <FormItem label={<Text message="Last name*" />} error={props.errors.lastName} class={css.item}>
         <Input
+          class="fs-mask"
           name="last-name"
           value={props.values.lastName}
           placeholder={String(i18n.t('Enter last name'))}
@@ -40,6 +41,7 @@ export function PersonalInfoFormItems(props: Readonly<PersonalInfoFormItemsProps
       </FormItem>
       <FormItem label={<Text message="Email address*" />} error={props.errors.email} class={css.item}>
         <Input
+          class="fs-mask"
           name="email"
           type="email"
           value={props.values.email}

@@ -29,7 +29,7 @@ export function EmployeesList(props: Readonly<EmployeesListProps>) {
             <div class={css.item} onClick={() => props.onClick(item.userData?.userId || '')}>
               <div>
                 <div class={css.name}>{formatName(item.userData)}</div>
-                <div>{item.email}</div>
+                <div class="fs-mask">{item.email}</div>
               </div>
               <div class={css.cards}>
                 <Show when={card} fallback={<Text message="No card" />}>

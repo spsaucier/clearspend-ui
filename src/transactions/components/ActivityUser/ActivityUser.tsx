@@ -3,6 +3,7 @@ import { Text } from 'solid-i18n';
 
 import { formatName } from 'employees/utils/formatName';
 import type { LedgerUser } from 'generated/capital';
+import { join } from '_common/utils/join';
 
 import css from './ActivityUser.css';
 
@@ -29,7 +30,7 @@ export function ActivityUser(props: Readonly<ActivityUserProps>) {
                 >
                   {formatName(user)}
                 </div>
-                <div class={css.email}>{user.email}</div>
+                <div class={join(css.email, 'fs-mask')}>{user.email}</div>
               </>
             )}
           </Match>

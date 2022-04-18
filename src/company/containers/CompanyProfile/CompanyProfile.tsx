@@ -8,6 +8,7 @@ import { CopyButton } from 'app/components/CopyButton';
 import type { Business } from 'generated/capital';
 import { BUSINESS_MCC } from 'app/types/mcc';
 import { BusinessTypeI18n } from 'app/types/businesses';
+import { join } from '_common/utils/join';
 
 import css from './CompanyProfile.css';
 
@@ -36,7 +37,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <CopyButton value={props.data.businessType!} class={css.copy} />
         </DataRow>
         <DataRow icon="payment-bank" class={css.data}>
-          <span class={css.dataLabel}>
+          <span class={join(css.dataLabel, 'fs-mask')}>
             <Text message="Business EIN" />:
           </span>
           <span class={css.dataValue}>{props.data.employerIdentificationNumber}</span>
@@ -46,7 +47,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Corporate phone number" />:
           </span>
-          <span class={css.dataValue}>{formatPhone(props.data.businessPhone)}</span>
+          <span class={join(css.dataValue, 'fs-mask')}>{formatPhone(props.data.businessPhone)}</span>
           <CopyButton value={formatPhone(props.data.businessPhone)} class={css.copy} />
         </DataRow>
       </Section>

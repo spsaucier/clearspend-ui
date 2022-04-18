@@ -72,8 +72,8 @@ export default function EmployeeView() {
         <Show when={user()}>
           {(data) => (
             <div class={css.info}>
-              <div>{data.email}</div>
-              {formatPhone(data.phone || '')}
+              <div class="fs-mask">{data.email}</div>
+              <span class="fs-mask">{formatPhone(data.phone || '')}</span>
             </div>
           )}
         </Show>

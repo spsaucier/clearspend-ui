@@ -9,6 +9,7 @@ import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
 import { CardsList } from 'cards/components/CardsList';
 import { searchCards } from 'cards/services';
 import type { SearchCardRequest } from 'generated/capital';
+import { join } from '_common/utils/join';
 
 import { getUser } from '../../services';
 import { formatName } from '../../utils/formatName';
@@ -37,8 +38,8 @@ export function EmployeePreview(props: Readonly<EmployeePreviewProps>) {
       <Data data={user()} loading={status().loading} error={status().error} onReload={reload}>
         <div class={css.content}>
           <h4 class={css.name}>{formatName(user()!)}</h4>
-          <div class={css.data}>{user()!.email}</div>
-          <div class={css.data}>{formatPhone(user()!.phone)}</div>
+          <div class={join(css.data, 'fs-mask')}>{user()!.email}</div>
+          <div class={join(css.data, 'fs-mask')}>{formatPhone(user()!.phone)}</div>
           <Data data={cards() as {}} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
             <CardsList
               data={cards()! as {}}
