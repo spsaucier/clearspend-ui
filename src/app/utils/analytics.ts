@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import mixpanel, { Config, Dict } from 'mixpanel-browser';
+import mixpanel, { Dict } from 'mixpanel-browser';
 import * as FS from '@fullstory/browser';
 
 import { formatAddress } from '_common/formatters/address';
@@ -55,7 +55,7 @@ export const Events = {
 export interface AnalyticsEvent {
   name?: string;
   type?: AnalyticsEventType;
-  data?: Dict | Partial<Config>;
+  data?: Dict;
 }
 
 export interface VendorAnalyticsEvent extends AnalyticsEvent {
@@ -89,24 +89,18 @@ const vendorActions = {
         mixpanel.identify(name);
         break;
       case AnalyticsEventType.AddUserProperties:
-        if (typeof data === 'object' && 'email' in data) {
-          mixpanel.people.set({
-            ...data,
-            $email: data.email,
-            $name: formatName(data),
-            address: formatAddress(data.address),
-          });
-          if ('businessId' in data && data.businessId) {
-            mixpanel.register({ businessId: data.businessId });
-          }
+        mixpanel.people.set({
+          ...data,
+          $email: data?.email,
+          $name: formatName(data),
+          address: formatAddress(data?.address),
+        });
+        if (data?.businessId) {
+          mixpanel.register({ businessId: data.businessId });
         }
         break;
-      case AnalyticsEventType.Init:
-        if (typeof data === 'object' && 'api_host' in data) {
-          mixpanel.init(name || '', data);
-        } else {
-          mixpanel.init(name || '', {});
-        }
+      case AnalyticsEventType.Logout:
+        mixpanel.reset();
         break;
       default:
         mixpanel.track(name || '', data || {});
@@ -116,15 +110,16 @@ const vendorActions = {
   [AnalyticsVendor.FullStory]: async ({ name, type, data }: AnalyticsEvent) => {
     switch (type) {
       case AnalyticsEventType.AddUserProperties:
-        if (typeof data === 'object' && 'email' in data) {
-          FS.identify(data.userId, {
-            displayName: formatName(data),
-            email: data.email,
-          });
-          FS.setUserVars({
-            company: data.businessId,
-          });
-        }
+        FS.identify(data?.userId, {
+          displayName: formatName(data),
+          email: data?.email,
+        });
+        FS.setUserVars({
+          company: data?.businessId,
+        });
+        break;
+      case AnalyticsEventType.Logout:
+        FS.anonymize();
         break;
       default:
         FS.log(name || JSON.stringify(data) || '');

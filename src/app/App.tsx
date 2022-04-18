@@ -1,6 +1,7 @@
 import { Routes, Route } from 'solid-app-router';
 import { createEffect } from 'solid-js';
 import * as FS from '@fullstory/browser';
+import mixpanel from 'mixpanel-browser';
 
 import { SignUp } from 'signup';
 import { SetPassword } from 'onboarding/pages/SetPassword';
@@ -10,18 +11,16 @@ import { Messages } from './containers/Messages';
 import { Login, Login2fa } from './pages/Login';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
-import { sendAnalyticsEvent, AnalyticsEventType } from './utils/analytics';
 
 export function App() {
   createEffect(() => {
-    sendAnalyticsEvent({
-      type: AnalyticsEventType.Init,
-      name: (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN,
-      data: {
-        debug: !(window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN,
+    mixpanel.init(
+      (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',
+      {
+        debug: false,
         ignore_dnt: true,
       },
-    });
+    );
     FS.init({
       orgId: 'o-19RE1Q-na1',
       debug: (window as CSWindow).clearspend_env?.NODE_ENV !== 'production',
