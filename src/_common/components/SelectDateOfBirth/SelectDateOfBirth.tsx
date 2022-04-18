@@ -30,6 +30,7 @@ export interface SelectDateOfBirthProps {
   error?: boolean;
   disabled?: boolean;
   onChange?: (value: ReadonlyDate) => void;
+  class?: string;
 }
 
 export function SelectDateOfBirth(props: Readonly<SelectDateOfBirthProps>) {
@@ -64,6 +65,7 @@ export function SelectDateOfBirth(props: Readonly<SelectDateOfBirthProps>) {
         error={props.error}
         disabled={props.disabled}
         popupClass={css.monthPopup}
+        class={props.class}
         onChange={(value) => {
           if (!value) return;
           setMonth(value);

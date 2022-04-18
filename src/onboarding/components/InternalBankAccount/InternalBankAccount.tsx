@@ -61,7 +61,7 @@ export function InternalBankAccount(props: Readonly<InternalBankAccountProps>) {
               when={showAccountNumber()}
               fallback={
                 <span onClick={() => setShowAccountNumber(true)} class={css.highlight}>
-                  {formatAccountNumber(business().accountNumber || '')}{' '}
+                  <span class="fs-mask">{formatAccountNumber(business().accountNumber || '')} </span>
                   <Icon size="sm" class={css.highlight} name="view" />
                 </span>
               }

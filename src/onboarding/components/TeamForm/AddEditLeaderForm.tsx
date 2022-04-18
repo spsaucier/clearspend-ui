@@ -139,6 +139,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Last name" error={errors().lastName}>
             <Input
+              class="fs-mask"
               name="last-name"
               value={values().lastName}
               error={Boolean(errors().lastName)}
@@ -151,6 +152,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Date of birth" error={errors().birthdate}>
             <SelectDateOfBirth
+              class="fs-mask"
               name="birthdate"
               value={values().birthdate}
               error={Boolean(errors().birthdate)}
@@ -159,6 +161,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Social security number" error={errors().ssn}>
             <Input
+              class="fs-mask"
               name="ssn"
               value={values().ssn}
               maxLength={9}
@@ -169,6 +172,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Email" error={errors().email}>
             <Input
+              class="fs-mask"
               name="email"
               type="email"
               value={values().email}
@@ -179,6 +183,7 @@ export function AddEditLeaderForm(props: Readonly<AddEditLeaderFormProps>) {
           </FormItem>
           <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
+              class="fs-mask"
               name="phone"
               value={values().phone}
               error={Boolean(errors().phone)}

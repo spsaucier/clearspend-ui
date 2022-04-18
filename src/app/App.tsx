@@ -1,5 +1,6 @@
 import { Routes, Route } from 'solid-app-router';
 import { createEffect } from 'solid-js';
+import * as FS from '@fullstory/browser';
 
 import { SignUp } from 'signup';
 import { SetPassword } from 'onboarding/pages/SetPassword';
@@ -20,6 +21,12 @@ export function App() {
         debug: !(window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN,
         ignore_dnt: true,
       },
+    });
+    FS.init({
+      orgId: 'o-19RE1Q-na1',
+      debug: (window as CSWindow).clearspend_env?.NODE_ENV !== 'production',
+      // TODO: disable on dev/UAT after PoC
+      devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
     });
   });
   return (

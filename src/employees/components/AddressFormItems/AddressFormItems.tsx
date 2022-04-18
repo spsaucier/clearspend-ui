@@ -50,6 +50,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           when={suggestions()}
           fallback={
             <Input
+              class="fs-mask"
               autoComplete="off"
               name="streetLine1"
               value={props.values().streetLine1}
@@ -59,6 +60,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           }
         >
           <Select
+            class="fs-mask"
             autoComplete="off"
             name="streetLine1"
             value={props.values().streetLine1}
@@ -79,6 +81,7 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
         class={css.item}
       >
         <Input
+          class="fs-mask"
           autoComplete="off"
           name="streetLine2"
           type="text"

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import mixpanel, { Config, Dict } from 'mixpanel-browser';
+import * as FS from '@fullstory/browser';
 
 import { formatAddress } from '_common/formatters/address';
 
@@ -63,6 +64,7 @@ export interface VendorAnalyticsEvent extends AnalyticsEvent {
 
 export enum AnalyticsVendor {
   Mixpanel = 'mixpanel',
+  FullStory = 'fullstory',
 }
 
 export enum AnalyticsEventType {
@@ -111,13 +113,31 @@ const vendorActions = {
         break;
     }
   },
+  [AnalyticsVendor.FullStory]: async ({ name, type, data }: AnalyticsEvent) => {
+    switch (type) {
+      case AnalyticsEventType.AddUserProperties:
+        if (typeof data === 'object' && 'email' in data) {
+          FS.identify(data.userId, {
+            displayName: formatName(data),
+            email: data.email,
+          });
+          FS.setUserVars({
+            company: data.businessId,
+          });
+        }
+        break;
+      default:
+        FS.log(name || JSON.stringify(data) || '');
+        break;
+    }
+  },
 };
 
 export const sendAnalyticsEvent = ({
   name,
   data,
   type = AnalyticsEventType.Track,
-  vendors = [AnalyticsVendor.Mixpanel],
+  vendors = [AnalyticsVendor.Mixpanel, AnalyticsVendor.FullStory],
 }: VendorAnalyticsEvent) => {
   if (location.hostname !== 'localhost') {
     vendors.forEach(async (vendor: AnalyticsVendor) => {

@@ -23,7 +23,7 @@ export function AddressView(props: Readonly<AddressViewProps>) {
         <Show when={props.label}>
           <div class={css.label}>{props.label}</div>
         </Show>
-        <div class={css.address}>{formatAddress(props.address)}</div>
+        <div class={join(css.address, 'fs-mask')}>{formatAddress(props.address)}</div>
       </div>
     </div>
   );

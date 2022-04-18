@@ -71,7 +71,7 @@ export function StripeElement(props: Readonly<StripeElementProps>) {
   });
 
   return (
-    <div class={join(css.root, props.class)}>
+    <div class={join(css.root, props.class, 'fs-exclude')}>
       <div ref={dataFrame} class={join(ELEMENT_STYLES[props.type])} />
       <div class={css.copy}>
         <Icon name={icon()} />

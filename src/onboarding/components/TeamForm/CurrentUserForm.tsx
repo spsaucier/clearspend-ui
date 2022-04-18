@@ -79,6 +79,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           </FormItem>
           <FormItem label="Date of birth" error={errors().birthdate}>
             <SelectDateOfBirth
+              class="fs-mask"
               name="birthdate"
               value={values().birthdate}
               error={Boolean(errors().birthdate)}
@@ -87,6 +88,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           </FormItem>
           <FormItem label="Social security number" error={errors().ssn}>
             <Input
+              class="fs-mask"
               name="ssn"
               value={values().ssn}
               maxLength={9}
@@ -107,6 +109,7 @@ export function CurrentUserForm(props: Readonly<UserFormProps>) {
           </FormItem>
           <FormItem label="Mobile number" error={errors().phone}>
             <InputPhone
+              class="fs-mask"
               name="phone"
               value={values().phone}
               error={Boolean(errors().phone)}
