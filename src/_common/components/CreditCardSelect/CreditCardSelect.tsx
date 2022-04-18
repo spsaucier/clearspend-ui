@@ -7,7 +7,7 @@ import { useResource } from '_common/utils/useResource';
 import { getCodatCreditCards } from 'accounting/services';
 import { Icon } from '_common/components/Icon';
 import { canManageCards } from 'allocations/utils/permissions';
-import type { CodatCreditCard } from 'app/types/creditCard';
+import type { CodatBankAccount } from 'generated/capital';
 
 import { useBusiness } from '../../../app/containers/Main/context';
 
@@ -17,7 +17,7 @@ interface AddCreditCardFormProps {
   selectedCardName: Accessor<string>;
   setCanEditNewCard: (canEdit: boolean) => void;
   setSelectedCardName: (cardName: string) => void;
-  onChange?: (card: CodatCreditCard) => void;
+  onChange?: (card: CodatBankAccount) => void;
 }
 
 export function CreditCardSelect(props: AddCreditCardFormProps) {
@@ -25,8 +25,8 @@ export function CreditCardSelect(props: AddCreditCardFormProps) {
   const { permissions } = useBusiness();
   const [creditCards] = useResource(getCodatCreditCards);
 
-  const onChangeSelectedCreditCard = async (card: CodatCreditCard) => {
-    setSelectedCardName(card.accountName);
+  const onChangeSelectedCreditCard = async (card: CodatBankAccount) => {
+    setSelectedCardName(card.accountName!);
     setCanEditNewCard(false);
 
     if (onChange) onChange(card);
@@ -58,7 +58,7 @@ export function CreditCardSelect(props: AddCreditCardFormProps) {
               <For each={creditCards()?.results}>
                 {(card) => (
                   <MenuItem name={card.accountName} onClick={() => onChangeSelectedCreditCard(card)}>
-                    <Text message={card.accountName} />
+                    <Text message={card.accountName!} />
                   </MenuItem>
                 )}
               </For>

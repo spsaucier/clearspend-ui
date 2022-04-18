@@ -1,24 +1,26 @@
 import type { DeepReadonly } from 'solid-js/store';
 
 import { Data } from 'app/components/Data';
+import type {
+  AddChartOfAccountsMappingRequest,
+  CodatAccountNestedResponse,
+  GetChartOfAccountsMappingResponse,
+} from 'generated/capital';
 
 import { ChartOfAccountsTable } from '../ChartOfAccountsTable';
-import type { IntegrationAccountMapping } from '../ChartOfAccountsTable/types';
-
-import type { IntegrationAccountResponse, IntegrationExpenseAccountMappingResponse } from './types';
 
 interface ChartOfAccountsDataProps {
   loading: boolean;
   error: unknown;
-  data: Readonly<IntegrationAccountResponse> | null;
-  mappings: Readonly<IntegrationExpenseAccountMappingResponse> | null;
-  onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
+  data: Readonly<CodatAccountNestedResponse> | null;
+  mappings: Readonly<GetChartOfAccountsMappingResponse> | null;
+  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
   onReload: () => Promise<unknown>;
   onCancel?: () => void;
   onSkip?: () => void;
   setShowRoadblock?: (newValue: boolean) => void;
   setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
-  setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
+  setRoadblockRequestParameters?: (newValue: DeepReadonly<AddChartOfAccountsMappingRequest | null>[]) => void;
   saveOnChange?: boolean;
   showDeleted?: boolean;
 }

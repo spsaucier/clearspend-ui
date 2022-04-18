@@ -1,20 +1,22 @@
-import type {
-  CodatBankAccountResponse,
-  CodatCreateCreditCardRequest,
-  CodatCreateCreditCardResponse,
-  CodatSetCreditCardRequest,
-} from 'app/types/creditCard';
 import { service } from 'app/utils/service';
-import type { ChartOfAccounts, ExpenseCategory, SyncCountResponse, SyncTransactionResponse } from 'generated/capital';
-
 import type {
+  AddChartOfAccountsMappingRequest,
   BusinessNotification,
-  IntegrationAccountResponse,
-  IntegrationExpenseAccountMappingResponse,
+  ChartOfAccounts,
+  ChartOfAccountsMappingResponse,
+  CodatAccountNestedResponse,
+  CodatBankAccountsResponse,
+  CodatCreateBankAccountResponse,
+  CreateCreditCardRequest,
+  ExpenseCategory,
+  GetChartOfAccountsMappingResponse,
+  PagedDataSyncLogResponse,
+  SetCreditCardRequest,
+  SyncCountResponse,
   SyncLogRequest,
-  SyncLogResponse,
-} from './components/ChartOfAccountsData/types';
-import type { IntegrationAccountMapping } from './components/ChartOfAccountsTable/types';
+  SyncTransactionResponse,
+} from 'generated/capital';
+
 import type { UpdateBusinessAccountingStepRequest } from './types';
 
 export async function getCompanyConnection(): Promise<boolean> {
@@ -34,14 +36,14 @@ export async function syncAllTransactions() {
 }
 
 export async function getCodatCreditCards() {
-  return (await service.get<Readonly<CodatBankAccountResponse>>(`/codat/bank-accounts`)).data;
+  return (await service.get<Readonly<CodatBankAccountsResponse>>(`/codat/bank-accounts`)).data;
 }
 
-export async function postCodatCreditCard(params: Readonly<CodatCreateCreditCardRequest>) {
-  return (await service.post<Readonly<CodatCreateCreditCardResponse>>(`/codat/bank-accounts`, params)).data;
+export async function postCodatCreditCard(params: Readonly<CreateCreditCardRequest>) {
+  return (await service.post<Readonly<CodatCreateBankAccountResponse>>(`/codat/bank-accounts`, params)).data;
 }
 
-export async function setCodatCreditCardforBusiness(params: Readonly<CodatSetCreditCardRequest>) {
+export async function setCodatCreditCardforBusiness(params: Readonly<SetCreditCardRequest>) {
   return (await service.put<Readonly<Boolean>>(`/codat/bank-accounts`, params)).data;
 }
 
@@ -59,27 +61,28 @@ export async function getExpenseCategories() {
 }
 
 export async function getIntegrationExpenseCategories() {
-  return (await service.get<Readonly<IntegrationAccountResponse>>('/codat/chart-of-accounts/expense')).data;
+  return (await service.get<Readonly<CodatAccountNestedResponse>>('/codat/chart-of-accounts/expense')).data;
 }
 
 export async function getIntegrationExpenseCategoryMappings() {
-  return (await service.get<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings')).data;
+  return (await service.get<Readonly<GetChartOfAccountsMappingResponse>>('/chart-of-accounts/mappings')).data;
 }
 
 export async function getSyncableTransactionCount() {
   return (await service.get<Readonly<SyncCountResponse>>('/codat/sync-count')).data;
 }
 
-export async function postIntegrationExpenseCategoryMappings(params: Readonly<IntegrationAccountMapping | null>[]) {
-  return (await service.post<Readonly<IntegrationExpenseAccountMappingResponse>>('/chart-of-accounts/mappings', params))
-    .data;
+export async function postIntegrationExpenseCategoryMappings(
+  params: Readonly<AddChartOfAccountsMappingRequest | null>[],
+) {
+  return (await service.post<Readonly<ChartOfAccountsMappingResponse>>('/chart-of-accounts/mappings', params)).data;
 }
 
 export async function deleteIntegrationExpenseCategoryMappings() {
   await service.remove('/chart-of-accounts/mappings');
 }
 export async function getSyncLogs(params: Readonly<SyncLogRequest>) {
-  return (await service.post<Readonly<SyncLogResponse>>('/codat/sync-log', params)).data;
+  return (await service.post<Readonly<PagedDataSyncLogResponse>>('/codat/sync-log', params)).data;
 }
 
 export async function deleteCompanyConnection() {
@@ -95,7 +98,7 @@ export async function updateChartOfAccounts() {
 }
 
 export async function getSavedChartOfAccounts() {
-  return (await service.get<Readonly<IntegrationAccountResponse>>('/chart-of-accounts/stored')).data;
+  return (await service.get<Readonly<CodatAccountNestedResponse>>('/chart-of-accounts/stored')).data;
 }
 
 export async function getChartOfAccountsChangeNumber() {

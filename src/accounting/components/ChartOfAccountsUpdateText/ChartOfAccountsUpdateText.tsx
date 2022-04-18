@@ -1,10 +1,9 @@
 import { Text } from 'solid-i18n';
 import { Match, Switch } from 'solid-js';
 
-import type { BusinessNotification } from '../ChartOfAccountsData/types';
+import type { BusinessNotification } from 'generated/capital';
 
 import css from './ChartOfAccountsUpdateText.css';
-
 
 interface ChartOfAccountsUpdateTextProps {
   notification: BusinessNotification;
@@ -17,7 +16,7 @@ export function ChartOfAccountsUpdateText(props: ChartOfAccountsUpdateTextProps)
         <Match when={props.notification.type === 'CHART_OF_ACCOUNTS_CREATED'}>
           <div class={css.message}>
             <Text
-              message={`${props.notification.data.newValue.split('.').slice(-1)[0]} has been added to Quickbooks.`}
+              message={`${props.notification.data?.newValue?.split('.').slice(-1)[0]} has been added to Quickbooks.`}
             />
             <div class={css.subtext}>
               <Text
@@ -31,14 +30,16 @@ export function ChartOfAccountsUpdateText(props: ChartOfAccountsUpdateTextProps)
         <Match when={props.notification.type === 'CHART_OF_ACCOUNTS_DELETED'}>
           <div class={css.message}>
             <Text
-              message={`${props.notification.data.oldValue.split('.').slice(-1)[0]} has been removed from Quickbooks.`}
+              message={`${
+                props.notification.data?.oldValue?.split('.').slice(-1)[0]
+              } has been removed from Quickbooks.`}
             />
           </div>
         </Match>
         <Match when={props.notification.type === 'CHART_OF_ACCOUNTS_RENAMED'}>
           <Text
-            message={`${props.notification.data.oldValue.split('.').slice(-1)[0]} has changed to ${
-              props.notification.data.newValue.split('.').slice(-1)[0]
+            message={`${props.notification.data?.oldValue?.split('.').slice(-1)[0]} has changed to ${
+              props.notification.data?.newValue?.split('.').slice(-1)[0]
             } in Quickbooks.`}
           />
         </Match>

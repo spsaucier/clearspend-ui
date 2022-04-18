@@ -1,11 +1,6 @@
-export interface IntegrationAccountMapping {
-  accountRef: string;
-  expenseCategoryId?: string;
-  expenseCategoryName?: string;
-  fullyQualifiedCategory?: string;
-}
+import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
 
-export type IntegrationAccountMap = Record<string, Readonly<IntegrationAccountMapping> | null>;
+export type IntegrationAccountMap = Record<string, Readonly<AddChartOfAccountsMappingRequest> | null>;
 
 export enum NestedLevels {
   One = 1,

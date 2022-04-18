@@ -6,16 +6,15 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
 import { disableCategories } from 'accounting/services';
-
-import type { IntegrationAccountMapping } from '../ChartOfAccountsTable/types';
+import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
 
 import css from './UnselectedCategoriesRoadblock.css';
 
 interface UnselectedCategoriesRoadblockProps {
   unusedCategories: Accessor<(string | undefined)[]>;
   onBack: () => void;
-  onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
-  roadblockRequestParameters?: DeepReadonly<IntegrationAccountMapping | null>[];
+  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
+  roadblockRequestParameters?: DeepReadonly<AddChartOfAccountsMappingRequest | null>[];
 }
 
 export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblockProps) {

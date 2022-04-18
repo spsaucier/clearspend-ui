@@ -10,28 +10,29 @@ import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { join } from '_common/utils/join';
 import { wrapAction } from '_common/utils/wrapAction';
-
 import type {
-  FlattenedIntegrationAccount,
-  IntegrationAccount,
-  IntegrationExpenseAccountMapping,
-} from '../ChartOfAccountsData/types';
+  AddChartOfAccountsMappingRequest,
+  ChartOfAccountsMappingResponse,
+  CodatAccountNested,
+} from 'generated/capital';
+
+import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory } from '../SelectExpenseCategory';
 import { CancelConfirmationButton } from '../CancelConfirmationButton';
 
 import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
-import { IntegrationAccountMapping, NestedLevels } from './types';
+import { NestedLevels } from './types';
 
 import css from './ChartOfAccountsTable.css';
 
 interface ChartOfAccountsTableProps {
-  data: IntegrationAccount[];
-  onSave: (mappings: Readonly<IntegrationAccountMapping | null>[]) => void;
-  mappings?: IntegrationExpenseAccountMapping[] | undefined;
+  data: CodatAccountNested[];
+  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
+  mappings?: ChartOfAccountsMappingResponse[] | undefined;
   onCancel?: () => void;
   onSkip?: () => void;
   setShowRoadblock?: (newValue: boolean) => void;
-  setRoadblockRequestParameters?: (newValue: DeepReadonly<IntegrationAccountMapping | null>[]) => void;
+  setRoadblockRequestParameters?: (newValue: DeepReadonly<AddChartOfAccountsMappingRequest | null>[]) => void;
   setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   saveOnChange: boolean;
   showDeleted?: boolean;
@@ -117,7 +118,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         return (
           <div class={join(css.nestedLevel, getNestedCSSlevel(item))}>
             {item.level > 1 && <Icon name="l-tab" style={{ color: 'transparent' }} />}
-            <Text message={item.name} />
+            <Text message={item.name || ''} />
           </div>
         );
       },
@@ -132,7 +133,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         return (
           <div>
-            <Text message={item.type} />
+            <Text message={item.type || ''} />
           </div>
         );
       },
@@ -160,13 +161,13 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         const target = props.mappings?.find((mapping) => mapping.accountRef === item.id)?.expenseCategoryId;
         const initId = target && categories.data?.some((ec) => ec.expenseCategoryId === target) ? target : undefined;
-        if (initId) setState(item.id, { accountRef: item.id, expenseCategoryId: initId });
+        if (initId) setState(item.id!, { accountRef: item.id, expenseCategoryId: initId });
         const [expenseCategory, setExpenseCategory] = createSignal<string | undefined>(initId);
 
         function onChange(id: string | undefined, name?: string) {
           batch(() => {
             setExpenseCategory(id);
-            setState(item.id, {
+            setState(item.id!, {
               accountRef: item.id,
               expenseCategoryId: id,
               expenseCategoryName: name || categories.data?.find((ec) => ec.expenseCategoryId === id)?.categoryName,
@@ -196,7 +197,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                   onClick={() => {
                     batch(() => {
                       setExpenseCategory(undefined);
-                      setState(item.id, null);
+                      setState(item.id!, null);
                     });
                     if (props.saveOnChange) {
                       saveMapping();

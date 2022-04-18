@@ -7,12 +7,12 @@ import {
   useIntegrationExpenseCategories,
   useIntegrationExpenseCategoryMappings,
 } from 'accounting/stores/integrationExpenseCategories';
-import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
-import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
 import { postIntegrationExpenseCategoryMappings, updateChartOfAccounts } from 'accounting/services';
 import { useMessages } from 'app/containers/Messages/context';
 import { i18n } from '_common/api/intl';
 import { UnselectedCategoriesRoadblock } from 'accounting/components/UnselectedCategoriesRoadblock/UnselectedCategoriesRoadblock';
+import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
+import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 
 import css from './ChartOfAccounts.css';
 
@@ -28,8 +28,8 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
   const [showRoadblock, setShowRoadblock] = createSignal(false);
   const [unselectedCategories, setUnselectedCategories] = createSignal<(string | undefined)[]>([]);
   const [roadblockRequestParameters, setRoadblockRequestParameters] =
-    createSignal<DeepReadonly<IntegrationAccountMapping | null>[]>();
-  const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) => {
+    createSignal<DeepReadonly<AddChartOfAccountsMappingRequest | null>[]>();
+  const handleSave = (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => {
     postIntegrationExpenseCategoryMappings(mappings).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });

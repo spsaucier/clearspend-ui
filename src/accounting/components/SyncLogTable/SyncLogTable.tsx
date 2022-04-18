@@ -1,17 +1,16 @@
+import type { PagedDataSyncLogResponse, SyncLogResponse } from 'generated/capital';
 import { Table, TableColumn } from '_common/components/Table';
 
-import type { SyncLog, SyncLogResponse } from '../ChartOfAccountsData/types';
-
 interface SyncLogTableProps {
-  syncLogs: Readonly<SyncLogResponse> | null;
+  syncLogs: Readonly<PagedDataSyncLogResponse> | null;
 }
 
 export function SyncLogTable(props: SyncLogTableProps) {
-  const columns: readonly Readonly<TableColumn<SyncLog>>[] = [
+  const columns: readonly Readonly<TableColumn<SyncLogResponse>>[] = [
     {
       name: 'startTime',
       title: 'Time Started',
-      render: (item) => new Date(item.startTime).toTimeString(),
+      render: (item) => new Date(item.startTime!).toTimeString(),
     },
     {
       name: 'firstName',
@@ -29,5 +28,5 @@ export function SyncLogTable(props: SyncLogTableProps) {
       render: (item) => item.status,
     },
   ];
-  return <div>{props.syncLogs && <Table columns={columns} data={props.syncLogs.content}></Table>}</div>;
+  return <div>{props.syncLogs && <Table columns={columns} data={props.syncLogs.content!}></Table>}</div>;
 }

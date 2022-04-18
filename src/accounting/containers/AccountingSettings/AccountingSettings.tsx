@@ -17,9 +17,11 @@ import {
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
-import type { PagedDataAccountActivityResponse } from 'generated/capital';
-import type { IntegrationAccountMapping } from 'accounting/components/ChartOfAccountsTable/types';
-import type { CodatCreditCard } from 'app/types/creditCard';
+import type {
+  AddChartOfAccountsMappingRequest,
+  CodatBankAccount,
+  PagedDataAccountActivityResponse,
+} from 'generated/capital';
 import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
@@ -43,7 +45,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
 
   const integrationExpenseCategoryStore = useStoredIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
-  const handleSave = (mappings: Readonly<IntegrationAccountMapping | null>[]) =>
+  const handleSave = (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) =>
     postIntegrationExpenseCategoryMappings(mappings);
 
   const transactionData = props.data?.content ?? [];
@@ -67,7 +69,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     }
   };
 
-  const saveSelectedCreditCard = async (card: CodatCreditCard) => {
+  const saveSelectedCreditCard = async (card: CodatBankAccount) => {
     try {
       await setCodatCreditCardforBusiness({
         accountId: card.id,
@@ -118,7 +120,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       >
         <CreditCardSelect
           selectedCardName={selectedCardName}
-          onChange={(card: CodatCreditCard) => saveSelectedCreditCard(card)}
+          onChange={(card: CodatBankAccount) => saveSelectedCreditCard(card)}
           setCanEditNewCard={setCanEditNewCard}
           setSelectedCardName={setSelectedCardName}
         ></CreditCardSelect>
