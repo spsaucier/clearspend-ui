@@ -8,3 +8,8 @@ export interface UpdateBusinessAccountingStepResponse {
 export interface UpdateBusinessAccountingStepRequest {
   accountingSetupStep: AccountSetupStep;
 }
+
+export enum AUTO_UPDATES_STATUS {
+  ON = 'On',
+  OFF = 'Off',
+}

@@ -5,6 +5,7 @@ import { useNavigate } from 'solid-app-router';
 import { Section } from 'app/components/Section';
 import { setActivityExpenseCategory } from 'app/services/activity';
 import { useMessages } from 'app/containers/Messages/context';
+import { AutomaticUpdates } from 'accounting/components/AutomaticUpdates';
 import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
 import { CreditCardSelect } from '_common/components/CreditCardSelect/CreditCardSelect';
@@ -26,6 +27,7 @@ import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
+import { AUTO_UPDATES_STATUS } from 'accounting/types';
 import { useUpdateNotifications } from 'accounting/stores/updateNotifications';
 
 import css from './AccountingSettings.css';
@@ -43,6 +45,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
   const [selectedCardName, setSelectedCardName] = createSignal<string>('');
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
+  const [automaticUpdates, setAutomaticUpdates] = createSignal<AUTO_UPDATES_STATUS>(AUTO_UPDATES_STATUS.OFF);
 
   // TODO replace with notification endpoint that dismisses on logout
   const updateNotifications = useUpdateNotifications();
@@ -97,6 +100,24 @@ export function AccountingSettings(props: AccountingSettingsProps) {
 
   return (
     <div>
+      <Section
+        title="Automatic updates"
+        description={
+          <Text
+            message={
+              'When new expense accounts are created in Quickbooks, ' +
+              'automatically assign a new expense category in ClearSpend.'
+            }
+          />
+        }
+        class={css.section}
+      >
+        <AutomaticUpdates
+          name="automatic-updates-toggle"
+          value={automaticUpdates}
+          setAutomaticUpdates={setAutomaticUpdates}
+        />
+      </Section>
       <Section
         title={<Text message="Chart of Accounts" />}
         // description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
