@@ -1,0 +1,13 @@
+.root {
+  display: grid;
+  padding: var(--pd-8) var(--pd-12);
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  grid-gap: var(--pd-4);
+  color: var(--tw-red-80);
+  font-size: var(--text-12);
+  line-height: 1.33;
+  background: var(--tw-red-10);
+  border: 1px solid var(--tw-red-20);
+  border-radius: var(--radius-8);
+}

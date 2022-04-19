@@ -1,15 +1,8 @@
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
-import { createSignal, createMemo, batch, Show, Switch, Match, JSXElement } from 'solid-js';
+import { createSignal, createMemo, batch, Show, Switch, Match } from 'solid-js';
 
-import type {
-  AccountActivityResponse,
-  DeclineDetails,
-  AddressPostalCodeMismatch,
-  OperationLimitExceeded,
-  LimitExceeded,
-  SpendControlViolated,
-} from 'generated/capital';
+import type { AccountActivityResponse } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
@@ -38,13 +31,13 @@ import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCatego
 import { syncTransaction } from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 
+import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
 import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import { formatMerchantType } from '../../utils/formatMerchantType';
-import { MERCHANT_CATEGORIES, STATUS_ICONS } from '../../constants';
-import { declineReasons } from '../constants';
+import { MERCHANT_CATEGORIES } from '../../constants';
 
 import type { ReceiptVideModel } from './ReceiptsView';
 
@@ -65,13 +58,6 @@ interface TransactionPreviewProps {
   onReport: () => void;
   showAccountingAdminView?: boolean;
 }
-
-const ErrorIndicator = (props: { text: JSXElement }) => (
-  <div class={css.declineReason}>
-    <Icon name={STATUS_ICONS.DECLINED} size="sm" />
-    <span>{props.text}</span>
-  </div>
-);
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
@@ -178,54 +164,14 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const allowReceiptUpload = createMemo(() => isAllowedReceipts(transaction().merchant, transaction().status));
 
-  const getErrorText = (
-    details: DeclineDetails | AddressPostalCodeMismatch | LimitExceeded | OperationLimitExceeded | SpendControlViolated,
-  ) => {
-    const reason = declineReasons[details.reason!] || details.reason || '';
-    if ('postalCode' in details && details.postalCode) {
-      return i18n.t('{reason} ({postalCode} entered)', { reason: String(reason), postalCode: details.postalCode });
-    }
-    if ('mccGroup' in details) {
-      if (details.mccGroup) {
-        return i18n.t('{reason}: {mccGroup} not permitted on this {entityType}', {
-          reason: String(reason),
-          mccGroup: details.mccGroup.toLowerCase().replace(/_/g, ''),
-          entityType: details.entityType?.toLowerCase() || 'card',
-        });
-      } else if (details.paymentType) {
-        return i18n.t('{reason}: {paymentType} not permitted on this {entityType}', {
-          reason: String(reason),
-          paymentType: details.paymentType.toLowerCase().replace(/_/g, ''),
-          entityType: details.entityType?.toLowerCase() || 'card',
-        });
-      }
-    }
-    if ('limitType' in details && details.limitType) {
-      if ('exceededAmount' in details && details.exceededAmount) {
-        return i18n.t('{reason}: {limitType} {period} limit exceeded by {amount}', {
-          reason: String(reason),
-          limitType: details.limitType.toLowerCase().replace(/_/g, ''),
-          period: details.limitPeriod?.toLowerCase() || '',
-          amount: details.exceededAmount,
-        });
-      } else {
-        return i18n.t('{reason}: {limitType} {period} limit exceeded', {
-          reason: String(reason),
-          limitType: details.limitType.toLowerCase().replace(/_/g, ''),
-          period: details.limitPeriod?.toLowerCase() || '',
-        });
-      }
-    }
-    return reason;
-  };
-
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
+      <DeclineReason
+        details={transaction().declineDetails || { reason: 'INSUFFICIENT_FUNDS' }} // TODO
+        class={css.declineReason}
+      />
       <div class={css.summary}>
-        <Show when={transaction().declineDetails}>
-          <ErrorIndicator text={getErrorText(transaction().declineDetails!)} />
-        </Show>
         <Show when={transaction().merchant}>
           <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
         </Show>
