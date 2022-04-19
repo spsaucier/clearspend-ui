@@ -68,12 +68,9 @@ export async function setActivityExpenseCategory(activityId: string, expenseCate
   ).data;
 }
 
-export async function uploadReceiptForActivity(receiptData: FormData) {
-  return (await service.post<Readonly<{ receiptId: string }>>('/images/receipts', receiptData)).data;
-}
-
-export async function linkReceiptToActivity(activityId: string, receiptId: string) {
-  return (await service.post<void>(`/users/account-activity/${activityId}/receipts/${receiptId}/link`)).data;
+export async function uploadReceipt(activityId: string, data: FormData) {
+  const { receiptId } = (await service.post<Readonly<{ receiptId: string }>>('/images/receipts', data)).data;
+  await service.post<void>(`/users/account-activity/${activityId}/receipts/${receiptId}/link`);
 }
 
 export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> => {

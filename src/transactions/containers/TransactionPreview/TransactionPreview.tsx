@@ -6,6 +6,7 @@ import type { AccountActivityResponse } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
+import { FilesDropArea } from '_common/components/FilesDropArea';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
@@ -19,8 +20,7 @@ import { formatName } from 'employees/utils/formatName';
 import {
   getActivityById,
   setActivityNote,
-  linkReceiptToActivity,
-  uploadReceiptForActivity,
+  uploadReceipt,
   viewReceipt,
   setActivityExpenseCategory,
 } from 'app/services/activity';
@@ -40,6 +40,7 @@ import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
 
 import type { ReceiptVideModel } from './ReceiptsView';
+import { getReceiptData } from './utils';
 
 import css from './TransactionPreview.css';
 
@@ -90,11 +91,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const onUploadClick = () => fileInput.click();
 
-  const [uploading, uploadReceipt] = wrapAction(async (e: Event) => {
-    const formData = new FormData();
-    formData.append('receipt', (e.target as HTMLInputElement).files?.[0] as File);
-    const { receiptId } = await uploadReceiptForActivity(formData);
-    await linkReceiptToActivity(transaction().accountActivityId!, receiptId);
+  const [uploading, uploadReceipts] = wrapAction(async (files: readonly File[]) => {
+    await Promise.all(files.map((file) => uploadReceipt(transaction().accountActivityId!, getReceiptData(file))));
     props.onUpdate(await getActivityById(transaction().accountActivityId!));
     reloadReceipts();
   });
@@ -167,10 +165,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
-      <DeclineReason
-        details={transaction().declineDetails} // TODO
-        class={css.declineReason}
-      />
+      <DeclineReason details={transaction().declineDetails} class={css.declineReason} />
       <div class={css.summary}>
         <Show when={transaction().merchant}>
           <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
@@ -261,20 +256,46 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                   } else props.onViewReceipt(receipts()!);
                 }}
               >
-                <Text message="View Receipt" />
+                <Show when={receiptIds().length > 1} fallback={<Text message="View Receipt" />}>
+                  <Text message="View Receipts ({count})" count={receiptIds().length} />
+                </Show>
               </Button>
             </Show>
-            <Show when={allowReceiptUpload() && !receiptIds().length}>
-              <Button wide icon="add-receipt" loading={uploading()} onClick={onUploadClick}>
-                <Text message="Add Receipt" />
-              </Button>
+            <Show when={allowReceiptUpload()}>
+              <FilesDropArea
+                types={RECEIPT_FILE_TYPES}
+                dropText={<Text message="Drop images" />}
+                onDrop={uploadReceipts}
+              >
+                <div class={css.receiptDrop}>
+                  <Show when={!receiptIds().length}>
+                    <Button
+                      type="primary"
+                      view="second"
+                      icon="add-receipt"
+                      loading={uploading()}
+                      onClick={onUploadClick}
+                    >
+                      <Text message="Add Receipt" />
+                    </Button>
+                  </Show>
+                  <Show when={receiptIds().length}>
+                    <Button type="primary" view="second" icon="receipt" loading={uploading()} onClick={onUploadClick}>
+                      <Text message="Upload more images" />
+                    </Button>
+                  </Show>
+                  <input
+                    ref={fileInput}
+                    type="file"
+                    accept={RECEIPT_FILE_TYPES.join(',')}
+                    onChange={(event: Event) => {
+                      uploadReceipts(Array.from((event.target as HTMLInputElement).files || []));
+                    }}
+                  />
+                  <Text message="or drag and drop" class={css.receiptDropText!} />
+                </div>
+              </FilesDropArea>
             </Show>
-            <Show when={allowReceiptUpload() && receiptIds().length}>
-              <Button wide icon="receipt" loading={uploading()} onClick={onUploadClick}>
-                <Text message="Upload more images" />
-              </Button>
-            </Show>
-            <input ref={fileInput} type="file" accept={RECEIPT_FILE_TYPES.join(',')} onChange={uploadReceipt} />
           </div>
           <div class={css.expenseCategory}>
             <div class={css.optionTitle}>

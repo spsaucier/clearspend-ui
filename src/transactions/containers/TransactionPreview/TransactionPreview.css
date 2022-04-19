@@ -41,6 +41,22 @@
   line-height: 1.33;
 }
 
+.receipt-drop {
+  display: flex;
+  min-height: 100px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent;
+  border: 1px dashed var(--tw-gray-30);
+  border-radius: var(--radius-10);
+}
+
+.receipt-drop-text {
+  margin-top: var(--pd-4);
+  font-size: var(--text-12);
+}
+
 .receipt-cta {
   display: grid;
   width: 100%;

@@ -1,0 +1,32 @@
+.root {
+  position: relative;
+}
+
+.children {
+  @nest [data-active='true'] & {
+    opacity: 0;
+  }
+}
+
+.drop-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 100%;
+  height: 100%;
+  padding: var(--pd-24);
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  font-size: var(--text-16);
+  text-align: center;
+  background: var(--tw-white);
+  border: 1px dashed var(--tw-black);
+  border-radius: var(--radius-10);
+  pointer-events: none;
+
+  @nest [data-active='true'] & {
+    display: flex;
+  }
+}
