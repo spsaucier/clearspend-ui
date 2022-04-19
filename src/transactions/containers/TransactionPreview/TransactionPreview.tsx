@@ -168,7 +168,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
       <DeclineReason
-        details={transaction().declineDetails || { reason: 'INSUFFICIENT_FUNDS' }} // TODO
+        details={transaction().declineDetails} // TODO
         class={css.declineReason}
       />
       <div class={css.summary}>
