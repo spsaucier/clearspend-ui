@@ -26,7 +26,7 @@ import { updateAllocation, getAllocationRoles, createOrUpdateAllocationRole } fr
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
-import { canManageUsers } from '../../utils/permissions';
+import { canManagePermissions, canLinkBankAccounts, canManageFunds } from '../../utils/permissions';
 
 import { getRolesList, getRolesUpdates } from './utils';
 
@@ -195,23 +195,25 @@ export function Settings(props: Readonly<SettingsProps>) {
 
   return (
     <Form>
-      <Section title={<Text message="Allocation details" />}>
-        <FormItem label={<Text message="Name" />} class={css.field} error={errors().name}>
-          <Input
-            name="allocation-label"
-            value={values().name}
-            error={Boolean(errors().name)}
-            onChange={handlers.name}
-          />
-        </FormItem>
-      </Section>
-      <Show when={canManageUsers(props.permissions())}>
+      <Show when={canManageFunds(props.permissions())}>
+        <Section title={<Text message="Allocation details" />}>
+          <FormItem label={<Text message="Name" />} class={css.field} error={errors().name}>
+            <Input
+              name="allocation-label"
+              value={values().name}
+              error={Boolean(errors().name)}
+              onChange={handlers.name}
+            />
+          </FormItem>
+        </Section>
+      </Show>
+      <Show when={canManagePermissions(props.permissions())}>
         <Section
           title={<Text message="Access" />}
           description={
             <>
               <Text message="Add users who can view or manage this allocation." class={css.content!} />
-              <Show when={!allocationHasParent}>
+              <Show when={!allocationHasParent && canLinkBankAccounts(props.permissions())}>
                 <div class={css.roleDescription}>
                   <h5 class={css.subheader}>
                     <Text message="Admin" />
@@ -282,11 +284,14 @@ export function Settings(props: Readonly<SettingsProps>) {
           >
             <For each={sortedRoles()}>
               {(role) => {
+                const disabled = role.user.userId === props.permissions()?.user?.userId;
                 const cannotBePromoted =
                   role.inherited &&
-                  [AllocationRoles.Admin, allocationHasParent ? AllocationRoles.Manager : undefined].includes(
-                    role.role,
-                  );
+                  [
+                    AllocationRoles.Admin,
+                    props.permissions()?.allocationRole,
+                    allocationHasParent ? AllocationRoles.Manager : undefined,
+                  ].includes(role.role);
                 return (
                   <Show when={!removedRoles()[role.user.userId!]}>
                     <AllocationRole
@@ -295,8 +300,9 @@ export function Settings(props: Readonly<SettingsProps>) {
                       role={role.role}
                       inherited={role.inherited}
                       class={css.field}
-                      onChange={cannotBePromoted ? undefined : onChangeRole}
-                      onDelete={onRemoveRole}
+                      onChange={disabled || cannotBePromoted ? undefined : onChangeRole}
+                      onDelete={disabled ? undefined : onRemoveRole}
+                      permissions={props.permissions}
                     />
                   </Show>
                 );

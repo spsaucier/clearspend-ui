@@ -1,4 +1,4 @@
-import { Show, Switch, Match } from 'solid-js';
+import { Show, Switch, Match, Accessor } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -8,7 +8,7 @@ import { Confirm } from '_common/components/Confirm';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
-import type { Allocation } from 'generated/capital';
+import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 import { AllocationRoles, AllocationUserRole } from '../../types';
 
@@ -18,7 +18,8 @@ interface AllocationRoleProps extends AllocationUserRole {
   class?: string;
   allocation?: Allocation;
   onChange?: (userId: string, role: AllocationRoles) => void;
-  onDelete: (userId: string) => void;
+  onDelete?: (userId: string) => void;
+  permissions?: Accessor<Readonly<UserRolesAndPermissionsRecord> | null>;
 }
 
 export function AllocationRole(props: Readonly<AllocationRoleProps>) {
@@ -37,7 +38,12 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
         disabled={props.user.type === 'BUSINESS_OWNER' || !props.onChange}
         onChange={(value) => props.onChange?.(props.user.userId!, value as AllocationRoles)}
       >
-        <Show when={!Boolean(props.allocation?.parentAllocationId)}>
+        <Show
+          when={
+            !Boolean(props.allocation?.parentAllocationId) &&
+            props.permissions?.()?.allocationRole === AllocationRoles.Admin
+          }
+        >
           <Option value={AllocationRoles.Admin}>
             <Text message="Admin" />
           </Option>
@@ -124,7 +130,7 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
       </div>
 
       <div class={css.deleteIconContainer}>
-        <Show when={!props.inherited && props.user.type !== 'BUSINESS_OWNER'}>
+        <Show when={!props.inherited && props.user.type !== 'BUSINESS_OWNER' && props.onDelete}>
           <Confirm
             position="bottom-center"
             question={
@@ -141,7 +147,7 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
               </div>
             }
             confirmText={<Text message="Remove role" />}
-            onConfirm={() => props.onDelete(props.user.userId!)}
+            onConfirm={() => props.onDelete?.(props.user.userId!)}
           >
             {(args) => <Button view="ghost" icon="trash" class={css.remove} {...args} />}
           </Confirm>

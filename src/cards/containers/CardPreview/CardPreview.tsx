@@ -102,7 +102,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
             <Match when={tab() === Tabs.details}>
               <CardInfo
                 limits={data()?.limits}
-                user={user()!}
+                user={user()}
                 allocation={allocation()!}
                 allocations={allocations.data!}
               />

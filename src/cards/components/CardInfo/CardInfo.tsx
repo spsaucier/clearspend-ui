@@ -16,7 +16,7 @@ import css from './CardInfo.css';
 
 interface CardInfoProps {
   limits?: CurrencyLimit[];
-  user: Readonly<User>;
+  user: Readonly<User | null>;
   allocation: Readonly<Allocation>;
   allocations: readonly Readonly<Allocation>[];
   class?: string;
@@ -70,16 +70,18 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           </span>
         </Show>
       </div>
-      <div class={css.item}>
-        <h4 class={css.title}>
-          <Text message="Employee" />
-        </h4>
-        <Link class={css.value} href={`/employees/view/${props.user.userId}`}>
-          <strong class={css.name}>{formatName(props.user)}</strong>
-          <Icon name="chevron-right" class={css.chevron} />
-        </Link>
-        <span class={join(css.note, 'fs-mask')}>{props.user.email}</span>
-      </div>
+      <Show when={props.user}>
+        <div class={css.item}>
+          <h4 class={css.title}>
+            <Text message="Employee" />
+          </h4>
+          <Link class={css.value} href={`/employees/view/${props.user?.userId}`}>
+            <strong class={css.name}>{formatName(props.user!)}</strong>
+            <Icon name="chevron-right" class={css.chevron} />
+          </Link>
+          <span class={join(css.note, 'fs-mask')}>{props.user?.email}</span>
+        </div>
+      </Show>
     </div>
   );
 }

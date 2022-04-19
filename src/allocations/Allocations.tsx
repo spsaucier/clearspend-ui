@@ -140,12 +140,12 @@ export default function Allocations() {
             <Tab value={Tabs.transactions}>
               <Text message="Activity" />
             </Tab>
-            <Show when={canManagePermissions(userPermissions())}>
+            <Show when={canManageFunds(userPermissions())}>
               <Tab value={Tabs.controls}>
                 <Text message="Card Controls" />
               </Tab>
             </Show>
-            <Show when={canManageCards(userPermissions())}>
+            <Show when={canManagePermissions(userPermissions()) || canManageFunds(userPermissions())}>
               <Tab value={Tabs.settings}>
                 <Text message="Settings" />
               </Tab>
