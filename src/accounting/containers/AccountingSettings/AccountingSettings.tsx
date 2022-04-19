@@ -27,7 +27,6 @@ import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
-import { AUTO_UPDATES_STATUS } from 'accounting/types';
 import { useUpdateNotifications } from 'accounting/stores/updateNotifications';
 
 import css from './AccountingSettings.css';
@@ -45,7 +44,6 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
   const [selectedCardName, setSelectedCardName] = createSignal<string>('');
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
-  const [automaticUpdates, setAutomaticUpdates] = createSignal<AUTO_UPDATES_STATUS>(AUTO_UPDATES_STATUS.OFF);
 
   // TODO replace with notification endpoint that dismisses on logout
   const updateNotifications = useUpdateNotifications();
@@ -112,11 +110,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         }
         class={css.section}
       >
-        <AutomaticUpdates
-          name="automatic-updates-toggle"
-          value={automaticUpdates}
-          setAutomaticUpdates={setAutomaticUpdates}
-        />
+        <AutomaticUpdates name="automatic-updates-toggle" />
       </Section>
       <Section
         title={<Text message="Chart of Accounts" />}

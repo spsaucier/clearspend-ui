@@ -66,3 +66,8 @@ export enum AccountSetupStep {
   MAP_CATEGORIES = 'MAP_CATEGORIES',
   COMPLETE = 'COMPLETE',
 }
+
+export enum AutoUpdatesStatus {
+  ON = 'ON',
+  OFF = 'OFF',
+}
