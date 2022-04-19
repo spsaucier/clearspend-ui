@@ -68,6 +68,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   let fileInput!: HTMLInputElement;
 
   const transaction = createMemo(() => props.transaction);
+  const requestedAmount = createMemo(() => formatCurrency(transaction().requestedAmount?.amount || 0));
   const displayAmount = createMemo(() => formatCurrency(transaction().amount?.amount || 0));
   const originalAmount = createMemo(() => {
     if (
@@ -398,6 +399,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <Text message="Posted On" />
           <TransactionDateTime date={transaction().activityTime} />
         </div>
+        <Show when={requestedAmount()}>
+          <div class={css.detail}>
+            <Text message="Requested Amount" />
+            <span>{requestedAmount()}</span>
+          </div>
+        </Show>
         <div class={css.detail}>
           <Text message="Posted Amount" />
           <span>{displayAmount()}</span>

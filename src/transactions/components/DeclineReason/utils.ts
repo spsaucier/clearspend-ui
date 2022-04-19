@@ -1,5 +1,6 @@
 import { i18n } from '_common/api/intl';
 import type { AccountActivityResponse } from 'generated/capital';
+import { formatCurrency } from '_common/api/intl/formatCurrency';
 
 import { declineReasons } from './constants';
 
@@ -27,11 +28,10 @@ export function getReasonText(details: Required<AccountActivityResponse>['declin
   }
   if ('limitType' in details && details.limitType) {
     if ('exceededAmount' in details && details.exceededAmount) {
-      return i18n.t('{reason}: {limitType} {period} limit exceeded by {amount}', {
-        reason: String(reason),
+      return i18n.t('{period} {limitType} limit exceeded by {amount}', {
+        period: `${details.limitPeriod?.slice(0, 1)}${details.limitPeriod?.slice(1)?.toLowerCase() || ''}`,
         limitType: details.limitType.toLowerCase().replace(/_/g, ''),
-        period: details.limitPeriod?.toLowerCase() || '',
-        amount: details.exceededAmount,
+        amount: formatCurrency(details.exceededAmount),
       });
     } else {
       return i18n.t('{reason}: {limitType} {period} limit exceeded', {

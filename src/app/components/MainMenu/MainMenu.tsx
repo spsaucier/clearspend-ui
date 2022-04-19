@@ -3,7 +3,7 @@ import { defineMessages } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
-import { canManageCards, canManageConnections } from 'allocations/utils/permissions';
+import { canManageCards, canManageConnections, canLinkBankAccounts } from 'allocations/utils/permissions';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -53,7 +53,7 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
         case TITLES.accounting:
           return canManageConnections(permissions()) && ldClient()?.variation('menu.accounting', false);
         case TITLES.company:
-          return canManageConnections(permissions());
+          return canLinkBankAccounts(permissions());
         default:
           return true;
       }

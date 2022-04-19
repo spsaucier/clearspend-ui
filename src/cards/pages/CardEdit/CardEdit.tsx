@@ -72,20 +72,18 @@ export default function CardEdit() {
         if (hasVirtualCard && hasPhysicalCard) {
           sendAnalyticsEvent({ name: Events.CREATE_CARD_BOTH_PHYSICAL_VIRTUAL });
           messages.success({
-            title: i18n.t('Cards created successfully'),
-            message: i18n.t(
-              'The virtual card is available now. Please allow 5-10 days for the physical card to arrive.',
-            ),
+            title: i18n.t('Cards created'),
+            message: i18n.t('Access virtual cards in the ClearSpend app. Physical cards will arrive in 5-10 days.'),
           });
         } else if (hasVirtualCard) {
           messages.success({
-            title: i18n.t('Virtual card issued successfully'),
-            message: i18n.t('This card is immediately available inside the ClearSpend app.'),
+            title: i18n.t('Virtual card created'),
+            message: i18n.t('Access this card in the ClearSpend app.'),
           });
         } else if (hasPhysicalCard) {
           messages.success({
-            title: i18n.t('Physical card issued successfully'),
-            message: i18n.t('Please allow 5-10 days for this card to arrive.'),
+            title: i18n.t('Physical card created'),
+            message: i18n.t('Card will arrive in 5-10 days.'),
           });
         }
       }
