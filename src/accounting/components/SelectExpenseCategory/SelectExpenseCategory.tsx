@@ -16,6 +16,7 @@ interface SelectExpenseCategoryProps {
   placeholder?: string;
   error?: boolean;
   loading?: boolean;
+  disabled?: boolean;
   createName?: string;
   isDisableCategory?: (categoryId: string) => boolean;
   onCreate?: () => void;

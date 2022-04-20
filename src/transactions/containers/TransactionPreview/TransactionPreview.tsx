@@ -226,6 +226,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               placeholder={String(i18n.t('Assign a category'))}
               error={!categoryIsActive(expenseCategory())}
               loading={savingExpenseCategory()}
+              disabled={transaction().syncStatus === 'SYNCED_LOCKED'}
               onChange={onSaveExpenseCategory}
             />
             <Show when={!categoryIsActive(expenseCategory())}>
@@ -256,7 +257,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               }
               placeholder={String(i18n.t('Add transaction comments'))}
               value={notes()}
-              disabled={savingNote()}
+              disabled={savingNote() || transaction().syncStatus === 'SYNCED_LOCKED'}
               onKeyDown={(event: KeyboardEvent) => {
                 if (event.keyCode === KEY_CODES.Enter && canSubmitNote()) {
                   onSaveNote();
