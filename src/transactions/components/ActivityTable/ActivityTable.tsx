@@ -16,8 +16,9 @@ import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import type { DateRange } from 'app/types/common';
 import type { LedgerActivityRequest, PagedDataLedgerActivityResponse, LedgerActivityResponse } from 'generated/capital';
+import { Option, Select } from '_common/components/Select';
 
-import { ACTIVITY_TYPE_TITLES } from '../../constants';
+import { ACTIVITY_TYPE_TITLES, LEDGER_TYPES, ACTIVITY_TYPES } from '../../constants';
 import { ActivityDate } from '../ActivityDate';
 import { ActivityUser } from '../ActivityUser';
 import { ActivityAccount } from '../ActivityAccount';
@@ -27,6 +28,19 @@ import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { useTransactionsFilters } from '../TransactionsTable/utils/useTransactionsFilters';
 
 import css from './ActivityTable.css';
+
+enum ACTIVITY_TYPE_GROUPS {
+  ALL = 'ALL',
+  FUNDS_MOVEMENT = 'FUNDS_MOVEMENT',
+  CARD_TRANSACTIONS = 'CARD_TRANSACTIONS',
+}
+
+const isEquivalent = (a: string[] | undefined, b: Readonly<string[]> | undefined) => {
+  if (!a || !b) return false;
+  if (a.length !== b.length) return false;
+  if ([...a].sort().toString() === [...b].sort().toString()) return true;
+  return false;
+};
 
 interface ActivityTableProps {
   showUserFilter?: boolean;
@@ -106,6 +120,36 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     props.showUserFilter,
   );
 
+  const onChangeActivityType = (newType: string) => {
+    switch (newType) {
+      case ACTIVITY_TYPE_GROUPS.ALL:
+        filters.onChangeFilters({ ...filters.filters(), types: undefined });
+        break;
+      case ACTIVITY_TYPE_GROUPS.FUNDS_MOVEMENT:
+        filters.onChangeFilters({ ...filters.filters(), types: [...LEDGER_TYPES] });
+        break;
+      case ACTIVITY_TYPE_GROUPS.CARD_TRANSACTIONS:
+        filters.onChangeFilters({ ...filters.filters(), types: [...ACTIVITY_TYPES] });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const activityType = createMemo(() => {
+    if (
+      !filters.filters().types?.length ||
+      filters.filters().types?.length === [...LEDGER_TYPES, ...ACTIVITY_TYPES].length
+    ) {
+      return ACTIVITY_TYPE_GROUPS.ALL;
+    } else if (isEquivalent(filters.filters().types, LEDGER_TYPES)) {
+      return ACTIVITY_TYPE_GROUPS.FUNDS_MOVEMENT;
+    } else if (isEquivalent(filters.filters().types, ACTIVITY_TYPES)) {
+      return ACTIVITY_TYPE_GROUPS.CARD_TRANSACTIONS;
+    }
+    return '';
+  });
+
   return (
     <div class={props.class}>
       <Filters
@@ -125,8 +169,24 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
           class={css.search}
           onSearch={changeRequestSearch(props.onChangeParams)}
         />
+        <Select
+          name="activity-type"
+          placeholder={String(i18n.t('Choose activity type'))}
+          onChange={onChangeActivityType}
+          value={activityType()}
+        >
+          <Option value={ACTIVITY_TYPE_GROUPS.ALL}>
+            <Text message="All activity" />
+          </Option>
+          <Option value={ACTIVITY_TYPE_GROUPS.FUNDS_MOVEMENT}>
+            <Text message="Funds movement" />
+          </Option>
+          <Option value={ACTIVITY_TYPE_GROUPS.CARD_TRANSACTIONS}>
+            <Text message="Card transactions" />
+          </Option>
+        </Select>
         <FiltersButton
-          label={<Text message="Filters" />}
+          label={<Text message="More filters" />}
           count={filters.filtersCount()}
           onReset={filters.onResetFilters}
           onClick={filters.toggleFilters}
