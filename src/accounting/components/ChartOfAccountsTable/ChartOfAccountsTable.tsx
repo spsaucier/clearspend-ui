@@ -149,7 +149,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       render: (item) => {
         return (
           <div>
-            <Text message={item.type || ''} />
+            <Text message={item.fullyQualifiedName?.split('.')[1] || ''} />
           </div>
         );
       },
@@ -163,7 +163,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       ),
       render: (item) => (
         <div>
-          <Text message={getAccountType(item)!} />
+          <Text message={getAccountType(item)!.replace(/[A-Z]/g, ' $&').trim()} />
         </div>
       ),
     },
