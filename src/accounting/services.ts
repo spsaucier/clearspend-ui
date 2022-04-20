@@ -17,7 +17,7 @@ import type {
   SyncTransactionResponse,
 } from 'generated/capital';
 
-import type { UpdateBusinessAccountingStepRequest, UpdateAutoUpdatesStatusRequest } from './types';
+import type { UpdateBusinessAccountingStepRequest, UpdateAutoCreateExpenseCategoriesRequest } from './types';
 
 export async function getCompanyConnection(): Promise<boolean> {
   return (await service.get<Readonly<boolean>>(`/codat/connection-status`)).data;
@@ -52,8 +52,13 @@ export async function postAccountingStepToBusiness(params: Readonly<UpdateBusine
     .data;
 }
 
-export async function postAutoUpdatesStatus(params: Readonly<UpdateAutoUpdatesStatusRequest>) {
-  return (await service.post<Readonly<UpdateAutoUpdatesStatusRequest>>(`/businesses/auto-updates-status`, params)).data;
+export async function postAutoCreateExpenseCategories(params: Readonly<UpdateAutoCreateExpenseCategoriesRequest>) {
+  return (
+    await service.post<Readonly<UpdateAutoCreateExpenseCategoriesRequest>>(
+      `/businesses/auto-create-expense-categories`,
+      params,
+    )
+  ).data;
 }
 
 export async function deleteIntegrationConnection() {

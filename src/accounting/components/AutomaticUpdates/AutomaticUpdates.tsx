@@ -2,8 +2,7 @@ import { Text } from 'solid-i18n';
 import { createSignal } from 'solid-js';
 
 import { SwitchBox } from 'app/components/SwitchBox';
-import { AutoUpdatesStatus } from 'app/types/businesses';
-import { postAutoUpdatesStatus } from 'accounting/services';
+import { postAutoCreateExpenseCategories } from 'accounting/services';
 
 import css from './AutomaticUpdates.css';
 
@@ -12,27 +11,25 @@ interface AutomaticUpdatesProps {
 }
 
 export function AutomaticUpdates(props: Readonly<AutomaticUpdatesProps>) {
-  const [autoUpdatesStatus, setAutoUpdatesStatus] = createSignal<AutoUpdatesStatus>(AutoUpdatesStatus.OFF);
+  const [autoUpdatesStatus, setAutoUpdatesStatus] = createSignal<boolean>(false);
 
-  const toggleAutoUpdatesStatus = async (status: AutoUpdatesStatus) => {
+  const toggleAutoUpdatesStatus = async (status: boolean) => {
     try {
-      await postAutoUpdatesStatus({ autoUpdateStatus: status });
+      await postAutoCreateExpenseCategories({ autoCreateExpenseCategories: status });
     } catch {
       // TODO: handle error
     }
   };
 
   const onToggleAutomaticStatus = () => {
-    autoUpdatesStatus() === AutoUpdatesStatus.ON
-      ? setAutoUpdatesStatus(AutoUpdatesStatus.OFF)
-      : setAutoUpdatesStatus(AutoUpdatesStatus.ON);
+    autoUpdatesStatus() ? setAutoUpdatesStatus(false) : setAutoUpdatesStatus(true);
     toggleAutoUpdatesStatus(autoUpdatesStatus());
   };
 
   return (
     <div class={css.root}>
       <SwitchBox
-        checked={autoUpdatesStatus() === AutoUpdatesStatus.ON}
+        checked={autoUpdatesStatus()}
         label={<Text message="Automatic updates" />}
         onChange={() => onToggleAutomaticStatus()}
         name={props.name}

@@ -1,4 +1,4 @@
-import type { AccountSetupStep, AutoUpdatesStatus } from 'app/types/businesses';
+import type { AccountSetupStep } from 'app/types/businesses';
 
 export interface UpdateBusinessAccountingStepResponse {
   businessId: string;
@@ -9,6 +9,6 @@ export interface UpdateBusinessAccountingStepRequest {
   accountingSetupStep: AccountSetupStep;
 }
 
-export interface UpdateAutoUpdatesStatusRequest {
-  autoUpdateStatus: AutoUpdatesStatus;
+export interface UpdateAutoCreateExpenseCategoriesRequest {
+  autoCreateExpenseCategories: Boolean;
 }
