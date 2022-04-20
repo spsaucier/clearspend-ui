@@ -34,6 +34,8 @@ const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relati
 
 export const ONBOARDING_LEADERS_KEY = 'ONBOARDING_LEADERS_KEY';
 
+export const FULL_OWNERSHIP_PERCENTAGE = 100;
+
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
 
@@ -118,6 +120,14 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
     }
   });
 
+  const showLeadershipTable = () => {
+    const hasLeaders = leaders().length > 0;
+    const signUpLeaderProvidedTaxId = leaders()[0]?.taxIdentificationNumber;
+    const hasFullOwnershipOwner = leaders().find((l) => l.percentageOwnership === FULL_OWNERSHIP_PERCENTAGE);
+
+    return hasLeaders && signUpLeaderProvidedTaxId && !showAddingNewLeader() && !hasFullOwnershipOwner;
+  };
+
   return (
     <Show when={!fetchingOwnersList().loading}>
       <Show when={leaders().length === 0 || !leaders()[0]?.taxIdentificationNumber}>
@@ -128,7 +138,11 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             props.setLoadingModalOpen(true);
             await updateOwner({ ...businessOwner, id: props.currentUser.userId });
             await refetchOwnersList();
-            props.setLoadingModalOpen(false);
+            if (businessOwner.percentageOwnership === FULL_OWNERSHIP_PERCENTAGE) {
+              next();
+            } else {
+              props.setLoadingModalOpen(false);
+            }
           }}
         />
       </Show>
@@ -142,7 +156,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
           errors={errors()}
         />
       </Show>
-      <Show when={leaders().length > 0 && leaders()[0]?.taxIdentificationNumber && !showAddingNewLeader()}>
+      <Show when={showLeadershipTable()}>
         <div class={css.tableWrapper}>
           <LeadershipTable
             business={props.business!}

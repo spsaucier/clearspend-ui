@@ -9,6 +9,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { Page, PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { validCode } from '_common/components/Form/rules/patterns';
 
 import { activateCard } from '../../services';
 
@@ -29,7 +30,7 @@ export default function CardActivate() {
   const { values, errors, handlers, isDirty, setErrors, reset, trigger } = createForm<FormValues>({
     defaultValues: { code: '' },
     rules: {
-      code: [(value: string): boolean | string => /^\d{4}$/.test(value) || String(i18n.t('Inappropriate value'))],
+      code: [validCode],
     },
   });
 

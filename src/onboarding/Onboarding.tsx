@@ -1,4 +1,4 @@
-import { createSignal, batch, Show, Switch, Match } from 'solid-js';
+import { createSignal, batch, Show, Switch, Match, onMount } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
 
@@ -45,7 +45,7 @@ import {
 } from './services/onboarding';
 import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
-import type { KycDocuments, RequiredDocument } from './components/SoftFail/types';
+import type { KycDocuments, ManualReviewResponse, RequiredDocument } from './components/SoftFail/types';
 import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/TeamForm';
 import LinkAccountStep from './containers/LinkAccount/LinkAccountStep';
 import type { BusinessWithBusinessName } from './components/BusinessForm/BusinessForm';
@@ -89,37 +89,37 @@ export default function Onboarding() {
 
   const [pendingVerification, setPendingVerification] = createSignal<readonly Readonly<string>[]>([]);
 
-  if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
-    getBankAccounts()
-      .then((data) => setAccounts(data))
-      .catch(() => messages.error({ title: 'Something went wrong' }));
-  }
+  const setRequirements = async (reviewRequirements: ManualReviewResponse) => {
+    setKYBRequiredDocuments(reviewRequirements.kybRequiredDocuments);
+    setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
+    setKybRequiredFields(reviewRequirements.kybRequiredFields);
+    setKycRequiredFields(reviewRequirements.kycRequiredFields);
 
-  if (
-    step() === OnboardingStep.SOFT_FAIL ||
-    step() === OnboardingStep.BUSINESS ||
-    step() === OnboardingStep.BUSINESS_OWNERS
-  ) {
-    getApplicationReviewRequirements()
-      .then((data) => {
-        setKYBRequiredDocuments(data.kybRequiredDocuments);
-        setKYCRequiredDocuments(data.kycRequiredDocuments);
-        setKybRequiredFields(data.kybRequiredFields);
+    setPendingVerification(reviewRequirements.pendingVerification);
+  };
 
-        setKycRequiredFields(data.kycRequiredFields);
+  onMount(async () => {
+    if (business()?.onboardingStep === OnboardingStep.TRANSFER_MONEY && !accounts().length) {
+      const bankAccountsData = await getBankAccounts();
+      setAccounts(bankAccountsData);
+    } else {
+      const possiblyPendingReview =
+        step() === OnboardingStep.SOFT_FAIL ||
+        step() === OnboardingStep.BUSINESS ||
+        step() === OnboardingStep.BUSINESS_OWNERS;
+      if (possiblyPendingReview) {
+        try {
+          const reviewRequirements = await getApplicationReviewRequirements();
+          setRequirements(reviewRequirements);
 
-        setPendingVerification(data.pendingVerification);
-
-        if (data.kybRequiredFields.length > 0) {
-          setStep(OnboardingStep.BUSINESS);
-        } else if (Object.keys(data.kycRequiredFields).length > 0) {
-          setStep(OnboardingStep.BUSINESS_OWNERS);
-        } else if (data.kybRequiredDocuments.length === 0 && data.kycRequiredDocuments.length === 0) {
-          setStep(OnboardingStep.REVIEW);
+          const nextStep = getNextStepFromRequirements(reviewRequirements, possiblyPendingReview);
+          setStep(nextStep);
+        } catch (error: unknown) {
+          messages.error({ title: 'Something went wrong' });
         }
-      })
-      .catch(() => messages.error({ title: 'Something went wrong' }));
-  }
+      }
+    }
+  });
 
   const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => {
     try {
@@ -154,7 +154,14 @@ export default function Onboarding() {
       });
     }
   };
-
+  const sendAnalyticsForStep = (s: OnboardingStep) => {
+    if (s === OnboardingStep.SOFT_FAIL) {
+      sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_REQUIRED });
+    }
+    if (s === OnboardingStep.LINK_ACCOUNT) {
+      sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
+    }
+  };
   const onUpdateKYC = async (skipTrigger?: boolean) => {
     setLoadingModalOpen(true);
     try {
@@ -163,34 +170,12 @@ export default function Onboarding() {
       }
       await refetchOnboardingState();
       const reviewRequirements = await getApplicationReviewRequirements();
+      setRequirements(reviewRequirements);
+      const nextStep = getNextStepFromRequirements(reviewRequirements);
+
       setLoadingModalOpen(false);
-
-      setKYBRequiredDocuments(reviewRequirements.kybRequiredDocuments);
-      setKYCRequiredDocuments(reviewRequirements.kycRequiredDocuments);
-
-      setKybRequiredFields(reviewRequirements.kybRequiredFields);
-      setKycRequiredFields(reviewRequirements.kycRequiredFields);
-
-      setPendingVerification(reviewRequirements.pendingVerification);
-
-      if (reviewRequirements.kybRequiredFields.length > 0) {
-        setStep(OnboardingStep.BUSINESS);
-      } else if (Object.keys(reviewRequirements.kycRequiredFields).length > 0) {
-        setStep(OnboardingStep.BUSINESS_OWNERS);
-      } else if (
-        reviewRequirements.kycRequiredDocuments.length > 0 ||
-        reviewRequirements.kybRequiredDocuments.length > 0
-      ) {
-        sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_REQUIRED });
-        setStep(OnboardingStep.SOFT_FAIL);
-      } else {
-        if (reviewRequirements.pendingVerification.length === 0) {
-          sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_LEADERSHIP });
-          setStep(OnboardingStep.LINK_ACCOUNT);
-        } else {
-          setStep(OnboardingStep.REVIEW);
-        }
-      }
+      sendAnalyticsForStep(nextStep);
+      setStep(nextStep);
     } catch (err: unknown) {
       setLoadingModalOpen(false);
       messages.error({ title: 'Something went wrong' });
@@ -403,5 +388,29 @@ const getMinutesRemaining = (currentStep?: OnboardingStep) => {
     case OnboardingStep.BUSINESS:
     default:
       return `12`;
+  }
+};
+const getNextStepFromRequirements = (
+  reviewRequirements: ManualReviewResponse,
+  possiblyPendingReview?: boolean,
+): OnboardingStep => {
+  const hasKybFieldRequirements = reviewRequirements.kybRequiredFields.length > 0;
+  const hasKycFieldRequirements = Object.keys(reviewRequirements.kycRequiredFields).length > 0;
+  const hasDocumentRequirements =
+    reviewRequirements.kycRequiredDocuments.length > 0 || reviewRequirements.kybRequiredDocuments.length > 0;
+  const hasPendingVerificationRequirements = reviewRequirements.pendingVerification.length > 0;
+
+  if (hasKybFieldRequirements) {
+    return OnboardingStep.BUSINESS;
+  } else if (hasKycFieldRequirements) {
+    return OnboardingStep.BUSINESS_OWNERS;
+  } else if (hasDocumentRequirements && !possiblyPendingReview) {
+    return OnboardingStep.SOFT_FAIL;
+  } else {
+    if (!hasPendingVerificationRequirements && !possiblyPendingReview) {
+      return OnboardingStep.LINK_ACCOUNT;
+    } else {
+      return OnboardingStep.REVIEW;
+    }
   }
 };

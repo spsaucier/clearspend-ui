@@ -1,4 +1,5 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
+import { Text } from 'solid-i18n';
 
 import { useMessages } from 'app/containers/Messages/context';
 import { FormItem } from '_common/components/Form';
@@ -68,6 +69,10 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
     });
   };
 
+  const requirementsLoaded = () =>
+    (props.kycRequiredDocuments && props.kycRequiredDocuments!.length > 0) ||
+    (props.kybRequiredDocuments && props.kybRequiredDocuments!.length > 0);
+
   return (
     <form
       onSubmit={onSubmit}
@@ -127,11 +132,21 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
           </For>
         </Section>
       </Show>
-      <Section title="" class={css.section}>
-        <Button type="primary" htmlType="submit" wide={media.small} disabled={!submitDisplay()} loading={loading()}>
-          Next
+      <Show when={!requirementsLoaded()}>
+        <div class={css.section}>
+          <Text message="Requirements are still pending verification." />
+        </div>
+        <Button type="primary" htmlType="submit" wide={media.small} disabled={requirementsLoaded()} loading={loading()}>
+          Check again
         </Button>
-      </Section>
+      </Show>
+      <Show when={requirementsLoaded()}>
+        <Section title="" class={css.section}>
+          <Button type="primary" htmlType="submit" wide={media.small} disabled={!submitDisplay()} loading={loading()}>
+            Next
+          </Button>
+        </Section>
+      </Show>
     </form>
   );
 }
