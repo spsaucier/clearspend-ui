@@ -44,6 +44,8 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const i18n = useI18n();
   const categories = useExpenseCategories({ initValue: [] });
 
+  const activeCategories = createMemo(() => categories.data!.filter((category) => category.status === 'ACTIVE'));
+
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
@@ -198,7 +200,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
             <SelectExpenseCategory
               createName={item.name}
               value={expenseCategory()}
-              items={categories.data || []}
+              items={activeCategories()}
               placeholder={String(i18n.t('Assign expense category'))}
               isDisableCategory={(id) => selectedCategories().includes(id)}
               onCreate={() => onChange(undefined, item.name)}
