@@ -14,6 +14,7 @@ import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
 import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { canManageUsers } from 'allocations/utils/permissions';
 
 import { Card } from '../../components/Card';
 import { CardInfo } from '../../components/CardInfo';
@@ -35,7 +36,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const navigate = useNavigate();
   const [tab, setTab] = createSignal(Tabs.transactions);
 
-  const { currentUser } = useBusiness();
+  const { currentUser, permissions } = useBusiness();
   const allocations = useAllocations();
   const [data, getCardRequestStatus, , , reload] = useResource(getCard, props.cardID);
   const [user, , , setUserID] = useResource(getUser, undefined, false);
@@ -115,13 +116,16 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
               <Text message="Activate card now" />
             </Button>
           </Show>
-          <Button
-            wide
-            type={showActivate() ? 'default' : 'primary'}
-            onClick={() => navigate(`/cards/view/${card()!.cardId}`)}
-          >
-            <Text message="View all card details" />
-          </Button>
+          {/* // TODO: CAP-1013 Remove Show when normal managers can view user details */}
+          <Show when={canManageUsers(permissions())}>
+            <Button
+              wide
+              type={showActivate() ? 'default' : 'primary'}
+              onClick={() => navigate(`/cards/view/${card()!.cardId}`)}
+            >
+              <Text message="View all card details" />
+            </Button>
+          </Show>
         </div>
       </Data>
     </div>

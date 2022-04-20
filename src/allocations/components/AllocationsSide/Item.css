@@ -6,7 +6,7 @@
   border-right: 3px solid transparent;
   transition: background-color 0.3s, border-right-color 0.3s;
 
-  &:hover:not(.active) {
+  &:hover:not(.active):not(.inaccessible) {
     color: var(--tw-black);
     background-color: var(--tw-gray-10);
     border-right-color: var(--tw-gray-10);
@@ -15,13 +15,6 @@
 
 .small {
   font-size: var(--text-12);
-}
-
-.active {
-  color: var(--tw-black);
-  font-weight: var(--font-700);
-  background-color: var(--tw-white);
-  border-right-color: var(--tw-primary-border);
 }
 
 .expanded {
@@ -45,6 +38,21 @@
   @nest .active & {
     cursor: default;
   }
+
+  @nest .inaccessible & {
+    cursor: not-allowed;
+  }
+}
+
+.active {
+  color: var(--tw-black);
+  background-color: var(--tw-white);
+  border-right-color: var(--tw-primary-border);
+  cursor: default;
+}
+
+.inaccessible {
+  opacity: 0.4;
 }
 
 .icon {

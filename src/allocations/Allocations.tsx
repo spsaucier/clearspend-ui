@@ -28,10 +28,17 @@ import { Settings } from './containers/Settings';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
-import { getRootAllocation } from './utils/getRootAllocation';
+import { getFirstAccessibleAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import { getAllocationPermissions, canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
+import {
+  getAllocationPermissions,
+  canManageFunds,
+  canManageCards,
+  canManagePermissions,
+  byAllowableRoles,
+} from './utils/permissions';
 import { getAllocation, updateAllocation } from './services';
+import { byName } from './components/AllocationSelect/utils';
 
 import css from './Allocations.css';
 
@@ -54,14 +61,24 @@ export default function Allocations() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
+  const accessibleAllocations = createMemo(() => {
+    const accessibleAllocationIds = currentUserRoles()
+      .filter(byAllowableRoles)
+      .map((r) => r.allocationId);
+    return allocations.data
+      ?.map((a) => (accessibleAllocationIds.includes(a.allocationId) ? a : { ...a, inaccessible: true }))
+      .sort(byName);
+  });
 
   const onAllocationChange = () => setTab(Tabs.cards, true);
 
   const current = createMemo(() => {
-    return params.id ? allocations.data?.find(allocationWithID(params.id)) : getRootAllocation(allocations.data);
+    return params.id
+      ? allocations.data?.find(allocationWithID(params.id))
+      : getFirstAccessibleAllocation(accessibleAllocations() || null);
   });
 
-  const [data, status, , setAllocationId, reload, mutate] = useResource(getAllocation, undefined, false);
+  const [data, status, , setAllocationIdParam, reload, mutate] = useResource(getAllocation, undefined, false);
   const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), current()?.allocationId));
 
   createEffect(
@@ -70,7 +87,7 @@ export default function Allocations() {
       (id) => {
         if (id) {
           if (canManagePermissions(userPermissions())) {
-            setAllocationId(id);
+            setAllocationIdParam(id);
           }
         }
       },
@@ -124,7 +141,7 @@ export default function Allocations() {
           side={
             <AllocationsSide
               currentID={current()!.allocationId}
-              items={allocations.data!}
+              items={accessibleAllocations() || null}
               onAllocationChange={onAllocationChange}
             />
           }

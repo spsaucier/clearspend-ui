@@ -19,6 +19,7 @@ import {
   canManageUsers,
   canManageCards,
   canLinkBankAccounts,
+  canLinkReceipts,
 } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
@@ -78,6 +79,7 @@ export default function Dashboard() {
               class={css.allocations}
               onChange={onAllocationChange}
               showAllAsOption
+              permissionCheck={canLinkReceipts} // TODO: change to Card Spend access: CAP-989
             />
           </Match>
         </Switch>

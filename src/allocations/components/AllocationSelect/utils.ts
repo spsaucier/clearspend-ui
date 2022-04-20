@@ -48,7 +48,8 @@ const treeToArray = (allocationTree: AllocationWithChildNodes[], nestLevel = 0) 
   return allocationsArray;
 };
 
-export const createSortedNestedArray = (allocations: Readonly<Allocation[]>) => {
+export const createSortedNestedArray = (allocations: Readonly<Allocation[]> | null) => {
+  if (!allocations) return [];
   let list = [...allocations].sort(byName);
   const tree = createTree(list);
   const newList = treeToArray(tree);

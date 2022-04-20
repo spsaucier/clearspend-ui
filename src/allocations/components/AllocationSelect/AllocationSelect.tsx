@@ -1,20 +1,21 @@
 import { For, createMemo } from 'solid-js';
 
 import { Select, Option } from '_common/components/Select';
-import type { Allocation } from 'generated/capital';
+import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { i18n } from '_common/api/intl';
 
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 import { AllocationView } from '../AllocationView';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import { createSortedNestedArray } from './utils';
 
 import css from './AllocationSelect.css';
 
 interface AllocationSelectProps {
-  items: readonly Readonly<Allocation>[];
+  items: readonly Readonly<Allocation>[] | null;
   value?: string;
   disabled?: boolean;
   class?: string;
@@ -22,24 +23,31 @@ interface AllocationSelectProps {
   showAllAsOption?: boolean;
   error?: boolean;
   onChange: (value: string) => void;
+  permissionCheck?: (permissions: UserRolesAndPermissionsRecord) => boolean;
 }
 
 export const ALL_ALLOCATIONS = 'all';
 const PX_INDENT = 10;
 
 export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
+  const { currentUserRoles } = useBusiness();
+
   const renderValue = (id: string) => {
     if (!id || id === ALL_ALLOCATIONS)
       return <AllocationView name={String(i18n.t('All allocations'))} amount={getTotalAvailableBalance(props.items)} />;
 
-    const found = props.items.find(allocationWithID(id));
+    const found = props.items?.find(allocationWithID(id));
     if (!found) return null;
 
     return <AllocationView name={found.name} amount={getAvailableBalance(found)} />;
   };
 
   const allocations = createMemo(() => {
-    return createSortedNestedArray(props.items);
+    return createSortedNestedArray(props.items).filter((a) => {
+      const currentPermissions = currentUserRoles().find((r) => r.allocationId === a.allocationId);
+      if (!props.permissionCheck || !currentPermissions) return true;
+      return props.permissionCheck(currentPermissions);
+    });
   });
 
   return (

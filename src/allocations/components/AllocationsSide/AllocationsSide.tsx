@@ -4,12 +4,12 @@ import { useI18n } from 'solid-i18n';
 
 import { InputSearch } from '_common/components/InputSearch';
 import { Divider } from '_common/components/Divider';
-import type { Allocation } from 'generated/capital';
+import type { AccessibleAllocation } from 'allocations/types';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
-import { byName } from '../AllocationSelect/utils';
 import { useMediaContext } from '../../../_common/api/media/context';
 import { AllocationSelect } from '../AllocationSelect';
+import { canManageCards } from '../../utils/permissions';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -18,7 +18,7 @@ import css from './AllocationsSide.css';
 
 interface AllocationsSideProps {
   currentID: string;
-  items: readonly Readonly<Allocation>[];
+  items: readonly Readonly<AccessibleAllocation>[] | null;
   onAllocationChange: () => void;
 }
 
@@ -32,7 +32,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
 
   const found = createMemo(() => {
     const target = search().toLowerCase();
-    return target ? props.items.filter((item) => item.name.toLowerCase().includes(target)) : [];
+    return target ? props.items?.filter((item) => item.name.toLowerCase().includes(target)) : [];
   });
 
   return (
@@ -49,6 +49,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                 props.onAllocationChange();
                 navigate(`/allocations/${id}`);
               }}
+              permissionCheck={canManageCards}
             />
           </header>
         }
@@ -90,7 +91,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                   <List
                     currentID={props.currentID}
                     parentID={data.allocationId}
-                    items={[...props.items].sort(byName)}
+                    items={props.items || []}
                     itemClass={css.item}
                     onSelect={props.onAllocationChange}
                   />

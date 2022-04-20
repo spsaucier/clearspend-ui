@@ -1,6 +1,6 @@
 import type { UserRolesAndPermissionsRecord } from 'generated/capital';
 
-import type { AllocationPermissions } from '../types';
+import { AllocationPermissions, AllocationRoles } from '../types';
 
 import { allocationWithID } from './allocationWithID';
 
@@ -44,3 +44,13 @@ export function canManageConnections(permissions: Permissions): boolean {
 export function canRead(permissions: Permissions): boolean {
   return can(permissions, 'READ');
 }
+
+export function canLinkReceipts(permissions: Permissions): boolean {
+  return can(permissions, 'LINK_RECEIPTS');
+}
+
+// Filter
+export const byAllowableRoles = (r: UserRolesAndPermissionsRecord) =>
+  [AllocationRoles.Admin, AllocationRoles.Manager, AllocationRoles.ViewOnly].includes(
+    r.allocationRole as AllocationRoles,
+  );

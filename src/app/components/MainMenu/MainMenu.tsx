@@ -4,6 +4,7 @@ import { defineMessages } from 'solid-i18n';
 import { join } from '_common/utils/join';
 import { useBusiness } from 'app/containers/Main/context';
 import { canManageCards, canManageConnections, canLinkBankAccounts } from 'allocations/utils/permissions';
+import { AllocationRoles } from 'allocations/types';
 
 import { MenuItem, MenuItemOptions } from './MenuItem';
 
@@ -43,8 +44,17 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
-  const { permissions, ldClient } = useBusiness();
+  const { permissions, currentUserRoles, ldClient } = useBusiness();
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
+
+  const hasManagerAccess = createMemo(() => {
+    return (
+      currentUserRoles().filter((r) =>
+        [AllocationRoles.Admin, AllocationRoles.Manager].includes(r.allocationRole as AllocationRoles),
+      ).length > 0
+    );
+  });
+
   const mainItems = createMemo(() => {
     return MAIN_ITEMS.filter((item) => {
       switch (item.title) {
@@ -54,6 +64,8 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
           return canManageConnections(permissions()) && ldClient()?.variation('menu.accounting', false);
         case TITLES.company:
           return canLinkBankAccounts(permissions());
+        case TITLES.allocations:
+          return hasManagerAccess();
         default:
           return true;
       }

@@ -4,13 +4,13 @@ import { NavLink } from 'solid-app-router';
 import { join } from '_common/utils/join';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
-import type { Allocation } from 'generated/capital';
+import type { AccessibleAllocation } from 'allocations/types';
 
 import css from './Item.css';
 
 interface ItemProps {
   root?: boolean;
-  data: Readonly<Allocation>;
+  data: Readonly<AccessibleAllocation>;
   active?: boolean;
   padding?: number;
   expanded?: boolean;
@@ -21,6 +21,15 @@ interface ItemProps {
 }
 
 export function Item(props: Readonly<ItemProps>) {
+  const Title = () => (
+    <>
+      <Show when={props.root}>
+        <Icon name="company" class={css.icon} />
+      </Show>
+      <span class={css.name}>{props.data.name}</span>
+    </>
+  );
+
   return (
     <div
       class={join(css.root, props.class)}
@@ -28,20 +37,27 @@ export function Item(props: Readonly<ItemProps>) {
         [css.small!]: Boolean(props.padding),
         [css.active!]: props.active,
         [css.expanded!]: props.expanded,
+        [css.inaccessible!]: props.data.inaccessible,
       }}
       style={{ 'padding-left': `${props.padding || 0}px` }}
     >
-      <NavLink
-        href={`/allocations/${props.data.allocationId}`}
-        class={css.item}
-        onClick={() => props.onClick(props.data.allocationId)}
+      <Show
+        when={!props.data.inaccessible}
+        fallback={
+          <div class={css.item}>
+            <Title />
+          </div>
+        }
       >
-        <Show when={props.root}>
-          <Icon name="company" class={css.icon} />
-        </Show>
-        <span class={css.name}>{props.data.name}</span>
-      </NavLink>
-      <Show when={props.hasChildren}>
+        <NavLink
+          href={`/allocations/${props.data.allocationId}`}
+          class={css.item}
+          onClick={() => props.onClick(props.data.allocationId)}
+        >
+          <Title />
+        </NavLink>
+      </Show>
+      <Show when={props.hasChildren && !props.data.inaccessible}>
         <Button
           view="ghost"
           icon={{ pos: 'left', name: 'chevron-right', class: css.moreIcon }}
