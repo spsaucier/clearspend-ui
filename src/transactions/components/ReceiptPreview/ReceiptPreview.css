@@ -1,0 +1,30 @@
+.root {
+  width: 80px;
+  height: 80px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-4);
+  transition: border-color 0.3s;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--tw-primary-border);
+  }
+
+  & > img,
+  & > canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.lg {
+  width: 96px;
+  height: 96px;
+}
+
+.active {
+  border: 3px solid var(--tw-primary-border);
+  cursor: default;
+}

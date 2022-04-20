@@ -41,32 +41,6 @@
   line-height: 1.33;
 }
 
-.receipt-drop {
-  display: flex;
-  min-height: 100px;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  background: transparent;
-  border: 1px dashed var(--tw-gray-30);
-  border-radius: var(--radius-10);
-}
-
-.receipt-drop-text {
-  margin-top: var(--pd-4);
-  font-size: var(--text-12);
-}
-
-.receipt-cta {
-  display: grid;
-  width: 100%;
-  grid-gap: var(--pd-10);
-}
-
-.receipt-cta input[type='file'] {
-  display: none;
-}
-
 .title {
   margin: var(--pd-24) 0 var(--pd-8);
   font: inherit;
@@ -88,7 +62,7 @@
 }
 
 .scroll {
-  padding: 0 var(--pd-24);
+  padding: 0 var(--pd-24) 15px;
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
@@ -109,6 +83,7 @@
 
 .actions {
   padding: var(--pd-24);
+  box-shadow: 0 0 10px rgb(0 0 0 / 20%);
 }
 
 .option-title {

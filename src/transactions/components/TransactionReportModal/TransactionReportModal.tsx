@@ -14,7 +14,7 @@ export interface ReportModalViewProps {
 
 export function TransactionReportModal(props: ReportModalViewProps) {
   return (
-    <Modal isOpen={props.open} close={props.onClose}>
+    <Modal isOpen={props.open} onClose={props.onClose}>
       <ModalCard
         title={<Text message="Report an issue" />}
         actions={

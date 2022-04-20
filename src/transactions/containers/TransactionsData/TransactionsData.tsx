@@ -5,7 +5,6 @@ import { Text } from 'solid-i18n';
 import type { Setter, SetterFunc } from '_common/types/common';
 import { useBool } from '_common/utils/useBool';
 import { Drawer } from '_common/components/Drawer';
-import { Modal } from '_common/components/Modal';
 import { Data } from 'app/components/Data';
 import { getActivityById } from 'app/services/activity';
 import type { DateRange } from 'app/types/common';
@@ -19,10 +18,10 @@ import type {
 import { TransactionsList } from '../../components/TransactionsList';
 import { TransactionsTable } from '../../components/TransactionsTable';
 import { TransactionReportModal } from '../../components/TransactionReportModal';
+import { usePreviewTransaction } from '../../utils/usePreviewTransaction';
+import { usePreviewReceipts } from '../../utils/usePreviewReceipts';
 import { TransactionPreview } from '../TransactionPreview';
-import { ReceiptsView, type ReceiptVideModel } from '../ReceiptsView';
-
-import { usePreviewTransaction } from './utils/usePreviewTransaction';
+import { ReceiptsModal } from '../ReceiptsModal';
 
 interface TransactionsDataProps {
   class?: string;
@@ -45,13 +44,12 @@ interface TransactionsDataProps {
 
 export function TransactionsData(props: Readonly<TransactionsDataProps>) {
   const [cardID, setCardID] = createSignal<string>();
+  const [reportModal, toggleReportModal] = useBool();
 
   const preview = usePreviewTransaction(
     createMemo(() => props.data?.content),
     getActivityById,
   );
-  const [showReceipts, setShowReceipts] = createSignal<Readonly<ReceiptVideModel[]>>([]);
-  const [reportModal, toggleReportModal] = useBool();
 
   const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
     props.onUpdateData((prev) => ({
@@ -59,6 +57,8 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
       content: prev.content?.map((item) => (item.accountActivityId === data.accountActivityId ? data : item)),
     }));
   };
+
+  const [onViewReceipt, receiptsProps] = usePreviewReceipts(onUpdateTransaction);
 
   return (
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
@@ -89,19 +89,12 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         <TransactionPreview
           transaction={preview.transaction()!}
           onUpdate={onUpdateTransaction}
-          onViewReceipt={setShowReceipts}
+          onViewReceipt={onViewReceipt}
           showAccountingAdminView={props.showAccountingAdminView}
           onReport={toggleReportModal}
         />
       </Drawer>
-      <Modal isOpen={!!preview.id() && !!showReceipts().length} close={() => setShowReceipts([])}>
-        <ReceiptsView
-          accountActivityId={preview.id()!}
-          receipts={showReceipts()}
-          onEmpty={() => setShowReceipts([])}
-          onUpdate={onUpdateTransaction}
-        />
-      </Modal>
+      <ReceiptsModal activityId={preview.id()} {...receiptsProps} />
       <TransactionReportModal open={reportModal()} onClose={toggleReportModal} />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={setCardID}>
         <CardPreview cardID={cardID()!} />

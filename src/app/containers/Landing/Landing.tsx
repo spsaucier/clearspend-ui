@@ -140,7 +140,7 @@ export function Landing(props: Readonly<LandingProps>) {
         </LandingCard>
       </Show>
 
-      <Modal isOpen={isOpenCongratulationsModal()} close={dismissModal}>
+      <Modal isOpen={isOpenCongratulationsModal()} onClose={dismissModal}>
         <ModalCard
           title={<Text message="Congratulations!" />}
           actions={

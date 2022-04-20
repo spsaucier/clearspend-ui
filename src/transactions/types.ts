@@ -1,3 +1,4 @@
+import type { FileTypes } from 'app/types/common';
 import type { AccountActivityResponse, LedgerActivityResponse, Merchant } from 'generated/capital';
 
 export type ActivityStatus = Required<AccountActivityResponse>['status'];
@@ -6,3 +7,9 @@ export type ActivityType = Required<LedgerActivityResponse>['type'];
 export type TransactionType = 'NETWORK_CAPTURE' | 'NETWORK_AUTHORIZATION' | 'NETWORK_REFUND' | 'CARD_FUND_RETURN';
 export type LedgerActivityType = Exclude<ActivityType, TransactionType>;
 export type MccGroup = Required<Merchant>['merchantCategoryGroup'];
+
+export interface ReceiptData {
+  id: string;
+  type: FileTypes;
+  uri: string;
+}

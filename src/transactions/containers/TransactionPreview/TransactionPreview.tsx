@@ -6,24 +6,15 @@ import type { AccountActivityResponse } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
-import { FilesDropArea } from '_common/components/FilesDropArea';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
-import { useResource } from '_common/utils/useResource';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
-import { FileTypes } from 'app/types/common';
 import { useAllocations } from 'allocations/stores/allocations';
 import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
-import {
-  getActivityById,
-  setActivityNote,
-  uploadReceipt,
-  viewReceipt,
-  setActivityExpenseCategory,
-} from 'app/services/activity';
+import { setActivityNote, setActivityExpenseCategory } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
@@ -35,16 +26,12 @@ import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
 import { TransactionDateTime } from '../../components/TransactionDateTime';
-import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import { formatMerchantType } from '../../utils/formatMerchantType';
+import type { ReceiptData } from '../../types';
 import { MERCHANT_CATEGORIES } from '../../constants';
-import type { ReceiptVideModel } from '../ReceiptsView';
-
-import { getReceiptData } from './utils';
+import { TransactionReceipts } from '../TransactionReceipts';
 
 import css from './TransactionPreview.css';
-
-const RECEIPT_FILE_TYPES = [FileTypes.JPG, FileTypes.PNG, FileTypes.PDF];
 
 const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
   READY: 'success',
@@ -53,19 +40,17 @@ const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
 };
 
 interface TransactionPreviewProps {
+  showAccountingAdminView?: boolean;
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
-  onViewReceipt: (receipts: Readonly<ReceiptVideModel[]>) => void;
+  onViewReceipt: (receipts: readonly Readonly<ReceiptData>[], id: string) => void;
   onReport: () => void;
-  showAccountingAdminView?: boolean;
 }
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
-
-  let fileInput!: HTMLInputElement;
 
   const transaction = createMemo(() => props.transaction);
   const requestedAmount = createMemo(() => formatCurrency(transaction().requestedAmount?.amount || 0));
@@ -86,17 +71,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const allocations = useAllocations({ initValue: [] });
   // TODO: Replace accountName with allocationId after CAP-721
   const allocation = createMemo(() => allocations.data!.find((item) => item.name === transaction().accountName));
-
-  const receiptIds = createMemo(() => transaction().receipt?.receiptId || []);
-  const [receipts, receiptsStatus, , , reloadReceipts] = useResource(() => Promise.all(receiptIds().map(viewReceipt)));
-
-  const onUploadClick = () => fileInput.click();
-
-  const [uploading, uploadReceipts] = wrapAction(async (files: readonly File[]) => {
-    await Promise.all(files.map((file) => uploadReceipt(transaction().accountActivityId!, getReceiptData(file))));
-    props.onUpdate(await getActivityById(transaction().accountActivityId!));
-    reloadReceipts();
-  });
 
   const [note, setNote] = createSignal<string>();
   const notes = createMemo(() => transaction().notes || note());
@@ -160,8 +134,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const canSubmitNote = createMemo(() => {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
-
-  const allowReceiptUpload = createMemo(() => isAllowedReceipts(transaction().merchant, transaction().status));
 
   return (
     <div class={css.root}>
@@ -242,62 +214,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </div>
         </Show>
         <div class={css.properties}>
-          <div class={css.receiptCta}>
-            <Show when={receiptIds().length}>
-              <Button
-                wide
-                loading={receiptsStatus().loading}
-                icon="receipt"
-                onClick={() => {
-                  if (receiptsStatus().error) {
-                    reloadReceipts().then(() => {
-                      if (receipts()) props.onViewReceipt(receipts()!);
-                      else messages.error({ title: i18n.t('Something went wrong') });
-                    });
-                  } else props.onViewReceipt(receipts()!);
-                }}
-              >
-                <Show when={receiptIds().length > 1} fallback={<Text message="View Receipt" />}>
-                  <Text message="View Receipts ({count})" count={receiptIds().length} />
-                </Show>
-              </Button>
-            </Show>
-            <Show when={allowReceiptUpload()}>
-              <FilesDropArea
-                types={RECEIPT_FILE_TYPES}
-                dropText={<Text message="Drop images" />}
-                onDrop={uploadReceipts}
-              >
-                <div class={css.receiptDrop}>
-                  <Show when={!receiptIds().length}>
-                    <Button
-                      type="primary"
-                      view="second"
-                      icon="add-receipt"
-                      loading={uploading()}
-                      onClick={onUploadClick}
-                    >
-                      <Text message="Add Receipt" />
-                    </Button>
-                  </Show>
-                  <Show when={receiptIds().length}>
-                    <Button type="primary" view="second" icon="receipt" loading={uploading()} onClick={onUploadClick}>
-                      <Text message="Upload more images" />
-                    </Button>
-                  </Show>
-                  <input
-                    ref={fileInput}
-                    type="file"
-                    accept={RECEIPT_FILE_TYPES.join(',')}
-                    onChange={(event: Event) => {
-                      uploadReceipts(Array.from((event.target as HTMLInputElement).files || []));
-                    }}
-                  />
-                  <Text message="or drag and drop" class={css.receiptDropText!} />
-                </div>
-              </FilesDropArea>
-            </Show>
-          </div>
+          <TransactionReceipts data={transaction()} onView={props.onViewReceipt} onUpdate={props.onUpdate} />
           <div class={css.expenseCategory}>
             <div class={css.optionTitle}>
               <Text message="Expense Category" />

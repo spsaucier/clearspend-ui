@@ -5,9 +5,10 @@ import { useSearchParams } from 'solid-app-router';
 import { useMessages } from 'app/containers/Messages/context';
 import type { AccountActivityResponse } from 'generated/capital';
 
-import { activityToLedger } from '../../../utils/convertTypes';
-import { isActivityType } from '../../../utils/isActivityType';
-import type { ActivityType } from '../../../types';
+import type { ActivityType } from '../types';
+
+import { activityToLedger } from './convertTypes';
+import { isActivityType } from './isActivityType';
 
 export function usePreviewTransaction<T extends { accountActivityId?: string; type?: ActivityType }>(
   transactions: Accessor<T[] | undefined>,

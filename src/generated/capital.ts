@@ -1275,7 +1275,7 @@ export interface CodatAccountNested {
   fullyQualifiedCategory?: string;
   fullyQualifiedName?: string;
   type?: string;
-  updateStatus?: 'NOT_CHANGED' | 'NEW' | 'DELETED';
+  updateStatus?: 'NOT_CHANGED' | 'NEW' | 'DELETED' | 'RENAMED';
   children?: CodatAccountNested[];
 }
 

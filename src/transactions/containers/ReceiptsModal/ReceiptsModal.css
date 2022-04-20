@@ -37,29 +37,8 @@
 .previews {
   display: flex;
   margin: var(--pd-16) 0 var(--pd-32);
-}
-
-.preview {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--radius-2);
-  overflow: hidden;
-  cursor: pointer;
-
-  &:not(:last-child) {
-    margin-right: var(--pd-8);
-  }
-
-  & > img,
-  & > canvas {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.current {
-  border: 3px solid var(--tw-primary-border);
-  cursor: default;
+  flex-wrap: wrap;
+  gap: var(--pd-8);
 }
 
 .content {

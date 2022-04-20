@@ -10,7 +10,7 @@ import type {
   PagedDataAccountActivityResponse,
   UpdateAccountActivityRequest,
 } from 'generated/capital';
-import type { ReceiptVideModel } from 'transactions/containers/ReceiptsView';
+import type { ReceiptData } from 'transactions/types';
 
 import type { ChartDataRequest, ChartDataResponse } from '../types/spending';
 
@@ -73,9 +73,9 @@ export async function uploadReceipt(activityId: string, data: FormData) {
   await service.post<void>(`/users/account-activity/${activityId}/receipts/${receiptId}/link`);
 }
 
-export const viewReceipt = async (receiptId: string): Promise<ReceiptVideModel> => {
+export const fetchReceipt = async (receiptId: string): Promise<Readonly<ReceiptData>> => {
   const data = (await service.get<Blob>(`/images/receipts/${receiptId}`, { respType: RespType.blob })).data;
-  return { receiptId, type: data.type as FileTypes, uri: URL.createObjectURL(data) };
+  return { id: receiptId, type: data.type as FileTypes, uri: URL.createObjectURL(data) };
 };
 
 export const deleteReceipt = async (receiptId: string) => {
