@@ -20,7 +20,7 @@ export default function ProfileSettings() {
   const [user, status, , , reload] = useResource(getUser, currentUser().userId);
 
   const onUpdate = async (params: Readonly<CreateUserRequest>) => {
-    await editUser(currentUser().userId, params);
+    await editUser(currentUser().userId, { ...params, address: { ...params.address, country: 'USA' } });
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('The address has been successfully updated.'),
