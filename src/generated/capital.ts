@@ -711,6 +711,7 @@ export interface DeclineDetails {
     | 'ADDRESS_POSTAL_CODE_MISMATCH'
     | 'CVC_MISMATCH'
     | 'EXPIRY_MISMATCH'
+    | 'BUSINESS_SUSPENSION'
     | 'ST_ACCOUNT_CLOSED'
     | 'ST_ACCOUNT_FROZEN'
     | 'ST_BANK_ACCOUNT_RESTRICTED'
@@ -1756,6 +1757,12 @@ export interface CardStatementRequest {
 
   /** @format date-time */
   endDate?: string;
+}
+
+export interface BusinessStatusResponse {
+  /** @format uuid */
+  businessId?: string;
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
 }
 
 export interface UpdateAllocationBalanceRequest {

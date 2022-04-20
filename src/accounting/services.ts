@@ -118,6 +118,10 @@ export async function getUpdateNotifications() {
   return (await service.get<Readonly<BusinessNotification[]>>('/business-notification/chart-of-accounts')).data;
 }
 
+export async function getRecentUpdateNotifications() {
+  return (await service.get<Readonly<BusinessNotification[]>>('/business-notification/chart-of-accounts/recent')).data;
+}
+
 export async function acceptChartOfAccountsNotifications() {
   return (await service.post<Readonly<BusinessNotification>>('/business-notification/accept-chart-of-accounts')).data;
 }

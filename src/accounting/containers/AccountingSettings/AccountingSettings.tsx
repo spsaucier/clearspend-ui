@@ -27,7 +27,7 @@ import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
-import { useUpdateNotifications } from 'accounting/stores/updateNotifications';
+import { useRecentUpdateNotifications } from 'accounting/stores/updateNotifications';
 
 import css from './AccountingSettings.css';
 
@@ -46,7 +46,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
 
   // TODO replace with notification endpoint that dismisses on logout
-  const updateNotifications = useUpdateNotifications();
+  const updateNotifications = useRecentUpdateNotifications();
   const integrationExpenseCategoryStore = useStoredIntegrationExpenseCategories();
   const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
   const handleSave = (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) =>
