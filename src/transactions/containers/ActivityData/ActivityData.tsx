@@ -24,8 +24,8 @@ import { ActivityTable } from '../../components/ActivityTable';
 import { ActivityList } from '../../components/ActivityList';
 import { TransactionReportModal } from '../../components/TransactionReportModal';
 import { usePreviewTransaction } from '../TransactionsData/utils/usePreviewTransaction';
-import type { ReceiptVideModel } from '../TransactionPreview';
-import { ReceiptsView, TransactionPreview } from '../TransactionPreview';
+import { TransactionPreview } from '../TransactionPreview';
+import { ReceiptsView, type ReceiptVideModel } from '../ReceiptsView';
 import { LedgerPreview } from '../LedgerPreview';
 import { activityToLedger, ledgerToActivity } from '../../utils/convertTypes';
 

@@ -10,7 +10,7 @@ import type {
   PagedDataAccountActivityResponse,
   UpdateAccountActivityRequest,
 } from 'generated/capital';
-import type { ReceiptVideModel } from 'transactions/containers/TransactionPreview/ReceiptsView';
+import type { ReceiptVideModel } from 'transactions/containers/ReceiptsView';
 
 import type { ChartDataRequest, ChartDataResponse } from '../types/spending';
 

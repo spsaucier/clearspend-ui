@@ -38,8 +38,8 @@ import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
+import type { ReceiptVideModel } from '../ReceiptsView';
 
-import type { ReceiptVideModel } from './ReceiptsView';
 import { getReceiptData } from './utils';
 
 import css from './TransactionPreview.css';

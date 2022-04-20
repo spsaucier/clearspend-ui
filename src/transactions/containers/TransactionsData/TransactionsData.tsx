@@ -19,7 +19,8 @@ import type {
 import { TransactionsList } from '../../components/TransactionsList';
 import { TransactionsTable } from '../../components/TransactionsTable';
 import { TransactionReportModal } from '../../components/TransactionReportModal';
-import { TransactionPreview, ReceiptsView, type ReceiptVideModel } from '../TransactionPreview';
+import { TransactionPreview } from '../TransactionPreview';
+import { ReceiptsView, type ReceiptVideModel } from '../ReceiptsView';
 
 import { usePreviewTransaction } from './utils/usePreviewTransaction';
 
