@@ -326,6 +326,7 @@ export interface Business {
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   accountingSetupStep?: 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  autoCreateExpenseCategories?: boolean;
   mcc?: string;
   businessName?: string;
   accountNumber?: string;
@@ -1765,6 +1766,46 @@ export interface BusinessStatusResponse {
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
 }
 
+export interface PlaidLogEntryRequest {
+  /** @format int32 */
+  pageNum?: number;
+
+  /** @format int32 */
+  pageSize?: number;
+}
+
+export interface PagedDataPlaidLogEntryMetadata {
+  /** @format int32 */
+  pageNumber?: number;
+
+  /** @format int32 */
+  pageSize?: number;
+
+  /** @format int64 */
+  totalElements?: number;
+  content?: PlaidLogEntryMetadata[];
+}
+
+export interface PlaidLogEntryMetadata {
+  /** @format uuid */
+  id?: string;
+
+  /** @format uuid */
+  businessId?: string;
+
+  /** @format date-time */
+  created?: string;
+  plaidResponseType?:
+    | 'BALANCE'
+    | 'OWNER'
+    | 'ACCOUNT'
+    | 'LINK_TOKEN'
+    | 'ACCESS_TOKEN'
+    | 'SANDBOX_LINK_TOKEN'
+    | 'ERROR'
+    | 'OTHER';
+}
+
 export interface UpdateAllocationBalanceRequest {
   amount: Amount;
 
@@ -1821,6 +1862,10 @@ export interface BusinessFundAllocationResponse {
   /** @format uuid */
   adjustmentIdTo?: string;
   ledgerBalanceTo?: Amount;
+}
+
+export interface UpdateAutoCreateExpenseCategoriesRequest {
+  autoCreateExpenseCategories?: boolean;
 }
 
 export interface SearchBusinessAllocationRequest {
@@ -3858,19 +3903,7 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
-  relationshipOwner?: boolean;
-  relationshipRepresentative?: boolean;
-  relationshipExecutive?: boolean;
-  relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4120,9 +4153,21 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  relationshipOwner?: boolean;
+  relationshipRepresentative?: boolean;
+  relationshipExecutive?: boolean;
+  relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4165,6 +4210,399 @@ export interface CodatBankAccount {
 
 export interface CodatBankAccountsResponse {
   results?: CodatBankAccount[];
+}
+
+export interface AccountBalance {
+  /** @format double */
+  available?: number;
+
+  /** @format double */
+  current?: number;
+
+  /** @format double */
+  limit?: number;
+  isoCurrencyCode?: string;
+  unofficialCurrencyCode?: string;
+
+  /** @format date-time */
+  lastUpdatedDatetime?: string;
+}
+
+export interface AccountBase {
+  accountId?: string;
+  balances?: AccountBalance;
+  mask?: string;
+  name?: string;
+  officialName?: string;
+  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  subtype?:
+    | '401a'
+    | '401k'
+    | '403B'
+    | '457b'
+    | '529'
+    | 'brokerage'
+    | 'cash isa'
+    | 'education savings account'
+    | 'ebt'
+    | 'gic'
+    | 'health reimbursement arrangement'
+    | 'hsa'
+    | 'isa'
+    | 'ira'
+    | 'lif'
+    | 'life insurance'
+    | 'lira'
+    | 'lrif'
+    | 'lrsp'
+    | 'non-taxable brokerage account'
+    | 'other'
+    | 'other insurance'
+    | 'other annuity'
+    | 'prif'
+    | 'rdsp'
+    | 'resp'
+    | 'rlif'
+    | 'rrif'
+    | 'pension'
+    | 'profit sharing plan'
+    | 'retirement'
+    | 'roth'
+    | 'roth 401k'
+    | 'rrsp'
+    | 'sep ira'
+    | 'simple ira'
+    | 'sipp'
+    | 'stock plan'
+    | 'thrift savings plan'
+    | 'tfsa'
+    | 'trust'
+    | 'ugma'
+    | 'utma'
+    | 'variable annuity'
+    | 'credit card'
+    | 'paypal'
+    | 'cd'
+    | 'checking'
+    | 'savings'
+    | 'money market'
+    | 'prepaid'
+    | 'auto'
+    | 'business'
+    | 'commercial'
+    | 'construction'
+    | 'consumer'
+    | 'home'
+    | 'home equity'
+    | 'loan'
+    | 'mortgage'
+    | 'overdraft'
+    | 'line of credit'
+    | 'student'
+    | 'cash management'
+    | 'keogh'
+    | 'mutual fund'
+    | 'recurring'
+    | 'rewards'
+    | 'safe deposit'
+    | 'sarsep'
+    | 'null';
+  verificationStatus?:
+    | 'pending_automatic_verification'
+    | 'pending_manual_verification'
+    | 'manually_verified'
+    | 'verification_expired'
+    | 'verification_failed';
+}
+
+export interface AccountIdentity {
+  accountId?: string;
+  balances?: AccountBalance;
+  mask?: string;
+  name?: string;
+  officialName?: string;
+  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  subtype?:
+    | '401a'
+    | '401k'
+    | '403B'
+    | '457b'
+    | '529'
+    | 'brokerage'
+    | 'cash isa'
+    | 'education savings account'
+    | 'ebt'
+    | 'gic'
+    | 'health reimbursement arrangement'
+    | 'hsa'
+    | 'isa'
+    | 'ira'
+    | 'lif'
+    | 'life insurance'
+    | 'lira'
+    | 'lrif'
+    | 'lrsp'
+    | 'non-taxable brokerage account'
+    | 'other'
+    | 'other insurance'
+    | 'other annuity'
+    | 'prif'
+    | 'rdsp'
+    | 'resp'
+    | 'rlif'
+    | 'rrif'
+    | 'pension'
+    | 'profit sharing plan'
+    | 'retirement'
+    | 'roth'
+    | 'roth 401k'
+    | 'rrsp'
+    | 'sep ira'
+    | 'simple ira'
+    | 'sipp'
+    | 'stock plan'
+    | 'thrift savings plan'
+    | 'tfsa'
+    | 'trust'
+    | 'ugma'
+    | 'utma'
+    | 'variable annuity'
+    | 'credit card'
+    | 'paypal'
+    | 'cd'
+    | 'checking'
+    | 'savings'
+    | 'money market'
+    | 'prepaid'
+    | 'auto'
+    | 'business'
+    | 'commercial'
+    | 'construction'
+    | 'consumer'
+    | 'home'
+    | 'home equity'
+    | 'loan'
+    | 'mortgage'
+    | 'overdraft'
+    | 'line of credit'
+    | 'student'
+    | 'cash management'
+    | 'keogh'
+    | 'mutual fund'
+    | 'recurring'
+    | 'rewards'
+    | 'safe deposit'
+    | 'sarsep'
+    | 'null';
+  verificationStatus?:
+    | 'pending_automatic_verification'
+    | 'pending_manual_verification'
+    | 'manually_verified'
+    | 'verification_expired'
+    | 'verification_failed';
+  owners?: Owner[];
+}
+
+export interface AccountsGetResponse {
+  accounts?: AccountBase[];
+  item?: Item;
+  requestId?: string;
+}
+
+export interface AuthGetNumbers {
+  ach?: NumbersACH[];
+  eft?: NumbersEFT[];
+  international?: NumbersInternational[];
+  bacs?: NumbersBACS[];
+}
+
+export interface AuthGetResponse {
+  accounts?: AccountBase[];
+  numbers?: AuthGetNumbers;
+  item?: Item;
+  requestId?: string;
+}
+
+export interface Email {
+  data?: string;
+  primary?: boolean;
+  type?: 'primary' | 'secondary' | 'other';
+}
+
+export interface Error {
+  errorType?:
+    | 'INVALID_REQUEST'
+    | 'INVALID_RESULT'
+    | 'INVALID_INPUT'
+    | 'INSTITUTION_ERROR'
+    | 'RATE_LIMIT_EXCEEDED'
+    | 'API_ERROR'
+    | 'ITEM_ERROR'
+    | 'ASSET_REPORT_ERROR'
+    | 'RECAPTCHA_ERROR'
+    | 'OAUTH_ERROR'
+    | 'PAYMENT_ERROR'
+    | 'BANK_TRANSFER_ERROR';
+  errorCode?: string;
+  errorMessage?: string;
+  displayMessage?: string;
+  requestId?: string;
+  causes?: object[];
+
+  /** @format double */
+  status?: number;
+  documentationUrl?: string;
+  suggestedAction?: string;
+}
+
+export interface IdentityGetResponse {
+  accounts?: AccountIdentity[];
+  item?: Item;
+  requestId?: string;
+}
+
+export interface Item {
+  itemId?: string;
+  institutionId?: string;
+  webhook?: string;
+  error?: Error;
+  availableProducts?: (
+    | 'assets'
+    | 'auth'
+    | 'balance'
+    | 'identity'
+    | 'investments'
+    | 'liabilities'
+    | 'payment_initiation'
+    | 'transactions'
+    | 'credit_details'
+    | 'income'
+    | 'income_verification'
+    | 'deposit_switch'
+    | 'standing_orders'
+  )[];
+  billedProducts?: (
+    | 'assets'
+    | 'auth'
+    | 'balance'
+    | 'identity'
+    | 'investments'
+    | 'liabilities'
+    | 'payment_initiation'
+    | 'transactions'
+    | 'credit_details'
+    | 'income'
+    | 'income_verification'
+    | 'deposit_switch'
+    | 'standing_orders'
+  )[];
+
+  /** @format date-time */
+  consentExpirationTime?: string;
+  updateType?: 'background' | 'user_present_required';
+}
+
+export interface ItemPublicTokenExchangeResponse {
+  accessToken?: string;
+  itemId?: string;
+  requestId?: string;
+}
+
+export interface LinkTokenCreateResponse {
+  linkToken?: string;
+
+  /** @format date-time */
+  expiration?: string;
+  requestId?: string;
+}
+
+export interface NumbersACH {
+  accountId?: string;
+  account?: string;
+  routing?: string;
+  wireRouting?: string;
+}
+
+export interface NumbersBACS {
+  accountId?: string;
+  account?: string;
+  sortCode?: string;
+}
+
+export interface NumbersEFT {
+  accountId?: string;
+  account?: string;
+  institution?: string;
+  branch?: string;
+}
+
+export interface NumbersInternational {
+  accountId?: string;
+  iban?: string;
+  bic?: string;
+}
+
+export interface Owner {
+  names?: string[];
+  phoneNumbers?: PhoneNumber[];
+  emails?: Email[];
+  addresses?: Address[];
+}
+
+export interface PhoneNumber {
+  data?: string;
+  primary?: boolean;
+  type?: 'home' | 'work' | 'office' | 'mobile' | 'mobile1' | 'other';
+}
+
+export type PlaidAccessTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: ItemPublicTokenExchangeResponse;
+};
+
+export type PlaidAccountLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: AuthGetResponse;
+};
+
+export type PlaidBalanceLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: AccountsGetResponse;
+};
+
+export type PlaidLinkTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: LinkTokenCreateResponse;
+};
+
+export interface PlaidLogEntryDetailsObject {
+  /** @format uuid */
+  id?: string;
+
+  /** @format uuid */
+  businessId?: string;
+
+  /** @format date-time */
+  created?: string;
+  plaidResponseType?:
+    | 'BALANCE'
+    | 'OWNER'
+    | 'ACCOUNT'
+    | 'LINK_TOKEN'
+    | 'ACCESS_TOKEN'
+    | 'SANDBOX_LINK_TOKEN'
+    | 'ERROR'
+    | 'OTHER';
+  message?: object;
+}
+
+export type PlaidOwnerLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: IdentityGetResponse;
+};
+
+export type SandboxLinkTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
+  message?: SandboxPublicTokenCreateResponse;
+};
+
+export interface SandboxPublicTokenCreateResponse {
+  publicToken?: string;
+  requestId?: string;
 }
 
 export interface BusinessProspectData {

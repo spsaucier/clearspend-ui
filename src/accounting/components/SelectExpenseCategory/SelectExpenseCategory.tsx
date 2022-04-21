@@ -33,7 +33,7 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
       placeholder={props.placeholder}
       error={props.error}
       loading={props.loading}
-      disabled={props.loading}
+      disabled={props.disabled}
       valueRender={(id) => props.items.find((item) => item.expenseCategoryId === id)?.categoryName}
       popupRender={(list) => (
         <>

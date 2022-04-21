@@ -200,17 +200,27 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 {props.transaction.lastSyncTime ? new Date(props.transaction.lastSyncTime).toLocaleString() : 'N/A'}
               </span>
             </div>
-            <Button
-              wide
-              icon="sync"
-              disabled={
-                transaction().syncStatus !== 'READY' || syncingTransaction() || !categoryIsActive(expenseCategory())
+            <Switch
+              fallback={
+                <Button
+                  wide
+                  icon="sync"
+                  disabled={
+                    transaction().syncStatus !== 'READY' || syncingTransaction() || !categoryIsActive(expenseCategory())
+                  }
+                  onClick={onSyncTransaction}
+                  data-name="sync-transaction-button"
+                >
+                  <Text message="Sync transaction" />
+                </Button>
               }
-              onClick={onSyncTransaction}
-              data-name="sync-transaction-button"
             >
-              <Text message="Sync transaction" />
-            </Button>
+              <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
+                <Button wide icon="lock" data-name="unlock-transaction-button">
+                  <Text message="Unlock" />
+                </Button>
+              </Match>
+            </Switch>
           </div>
         </Show>
         <div class={css.properties}>
