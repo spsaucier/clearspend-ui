@@ -32,13 +32,12 @@ import { getSyncableTransactionCount, syncAllTransactions, syncMultipleTransacti
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Popover } from '_common/components/Popover';
 
+import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
 import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
-
-import { useTransactionsFilters } from './utils/useTransactionsFilters';
 
 import css from './TransactionsTable.css';
 
@@ -141,7 +140,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     createMemo(() => props.params),
     props.dateRange,
     props.onChangeParams,
-    props.showUserFilter,
+    { types: true, userId: !props.showUserFilter },
   );
 
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [

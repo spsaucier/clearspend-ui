@@ -1,14 +1,15 @@
 import { createMemo, type Accessor } from 'solid-js';
 
 import type { Setter } from '_common/types/common';
+import { keys } from '_common/utils/keys';
 import { useBool } from '_common/utils/useBool';
 import { getResetFilters } from 'app/utils/getResetFilters';
 import type { DateRange } from 'app/types/common';
 import type { AccountActivityRequest } from 'generated/capital';
 
-import { useDateFilterHandler } from '../../../utils/useDateFilterHandler';
+import { useDateFilterHandler } from './useDateFilterHandler';
 
-const FILTERS_KEYS = [
+const FILTERS_KEYS: readonly (keyof Omit<AccountActivityRequest, 'pageRequest' | 'searchText'>)[] = [
   'amount',
   'categories',
   'syncStatus',
@@ -17,21 +18,22 @@ const FILTERS_KEYS = [
   'userId',
   'withReceipt',
   'withoutReceipt',
-] as const;
+];
 
 export function useTransactionsFilters(
   params: Accessor<Readonly<AccountActivityRequest>>,
   dateRange: Readonly<DateRange> | undefined,
   onChangeParams: Setter<Readonly<AccountActivityRequest>>,
-  showUserFilter?: boolean,
+  ignoreFilterKeys?: Partial<Record<keyof AccountActivityRequest, boolean>>,
 ) {
   const [showFilters, toggleFilters] = useBool();
   const [dateFilter, onChangeFilters] = useDateFilterHandler(onChangeParams, dateRange);
   const filters = createMemo<Readonly<AccountActivityRequest>>(() => ({ ...params(), ...dateFilter() }));
 
-  const filtersKeys = createMemo(() =>
-    showUserFilter ? [...FILTERS_KEYS] : [...FILTERS_KEYS.filter((f) => f !== 'userId')],
-  );
+  const filtersKeys = createMemo(() => {
+    const ignoreKeys = ignoreFilterKeys && keys(ignoreFilterKeys).filter((item) => ignoreFilterKeys[item]);
+    return ignoreKeys ? FILTERS_KEYS.filter((item) => !ignoreKeys.includes(item)) : FILTERS_KEYS;
+  });
 
   const filtersCount = createMemo(
     () =>

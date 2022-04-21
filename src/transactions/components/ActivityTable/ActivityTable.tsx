@@ -19,13 +19,13 @@ import type { LedgerActivityRequest, PagedDataLedgerActivityResponse, LedgerActi
 import { Option, Select } from '_common/components/Select';
 
 import { ACTIVITY_TYPE_TITLES, LEDGER_TYPES, ACTIVITY_TYPES } from '../../constants';
+import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
 import { ActivityUser } from '../ActivityUser';
 import { ActivityAccount } from '../ActivityAccount';
 import { ActivityAmount } from '../ActivityAmount';
 import { MissingDetails } from '../MissingDetails';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
-import { useTransactionsFilters } from '../TransactionsTable/utils/useTransactionsFilters';
 
 import css from './ActivityTable.css';
 
@@ -117,7 +117,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     createMemo(() => props.params),
     props.dateRange,
     props.onChangeParams,
-    props.showUserFilter,
+    { userId: !props.showUserFilter },
   );
 
   const onChangeActivityType = (newType: string) => {

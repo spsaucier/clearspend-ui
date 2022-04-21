@@ -13,7 +13,7 @@ import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
-import { DEFAULT_ACTIVITY_PARAMS } from 'transactions/constants';
+import { DEFAULT_TRANSACTIONS_PARAMS } from 'transactions/constants';
 import { canManageUsers } from 'allocations/utils/permissions';
 
 import { Card } from '../../components/Card';
@@ -42,7 +42,7 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const [user, , , setUserID] = useResource(getUser, undefined, false);
 
   const [activity, accountActivityRequestStatus, accountActivityParams, setActivityParams, reloadActivity] =
-    useResource(getAccountActivity, DEFAULT_ACTIVITY_PARAMS, false);
+    useResource(getAccountActivity, DEFAULT_TRANSACTIONS_PARAMS, false);
 
   const card = createMemo(() => data()?.card);
 
