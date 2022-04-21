@@ -1,23 +1,29 @@
 import { Text } from 'solid-i18n';
+import { createMemo } from 'solid-js';
 
 import { formatPhone } from '_common/formatters/phone';
 import { formatAddress } from '_common/formatters/address';
 import { Section } from 'app/components/Section';
 import { DataRow } from 'app/components/DataRow';
 import { CopyButton } from 'app/components/CopyButton';
-import type { Business } from 'generated/capital';
 import { BUSINESS_MCC } from 'app/types/mcc';
 import { BusinessTypeI18n } from 'app/types/businesses';
+import { LeadershipTable } from 'onboarding/components/LeadershipTable';
+import { useBusiness } from 'app/containers/Main/context';
+import { useResource } from '_common/utils/useResource';
+import { listBusinessOwners } from 'onboarding/services/onboarding';
 import { join } from '_common/utils/join';
 
 import css from './CompanyProfile.css';
 
-interface CompanyProfileProps {
-  data: Readonly<Business>;
-}
-
-export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
-  const mccValue = BUSINESS_MCC.find((category) => category.value === props.data.mcc);
+export function CompanyProfile() {
+  const { business, currentUser } = useBusiness();
+  const [ownersList] = useResource(listBusinessOwners, []);
+  const leaders = createMemo(() => {
+    const value = ownersList() ?? [];
+    return value;
+  });
+  const mccValue = BUSINESS_MCC.find((category) => category.value === business().mcc);
 
   return (
     <div>
@@ -26,29 +32,31 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Legal entity name" />:
           </span>
-          <span class={css.dataValue}>{props.data.legalName}</span>
-          <CopyButton value={props.data.legalName!} class={css.copy} />
+          <span class={css.dataValue}>{business().legalName}</span>
+          <CopyButton value={business().legalName!} class={css.copy} />
         </DataRow>
         <DataRow icon="file-text" class={css.data}>
           <span class={css.dataLabel}>
             <Text message="Legal entity type" />:
           </span>
-          <span class={css.dataValue}>{BusinessTypeI18n[props.data.businessType!]}</span>
-          <CopyButton value={props.data.businessType!} class={css.copy} />
+          <span class={css.dataValue}>{BusinessTypeI18n[business().businessType!]}</span>
+          <CopyButton value={business().businessType!} class={css.copy} />
         </DataRow>
         <DataRow icon="payment-bank" class={css.data}>
           <span class={join(css.dataLabel, 'fs-mask')}>
             <Text message="Business EIN" />:
           </span>
-          <span class={css.dataValue}>{props.data.employerIdentificationNumber}</span>
-          <CopyButton value={props.data.employerIdentificationNumber!} class={css.copy} />
+          <span class={css.dataValue}>{business().employerIdentificationNumber}</span>
+          <CopyButton value={business().employerIdentificationNumber!} class={css.copy} />
         </DataRow>
         <DataRow icon="channel-moto" class={css.data}>
           <span class={css.dataLabel}>
             <Text message="Corporate phone number" />:
           </span>
-          <span class={join(css.dataValue, 'fs-mask')}>{formatPhone(props.data.businessPhone)}</span>
-          <CopyButton value={formatPhone(props.data.businessPhone)} class={css.copy} />
+          <span class={css.dataValue}>{formatPhone(business().businessPhone)}</span>
+          <CopyButton value={formatPhone(business().businessPhone)} class={css.copy} />
+          <span class={join(css.dataValue, 'fs-mask')}>{formatPhone(business().businessPhone)}</span>
+          <CopyButton value={formatPhone(business().businessPhone)} class={css.copy} />
         </DataRow>
       </Section>
       <Section title={<Text message="Business description" />} class={css.section}>
@@ -56,7 +64,7 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
           <span class={css.dataLabel}>
             <Text message="Brief description" />:
           </span>
-          <span class={css.dataValue}>{props.data.description}</span>
+          <span class={css.dataValue}>{business().description}</span>
         </DataRow>
         <DataRow icon="merchant-services" class={css.data}>
           <span class={css.dataLabel}>
@@ -79,8 +87,11 @@ export function CompanyProfile(props: Readonly<CompanyProfileProps>) {
         class={css.section}
       >
         <DataRow icon="pin" class={css.data} contentClass={css.address}>
-          {formatAddress(props.data.address!)}
+          {formatAddress(business().address!)}
         </DataRow>
+      </Section>
+      <Section title={<Text message="Leadership" />} class={css.section}>
+        <LeadershipTable business={business()} currentUserEmail={currentUser().email} leaders={leaders()} />
       </Section>
     </div>
   );

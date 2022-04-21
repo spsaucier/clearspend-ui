@@ -3,7 +3,6 @@ import { Text } from 'solid-i18n';
 
 import { TabList, Tab } from '_common/components/Tabs';
 import { Page } from 'app/components/Page';
-import { useBusiness } from 'app/containers/Main/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 
 import { CompanyProfile } from './containers/CompanyProfile';
@@ -18,7 +17,6 @@ enum Tabs {
 
 export default function CompanySettings() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.profile);
-  const { business } = useBusiness();
 
   return (
     <Page title={<Text message="Company settings" />}>
@@ -35,7 +33,7 @@ export default function CompanySettings() {
       </TabList>
       <Switch>
         <Match when={tab() === Tabs.profile}>
-          <CompanyProfile data={business()} />
+          <CompanyProfile />
         </Match>
         <Match when={tab() === Tabs.accounts}>
           <BankAccounts />

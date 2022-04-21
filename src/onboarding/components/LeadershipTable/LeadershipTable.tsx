@@ -11,27 +11,31 @@ import css from './LeadershipTable.css';
 
 interface LeadershipTableProps {
   leaders: BusinessOwner[];
-  onEditClick: (id: string) => void;
-  onDeleteClick: (id: string) => void;
-  onAddClick: () => void;
+  business: Business;
+  onEditClick?: (id: string) => void;
+  onDeleteClick?: (id: string) => void;
+  onAddClick?: () => void;
   currentUserEmail?: string;
   leaderIdsWithError?: string[];
-  business: Business;
 }
 
 export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/ListFormat
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-  const ownershipColumn: TableColumn<BusinessOwner> = ![
-    BusinessType.SOLE_PROPRIETORSHIP,
-    BusinessType.INCORPORATED_NON_PROFIT,
-  ].includes(props.business.businessType as BusinessType)
-    ? {
-        name: 'percentage',
-        title: <Text message="Ownership (25% or more)" />,
-        render: (leader) => <div class={css.cell}>{leader.percentageOwnership}%</div>,
-      }
-    : ({} as TableColumn<BusinessOwner>);
+
+  const hiddenColumns: string[] = [];
+
+  if (
+    [BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+      props.business.businessType as BusinessType,
+    )
+  ) {
+    hiddenColumns.push('percentage');
+  }
+
+  if (!props.onEditClick) {
+    hiddenColumns.push('actions');
+  }
 
   const columns: readonly Readonly<TableColumn<BusinessOwner>>[] = [
     {
@@ -65,11 +69,20 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
         );
       },
     },
-    { ...ownershipColumn },
+    {
+      name: 'percentage',
+      title: <Text message="Ownership (25% or more)" />,
+      render: (leader) => (
+        <div class={css.cell}>
+          {leader.percentageOwnership ? leader.percentageOwnership : ''}
+          {leader.percentageOwnership ? `%` : 'N/A'}
+        </div>
+      ),
+    },
     {
       name: 'actions',
       title: <Text message="Actions" />,
-      render: (leader) => (
+      render: (leader: BusinessOwner) => (
         <div class={css.cell}>
           <div class={css.row}>
             <Button
@@ -77,7 +90,7 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
               icon="edit"
               view="ghost"
               type="primary"
-              onClick={() => props.onEditClick(leader.businessOwnerId || '')}
+              onClick={() => props.onEditClick!(leader.businessOwnerId || '')}
             />
           </div>
         </div>
@@ -87,11 +100,17 @@ export function LeadershipTable(props: Readonly<LeadershipTableProps>) {
 
   return (
     <div class={css.wrapper}>
-      <Table columns={columns} data={props.leaders} cellClass={css.cell} />
+      <Table
+        columns={columns.filter((c) => !hiddenColumns.includes(c.name))}
+        data={props.leaders}
+        cellClass={css.cell}
+      />
       <div>
-        <Button class={css.button} type="default" icon="add" onClick={props.onAddClick} size={'lg'}>
-          <Text message="Add a leader" />
-        </Button>
+        <Show when={props.onAddClick}>
+          <Button class={css.button} type="default" icon="add" onClick={props.onAddClick} size={'lg'}>
+            <Text message="Add a leader" />
+          </Button>
+        </Show>
       </div>
     </div>
   );
