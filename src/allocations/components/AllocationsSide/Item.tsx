@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Show, JSXElement } from 'solid-js';
 import { NavLink } from 'solid-app-router';
 
 import { join } from '_common/utils/join';
@@ -15,6 +15,7 @@ interface ItemProps {
   padding?: number;
   expanded?: boolean;
   hasChildren?: boolean;
+  title?: JSXElement;
   class?: string;
   onClick: (id: string) => void;
   onSwitch?: (id: string) => void;
@@ -26,7 +27,7 @@ export function Item(props: Readonly<ItemProps>) {
       <Show when={props.root}>
         <Icon name="company" class={css.icon} />
       </Show>
-      <span class={css.name}>{props.data.name}</span>
+      <span class={css.name}>{props.title ?? props.data.name}</span>
     </>
   );
 

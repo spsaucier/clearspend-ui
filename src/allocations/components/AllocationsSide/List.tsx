@@ -3,6 +3,7 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import type { AccessibleAllocation } from 'allocations/types';
 
 import { allocationWithID } from '../../utils/allocationWithID';
+import { Breadcrumbs } from '../Breadcrumbs';
 
 import { getDefaultExpanded } from './utils';
 import { Item } from './Item';
@@ -11,7 +12,7 @@ import css from './List.css';
 
 const CHILD_PADDING_PX = 16;
 
-interface ListProps {
+export interface ListProps {
   currentID: string;
   parentID: string;
   items: readonly Readonly<AccessibleAllocation>[];
@@ -21,10 +22,26 @@ interface ListProps {
 }
 
 export function List(props: Readonly<ListProps>) {
-  const items = createMemo(() => props.items.filter((item) => item.parentAllocationId === props.parentID));
+  if (!props.parentID) {
+    return (
+      <For each={props.items}>
+        {(item) => (
+          <Item
+            data={item}
+            active={props.currentID === item.allocationId}
+            padding={props.padding}
+            onClick={props.onSelect}
+            onSwitch={onSwitch}
+            title={<Breadcrumbs current={item} items={props.items} />}
+          />
+        )}
+      </For>
+    );
+  }
+  const siblings = createMemo(() => props.items.filter((item) => item.parentAllocationId === props.parentID));
 
   const [expanded, setExpanded] = createSignal<Record<string, boolean>>(
-    getDefaultExpanded(props.currentID, items(), props.items),
+    getDefaultExpanded(props.currentID, siblings(), props.items),
   );
 
   const onSwitch = (id: string) => {
@@ -33,7 +50,7 @@ export function List(props: Readonly<ListProps>) {
   };
 
   return (
-    <For each={items()}>
+    <For each={siblings()}>
       {(item) => {
         const hasChildren = createMemo(() => Boolean(item.childrenAllocationIds?.length));
         const showSubmenu = createMemo(() => (hasChildren() && expanded()[item.allocationId]) || item.inaccessible);

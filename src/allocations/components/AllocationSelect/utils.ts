@@ -1,7 +1,7 @@
 import { AllocationRoles, AllocationUserRole } from 'allocations/types';
 import type { Allocation, User } from 'generated/capital';
 
-interface AllocationWithChildNodes extends Allocation {
+export interface AllocationWithChildNodes extends Allocation {
   childNodes: AllocationWithChildNodes[];
 }
 interface AllocationIndented extends Allocation {
@@ -50,7 +50,8 @@ const treeToArray = (allocationTree: AllocationWithChildNodes[], nestLevel = 0) 
 
 export const createSortedNestedArray = (allocations: Readonly<Allocation[]> | null) => {
   if (!allocations) return [];
-  let list = [...allocations].sort(byName);
+  let list = [...allocations].sort(byName).map((a) => ({ ...a, nestLevel: 0 }));
   const tree = createTree(list);
+  if (!Object.keys(tree).length) return list;
   return treeToArray(tree);
 };
