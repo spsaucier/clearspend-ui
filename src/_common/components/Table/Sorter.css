@@ -1,0 +1,10 @@
+.root {
+  display: block;
+  width: 20px;
+  height: 20px;
+  color: var(--tw-gray-60);
+}
+
+.active {
+  fill: var(--tw-primary-content);
+}

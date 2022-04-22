@@ -16,8 +16,22 @@
 }
 
 .th {
-  padding: var(--pd-14) var(--pd-12);
+  padding: var(--pd-12);
   font: inherit;
+}
+
+.has-sorter {
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+}
+
+.sorter {
+  margin-left: var(--pd-8);
 }
 
 .row {

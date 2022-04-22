@@ -1,4 +1,5 @@
-import { Table, TableColumn } from './Table';
+import { Table } from './Table';
+import type { TableColumn } from './types';
 
 interface Mock {
   key: string;

@@ -1,32 +1,60 @@
-import { JSXElement, For } from 'solid-js';
+import { createSignal, createMemo, For, Show } from 'solid-js';
 
 import { join } from '../../utils/join';
 
-import css from './Table.css';
+import { Sorter } from './Sorter';
+import { updateSorter, getInitSorter, getOrder } from './utils';
+import type { TableColumn, OrderBy } from './types';
 
-export interface TableColumn<T extends {}> {
-  name: string;
-  title?: JSXElement;
-  class?: string;
-  render?: (row: T) => JSXElement;
-  onClick?: (row: T) => void;
-}
+import css from './Table.css';
 
 export interface TableProps<T extends {}> {
   columns: readonly Readonly<TableColumn<T>>[];
   data: readonly T[];
+  order?: readonly Partial<OrderBy>[];
   class?: string;
   cellClass?: string;
   rowClass?: string;
   onRowClick?: (data: T) => void;
+  onChangeOrder?: (value: Readonly<OrderBy>[] | undefined) => void;
 }
 
 export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
+  const [sorter, setSorter] = createSignal(getInitSorter(props.columns, props.order));
+
+  const onChangeSorter = (column: Readonly<TableColumn<T>>) => {
+    if (!column.orderBy?.length) return;
+    const updated = updateSorter(column.name, sorter());
+    setSorter(updated);
+    props.onChangeOrder?.(getOrder(column.orderBy, updated.direction));
+  };
+
   return (
     <table class={join(css.root, props.class)}>
       <thead class={css.head}>
         <tr>
-          <For each={props.columns}>{(column) => <th class={join(css.th)}>{column.title}</th>}</For>
+          <For each={props.columns}>
+            {(column) => {
+              const sortable = createMemo(() => Boolean(column.orderBy?.length));
+              return (
+                <th
+                  class={join(css.th)}
+                  classList={{ [css.hasSorter!]: sortable() }}
+                  onClick={() => onChangeSorter(column)}
+                >
+                  <span class={css.title}>
+                    {column.title}
+                    <Show when={sortable()}>
+                      <Sorter
+                        value={sorter()?.name === column.name ? sorter()?.direction : undefined}
+                        class={css.sorter}
+                      />
+                    </Show>
+                  </span>
+                </th>
+              );
+            }}
+          </For>
         </tr>
       </thead>
       <tbody>

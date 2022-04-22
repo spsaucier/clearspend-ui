@@ -9,6 +9,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import type { Setter } from '_common/types/common';
 import { Filters } from 'app/components/Filters';
 import { useMessages } from 'app/containers/Messages/context';
+import { changeRequestOrder } from 'app/utils/changeRequestOrder';
 import { changeRequestPage } from 'app/utils/changeRequestPage';
 import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 import { getResetFilters } from 'app/utils/getResetFilters';
@@ -47,6 +48,7 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
   const columns: readonly Readonly<TableColumn<UserPageData>>[] = [
     {
       name: 'name',
+      // orderBy: ['lastName', 'firstName'],
       title: <Text message="Employee" />,
       class: css.name,
       render: (item) => formatName(item.userData),
@@ -140,8 +142,12 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
           <Text message="Export" />
         </Button>
       </Filters>
-      <Table columns={columns} data={props.data.content || []} />
-
+      <Table
+        columns={columns}
+        data={props.data.content || []}
+        order={props.params.pageRequest?.orderBy}
+        onChangeOrder={changeRequestOrder(props.onChangeParams)}
+      />
       <Drawer
         noPadding
         open={filterPanelOpen()}
