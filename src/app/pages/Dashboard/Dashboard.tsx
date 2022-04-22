@@ -19,10 +19,10 @@ import {
   canManageUsers,
   canManageCards,
   canLinkBankAccounts,
-  canLinkReceipts,
 } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
+import { getAccessibleAllocations } from 'allocations/utils/getAccessibleAllocations';
 import { getTotalAvailableBalance } from 'allocations/utils/getTotalAvailableBalance';
 import { ALLOCATIONS_START_COUNT } from 'app/constants/common';
 
@@ -44,13 +44,19 @@ export default function Dashboard() {
 
   const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
   const allocations = useAllocations({ initValue: [] });
+  const allocationItems = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
+  const accessibleAllocations = createMemo(() => allocationItems().filter((item) => !item.inaccessible));
 
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
-  const allocationCount = createMemo(() => allocations.data?.length || 0);
+  const allocationCount = createMemo(() => allocationItems().length);
 
   const currentAllocationId = createMemo(() => {
-    // TODO: Check and update for single allocation manager view (when it's not the root allocation): CAP-410
-    return allocation() === ALL_ALLOCATIONS ? getRootAllocation(allocations.data)?.allocationId : allocation();
+    if (allocation() === ALL_ALLOCATIONS) {
+      return accessibleAllocations().length === 1
+        ? accessibleAllocations()[0]!.allocationId
+        : getRootAllocation(allocationItems())?.allocationId;
+    }
+    return allocation();
   });
 
   const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), currentAllocationId()));
@@ -60,7 +66,7 @@ export default function Dashboard() {
     setSearchParams({ allocation: id });
   };
 
-  const totalAllocationBalance = createMemo(() => getTotalAvailableBalance(allocations.data || []));
+  const totalAllocationBalance = createMemo(() => getTotalAvailableBalance(accessibleAllocations()));
   const showAddBalance = createMemo(() => canManageFunds(permissions()) && totalAllocationBalance() === 0);
 
   return (
@@ -69,17 +75,17 @@ export default function Dashboard() {
       contentClass={css.content}
       extra={
         <Switch>
-          <Match when={allocations.data?.length === 1}>
-            <AllocationTag data={allocations.data![0]!} />
+          <Match when={accessibleAllocations().length === 1}>
+            <AllocationTag data={accessibleAllocations()[0]!} />
           </Match>
-          <Match when={allocations.data?.length}>
+          <Match when={accessibleAllocations().length}>
             <AllocationSelect
-              items={allocations.data!}
+              items={allocationItems()}
               value={allocation()}
               class={css.allocations}
               onChange={onAllocationChange}
               showAllAsOption
-              permissionCheck={canLinkReceipts} // TODO: change to Card Spend access: CAP-989
+              permissionCheck={canManageCards} // TODO: change to Card Spend access: CAP-989
             />
           </Match>
         </Switch>
@@ -88,7 +94,7 @@ export default function Dashboard() {
         <div class={css.actions}>
           <Show
             when={
-              currentAllocationId() === getRootAllocation(allocations.data)?.allocationId
+              currentAllocationId() === getRootAllocation(allocationItems())?.allocationId
                 ? canLinkBankAccounts(userPermissions())
                 : canManageFunds(userPermissions())
             }
@@ -156,7 +162,7 @@ export default function Dashboard() {
         <Match when={cardsStore.error}>
           <LoadingError onReload={cardsStore.reload} />
         </Match>
-        <Match when={(allocations.loading && !allocations.data?.length) || (cardsStore.loading && !cardsStore.data)}>
+        <Match when={(allocations.loading && !allocationItems().length) || (cardsStore.loading && !cardsStore.data)}>
           <Loading />
         </Match>
         <Match when={!cardsCount()}>
@@ -170,7 +176,7 @@ export default function Dashboard() {
         <Match when={allocations.data}>
           <Overview
             allocationId={allocation()}
-            allocations={allocations.data}
+            allocations={allocationItems()}
             userPermissions={userPermissions()}
             onAllocationChange={onAllocationChange}
           />
@@ -180,7 +186,7 @@ export default function Dashboard() {
         <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
           <ManageBalance
             allocationId={manageId()!}
-            allocations={allocations.data!}
+            allocations={allocationItems()}
             onReload={allocations.reload}
             onClose={() => setManageId()}
           />

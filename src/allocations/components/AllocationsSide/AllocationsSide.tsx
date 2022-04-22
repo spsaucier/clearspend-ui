@@ -9,6 +9,7 @@ import type { AccessibleAllocation } from 'allocations/types';
 import { getRootAllocation } from '../../utils/getRootAllocation';
 import { useMediaContext } from '../../../_common/api/media/context';
 import { AllocationSelect } from '../AllocationSelect';
+import { byName } from '../AllocationSelect/utils';
 import { canManageCards } from '../../utils/permissions';
 
 import { Item } from './Item';
@@ -29,10 +30,11 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
 
   const [search, setSearch] = createSignal('');
   const root = createMemo(() => getRootAllocation(props.items));
+  const sortedItems = createMemo(() => (props.items ? [...props.items].sort(byName) : []));
 
   const found = createMemo(() => {
     const target = search().toLowerCase();
-    return target ? props.items?.filter((item) => item.name.toLowerCase().includes(target)) : [];
+    return target ? sortedItems().filter((item) => item.name.toLowerCase().includes(target)) : [];
   });
 
   return (
@@ -91,7 +93,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                   <List
                     currentID={props.currentID}
                     parentID={data.allocationId}
-                    items={props.items || []}
+                    items={sortedItems()}
                     itemClass={css.item}
                     onSelect={props.onAllocationChange}
                   />

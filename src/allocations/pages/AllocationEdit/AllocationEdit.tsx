@@ -1,4 +1,4 @@
-import { Switch, Match, createEffect } from 'solid-js';
+import { Switch, Match, createEffect, createMemo } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { useNav, useLoc } from '_common/api/router';
@@ -18,6 +18,7 @@ import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { EditAllocationForm } from '../../components/EditAllocationForm';
 import { saveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
 import { useAllocations } from '../../stores/allocations';
+import { getAccessibleAllocations } from '../../utils/getAccessibleAllocations';
 import type { AllocationUserRole } from '../../types';
 
 export default function AllocationEdit() {
@@ -26,10 +27,11 @@ export default function AllocationEdit() {
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
 
-  const { reloadPermissions } = useBusiness();
+  const { currentUserRoles, reloadPermissions } = useBusiness();
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
+  const allocationItems = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
 
   const [parentRoles, rolesStatus, params, setRolesId, reloadRoles, mutateRoles] = useResource(
     getAllocationRoles,
@@ -120,7 +122,7 @@ export default function AllocationEdit() {
           <EditAllocationForm
             users={users.data!}
             mccCategories={mcc.data!}
-            allocations={allocations.data!}
+            allocations={allocationItems()}
             parentRoles={parentRoles() ?? []}
             onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}

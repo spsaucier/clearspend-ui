@@ -33,6 +33,7 @@ import { SwitchMccCategories } from '../SwitchMccCategories';
 import { SwitchLimits } from '../SwitchLimits';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
+import { canManageCards } from '../../utils/permissions';
 import { AllocationRoles, AllocationUserRole } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../AllocationSelect/utils';
 
@@ -159,6 +160,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             items={props.allocations}
             value={values().parent}
             placeholder={String(i18n.t('Select allocation'))}
+            permissionCheck={canManageCards}
             error={Boolean(errors().parent)}
             onChange={onParentChange}
           />

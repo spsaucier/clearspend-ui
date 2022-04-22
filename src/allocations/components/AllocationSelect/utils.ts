@@ -52,6 +52,5 @@ export const createSortedNestedArray = (allocations: Readonly<Allocation[]> | nu
   if (!allocations) return [];
   let list = [...allocations].sort(byName);
   const tree = createTree(list);
-  const newList = treeToArray(tree);
-  return newList;
+  return treeToArray(tree);
 };

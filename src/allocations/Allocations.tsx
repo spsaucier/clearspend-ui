@@ -18,6 +18,7 @@ import type { UpdateAllocationRequest } from 'generated/capital';
 import { useMediaContext } from '_common/api/media/context';
 import { Tag } from '_common/components/Tag';
 
+import { byName } from './components/AllocationSelect/utils';
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
@@ -30,15 +31,9 @@ import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
 import { getFirstAccessibleAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import {
-  getAllocationPermissions,
-  canManageFunds,
-  canManageCards,
-  canManagePermissions,
-  byAllowableRoles,
-} from './utils/permissions';
+import { getAccessibleAllocations } from './utils/getAccessibleAllocations';
+import { getAllocationPermissions, canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
 import { getAllocation, updateAllocation } from './services';
-import { byName } from './components/AllocationSelect/utils';
 
 import css from './Allocations.css';
 
@@ -61,21 +56,14 @@ export default function Allocations() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
-  const accessibleAllocations = createMemo(() => {
-    const accessibleAllocationIds = currentUserRoles()
-      .filter(byAllowableRoles)
-      .map((r) => r.allocationId);
-    return allocations.data
-      ?.map((a) => (accessibleAllocationIds.includes(a.allocationId) ? a : { ...a, inaccessible: true }))
-      .sort(byName);
-  });
+  const accessibleAllocations = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
 
   const onAllocationChange = () => setTab(Tabs.cards, true);
 
   const current = createMemo(() => {
     return params.id
       ? allocations.data?.find(allocationWithID(params.id))
-      : getFirstAccessibleAllocation(accessibleAllocations() || null);
+      : getFirstAccessibleAllocation([...accessibleAllocations()].sort(byName));
   });
 
   const [data, status, , setAllocationIdParam, reload, mutate] = useResource(getAllocation, undefined, false);
@@ -141,7 +129,7 @@ export default function Allocations() {
           side={
             <AllocationsSide
               currentID={current()!.allocationId}
-              items={accessibleAllocations() || null}
+              items={accessibleAllocations()}
               onAllocationChange={onAllocationChange}
             />
           }
