@@ -25,7 +25,6 @@ import {
 import { AddressSelect } from 'employees/components/AddressSelect';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { SelectEmployee } from 'employees/components/SelectEmployee';
-import { formatName } from 'employees/utils/formatName';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   Address,
@@ -45,6 +44,7 @@ import { CardType } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
+import { formatNameString } from '../../../employees/utils/formatName';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -114,7 +114,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const ownerName = createMemo(() => {
     const { employee: userId, personal } = values();
     const user = !!userId && personal ? props.users.find((item) => item.userId === userId) : undefined;
-    return user && formatName(user);
+    return user && formatNameString(user);
   });
 
   createEffect(() => {

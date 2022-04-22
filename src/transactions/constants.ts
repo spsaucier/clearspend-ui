@@ -62,7 +62,7 @@ export const STATUS_FILL_ICONS: Record<ActivityStatus, keyof typeof IconName> = 
 };
 
 export const ACTIVITY_TYPE_TITLES: Partial<Readonly<Record<ActivityType, JSXElement>>> = {
-  NETWORK_CAPTURE: i18n.t('Payment Capture'),
+  NETWORK_CAPTURE: i18n.t('Card Payment'),
   NETWORK_AUTHORIZATION: i18n.t('Payment Hold'),
   NETWORK_REFUND: i18n.t('Refund'),
   CARD_FUND_RETURN: i18n.t('Card Funding Return'),
