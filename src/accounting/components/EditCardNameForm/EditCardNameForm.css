@@ -9,3 +9,8 @@
   font-size: 36px;
   font-weight: bold;
 }
+
+.existing-card-name-warning {
+  color: var(--tw-red-70);
+  font-size: var(--text-12);
+}

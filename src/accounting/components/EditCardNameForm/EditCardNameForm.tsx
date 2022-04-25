@@ -1,8 +1,10 @@
-import { Accessor, createSignal } from 'solid-js';
+import { Accessor, createSignal, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
 import { Input } from '_common/components/Input';
+import { useResource } from '_common/utils/useResource';
+import { getCodatCreditCards } from 'accounting/services';
 
 import css from './EditCardNameForm.css';
 
@@ -13,12 +15,32 @@ interface EditCardNameFormProps {
 
 export function EditCardNameForm(props: Readonly<EditCardNameFormProps>) {
   const [newCardName, setNewCardName] = createSignal<string>(props.oldCardName());
+  const [isCardNameValid, setIsCardNameValid] = createSignal<boolean>(true);
+  const [creditCards] = useResource(getCodatCreditCards);
+
+  const checkNewCardName = (cardName: string) => {
+    creditCards()?.results?.forEach((card) => {
+      if (card.accountName === cardName) setIsCardNameValid(false);
+    });
+    if (isCardNameValid()) setNewCardName(cardName);
+  };
+
   return (
     <div class={css.root}>
       <div>
         <h1 class={css.title}>Edit Card</h1>
         <Text message="Card name" />
-        <Input name="first-name" value={newCardName()} onChange={setNewCardName} error={newCardName() === ''} />
+        <Input
+          name="first-name"
+          value={newCardName()}
+          onChange={checkNewCardName}
+          error={newCardName() === '' || !isCardNameValid()}
+        />
+        <Show when={!isCardNameValid()}>
+          <div class={css.existingCardNameWarning}>
+            <Text message="There is already an account with this name" />
+          </div>
+        </Show>
       </div>
       <Button onClick={() => props.onSave(newCardName())} disabled={newCardName() === ''}>
         <Text message="Save" />
