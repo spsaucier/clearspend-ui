@@ -22,8 +22,12 @@ export const validZipCode: ValidationRuleFn = (value) => {
 export const validCode: ValidationRuleFn = (value) => {
   return /^\d{4}$/.test(value) || String(i18n.t('Inappropriate value'));
 };
+
+const percentOwnershipMinimum = 25;
 export const validOwnershipPercentage: ValidationRuleFn = (value) => {
-  return (+value <= FULL_OWNERSHIP_PERCENTAGE && +value > 0) || String(i18n.t('Inappropriate value'));
+  return (
+    (+value <= FULL_OWNERSHIP_PERCENTAGE && +value >= percentOwnershipMinimum) || String(i18n.t('Must be at least 25%'))
+  );
 };
 
 export const validStreetLine1: ValidationRuleFn = (value) => {

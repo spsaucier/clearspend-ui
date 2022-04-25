@@ -22,6 +22,12 @@ const stringToDate = (dateString: string) => {
 };
 
 export function getFormOptions({ currentUser, leader, business }: Props): FormOptions<FormValues> {
+  const shouldRequirePercentOwnership = (values: FormValues) =>
+    values.relationshipOwner &&
+    ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
+      business.businessType as BusinessType,
+    );
+
   const rules = {
     firstName: [required],
     lastName: [required],
@@ -35,15 +41,9 @@ export function getFormOptions({ currentUser, leader, business }: Props): FormOp
     region: [required],
     postalCode: [required, validZipCode],
     percentageOwnership: [
+      (value: string, values: FormValues) => requiredIf(value, shouldRequirePercentOwnership(values)),
       (value: string, values: FormValues) =>
-        requiredIf(
-          value,
-          values.relationshipOwner &&
-            ![BusinessType.SOLE_PROPRIETORSHIP, BusinessType.INCORPORATED_NON_PROFIT].includes(
-              business.businessType as BusinessType,
-            ),
-        ),
-      validOwnershipPercentage,
+        shouldRequirePercentOwnership(values) ? validOwnershipPercentage(value) : true,
     ],
   };
 
@@ -100,7 +100,7 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     taxIdentificationNumber: cleanSSN(ssn),
     email,
     phone,
-    percentageOwnership: parseInt(percentageOwnership, 10),
+    percentageOwnership: relationshipOwner ? parseInt(percentageOwnership, 10) : 0,
     title,
     relationshipOwner,
     relationshipExecutive,
