@@ -130,7 +130,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     });
   };
 
-  const [unsyncingTransaction, setUnsyncingTransaction] = wrapAction(syncTransaction);
+  const [, setUnsyncingTransaction] = wrapAction(syncTransaction);
   const onUnsyncTransaction = () => {
     props.onUpdate({ ...transaction(), syncStatus: 'READY' });
     setUnsyncingTransaction(transaction().accountActivityId!).catch(() => {
@@ -143,7 +143,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   });
 
   const isSyncedLockedDashboard = !props.showAccountingAdminView && transaction().syncStatus === 'SYNCED_LOCKED';
-  
+
   const [unlockSyncConfirmationOpen, setUnlockSyncConfirmationOpen] = createSignal(false);
   const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
 
