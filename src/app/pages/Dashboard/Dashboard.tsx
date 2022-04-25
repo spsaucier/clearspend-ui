@@ -10,6 +10,7 @@ import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
 import { AllocationTag } from 'allocations/components/AllocationTag';
 import { ALL_ALLOCATIONS, AllocationSelect } from 'allocations/components/AllocationSelect';
+import { ManageBalanceButton } from 'allocations/containers/ManageBalanceButton';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
 import { useAllocations } from 'allocations/stores/allocations';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
@@ -18,7 +19,6 @@ import {
   canManageFunds,
   canManageUsers,
   canManageCards,
-  canLinkBankAccounts,
 } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
@@ -92,23 +92,12 @@ export default function Dashboard() {
       }
       actions={
         <div class={css.actions}>
-          <Show
-            when={
-              currentAllocationId() === getRootAllocation(allocationItems())?.allocationId
-                ? canLinkBankAccounts(userPermissions())
-                : canManageFunds(userPermissions())
-            }
-          >
-            <Button
-              id="add-balance-button"
-              type="primary"
-              size="lg"
-              icon="dollars"
-              onClick={() => setManageId(currentAllocationId())}
-            >
-              <Text message="Manage Balance" />
-            </Button>
-          </Show>
+          <ManageBalanceButton
+            allocationId={currentAllocationId()!}
+            allocations={allocationItems()}
+            userPermissions={userPermissions()}
+            onClick={setManageId}
+          />
           <Show
             when={
               canManageUsers(userPermissions()) ||

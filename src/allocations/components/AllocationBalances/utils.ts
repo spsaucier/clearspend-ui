@@ -24,7 +24,7 @@ function toAllocationData(
   return {
     allocation: item,
     balance: getAvailableBalance(item),
-    path: getParentsChain(allocations, item, false)
+    path: getParentsChain(allocations, item, { excludeRoot: true })
       .map((allocation) => allocation.name)
       .join('/'),
   };

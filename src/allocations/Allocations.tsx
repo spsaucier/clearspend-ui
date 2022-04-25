@@ -26,6 +26,7 @@ import { Transactions } from './containers/Transactions';
 import { Ledger } from './containers/Ledger';
 import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
+import { ManageBalanceButton } from './containers/ManageBalanceButton';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
@@ -99,11 +100,12 @@ export default function Allocations() {
           breadcrumbs={media.medium && <Breadcrumbs current={current()!} items={allocations.data!} />}
           actions={
             <div class={css.actions}>
-              <Show when={canManageFunds(userPermissions())}>
-                <Button type="primary" size="lg" icon="dollars" onClick={() => setManageId(current()?.allocationId)}>
-                  <Text message="Manage Balance" />
-                </Button>
-              </Show>
+              <ManageBalanceButton
+                allocationId={current()!.allocationId}
+                allocations={accessibleAllocations()}
+                userPermissions={userPermissions()}
+                onClick={setManageId}
+              />
               <Show when={canManageFunds(userPermissions())}>
                 <Button
                   size="lg"
@@ -183,7 +185,7 @@ export default function Allocations() {
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
             <ManageBalance
               allocationId={manageId()!}
-              allocations={allocations.data!}
+              allocations={accessibleAllocations()}
               onReload={allocations.reload}
               onClose={() => setManageId()}
             />
