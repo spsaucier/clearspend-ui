@@ -4,6 +4,7 @@ import type {
   CardDetailsResponse,
   CardStatementRequest,
   IssueCardRequest,
+  IssueCardResponse,
   PagedDataSearchCardData,
   RevealCardRequest,
   RevealCardResponse,
@@ -16,7 +17,7 @@ export async function getCard(cardId: Card['cardId']) {
 }
 
 export async function saveCard(params: Readonly<IssueCardRequest>) {
-  return (await service.post('/cards', params)).data;
+  return (await service.post<readonly Readonly<IssueCardResponse>[]>('/cards', params)).data;
 }
 
 export async function updateCard(cardId: string, params: Readonly<UpdateCardRequest>) {

@@ -40,7 +40,7 @@ export default function CardEdit() {
   };
 
   const onSave = async (data: Readonly<IssueCardRequest>) => {
-    await saveCard(data).catch((e: { data?: { message?: string } }) => {
+    const resp = await saveCard(data).catch((e: { data?: { message?: string } }) => {
       setErrorLevel('WARNING');
       if (e.data?.message === 'Physical card issuance limit exceeded') {
         let message = i18n.t(
@@ -60,6 +60,7 @@ export default function CardEdit() {
         setErrorLevel('ERROR');
         messages.error({ title: i18n.t('Failed to create card') });
       }
+      return undefined;
     });
 
     if (errorLevel() !== 'ERROR') {
@@ -87,8 +88,11 @@ export default function CardEdit() {
           });
         }
       }
-      // TODO: after CAP-842, redirect to created card if possible
-      navigate(location.state?.prev || '/cards');
+
+      const prevLocation = location.state?.prev;
+      if (prevLocation) navigate(prevLocation);
+      else if (resp?.length === 1) navigate(`/cards/view/${resp[0]!.cardId}`);
+      else navigate('/cards');
     }
   };
 
