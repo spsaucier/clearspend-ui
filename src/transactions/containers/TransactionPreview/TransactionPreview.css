@@ -137,3 +137,22 @@
   background: var(--tw-gray-80);
   border: 1px solid var(--tw-gray-60);
 }
+
+.popup {
+  width: 312px;
+}
+
+.popup-title {
+  font-weight: var(--font-700);
+}
+
+.popup-content {
+  margin-top: var(--pd-4);
+}
+
+.footer {
+  display: flex;
+  margin-top: var(--pd-16);
+  justify-content: flex-end;
+  grid-gap: var(--pd-8);
+}

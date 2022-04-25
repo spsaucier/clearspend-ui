@@ -8,6 +8,7 @@ import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
+import { Popover } from '_common/components/Popover';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { useAllocations } from 'allocations/stores/allocations';
@@ -133,6 +134,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
 
+  const [unlockSyncConfirmationOpen, setUnlockSyncConfirmationOpen] = createSignal(false);
+  const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
+
+  const onUnlock = () => {
+    onCancelUnlock();
+  };
+
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
@@ -214,9 +222,47 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               }
             >
               <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
-                <Button wide icon="lock" data-name="unlock-transaction-button">
-                  <Text message="Unlock" />
-                </Button>
+                <Popover
+                  balloon
+                  position="bottom-center"
+                  open={unlockSyncConfirmationOpen()}
+                  onClickOutside={() => setUnlockSyncConfirmationOpen(false)}
+                  trigger="click"
+                  leaveDelay={0}
+                  class={css.popup}
+                  content={
+                    <div>
+                      <Text message="Are you sure?" class={css.popupTitle!} />
+                      <div class={css.popupContent}>
+                        <Text message="This transaction has already been synced. Syncing this transaction again will create a duplicate transaction in your accounting system." />
+                        <div class={css.footer}>
+                          <Button
+                            type="default"
+                            view="ghost"
+                            onClick={onCancelUnlock}
+                            data-name="keep-locked-transaction-button"
+                          >
+                            <Text message="No, keep locked" />
+                          </Button>
+                          <Button type="danger" onClick={onUnlock} data-name="unlock-transaction-button">
+                            <Text message="Unlock" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                >
+                  {() => (
+                    <Button
+                      wide
+                      icon="lock"
+                      onClick={() => setUnlockSyncConfirmationOpen(true)}
+                      data-name="unlock-transaction-button"
+                    >
+                      <Text message="Unlock" />
+                    </Button>
+                  )}
+                </Popover>
               </Match>
             </Switch>
           </div>
