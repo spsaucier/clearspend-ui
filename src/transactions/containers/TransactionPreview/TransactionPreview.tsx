@@ -130,6 +130,14 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     });
   };
 
+  const [unsyncingTransaction, setUnsyncingTransaction] = wrapAction(syncTransaction);
+  const onUnsyncTransaction = () => {
+    props.onUpdate({ ...transaction(), syncStatus: 'READY' });
+    setUnsyncingTransaction(transaction().accountActivityId!).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
+  };
+
   const canSubmitNote = createMemo(() => {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
@@ -140,7 +148,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
 
   const onUnlock = () => {
-    onCancelUnlock();
+    setUnlockSyncConfirmationOpen(false);
+    onUnsyncTransaction();
   };
 
   return (
