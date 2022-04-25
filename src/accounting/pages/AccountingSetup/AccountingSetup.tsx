@@ -1,4 +1,4 @@
-import { createSignal, Match, onMount, Switch } from 'solid-js';
+import { createSignal, Match, onCleanup, onMount, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import {
@@ -9,23 +9,38 @@ import {
 } from 'accounting/services';
 import { useBusiness } from 'app/containers/Main/context';
 import { AccountSetupStep } from 'app/types/businesses';
+import { Button } from '_common/components/Button';
 
 import { AddCreditCardForm } from '../AddCreditCardForm';
 import { ChartOfAccounts } from '../ChartOfAccounts';
+import { AwaitingCodatSync } from '../AwaitingCodatSync/AwaitingCodatSync';
+
+const REFETCH_MS_CHECK_ACCOUNTING_STEP = 3000; // 3 seconds
 
 export default function AccountingSetup() {
-  const { business, mutate } = useBusiness();
+  const { business, mutate, refetch } = useBusiness();
 
-  const [step, setStep] = createSignal<AccountSetupStep | undefined>(
-    business().accountingSetupStep as AccountSetupStep,
-  );
+  const [totalWaitTime, setTotalWaitTime] = createSignal<number>(0);
+
+  onMount(() => {
+    const refetchInterval = setInterval(() => {
+      setTotalWaitTime(totalWaitTime() + REFETCH_MS_CHECK_ACCOUNTING_STEP);
+      if (business().accountingSetupStep === AccountSetupStep.AWAITING_SYNC) {
+        refetch();
+      }
+    }, REFETCH_MS_CHECK_ACCOUNTING_STEP);
+    onCleanup(() => {
+      clearInterval(refetchInterval);
+    });
+  });
+
   const [hasIntegrationConnection, setHasIntegrationConnection] = createSignal<boolean | null>(null);
 
   const navigate = useNavigate();
 
   const onUpdateCreditCard = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.MAP_CATEGORIES });
-    setStep(AccountSetupStep.MAP_CATEGORIES);
+    mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.MAP_CATEGORIES } });
   };
 
   const getCompanyConnectionState = async () => {
@@ -35,14 +50,13 @@ export default function AccountingSetup() {
 
   onMount(async () => {
     getCompanyConnectionState();
-    if (step() === AccountSetupStep.COMPLETE) {
+    if (business().accountingSetupStep === AccountSetupStep.COMPLETE) {
       navigate('/accounting');
     }
   });
 
   const onCompleteChartOfAccounts = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
-    setStep(AccountSetupStep.COMPLETE);
     mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE } });
     navigate('/accounting?notification=setup');
   };
@@ -52,7 +66,6 @@ export default function AccountingSetup() {
     deleteIntegrationExpenseCategoryMappings();
     await deleteIntegrationConnection();
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.ADD_CREDIT_CARD });
-    setStep(AccountSetupStep.ADD_CREDIT_CARD);
   };
 
   return (
@@ -60,10 +73,14 @@ export default function AccountingSetup() {
       <Switch>
         <Match when={hasIntegrationConnection() === true}>
           <Switch>
-            <Match when={step() === AccountSetupStep.ADD_CREDIT_CARD}>
+            <Match when={business().accountingSetupStep === AccountSetupStep.AWAITING_SYNC}>
+              <AwaitingCodatSync />
+              <Button onClick={() => refetch()}></Button>
+            </Match>
+            <Match when={business().accountingSetupStep === AccountSetupStep.ADD_CREDIT_CARD}>
               <AddCreditCardForm onNext={onUpdateCreditCard} onCancel={onCancelAccountingSetup} />
             </Match>
-            <Match when={step() === AccountSetupStep.MAP_CATEGORIES}>
+            <Match when={business().accountingSetupStep === AccountSetupStep.MAP_CATEGORIES}>
               <ChartOfAccounts onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
             </Match>
           </Switch>

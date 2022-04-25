@@ -62,6 +62,7 @@ export enum BusinessTypeCategory {
 }
 
 export enum AccountSetupStep {
+  AWAITING_SYNC = 'AWAITING_SYNC',
   ADD_CREDIT_CARD = 'ADD_CREDIT_CARD',
   MAP_CATEGORIES = 'MAP_CATEGORIES',
   COMPLETE = 'COMPLETE',
