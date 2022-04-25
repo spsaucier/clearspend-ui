@@ -138,6 +138,30 @@
   border: 1px solid var(--tw-gray-60);
 }
 
+.row {
+  display: flex;
+  min-height: 1.5em;
+  margin-bottom: 4px;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.icon {
+  min-width: 30px;
+  height: auto;
+  margin-right: 8px;
+  margin-bottom: var(--pd-12) 0;
+  color: var(--tw-red-70);
+}
+
+.text {
+  display: flex;
+  margin-bottom: var(--pd-12);
+  justify-content: space-between;
+  font-size: var(--text-12);
+  line-height: 1.33;
+}
+
 .popup {
   width: 312px;
 }

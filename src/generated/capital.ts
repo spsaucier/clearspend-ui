@@ -43,254 +43,254 @@ export interface Address {
   region?: string;
   postalCode?: string;
   country?:
-    | 'UNSPECIFIED'
-    | 'ABW'
-    | 'AFG'
-    | 'AGO'
-    | 'AIA'
-    | 'ALA'
-    | 'ALB'
-    | 'AND'
-    | 'ANT'
-    | 'ARE'
-    | 'ARG'
-    | 'ARM'
-    | 'ASM'
-    | 'ATA'
-    | 'ATF'
-    | 'ATG'
-    | 'AUS'
-    | 'AUT'
-    | 'AZE'
-    | 'BDI'
-    | 'BEL'
-    | 'BEN'
-    | 'BFA'
-    | 'BGD'
-    | 'BGR'
-    | 'BHR'
-    | 'BHS'
-    | 'BIH'
-    | 'BLM'
-    | 'BLR'
-    | 'BLZ'
-    | 'BMU'
-    | 'BOL'
-    | 'BRA'
-    | 'BRB'
-    | 'BRN'
-    | 'BTN'
-    | 'BVT'
-    | 'BWA'
-    | 'CAF'
-    | 'CAN'
-    | 'CCK'
-    | 'CHE'
-    | 'CHL'
-    | 'CHN'
-    | 'CIV'
-    | 'CMR'
-    | 'COD'
-    | 'COG'
-    | 'COK'
-    | 'COL'
-    | 'COM'
-    | 'CPV'
-    | 'CRI'
-    | 'CUB'
-    | 'CXR'
-    | 'CYM'
-    | 'CYP'
-    | 'CZE'
-    | 'DEU'
-    | 'DJI'
-    | 'DMA'
-    | 'DNK'
-    | 'DOM'
-    | 'DZA'
-    | 'ECU'
-    | 'EGY'
-    | 'ERI'
-    | 'ESH'
-    | 'ESP'
-    | 'EST'
-    | 'ETH'
-    | 'FIN'
-    | 'FJI'
-    | 'FLK'
-    | 'FRA'
-    | 'FRO'
-    | 'FSM'
-    | 'GAB'
-    | 'GBR'
-    | 'GEO'
-    | 'GGY'
-    | 'GHA'
-    | 'GIB'
-    | 'GIN'
-    | 'GLP'
-    | 'GMB'
-    | 'GNB'
-    | 'GNQ'
-    | 'GRC'
-    | 'GRD'
-    | 'GRL'
-    | 'GTM'
-    | 'GUF'
-    | 'GUM'
-    | 'GUY'
-    | 'HKG'
-    | 'HMD'
-    | 'HND'
-    | 'HRV'
-    | 'HTI'
-    | 'HUN'
-    | 'IDN'
-    | 'IMN'
-    | 'IND'
-    | 'IOT'
-    | 'IRL'
-    | 'IRN'
-    | 'IRQ'
-    | 'ISL'
-    | 'ISR'
-    | 'ITA'
-    | 'JAM'
-    | 'JEY'
-    | 'JOR'
-    | 'JPN'
-    | 'KAZ'
-    | 'KEN'
-    | 'KGZ'
-    | 'KHM'
-    | 'KIR'
-    | 'KNA'
-    | 'KOR'
-    | 'KWT'
-    | 'LAO'
-    | 'LBN'
-    | 'LBR'
-    | 'LBY'
-    | 'LCA'
-    | 'LIE'
-    | 'LKA'
-    | 'LSO'
-    | 'LTU'
-    | 'LUX'
-    | 'LVA'
-    | 'MAC'
-    | 'MAF'
-    | 'MAR'
-    | 'MCO'
-    | 'MDA'
-    | 'MDG'
-    | 'MDV'
-    | 'MEX'
-    | 'MHL'
-    | 'MKD'
-    | 'MLI'
-    | 'MLT'
-    | 'MMR'
-    | 'MNE'
-    | 'MNG'
-    | 'MNP'
-    | 'MOZ'
-    | 'MRT'
-    | 'MSR'
-    | 'MTQ'
-    | 'MUS'
-    | 'MWI'
-    | 'MYS'
-    | 'MYT'
-    | 'NAM'
-    | 'NCL'
-    | 'NER'
-    | 'NFK'
-    | 'NGA'
-    | 'NIC'
-    | 'NIU'
-    | 'NLD'
-    | 'NOR'
-    | 'NPL'
-    | 'NRU'
-    | 'NZL'
-    | 'OMN'
-    | 'PAK'
-    | 'PAN'
-    | 'PCN'
-    | 'PER'
-    | 'PHL'
-    | 'PLW'
-    | 'PNG'
-    | 'POL'
-    | 'PRI'
-    | 'PRK'
-    | 'PRT'
-    | 'PRY'
-    | 'PSE'
-    | 'PYF'
-    | 'QAT'
-    | 'REU'
-    | 'ROU'
-    | 'RUS'
-    | 'RWA'
-    | 'SAU'
-    | 'SDN'
-    | 'SEN'
-    | 'SGP'
-    | 'SGS'
-    | 'SHN'
-    | 'SJM'
-    | 'SLB'
-    | 'SLE'
-    | 'SLV'
-    | 'SMR'
-    | 'SOM'
-    | 'SPM'
-    | 'SRB'
-    | 'SSD'
-    | 'STP'
-    | 'SUR'
-    | 'SVK'
-    | 'SVN'
-    | 'SWE'
-    | 'SWZ'
-    | 'SYC'
-    | 'SYR'
-    | 'TCA'
-    | 'TCD'
-    | 'TGO'
-    | 'THA'
-    | 'TJK'
-    | 'TKL'
-    | 'TKM'
-    | 'TLS'
-    | 'TON'
-    | 'TTO'
-    | 'TUN'
-    | 'TUR'
-    | 'TUV'
-    | 'TWN'
-    | 'TZA'
-    | 'UGA'
-    | 'UKR'
-    | 'UMI'
-    | 'URY'
-    | 'USA'
-    | 'UZB'
-    | 'VAT'
-    | 'VCT'
-    | 'VEN'
-    | 'VGB'
-    | 'VIR'
-    | 'VNM'
-    | 'VUT'
-    | 'WLF'
-    | 'WSM'
-    | 'YEM'
-    | 'ZAF'
-    | 'ZMB'
-    | 'ZWE';
+    | "UNSPECIFIED"
+    | "ABW"
+    | "AFG"
+    | "AGO"
+    | "AIA"
+    | "ALA"
+    | "ALB"
+    | "AND"
+    | "ANT"
+    | "ARE"
+    | "ARG"
+    | "ARM"
+    | "ASM"
+    | "ATA"
+    | "ATF"
+    | "ATG"
+    | "AUS"
+    | "AUT"
+    | "AZE"
+    | "BDI"
+    | "BEL"
+    | "BEN"
+    | "BFA"
+    | "BGD"
+    | "BGR"
+    | "BHR"
+    | "BHS"
+    | "BIH"
+    | "BLM"
+    | "BLR"
+    | "BLZ"
+    | "BMU"
+    | "BOL"
+    | "BRA"
+    | "BRB"
+    | "BRN"
+    | "BTN"
+    | "BVT"
+    | "BWA"
+    | "CAF"
+    | "CAN"
+    | "CCK"
+    | "CHE"
+    | "CHL"
+    | "CHN"
+    | "CIV"
+    | "CMR"
+    | "COD"
+    | "COG"
+    | "COK"
+    | "COL"
+    | "COM"
+    | "CPV"
+    | "CRI"
+    | "CUB"
+    | "CXR"
+    | "CYM"
+    | "CYP"
+    | "CZE"
+    | "DEU"
+    | "DJI"
+    | "DMA"
+    | "DNK"
+    | "DOM"
+    | "DZA"
+    | "ECU"
+    | "EGY"
+    | "ERI"
+    | "ESH"
+    | "ESP"
+    | "EST"
+    | "ETH"
+    | "FIN"
+    | "FJI"
+    | "FLK"
+    | "FRA"
+    | "FRO"
+    | "FSM"
+    | "GAB"
+    | "GBR"
+    | "GEO"
+    | "GGY"
+    | "GHA"
+    | "GIB"
+    | "GIN"
+    | "GLP"
+    | "GMB"
+    | "GNB"
+    | "GNQ"
+    | "GRC"
+    | "GRD"
+    | "GRL"
+    | "GTM"
+    | "GUF"
+    | "GUM"
+    | "GUY"
+    | "HKG"
+    | "HMD"
+    | "HND"
+    | "HRV"
+    | "HTI"
+    | "HUN"
+    | "IDN"
+    | "IMN"
+    | "IND"
+    | "IOT"
+    | "IRL"
+    | "IRN"
+    | "IRQ"
+    | "ISL"
+    | "ISR"
+    | "ITA"
+    | "JAM"
+    | "JEY"
+    | "JOR"
+    | "JPN"
+    | "KAZ"
+    | "KEN"
+    | "KGZ"
+    | "KHM"
+    | "KIR"
+    | "KNA"
+    | "KOR"
+    | "KWT"
+    | "LAO"
+    | "LBN"
+    | "LBR"
+    | "LBY"
+    | "LCA"
+    | "LIE"
+    | "LKA"
+    | "LSO"
+    | "LTU"
+    | "LUX"
+    | "LVA"
+    | "MAC"
+    | "MAF"
+    | "MAR"
+    | "MCO"
+    | "MDA"
+    | "MDG"
+    | "MDV"
+    | "MEX"
+    | "MHL"
+    | "MKD"
+    | "MLI"
+    | "MLT"
+    | "MMR"
+    | "MNE"
+    | "MNG"
+    | "MNP"
+    | "MOZ"
+    | "MRT"
+    | "MSR"
+    | "MTQ"
+    | "MUS"
+    | "MWI"
+    | "MYS"
+    | "MYT"
+    | "NAM"
+    | "NCL"
+    | "NER"
+    | "NFK"
+    | "NGA"
+    | "NIC"
+    | "NIU"
+    | "NLD"
+    | "NOR"
+    | "NPL"
+    | "NRU"
+    | "NZL"
+    | "OMN"
+    | "PAK"
+    | "PAN"
+    | "PCN"
+    | "PER"
+    | "PHL"
+    | "PLW"
+    | "PNG"
+    | "POL"
+    | "PRI"
+    | "PRK"
+    | "PRT"
+    | "PRY"
+    | "PSE"
+    | "PYF"
+    | "QAT"
+    | "REU"
+    | "ROU"
+    | "RUS"
+    | "RWA"
+    | "SAU"
+    | "SDN"
+    | "SEN"
+    | "SGP"
+    | "SGS"
+    | "SHN"
+    | "SJM"
+    | "SLB"
+    | "SLE"
+    | "SLV"
+    | "SMR"
+    | "SOM"
+    | "SPM"
+    | "SRB"
+    | "SSD"
+    | "STP"
+    | "SUR"
+    | "SVK"
+    | "SVN"
+    | "SWE"
+    | "SWZ"
+    | "SYC"
+    | "SYR"
+    | "TCA"
+    | "TCD"
+    | "TGO"
+    | "THA"
+    | "TJK"
+    | "TKL"
+    | "TKM"
+    | "TLS"
+    | "TON"
+    | "TTO"
+    | "TUN"
+    | "TUR"
+    | "TUV"
+    | "TWN"
+    | "TZA"
+    | "UGA"
+    | "UKR"
+    | "UMI"
+    | "URY"
+    | "USA"
+    | "UZB"
+    | "VAT"
+    | "VCT"
+    | "VEN"
+    | "VGB"
+    | "VIR"
+    | "VNM"
+    | "VUT"
+    | "WLF"
+    | "WSM"
+    | "YEM"
+    | "ZAF"
+    | "ZMB"
+    | "ZWE";
 }
 
 export interface Business {
@@ -298,15 +298,15 @@ export interface Business {
   businessId?: string;
   legalName?: string;
   businessType?:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
+    | "INDIVIDUAL"
+    | "SOLE_PROPRIETORSHIP"
+    | "SINGLE_MEMBER_LLC"
+    | "MULTI_MEMBER_LLC"
+    | "PRIVATE_PARTNERSHIP"
+    | "PUBLIC_PARTNERSHIP"
+    | "PRIVATE_CORPORATION"
+    | "PUBLIC_CORPORATION"
+    | "INCORPORATED_NON_PROFIT";
   employerIdentificationNumber?: string;
 
   /**
@@ -316,16 +316,20 @@ export interface Business {
   businessPhone?: string;
   address?: Address;
   onboardingStep?:
-    | 'BUSINESS'
-    | 'BUSINESS_OWNERS'
-    | 'SOFT_FAIL'
-    | 'REVIEW'
-    | 'LINK_ACCOUNT'
-    | 'TRANSFER_MONEY'
-    | 'COMPLETE';
-  knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
-  accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+    | "BUSINESS"
+    | "BUSINESS_OWNERS"
+    | "SOFT_FAIL"
+    | "REVIEW"
+    | "LINK_ACCOUNT"
+    | "TRANSFER_MONEY"
+    | "COMPLETE";
+  knowYourBusinessStatus?: "PENDING" | "REVIEW" | "FAIL" | "PASS";
+  status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED" | "CLOSED";
+  accountingSetupStep?:
+    | "AWAITING_SYNC"
+    | "ADD_CREDIT_CARD"
+    | "MAP_CATEGORIES"
+    | "COMPLETE";
   autoCreateExpenseCategories?: boolean;
   mcc?: string;
   businessName?: string;
@@ -382,7 +386,7 @@ export interface CreateUserResponse {
 export interface OrderBy {
   /** @pattern [a-zA-Z0-9_\-]* */
   item?: string;
-  direction?: 'ASC' | 'DESC';
+  direction?: "ASC" | "DESC";
 }
 
 export interface PageRequest {
@@ -428,7 +432,7 @@ export interface PagedDataUserPageData {
 export interface UserData {
   /** @format uuid */
   userId?: string;
-  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  type?: "EMPLOYEE" | "BUSINESS_OWNER";
   firstName?: string;
   lastName?: string;
 }
@@ -453,19 +457,19 @@ export interface AccountActivityRequest {
   cardId?: string;
   searchText?: string;
   types?: (
-    | 'BANK_DEPOSIT_STRIPE'
-    | 'BANK_DEPOSIT_ACH'
-    | 'BANK_DEPOSIT_WIRE'
-    | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_WITHDRAWAL'
-    | 'BANK_WITHDRAWAL_RETURN'
-    | 'MANUAL'
-    | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE'
-    | 'NETWORK_REFUND'
-    | 'REALLOCATE'
-    | 'FEE'
-    | 'CARD_FUND_RETURN'
+    | "BANK_DEPOSIT_STRIPE"
+    | "BANK_DEPOSIT_ACH"
+    | "BANK_DEPOSIT_WIRE"
+    | "BANK_DEPOSIT_RETURN"
+    | "BANK_WITHDRAWAL"
+    | "BANK_WITHDRAWAL_RETURN"
+    | "MANUAL"
+    | "NETWORK_AUTHORIZATION"
+    | "NETWORK_CAPTURE"
+    | "NETWORK_REFUND"
+    | "REALLOCATE"
+    | "FEE"
+    | "CARD_FUND_RETURN"
   )[];
 
   /** @format date-time */
@@ -473,12 +477,19 @@ export interface AccountActivityRequest {
 
   /** @format date-time */
   to?: string;
-  statuses?: ('PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED')[];
+  statuses?: (
+    | "PENDING"
+    | "DECLINED"
+    | "APPROVED"
+    | "CANCELED"
+    | "CREDIT"
+    | "PROCESSED"
+  )[];
   amount?: FilterAmount;
   categories?: string[];
   withReceipt?: boolean;
   withoutReceipt?: boolean;
-  syncStatus?: ('SYNCED_LOCKED' | 'READY' | 'NOT_READY')[];
+  syncStatus?: ("SYNCED_LOCKED" | "READY" | "NOT_READY")[];
   missingExpenseCategory?: boolean;
 }
 
@@ -497,26 +508,32 @@ export interface AccountActivityResponse {
   card?: CardInfo;
   merchant?: Merchant;
   type?:
-    | 'BANK_DEPOSIT_STRIPE'
-    | 'BANK_DEPOSIT_ACH'
-    | 'BANK_DEPOSIT_WIRE'
-    | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_WITHDRAWAL'
-    | 'BANK_WITHDRAWAL_RETURN'
-    | 'MANUAL'
-    | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE'
-    | 'NETWORK_REFUND'
-    | 'REALLOCATE'
-    | 'FEE'
-    | 'CARD_FUND_RETURN';
-  status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
+    | "BANK_DEPOSIT_STRIPE"
+    | "BANK_DEPOSIT_ACH"
+    | "BANK_DEPOSIT_WIRE"
+    | "BANK_DEPOSIT_RETURN"
+    | "BANK_WITHDRAWAL"
+    | "BANK_WITHDRAWAL_RETURN"
+    | "MANUAL"
+    | "NETWORK_AUTHORIZATION"
+    | "NETWORK_CAPTURE"
+    | "NETWORK_REFUND"
+    | "REALLOCATE"
+    | "FEE"
+    | "CARD_FUND_RETURN";
+  status?:
+    | "PENDING"
+    | "DECLINED"
+    | "APPROVED"
+    | "CANCELED"
+    | "CREDIT"
+    | "PROCESSED";
   amount?: Amount;
   requestedAmount?: Amount;
   receipt?: ReceiptDetails;
   notes?: string;
   expenseDetails?: ExpenseDetails;
-  syncStatus?: 'SYNCED_LOCKED' | 'READY' | 'NOT_READY';
+  syncStatus?: "SYNCED_LOCKED" | "READY" | "NOT_READY";
 
   /** @format date-time */
   lastSyncTime?: string;
@@ -529,203 +546,203 @@ export interface AccountActivityResponse {
 }
 
 export type AddressPostalCodeMismatch = DeclineDetails & {
-  postalCode?: string;
+  postalCode?: string,
 };
 
 export interface Amount {
   currency?:
-    | 'UNSPECIFIED'
-    | 'AED'
-    | 'AFN'
-    | 'ALL'
-    | 'AMD'
-    | 'ANG'
-    | 'AOA'
-    | 'ARS'
-    | 'AUD'
-    | 'AWG'
-    | 'AZN'
-    | 'BAM'
-    | 'BBD'
-    | 'BDT'
-    | 'BGN'
-    | 'BHD'
-    | 'BIF'
-    | 'BMD'
-    | 'BND'
-    | 'BOB'
-    | 'BRL'
-    | 'BSD'
-    | 'BTN'
-    | 'BWP'
-    | 'BYN'
-    | 'BYR'
-    | 'BZD'
-    | 'CAD'
-    | 'CDF'
-    | 'CHF'
-    | 'CLP'
-    | 'CNY'
-    | 'COP'
-    | 'CRC'
-    | 'CUC'
-    | 'CUP'
-    | 'CVE'
-    | 'CZK'
-    | 'DJF'
-    | 'DKK'
-    | 'DOP'
-    | 'DZD'
-    | 'EGP'
-    | 'ERN'
-    | 'ETB'
-    | 'EUR'
-    | 'FJD'
-    | 'FKP'
-    | 'GBP'
-    | 'GEL'
-    | 'GHS'
-    | 'GIP'
-    | 'GMD'
-    | 'GNF'
-    | 'GTQ'
-    | 'GYD'
-    | 'HKD'
-    | 'HNL'
-    | 'HRK'
-    | 'HTG'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'IQD'
-    | 'IRR'
-    | 'ISK'
-    | 'JMD'
-    | 'JOD'
-    | 'JPY'
-    | 'KES'
-    | 'KGS'
-    | 'KHR'
-    | 'KMF'
-    | 'KPW'
-    | 'KRW'
-    | 'KWD'
-    | 'KYD'
-    | 'KZT'
-    | 'LAK'
-    | 'LBP'
-    | 'LKR'
-    | 'LRD'
-    | 'LSL'
-    | 'LTL'
-    | 'LYD'
-    | 'MAD'
-    | 'MDL'
-    | 'MGA'
-    | 'MKD'
-    | 'MMK'
-    | 'MNT'
-    | 'MOP'
-    | 'MRO'
-    | 'MRU'
-    | 'MUR'
-    | 'MVR'
-    | 'MWK'
-    | 'MXN'
-    | 'MYR'
-    | 'MZN'
-    | 'NAD'
-    | 'NGN'
-    | 'NIO'
-    | 'NOK'
-    | 'NPR'
-    | 'NZD'
-    | 'OMR'
-    | 'PAB'
-    | 'PEN'
-    | 'PGK'
-    | 'PHP'
-    | 'PKR'
-    | 'PLN'
-    | 'PYG'
-    | 'QAR'
-    | 'RON'
-    | 'RSD'
-    | 'RUB'
-    | 'RUR'
-    | 'RWF'
-    | 'SAR'
-    | 'SBD'
-    | 'SCR'
-    | 'SDG'
-    | 'SEK'
-    | 'SGD'
-    | 'SHP'
-    | 'SLL'
-    | 'SOS'
-    | 'SRD'
-    | 'SSP'
-    | 'STD'
-    | 'STN'
-    | 'SVC'
-    | 'SYP'
-    | 'SZL'
-    | 'THB'
-    | 'TJS'
-    | 'TMT'
-    | 'TND'
-    | 'TOP'
-    | 'TRY'
-    | 'TTD'
-    | 'TWD'
-    | 'TZS'
-    | 'UAH'
-    | 'UGX'
-    | 'USD'
-    | 'UYU'
-    | 'UZS'
-    | 'VEF'
-    | 'VES'
-    | 'VND'
-    | 'VUV'
-    | 'WST'
-    | 'XAF'
-    | 'XCD'
-    | 'XOF'
-    | 'XPF'
-    | 'YER'
-    | 'ZAR'
-    | 'ZMW'
-    | 'ZWL';
+    | "UNSPECIFIED"
+    | "AED"
+    | "AFN"
+    | "ALL"
+    | "AMD"
+    | "ANG"
+    | "AOA"
+    | "ARS"
+    | "AUD"
+    | "AWG"
+    | "AZN"
+    | "BAM"
+    | "BBD"
+    | "BDT"
+    | "BGN"
+    | "BHD"
+    | "BIF"
+    | "BMD"
+    | "BND"
+    | "BOB"
+    | "BRL"
+    | "BSD"
+    | "BTN"
+    | "BWP"
+    | "BYN"
+    | "BYR"
+    | "BZD"
+    | "CAD"
+    | "CDF"
+    | "CHF"
+    | "CLP"
+    | "CNY"
+    | "COP"
+    | "CRC"
+    | "CUC"
+    | "CUP"
+    | "CVE"
+    | "CZK"
+    | "DJF"
+    | "DKK"
+    | "DOP"
+    | "DZD"
+    | "EGP"
+    | "ERN"
+    | "ETB"
+    | "EUR"
+    | "FJD"
+    | "FKP"
+    | "GBP"
+    | "GEL"
+    | "GHS"
+    | "GIP"
+    | "GMD"
+    | "GNF"
+    | "GTQ"
+    | "GYD"
+    | "HKD"
+    | "HNL"
+    | "HRK"
+    | "HTG"
+    | "HUF"
+    | "IDR"
+    | "ILS"
+    | "INR"
+    | "IQD"
+    | "IRR"
+    | "ISK"
+    | "JMD"
+    | "JOD"
+    | "JPY"
+    | "KES"
+    | "KGS"
+    | "KHR"
+    | "KMF"
+    | "KPW"
+    | "KRW"
+    | "KWD"
+    | "KYD"
+    | "KZT"
+    | "LAK"
+    | "LBP"
+    | "LKR"
+    | "LRD"
+    | "LSL"
+    | "LTL"
+    | "LYD"
+    | "MAD"
+    | "MDL"
+    | "MGA"
+    | "MKD"
+    | "MMK"
+    | "MNT"
+    | "MOP"
+    | "MRO"
+    | "MRU"
+    | "MUR"
+    | "MVR"
+    | "MWK"
+    | "MXN"
+    | "MYR"
+    | "MZN"
+    | "NAD"
+    | "NGN"
+    | "NIO"
+    | "NOK"
+    | "NPR"
+    | "NZD"
+    | "OMR"
+    | "PAB"
+    | "PEN"
+    | "PGK"
+    | "PHP"
+    | "PKR"
+    | "PLN"
+    | "PYG"
+    | "QAR"
+    | "RON"
+    | "RSD"
+    | "RUB"
+    | "RUR"
+    | "RWF"
+    | "SAR"
+    | "SBD"
+    | "SCR"
+    | "SDG"
+    | "SEK"
+    | "SGD"
+    | "SHP"
+    | "SLL"
+    | "SOS"
+    | "SRD"
+    | "SSP"
+    | "STD"
+    | "STN"
+    | "SVC"
+    | "SYP"
+    | "SZL"
+    | "THB"
+    | "TJS"
+    | "TMT"
+    | "TND"
+    | "TOP"
+    | "TRY"
+    | "TTD"
+    | "TWD"
+    | "TZS"
+    | "UAH"
+    | "UGX"
+    | "USD"
+    | "UYU"
+    | "UZS"
+    | "VEF"
+    | "VES"
+    | "VND"
+    | "VUV"
+    | "WST"
+    | "XAF"
+    | "XCD"
+    | "XOF"
+    | "XPF"
+    | "YER"
+    | "ZAR"
+    | "ZMW"
+    | "ZWL";
   amount?: number;
 }
 
 export interface DeclineDetails {
   reason?:
-    | 'INSUFFICIENT_FUNDS'
-    | 'INVALID_CARD_STATUS'
-    | 'CARD_NOT_FOUND'
-    | 'LIMIT_EXCEEDED'
-    | 'OPERATION_LIMIT_EXCEEDED'
-    | 'SPEND_CONTROL_VIOLATED'
-    | 'ADDRESS_POSTAL_CODE_MISMATCH'
-    | 'CVC_MISMATCH'
-    | 'EXPIRY_MISMATCH'
-    | 'BUSINESS_SUSPENSION'
-    | 'ST_ACCOUNT_CLOSED'
-    | 'ST_ACCOUNT_FROZEN'
-    | 'ST_BANK_ACCOUNT_RESTRICTED'
-    | 'ST_BANK_OWNERSHIP_CHANGED'
-    | 'ST_COULD_NOT_PROCESS'
-    | 'ST_INVALID_ACCOUNT_NUMBER'
-    | 'ST_INCORRECT_ACCOUNT_HOLDER_NAME'
-    | 'ST_INVALID_CURRENCY'
-    | 'ST_NO_ACCOUNT'
-    | 'ST_DECLINED'
-    | 'ST_FAILED'
-    | 'ST_CANCELLED'
-    | 'ST_UNKNOWN';
+    | "INSUFFICIENT_FUNDS"
+    | "INVALID_CARD_STATUS"
+    | "CARD_NOT_FOUND"
+    | "LIMIT_EXCEEDED"
+    | "OPERATION_LIMIT_EXCEEDED"
+    | "SPEND_CONTROL_VIOLATED"
+    | "ADDRESS_POSTAL_CODE_MISMATCH"
+    | "CVC_MISMATCH"
+    | "EXPIRY_MISMATCH"
+    | "BUSINESS_SUSPENSION"
+    | "ST_ACCOUNT_CLOSED"
+    | "ST_ACCOUNT_FROZEN"
+    | "ST_BANK_ACCOUNT_RESTRICTED"
+    | "ST_BANK_OWNERSHIP_CHANGED"
+    | "ST_COULD_NOT_PROCESS"
+    | "ST_INVALID_ACCOUNT_NUMBER"
+    | "ST_INCORRECT_ACCOUNT_HOLDER_NAME"
+    | "ST_INVALID_CURRENCY"
+    | "ST_NO_ACCOUNT"
+    | "ST_DECLINED"
+    | "ST_FAILED"
+    | "ST_CANCELLED"
+    | "ST_UNKNOWN";
 }
 
 export interface ExpenseDetails {
@@ -738,335 +755,335 @@ export interface ExpenseDetails {
 }
 
 export type LimitExceeded = DeclineDetails & {
-  entityId?: string;
-  entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
-  limitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
-  limitPeriod?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
-  exceededAmount?: number;
+  entityId?: string,
+  entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
+  limitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE",
+  limitPeriod?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY",
+  exceededAmount?: number,
 };
 
 export interface Merchant {
   name?: string;
   type?:
-    | 'UNKNOWN'
-    | 'AC_REFRIGERATION_REPAIR'
-    | 'ACCOUNTING_BOOKKEEPING_SERVICES'
-    | 'ADVERTISING_SERVICES'
-    | 'AGRICULTURAL_COOPERATIVE'
-    | 'AIRLINES_AIR_CARRIERS'
-    | 'AIRPORTS_FLYING_FIELDS'
-    | 'AMBULANCE_SERVICES'
-    | 'AMUSEMENT_PARKS_CARNIVALS'
-    | 'ANTIQUE_REPRODUCTIONS'
-    | 'ANTIQUE_SHOPS'
-    | 'AQUARIUMS'
-    | 'ARCHITECTURAL_SURVEYING_SERVICES'
-    | 'ART_DEALERS_AND_GALLERIES'
-    | 'ARTISTS_SUPPLY_AND_CRAFT_SHOPS'
-    | 'AUTO_BODY_REPAIR_SHOPS'
-    | 'AUTO_PAINT_SHOPS'
-    | 'AUTO_SERVICE_SHOPS'
-    | 'AUTO_AND_HOME_SUPPLY_STORES'
-    | 'AUTOMATED_CASH_DISBURSE'
-    | 'AUTOMATED_FUEL_DISPENSERS'
-    | 'AUTOMOBILE_ASSOCIATIONS'
-    | 'AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES'
-    | 'AUTOMOTIVE_TIRE_STORES'
-    | 'BAIL_AND_BOND_PAYMENTS'
-    | 'BAKERIES'
-    | 'BANDS_ORCHESTRAS'
-    | 'BARBER_AND_BEAUTY_SHOPS'
-    | 'BETTING_CASINO_GAMBLING'
-    | 'BICYCLE_SHOPS'
-    | 'BILLIARD_POOL_ESTABLISHMENTS'
-    | 'BOAT_DEALERS'
-    | 'BOAT_RENTALS_AND_LEASES'
-    | 'BOOK_STORES'
-    | 'BOOKS_PERIODICALS_AND_NEWSPAPERS'
-    | 'BOWLING_ALLEYS'
-    | 'BUS_LINES'
-    | 'BUSINESS_SECRETARIAL_SCHOOLS'
-    | 'BUYING_SHOPPING_SERVICES'
-    | 'CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO'
-    | 'CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES'
-    | 'CANDY_NUT_AND_CONFECTIONERY_STORES'
-    | 'CAR_RENTAL_AGENCIES'
-    | 'CAR_WASHES'
-    | 'CAR_AND_TRUCK_DEALERS_NEW_USED'
-    | 'CAR_AND_TRUCK_DEALERS_USED_ONLY'
-    | 'CARPENTRY_SERVICES'
-    | 'CARPET_UPHOLSTERY_CLEANING'
-    | 'CATERERS'
-    | 'CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING'
-    | 'CHEMICALS_AND_ALLIED_PRODUCTS'
-    | 'CHILD_CARE_SERVICES'
-    | 'CHILDRENS_AND_INFANTS_WEAR_STORES'
-    | 'CHIROPODISTS_PODIATRISTS'
-    | 'CHIROPRACTORS'
-    | 'CIGAR_STORES_AND_STANDS'
-    | 'CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS'
-    | 'CLEANING_AND_MAINTENANCE'
-    | 'CLOTHING_RENTAL'
-    | 'COLLEGES_UNIVERSITIES'
-    | 'COMMERCIAL_EQUIPMENT'
-    | 'COMMERCIAL_FOOTWEAR'
-    | 'COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS'
-    | 'COMMUTER_TRANSPORT_AND_FERRIES'
-    | 'COMPUTER_NETWORK_SERVICES'
-    | 'COMPUTER_PROGRAMMING'
-    | 'COMPUTER_REPAIR'
-    | 'COMPUTER_SOFTWARE_STORES'
-    | 'COMPUTERS_PERIPHERALS_AND_SOFTWARE'
-    | 'CONCRETE_WORK_SERVICES'
-    | 'CONSTRUCTION_MATERIALS'
-    | 'CONSULTING_PUBLIC_RELATIONS'
-    | 'CORRESPONDENCE_SCHOOLS'
-    | 'COSMETIC_STORES'
-    | 'COUNSELING_SERVICES'
-    | 'COUNTRY_CLUBS'
-    | 'COURIER_SERVICES'
-    | 'COURT_COSTS'
-    | 'CREDIT_REPORTING_AGENCIES'
-    | 'CRUISE_LINES'
-    | 'DAIRY_PRODUCTS_STORES'
-    | 'DANCE_HALL_STUDIOS_SCHOOLS'
-    | 'DATING_ESCORT_SERVICES'
-    | 'DENTISTS_ORTHODONTISTS'
-    | 'DEPARTMENT_STORES'
-    | 'DETECTIVE_AGENCIES'
-    | 'DIGITAL_GOODS_MEDIA'
-    | 'DIGITAL_GOODS_APPLICATIONS'
-    | 'DIGITAL_GOODS_GAMES'
-    | 'DIGITAL_GOODS_LARGE_VOLUME'
-    | 'DIRECT_MARKETING_CATALOG_MERCHANT'
-    | 'DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT'
-    | 'DIRECT_MARKETING_INBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_INSURANCE_SERVICES'
-    | 'DIRECT_MARKETING_OTHER'
-    | 'DIRECT_MARKETING_OUTBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_SUBSCRIPTION'
-    | 'DIRECT_MARKETING_TRAVEL'
-    | 'DISCOUNT_STORES'
-    | 'DOCTORS'
-    | 'DOOR_TO_DOOR_SALES'
-    | 'DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES'
-    | 'DRINKING_PLACES'
-    | 'DRUG_STORES_AND_PHARMACIES'
-    | 'DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES'
-    | 'DRY_CLEANERS'
-    | 'DURABLE_GOODS'
-    | 'DUTY_FREE_STORES'
-    | 'EATING_PLACES_RESTAURANTS'
-    | 'EDUCATIONAL_SERVICES'
-    | 'ELECTRIC_RAZOR_STORES'
-    | 'ELECTRICAL_PARTS_AND_EQUIPMENT'
-    | 'ELECTRICAL_SERVICES'
-    | 'ELECTRONICS_REPAIR_SHOPS'
-    | 'ELECTRONICS_STORES'
-    | 'ELEMENTARY_SECONDARY_SCHOOLS'
-    | 'EMPLOYMENT_TEMP_AGENCIES'
-    | 'EQUIPMENT_RENTAL'
-    | 'EXTERMINATING_SERVICES'
-    | 'FAMILY_CLOTHING_STORES'
-    | 'FAST_FOOD_RESTAURANTS'
-    | 'FINANCIAL_INSTITUTIONS'
-    | 'FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES'
-    | 'FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES'
-    | 'FLOOR_COVERING_STORES'
-    | 'FLORISTS'
-    | 'FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS'
-    | 'FREEZER_AND_LOCKER_MEAT_PROVISIONERS'
-    | 'FUEL_DEALERS_NON_AUTOMOTIVE'
-    | 'FUNERAL_SERVICES_CREMATORIES'
-    | 'FURNITURE_REPAIR_REFINISHING'
-    | 'FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES'
-    | 'FURRIERS_AND_FUR_SHOPS'
-    | 'GENERAL_SERVICES'
-    | 'GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS'
-    | 'GLASS_PAINT_AND_WALLPAPER_STORES'
-    | 'GLASSWARE_CRYSTAL_STORES'
-    | 'GOLF_COURSES_PUBLIC'
-    | 'GOVERNMENT_SERVICES'
-    | 'GROCERY_STORES_SUPERMARKETS'
-    | 'HARDWARE_STORES'
-    | 'HARDWARE_EQUIPMENT_AND_SUPPLIES'
-    | 'HEALTH_AND_BEAUTY_SPAS'
-    | 'HEARING_AIDS_SALES_AND_SUPPLIES'
-    | 'HEATING_PLUMBING_A_C'
-    | 'HOBBY_TOY_AND_GAME_SHOPS'
-    | 'HOME_SUPPLY_WAREHOUSE_STORES'
-    | 'HOSPITALS'
-    | 'HOTELS_MOTELS_AND_RESORTS'
-    | 'HOUSEHOLD_APPLIANCE_STORES'
-    | 'INDUSTRIAL_SUPPLIES'
-    | 'INFORMATION_RETRIEVAL_SERVICES'
-    | 'INSURANCE_DEFAULT'
-    | 'INSURANCE_UNDERWRITING_PREMIUMS'
-    | 'INTRA_COMPANY_PURCHASES'
-    | 'JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES'
-    | 'LANDSCAPING_SERVICES'
-    | 'LAUNDRIES'
-    | 'LAUNDRY_CLEANING_SERVICES'
-    | 'LEGAL_SERVICES_ATTORNEYS'
-    | 'LUGGAGE_AND_LEATHER_GOODS_STORES'
-    | 'LUMBER_BUILDING_MATERIALS_STORES'
-    | 'MANUAL_CASH_DISBURSE'
-    | 'MARINAS_SERVICE_AND_SUPPLIES'
-    | 'MASONRY_STONEWORK_AND_PLASTER'
-    | 'MASSAGE_PARLORS'
-    | 'MEDICAL_SERVICES'
-    | 'MEDICAL_AND_DENTAL_LABS'
-    | 'MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES'
-    | 'MEMBERSHIP_ORGANIZATIONS'
-    | 'MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES'
-    | 'MENS_WOMENS_CLOTHING_STORES'
-    | 'METAL_SERVICE_CENTERS'
-    | 'MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS'
-    | 'MISCELLANEOUS_AUTO_DEALERS'
-    | 'MISCELLANEOUS_BUSINESS_SERVICES'
-    | 'MISCELLANEOUS_FOOD_STORES'
-    | 'MISCELLANEOUS_GENERAL_MERCHANDISE'
-    | 'MISCELLANEOUS_GENERAL_SERVICES'
-    | 'MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES'
-    | 'MISCELLANEOUS_PUBLISHING_AND_PRINTING'
-    | 'MISCELLANEOUS_RECREATION_SERVICES'
-    | 'MISCELLANEOUS_REPAIR_SHOPS'
-    | 'MISCELLANEOUS_SPECIALTY_RETAIL'
-    | 'MOBILE_HOME_DEALERS'
-    | 'MOTION_PICTURE_THEATERS'
-    | 'MOTOR_FREIGHT_CARRIERS_AND_TRUCKING'
-    | 'MOTOR_HOMES_DEALERS'
-    | 'MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS'
-    | 'MOTORCYCLE_SHOPS_AND_DEALERS'
-    | 'MOTORCYCLE_SHOPS_DEALERS'
-    | 'MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC'
-    | 'NEWS_DEALERS_AND_NEWSSTANDS'
-    | 'NON_FI_MONEY_ORDERS'
-    | 'NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD'
-    | 'NONDURABLE_GOODS'
-    | 'NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES'
-    | 'NURSING_PERSONAL_CARE'
-    | 'OFFICE_AND_COMMERCIAL_FURNITURE'
-    | 'OPTICIANS_EYEGLASSES'
-    | 'OPTOMETRISTS_OPHTHALMOLOGIST'
-    | 'ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES'
-    | 'OSTEOPATHS'
-    | 'PACKAGE_STORES_BEER_WINE_AND_LIQUOR'
-    | 'PAINTS_VARNISHES_AND_SUPPLIES'
-    | 'PARKING_LOTS_GARAGES'
-    | 'PASSENGER_RAILWAYS'
-    | 'PAWN_SHOPS'
-    | 'PET_SHOPS_PET_FOOD_AND_SUPPLIES'
-    | 'PETROLEUM_AND_PETROLEUM_PRODUCTS'
-    | 'PHOTO_DEVELOPING'
-    | 'PHOTOGRAPHIC_STUDIOS'
-    | 'PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES'
-    | 'PICTURE_VIDEO_PRODUCTION'
-    | 'PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS'
-    | 'PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES'
-    | 'POLITICAL_ORGANIZATIONS'
-    | 'POSTAL_SERVICES_GOVERNMENT_ONLY'
-    | 'PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY'
-    | 'PROFESSIONAL_SERVICES'
-    | 'PUBLIC_WAREHOUSING_AND_STORAGE'
-    | 'QUICK_COPY_REPRO_AND_BLUEPRINT'
-    | 'RAILROADS'
-    | 'REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS'
-    | 'RECORD_STORES'
-    | 'RECREATIONAL_VEHICLE_RENTALS'
-    | 'RELIGIOUS_GOODS_STORES'
-    | 'RELIGIOUS_ORGANIZATIONS'
-    | 'ROOFING_SIDING_SHEET_METAL'
-    | 'SECRETARIAL_SUPPORT_SERVICES'
-    | 'SECURITY_BROKERS_DEALERS'
-    | 'SERVICE_STATIONS'
-    | 'SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES'
-    | 'SHOE_REPAIR_HAT_CLEANING'
-    | 'SHOE_STORES'
-    | 'SMALL_APPLIANCE_REPAIR'
-    | 'SNOWMOBILE_DEALERS'
-    | 'SPECIAL_TRADE_SERVICES'
-    | 'SPECIALTY_CLEANING'
-    | 'SPORTING_GOODS_STORES'
-    | 'SPORTING_RECREATION_CAMPS'
-    | 'SPORTS_CLUBS_FIELDS'
-    | 'SPORTS_AND_RIDING_APPAREL_STORES'
-    | 'STAMP_AND_COIN_STORES'
-    | 'STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER'
-    | 'STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES'
-    | 'SWIMMING_POOLS_SALES'
-    | 'T_UI_TRAVEL_GERMANY'
-    | 'TAILORS_ALTERATIONS'
-    | 'TAX_PAYMENTS_GOVERNMENT_AGENCIES'
-    | 'TAX_PREPARATION_SERVICES'
-    | 'TAXICABS_LIMOUSINES'
-    | 'TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES'
-    | 'TELECOMMUNICATION_SERVICES'
-    | 'TELEGRAPH_SERVICES'
-    | 'TENT_AND_AWNING_SHOPS'
-    | 'TESTING_LABORATORIES'
-    | 'THEATRICAL_TICKET_AGENCIES'
-    | 'TIMESHARES'
-    | 'TIRE_RETREADING_AND_REPAIR'
-    | 'TOLLS_BRIDGE_FEES'
-    | 'TOURIST_ATTRACTIONS_AND_EXHIBITS'
-    | 'TOWING_SERVICES'
-    | 'TRAILER_PARKS_CAMPGROUNDS'
-    | 'TRANSPORTATION_SERVICES'
-    | 'TRAVEL_AGENCIES_TOUR_OPERATORS'
-    | 'TRUCK_STOP_ITERATION'
-    | 'TRUCK_UTILITY_TRAILER_RENTALS'
-    | 'TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES'
-    | 'TYPEWRITER_STORES'
-    | 'U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS'
-    | 'UNIFORMS_COMMERCIAL_CLOTHING'
-    | 'USED_MERCHANDISE_AND_SECONDHAND_STORES'
-    | 'UTILITIES'
-    | 'VARIETY_STORES'
-    | 'VETERINARY_SERVICES'
-    | 'VIDEO_AMUSEMENT_GAME_SUPPLIES'
-    | 'VIDEO_GAME_ARCADES'
-    | 'VIDEO_TAPE_RENTAL_STORES'
-    | 'VOCATIONAL_TRADE_SCHOOLS'
-    | 'WATCH_JEWELRY_REPAIR'
-    | 'WELDING_REPAIR'
-    | 'WHOLESALE_CLUBS'
-    | 'WIG_AND_TOUPEE_STORES'
-    | 'WIRES_MONEY_ORDERS'
-    | 'WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS'
-    | 'WOMENS_READY_TO_WEAR_STORES'
-    | 'WRECKING_AND_SALVAGE_YARDS';
+    | "UNKNOWN"
+    | "AC_REFRIGERATION_REPAIR"
+    | "ACCOUNTING_BOOKKEEPING_SERVICES"
+    | "ADVERTISING_SERVICES"
+    | "AGRICULTURAL_COOPERATIVE"
+    | "AIRLINES_AIR_CARRIERS"
+    | "AIRPORTS_FLYING_FIELDS"
+    | "AMBULANCE_SERVICES"
+    | "AMUSEMENT_PARKS_CARNIVALS"
+    | "ANTIQUE_REPRODUCTIONS"
+    | "ANTIQUE_SHOPS"
+    | "AQUARIUMS"
+    | "ARCHITECTURAL_SURVEYING_SERVICES"
+    | "ART_DEALERS_AND_GALLERIES"
+    | "ARTISTS_SUPPLY_AND_CRAFT_SHOPS"
+    | "AUTO_BODY_REPAIR_SHOPS"
+    | "AUTO_PAINT_SHOPS"
+    | "AUTO_SERVICE_SHOPS"
+    | "AUTO_AND_HOME_SUPPLY_STORES"
+    | "AUTOMATED_CASH_DISBURSE"
+    | "AUTOMATED_FUEL_DISPENSERS"
+    | "AUTOMOBILE_ASSOCIATIONS"
+    | "AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES"
+    | "AUTOMOTIVE_TIRE_STORES"
+    | "BAIL_AND_BOND_PAYMENTS"
+    | "BAKERIES"
+    | "BANDS_ORCHESTRAS"
+    | "BARBER_AND_BEAUTY_SHOPS"
+    | "BETTING_CASINO_GAMBLING"
+    | "BICYCLE_SHOPS"
+    | "BILLIARD_POOL_ESTABLISHMENTS"
+    | "BOAT_DEALERS"
+    | "BOAT_RENTALS_AND_LEASES"
+    | "BOOK_STORES"
+    | "BOOKS_PERIODICALS_AND_NEWSPAPERS"
+    | "BOWLING_ALLEYS"
+    | "BUS_LINES"
+    | "BUSINESS_SECRETARIAL_SCHOOLS"
+    | "BUYING_SHOPPING_SERVICES"
+    | "CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO"
+    | "CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES"
+    | "CANDY_NUT_AND_CONFECTIONERY_STORES"
+    | "CAR_RENTAL_AGENCIES"
+    | "CAR_WASHES"
+    | "CAR_AND_TRUCK_DEALERS_NEW_USED"
+    | "CAR_AND_TRUCK_DEALERS_USED_ONLY"
+    | "CARPENTRY_SERVICES"
+    | "CARPET_UPHOLSTERY_CLEANING"
+    | "CATERERS"
+    | "CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING"
+    | "CHEMICALS_AND_ALLIED_PRODUCTS"
+    | "CHILD_CARE_SERVICES"
+    | "CHILDRENS_AND_INFANTS_WEAR_STORES"
+    | "CHIROPODISTS_PODIATRISTS"
+    | "CHIROPRACTORS"
+    | "CIGAR_STORES_AND_STANDS"
+    | "CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS"
+    | "CLEANING_AND_MAINTENANCE"
+    | "CLOTHING_RENTAL"
+    | "COLLEGES_UNIVERSITIES"
+    | "COMMERCIAL_EQUIPMENT"
+    | "COMMERCIAL_FOOTWEAR"
+    | "COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS"
+    | "COMMUTER_TRANSPORT_AND_FERRIES"
+    | "COMPUTER_NETWORK_SERVICES"
+    | "COMPUTER_PROGRAMMING"
+    | "COMPUTER_REPAIR"
+    | "COMPUTER_SOFTWARE_STORES"
+    | "COMPUTERS_PERIPHERALS_AND_SOFTWARE"
+    | "CONCRETE_WORK_SERVICES"
+    | "CONSTRUCTION_MATERIALS"
+    | "CONSULTING_PUBLIC_RELATIONS"
+    | "CORRESPONDENCE_SCHOOLS"
+    | "COSMETIC_STORES"
+    | "COUNSELING_SERVICES"
+    | "COUNTRY_CLUBS"
+    | "COURIER_SERVICES"
+    | "COURT_COSTS"
+    | "CREDIT_REPORTING_AGENCIES"
+    | "CRUISE_LINES"
+    | "DAIRY_PRODUCTS_STORES"
+    | "DANCE_HALL_STUDIOS_SCHOOLS"
+    | "DATING_ESCORT_SERVICES"
+    | "DENTISTS_ORTHODONTISTS"
+    | "DEPARTMENT_STORES"
+    | "DETECTIVE_AGENCIES"
+    | "DIGITAL_GOODS_MEDIA"
+    | "DIGITAL_GOODS_APPLICATIONS"
+    | "DIGITAL_GOODS_GAMES"
+    | "DIGITAL_GOODS_LARGE_VOLUME"
+    | "DIRECT_MARKETING_CATALOG_MERCHANT"
+    | "DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT"
+    | "DIRECT_MARKETING_INBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_INSURANCE_SERVICES"
+    | "DIRECT_MARKETING_OTHER"
+    | "DIRECT_MARKETING_OUTBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_SUBSCRIPTION"
+    | "DIRECT_MARKETING_TRAVEL"
+    | "DISCOUNT_STORES"
+    | "DOCTORS"
+    | "DOOR_TO_DOOR_SALES"
+    | "DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES"
+    | "DRINKING_PLACES"
+    | "DRUG_STORES_AND_PHARMACIES"
+    | "DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES"
+    | "DRY_CLEANERS"
+    | "DURABLE_GOODS"
+    | "DUTY_FREE_STORES"
+    | "EATING_PLACES_RESTAURANTS"
+    | "EDUCATIONAL_SERVICES"
+    | "ELECTRIC_RAZOR_STORES"
+    | "ELECTRICAL_PARTS_AND_EQUIPMENT"
+    | "ELECTRICAL_SERVICES"
+    | "ELECTRONICS_REPAIR_SHOPS"
+    | "ELECTRONICS_STORES"
+    | "ELEMENTARY_SECONDARY_SCHOOLS"
+    | "EMPLOYMENT_TEMP_AGENCIES"
+    | "EQUIPMENT_RENTAL"
+    | "EXTERMINATING_SERVICES"
+    | "FAMILY_CLOTHING_STORES"
+    | "FAST_FOOD_RESTAURANTS"
+    | "FINANCIAL_INSTITUTIONS"
+    | "FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES"
+    | "FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES"
+    | "FLOOR_COVERING_STORES"
+    | "FLORISTS"
+    | "FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS"
+    | "FREEZER_AND_LOCKER_MEAT_PROVISIONERS"
+    | "FUEL_DEALERS_NON_AUTOMOTIVE"
+    | "FUNERAL_SERVICES_CREMATORIES"
+    | "FURNITURE_REPAIR_REFINISHING"
+    | "FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES"
+    | "FURRIERS_AND_FUR_SHOPS"
+    | "GENERAL_SERVICES"
+    | "GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS"
+    | "GLASS_PAINT_AND_WALLPAPER_STORES"
+    | "GLASSWARE_CRYSTAL_STORES"
+    | "GOLF_COURSES_PUBLIC"
+    | "GOVERNMENT_SERVICES"
+    | "GROCERY_STORES_SUPERMARKETS"
+    | "HARDWARE_STORES"
+    | "HARDWARE_EQUIPMENT_AND_SUPPLIES"
+    | "HEALTH_AND_BEAUTY_SPAS"
+    | "HEARING_AIDS_SALES_AND_SUPPLIES"
+    | "HEATING_PLUMBING_A_C"
+    | "HOBBY_TOY_AND_GAME_SHOPS"
+    | "HOME_SUPPLY_WAREHOUSE_STORES"
+    | "HOSPITALS"
+    | "HOTELS_MOTELS_AND_RESORTS"
+    | "HOUSEHOLD_APPLIANCE_STORES"
+    | "INDUSTRIAL_SUPPLIES"
+    | "INFORMATION_RETRIEVAL_SERVICES"
+    | "INSURANCE_DEFAULT"
+    | "INSURANCE_UNDERWRITING_PREMIUMS"
+    | "INTRA_COMPANY_PURCHASES"
+    | "JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES"
+    | "LANDSCAPING_SERVICES"
+    | "LAUNDRIES"
+    | "LAUNDRY_CLEANING_SERVICES"
+    | "LEGAL_SERVICES_ATTORNEYS"
+    | "LUGGAGE_AND_LEATHER_GOODS_STORES"
+    | "LUMBER_BUILDING_MATERIALS_STORES"
+    | "MANUAL_CASH_DISBURSE"
+    | "MARINAS_SERVICE_AND_SUPPLIES"
+    | "MASONRY_STONEWORK_AND_PLASTER"
+    | "MASSAGE_PARLORS"
+    | "MEDICAL_SERVICES"
+    | "MEDICAL_AND_DENTAL_LABS"
+    | "MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES"
+    | "MEMBERSHIP_ORGANIZATIONS"
+    | "MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES"
+    | "MENS_WOMENS_CLOTHING_STORES"
+    | "METAL_SERVICE_CENTERS"
+    | "MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS"
+    | "MISCELLANEOUS_AUTO_DEALERS"
+    | "MISCELLANEOUS_BUSINESS_SERVICES"
+    | "MISCELLANEOUS_FOOD_STORES"
+    | "MISCELLANEOUS_GENERAL_MERCHANDISE"
+    | "MISCELLANEOUS_GENERAL_SERVICES"
+    | "MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES"
+    | "MISCELLANEOUS_PUBLISHING_AND_PRINTING"
+    | "MISCELLANEOUS_RECREATION_SERVICES"
+    | "MISCELLANEOUS_REPAIR_SHOPS"
+    | "MISCELLANEOUS_SPECIALTY_RETAIL"
+    | "MOBILE_HOME_DEALERS"
+    | "MOTION_PICTURE_THEATERS"
+    | "MOTOR_FREIGHT_CARRIERS_AND_TRUCKING"
+    | "MOTOR_HOMES_DEALERS"
+    | "MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS"
+    | "MOTORCYCLE_SHOPS_AND_DEALERS"
+    | "MOTORCYCLE_SHOPS_DEALERS"
+    | "MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC"
+    | "NEWS_DEALERS_AND_NEWSSTANDS"
+    | "NON_FI_MONEY_ORDERS"
+    | "NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD"
+    | "NONDURABLE_GOODS"
+    | "NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES"
+    | "NURSING_PERSONAL_CARE"
+    | "OFFICE_AND_COMMERCIAL_FURNITURE"
+    | "OPTICIANS_EYEGLASSES"
+    | "OPTOMETRISTS_OPHTHALMOLOGIST"
+    | "ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES"
+    | "OSTEOPATHS"
+    | "PACKAGE_STORES_BEER_WINE_AND_LIQUOR"
+    | "PAINTS_VARNISHES_AND_SUPPLIES"
+    | "PARKING_LOTS_GARAGES"
+    | "PASSENGER_RAILWAYS"
+    | "PAWN_SHOPS"
+    | "PET_SHOPS_PET_FOOD_AND_SUPPLIES"
+    | "PETROLEUM_AND_PETROLEUM_PRODUCTS"
+    | "PHOTO_DEVELOPING"
+    | "PHOTOGRAPHIC_STUDIOS"
+    | "PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES"
+    | "PICTURE_VIDEO_PRODUCTION"
+    | "PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS"
+    | "PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES"
+    | "POLITICAL_ORGANIZATIONS"
+    | "POSTAL_SERVICES_GOVERNMENT_ONLY"
+    | "PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY"
+    | "PROFESSIONAL_SERVICES"
+    | "PUBLIC_WAREHOUSING_AND_STORAGE"
+    | "QUICK_COPY_REPRO_AND_BLUEPRINT"
+    | "RAILROADS"
+    | "REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS"
+    | "RECORD_STORES"
+    | "RECREATIONAL_VEHICLE_RENTALS"
+    | "RELIGIOUS_GOODS_STORES"
+    | "RELIGIOUS_ORGANIZATIONS"
+    | "ROOFING_SIDING_SHEET_METAL"
+    | "SECRETARIAL_SUPPORT_SERVICES"
+    | "SECURITY_BROKERS_DEALERS"
+    | "SERVICE_STATIONS"
+    | "SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES"
+    | "SHOE_REPAIR_HAT_CLEANING"
+    | "SHOE_STORES"
+    | "SMALL_APPLIANCE_REPAIR"
+    | "SNOWMOBILE_DEALERS"
+    | "SPECIAL_TRADE_SERVICES"
+    | "SPECIALTY_CLEANING"
+    | "SPORTING_GOODS_STORES"
+    | "SPORTING_RECREATION_CAMPS"
+    | "SPORTS_CLUBS_FIELDS"
+    | "SPORTS_AND_RIDING_APPAREL_STORES"
+    | "STAMP_AND_COIN_STORES"
+    | "STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER"
+    | "STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES"
+    | "SWIMMING_POOLS_SALES"
+    | "T_UI_TRAVEL_GERMANY"
+    | "TAILORS_ALTERATIONS"
+    | "TAX_PAYMENTS_GOVERNMENT_AGENCIES"
+    | "TAX_PREPARATION_SERVICES"
+    | "TAXICABS_LIMOUSINES"
+    | "TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES"
+    | "TELECOMMUNICATION_SERVICES"
+    | "TELEGRAPH_SERVICES"
+    | "TENT_AND_AWNING_SHOPS"
+    | "TESTING_LABORATORIES"
+    | "THEATRICAL_TICKET_AGENCIES"
+    | "TIMESHARES"
+    | "TIRE_RETREADING_AND_REPAIR"
+    | "TOLLS_BRIDGE_FEES"
+    | "TOURIST_ATTRACTIONS_AND_EXHIBITS"
+    | "TOWING_SERVICES"
+    | "TRAILER_PARKS_CAMPGROUNDS"
+    | "TRANSPORTATION_SERVICES"
+    | "TRAVEL_AGENCIES_TOUR_OPERATORS"
+    | "TRUCK_STOP_ITERATION"
+    | "TRUCK_UTILITY_TRAILER_RENTALS"
+    | "TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES"
+    | "TYPEWRITER_STORES"
+    | "U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS"
+    | "UNIFORMS_COMMERCIAL_CLOTHING"
+    | "USED_MERCHANDISE_AND_SECONDHAND_STORES"
+    | "UTILITIES"
+    | "VARIETY_STORES"
+    | "VETERINARY_SERVICES"
+    | "VIDEO_AMUSEMENT_GAME_SUPPLIES"
+    | "VIDEO_GAME_ARCADES"
+    | "VIDEO_TAPE_RENTAL_STORES"
+    | "VOCATIONAL_TRADE_SCHOOLS"
+    | "WATCH_JEWELRY_REPAIR"
+    | "WELDING_REPAIR"
+    | "WHOLESALE_CLUBS"
+    | "WIG_AND_TOUPEE_STORES"
+    | "WIRES_MONEY_ORDERS"
+    | "WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS"
+    | "WOMENS_READY_TO_WEAR_STORES"
+    | "WRECKING_AND_SALVAGE_YARDS";
   amount?: Amount;
   merchantNumber?: string;
 
   /** @format int32 */
   merchantCategoryCode?: number;
   merchantCategoryGroup?:
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER';
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER";
   merchantLogoUrl?: string;
   merchantLatitude?: number;
   merchantLongitude?: number;
 }
 
 export type OperationLimitExceeded = DeclineDetails & {
-  entityId?: string;
-  entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
-  limitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
-  limitPeriod?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  entityId?: string,
+  entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
+  limitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE",
+  limitPeriod?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY",
 };
 
 export interface PagedDataAccountActivityResponse {
@@ -1086,31 +1103,35 @@ export interface ReceiptDetails {
 }
 
 export type SpendControlViolated = DeclineDetails & {
-  entityId?: string;
-  entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
+  entityId?: string,
+  entityType?: "UNKNOWN" | "ALLOCATION" | "CARD" | "BUSINESS",
   mccGroup?:
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER';
-  paymentType?: 'POS' | 'ONLINE' | 'MANUAL_ENTRY';
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER",
+  paymentType?: "POS" | "ONLINE" | "MANUAL_ENTRY",
 };
 
 export interface NetworkMessageRequest {
   /** @format uuid */
   cardId?: string;
-  networkMessageType?: 'AUTH_REQUEST' | 'AUTH_CREATED' | 'AUTH_UPDATED' | 'TRANSACTION_CREATED';
+  networkMessageType?:
+    | "AUTH_REQUEST"
+    | "AUTH_CREATED"
+    | "AUTH_UPDATED"
+    | "TRANSACTION_CREATED";
   amount?: Amount;
 
   /** @format uuid */
@@ -1144,7 +1165,7 @@ export interface CreateBusinessOwnerRequest {
 }
 
 export interface TransactBankAccountRequest {
-  bankAccountTransactType?: 'DEPOSIT' | 'WITHDRAW';
+  bankAccountTransactType?: "DEPOSIT" | "WITHDRAW";
   amount?: Amount;
 }
 
@@ -1277,7 +1298,7 @@ export interface CodatAccountNested {
   fullyQualifiedCategory?: string;
   fullyQualifiedName?: string;
   type?: string;
-  updateStatus?: 'NOT_CHANGED' | 'NEW' | 'DELETED' | 'RENAMED';
+  updateStatus?: "NOT_CHANGED" | "NEW" | "DELETED" | "RENAMED";
   children?: CodatAccountNested[];
 }
 
@@ -1306,175 +1327,175 @@ export interface GetChartOfAccountsMappingResponse {
 
 export interface CurrencyLimit {
   currency:
-    | 'UNSPECIFIED'
-    | 'AED'
-    | 'AFN'
-    | 'ALL'
-    | 'AMD'
-    | 'ANG'
-    | 'AOA'
-    | 'ARS'
-    | 'AUD'
-    | 'AWG'
-    | 'AZN'
-    | 'BAM'
-    | 'BBD'
-    | 'BDT'
-    | 'BGN'
-    | 'BHD'
-    | 'BIF'
-    | 'BMD'
-    | 'BND'
-    | 'BOB'
-    | 'BRL'
-    | 'BSD'
-    | 'BTN'
-    | 'BWP'
-    | 'BYN'
-    | 'BYR'
-    | 'BZD'
-    | 'CAD'
-    | 'CDF'
-    | 'CHF'
-    | 'CLP'
-    | 'CNY'
-    | 'COP'
-    | 'CRC'
-    | 'CUC'
-    | 'CUP'
-    | 'CVE'
-    | 'CZK'
-    | 'DJF'
-    | 'DKK'
-    | 'DOP'
-    | 'DZD'
-    | 'EGP'
-    | 'ERN'
-    | 'ETB'
-    | 'EUR'
-    | 'FJD'
-    | 'FKP'
-    | 'GBP'
-    | 'GEL'
-    | 'GHS'
-    | 'GIP'
-    | 'GMD'
-    | 'GNF'
-    | 'GTQ'
-    | 'GYD'
-    | 'HKD'
-    | 'HNL'
-    | 'HRK'
-    | 'HTG'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'IQD'
-    | 'IRR'
-    | 'ISK'
-    | 'JMD'
-    | 'JOD'
-    | 'JPY'
-    | 'KES'
-    | 'KGS'
-    | 'KHR'
-    | 'KMF'
-    | 'KPW'
-    | 'KRW'
-    | 'KWD'
-    | 'KYD'
-    | 'KZT'
-    | 'LAK'
-    | 'LBP'
-    | 'LKR'
-    | 'LRD'
-    | 'LSL'
-    | 'LTL'
-    | 'LYD'
-    | 'MAD'
-    | 'MDL'
-    | 'MGA'
-    | 'MKD'
-    | 'MMK'
-    | 'MNT'
-    | 'MOP'
-    | 'MRO'
-    | 'MRU'
-    | 'MUR'
-    | 'MVR'
-    | 'MWK'
-    | 'MXN'
-    | 'MYR'
-    | 'MZN'
-    | 'NAD'
-    | 'NGN'
-    | 'NIO'
-    | 'NOK'
-    | 'NPR'
-    | 'NZD'
-    | 'OMR'
-    | 'PAB'
-    | 'PEN'
-    | 'PGK'
-    | 'PHP'
-    | 'PKR'
-    | 'PLN'
-    | 'PYG'
-    | 'QAR'
-    | 'RON'
-    | 'RSD'
-    | 'RUB'
-    | 'RUR'
-    | 'RWF'
-    | 'SAR'
-    | 'SBD'
-    | 'SCR'
-    | 'SDG'
-    | 'SEK'
-    | 'SGD'
-    | 'SHP'
-    | 'SLL'
-    | 'SOS'
-    | 'SRD'
-    | 'SSP'
-    | 'STD'
-    | 'STN'
-    | 'SVC'
-    | 'SYP'
-    | 'SZL'
-    | 'THB'
-    | 'TJS'
-    | 'TMT'
-    | 'TND'
-    | 'TOP'
-    | 'TRY'
-    | 'TTD'
-    | 'TWD'
-    | 'TZS'
-    | 'UAH'
-    | 'UGX'
-    | 'USD'
-    | 'UYU'
-    | 'UZS'
-    | 'VEF'
-    | 'VES'
-    | 'VND'
-    | 'VUV'
-    | 'WST'
-    | 'XAF'
-    | 'XCD'
-    | 'XOF'
-    | 'XPF'
-    | 'YER'
-    | 'ZAR'
-    | 'ZMW'
-    | 'ZWL';
+    | "UNSPECIFIED"
+    | "AED"
+    | "AFN"
+    | "ALL"
+    | "AMD"
+    | "ANG"
+    | "AOA"
+    | "ARS"
+    | "AUD"
+    | "AWG"
+    | "AZN"
+    | "BAM"
+    | "BBD"
+    | "BDT"
+    | "BGN"
+    | "BHD"
+    | "BIF"
+    | "BMD"
+    | "BND"
+    | "BOB"
+    | "BRL"
+    | "BSD"
+    | "BTN"
+    | "BWP"
+    | "BYN"
+    | "BYR"
+    | "BZD"
+    | "CAD"
+    | "CDF"
+    | "CHF"
+    | "CLP"
+    | "CNY"
+    | "COP"
+    | "CRC"
+    | "CUC"
+    | "CUP"
+    | "CVE"
+    | "CZK"
+    | "DJF"
+    | "DKK"
+    | "DOP"
+    | "DZD"
+    | "EGP"
+    | "ERN"
+    | "ETB"
+    | "EUR"
+    | "FJD"
+    | "FKP"
+    | "GBP"
+    | "GEL"
+    | "GHS"
+    | "GIP"
+    | "GMD"
+    | "GNF"
+    | "GTQ"
+    | "GYD"
+    | "HKD"
+    | "HNL"
+    | "HRK"
+    | "HTG"
+    | "HUF"
+    | "IDR"
+    | "ILS"
+    | "INR"
+    | "IQD"
+    | "IRR"
+    | "ISK"
+    | "JMD"
+    | "JOD"
+    | "JPY"
+    | "KES"
+    | "KGS"
+    | "KHR"
+    | "KMF"
+    | "KPW"
+    | "KRW"
+    | "KWD"
+    | "KYD"
+    | "KZT"
+    | "LAK"
+    | "LBP"
+    | "LKR"
+    | "LRD"
+    | "LSL"
+    | "LTL"
+    | "LYD"
+    | "MAD"
+    | "MDL"
+    | "MGA"
+    | "MKD"
+    | "MMK"
+    | "MNT"
+    | "MOP"
+    | "MRO"
+    | "MRU"
+    | "MUR"
+    | "MVR"
+    | "MWK"
+    | "MXN"
+    | "MYR"
+    | "MZN"
+    | "NAD"
+    | "NGN"
+    | "NIO"
+    | "NOK"
+    | "NPR"
+    | "NZD"
+    | "OMR"
+    | "PAB"
+    | "PEN"
+    | "PGK"
+    | "PHP"
+    | "PKR"
+    | "PLN"
+    | "PYG"
+    | "QAR"
+    | "RON"
+    | "RSD"
+    | "RUB"
+    | "RUR"
+    | "RWF"
+    | "SAR"
+    | "SBD"
+    | "SCR"
+    | "SDG"
+    | "SEK"
+    | "SGD"
+    | "SHP"
+    | "SLL"
+    | "SOS"
+    | "SRD"
+    | "SSP"
+    | "STD"
+    | "STN"
+    | "SVC"
+    | "SYP"
+    | "SZL"
+    | "THB"
+    | "TJS"
+    | "TMT"
+    | "TND"
+    | "TOP"
+    | "TRY"
+    | "TTD"
+    | "TWD"
+    | "TZS"
+    | "UAH"
+    | "UGX"
+    | "USD"
+    | "UYU"
+    | "UZS"
+    | "VEF"
+    | "VES"
+    | "VND"
+    | "VUV"
+    | "WST"
+    | "XAF"
+    | "XCD"
+    | "XOF"
+    | "XPF"
+    | "YER"
+    | "ZAR"
+    | "ZMW"
+    | "ZWL";
   typeMap: LimitTypeMap;
 }
 
 export interface IssueCardRequest {
-  cardType: ('PHYSICAL' | 'VIRTUAL')[];
+  cardType: ("PHYSICAL" | "VIRTUAL")[];
 
   /**
    * @format uuid
@@ -1488,196 +1509,196 @@ export interface IssueCardRequest {
    */
   userId: string;
   currency:
-    | 'UNSPECIFIED'
-    | 'AED'
-    | 'AFN'
-    | 'ALL'
-    | 'AMD'
-    | 'ANG'
-    | 'AOA'
-    | 'ARS'
-    | 'AUD'
-    | 'AWG'
-    | 'AZN'
-    | 'BAM'
-    | 'BBD'
-    | 'BDT'
-    | 'BGN'
-    | 'BHD'
-    | 'BIF'
-    | 'BMD'
-    | 'BND'
-    | 'BOB'
-    | 'BRL'
-    | 'BSD'
-    | 'BTN'
-    | 'BWP'
-    | 'BYN'
-    | 'BYR'
-    | 'BZD'
-    | 'CAD'
-    | 'CDF'
-    | 'CHF'
-    | 'CLP'
-    | 'CNY'
-    | 'COP'
-    | 'CRC'
-    | 'CUC'
-    | 'CUP'
-    | 'CVE'
-    | 'CZK'
-    | 'DJF'
-    | 'DKK'
-    | 'DOP'
-    | 'DZD'
-    | 'EGP'
-    | 'ERN'
-    | 'ETB'
-    | 'EUR'
-    | 'FJD'
-    | 'FKP'
-    | 'GBP'
-    | 'GEL'
-    | 'GHS'
-    | 'GIP'
-    | 'GMD'
-    | 'GNF'
-    | 'GTQ'
-    | 'GYD'
-    | 'HKD'
-    | 'HNL'
-    | 'HRK'
-    | 'HTG'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'IQD'
-    | 'IRR'
-    | 'ISK'
-    | 'JMD'
-    | 'JOD'
-    | 'JPY'
-    | 'KES'
-    | 'KGS'
-    | 'KHR'
-    | 'KMF'
-    | 'KPW'
-    | 'KRW'
-    | 'KWD'
-    | 'KYD'
-    | 'KZT'
-    | 'LAK'
-    | 'LBP'
-    | 'LKR'
-    | 'LRD'
-    | 'LSL'
-    | 'LTL'
-    | 'LYD'
-    | 'MAD'
-    | 'MDL'
-    | 'MGA'
-    | 'MKD'
-    | 'MMK'
-    | 'MNT'
-    | 'MOP'
-    | 'MRO'
-    | 'MRU'
-    | 'MUR'
-    | 'MVR'
-    | 'MWK'
-    | 'MXN'
-    | 'MYR'
-    | 'MZN'
-    | 'NAD'
-    | 'NGN'
-    | 'NIO'
-    | 'NOK'
-    | 'NPR'
-    | 'NZD'
-    | 'OMR'
-    | 'PAB'
-    | 'PEN'
-    | 'PGK'
-    | 'PHP'
-    | 'PKR'
-    | 'PLN'
-    | 'PYG'
-    | 'QAR'
-    | 'RON'
-    | 'RSD'
-    | 'RUB'
-    | 'RUR'
-    | 'RWF'
-    | 'SAR'
-    | 'SBD'
-    | 'SCR'
-    | 'SDG'
-    | 'SEK'
-    | 'SGD'
-    | 'SHP'
-    | 'SLL'
-    | 'SOS'
-    | 'SRD'
-    | 'SSP'
-    | 'STD'
-    | 'STN'
-    | 'SVC'
-    | 'SYP'
-    | 'SZL'
-    | 'THB'
-    | 'TJS'
-    | 'TMT'
-    | 'TND'
-    | 'TOP'
-    | 'TRY'
-    | 'TTD'
-    | 'TWD'
-    | 'TZS'
-    | 'UAH'
-    | 'UGX'
-    | 'USD'
-    | 'UYU'
-    | 'UZS'
-    | 'VEF'
-    | 'VES'
-    | 'VND'
-    | 'VUV'
-    | 'WST'
-    | 'XAF'
-    | 'XCD'
-    | 'XOF'
-    | 'XPF'
-    | 'YER'
-    | 'ZAR'
-    | 'ZMW'
-    | 'ZWL';
+    | "UNSPECIFIED"
+    | "AED"
+    | "AFN"
+    | "ALL"
+    | "AMD"
+    | "ANG"
+    | "AOA"
+    | "ARS"
+    | "AUD"
+    | "AWG"
+    | "AZN"
+    | "BAM"
+    | "BBD"
+    | "BDT"
+    | "BGN"
+    | "BHD"
+    | "BIF"
+    | "BMD"
+    | "BND"
+    | "BOB"
+    | "BRL"
+    | "BSD"
+    | "BTN"
+    | "BWP"
+    | "BYN"
+    | "BYR"
+    | "BZD"
+    | "CAD"
+    | "CDF"
+    | "CHF"
+    | "CLP"
+    | "CNY"
+    | "COP"
+    | "CRC"
+    | "CUC"
+    | "CUP"
+    | "CVE"
+    | "CZK"
+    | "DJF"
+    | "DKK"
+    | "DOP"
+    | "DZD"
+    | "EGP"
+    | "ERN"
+    | "ETB"
+    | "EUR"
+    | "FJD"
+    | "FKP"
+    | "GBP"
+    | "GEL"
+    | "GHS"
+    | "GIP"
+    | "GMD"
+    | "GNF"
+    | "GTQ"
+    | "GYD"
+    | "HKD"
+    | "HNL"
+    | "HRK"
+    | "HTG"
+    | "HUF"
+    | "IDR"
+    | "ILS"
+    | "INR"
+    | "IQD"
+    | "IRR"
+    | "ISK"
+    | "JMD"
+    | "JOD"
+    | "JPY"
+    | "KES"
+    | "KGS"
+    | "KHR"
+    | "KMF"
+    | "KPW"
+    | "KRW"
+    | "KWD"
+    | "KYD"
+    | "KZT"
+    | "LAK"
+    | "LBP"
+    | "LKR"
+    | "LRD"
+    | "LSL"
+    | "LTL"
+    | "LYD"
+    | "MAD"
+    | "MDL"
+    | "MGA"
+    | "MKD"
+    | "MMK"
+    | "MNT"
+    | "MOP"
+    | "MRO"
+    | "MRU"
+    | "MUR"
+    | "MVR"
+    | "MWK"
+    | "MXN"
+    | "MYR"
+    | "MZN"
+    | "NAD"
+    | "NGN"
+    | "NIO"
+    | "NOK"
+    | "NPR"
+    | "NZD"
+    | "OMR"
+    | "PAB"
+    | "PEN"
+    | "PGK"
+    | "PHP"
+    | "PKR"
+    | "PLN"
+    | "PYG"
+    | "QAR"
+    | "RON"
+    | "RSD"
+    | "RUB"
+    | "RUR"
+    | "RWF"
+    | "SAR"
+    | "SBD"
+    | "SCR"
+    | "SDG"
+    | "SEK"
+    | "SGD"
+    | "SHP"
+    | "SLL"
+    | "SOS"
+    | "SRD"
+    | "SSP"
+    | "STD"
+    | "STN"
+    | "SVC"
+    | "SYP"
+    | "SZL"
+    | "THB"
+    | "TJS"
+    | "TMT"
+    | "TND"
+    | "TOP"
+    | "TRY"
+    | "TTD"
+    | "TWD"
+    | "TZS"
+    | "UAH"
+    | "UGX"
+    | "USD"
+    | "UYU"
+    | "UZS"
+    | "VEF"
+    | "VES"
+    | "VND"
+    | "VUV"
+    | "WST"
+    | "XAF"
+    | "XCD"
+    | "XOF"
+    | "XPF"
+    | "YER"
+    | "ZAR"
+    | "ZMW"
+    | "ZWL";
   isPersonal: boolean;
   limits: CurrencyLimit[];
   disabledMccGroups: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 
   /** @example DEBIT */
-  binType?: 'DEBIT';
+  binType?: "DEBIT";
 
   /** @example DEBIT */
-  fundingType?: 'POOLED' | 'INDIVIDUAL';
+  fundingType?: "POOLED" | "INDIVIDUAL";
   shippingAddress?: Address;
 }
 
@@ -1695,8 +1716,8 @@ export interface SearchCardRequest {
   allocations?: string[];
   searchText?: string;
   balance?: FilterAmount;
-  statuses?: ('ACTIVE' | 'INACTIVE' | 'CANCELLED')[];
-  types?: ('PHYSICAL' | 'VIRTUAL')[];
+  statuses?: ("ACTIVE" | "INACTIVE" | "CANCELLED")[];
+  types?: ("PHYSICAL" | "VIRTUAL")[];
 }
 
 export interface ItemTypedIdAllocationId {
@@ -1724,8 +1745,8 @@ export interface SearchCardData {
   user?: UserData;
   allocation?: ItemTypedIdAllocationId;
   balance?: Amount;
-  cardStatus?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-  cardType?: 'PHYSICAL' | 'VIRTUAL';
+  cardStatus?: "ACTIVE" | "INACTIVE" | "CANCELLED";
+  cardType?: "PHYSICAL" | "VIRTUAL";
   activated?: boolean;
 
   /** @format date-time */
@@ -1763,7 +1784,7 @@ export interface CardStatementRequest {
 export interface BusinessStatusResponse {
   /** @format uuid */
   businessId?: string;
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  status?: "ONBOARDING" | "ACTIVE" | "SUSPENDED" | "CLOSED";
 }
 
 export interface PlaidLogEntryRequest {
@@ -1796,14 +1817,14 @@ export interface PlaidLogEntryMetadata {
   /** @format date-time */
   created?: string;
   plaidResponseType?:
-    | 'BALANCE'
-    | 'OWNER'
-    | 'ACCOUNT'
-    | 'LINK_TOKEN'
-    | 'ACCESS_TOKEN'
-    | 'SANDBOX_LINK_TOKEN'
-    | 'ERROR'
-    | 'OTHER';
+    | "BALANCE"
+    | "OWNER"
+    | "ACCOUNT"
+    | "LINK_TOKEN"
+    | "ACCESS_TOKEN"
+    | "SANDBOX_LINK_TOKEN"
+    | "ERROR"
+    | "OTHER";
 }
 
 export interface UpdateAllocationBalanceRequest {
@@ -1823,15 +1844,15 @@ export interface UpdateBusiness {
   legalName?: string;
   businessName?: string;
   businessType?:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
+    | "INDIVIDUAL"
+    | "SOLE_PROPRIETORSHIP"
+    | "SINGLE_MEMBER_LLC"
+    | "MULTI_MEMBER_LLC"
+    | "PRIVATE_PARTNERSHIP"
+    | "PUBLIC_PARTNERSHIP"
+    | "PRIVATE_CORPORATION"
+    | "PUBLIC_CORPORATION"
+    | "INCORPORATED_NON_PROFIT";
   employerIdentificationNumber?: string;
 
   /**
@@ -1884,7 +1905,7 @@ export interface Account {
 
   /** @format uuid */
   ledgerAccountId: string;
-  type: 'ALLOCATION' | 'CARD';
+  type: "ALLOCATION" | "CARD";
 
   /** @format uuid */
   cardId?: string;
@@ -1907,7 +1928,11 @@ export interface Allocation {
 }
 
 export interface UpdateBusinessAccountingStepRequest {
-  accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  accountingSetupStep?:
+    | "AWAITING_SYNC"
+    | "ADD_CREDIT_CARD"
+    | "MAP_CATEGORIES"
+    | "COMPLETE";
 }
 
 export interface CreateOrUpdateBusinessProspectRequest {
@@ -1935,15 +1960,15 @@ export interface CreateOrUpdateBusinessProspectRequest {
    * @example SINGLE_MEMBER_LLC
    */
   businessType?:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
+    | "INDIVIDUAL"
+    | "SOLE_PROPRIETORSHIP"
+    | "SINGLE_MEMBER_LLC"
+    | "MULTI_MEMBER_LLC"
+    | "PRIVATE_PARTNERSHIP"
+    | "PUBLIC_PARTNERSHIP"
+    | "PRIVATE_CORPORATION"
+    | "PUBLIC_CORPORATION"
+    | "INCORPORATED_NON_PROFIT";
 
   /**
    * Relationship to business Owner
@@ -1967,7 +1992,11 @@ export interface CreateOrUpdateBusinessProspectRequest {
 export interface CreateBusinessProspectResponse {
   /** @format uuid */
   businessProspectId?: string;
-  businessProspectStatus?: 'NEW' | 'EMAIL_VERIFIED' | 'MOBILE_VERIFIED' | 'COMPLETED';
+  businessProspectStatus?:
+    | "NEW"
+    | "EMAIL_VERIFIED"
+    | "MOBILE_VERIFIED"
+    | "COMPLETED";
 }
 
 export interface ValidateBusinessProspectIdentifierRequest {
@@ -1975,7 +2004,7 @@ export interface ValidateBusinessProspectIdentifierRequest {
    * Type of Identifier to validate
    * @example EMAIL
    */
-  identifierType?: 'EMAIL' | 'PHONE';
+  identifierType?: "EMAIL" | "PHONE";
 
   /**
    * OTP received via email/phone
@@ -1986,7 +2015,7 @@ export interface ValidateBusinessProspectIdentifierRequest {
 
 export interface ValidateIdentifierResponse {
   /** @example true */
-  'If email already exist on the system. User can login, reset password or use another email'?: boolean;
+  "If email already exist on the system. User can login, reset password or use another email"?: boolean;
 }
 
 export interface SetBusinessProspectPhoneRequest {
@@ -2150,10 +2179,10 @@ export interface BusinessNotification {
   /** @format uuid */
   userId?: string;
   type?:
-    | 'CHART_OF_ACCOUNTS_CREATED'
-    | 'CHART_OF_ACCOUNTS_DELETED'
-    | 'CHART_OF_ACCOUNTS_RENAMED'
-    | 'USER_ACCEPTED_COA_CHANGES';
+    | "CHART_OF_ACCOUNTS_CREATED"
+    | "CHART_OF_ACCOUNTS_DELETED"
+    | "CHART_OF_ACCOUNTS_RENAMED"
+    | "USER_ACCEPTED_COA_CHANGES";
   data?: BusinessNotificationData;
 
   /** @format int64 */
@@ -2186,7 +2215,16 @@ export interface DeviceInfo {
   /** @format date-time */
   lastAccessedInstant?: string;
   name?: string;
-  type?: 'BROWSER' | 'DESKTOP' | 'LAPTOP' | 'MOBILE' | 'OTHER' | 'SERVER' | 'TABLET' | 'TV' | 'UNKNOWN';
+  type?:
+    | "BROWSER"
+    | "DESKTOP"
+    | "LAPTOP"
+    | "MOBILE"
+    | "OTHER"
+    | "SERVER"
+    | "TABLET"
+    | "TV"
+    | "UNKNOWN";
 }
 
 export interface EventInfo {
@@ -2246,14 +2284,18 @@ export interface RelationshipToBusiness {
 export interface UserLoginResponse {
   twoFactorId?: string;
   changePasswordId?: string;
-  changePasswordReason?: 'Administrative' | 'Breached' | 'Expired' | 'Validation';
+  changePasswordReason?:
+    | "Administrative"
+    | "Breached"
+    | "Expired"
+    | "Validation";
 
   /** @format uuid */
   userId?: string;
 
   /** @format uuid */
   businessId?: string;
-  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  type?: "EMPLOYEE" | "BUSINESS_OWNER";
   firstName?: string;
   lastName?: string;
   address?: Address;
@@ -2265,7 +2307,7 @@ export interface UserLoginResponse {
 
 export interface FirstTwoFactorValidateRequest {
   code?: string;
-  method?: 'email' | 'sms' | 'authenticator';
+  method?: "email" | "sms" | "authenticator";
   destination?: string;
 }
 
@@ -2275,7 +2317,7 @@ export interface TwoFactorResponse {
 
 export interface FirstTwoFactorSendRequest {
   destination?: string;
-  method?: 'email' | 'sms' | 'authenticator';
+  method?: "email" | "sms" | "authenticator";
 }
 
 export interface ResetPasswordRequest {
@@ -2321,23 +2363,23 @@ export interface CreateAllocationRequest {
   amount: Amount;
   limits: CurrencyLimit[];
   disabledMccGroups: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 }
 
 export interface CreateAllocationResponse {
@@ -2359,7 +2401,7 @@ export interface AllocationFundCardRequest {
   cardId: string;
 
   /** @example DEPOSIT */
-  reallocationType: 'ALLOCATION_TO_CARD' | 'CARD_TO_ALLOCATION';
+  reallocationType: "ALLOCATION_TO_CARD" | "CARD_TO_ALLOCATION";
   amount: Amount;
 }
 
@@ -2384,19 +2426,19 @@ export interface LedgerActivityRequest {
   cardId?: string;
   searchText?: string;
   types?: (
-    | 'BANK_DEPOSIT_STRIPE'
-    | 'BANK_DEPOSIT_ACH'
-    | 'BANK_DEPOSIT_WIRE'
-    | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_WITHDRAWAL'
-    | 'BANK_WITHDRAWAL_RETURN'
-    | 'MANUAL'
-    | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE'
-    | 'NETWORK_REFUND'
-    | 'REALLOCATE'
-    | 'FEE'
-    | 'CARD_FUND_RETURN'
+    | "BANK_DEPOSIT_STRIPE"
+    | "BANK_DEPOSIT_ACH"
+    | "BANK_DEPOSIT_WIRE"
+    | "BANK_DEPOSIT_RETURN"
+    | "BANK_WITHDRAWAL"
+    | "BANK_WITHDRAWAL_RETURN"
+    | "MANUAL"
+    | "NETWORK_AUTHORIZATION"
+    | "NETWORK_CAPTURE"
+    | "NETWORK_REFUND"
+    | "REALLOCATE"
+    | "FEE"
+    | "CARD_FUND_RETURN"
   )[];
 
   /** @format date-time */
@@ -2404,12 +2446,19 @@ export interface LedgerActivityRequest {
 
   /** @format date-time */
   to?: string;
-  statuses?: ('PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED')[];
+  statuses?: (
+    | "PENDING"
+    | "DECLINED"
+    | "APPROVED"
+    | "CANCELED"
+    | "CREDIT"
+    | "PROCESSED"
+  )[];
   amount?: FilterAmount;
   categories?: string[];
   withReceipt?: boolean;
   withoutReceipt?: boolean;
-  syncStatus?: ('SYNCED_LOCKED' | 'READY' | 'NOT_READY')[];
+  syncStatus?: ("SYNCED_LOCKED" | "READY" | "NOT_READY")[];
   missingExpenseCategory?: boolean;
   pageRequest: PageRequest;
 }
@@ -2426,7 +2475,7 @@ export interface BankInfo {
 }
 
 export interface LedgerAccount {
-  type?: 'BANK' | 'MERCHANT' | 'ALLOCATION' | 'CARD';
+  type?: "BANK" | "MERCHANT" | "ALLOCATION" | "CARD";
 }
 
 export interface LedgerActivityResponse {
@@ -2436,27 +2485,41 @@ export interface LedgerActivityResponse {
   /** @format date-time */
   activityTime?: string;
   type?:
-    | 'BANK_DEPOSIT_STRIPE'
-    | 'BANK_DEPOSIT_ACH'
-    | 'BANK_DEPOSIT_WIRE'
-    | 'BANK_DEPOSIT_RETURN'
-    | 'BANK_WITHDRAWAL'
-    | 'BANK_WITHDRAWAL_RETURN'
-    | 'MANUAL'
-    | 'NETWORK_AUTHORIZATION'
-    | 'NETWORK_CAPTURE'
-    | 'NETWORK_REFUND'
-    | 'REALLOCATE'
-    | 'FEE'
-    | 'CARD_FUND_RETURN';
-  status?: 'PENDING' | 'DECLINED' | 'APPROVED' | 'CANCELED' | 'CREDIT' | 'PROCESSED';
+    | "BANK_DEPOSIT_STRIPE"
+    | "BANK_DEPOSIT_ACH"
+    | "BANK_DEPOSIT_WIRE"
+    | "BANK_DEPOSIT_RETURN"
+    | "BANK_WITHDRAWAL"
+    | "BANK_WITHDRAWAL_RETURN"
+    | "MANUAL"
+    | "NETWORK_AUTHORIZATION"
+    | "NETWORK_CAPTURE"
+    | "NETWORK_REFUND"
+    | "REALLOCATE"
+    | "FEE"
+    | "CARD_FUND_RETURN";
+  status?:
+    | "PENDING"
+    | "DECLINED"
+    | "APPROVED"
+    | "CANCELED"
+    | "CREDIT"
+    | "PROCESSED";
   user?: LedgerUser;
   amount?: Amount;
   requestedAmount?: Amount;
-  syncStatus?: 'SYNCED_LOCKED' | 'READY' | 'NOT_READY';
+  syncStatus?: "SYNCED_LOCKED" | "READY" | "NOT_READY";
   hold?: LedgerHoldInfo;
-  sourceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
-  targetAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+  sourceAccount?:
+    | LedgerAllocationAccount
+    | LedgerBankAccount
+    | LedgerCardAccount
+    | LedgerMerchantAccount;
+  targetAccount?:
+    | LedgerAllocationAccount
+    | LedgerBankAccount
+    | LedgerCardAccount
+    | LedgerMerchantAccount;
   receipt?: ReceiptDetails;
   notes?: string;
   expenseDetails?: ExpenseDetails;
@@ -2472,7 +2535,7 @@ export interface LedgerActivityResponse {
 }
 
 export type LedgerAllocationAccount = LedgerAccount & {
-  allocationInfo?: AllocationInfo;
+  allocationInfo?: AllocationInfo,
 };
 
 export type LedgerBankAccount = LedgerAccount & { bankInfo?: BankInfo };
@@ -2490,7 +2553,7 @@ export interface LedgerHoldInfo {
 export type LedgerMerchantAccount = LedgerAccount & { merchantInfo?: Merchant };
 
 export interface LedgerUser {
-  type?: 'USER' | 'SYSTEM' | 'EXTERNAL';
+  type?: "USER" | "SYSTEM" | "EXTERNAL";
   userInfo?: UserInfo;
 }
 
@@ -2548,7 +2611,7 @@ export interface GraphData {
 }
 
 export interface ChartDataRequest {
-  chartFilter: 'MERCHANT_CATEGORY' | 'ALLOCATION' | 'EMPLOYEE' | 'MERCHANT';
+  chartFilter: "MERCHANT_CATEGORY" | "ALLOCATION" | "EMPLOYEE" | "MERCHANT";
 
   /** @format uuid */
   allocationId?: string;
@@ -2561,7 +2624,7 @@ export interface ChartDataRequest {
 
   /** @format date-time */
   to: string;
-  sortDirection?: 'ASC' | 'DESC';
+  sortDirection?: "ASC" | "DESC";
 }
 
 export interface AllocationChartData {
@@ -2578,294 +2641,294 @@ export interface ChartDataResponse {
 
 export interface MerchantCategoryChartData {
   merchantType?:
-    | 'UNKNOWN'
-    | 'AC_REFRIGERATION_REPAIR'
-    | 'ACCOUNTING_BOOKKEEPING_SERVICES'
-    | 'ADVERTISING_SERVICES'
-    | 'AGRICULTURAL_COOPERATIVE'
-    | 'AIRLINES_AIR_CARRIERS'
-    | 'AIRPORTS_FLYING_FIELDS'
-    | 'AMBULANCE_SERVICES'
-    | 'AMUSEMENT_PARKS_CARNIVALS'
-    | 'ANTIQUE_REPRODUCTIONS'
-    | 'ANTIQUE_SHOPS'
-    | 'AQUARIUMS'
-    | 'ARCHITECTURAL_SURVEYING_SERVICES'
-    | 'ART_DEALERS_AND_GALLERIES'
-    | 'ARTISTS_SUPPLY_AND_CRAFT_SHOPS'
-    | 'AUTO_BODY_REPAIR_SHOPS'
-    | 'AUTO_PAINT_SHOPS'
-    | 'AUTO_SERVICE_SHOPS'
-    | 'AUTO_AND_HOME_SUPPLY_STORES'
-    | 'AUTOMATED_CASH_DISBURSE'
-    | 'AUTOMATED_FUEL_DISPENSERS'
-    | 'AUTOMOBILE_ASSOCIATIONS'
-    | 'AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES'
-    | 'AUTOMOTIVE_TIRE_STORES'
-    | 'BAIL_AND_BOND_PAYMENTS'
-    | 'BAKERIES'
-    | 'BANDS_ORCHESTRAS'
-    | 'BARBER_AND_BEAUTY_SHOPS'
-    | 'BETTING_CASINO_GAMBLING'
-    | 'BICYCLE_SHOPS'
-    | 'BILLIARD_POOL_ESTABLISHMENTS'
-    | 'BOAT_DEALERS'
-    | 'BOAT_RENTALS_AND_LEASES'
-    | 'BOOK_STORES'
-    | 'BOOKS_PERIODICALS_AND_NEWSPAPERS'
-    | 'BOWLING_ALLEYS'
-    | 'BUS_LINES'
-    | 'BUSINESS_SECRETARIAL_SCHOOLS'
-    | 'BUYING_SHOPPING_SERVICES'
-    | 'CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO'
-    | 'CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES'
-    | 'CANDY_NUT_AND_CONFECTIONERY_STORES'
-    | 'CAR_RENTAL_AGENCIES'
-    | 'CAR_WASHES'
-    | 'CAR_AND_TRUCK_DEALERS_NEW_USED'
-    | 'CAR_AND_TRUCK_DEALERS_USED_ONLY'
-    | 'CARPENTRY_SERVICES'
-    | 'CARPET_UPHOLSTERY_CLEANING'
-    | 'CATERERS'
-    | 'CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING'
-    | 'CHEMICALS_AND_ALLIED_PRODUCTS'
-    | 'CHILD_CARE_SERVICES'
-    | 'CHILDRENS_AND_INFANTS_WEAR_STORES'
-    | 'CHIROPODISTS_PODIATRISTS'
-    | 'CHIROPRACTORS'
-    | 'CIGAR_STORES_AND_STANDS'
-    | 'CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS'
-    | 'CLEANING_AND_MAINTENANCE'
-    | 'CLOTHING_RENTAL'
-    | 'COLLEGES_UNIVERSITIES'
-    | 'COMMERCIAL_EQUIPMENT'
-    | 'COMMERCIAL_FOOTWEAR'
-    | 'COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS'
-    | 'COMMUTER_TRANSPORT_AND_FERRIES'
-    | 'COMPUTER_NETWORK_SERVICES'
-    | 'COMPUTER_PROGRAMMING'
-    | 'COMPUTER_REPAIR'
-    | 'COMPUTER_SOFTWARE_STORES'
-    | 'COMPUTERS_PERIPHERALS_AND_SOFTWARE'
-    | 'CONCRETE_WORK_SERVICES'
-    | 'CONSTRUCTION_MATERIALS'
-    | 'CONSULTING_PUBLIC_RELATIONS'
-    | 'CORRESPONDENCE_SCHOOLS'
-    | 'COSMETIC_STORES'
-    | 'COUNSELING_SERVICES'
-    | 'COUNTRY_CLUBS'
-    | 'COURIER_SERVICES'
-    | 'COURT_COSTS'
-    | 'CREDIT_REPORTING_AGENCIES'
-    | 'CRUISE_LINES'
-    | 'DAIRY_PRODUCTS_STORES'
-    | 'DANCE_HALL_STUDIOS_SCHOOLS'
-    | 'DATING_ESCORT_SERVICES'
-    | 'DENTISTS_ORTHODONTISTS'
-    | 'DEPARTMENT_STORES'
-    | 'DETECTIVE_AGENCIES'
-    | 'DIGITAL_GOODS_MEDIA'
-    | 'DIGITAL_GOODS_APPLICATIONS'
-    | 'DIGITAL_GOODS_GAMES'
-    | 'DIGITAL_GOODS_LARGE_VOLUME'
-    | 'DIRECT_MARKETING_CATALOG_MERCHANT'
-    | 'DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT'
-    | 'DIRECT_MARKETING_INBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_INSURANCE_SERVICES'
-    | 'DIRECT_MARKETING_OTHER'
-    | 'DIRECT_MARKETING_OUTBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_SUBSCRIPTION'
-    | 'DIRECT_MARKETING_TRAVEL'
-    | 'DISCOUNT_STORES'
-    | 'DOCTORS'
-    | 'DOOR_TO_DOOR_SALES'
-    | 'DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES'
-    | 'DRINKING_PLACES'
-    | 'DRUG_STORES_AND_PHARMACIES'
-    | 'DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES'
-    | 'DRY_CLEANERS'
-    | 'DURABLE_GOODS'
-    | 'DUTY_FREE_STORES'
-    | 'EATING_PLACES_RESTAURANTS'
-    | 'EDUCATIONAL_SERVICES'
-    | 'ELECTRIC_RAZOR_STORES'
-    | 'ELECTRICAL_PARTS_AND_EQUIPMENT'
-    | 'ELECTRICAL_SERVICES'
-    | 'ELECTRONICS_REPAIR_SHOPS'
-    | 'ELECTRONICS_STORES'
-    | 'ELEMENTARY_SECONDARY_SCHOOLS'
-    | 'EMPLOYMENT_TEMP_AGENCIES'
-    | 'EQUIPMENT_RENTAL'
-    | 'EXTERMINATING_SERVICES'
-    | 'FAMILY_CLOTHING_STORES'
-    | 'FAST_FOOD_RESTAURANTS'
-    | 'FINANCIAL_INSTITUTIONS'
-    | 'FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES'
-    | 'FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES'
-    | 'FLOOR_COVERING_STORES'
-    | 'FLORISTS'
-    | 'FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS'
-    | 'FREEZER_AND_LOCKER_MEAT_PROVISIONERS'
-    | 'FUEL_DEALERS_NON_AUTOMOTIVE'
-    | 'FUNERAL_SERVICES_CREMATORIES'
-    | 'FURNITURE_REPAIR_REFINISHING'
-    | 'FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES'
-    | 'FURRIERS_AND_FUR_SHOPS'
-    | 'GENERAL_SERVICES'
-    | 'GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS'
-    | 'GLASS_PAINT_AND_WALLPAPER_STORES'
-    | 'GLASSWARE_CRYSTAL_STORES'
-    | 'GOLF_COURSES_PUBLIC'
-    | 'GOVERNMENT_SERVICES'
-    | 'GROCERY_STORES_SUPERMARKETS'
-    | 'HARDWARE_STORES'
-    | 'HARDWARE_EQUIPMENT_AND_SUPPLIES'
-    | 'HEALTH_AND_BEAUTY_SPAS'
-    | 'HEARING_AIDS_SALES_AND_SUPPLIES'
-    | 'HEATING_PLUMBING_A_C'
-    | 'HOBBY_TOY_AND_GAME_SHOPS'
-    | 'HOME_SUPPLY_WAREHOUSE_STORES'
-    | 'HOSPITALS'
-    | 'HOTELS_MOTELS_AND_RESORTS'
-    | 'HOUSEHOLD_APPLIANCE_STORES'
-    | 'INDUSTRIAL_SUPPLIES'
-    | 'INFORMATION_RETRIEVAL_SERVICES'
-    | 'INSURANCE_DEFAULT'
-    | 'INSURANCE_UNDERWRITING_PREMIUMS'
-    | 'INTRA_COMPANY_PURCHASES'
-    | 'JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES'
-    | 'LANDSCAPING_SERVICES'
-    | 'LAUNDRIES'
-    | 'LAUNDRY_CLEANING_SERVICES'
-    | 'LEGAL_SERVICES_ATTORNEYS'
-    | 'LUGGAGE_AND_LEATHER_GOODS_STORES'
-    | 'LUMBER_BUILDING_MATERIALS_STORES'
-    | 'MANUAL_CASH_DISBURSE'
-    | 'MARINAS_SERVICE_AND_SUPPLIES'
-    | 'MASONRY_STONEWORK_AND_PLASTER'
-    | 'MASSAGE_PARLORS'
-    | 'MEDICAL_SERVICES'
-    | 'MEDICAL_AND_DENTAL_LABS'
-    | 'MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES'
-    | 'MEMBERSHIP_ORGANIZATIONS'
-    | 'MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES'
-    | 'MENS_WOMENS_CLOTHING_STORES'
-    | 'METAL_SERVICE_CENTERS'
-    | 'MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS'
-    | 'MISCELLANEOUS_AUTO_DEALERS'
-    | 'MISCELLANEOUS_BUSINESS_SERVICES'
-    | 'MISCELLANEOUS_FOOD_STORES'
-    | 'MISCELLANEOUS_GENERAL_MERCHANDISE'
-    | 'MISCELLANEOUS_GENERAL_SERVICES'
-    | 'MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES'
-    | 'MISCELLANEOUS_PUBLISHING_AND_PRINTING'
-    | 'MISCELLANEOUS_RECREATION_SERVICES'
-    | 'MISCELLANEOUS_REPAIR_SHOPS'
-    | 'MISCELLANEOUS_SPECIALTY_RETAIL'
-    | 'MOBILE_HOME_DEALERS'
-    | 'MOTION_PICTURE_THEATERS'
-    | 'MOTOR_FREIGHT_CARRIERS_AND_TRUCKING'
-    | 'MOTOR_HOMES_DEALERS'
-    | 'MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS'
-    | 'MOTORCYCLE_SHOPS_AND_DEALERS'
-    | 'MOTORCYCLE_SHOPS_DEALERS'
-    | 'MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC'
-    | 'NEWS_DEALERS_AND_NEWSSTANDS'
-    | 'NON_FI_MONEY_ORDERS'
-    | 'NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD'
-    | 'NONDURABLE_GOODS'
-    | 'NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES'
-    | 'NURSING_PERSONAL_CARE'
-    | 'OFFICE_AND_COMMERCIAL_FURNITURE'
-    | 'OPTICIANS_EYEGLASSES'
-    | 'OPTOMETRISTS_OPHTHALMOLOGIST'
-    | 'ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES'
-    | 'OSTEOPATHS'
-    | 'PACKAGE_STORES_BEER_WINE_AND_LIQUOR'
-    | 'PAINTS_VARNISHES_AND_SUPPLIES'
-    | 'PARKING_LOTS_GARAGES'
-    | 'PASSENGER_RAILWAYS'
-    | 'PAWN_SHOPS'
-    | 'PET_SHOPS_PET_FOOD_AND_SUPPLIES'
-    | 'PETROLEUM_AND_PETROLEUM_PRODUCTS'
-    | 'PHOTO_DEVELOPING'
-    | 'PHOTOGRAPHIC_STUDIOS'
-    | 'PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES'
-    | 'PICTURE_VIDEO_PRODUCTION'
-    | 'PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS'
-    | 'PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES'
-    | 'POLITICAL_ORGANIZATIONS'
-    | 'POSTAL_SERVICES_GOVERNMENT_ONLY'
-    | 'PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY'
-    | 'PROFESSIONAL_SERVICES'
-    | 'PUBLIC_WAREHOUSING_AND_STORAGE'
-    | 'QUICK_COPY_REPRO_AND_BLUEPRINT'
-    | 'RAILROADS'
-    | 'REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS'
-    | 'RECORD_STORES'
-    | 'RECREATIONAL_VEHICLE_RENTALS'
-    | 'RELIGIOUS_GOODS_STORES'
-    | 'RELIGIOUS_ORGANIZATIONS'
-    | 'ROOFING_SIDING_SHEET_METAL'
-    | 'SECRETARIAL_SUPPORT_SERVICES'
-    | 'SECURITY_BROKERS_DEALERS'
-    | 'SERVICE_STATIONS'
-    | 'SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES'
-    | 'SHOE_REPAIR_HAT_CLEANING'
-    | 'SHOE_STORES'
-    | 'SMALL_APPLIANCE_REPAIR'
-    | 'SNOWMOBILE_DEALERS'
-    | 'SPECIAL_TRADE_SERVICES'
-    | 'SPECIALTY_CLEANING'
-    | 'SPORTING_GOODS_STORES'
-    | 'SPORTING_RECREATION_CAMPS'
-    | 'SPORTS_CLUBS_FIELDS'
-    | 'SPORTS_AND_RIDING_APPAREL_STORES'
-    | 'STAMP_AND_COIN_STORES'
-    | 'STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER'
-    | 'STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES'
-    | 'SWIMMING_POOLS_SALES'
-    | 'T_UI_TRAVEL_GERMANY'
-    | 'TAILORS_ALTERATIONS'
-    | 'TAX_PAYMENTS_GOVERNMENT_AGENCIES'
-    | 'TAX_PREPARATION_SERVICES'
-    | 'TAXICABS_LIMOUSINES'
-    | 'TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES'
-    | 'TELECOMMUNICATION_SERVICES'
-    | 'TELEGRAPH_SERVICES'
-    | 'TENT_AND_AWNING_SHOPS'
-    | 'TESTING_LABORATORIES'
-    | 'THEATRICAL_TICKET_AGENCIES'
-    | 'TIMESHARES'
-    | 'TIRE_RETREADING_AND_REPAIR'
-    | 'TOLLS_BRIDGE_FEES'
-    | 'TOURIST_ATTRACTIONS_AND_EXHIBITS'
-    | 'TOWING_SERVICES'
-    | 'TRAILER_PARKS_CAMPGROUNDS'
-    | 'TRANSPORTATION_SERVICES'
-    | 'TRAVEL_AGENCIES_TOUR_OPERATORS'
-    | 'TRUCK_STOP_ITERATION'
-    | 'TRUCK_UTILITY_TRAILER_RENTALS'
-    | 'TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES'
-    | 'TYPEWRITER_STORES'
-    | 'U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS'
-    | 'UNIFORMS_COMMERCIAL_CLOTHING'
-    | 'USED_MERCHANDISE_AND_SECONDHAND_STORES'
-    | 'UTILITIES'
-    | 'VARIETY_STORES'
-    | 'VETERINARY_SERVICES'
-    | 'VIDEO_AMUSEMENT_GAME_SUPPLIES'
-    | 'VIDEO_GAME_ARCADES'
-    | 'VIDEO_TAPE_RENTAL_STORES'
-    | 'VOCATIONAL_TRADE_SCHOOLS'
-    | 'WATCH_JEWELRY_REPAIR'
-    | 'WELDING_REPAIR'
-    | 'WHOLESALE_CLUBS'
-    | 'WIG_AND_TOUPEE_STORES'
-    | 'WIRES_MONEY_ORDERS'
-    | 'WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS'
-    | 'WOMENS_READY_TO_WEAR_STORES'
-    | 'WRECKING_AND_SALVAGE_YARDS';
+    | "UNKNOWN"
+    | "AC_REFRIGERATION_REPAIR"
+    | "ACCOUNTING_BOOKKEEPING_SERVICES"
+    | "ADVERTISING_SERVICES"
+    | "AGRICULTURAL_COOPERATIVE"
+    | "AIRLINES_AIR_CARRIERS"
+    | "AIRPORTS_FLYING_FIELDS"
+    | "AMBULANCE_SERVICES"
+    | "AMUSEMENT_PARKS_CARNIVALS"
+    | "ANTIQUE_REPRODUCTIONS"
+    | "ANTIQUE_SHOPS"
+    | "AQUARIUMS"
+    | "ARCHITECTURAL_SURVEYING_SERVICES"
+    | "ART_DEALERS_AND_GALLERIES"
+    | "ARTISTS_SUPPLY_AND_CRAFT_SHOPS"
+    | "AUTO_BODY_REPAIR_SHOPS"
+    | "AUTO_PAINT_SHOPS"
+    | "AUTO_SERVICE_SHOPS"
+    | "AUTO_AND_HOME_SUPPLY_STORES"
+    | "AUTOMATED_CASH_DISBURSE"
+    | "AUTOMATED_FUEL_DISPENSERS"
+    | "AUTOMOBILE_ASSOCIATIONS"
+    | "AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES"
+    | "AUTOMOTIVE_TIRE_STORES"
+    | "BAIL_AND_BOND_PAYMENTS"
+    | "BAKERIES"
+    | "BANDS_ORCHESTRAS"
+    | "BARBER_AND_BEAUTY_SHOPS"
+    | "BETTING_CASINO_GAMBLING"
+    | "BICYCLE_SHOPS"
+    | "BILLIARD_POOL_ESTABLISHMENTS"
+    | "BOAT_DEALERS"
+    | "BOAT_RENTALS_AND_LEASES"
+    | "BOOK_STORES"
+    | "BOOKS_PERIODICALS_AND_NEWSPAPERS"
+    | "BOWLING_ALLEYS"
+    | "BUS_LINES"
+    | "BUSINESS_SECRETARIAL_SCHOOLS"
+    | "BUYING_SHOPPING_SERVICES"
+    | "CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO"
+    | "CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES"
+    | "CANDY_NUT_AND_CONFECTIONERY_STORES"
+    | "CAR_RENTAL_AGENCIES"
+    | "CAR_WASHES"
+    | "CAR_AND_TRUCK_DEALERS_NEW_USED"
+    | "CAR_AND_TRUCK_DEALERS_USED_ONLY"
+    | "CARPENTRY_SERVICES"
+    | "CARPET_UPHOLSTERY_CLEANING"
+    | "CATERERS"
+    | "CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING"
+    | "CHEMICALS_AND_ALLIED_PRODUCTS"
+    | "CHILD_CARE_SERVICES"
+    | "CHILDRENS_AND_INFANTS_WEAR_STORES"
+    | "CHIROPODISTS_PODIATRISTS"
+    | "CHIROPRACTORS"
+    | "CIGAR_STORES_AND_STANDS"
+    | "CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS"
+    | "CLEANING_AND_MAINTENANCE"
+    | "CLOTHING_RENTAL"
+    | "COLLEGES_UNIVERSITIES"
+    | "COMMERCIAL_EQUIPMENT"
+    | "COMMERCIAL_FOOTWEAR"
+    | "COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS"
+    | "COMMUTER_TRANSPORT_AND_FERRIES"
+    | "COMPUTER_NETWORK_SERVICES"
+    | "COMPUTER_PROGRAMMING"
+    | "COMPUTER_REPAIR"
+    | "COMPUTER_SOFTWARE_STORES"
+    | "COMPUTERS_PERIPHERALS_AND_SOFTWARE"
+    | "CONCRETE_WORK_SERVICES"
+    | "CONSTRUCTION_MATERIALS"
+    | "CONSULTING_PUBLIC_RELATIONS"
+    | "CORRESPONDENCE_SCHOOLS"
+    | "COSMETIC_STORES"
+    | "COUNSELING_SERVICES"
+    | "COUNTRY_CLUBS"
+    | "COURIER_SERVICES"
+    | "COURT_COSTS"
+    | "CREDIT_REPORTING_AGENCIES"
+    | "CRUISE_LINES"
+    | "DAIRY_PRODUCTS_STORES"
+    | "DANCE_HALL_STUDIOS_SCHOOLS"
+    | "DATING_ESCORT_SERVICES"
+    | "DENTISTS_ORTHODONTISTS"
+    | "DEPARTMENT_STORES"
+    | "DETECTIVE_AGENCIES"
+    | "DIGITAL_GOODS_MEDIA"
+    | "DIGITAL_GOODS_APPLICATIONS"
+    | "DIGITAL_GOODS_GAMES"
+    | "DIGITAL_GOODS_LARGE_VOLUME"
+    | "DIRECT_MARKETING_CATALOG_MERCHANT"
+    | "DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT"
+    | "DIRECT_MARKETING_INBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_INSURANCE_SERVICES"
+    | "DIRECT_MARKETING_OTHER"
+    | "DIRECT_MARKETING_OUTBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_SUBSCRIPTION"
+    | "DIRECT_MARKETING_TRAVEL"
+    | "DISCOUNT_STORES"
+    | "DOCTORS"
+    | "DOOR_TO_DOOR_SALES"
+    | "DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES"
+    | "DRINKING_PLACES"
+    | "DRUG_STORES_AND_PHARMACIES"
+    | "DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES"
+    | "DRY_CLEANERS"
+    | "DURABLE_GOODS"
+    | "DUTY_FREE_STORES"
+    | "EATING_PLACES_RESTAURANTS"
+    | "EDUCATIONAL_SERVICES"
+    | "ELECTRIC_RAZOR_STORES"
+    | "ELECTRICAL_PARTS_AND_EQUIPMENT"
+    | "ELECTRICAL_SERVICES"
+    | "ELECTRONICS_REPAIR_SHOPS"
+    | "ELECTRONICS_STORES"
+    | "ELEMENTARY_SECONDARY_SCHOOLS"
+    | "EMPLOYMENT_TEMP_AGENCIES"
+    | "EQUIPMENT_RENTAL"
+    | "EXTERMINATING_SERVICES"
+    | "FAMILY_CLOTHING_STORES"
+    | "FAST_FOOD_RESTAURANTS"
+    | "FINANCIAL_INSTITUTIONS"
+    | "FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES"
+    | "FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES"
+    | "FLOOR_COVERING_STORES"
+    | "FLORISTS"
+    | "FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS"
+    | "FREEZER_AND_LOCKER_MEAT_PROVISIONERS"
+    | "FUEL_DEALERS_NON_AUTOMOTIVE"
+    | "FUNERAL_SERVICES_CREMATORIES"
+    | "FURNITURE_REPAIR_REFINISHING"
+    | "FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES"
+    | "FURRIERS_AND_FUR_SHOPS"
+    | "GENERAL_SERVICES"
+    | "GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS"
+    | "GLASS_PAINT_AND_WALLPAPER_STORES"
+    | "GLASSWARE_CRYSTAL_STORES"
+    | "GOLF_COURSES_PUBLIC"
+    | "GOVERNMENT_SERVICES"
+    | "GROCERY_STORES_SUPERMARKETS"
+    | "HARDWARE_STORES"
+    | "HARDWARE_EQUIPMENT_AND_SUPPLIES"
+    | "HEALTH_AND_BEAUTY_SPAS"
+    | "HEARING_AIDS_SALES_AND_SUPPLIES"
+    | "HEATING_PLUMBING_A_C"
+    | "HOBBY_TOY_AND_GAME_SHOPS"
+    | "HOME_SUPPLY_WAREHOUSE_STORES"
+    | "HOSPITALS"
+    | "HOTELS_MOTELS_AND_RESORTS"
+    | "HOUSEHOLD_APPLIANCE_STORES"
+    | "INDUSTRIAL_SUPPLIES"
+    | "INFORMATION_RETRIEVAL_SERVICES"
+    | "INSURANCE_DEFAULT"
+    | "INSURANCE_UNDERWRITING_PREMIUMS"
+    | "INTRA_COMPANY_PURCHASES"
+    | "JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES"
+    | "LANDSCAPING_SERVICES"
+    | "LAUNDRIES"
+    | "LAUNDRY_CLEANING_SERVICES"
+    | "LEGAL_SERVICES_ATTORNEYS"
+    | "LUGGAGE_AND_LEATHER_GOODS_STORES"
+    | "LUMBER_BUILDING_MATERIALS_STORES"
+    | "MANUAL_CASH_DISBURSE"
+    | "MARINAS_SERVICE_AND_SUPPLIES"
+    | "MASONRY_STONEWORK_AND_PLASTER"
+    | "MASSAGE_PARLORS"
+    | "MEDICAL_SERVICES"
+    | "MEDICAL_AND_DENTAL_LABS"
+    | "MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES"
+    | "MEMBERSHIP_ORGANIZATIONS"
+    | "MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES"
+    | "MENS_WOMENS_CLOTHING_STORES"
+    | "METAL_SERVICE_CENTERS"
+    | "MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS"
+    | "MISCELLANEOUS_AUTO_DEALERS"
+    | "MISCELLANEOUS_BUSINESS_SERVICES"
+    | "MISCELLANEOUS_FOOD_STORES"
+    | "MISCELLANEOUS_GENERAL_MERCHANDISE"
+    | "MISCELLANEOUS_GENERAL_SERVICES"
+    | "MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES"
+    | "MISCELLANEOUS_PUBLISHING_AND_PRINTING"
+    | "MISCELLANEOUS_RECREATION_SERVICES"
+    | "MISCELLANEOUS_REPAIR_SHOPS"
+    | "MISCELLANEOUS_SPECIALTY_RETAIL"
+    | "MOBILE_HOME_DEALERS"
+    | "MOTION_PICTURE_THEATERS"
+    | "MOTOR_FREIGHT_CARRIERS_AND_TRUCKING"
+    | "MOTOR_HOMES_DEALERS"
+    | "MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS"
+    | "MOTORCYCLE_SHOPS_AND_DEALERS"
+    | "MOTORCYCLE_SHOPS_DEALERS"
+    | "MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC"
+    | "NEWS_DEALERS_AND_NEWSSTANDS"
+    | "NON_FI_MONEY_ORDERS"
+    | "NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD"
+    | "NONDURABLE_GOODS"
+    | "NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES"
+    | "NURSING_PERSONAL_CARE"
+    | "OFFICE_AND_COMMERCIAL_FURNITURE"
+    | "OPTICIANS_EYEGLASSES"
+    | "OPTOMETRISTS_OPHTHALMOLOGIST"
+    | "ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES"
+    | "OSTEOPATHS"
+    | "PACKAGE_STORES_BEER_WINE_AND_LIQUOR"
+    | "PAINTS_VARNISHES_AND_SUPPLIES"
+    | "PARKING_LOTS_GARAGES"
+    | "PASSENGER_RAILWAYS"
+    | "PAWN_SHOPS"
+    | "PET_SHOPS_PET_FOOD_AND_SUPPLIES"
+    | "PETROLEUM_AND_PETROLEUM_PRODUCTS"
+    | "PHOTO_DEVELOPING"
+    | "PHOTOGRAPHIC_STUDIOS"
+    | "PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES"
+    | "PICTURE_VIDEO_PRODUCTION"
+    | "PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS"
+    | "PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES"
+    | "POLITICAL_ORGANIZATIONS"
+    | "POSTAL_SERVICES_GOVERNMENT_ONLY"
+    | "PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY"
+    | "PROFESSIONAL_SERVICES"
+    | "PUBLIC_WAREHOUSING_AND_STORAGE"
+    | "QUICK_COPY_REPRO_AND_BLUEPRINT"
+    | "RAILROADS"
+    | "REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS"
+    | "RECORD_STORES"
+    | "RECREATIONAL_VEHICLE_RENTALS"
+    | "RELIGIOUS_GOODS_STORES"
+    | "RELIGIOUS_ORGANIZATIONS"
+    | "ROOFING_SIDING_SHEET_METAL"
+    | "SECRETARIAL_SUPPORT_SERVICES"
+    | "SECURITY_BROKERS_DEALERS"
+    | "SERVICE_STATIONS"
+    | "SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES"
+    | "SHOE_REPAIR_HAT_CLEANING"
+    | "SHOE_STORES"
+    | "SMALL_APPLIANCE_REPAIR"
+    | "SNOWMOBILE_DEALERS"
+    | "SPECIAL_TRADE_SERVICES"
+    | "SPECIALTY_CLEANING"
+    | "SPORTING_GOODS_STORES"
+    | "SPORTING_RECREATION_CAMPS"
+    | "SPORTS_CLUBS_FIELDS"
+    | "SPORTS_AND_RIDING_APPAREL_STORES"
+    | "STAMP_AND_COIN_STORES"
+    | "STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER"
+    | "STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES"
+    | "SWIMMING_POOLS_SALES"
+    | "T_UI_TRAVEL_GERMANY"
+    | "TAILORS_ALTERATIONS"
+    | "TAX_PAYMENTS_GOVERNMENT_AGENCIES"
+    | "TAX_PREPARATION_SERVICES"
+    | "TAXICABS_LIMOUSINES"
+    | "TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES"
+    | "TELECOMMUNICATION_SERVICES"
+    | "TELEGRAPH_SERVICES"
+    | "TENT_AND_AWNING_SHOPS"
+    | "TESTING_LABORATORIES"
+    | "THEATRICAL_TICKET_AGENCIES"
+    | "TIMESHARES"
+    | "TIRE_RETREADING_AND_REPAIR"
+    | "TOLLS_BRIDGE_FEES"
+    | "TOURIST_ATTRACTIONS_AND_EXHIBITS"
+    | "TOWING_SERVICES"
+    | "TRAILER_PARKS_CAMPGROUNDS"
+    | "TRANSPORTATION_SERVICES"
+    | "TRAVEL_AGENCIES_TOUR_OPERATORS"
+    | "TRUCK_STOP_ITERATION"
+    | "TRUCK_UTILITY_TRAILER_RENTALS"
+    | "TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES"
+    | "TYPEWRITER_STORES"
+    | "U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS"
+    | "UNIFORMS_COMMERCIAL_CLOTHING"
+    | "USED_MERCHANDISE_AND_SECONDHAND_STORES"
+    | "UTILITIES"
+    | "VARIETY_STORES"
+    | "VETERINARY_SERVICES"
+    | "VIDEO_AMUSEMENT_GAME_SUPPLIES"
+    | "VIDEO_GAME_ARCADES"
+    | "VIDEO_TAPE_RENTAL_STORES"
+    | "VOCATIONAL_TRADE_SCHOOLS"
+    | "WATCH_JEWELRY_REPAIR"
+    | "WELDING_REPAIR"
+    | "WHOLESALE_CLUBS"
+    | "WIG_AND_TOUPEE_STORES"
+    | "WIRES_MONEY_ORDERS"
+    | "WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS"
+    | "WOMENS_READY_TO_WEAR_STORES"
+    | "WRECKING_AND_SALVAGE_YARDS";
   amount?: Amount;
 }
 
@@ -2877,294 +2940,294 @@ export interface MerchantChartData {
 export interface MerchantInfo {
   name?: string;
   type?:
-    | 'UNKNOWN'
-    | 'AC_REFRIGERATION_REPAIR'
-    | 'ACCOUNTING_BOOKKEEPING_SERVICES'
-    | 'ADVERTISING_SERVICES'
-    | 'AGRICULTURAL_COOPERATIVE'
-    | 'AIRLINES_AIR_CARRIERS'
-    | 'AIRPORTS_FLYING_FIELDS'
-    | 'AMBULANCE_SERVICES'
-    | 'AMUSEMENT_PARKS_CARNIVALS'
-    | 'ANTIQUE_REPRODUCTIONS'
-    | 'ANTIQUE_SHOPS'
-    | 'AQUARIUMS'
-    | 'ARCHITECTURAL_SURVEYING_SERVICES'
-    | 'ART_DEALERS_AND_GALLERIES'
-    | 'ARTISTS_SUPPLY_AND_CRAFT_SHOPS'
-    | 'AUTO_BODY_REPAIR_SHOPS'
-    | 'AUTO_PAINT_SHOPS'
-    | 'AUTO_SERVICE_SHOPS'
-    | 'AUTO_AND_HOME_SUPPLY_STORES'
-    | 'AUTOMATED_CASH_DISBURSE'
-    | 'AUTOMATED_FUEL_DISPENSERS'
-    | 'AUTOMOBILE_ASSOCIATIONS'
-    | 'AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES'
-    | 'AUTOMOTIVE_TIRE_STORES'
-    | 'BAIL_AND_BOND_PAYMENTS'
-    | 'BAKERIES'
-    | 'BANDS_ORCHESTRAS'
-    | 'BARBER_AND_BEAUTY_SHOPS'
-    | 'BETTING_CASINO_GAMBLING'
-    | 'BICYCLE_SHOPS'
-    | 'BILLIARD_POOL_ESTABLISHMENTS'
-    | 'BOAT_DEALERS'
-    | 'BOAT_RENTALS_AND_LEASES'
-    | 'BOOK_STORES'
-    | 'BOOKS_PERIODICALS_AND_NEWSPAPERS'
-    | 'BOWLING_ALLEYS'
-    | 'BUS_LINES'
-    | 'BUSINESS_SECRETARIAL_SCHOOLS'
-    | 'BUYING_SHOPPING_SERVICES'
-    | 'CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO'
-    | 'CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES'
-    | 'CANDY_NUT_AND_CONFECTIONERY_STORES'
-    | 'CAR_RENTAL_AGENCIES'
-    | 'CAR_WASHES'
-    | 'CAR_AND_TRUCK_DEALERS_NEW_USED'
-    | 'CAR_AND_TRUCK_DEALERS_USED_ONLY'
-    | 'CARPENTRY_SERVICES'
-    | 'CARPET_UPHOLSTERY_CLEANING'
-    | 'CATERERS'
-    | 'CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING'
-    | 'CHEMICALS_AND_ALLIED_PRODUCTS'
-    | 'CHILD_CARE_SERVICES'
-    | 'CHILDRENS_AND_INFANTS_WEAR_STORES'
-    | 'CHIROPODISTS_PODIATRISTS'
-    | 'CHIROPRACTORS'
-    | 'CIGAR_STORES_AND_STANDS'
-    | 'CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS'
-    | 'CLEANING_AND_MAINTENANCE'
-    | 'CLOTHING_RENTAL'
-    | 'COLLEGES_UNIVERSITIES'
-    | 'COMMERCIAL_EQUIPMENT'
-    | 'COMMERCIAL_FOOTWEAR'
-    | 'COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS'
-    | 'COMMUTER_TRANSPORT_AND_FERRIES'
-    | 'COMPUTER_NETWORK_SERVICES'
-    | 'COMPUTER_PROGRAMMING'
-    | 'COMPUTER_REPAIR'
-    | 'COMPUTER_SOFTWARE_STORES'
-    | 'COMPUTERS_PERIPHERALS_AND_SOFTWARE'
-    | 'CONCRETE_WORK_SERVICES'
-    | 'CONSTRUCTION_MATERIALS'
-    | 'CONSULTING_PUBLIC_RELATIONS'
-    | 'CORRESPONDENCE_SCHOOLS'
-    | 'COSMETIC_STORES'
-    | 'COUNSELING_SERVICES'
-    | 'COUNTRY_CLUBS'
-    | 'COURIER_SERVICES'
-    | 'COURT_COSTS'
-    | 'CREDIT_REPORTING_AGENCIES'
-    | 'CRUISE_LINES'
-    | 'DAIRY_PRODUCTS_STORES'
-    | 'DANCE_HALL_STUDIOS_SCHOOLS'
-    | 'DATING_ESCORT_SERVICES'
-    | 'DENTISTS_ORTHODONTISTS'
-    | 'DEPARTMENT_STORES'
-    | 'DETECTIVE_AGENCIES'
-    | 'DIGITAL_GOODS_MEDIA'
-    | 'DIGITAL_GOODS_APPLICATIONS'
-    | 'DIGITAL_GOODS_GAMES'
-    | 'DIGITAL_GOODS_LARGE_VOLUME'
-    | 'DIRECT_MARKETING_CATALOG_MERCHANT'
-    | 'DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT'
-    | 'DIRECT_MARKETING_INBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_INSURANCE_SERVICES'
-    | 'DIRECT_MARKETING_OTHER'
-    | 'DIRECT_MARKETING_OUTBOUND_TELEMARKETING'
-    | 'DIRECT_MARKETING_SUBSCRIPTION'
-    | 'DIRECT_MARKETING_TRAVEL'
-    | 'DISCOUNT_STORES'
-    | 'DOCTORS'
-    | 'DOOR_TO_DOOR_SALES'
-    | 'DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES'
-    | 'DRINKING_PLACES'
-    | 'DRUG_STORES_AND_PHARMACIES'
-    | 'DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES'
-    | 'DRY_CLEANERS'
-    | 'DURABLE_GOODS'
-    | 'DUTY_FREE_STORES'
-    | 'EATING_PLACES_RESTAURANTS'
-    | 'EDUCATIONAL_SERVICES'
-    | 'ELECTRIC_RAZOR_STORES'
-    | 'ELECTRICAL_PARTS_AND_EQUIPMENT'
-    | 'ELECTRICAL_SERVICES'
-    | 'ELECTRONICS_REPAIR_SHOPS'
-    | 'ELECTRONICS_STORES'
-    | 'ELEMENTARY_SECONDARY_SCHOOLS'
-    | 'EMPLOYMENT_TEMP_AGENCIES'
-    | 'EQUIPMENT_RENTAL'
-    | 'EXTERMINATING_SERVICES'
-    | 'FAMILY_CLOTHING_STORES'
-    | 'FAST_FOOD_RESTAURANTS'
-    | 'FINANCIAL_INSTITUTIONS'
-    | 'FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES'
-    | 'FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES'
-    | 'FLOOR_COVERING_STORES'
-    | 'FLORISTS'
-    | 'FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS'
-    | 'FREEZER_AND_LOCKER_MEAT_PROVISIONERS'
-    | 'FUEL_DEALERS_NON_AUTOMOTIVE'
-    | 'FUNERAL_SERVICES_CREMATORIES'
-    | 'FURNITURE_REPAIR_REFINISHING'
-    | 'FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES'
-    | 'FURRIERS_AND_FUR_SHOPS'
-    | 'GENERAL_SERVICES'
-    | 'GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS'
-    | 'GLASS_PAINT_AND_WALLPAPER_STORES'
-    | 'GLASSWARE_CRYSTAL_STORES'
-    | 'GOLF_COURSES_PUBLIC'
-    | 'GOVERNMENT_SERVICES'
-    | 'GROCERY_STORES_SUPERMARKETS'
-    | 'HARDWARE_STORES'
-    | 'HARDWARE_EQUIPMENT_AND_SUPPLIES'
-    | 'HEALTH_AND_BEAUTY_SPAS'
-    | 'HEARING_AIDS_SALES_AND_SUPPLIES'
-    | 'HEATING_PLUMBING_A_C'
-    | 'HOBBY_TOY_AND_GAME_SHOPS'
-    | 'HOME_SUPPLY_WAREHOUSE_STORES'
-    | 'HOSPITALS'
-    | 'HOTELS_MOTELS_AND_RESORTS'
-    | 'HOUSEHOLD_APPLIANCE_STORES'
-    | 'INDUSTRIAL_SUPPLIES'
-    | 'INFORMATION_RETRIEVAL_SERVICES'
-    | 'INSURANCE_DEFAULT'
-    | 'INSURANCE_UNDERWRITING_PREMIUMS'
-    | 'INTRA_COMPANY_PURCHASES'
-    | 'JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES'
-    | 'LANDSCAPING_SERVICES'
-    | 'LAUNDRIES'
-    | 'LAUNDRY_CLEANING_SERVICES'
-    | 'LEGAL_SERVICES_ATTORNEYS'
-    | 'LUGGAGE_AND_LEATHER_GOODS_STORES'
-    | 'LUMBER_BUILDING_MATERIALS_STORES'
-    | 'MANUAL_CASH_DISBURSE'
-    | 'MARINAS_SERVICE_AND_SUPPLIES'
-    | 'MASONRY_STONEWORK_AND_PLASTER'
-    | 'MASSAGE_PARLORS'
-    | 'MEDICAL_SERVICES'
-    | 'MEDICAL_AND_DENTAL_LABS'
-    | 'MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES'
-    | 'MEMBERSHIP_ORGANIZATIONS'
-    | 'MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES'
-    | 'MENS_WOMENS_CLOTHING_STORES'
-    | 'METAL_SERVICE_CENTERS'
-    | 'MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS'
-    | 'MISCELLANEOUS_AUTO_DEALERS'
-    | 'MISCELLANEOUS_BUSINESS_SERVICES'
-    | 'MISCELLANEOUS_FOOD_STORES'
-    | 'MISCELLANEOUS_GENERAL_MERCHANDISE'
-    | 'MISCELLANEOUS_GENERAL_SERVICES'
-    | 'MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES'
-    | 'MISCELLANEOUS_PUBLISHING_AND_PRINTING'
-    | 'MISCELLANEOUS_RECREATION_SERVICES'
-    | 'MISCELLANEOUS_REPAIR_SHOPS'
-    | 'MISCELLANEOUS_SPECIALTY_RETAIL'
-    | 'MOBILE_HOME_DEALERS'
-    | 'MOTION_PICTURE_THEATERS'
-    | 'MOTOR_FREIGHT_CARRIERS_AND_TRUCKING'
-    | 'MOTOR_HOMES_DEALERS'
-    | 'MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS'
-    | 'MOTORCYCLE_SHOPS_AND_DEALERS'
-    | 'MOTORCYCLE_SHOPS_DEALERS'
-    | 'MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC'
-    | 'NEWS_DEALERS_AND_NEWSSTANDS'
-    | 'NON_FI_MONEY_ORDERS'
-    | 'NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD'
-    | 'NONDURABLE_GOODS'
-    | 'NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES'
-    | 'NURSING_PERSONAL_CARE'
-    | 'OFFICE_AND_COMMERCIAL_FURNITURE'
-    | 'OPTICIANS_EYEGLASSES'
-    | 'OPTOMETRISTS_OPHTHALMOLOGIST'
-    | 'ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES'
-    | 'OSTEOPATHS'
-    | 'PACKAGE_STORES_BEER_WINE_AND_LIQUOR'
-    | 'PAINTS_VARNISHES_AND_SUPPLIES'
-    | 'PARKING_LOTS_GARAGES'
-    | 'PASSENGER_RAILWAYS'
-    | 'PAWN_SHOPS'
-    | 'PET_SHOPS_PET_FOOD_AND_SUPPLIES'
-    | 'PETROLEUM_AND_PETROLEUM_PRODUCTS'
-    | 'PHOTO_DEVELOPING'
-    | 'PHOTOGRAPHIC_STUDIOS'
-    | 'PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES'
-    | 'PICTURE_VIDEO_PRODUCTION'
-    | 'PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS'
-    | 'PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES'
-    | 'POLITICAL_ORGANIZATIONS'
-    | 'POSTAL_SERVICES_GOVERNMENT_ONLY'
-    | 'PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY'
-    | 'PROFESSIONAL_SERVICES'
-    | 'PUBLIC_WAREHOUSING_AND_STORAGE'
-    | 'QUICK_COPY_REPRO_AND_BLUEPRINT'
-    | 'RAILROADS'
-    | 'REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS'
-    | 'RECORD_STORES'
-    | 'RECREATIONAL_VEHICLE_RENTALS'
-    | 'RELIGIOUS_GOODS_STORES'
-    | 'RELIGIOUS_ORGANIZATIONS'
-    | 'ROOFING_SIDING_SHEET_METAL'
-    | 'SECRETARIAL_SUPPORT_SERVICES'
-    | 'SECURITY_BROKERS_DEALERS'
-    | 'SERVICE_STATIONS'
-    | 'SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES'
-    | 'SHOE_REPAIR_HAT_CLEANING'
-    | 'SHOE_STORES'
-    | 'SMALL_APPLIANCE_REPAIR'
-    | 'SNOWMOBILE_DEALERS'
-    | 'SPECIAL_TRADE_SERVICES'
-    | 'SPECIALTY_CLEANING'
-    | 'SPORTING_GOODS_STORES'
-    | 'SPORTING_RECREATION_CAMPS'
-    | 'SPORTS_CLUBS_FIELDS'
-    | 'SPORTS_AND_RIDING_APPAREL_STORES'
-    | 'STAMP_AND_COIN_STORES'
-    | 'STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER'
-    | 'STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES'
-    | 'SWIMMING_POOLS_SALES'
-    | 'T_UI_TRAVEL_GERMANY'
-    | 'TAILORS_ALTERATIONS'
-    | 'TAX_PAYMENTS_GOVERNMENT_AGENCIES'
-    | 'TAX_PREPARATION_SERVICES'
-    | 'TAXICABS_LIMOUSINES'
-    | 'TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES'
-    | 'TELECOMMUNICATION_SERVICES'
-    | 'TELEGRAPH_SERVICES'
-    | 'TENT_AND_AWNING_SHOPS'
-    | 'TESTING_LABORATORIES'
-    | 'THEATRICAL_TICKET_AGENCIES'
-    | 'TIMESHARES'
-    | 'TIRE_RETREADING_AND_REPAIR'
-    | 'TOLLS_BRIDGE_FEES'
-    | 'TOURIST_ATTRACTIONS_AND_EXHIBITS'
-    | 'TOWING_SERVICES'
-    | 'TRAILER_PARKS_CAMPGROUNDS'
-    | 'TRANSPORTATION_SERVICES'
-    | 'TRAVEL_AGENCIES_TOUR_OPERATORS'
-    | 'TRUCK_STOP_ITERATION'
-    | 'TRUCK_UTILITY_TRAILER_RENTALS'
-    | 'TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES'
-    | 'TYPEWRITER_STORES'
-    | 'U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS'
-    | 'UNIFORMS_COMMERCIAL_CLOTHING'
-    | 'USED_MERCHANDISE_AND_SECONDHAND_STORES'
-    | 'UTILITIES'
-    | 'VARIETY_STORES'
-    | 'VETERINARY_SERVICES'
-    | 'VIDEO_AMUSEMENT_GAME_SUPPLIES'
-    | 'VIDEO_GAME_ARCADES'
-    | 'VIDEO_TAPE_RENTAL_STORES'
-    | 'VOCATIONAL_TRADE_SCHOOLS'
-    | 'WATCH_JEWELRY_REPAIR'
-    | 'WELDING_REPAIR'
-    | 'WHOLESALE_CLUBS'
-    | 'WIG_AND_TOUPEE_STORES'
-    | 'WIRES_MONEY_ORDERS'
-    | 'WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS'
-    | 'WOMENS_READY_TO_WEAR_STORES'
-    | 'WRECKING_AND_SALVAGE_YARDS';
+    | "UNKNOWN"
+    | "AC_REFRIGERATION_REPAIR"
+    | "ACCOUNTING_BOOKKEEPING_SERVICES"
+    | "ADVERTISING_SERVICES"
+    | "AGRICULTURAL_COOPERATIVE"
+    | "AIRLINES_AIR_CARRIERS"
+    | "AIRPORTS_FLYING_FIELDS"
+    | "AMBULANCE_SERVICES"
+    | "AMUSEMENT_PARKS_CARNIVALS"
+    | "ANTIQUE_REPRODUCTIONS"
+    | "ANTIQUE_SHOPS"
+    | "AQUARIUMS"
+    | "ARCHITECTURAL_SURVEYING_SERVICES"
+    | "ART_DEALERS_AND_GALLERIES"
+    | "ARTISTS_SUPPLY_AND_CRAFT_SHOPS"
+    | "AUTO_BODY_REPAIR_SHOPS"
+    | "AUTO_PAINT_SHOPS"
+    | "AUTO_SERVICE_SHOPS"
+    | "AUTO_AND_HOME_SUPPLY_STORES"
+    | "AUTOMATED_CASH_DISBURSE"
+    | "AUTOMATED_FUEL_DISPENSERS"
+    | "AUTOMOBILE_ASSOCIATIONS"
+    | "AUTOMOTIVE_PARTS_AND_ACCESSORIES_STORES"
+    | "AUTOMOTIVE_TIRE_STORES"
+    | "BAIL_AND_BOND_PAYMENTS"
+    | "BAKERIES"
+    | "BANDS_ORCHESTRAS"
+    | "BARBER_AND_BEAUTY_SHOPS"
+    | "BETTING_CASINO_GAMBLING"
+    | "BICYCLE_SHOPS"
+    | "BILLIARD_POOL_ESTABLISHMENTS"
+    | "BOAT_DEALERS"
+    | "BOAT_RENTALS_AND_LEASES"
+    | "BOOK_STORES"
+    | "BOOKS_PERIODICALS_AND_NEWSPAPERS"
+    | "BOWLING_ALLEYS"
+    | "BUS_LINES"
+    | "BUSINESS_SECRETARIAL_SCHOOLS"
+    | "BUYING_SHOPPING_SERVICES"
+    | "CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO"
+    | "CAMERA_AND_PHOTOGRAPHIC_SUPPLY_STORES"
+    | "CANDY_NUT_AND_CONFECTIONERY_STORES"
+    | "CAR_RENTAL_AGENCIES"
+    | "CAR_WASHES"
+    | "CAR_AND_TRUCK_DEALERS_NEW_USED"
+    | "CAR_AND_TRUCK_DEALERS_USED_ONLY"
+    | "CARPENTRY_SERVICES"
+    | "CARPET_UPHOLSTERY_CLEANING"
+    | "CATERERS"
+    | "CHARITABLE_AND_SOCIAL_SERVICE_ORGANIZATIONS_FUNDRAISING"
+    | "CHEMICALS_AND_ALLIED_PRODUCTS"
+    | "CHILD_CARE_SERVICES"
+    | "CHILDRENS_AND_INFANTS_WEAR_STORES"
+    | "CHIROPODISTS_PODIATRISTS"
+    | "CHIROPRACTORS"
+    | "CIGAR_STORES_AND_STANDS"
+    | "CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS"
+    | "CLEANING_AND_MAINTENANCE"
+    | "CLOTHING_RENTAL"
+    | "COLLEGES_UNIVERSITIES"
+    | "COMMERCIAL_EQUIPMENT"
+    | "COMMERCIAL_FOOTWEAR"
+    | "COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS"
+    | "COMMUTER_TRANSPORT_AND_FERRIES"
+    | "COMPUTER_NETWORK_SERVICES"
+    | "COMPUTER_PROGRAMMING"
+    | "COMPUTER_REPAIR"
+    | "COMPUTER_SOFTWARE_STORES"
+    | "COMPUTERS_PERIPHERALS_AND_SOFTWARE"
+    | "CONCRETE_WORK_SERVICES"
+    | "CONSTRUCTION_MATERIALS"
+    | "CONSULTING_PUBLIC_RELATIONS"
+    | "CORRESPONDENCE_SCHOOLS"
+    | "COSMETIC_STORES"
+    | "COUNSELING_SERVICES"
+    | "COUNTRY_CLUBS"
+    | "COURIER_SERVICES"
+    | "COURT_COSTS"
+    | "CREDIT_REPORTING_AGENCIES"
+    | "CRUISE_LINES"
+    | "DAIRY_PRODUCTS_STORES"
+    | "DANCE_HALL_STUDIOS_SCHOOLS"
+    | "DATING_ESCORT_SERVICES"
+    | "DENTISTS_ORTHODONTISTS"
+    | "DEPARTMENT_STORES"
+    | "DETECTIVE_AGENCIES"
+    | "DIGITAL_GOODS_MEDIA"
+    | "DIGITAL_GOODS_APPLICATIONS"
+    | "DIGITAL_GOODS_GAMES"
+    | "DIGITAL_GOODS_LARGE_VOLUME"
+    | "DIRECT_MARKETING_CATALOG_MERCHANT"
+    | "DIRECT_MARKETING_COMBINATION_CATALOG_AND_RETAIL_MERCHANT"
+    | "DIRECT_MARKETING_INBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_INSURANCE_SERVICES"
+    | "DIRECT_MARKETING_OTHER"
+    | "DIRECT_MARKETING_OUTBOUND_TELEMARKETING"
+    | "DIRECT_MARKETING_SUBSCRIPTION"
+    | "DIRECT_MARKETING_TRAVEL"
+    | "DISCOUNT_STORES"
+    | "DOCTORS"
+    | "DOOR_TO_DOOR_SALES"
+    | "DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY_STORES"
+    | "DRINKING_PLACES"
+    | "DRUG_STORES_AND_PHARMACIES"
+    | "DRUGS_DRUG_PROPRIETARIES_AND_DRUGGIST_SUNDRIES"
+    | "DRY_CLEANERS"
+    | "DURABLE_GOODS"
+    | "DUTY_FREE_STORES"
+    | "EATING_PLACES_RESTAURANTS"
+    | "EDUCATIONAL_SERVICES"
+    | "ELECTRIC_RAZOR_STORES"
+    | "ELECTRICAL_PARTS_AND_EQUIPMENT"
+    | "ELECTRICAL_SERVICES"
+    | "ELECTRONICS_REPAIR_SHOPS"
+    | "ELECTRONICS_STORES"
+    | "ELEMENTARY_SECONDARY_SCHOOLS"
+    | "EMPLOYMENT_TEMP_AGENCIES"
+    | "EQUIPMENT_RENTAL"
+    | "EXTERMINATING_SERVICES"
+    | "FAMILY_CLOTHING_STORES"
+    | "FAST_FOOD_RESTAURANTS"
+    | "FINANCIAL_INSTITUTIONS"
+    | "FINES_GOVERNMENT_ADMINISTRATIVE_ENTITIES"
+    | "FIREPLACE_FIREPLACE_SCREENS_AND_ACCESSORIES_STORES"
+    | "FLOOR_COVERING_STORES"
+    | "FLORISTS"
+    | "FLORISTS_SUPPLIES_NURSERY_STOCK_AND_FLOWERS"
+    | "FREEZER_AND_LOCKER_MEAT_PROVISIONERS"
+    | "FUEL_DEALERS_NON_AUTOMOTIVE"
+    | "FUNERAL_SERVICES_CREMATORIES"
+    | "FURNITURE_REPAIR_REFINISHING"
+    | "FURNITURE_HOME_FURNISHINGS_AND_EQUIPMENT_STORES_EXCEPT_APPLIANCES"
+    | "FURRIERS_AND_FUR_SHOPS"
+    | "GENERAL_SERVICES"
+    | "GIFT_CARD_NOVELTY_AND_SOUVENIR_SHOPS"
+    | "GLASS_PAINT_AND_WALLPAPER_STORES"
+    | "GLASSWARE_CRYSTAL_STORES"
+    | "GOLF_COURSES_PUBLIC"
+    | "GOVERNMENT_SERVICES"
+    | "GROCERY_STORES_SUPERMARKETS"
+    | "HARDWARE_STORES"
+    | "HARDWARE_EQUIPMENT_AND_SUPPLIES"
+    | "HEALTH_AND_BEAUTY_SPAS"
+    | "HEARING_AIDS_SALES_AND_SUPPLIES"
+    | "HEATING_PLUMBING_A_C"
+    | "HOBBY_TOY_AND_GAME_SHOPS"
+    | "HOME_SUPPLY_WAREHOUSE_STORES"
+    | "HOSPITALS"
+    | "HOTELS_MOTELS_AND_RESORTS"
+    | "HOUSEHOLD_APPLIANCE_STORES"
+    | "INDUSTRIAL_SUPPLIES"
+    | "INFORMATION_RETRIEVAL_SERVICES"
+    | "INSURANCE_DEFAULT"
+    | "INSURANCE_UNDERWRITING_PREMIUMS"
+    | "INTRA_COMPANY_PURCHASES"
+    | "JEWELRY_STORES_WATCHES_CLOCKS_AND_SILVERWARE_STORES"
+    | "LANDSCAPING_SERVICES"
+    | "LAUNDRIES"
+    | "LAUNDRY_CLEANING_SERVICES"
+    | "LEGAL_SERVICES_ATTORNEYS"
+    | "LUGGAGE_AND_LEATHER_GOODS_STORES"
+    | "LUMBER_BUILDING_MATERIALS_STORES"
+    | "MANUAL_CASH_DISBURSE"
+    | "MARINAS_SERVICE_AND_SUPPLIES"
+    | "MASONRY_STONEWORK_AND_PLASTER"
+    | "MASSAGE_PARLORS"
+    | "MEDICAL_SERVICES"
+    | "MEDICAL_AND_DENTAL_LABS"
+    | "MEDICAL_DENTAL_OPHTHALMIC_AND_HOSPITAL_EQUIPMENT_AND_SUPPLIES"
+    | "MEMBERSHIP_ORGANIZATIONS"
+    | "MENS_AND_BOYS_CLOTHING_AND_ACCESSORIES_STORES"
+    | "MENS_WOMENS_CLOTHING_STORES"
+    | "METAL_SERVICE_CENTERS"
+    | "MISCELLANEOUS_APPAREL_AND_ACCESSORY_SHOPS"
+    | "MISCELLANEOUS_AUTO_DEALERS"
+    | "MISCELLANEOUS_BUSINESS_SERVICES"
+    | "MISCELLANEOUS_FOOD_STORES"
+    | "MISCELLANEOUS_GENERAL_MERCHANDISE"
+    | "MISCELLANEOUS_GENERAL_SERVICES"
+    | "MISCELLANEOUS_HOME_FURNISHING_SPECIALTY_STORES"
+    | "MISCELLANEOUS_PUBLISHING_AND_PRINTING"
+    | "MISCELLANEOUS_RECREATION_SERVICES"
+    | "MISCELLANEOUS_REPAIR_SHOPS"
+    | "MISCELLANEOUS_SPECIALTY_RETAIL"
+    | "MOBILE_HOME_DEALERS"
+    | "MOTION_PICTURE_THEATERS"
+    | "MOTOR_FREIGHT_CARRIERS_AND_TRUCKING"
+    | "MOTOR_HOMES_DEALERS"
+    | "MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS"
+    | "MOTORCYCLE_SHOPS_AND_DEALERS"
+    | "MOTORCYCLE_SHOPS_DEALERS"
+    | "MUSIC_STORES_MUSICAL_INSTRUMENTS_PIANOS_AND_SHEET_MUSIC"
+    | "NEWS_DEALERS_AND_NEWSSTANDS"
+    | "NON_FI_MONEY_ORDERS"
+    | "NON_FI_STORED_VALUE_CARD_PURCHASE_LOAD"
+    | "NONDURABLE_GOODS"
+    | "NURSERIES_LAWN_AND_GARDEN_SUPPLY_STORES"
+    | "NURSING_PERSONAL_CARE"
+    | "OFFICE_AND_COMMERCIAL_FURNITURE"
+    | "OPTICIANS_EYEGLASSES"
+    | "OPTOMETRISTS_OPHTHALMOLOGIST"
+    | "ORTHOPEDIC_GOODS_PROSTHETIC_DEVICES"
+    | "OSTEOPATHS"
+    | "PACKAGE_STORES_BEER_WINE_AND_LIQUOR"
+    | "PAINTS_VARNISHES_AND_SUPPLIES"
+    | "PARKING_LOTS_GARAGES"
+    | "PASSENGER_RAILWAYS"
+    | "PAWN_SHOPS"
+    | "PET_SHOPS_PET_FOOD_AND_SUPPLIES"
+    | "PETROLEUM_AND_PETROLEUM_PRODUCTS"
+    | "PHOTO_DEVELOPING"
+    | "PHOTOGRAPHIC_STUDIOS"
+    | "PHOTOGRAPHIC_PHOTOCOPY_MICROFILM_EQUIPMENT_AND_SUPPLIES"
+    | "PICTURE_VIDEO_PRODUCTION"
+    | "PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS"
+    | "PLUMBING_HEATING_EQUIPMENT_AND_SUPPLIES"
+    | "POLITICAL_ORGANIZATIONS"
+    | "POSTAL_SERVICES_GOVERNMENT_ONLY"
+    | "PRECIOUS_STONES_AND_METALS_WATCHES_AND_JEWELRY"
+    | "PROFESSIONAL_SERVICES"
+    | "PUBLIC_WAREHOUSING_AND_STORAGE"
+    | "QUICK_COPY_REPRO_AND_BLUEPRINT"
+    | "RAILROADS"
+    | "REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS"
+    | "RECORD_STORES"
+    | "RECREATIONAL_VEHICLE_RENTALS"
+    | "RELIGIOUS_GOODS_STORES"
+    | "RELIGIOUS_ORGANIZATIONS"
+    | "ROOFING_SIDING_SHEET_METAL"
+    | "SECRETARIAL_SUPPORT_SERVICES"
+    | "SECURITY_BROKERS_DEALERS"
+    | "SERVICE_STATIONS"
+    | "SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES"
+    | "SHOE_REPAIR_HAT_CLEANING"
+    | "SHOE_STORES"
+    | "SMALL_APPLIANCE_REPAIR"
+    | "SNOWMOBILE_DEALERS"
+    | "SPECIAL_TRADE_SERVICES"
+    | "SPECIALTY_CLEANING"
+    | "SPORTING_GOODS_STORES"
+    | "SPORTING_RECREATION_CAMPS"
+    | "SPORTS_CLUBS_FIELDS"
+    | "SPORTS_AND_RIDING_APPAREL_STORES"
+    | "STAMP_AND_COIN_STORES"
+    | "STATIONARY_OFFICE_SUPPLIES_PRINTING_AND_WRITING_PAPER"
+    | "STATIONERY_STORES_OFFICE_AND_SCHOOL_SUPPLY_STORES"
+    | "SWIMMING_POOLS_SALES"
+    | "T_UI_TRAVEL_GERMANY"
+    | "TAILORS_ALTERATIONS"
+    | "TAX_PAYMENTS_GOVERNMENT_AGENCIES"
+    | "TAX_PREPARATION_SERVICES"
+    | "TAXICABS_LIMOUSINES"
+    | "TELECOMMUNICATION_EQUIPMENT_AND_TELEPHONE_SALES"
+    | "TELECOMMUNICATION_SERVICES"
+    | "TELEGRAPH_SERVICES"
+    | "TENT_AND_AWNING_SHOPS"
+    | "TESTING_LABORATORIES"
+    | "THEATRICAL_TICKET_AGENCIES"
+    | "TIMESHARES"
+    | "TIRE_RETREADING_AND_REPAIR"
+    | "TOLLS_BRIDGE_FEES"
+    | "TOURIST_ATTRACTIONS_AND_EXHIBITS"
+    | "TOWING_SERVICES"
+    | "TRAILER_PARKS_CAMPGROUNDS"
+    | "TRANSPORTATION_SERVICES"
+    | "TRAVEL_AGENCIES_TOUR_OPERATORS"
+    | "TRUCK_STOP_ITERATION"
+    | "TRUCK_UTILITY_TRAILER_RENTALS"
+    | "TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES"
+    | "TYPEWRITER_STORES"
+    | "U_S_FEDERAL_GOVERNMENT_AGENCIES_OR_DEPARTMENTS"
+    | "UNIFORMS_COMMERCIAL_CLOTHING"
+    | "USED_MERCHANDISE_AND_SECONDHAND_STORES"
+    | "UTILITIES"
+    | "VARIETY_STORES"
+    | "VETERINARY_SERVICES"
+    | "VIDEO_AMUSEMENT_GAME_SUPPLIES"
+    | "VIDEO_GAME_ARCADES"
+    | "VIDEO_TAPE_RENTAL_STORES"
+    | "VOCATIONAL_TRADE_SCHOOLS"
+    | "WATCH_JEWELRY_REPAIR"
+    | "WELDING_REPAIR"
+    | "WHOLESALE_CLUBS"
+    | "WIG_AND_TOUPEE_STORES"
+    | "WIRES_MONEY_ORDERS"
+    | "WOMENS_ACCESSORY_AND_SPECIALTY_SHOPS"
+    | "WOMENS_READY_TO_WEAR_STORES"
+    | "WRECKING_AND_SALVAGE_YARDS";
   merchantNumber?: string;
 
   /** @format int32 */
@@ -3180,7 +3243,7 @@ export interface UserChartData {
 export interface UserChartInfo {
   /** @format uuid */
   userId?: string;
-  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  type?: "EMPLOYEE" | "BUSINESS_OWNER";
   firstName?: string;
   lastName?: string;
 }
@@ -3227,7 +3290,7 @@ export interface UpdateUserResponse {
 
 export interface UpdateCardStatusRequest {
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
+  statusReason?: "NONE" | "CARDHOLDER_REQUESTED";
 }
 
 export interface Card {
@@ -3242,9 +3305,9 @@ export interface Card {
 
   /** @format uuid */
   accountId?: string;
-  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
-  fundingType?: 'POOLED' | 'INDIVIDUAL';
+  status?: "ACTIVE" | "INACTIVE" | "CANCELLED";
+  statusReason?: "NONE" | "CARDHOLDER_REQUESTED";
+  fundingType?: "POOLED" | "INDIVIDUAL";
 
   /** @format date-time */
   issueDate?: string;
@@ -3257,7 +3320,7 @@ export interface Card {
   activationDate?: string;
   cardLine3?: string;
   cardLine4?: string;
-  type?: 'PHYSICAL' | 'VIRTUAL';
+  type?: "PHYSICAL" | "VIRTUAL";
   superseded?: boolean;
   cardNumber?: string;
   lastFour?: string;
@@ -3270,7 +3333,7 @@ export interface ActivateCardRequest {
   lastFour?: string;
 
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
+  statusReason?: "NONE" | "CARDHOLDER_REQUESTED";
 }
 
 export interface UpdateCardAccountRequest {
@@ -3297,23 +3360,23 @@ export interface UpdateAccountActivityRequest {
 export interface UpdateCardRequest {
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes?: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 }
 
 export interface CardDetailsResponse {
@@ -3323,23 +3386,23 @@ export interface CardDetailsResponse {
   allocationName: string;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes?: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 }
 
 export interface BusinessLimit {
@@ -3354,362 +3417,362 @@ export interface BusinessLimit {
 }
 
 export interface BusinessLimitOperationRecord {
-  businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
+  businessLimitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE";
   limitOperationPeriods?: LimitPeriodOperationRecord[];
 }
 
 export interface BusinessLimitRecord {
-  businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
+  businessLimitType?: "ACH_DEPOSIT" | "ACH_WITHDRAW" | "PURCHASE";
   limitPeriods?: LimitPeriodRecord[];
 }
 
 export interface LimitOperationRecord {
   currency?:
-    | 'UNSPECIFIED'
-    | 'AED'
-    | 'AFN'
-    | 'ALL'
-    | 'AMD'
-    | 'ANG'
-    | 'AOA'
-    | 'ARS'
-    | 'AUD'
-    | 'AWG'
-    | 'AZN'
-    | 'BAM'
-    | 'BBD'
-    | 'BDT'
-    | 'BGN'
-    | 'BHD'
-    | 'BIF'
-    | 'BMD'
-    | 'BND'
-    | 'BOB'
-    | 'BRL'
-    | 'BSD'
-    | 'BTN'
-    | 'BWP'
-    | 'BYN'
-    | 'BYR'
-    | 'BZD'
-    | 'CAD'
-    | 'CDF'
-    | 'CHF'
-    | 'CLP'
-    | 'CNY'
-    | 'COP'
-    | 'CRC'
-    | 'CUC'
-    | 'CUP'
-    | 'CVE'
-    | 'CZK'
-    | 'DJF'
-    | 'DKK'
-    | 'DOP'
-    | 'DZD'
-    | 'EGP'
-    | 'ERN'
-    | 'ETB'
-    | 'EUR'
-    | 'FJD'
-    | 'FKP'
-    | 'GBP'
-    | 'GEL'
-    | 'GHS'
-    | 'GIP'
-    | 'GMD'
-    | 'GNF'
-    | 'GTQ'
-    | 'GYD'
-    | 'HKD'
-    | 'HNL'
-    | 'HRK'
-    | 'HTG'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'IQD'
-    | 'IRR'
-    | 'ISK'
-    | 'JMD'
-    | 'JOD'
-    | 'JPY'
-    | 'KES'
-    | 'KGS'
-    | 'KHR'
-    | 'KMF'
-    | 'KPW'
-    | 'KRW'
-    | 'KWD'
-    | 'KYD'
-    | 'KZT'
-    | 'LAK'
-    | 'LBP'
-    | 'LKR'
-    | 'LRD'
-    | 'LSL'
-    | 'LTL'
-    | 'LYD'
-    | 'MAD'
-    | 'MDL'
-    | 'MGA'
-    | 'MKD'
-    | 'MMK'
-    | 'MNT'
-    | 'MOP'
-    | 'MRO'
-    | 'MRU'
-    | 'MUR'
-    | 'MVR'
-    | 'MWK'
-    | 'MXN'
-    | 'MYR'
-    | 'MZN'
-    | 'NAD'
-    | 'NGN'
-    | 'NIO'
-    | 'NOK'
-    | 'NPR'
-    | 'NZD'
-    | 'OMR'
-    | 'PAB'
-    | 'PEN'
-    | 'PGK'
-    | 'PHP'
-    | 'PKR'
-    | 'PLN'
-    | 'PYG'
-    | 'QAR'
-    | 'RON'
-    | 'RSD'
-    | 'RUB'
-    | 'RUR'
-    | 'RWF'
-    | 'SAR'
-    | 'SBD'
-    | 'SCR'
-    | 'SDG'
-    | 'SEK'
-    | 'SGD'
-    | 'SHP'
-    | 'SLL'
-    | 'SOS'
-    | 'SRD'
-    | 'SSP'
-    | 'STD'
-    | 'STN'
-    | 'SVC'
-    | 'SYP'
-    | 'SZL'
-    | 'THB'
-    | 'TJS'
-    | 'TMT'
-    | 'TND'
-    | 'TOP'
-    | 'TRY'
-    | 'TTD'
-    | 'TWD'
-    | 'TZS'
-    | 'UAH'
-    | 'UGX'
-    | 'USD'
-    | 'UYU'
-    | 'UZS'
-    | 'VEF'
-    | 'VES'
-    | 'VND'
-    | 'VUV'
-    | 'WST'
-    | 'XAF'
-    | 'XCD'
-    | 'XOF'
-    | 'XPF'
-    | 'YER'
-    | 'ZAR'
-    | 'ZMW'
-    | 'ZWL';
+    | "UNSPECIFIED"
+    | "AED"
+    | "AFN"
+    | "ALL"
+    | "AMD"
+    | "ANG"
+    | "AOA"
+    | "ARS"
+    | "AUD"
+    | "AWG"
+    | "AZN"
+    | "BAM"
+    | "BBD"
+    | "BDT"
+    | "BGN"
+    | "BHD"
+    | "BIF"
+    | "BMD"
+    | "BND"
+    | "BOB"
+    | "BRL"
+    | "BSD"
+    | "BTN"
+    | "BWP"
+    | "BYN"
+    | "BYR"
+    | "BZD"
+    | "CAD"
+    | "CDF"
+    | "CHF"
+    | "CLP"
+    | "CNY"
+    | "COP"
+    | "CRC"
+    | "CUC"
+    | "CUP"
+    | "CVE"
+    | "CZK"
+    | "DJF"
+    | "DKK"
+    | "DOP"
+    | "DZD"
+    | "EGP"
+    | "ERN"
+    | "ETB"
+    | "EUR"
+    | "FJD"
+    | "FKP"
+    | "GBP"
+    | "GEL"
+    | "GHS"
+    | "GIP"
+    | "GMD"
+    | "GNF"
+    | "GTQ"
+    | "GYD"
+    | "HKD"
+    | "HNL"
+    | "HRK"
+    | "HTG"
+    | "HUF"
+    | "IDR"
+    | "ILS"
+    | "INR"
+    | "IQD"
+    | "IRR"
+    | "ISK"
+    | "JMD"
+    | "JOD"
+    | "JPY"
+    | "KES"
+    | "KGS"
+    | "KHR"
+    | "KMF"
+    | "KPW"
+    | "KRW"
+    | "KWD"
+    | "KYD"
+    | "KZT"
+    | "LAK"
+    | "LBP"
+    | "LKR"
+    | "LRD"
+    | "LSL"
+    | "LTL"
+    | "LYD"
+    | "MAD"
+    | "MDL"
+    | "MGA"
+    | "MKD"
+    | "MMK"
+    | "MNT"
+    | "MOP"
+    | "MRO"
+    | "MRU"
+    | "MUR"
+    | "MVR"
+    | "MWK"
+    | "MXN"
+    | "MYR"
+    | "MZN"
+    | "NAD"
+    | "NGN"
+    | "NIO"
+    | "NOK"
+    | "NPR"
+    | "NZD"
+    | "OMR"
+    | "PAB"
+    | "PEN"
+    | "PGK"
+    | "PHP"
+    | "PKR"
+    | "PLN"
+    | "PYG"
+    | "QAR"
+    | "RON"
+    | "RSD"
+    | "RUB"
+    | "RUR"
+    | "RWF"
+    | "SAR"
+    | "SBD"
+    | "SCR"
+    | "SDG"
+    | "SEK"
+    | "SGD"
+    | "SHP"
+    | "SLL"
+    | "SOS"
+    | "SRD"
+    | "SSP"
+    | "STD"
+    | "STN"
+    | "SVC"
+    | "SYP"
+    | "SZL"
+    | "THB"
+    | "TJS"
+    | "TMT"
+    | "TND"
+    | "TOP"
+    | "TRY"
+    | "TTD"
+    | "TWD"
+    | "TZS"
+    | "UAH"
+    | "UGX"
+    | "USD"
+    | "UYU"
+    | "UZS"
+    | "VEF"
+    | "VES"
+    | "VND"
+    | "VUV"
+    | "WST"
+    | "XAF"
+    | "XCD"
+    | "XOF"
+    | "XPF"
+    | "YER"
+    | "ZAR"
+    | "ZMW"
+    | "ZWL";
   businessLimitOperations?: BusinessLimitOperationRecord[];
 }
 
 export interface LimitPeriodOperationRecord {
-  period?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  period?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY";
 
   /** @format int32 */
   value?: number;
 }
 
 export interface LimitPeriodRecord {
-  period?: 'INSTANT' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  period?: "INSTANT" | "DAILY" | "WEEKLY" | "MONTHLY";
   value?: number;
 }
 
 export interface LimitRecord {
   currency?:
-    | 'UNSPECIFIED'
-    | 'AED'
-    | 'AFN'
-    | 'ALL'
-    | 'AMD'
-    | 'ANG'
-    | 'AOA'
-    | 'ARS'
-    | 'AUD'
-    | 'AWG'
-    | 'AZN'
-    | 'BAM'
-    | 'BBD'
-    | 'BDT'
-    | 'BGN'
-    | 'BHD'
-    | 'BIF'
-    | 'BMD'
-    | 'BND'
-    | 'BOB'
-    | 'BRL'
-    | 'BSD'
-    | 'BTN'
-    | 'BWP'
-    | 'BYN'
-    | 'BYR'
-    | 'BZD'
-    | 'CAD'
-    | 'CDF'
-    | 'CHF'
-    | 'CLP'
-    | 'CNY'
-    | 'COP'
-    | 'CRC'
-    | 'CUC'
-    | 'CUP'
-    | 'CVE'
-    | 'CZK'
-    | 'DJF'
-    | 'DKK'
-    | 'DOP'
-    | 'DZD'
-    | 'EGP'
-    | 'ERN'
-    | 'ETB'
-    | 'EUR'
-    | 'FJD'
-    | 'FKP'
-    | 'GBP'
-    | 'GEL'
-    | 'GHS'
-    | 'GIP'
-    | 'GMD'
-    | 'GNF'
-    | 'GTQ'
-    | 'GYD'
-    | 'HKD'
-    | 'HNL'
-    | 'HRK'
-    | 'HTG'
-    | 'HUF'
-    | 'IDR'
-    | 'ILS'
-    | 'INR'
-    | 'IQD'
-    | 'IRR'
-    | 'ISK'
-    | 'JMD'
-    | 'JOD'
-    | 'JPY'
-    | 'KES'
-    | 'KGS'
-    | 'KHR'
-    | 'KMF'
-    | 'KPW'
-    | 'KRW'
-    | 'KWD'
-    | 'KYD'
-    | 'KZT'
-    | 'LAK'
-    | 'LBP'
-    | 'LKR'
-    | 'LRD'
-    | 'LSL'
-    | 'LTL'
-    | 'LYD'
-    | 'MAD'
-    | 'MDL'
-    | 'MGA'
-    | 'MKD'
-    | 'MMK'
-    | 'MNT'
-    | 'MOP'
-    | 'MRO'
-    | 'MRU'
-    | 'MUR'
-    | 'MVR'
-    | 'MWK'
-    | 'MXN'
-    | 'MYR'
-    | 'MZN'
-    | 'NAD'
-    | 'NGN'
-    | 'NIO'
-    | 'NOK'
-    | 'NPR'
-    | 'NZD'
-    | 'OMR'
-    | 'PAB'
-    | 'PEN'
-    | 'PGK'
-    | 'PHP'
-    | 'PKR'
-    | 'PLN'
-    | 'PYG'
-    | 'QAR'
-    | 'RON'
-    | 'RSD'
-    | 'RUB'
-    | 'RUR'
-    | 'RWF'
-    | 'SAR'
-    | 'SBD'
-    | 'SCR'
-    | 'SDG'
-    | 'SEK'
-    | 'SGD'
-    | 'SHP'
-    | 'SLL'
-    | 'SOS'
-    | 'SRD'
-    | 'SSP'
-    | 'STD'
-    | 'STN'
-    | 'SVC'
-    | 'SYP'
-    | 'SZL'
-    | 'THB'
-    | 'TJS'
-    | 'TMT'
-    | 'TND'
-    | 'TOP'
-    | 'TRY'
-    | 'TTD'
-    | 'TWD'
-    | 'TZS'
-    | 'UAH'
-    | 'UGX'
-    | 'USD'
-    | 'UYU'
-    | 'UZS'
-    | 'VEF'
-    | 'VES'
-    | 'VND'
-    | 'VUV'
-    | 'WST'
-    | 'XAF'
-    | 'XCD'
-    | 'XOF'
-    | 'XPF'
-    | 'YER'
-    | 'ZAR'
-    | 'ZMW'
-    | 'ZWL';
+    | "UNSPECIFIED"
+    | "AED"
+    | "AFN"
+    | "ALL"
+    | "AMD"
+    | "ANG"
+    | "AOA"
+    | "ARS"
+    | "AUD"
+    | "AWG"
+    | "AZN"
+    | "BAM"
+    | "BBD"
+    | "BDT"
+    | "BGN"
+    | "BHD"
+    | "BIF"
+    | "BMD"
+    | "BND"
+    | "BOB"
+    | "BRL"
+    | "BSD"
+    | "BTN"
+    | "BWP"
+    | "BYN"
+    | "BYR"
+    | "BZD"
+    | "CAD"
+    | "CDF"
+    | "CHF"
+    | "CLP"
+    | "CNY"
+    | "COP"
+    | "CRC"
+    | "CUC"
+    | "CUP"
+    | "CVE"
+    | "CZK"
+    | "DJF"
+    | "DKK"
+    | "DOP"
+    | "DZD"
+    | "EGP"
+    | "ERN"
+    | "ETB"
+    | "EUR"
+    | "FJD"
+    | "FKP"
+    | "GBP"
+    | "GEL"
+    | "GHS"
+    | "GIP"
+    | "GMD"
+    | "GNF"
+    | "GTQ"
+    | "GYD"
+    | "HKD"
+    | "HNL"
+    | "HRK"
+    | "HTG"
+    | "HUF"
+    | "IDR"
+    | "ILS"
+    | "INR"
+    | "IQD"
+    | "IRR"
+    | "ISK"
+    | "JMD"
+    | "JOD"
+    | "JPY"
+    | "KES"
+    | "KGS"
+    | "KHR"
+    | "KMF"
+    | "KPW"
+    | "KRW"
+    | "KWD"
+    | "KYD"
+    | "KZT"
+    | "LAK"
+    | "LBP"
+    | "LKR"
+    | "LRD"
+    | "LSL"
+    | "LTL"
+    | "LYD"
+    | "MAD"
+    | "MDL"
+    | "MGA"
+    | "MKD"
+    | "MMK"
+    | "MNT"
+    | "MOP"
+    | "MRO"
+    | "MRU"
+    | "MUR"
+    | "MVR"
+    | "MWK"
+    | "MXN"
+    | "MYR"
+    | "MZN"
+    | "NAD"
+    | "NGN"
+    | "NIO"
+    | "NOK"
+    | "NPR"
+    | "NZD"
+    | "OMR"
+    | "PAB"
+    | "PEN"
+    | "PGK"
+    | "PHP"
+    | "PKR"
+    | "PLN"
+    | "PYG"
+    | "QAR"
+    | "RON"
+    | "RSD"
+    | "RUB"
+    | "RUR"
+    | "RWF"
+    | "SAR"
+    | "SBD"
+    | "SCR"
+    | "SDG"
+    | "SEK"
+    | "SGD"
+    | "SHP"
+    | "SLL"
+    | "SOS"
+    | "SRD"
+    | "SSP"
+    | "STD"
+    | "STN"
+    | "SVC"
+    | "SYP"
+    | "SZL"
+    | "THB"
+    | "TJS"
+    | "TMT"
+    | "TND"
+    | "TOP"
+    | "TRY"
+    | "TTD"
+    | "TWD"
+    | "TZS"
+    | "UAH"
+    | "UGX"
+    | "USD"
+    | "UYU"
+    | "UZS"
+    | "VEF"
+    | "VES"
+    | "VND"
+    | "VUV"
+    | "WST"
+    | "XAF"
+    | "XCD"
+    | "XOF"
+    | "XPF"
+    | "YER"
+    | "ZAR"
+    | "ZMW"
+    | "ZWL";
   businessLimits?: BusinessLimitRecord[];
 }
 
@@ -3730,23 +3793,23 @@ export interface UpdateAllocationRequest {
   ownerId?: string;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes?: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 }
 
 export interface AllocationDetailsResponse {
@@ -3754,23 +3817,23 @@ export interface AllocationDetailsResponse {
   owner?: UserData;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
+    | "CHILD_CARE"
+    | "DIGITAL_GOODS"
+    | "EDUCATION"
+    | "ENTERTAINMENT"
+    | "FOOD_BEVERAGE"
+    | "GAMBLING"
+    | "GOVERNMENT"
+    | "HEALTH"
+    | "MEMBERSHIPS"
+    | "MONEY_TRANSFER"
+    | "SERVICES"
+    | "SHOPPING"
+    | "TRAVEL"
+    | "UTILITIES"
+    | "OTHER"
   )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+  disabledPaymentTypes?: ("POS" | "ONLINE" | "MANUAL_ENTRY")[];
 }
 
 export interface User {
@@ -3779,7 +3842,7 @@ export interface User {
 
   /** @format uuid */
   businessId?: string;
-  type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
+  type?: "EMPLOYEE" | "BUSINESS_OWNER";
   firstName?: string;
   lastName?: string;
   address?: Address;
@@ -3821,7 +3884,7 @@ export interface CardAccount {
   accountId?: string;
 
   /** @example ALLOCATION */
-  accountType?: 'ALLOCATION' | 'CARD';
+  accountType?: "ALLOCATION" | "CARD";
   ledgerBalance?: Amount;
 }
 
@@ -3839,24 +3902,24 @@ export interface UserRolesAndPermissionsRecord {
   allocationRole?: string;
   inherited?: boolean;
   allocationPermissions?: (
-    | 'READ'
-    | 'CATEGORIZE'
-    | 'LINK_RECEIPTS'
-    | 'MANAGE_FUNDS'
-    | 'MANAGE_CARDS'
-    | 'MANAGE_USERS'
-    | 'MANAGE_PERMISSIONS'
-    | 'MANAGE_CONNECTIONS'
-    | 'VIEW_OWN'
-    | 'LINK_BANK_ACCOUNTS'
+    | "READ"
+    | "CATEGORIZE"
+    | "LINK_RECEIPTS"
+    | "MANAGE_FUNDS"
+    | "MANAGE_CARDS"
+    | "MANAGE_USERS"
+    | "MANAGE_PERMISSIONS"
+    | "MANAGE_CONNECTIONS"
+    | "VIEW_OWN"
+    | "LINK_BANK_ACCOUNTS"
   )[];
   globalUserPermissions?: (
-    | 'BATCH_ONBOARD'
-    | 'CROSS_BUSINESS_BOUNDARY'
-    | 'GLOBAL_READ'
-    | 'CUSTOMER_SERVICE'
-    | 'CUSTOMER_SERVICE_MANAGER'
-    | 'APPLICATION'
+    | "BATCH_ONBOARD"
+    | "CROSS_BUSINESS_BOUNDARY"
+    | "GLOBAL_READ"
+    | "CUSTOMER_SERVICE"
+    | "CUSTOMER_SERVICE_MANAGER"
+    | "APPLICATION"
   )[];
 }
 
@@ -3900,7 +3963,7 @@ export interface GetBusinessesResponse {
 export interface BusinessOwner {
   /** @format uuid */
   businessId?: string;
-  type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
+  type?: "UNSPECIFIED" | "PRINCIPLE_OWNER" | "ULTIMATE_BENEFICIAL_OWNER";
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
   title?: string;
@@ -3917,257 +3980,257 @@ export interface BusinessOwner {
   /** @format date */
   dateOfBirth?: string;
   countryOfCitizenship?:
-    | 'UNSPECIFIED'
-    | 'ABW'
-    | 'AFG'
-    | 'AGO'
-    | 'AIA'
-    | 'ALA'
-    | 'ALB'
-    | 'AND'
-    | 'ANT'
-    | 'ARE'
-    | 'ARG'
-    | 'ARM'
-    | 'ASM'
-    | 'ATA'
-    | 'ATF'
-    | 'ATG'
-    | 'AUS'
-    | 'AUT'
-    | 'AZE'
-    | 'BDI'
-    | 'BEL'
-    | 'BEN'
-    | 'BFA'
-    | 'BGD'
-    | 'BGR'
-    | 'BHR'
-    | 'BHS'
-    | 'BIH'
-    | 'BLM'
-    | 'BLR'
-    | 'BLZ'
-    | 'BMU'
-    | 'BOL'
-    | 'BRA'
-    | 'BRB'
-    | 'BRN'
-    | 'BTN'
-    | 'BVT'
-    | 'BWA'
-    | 'CAF'
-    | 'CAN'
-    | 'CCK'
-    | 'CHE'
-    | 'CHL'
-    | 'CHN'
-    | 'CIV'
-    | 'CMR'
-    | 'COD'
-    | 'COG'
-    | 'COK'
-    | 'COL'
-    | 'COM'
-    | 'CPV'
-    | 'CRI'
-    | 'CUB'
-    | 'CXR'
-    | 'CYM'
-    | 'CYP'
-    | 'CZE'
-    | 'DEU'
-    | 'DJI'
-    | 'DMA'
-    | 'DNK'
-    | 'DOM'
-    | 'DZA'
-    | 'ECU'
-    | 'EGY'
-    | 'ERI'
-    | 'ESH'
-    | 'ESP'
-    | 'EST'
-    | 'ETH'
-    | 'FIN'
-    | 'FJI'
-    | 'FLK'
-    | 'FRA'
-    | 'FRO'
-    | 'FSM'
-    | 'GAB'
-    | 'GBR'
-    | 'GEO'
-    | 'GGY'
-    | 'GHA'
-    | 'GIB'
-    | 'GIN'
-    | 'GLP'
-    | 'GMB'
-    | 'GNB'
-    | 'GNQ'
-    | 'GRC'
-    | 'GRD'
-    | 'GRL'
-    | 'GTM'
-    | 'GUF'
-    | 'GUM'
-    | 'GUY'
-    | 'HKG'
-    | 'HMD'
-    | 'HND'
-    | 'HRV'
-    | 'HTI'
-    | 'HUN'
-    | 'IDN'
-    | 'IMN'
-    | 'IND'
-    | 'IOT'
-    | 'IRL'
-    | 'IRN'
-    | 'IRQ'
-    | 'ISL'
-    | 'ISR'
-    | 'ITA'
-    | 'JAM'
-    | 'JEY'
-    | 'JOR'
-    | 'JPN'
-    | 'KAZ'
-    | 'KEN'
-    | 'KGZ'
-    | 'KHM'
-    | 'KIR'
-    | 'KNA'
-    | 'KOR'
-    | 'KWT'
-    | 'LAO'
-    | 'LBN'
-    | 'LBR'
-    | 'LBY'
-    | 'LCA'
-    | 'LIE'
-    | 'LKA'
-    | 'LSO'
-    | 'LTU'
-    | 'LUX'
-    | 'LVA'
-    | 'MAC'
-    | 'MAF'
-    | 'MAR'
-    | 'MCO'
-    | 'MDA'
-    | 'MDG'
-    | 'MDV'
-    | 'MEX'
-    | 'MHL'
-    | 'MKD'
-    | 'MLI'
-    | 'MLT'
-    | 'MMR'
-    | 'MNE'
-    | 'MNG'
-    | 'MNP'
-    | 'MOZ'
-    | 'MRT'
-    | 'MSR'
-    | 'MTQ'
-    | 'MUS'
-    | 'MWI'
-    | 'MYS'
-    | 'MYT'
-    | 'NAM'
-    | 'NCL'
-    | 'NER'
-    | 'NFK'
-    | 'NGA'
-    | 'NIC'
-    | 'NIU'
-    | 'NLD'
-    | 'NOR'
-    | 'NPL'
-    | 'NRU'
-    | 'NZL'
-    | 'OMN'
-    | 'PAK'
-    | 'PAN'
-    | 'PCN'
-    | 'PER'
-    | 'PHL'
-    | 'PLW'
-    | 'PNG'
-    | 'POL'
-    | 'PRI'
-    | 'PRK'
-    | 'PRT'
-    | 'PRY'
-    | 'PSE'
-    | 'PYF'
-    | 'QAT'
-    | 'REU'
-    | 'ROU'
-    | 'RUS'
-    | 'RWA'
-    | 'SAU'
-    | 'SDN'
-    | 'SEN'
-    | 'SGP'
-    | 'SGS'
-    | 'SHN'
-    | 'SJM'
-    | 'SLB'
-    | 'SLE'
-    | 'SLV'
-    | 'SMR'
-    | 'SOM'
-    | 'SPM'
-    | 'SRB'
-    | 'SSD'
-    | 'STP'
-    | 'SUR'
-    | 'SVK'
-    | 'SVN'
-    | 'SWE'
-    | 'SWZ'
-    | 'SYC'
-    | 'SYR'
-    | 'TCA'
-    | 'TCD'
-    | 'TGO'
-    | 'THA'
-    | 'TJK'
-    | 'TKL'
-    | 'TKM'
-    | 'TLS'
-    | 'TON'
-    | 'TTO'
-    | 'TUN'
-    | 'TUR'
-    | 'TUV'
-    | 'TWN'
-    | 'TZA'
-    | 'UGA'
-    | 'UKR'
-    | 'UMI'
-    | 'URY'
-    | 'USA'
-    | 'UZB'
-    | 'VAT'
-    | 'VCT'
-    | 'VEN'
-    | 'VGB'
-    | 'VIR'
-    | 'VNM'
-    | 'VUT'
-    | 'WLF'
-    | 'WSM'
-    | 'YEM'
-    | 'ZAF'
-    | 'ZMB'
-    | 'ZWE';
+    | "UNSPECIFIED"
+    | "ABW"
+    | "AFG"
+    | "AGO"
+    | "AIA"
+    | "ALA"
+    | "ALB"
+    | "AND"
+    | "ANT"
+    | "ARE"
+    | "ARG"
+    | "ARM"
+    | "ASM"
+    | "ATA"
+    | "ATF"
+    | "ATG"
+    | "AUS"
+    | "AUT"
+    | "AZE"
+    | "BDI"
+    | "BEL"
+    | "BEN"
+    | "BFA"
+    | "BGD"
+    | "BGR"
+    | "BHR"
+    | "BHS"
+    | "BIH"
+    | "BLM"
+    | "BLR"
+    | "BLZ"
+    | "BMU"
+    | "BOL"
+    | "BRA"
+    | "BRB"
+    | "BRN"
+    | "BTN"
+    | "BVT"
+    | "BWA"
+    | "CAF"
+    | "CAN"
+    | "CCK"
+    | "CHE"
+    | "CHL"
+    | "CHN"
+    | "CIV"
+    | "CMR"
+    | "COD"
+    | "COG"
+    | "COK"
+    | "COL"
+    | "COM"
+    | "CPV"
+    | "CRI"
+    | "CUB"
+    | "CXR"
+    | "CYM"
+    | "CYP"
+    | "CZE"
+    | "DEU"
+    | "DJI"
+    | "DMA"
+    | "DNK"
+    | "DOM"
+    | "DZA"
+    | "ECU"
+    | "EGY"
+    | "ERI"
+    | "ESH"
+    | "ESP"
+    | "EST"
+    | "ETH"
+    | "FIN"
+    | "FJI"
+    | "FLK"
+    | "FRA"
+    | "FRO"
+    | "FSM"
+    | "GAB"
+    | "GBR"
+    | "GEO"
+    | "GGY"
+    | "GHA"
+    | "GIB"
+    | "GIN"
+    | "GLP"
+    | "GMB"
+    | "GNB"
+    | "GNQ"
+    | "GRC"
+    | "GRD"
+    | "GRL"
+    | "GTM"
+    | "GUF"
+    | "GUM"
+    | "GUY"
+    | "HKG"
+    | "HMD"
+    | "HND"
+    | "HRV"
+    | "HTI"
+    | "HUN"
+    | "IDN"
+    | "IMN"
+    | "IND"
+    | "IOT"
+    | "IRL"
+    | "IRN"
+    | "IRQ"
+    | "ISL"
+    | "ISR"
+    | "ITA"
+    | "JAM"
+    | "JEY"
+    | "JOR"
+    | "JPN"
+    | "KAZ"
+    | "KEN"
+    | "KGZ"
+    | "KHM"
+    | "KIR"
+    | "KNA"
+    | "KOR"
+    | "KWT"
+    | "LAO"
+    | "LBN"
+    | "LBR"
+    | "LBY"
+    | "LCA"
+    | "LIE"
+    | "LKA"
+    | "LSO"
+    | "LTU"
+    | "LUX"
+    | "LVA"
+    | "MAC"
+    | "MAF"
+    | "MAR"
+    | "MCO"
+    | "MDA"
+    | "MDG"
+    | "MDV"
+    | "MEX"
+    | "MHL"
+    | "MKD"
+    | "MLI"
+    | "MLT"
+    | "MMR"
+    | "MNE"
+    | "MNG"
+    | "MNP"
+    | "MOZ"
+    | "MRT"
+    | "MSR"
+    | "MTQ"
+    | "MUS"
+    | "MWI"
+    | "MYS"
+    | "MYT"
+    | "NAM"
+    | "NCL"
+    | "NER"
+    | "NFK"
+    | "NGA"
+    | "NIC"
+    | "NIU"
+    | "NLD"
+    | "NOR"
+    | "NPL"
+    | "NRU"
+    | "NZL"
+    | "OMN"
+    | "PAK"
+    | "PAN"
+    | "PCN"
+    | "PER"
+    | "PHL"
+    | "PLW"
+    | "PNG"
+    | "POL"
+    | "PRI"
+    | "PRK"
+    | "PRT"
+    | "PRY"
+    | "PSE"
+    | "PYF"
+    | "QAT"
+    | "REU"
+    | "ROU"
+    | "RUS"
+    | "RWA"
+    | "SAU"
+    | "SDN"
+    | "SEN"
+    | "SGP"
+    | "SGS"
+    | "SHN"
+    | "SJM"
+    | "SLB"
+    | "SLE"
+    | "SLV"
+    | "SMR"
+    | "SOM"
+    | "SPM"
+    | "SRB"
+    | "SSD"
+    | "STP"
+    | "SUR"
+    | "SVK"
+    | "SVN"
+    | "SWE"
+    | "SWZ"
+    | "SYC"
+    | "SYR"
+    | "TCA"
+    | "TCD"
+    | "TGO"
+    | "THA"
+    | "TJK"
+    | "TKL"
+    | "TKM"
+    | "TLS"
+    | "TON"
+    | "TTO"
+    | "TUN"
+    | "TUR"
+    | "TUV"
+    | "TWN"
+    | "TZA"
+    | "UGA"
+    | "UKR"
+    | "UMI"
+    | "URY"
+    | "USA"
+    | "UZB"
+    | "VAT"
+    | "VCT"
+    | "VEN"
+    | "VGB"
+    | "VIR"
+    | "VNM"
+    | "VUT"
+    | "WLF"
+    | "WSM"
+    | "YEM"
+    | "ZAF"
+    | "ZMB"
+    | "ZWE";
   subjectRef?: string;
-  knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
-  status?: 'ACTIVE' | 'RETIRED';
+  knowYourCustomerStatus?: "PENDING" | "REVIEW" | "FAIL" | "PASS";
+  status?: "ACTIVE" | "RETIRED";
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4234,85 +4297,91 @@ export interface AccountBase {
   mask?: string;
   name?: string;
   officialName?: string;
-  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  type?:
+    | "investment"
+    | "credit"
+    | "depository"
+    | "loan"
+    | "brokerage"
+    | "other";
   subtype?:
-    | '401a'
-    | '401k'
-    | '403B'
-    | '457b'
-    | '529'
-    | 'brokerage'
-    | 'cash isa'
-    | 'education savings account'
-    | 'ebt'
-    | 'gic'
-    | 'health reimbursement arrangement'
-    | 'hsa'
-    | 'isa'
-    | 'ira'
-    | 'lif'
-    | 'life insurance'
-    | 'lira'
-    | 'lrif'
-    | 'lrsp'
-    | 'non-taxable brokerage account'
-    | 'other'
-    | 'other insurance'
-    | 'other annuity'
-    | 'prif'
-    | 'rdsp'
-    | 'resp'
-    | 'rlif'
-    | 'rrif'
-    | 'pension'
-    | 'profit sharing plan'
-    | 'retirement'
-    | 'roth'
-    | 'roth 401k'
-    | 'rrsp'
-    | 'sep ira'
-    | 'simple ira'
-    | 'sipp'
-    | 'stock plan'
-    | 'thrift savings plan'
-    | 'tfsa'
-    | 'trust'
-    | 'ugma'
-    | 'utma'
-    | 'variable annuity'
-    | 'credit card'
-    | 'paypal'
-    | 'cd'
-    | 'checking'
-    | 'savings'
-    | 'money market'
-    | 'prepaid'
-    | 'auto'
-    | 'business'
-    | 'commercial'
-    | 'construction'
-    | 'consumer'
-    | 'home'
-    | 'home equity'
-    | 'loan'
-    | 'mortgage'
-    | 'overdraft'
-    | 'line of credit'
-    | 'student'
-    | 'cash management'
-    | 'keogh'
-    | 'mutual fund'
-    | 'recurring'
-    | 'rewards'
-    | 'safe deposit'
-    | 'sarsep'
-    | 'null';
+    | "401a"
+    | "401k"
+    | "403B"
+    | "457b"
+    | "529"
+    | "brokerage"
+    | "cash isa"
+    | "education savings account"
+    | "ebt"
+    | "gic"
+    | "health reimbursement arrangement"
+    | "hsa"
+    | "isa"
+    | "ira"
+    | "lif"
+    | "life insurance"
+    | "lira"
+    | "lrif"
+    | "lrsp"
+    | "non-taxable brokerage account"
+    | "other"
+    | "other insurance"
+    | "other annuity"
+    | "prif"
+    | "rdsp"
+    | "resp"
+    | "rlif"
+    | "rrif"
+    | "pension"
+    | "profit sharing plan"
+    | "retirement"
+    | "roth"
+    | "roth 401k"
+    | "rrsp"
+    | "sep ira"
+    | "simple ira"
+    | "sipp"
+    | "stock plan"
+    | "thrift savings plan"
+    | "tfsa"
+    | "trust"
+    | "ugma"
+    | "utma"
+    | "variable annuity"
+    | "credit card"
+    | "paypal"
+    | "cd"
+    | "checking"
+    | "savings"
+    | "money market"
+    | "prepaid"
+    | "auto"
+    | "business"
+    | "commercial"
+    | "construction"
+    | "consumer"
+    | "home"
+    | "home equity"
+    | "loan"
+    | "mortgage"
+    | "overdraft"
+    | "line of credit"
+    | "student"
+    | "cash management"
+    | "keogh"
+    | "mutual fund"
+    | "recurring"
+    | "rewards"
+    | "safe deposit"
+    | "sarsep"
+    | "null";
   verificationStatus?:
-    | 'pending_automatic_verification'
-    | 'pending_manual_verification'
-    | 'manually_verified'
-    | 'verification_expired'
-    | 'verification_failed';
+    | "pending_automatic_verification"
+    | "pending_manual_verification"
+    | "manually_verified"
+    | "verification_expired"
+    | "verification_failed";
 }
 
 export interface AccountIdentity {
@@ -4321,85 +4390,91 @@ export interface AccountIdentity {
   mask?: string;
   name?: string;
   officialName?: string;
-  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  type?:
+    | "investment"
+    | "credit"
+    | "depository"
+    | "loan"
+    | "brokerage"
+    | "other";
   subtype?:
-    | '401a'
-    | '401k'
-    | '403B'
-    | '457b'
-    | '529'
-    | 'brokerage'
-    | 'cash isa'
-    | 'education savings account'
-    | 'ebt'
-    | 'gic'
-    | 'health reimbursement arrangement'
-    | 'hsa'
-    | 'isa'
-    | 'ira'
-    | 'lif'
-    | 'life insurance'
-    | 'lira'
-    | 'lrif'
-    | 'lrsp'
-    | 'non-taxable brokerage account'
-    | 'other'
-    | 'other insurance'
-    | 'other annuity'
-    | 'prif'
-    | 'rdsp'
-    | 'resp'
-    | 'rlif'
-    | 'rrif'
-    | 'pension'
-    | 'profit sharing plan'
-    | 'retirement'
-    | 'roth'
-    | 'roth 401k'
-    | 'rrsp'
-    | 'sep ira'
-    | 'simple ira'
-    | 'sipp'
-    | 'stock plan'
-    | 'thrift savings plan'
-    | 'tfsa'
-    | 'trust'
-    | 'ugma'
-    | 'utma'
-    | 'variable annuity'
-    | 'credit card'
-    | 'paypal'
-    | 'cd'
-    | 'checking'
-    | 'savings'
-    | 'money market'
-    | 'prepaid'
-    | 'auto'
-    | 'business'
-    | 'commercial'
-    | 'construction'
-    | 'consumer'
-    | 'home'
-    | 'home equity'
-    | 'loan'
-    | 'mortgage'
-    | 'overdraft'
-    | 'line of credit'
-    | 'student'
-    | 'cash management'
-    | 'keogh'
-    | 'mutual fund'
-    | 'recurring'
-    | 'rewards'
-    | 'safe deposit'
-    | 'sarsep'
-    | 'null';
+    | "401a"
+    | "401k"
+    | "403B"
+    | "457b"
+    | "529"
+    | "brokerage"
+    | "cash isa"
+    | "education savings account"
+    | "ebt"
+    | "gic"
+    | "health reimbursement arrangement"
+    | "hsa"
+    | "isa"
+    | "ira"
+    | "lif"
+    | "life insurance"
+    | "lira"
+    | "lrif"
+    | "lrsp"
+    | "non-taxable brokerage account"
+    | "other"
+    | "other insurance"
+    | "other annuity"
+    | "prif"
+    | "rdsp"
+    | "resp"
+    | "rlif"
+    | "rrif"
+    | "pension"
+    | "profit sharing plan"
+    | "retirement"
+    | "roth"
+    | "roth 401k"
+    | "rrsp"
+    | "sep ira"
+    | "simple ira"
+    | "sipp"
+    | "stock plan"
+    | "thrift savings plan"
+    | "tfsa"
+    | "trust"
+    | "ugma"
+    | "utma"
+    | "variable annuity"
+    | "credit card"
+    | "paypal"
+    | "cd"
+    | "checking"
+    | "savings"
+    | "money market"
+    | "prepaid"
+    | "auto"
+    | "business"
+    | "commercial"
+    | "construction"
+    | "consumer"
+    | "home"
+    | "home equity"
+    | "loan"
+    | "mortgage"
+    | "overdraft"
+    | "line of credit"
+    | "student"
+    | "cash management"
+    | "keogh"
+    | "mutual fund"
+    | "recurring"
+    | "rewards"
+    | "safe deposit"
+    | "sarsep"
+    | "null";
   verificationStatus?:
-    | 'pending_automatic_verification'
-    | 'pending_manual_verification'
-    | 'manually_verified'
-    | 'verification_expired'
-    | 'verification_failed';
+    | "pending_automatic_verification"
+    | "pending_manual_verification"
+    | "manually_verified"
+    | "verification_expired"
+    | "verification_failed";
   owners?: Owner[];
 }
 
@@ -4426,23 +4501,23 @@ export interface AuthGetResponse {
 export interface Email {
   data?: string;
   primary?: boolean;
-  type?: 'primary' | 'secondary' | 'other';
+  type?: "primary" | "secondary" | "other";
 }
 
 export interface Error {
   errorType?:
-    | 'INVALID_REQUEST'
-    | 'INVALID_RESULT'
-    | 'INVALID_INPUT'
-    | 'INSTITUTION_ERROR'
-    | 'RATE_LIMIT_EXCEEDED'
-    | 'API_ERROR'
-    | 'ITEM_ERROR'
-    | 'ASSET_REPORT_ERROR'
-    | 'RECAPTCHA_ERROR'
-    | 'OAUTH_ERROR'
-    | 'PAYMENT_ERROR'
-    | 'BANK_TRANSFER_ERROR';
+    | "INVALID_REQUEST"
+    | "INVALID_RESULT"
+    | "INVALID_INPUT"
+    | "INSTITUTION_ERROR"
+    | "RATE_LIMIT_EXCEEDED"
+    | "API_ERROR"
+    | "ITEM_ERROR"
+    | "ASSET_REPORT_ERROR"
+    | "RECAPTCHA_ERROR"
+    | "OAUTH_ERROR"
+    | "PAYMENT_ERROR"
+    | "BANK_TRANSFER_ERROR";
   errorCode?: string;
   errorMessage?: string;
   displayMessage?: string;
@@ -4467,39 +4542,39 @@ export interface Item {
   webhook?: string;
   error?: Error;
   availableProducts?: (
-    | 'assets'
-    | 'auth'
-    | 'balance'
-    | 'identity'
-    | 'investments'
-    | 'liabilities'
-    | 'payment_initiation'
-    | 'transactions'
-    | 'credit_details'
-    | 'income'
-    | 'income_verification'
-    | 'deposit_switch'
-    | 'standing_orders'
+    | "assets"
+    | "auth"
+    | "balance"
+    | "identity"
+    | "investments"
+    | "liabilities"
+    | "payment_initiation"
+    | "transactions"
+    | "credit_details"
+    | "income"
+    | "income_verification"
+    | "deposit_switch"
+    | "standing_orders"
   )[];
   billedProducts?: (
-    | 'assets'
-    | 'auth'
-    | 'balance'
-    | 'identity'
-    | 'investments'
-    | 'liabilities'
-    | 'payment_initiation'
-    | 'transactions'
-    | 'credit_details'
-    | 'income'
-    | 'income_verification'
-    | 'deposit_switch'
-    | 'standing_orders'
+    | "assets"
+    | "auth"
+    | "balance"
+    | "identity"
+    | "investments"
+    | "liabilities"
+    | "payment_initiation"
+    | "transactions"
+    | "credit_details"
+    | "income"
+    | "income_verification"
+    | "deposit_switch"
+    | "standing_orders"
   )[];
 
   /** @format date-time */
   consentExpirationTime?: string;
-  updateType?: 'background' | 'user_present_required';
+  updateType?: "background" | "user_present_required";
 }
 
 export interface ItemPublicTokenExchangeResponse {
@@ -4552,23 +4627,23 @@ export interface Owner {
 export interface PhoneNumber {
   data?: string;
   primary?: boolean;
-  type?: 'home' | 'work' | 'office' | 'mobile' | 'mobile1' | 'other';
+  type?: "home" | "work" | "office" | "mobile" | "mobile1" | "other";
 }
 
 export type PlaidAccessTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: ItemPublicTokenExchangeResponse;
+  message?: ItemPublicTokenExchangeResponse,
 };
 
 export type PlaidAccountLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: AuthGetResponse;
+  message?: AuthGetResponse,
 };
 
 export type PlaidBalanceLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: AccountsGetResponse;
+  message?: AccountsGetResponse,
 };
 
 export type PlaidLinkTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: LinkTokenCreateResponse;
+  message?: LinkTokenCreateResponse,
 };
 
 export interface PlaidLogEntryDetailsObject {
@@ -4581,23 +4656,23 @@ export interface PlaidLogEntryDetailsObject {
   /** @format date-time */
   created?: string;
   plaidResponseType?:
-    | 'BALANCE'
-    | 'OWNER'
-    | 'ACCOUNT'
-    | 'LINK_TOKEN'
-    | 'ACCESS_TOKEN'
-    | 'SANDBOX_LINK_TOKEN'
-    | 'ERROR'
-    | 'OTHER';
+    | "BALANCE"
+    | "OWNER"
+    | "ACCOUNT"
+    | "LINK_TOKEN"
+    | "ACCESS_TOKEN"
+    | "SANDBOX_LINK_TOKEN"
+    | "ERROR"
+    | "OTHER";
   message?: object;
 }
 
 export type PlaidOwnerLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: IdentityGetResponse;
+  message?: IdentityGetResponse,
 };
 
 export type SandboxLinkTokenLogEntryDetails = PlaidLogEntryDetailsObject & {
-  message?: SandboxPublicTokenCreateResponse;
+  message?: SandboxPublicTokenCreateResponse,
 };
 
 export interface SandboxPublicTokenCreateResponse {
@@ -4630,15 +4705,15 @@ export interface BusinessProspectData {
    * @example SINGLE_MEMBER_LLC
    */
   businessType:
-    | 'INDIVIDUAL'
-    | 'SOLE_PROPRIETORSHIP'
-    | 'SINGLE_MEMBER_LLC'
-    | 'MULTI_MEMBER_LLC'
-    | 'PRIVATE_PARTNERSHIP'
-    | 'PUBLIC_PARTNERSHIP'
-    | 'PRIVATE_CORPORATION'
-    | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT';
+    | "INDIVIDUAL"
+    | "SOLE_PROPRIETORSHIP"
+    | "SINGLE_MEMBER_LLC"
+    | "MULTI_MEMBER_LLC"
+    | "PRIVATE_PARTNERSHIP"
+    | "PUBLIC_PARTNERSHIP"
+    | "PRIVATE_CORPORATION"
+    | "PUBLIC_CORPORATION"
+    | "INCORPORATED_NON_PROFIT";
 
   /**
    * Relationship to business Owner
@@ -4709,51 +4784,51 @@ export interface ApplicationReviewRequirements {
   requireRepresentative?: boolean;
   pendingVerification?: string[];
   errorCodes?: (
-    | 'invalid_address_city_state_postal_code'
-    | 'invalid_street_address'
-    | 'invalid_value_other'
-    | 'verification_document_address_mismatch'
-    | 'verification_document_address_missing'
-    | 'verification_document_corrupt'
-    | 'verification_document_country_not_supported'
-    | 'verification_document_dob_mismatch'
-    | 'verification_document_duplicate_type'
-    | 'verification_document_expired'
-    | 'verification_document_failed_copy'
-    | 'verification_document_failed_greyscale'
-    | 'verification_document_failed_other'
-    | 'verification_document_failed_test_mode'
-    | 'verification_document_fraudulent'
-    | 'verification_document_id_number_mismatch'
-    | 'verification_document_id_number_missing'
-    | 'verification_document_incomplete'
-    | 'verification_document_invalid'
-    | 'verification_document_issue_or_expiry_date_missing'
-    | 'verification_document_manipulated'
-    | 'verification_document_missing_back'
-    | 'verification_document_missing_front'
-    | 'verification_document_name_mismatch'
-    | 'verification_document_name_missing'
-    | 'verification_document_nationality_mismatch'
-    | 'verification_document_not_readable'
-    | 'verification_document_not_signed'
-    | 'verification_document_not_uploaded'
-    | 'verification_document_photo_mismatch'
-    | 'verification_document_too_large'
-    | 'verification_document_type_not_supported'
-    | 'verification_failed_address_match'
-    | 'verification_failed_business_iec_number'
-    | 'verification_failed_document_match'
-    | 'verification_failed_id_number_match'
-    | 'verification_failed_keyed_identity'
-    | 'verification_failed_keyed_match'
-    | 'verification_failed_name_match'
-    | 'verification_failed_other'
-    | 'verification_failed_tax_id_match'
-    | 'verification_failed_tax_id_not_issued'
-    | 'verification_missing_executives'
-    | 'verification_missing_owners'
-    | 'verification_requires_additional_memorandum_of_associations'
+    | "invalid_address_city_state_postal_code"
+    | "invalid_street_address"
+    | "invalid_value_other"
+    | "verification_document_address_mismatch"
+    | "verification_document_address_missing"
+    | "verification_document_corrupt"
+    | "verification_document_country_not_supported"
+    | "verification_document_dob_mismatch"
+    | "verification_document_duplicate_type"
+    | "verification_document_expired"
+    | "verification_document_failed_copy"
+    | "verification_document_failed_greyscale"
+    | "verification_document_failed_other"
+    | "verification_document_failed_test_mode"
+    | "verification_document_fraudulent"
+    | "verification_document_id_number_mismatch"
+    | "verification_document_id_number_missing"
+    | "verification_document_incomplete"
+    | "verification_document_invalid"
+    | "verification_document_issue_or_expiry_date_missing"
+    | "verification_document_manipulated"
+    | "verification_document_missing_back"
+    | "verification_document_missing_front"
+    | "verification_document_name_mismatch"
+    | "verification_document_name_missing"
+    | "verification_document_nationality_mismatch"
+    | "verification_document_not_readable"
+    | "verification_document_not_signed"
+    | "verification_document_not_uploaded"
+    | "verification_document_photo_mismatch"
+    | "verification_document_too_large"
+    | "verification_document_type_not_supported"
+    | "verification_failed_address_match"
+    | "verification_failed_business_iec_number"
+    | "verification_failed_document_match"
+    | "verification_failed_id_number_match"
+    | "verification_failed_keyed_identity"
+    | "verification_failed_keyed_match"
+    | "verification_failed_name_match"
+    | "verification_failed_other"
+    | "verification_failed_tax_id_match"
+    | "verification_failed_tax_id_not_issued"
+    | "verification_missing_executives"
+    | "verification_missing_owners"
+    | "verification_requires_additional_memorandum_of_associations"
   )[];
 }
 
@@ -4776,16 +4851,16 @@ export interface AllocationRolePermissionRecord {
   businessId?: string;
   role_name: string;
   permissions: (
-    | 'READ'
-    | 'CATEGORIZE'
-    | 'LINK_RECEIPTS'
-    | 'MANAGE_FUNDS'
-    | 'MANAGE_CARDS'
-    | 'MANAGE_USERS'
-    | 'MANAGE_PERMISSIONS'
-    | 'MANAGE_CONNECTIONS'
-    | 'VIEW_OWN'
-    | 'LINK_BANK_ACCOUNTS'
+    | "READ"
+    | "CATEGORIZE"
+    | "LINK_RECEIPTS"
+    | "MANAGE_FUNDS"
+    | "MANAGE_CARDS"
+    | "MANAGE_USERS"
+    | "MANAGE_PERMISSIONS"
+    | "MANAGE_CONNECTIONS"
+    | "VIEW_OWN"
+    | "LINK_BANK_ACCOUNTS"
   )[];
 }
 

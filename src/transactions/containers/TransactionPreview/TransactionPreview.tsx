@@ -134,6 +134,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
 
+  const isSyncedLockedDashboard = !props.showAccountingAdminView && transaction().syncStatus === 'SYNCED_LOCKED';
+  
   const [unlockSyncConfirmationOpen, setUnlockSyncConfirmationOpen] = createSignal(false);
   const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
 
@@ -321,6 +323,15 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               onFocusOut={canSubmitNote() ? onSaveNote : getNoop}
             />
           </div>
+          <Show when={isSyncedLockedDashboard}>
+            <div class={css.row}>
+              <Icon size="md" name="alert" class={css.icon} />
+              <div class={css.text}>
+                The transaction has been synced with your accounting software. Expense category and comments can not be
+                changed.
+              </div>
+            </div>
+          </Show>
         </div>
         <Show when={transaction().card}>
           <h4 class={css.title}>
