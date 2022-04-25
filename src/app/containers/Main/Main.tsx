@@ -26,7 +26,7 @@ export default function Main() {
 
   const [data, status, , , refetch, mutate] = useResource(async () => {
     const [currentUser, business] = await Promise.all([getUsers(), getBusiness()]);
-    return { currentUser, business, ...(await getPermissions(business, getAllPermissions)) };
+    return { currentUser, business, ...(await getPermissions(getAllPermissions)) };
   });
 
   const business = createMemo(() => data()?.business || null);
@@ -34,7 +34,7 @@ export default function Main() {
 
   const reloadPermissions = async () => {
     const current = data();
-    if (current) mutate({ ...current, ...(await getPermissions(current.business, getAllPermissions)) });
+    if (current) mutate({ ...current, ...(await getPermissions(getAllPermissions)) });
   };
 
   events.sub(AppEvent.Logout, (returnUrl: string) => {
