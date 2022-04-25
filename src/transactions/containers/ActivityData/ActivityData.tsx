@@ -24,9 +24,7 @@ import { ActivityList } from '../../components/ActivityList';
 import { TransactionReportModal } from '../../components/TransactionReportModal';
 import { activityToLedger, ledgerToActivity } from '../../utils/convertTypes';
 import { usePreviewTransaction } from '../../utils/usePreviewTransaction';
-import { usePreviewReceipts } from '../../utils/usePreviewReceipts';
 import { TransactionPreview } from '../TransactionPreview';
-import { ReceiptsModal } from '../ReceiptsModal';
 import { LedgerPreview } from '../LedgerPreview';
 
 interface ActivityDataProps {
@@ -63,8 +61,6 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
       ),
     }));
   };
-
-  const [onViewReceipt, receiptsProps] = usePreviewReceipts(onUpdateTransaction);
 
   const onExport = (params: Readonly<LedgerActivityRequest>) => {
     return exportAccountActivity(params).then((file) => {
@@ -106,11 +102,9 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
         <TransactionPreview
           transaction={ledgerToActivity(preview.transaction()!)}
           onUpdate={onUpdateTransaction}
-          onViewReceipt={onViewReceipt}
           onReport={toggleReportModal}
         />
       </Drawer>
-      <ReceiptsModal activityId={preview.id()} {...receiptsProps} />
       <TransactionReportModal open={reportModal()} onClose={toggleReportModal} />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={setCardID}>
         <CardPreview cardID={cardID()!} />

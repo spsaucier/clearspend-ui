@@ -43,7 +43,7 @@ export async function saveUser(params: Readonly<CreateUserRequest>) {
 export const updateCurrentUser = async (user: User) =>
   (await service.post<Readonly<UpdateUserRequest>>(`/users/${user.userId}`, { ...user })).data;
 
-export async function editUser(userId: string, params: Readonly<CreateUserRequest>) {
+export async function editUser(userId: string, params: Readonly<UpdateUserRequest>) {
   return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
 }
 

@@ -19,9 +19,7 @@ import { TransactionsList } from '../../components/TransactionsList';
 import { TransactionsTable } from '../../components/TransactionsTable';
 import { TransactionReportModal } from '../../components/TransactionReportModal';
 import { usePreviewTransaction } from '../../utils/usePreviewTransaction';
-import { usePreviewReceipts } from '../../utils/usePreviewReceipts';
 import { TransactionPreview } from '../TransactionPreview';
-import { ReceiptsModal } from '../ReceiptsModal';
 
 interface TransactionsDataProps {
   class?: string;
@@ -58,8 +56,6 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
     }));
   };
 
-  const [onViewReceipt, receiptsProps] = usePreviewReceipts(onUpdateTransaction);
-
   return (
     <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
       <Dynamic
@@ -89,12 +85,10 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         <TransactionPreview
           transaction={preview.transaction()!}
           onUpdate={onUpdateTransaction}
-          onViewReceipt={onViewReceipt}
           showAccountingAdminView={props.showAccountingAdminView}
           onReport={toggleReportModal}
         />
       </Drawer>
-      <ReceiptsModal activityId={preview.id()} {...receiptsProps} />
       <TransactionReportModal open={reportModal()} onClose={toggleReportModal} />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={setCardID}>
         <CardPreview cardID={cardID()!} />

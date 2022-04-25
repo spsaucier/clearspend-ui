@@ -32,9 +32,9 @@ export default function PdfView(props: Readonly<PdfViewProps>) {
   });
 
   return (
-    <>
-      <canvas ref={canvas} class={css.root} width="0" height="0" />
+    <div class={css.root}>
+      <canvas ref={canvas} class={css.canvas} width="0" height="0" />
       <Show when={error()}>{error()}</Show>
-    </>
+    </div>
   );
 }

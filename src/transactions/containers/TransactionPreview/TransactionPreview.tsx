@@ -27,7 +27,6 @@ import { MerchantLogo } from '../../components/MerchantLogo';
 import { TransactionPreviewStatus } from '../../components/TransactionPreviewStatus';
 import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
-import type { ReceiptData } from '../../types';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { TransactionReceipts } from '../TransactionReceipts';
 
@@ -43,7 +42,6 @@ interface TransactionPreviewProps {
   showAccountingAdminView?: boolean;
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
-  onViewReceipt: (receipts: readonly Readonly<ReceiptData>[], id: string) => void;
   onReport: () => void;
 }
 
@@ -224,7 +222,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </div>
         </Show>
         <div class={css.properties}>
-          <TransactionReceipts data={transaction()} onView={props.onViewReceipt} onUpdate={props.onUpdate} />
+          <TransactionReceipts data={transaction()} onUpdate={props.onUpdate} />
           <div class={css.expenseCategory}>
             <div class={css.optionTitle}>
               <Text message="Expense Category" />

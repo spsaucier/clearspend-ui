@@ -6,7 +6,7 @@ import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
 import { useMessages } from 'app/containers/Messages/context';
 import { useBusiness } from 'app/containers/Main/context';
-import type { CreateUserRequest } from 'generated/capital';
+import type { UpdateUserRequest } from 'generated/capital';
 
 import { EditProfileForm } from '../../components/EditProfileForm';
 import { getUser, editUser } from '../../services';
@@ -19,7 +19,7 @@ export default function ProfileSettings() {
   const { currentUser } = useBusiness();
   const [user, status, , , reload] = useResource(getUser, currentUser().userId);
 
-  const onUpdate = async (params: Readonly<CreateUserRequest>) => {
+  const onUpdate = async (params: Readonly<UpdateUserRequest>) => {
     await editUser(currentUser().userId, { ...params, address: { ...params.address, country: 'USA' } });
     messages.success({
       title: i18n.t('Success'),

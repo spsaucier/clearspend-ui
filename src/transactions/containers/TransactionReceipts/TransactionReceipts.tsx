@@ -15,7 +15,7 @@ import type { AccountActivityResponse } from 'generated/capital';
 
 import { ReceiptPreview } from '../../components/ReceiptPreview';
 import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
-import type { ReceiptData } from '../../types';
+import { ReceiptsModal } from '../ReceiptsModal';
 
 import { getReceiptData } from './utils';
 
@@ -26,12 +26,12 @@ const RECEIPT_FILE_TYPES = [FileTypes.JPG, FileTypes.PNG, FileTypes.PDF];
 interface TransactionReceiptsProps {
   data: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
-  onView: (receipts: readonly Readonly<ReceiptData>[], id: string) => void;
 }
 
 export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
   const i18n = useI18n();
   const messages = useMessages();
+  const [initialIdx, setInitialIdx] = createSignal<number>();
 
   let input!: HTMLInputElement;
 
@@ -53,7 +53,10 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
   };
 
   const onChooseFiles = () => input.click();
-  const onChangeFiles = (event: Event) => onUpload(Array.from((event.target as HTMLInputElement).files || []));
+  const onChangeFiles = (event: Event) => {
+    setInitialIdx();
+    return onUpload(Array.from((event.target as HTMLInputElement).files || []));
+  };
 
   const [deletingId, setDeletingId] = createSignal<string>();
 
@@ -66,6 +69,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
       })
       .then((data) => {
         props.onUpdate(data);
+        setInitialIdx(0);
         setDeletingId();
       })
       .catch(() => {
@@ -77,88 +81,100 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
   const allowReceiptUpload = createMemo(() => isAllowedReceipts(props.data.merchant, props.data.status));
 
   return (
-    <Show when={allowReceiptUpload()}>
-      <div>
-        <Text message="Receipt" class={css.label!} />
-        <input
-          ref={input}
-          type="file"
-          accept={RECEIPT_FILE_TYPES.join(',')}
-          class={css.input}
-          onChange={onChangeFiles}
-        />
-      </div>
-      <Switch>
-        <Match when={status().error}>
-          <div class={css.error}>
-            <Text message="Something went wrong" />
-            <Button size="sm" view="second" loading={status().loading} onClick={reload}>
-              <Text message="Reload" />
-            </Button>
-          </div>
-        </Match>
-        <Match when={status().loading && !receipts()}>
-          <Loading />
-        </Match>
-        <Match when={receipts()}>
-          {(items) => (
-            <FilesDropArea types={RECEIPT_FILE_TYPES} dropText={<Text message="Drop images" />} onDrop={onUpload}>
-              <Show
-                when={items.length}
-                fallback={
-                  <div class={css.empty}>
+    <>
+      <Show when={allowReceiptUpload()}>
+        <div>
+          <Text message="Receipt" class={css.label!} />
+          <input
+            ref={input}
+            type="file"
+            accept={RECEIPT_FILE_TYPES.join(',')}
+            class={css.input}
+            onChange={onChangeFiles}
+          />
+        </div>
+        <Switch>
+          <Match when={status().error}>
+            <div class={css.error}>
+              <Text message="Something went wrong" />
+              <Button size="sm" view="second" loading={status().loading} onClick={reload}>
+                <Text message="Reload" />
+              </Button>
+            </div>
+          </Match>
+          <Match when={status().loading && !receipts()}>
+            <Loading />
+          </Match>
+          <Match when={receipts()}>
+            {(items) => (
+              <FilesDropArea types={RECEIPT_FILE_TYPES} dropText={<Text message="Drop images" />} onDrop={onUpload}>
+                <Show
+                  when={items.length}
+                  fallback={
+                    <div class={css.empty}>
+                      <Button
+                        type="primary"
+                        view="second"
+                        icon="add-receipt"
+                        loading={uploading() || status().loading}
+                        onClick={onChooseFiles}
+                      >
+                        <Text message="Add Receipt" />
+                      </Button>
+                      <Text message="or drag and drop" class={css.dropText!} />
+                    </div>
+                  }
+                >
+                  <div class={css.previews}>
+                    <For each={items}>
+                      {(receipt, i) => (
+                        <div class={css.previewWrap}>
+                          <ReceiptPreview size="lg" data={receipt} onClick={() => setInitialIdx(i())} />
+                          <Confirm
+                            question={<Text message="Are you sure you want to delete this receipt?" />}
+                            confirmText={<Text message="Delete" />}
+                            onConfirm={() => onDelete(receipt.id)}
+                          >
+                            {(args) => (
+                              <Button
+                                type="danger"
+                                view="second"
+                                icon="trash"
+                                class={css.remove}
+                                loading={deletingId() === receipt.id}
+                                {...args}
+                              />
+                            )}
+                          </Confirm>
+                        </div>
+                      )}
+                    </For>
                     <Button
-                      type="primary"
                       view="second"
                       icon="add-receipt"
                       loading={uploading()}
+                      class={css.squareButton}
                       onClick={onChooseFiles}
                     >
                       <Text message="Add Receipt" />
                     </Button>
-                    <Text message="or drag and drop" class={css.dropText!} />
                   </div>
-                }
-              >
-                <div class={css.previews}>
-                  <For each={items}>
-                    {(receipt) => (
-                      <div class={css.previewWrap}>
-                        <ReceiptPreview size="lg" data={receipt} onClick={(id) => props.onView(items, id)} />
-                        <Confirm
-                          question={<Text message="Are you sure you want to delete this receipt?" />}
-                          confirmText={<Text message="Delete" />}
-                          onConfirm={() => onDelete(receipt.id)}
-                        >
-                          {(args) => (
-                            <Button
-                              type="danger"
-                              view="second"
-                              icon="trash"
-                              class={css.remove}
-                              loading={deletingId() === receipt.id}
-                              {...args}
-                            />
-                          )}
-                        </Confirm>
-                      </div>
-                    )}
-                  </For>
-                  <Button
-                    view="second"
-                    icon="add-receipt"
-                    loading={uploading()}
-                    class={css.squareButton}
-                    onClick={onChooseFiles}
-                  >
-                    <Text message="Add Receipt" />
-                  </Button>
-                </div>
-              </Show>
-            </FilesDropArea>
-          )}
-        </Match>
-      </Switch>
-    </Show>
+                </Show>
+              </FilesDropArea>
+            )}
+          </Match>
+        </Switch>
+      </Show>
+
+      <Show when={!status().loading && receipts()?.length && typeof initialIdx() !== 'undefined'}>
+        <ReceiptsModal
+          initialIdx={initialIdx()!}
+          deleting={!!deletingId()}
+          onClose={() => setInitialIdx()}
+          receipts={receipts()!}
+          onDelete={onDelete}
+        />
+      </Show>
+    </>
   );
 }
