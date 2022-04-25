@@ -182,9 +182,9 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
         if (initId) setState(item.id!, { accountRef: item.id, expenseCategoryId: initId });
         const [expenseCategory, setExpenseCategory] = createSignal<string | undefined>(initId);
 
-        function onChange(id: string | undefined, name?: string) {
+        function onChangeExpenseCategory(id: string | undefined, name?: string) {
           batch(() => {
-            setExpenseCategory(id);
+            name === undefined ? setExpenseCategory(id) : setExpenseCategory(name);
             setState(item.id!, {
               accountRef: item.id,
               expenseCategoryId: id,
@@ -195,15 +195,22 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           if (props.saveOnChange) saveMapping();
         }
 
+        function onChange(value: string | undefined) {
+          if (value === item.name) {
+            onChangeExpenseCategory(undefined, value);
+          } else {
+            onChangeExpenseCategory(value, undefined);
+          }
+        }
+
         return (
           <div class={css.expenseCategoryCell}>
             <SelectExpenseCategory
               createName={item.name}
               value={expenseCategory()}
-              items={activeCategories()}
+              items={[{ categoryName: item.name, expenseCategoryId: item.name }, ...activeCategories()]}
               placeholder={String(i18n.t('Assign expense category'))}
               isDisableCategory={(id) => selectedCategories().includes(id)}
-              onCreate={() => onChange(undefined, item.name)}
               onChange={onChange}
             />
             <div class={css.cancel}>
@@ -213,8 +220,8 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
                   view="ghost"
                   class={css.cancelIcon}
                   onClick={() => {
+                    setExpenseCategory(undefined);
                     batch(() => {
-                      setExpenseCategory(undefined);
                       setState(item.id!, null);
                     });
                     if (props.saveOnChange) {

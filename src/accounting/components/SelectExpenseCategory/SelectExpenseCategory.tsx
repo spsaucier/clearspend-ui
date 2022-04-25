@@ -1,4 +1,4 @@
-import { Show, For } from 'solid-js';
+import { For } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Icon, IconName } from '_common/components/Icon';
@@ -19,7 +19,6 @@ interface SelectExpenseCategoryProps {
   disabled?: boolean;
   createName?: string;
   isDisableCategory?: (categoryId: string) => boolean;
-  onCreate?: () => void;
   onChange?: (value: string | undefined) => void;
 }
 
@@ -33,26 +32,28 @@ export function SelectExpenseCategory(props: Readonly<SelectExpenseCategoryProps
       placeholder={props.placeholder}
       error={props.error}
       loading={props.loading}
-      disabled={props.disabled}
-      valueRender={(id) => props.items.find((item) => item.expenseCategoryId === id)?.categoryName}
-      popupRender={(list) => (
-        <>
-          <Show when={Boolean(props.createName && props.onCreate)}>
-            <button class={css.create} onClick={props.onCreate}>
-              <Icon name="add-circle-outline" size="sm" class={css.icon} />
-              <Text message="Create {name}" name={props.createName!} />
-            </button>
-            <Divider />
-          </Show>
-          {list}
-        </>
-      )}
+      disabled={props.loading}
+      valueRender={(id) => {
+        return id === props.createName
+          ? props.createName
+          : props.items.find((item) => item.expenseCategoryId === id)?.categoryName;
+      }}
       onChange={props.onChange}
     >
       <For each={props.items}>
         {(item) => (
           <Option value={item.expenseCategoryId!} disabled={props.isDisableCategory?.(item.expenseCategoryId!)}>
-            <span>{item.categoryName}</span>
+            {item.expenseCategoryId === props.createName ? (
+              <div>
+                <div class={css.create}>
+                  <Icon name="add-circle-outline" size="sm" class={css.icon} />
+                  <Text message="Create {name}" name={props.createName!} />
+                </div>
+                <Divider />
+              </div>
+            ) : (
+              <span>{item.categoryName}</span>
+            )}
             {item.pathSegments?.length && item.pathSegments[0] !== '' && (
               <span class={css.categoryHierarchy}>
                 <Text message={`in {path}`} path={item.pathSegments.join(' > ')} />
