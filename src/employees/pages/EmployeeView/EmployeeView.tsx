@@ -59,9 +59,11 @@ export default function EmployeeView() {
   return (
     <Page
       breadcrumbs={
-        <BackLink to="/employees">
-          <Text message="Employees" />
-        </BackLink>
+        <Show when={canManageUsers(permissions())}>
+          <BackLink to="/employees">
+            <Text message="Employees" />
+          </BackLink>
+        </Show>
       }
       title={
         <Show when={user()} fallback="Loading...">
