@@ -11,6 +11,7 @@ import { useMediaContext } from '../../../_common/api/media/context';
 import { AllocationSelect } from '../AllocationSelect';
 import { byName } from '../AllocationSelect/utils';
 import { canManageCards } from '../../utils/permissions';
+import { Breadcrumbs } from '../Breadcrumbs';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -59,9 +60,26 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
         <>
           <header class={css.header}>
             <h3 class={css.title}>Allocations</h3>
-            <InputSearch delay={300} placeholder={String(i18n.t('Search Allocations...'))} onSearch={setSearch} />
+            <Show when={root()}>
+              <InputSearch delay={300} placeholder={String(i18n.t('Search Allocations...'))} onSearch={setSearch} />
+            </Show>
           </header>
-          <Show when={root()}>
+          <Show
+            when={root()}
+            fallback={
+              <For each={props.items}>
+                {(item) => (
+                  <Item
+                    data={item}
+                    active={props.currentID === item.allocationId}
+                    class={css.item}
+                    onClick={props.onAllocationChange}
+                    title={<Breadcrumbs current={item} items={props.items!} />}
+                  />
+                )}
+              </For>
+            }
+          >
             {(data) => (
               <div class={css.content}>
                 <Show

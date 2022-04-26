@@ -1,10 +1,12 @@
+import type { JSXElement } from 'solid-js';
+
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { join } from '_common/utils/join';
 
 import css from './AllocationView.css';
 
 interface AllocationViewProps {
-  name: string;
+  name: JSXElement;
   amount: number;
   class?: string;
 }

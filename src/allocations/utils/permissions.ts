@@ -49,6 +49,13 @@ export function canLinkReceipts(permissions: Permissions): boolean {
   return can(permissions, 'LINK_RECEIPTS');
 }
 
+export const hasSomeManagerRole = (roles: UserRolesAndPermissionsRecord[]) => {
+  return (
+    roles.filter((r) => [AllocationRoles.Admin, AllocationRoles.Manager].includes(r.allocationRole as AllocationRoles))
+      .length > 0
+  );
+};
+
 // Filter
 export const byAllowableRoles = (r: UserRolesAndPermissionsRecord) =>
   [AllocationRoles.Admin, AllocationRoles.Manager, AllocationRoles.ViewOnly].includes(

@@ -9,6 +9,7 @@ import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 import { AllocationView } from '../AllocationView';
 import { useBusiness } from '../../../app/containers/Main/context';
+import { Breadcrumbs } from '../Breadcrumbs';
 
 import { createSortedNestedArray } from './utils';
 
@@ -39,7 +40,12 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
     const found = props.items?.find(allocationWithID(id));
     if (!found) return null;
 
-    return <AllocationView name={found.name} amount={getAvailableBalance(found)} />;
+    return (
+      <AllocationView
+        name={<Breadcrumbs current={found} items={props.items || []} /> || found.name}
+        amount={getAvailableBalance(found)}
+      />
+    );
   };
 
   const allocations = createMemo(() => {

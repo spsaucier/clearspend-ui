@@ -19,6 +19,7 @@ import {
   canManageFunds,
   canManageUsers,
   canManageCards,
+  hasSomeManagerRole,
 } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
@@ -98,13 +99,7 @@ export default function Dashboard() {
             userPermissions={userPermissions()}
             onClick={setManageId}
           />
-          <Show
-            when={
-              canManageUsers(userPermissions()) ||
-              canManageFunds(userPermissions()) ||
-              canManageCards(userPermissions())
-            }
-          >
+          <Show when={canManageUsers(userPermissions()) || hasSomeManagerRole(currentUserRoles())}>
             <Dropdown
               id="add-new-dropdown"
               position="bottom-right"
@@ -115,23 +110,35 @@ export default function Dashboard() {
                       <Text message="Employee" />
                     </MenuItem>
                   ) : null}
-                  {canManageFunds(userPermissions()) ? (
-                    <MenuItem
-                      name="allocation"
-                      onClick={() =>
-                        navigate('/allocations/edit', { state: { parentAllocationId: currentAllocationId() } })
-                      }
-                    >
-                      <Text message="Allocation" />
-                    </MenuItem>
-                  ) : null}
-                  {canManageCards(userPermissions()) ? (
-                    <MenuItem
-                      name="card"
-                      onClick={() => navigate('/cards/edit', { state: { allocationId: currentAllocationId() } })}
-                    >
-                      <Text message="Card" />
-                    </MenuItem>
+                  {hasSomeManagerRole(currentUserRoles()) ? (
+                    <>
+                      <MenuItem
+                        name="allocation"
+                        onClick={() =>
+                          navigate(
+                            '/allocations/edit',
+                            canManageFunds(userPermissions())
+                              ? { state: { parentAllocationId: currentAllocationId() } }
+                              : undefined,
+                          )
+                        }
+                      >
+                        <Text message="Allocation" />
+                      </MenuItem>
+                      <MenuItem
+                        name="card"
+                        onClick={() =>
+                          navigate(
+                            '/cards/edit',
+                            canManageCards(userPermissions())
+                              ? { state: { allocationId: currentAllocationId() } }
+                              : undefined,
+                          )
+                        }
+                      >
+                        <Text message="Card" />
+                      </MenuItem>
+                    </>
                   ) : null}
                 </>
               }
