@@ -22,11 +22,11 @@ export function App() {
           ignore_dnt: true,
         },
       );
+      const isDeployedDev = (window as CSWindow).clearspend_env?.NODE_ENV === 'development';
       FS.init({
         orgId: 'o-19RE1Q-na1',
-        debug: (window as CSWindow).clearspend_env?.NODE_ENV === 'development',
-        // TODO: disable on dev/UAT after PoC
-        // devMode: !(window as CSWindow).clearspend_env, // devMode disables FullStory
+        // debug: isDeployedDev,
+        devMode: !(window as CSWindow).clearspend_env || isDeployedDev, // devMode disables FullStory
       });
     });
   }
