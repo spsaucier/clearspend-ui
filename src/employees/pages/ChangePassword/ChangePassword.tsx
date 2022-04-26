@@ -62,7 +62,6 @@ export default function ChangePassword() {
               name="password"
               type="password"
               value={values().current}
-              autoComplete="off"
               placeholder={String(i18n.t('Password'))}
               error={Boolean(errors().current)}
               onChange={handlers.current}
@@ -73,7 +72,7 @@ export default function ChangePassword() {
               name="new-password"
               type="password"
               value={values().password}
-              autoComplete="off"
+              autoComplete="chrome-off"
               placeholder={String(i18n.t('New password'))}
               error={Boolean(errors().password)}
               onChange={handlers.password}
@@ -84,7 +83,7 @@ export default function ChangePassword() {
               name="confirm-password"
               type="password"
               value={values().confirm}
-              autoComplete="off"
+              autoComplete="chrome-off"
               placeholder={String(i18n.t('Confirm new password'))}
               error={Boolean(errors().confirm)}
               onChange={handlers.confirm}

@@ -156,7 +156,7 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
             name={props.name ? `${props.name}-from` : undefined}
             data-name={props.name ? `${props.name}-from` : undefined}
             value={props.value[0] && i18n.formatDateTime(props.value[0] as Date, DateFormat.date)}
-            autocomplete="off"
+            autocomplete="chrome-off"
             disabled={props.disabled}
             onFocusIn={() => setOpen(true)}
             onKeyDown={onKeyDown}
@@ -167,7 +167,7 @@ export function SelectDateRange(props: Readonly<SelectDateRangeProps>) {
             name={props.name ? `${props.name}-to` : undefined}
             data-name={props.name ? `${props.name}-to` : undefined}
             value={props.value[1] && i18n.formatDateTime(props.value[1] as Date, DateFormat.date)}
-            autocomplete="off"
+            autocomplete="chrome-off"
             disabled={props.disabled}
             onKeyDown={onKeyDown}
           />

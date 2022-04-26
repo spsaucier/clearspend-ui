@@ -76,7 +76,7 @@ export function InputCode(props: Readonly<InputCodeProps>) {
             value={(props.value || '')[idx] || ''}
             maxLength={1}
             inputMode="numeric"
-            autoComplete="off"
+            autoComplete="chrome-off"
             error={props.error}
             disabled={props.disabled}
             class={css.input}

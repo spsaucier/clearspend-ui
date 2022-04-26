@@ -62,7 +62,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
             name="new-password"
             type="password"
             value={values().password}
-            autoComplete="off"
+            autoComplete="chrome-off"
             error={Boolean(errors().password)}
             class={css.input}
             onChange={handlers.password}
@@ -74,7 +74,7 @@ export function PasswordForm(props: Readonly<PasswordFormProps>) {
             name="confirm-password"
             type="password"
             value={values().confirm}
-            autoComplete="off"
+            autoComplete="chrome-off"
             error={Boolean(errors().confirm)}
             class={css.input}
             onChange={handlers.confirm}

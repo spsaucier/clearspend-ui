@@ -101,7 +101,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
         suffix={<Icon name="calendar" />}
         class={props.class}
         error={props.error}
-        autoComplete="off"
+        autoComplete="chrome-off"
         placeholder={props.placeholder ?? 'MM/DD/YYYY'}
         onClick={() => setOpen(true)}
         onFocusIn={() => setOpen(true)}
