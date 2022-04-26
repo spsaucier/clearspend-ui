@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { For, onCleanup, onMount } from 'solid-js';
+import { For, onCleanup, onMount, JSXElement, Show } from 'solid-js';
 
 import { join } from '_common/utils/join';
 
@@ -8,7 +8,7 @@ import css from './RotatingText.css';
 const RAND = 0.5;
 const MS_PER_SLIDE = 3500;
 
-export function RotatingText(props: { class?: string }) {
+export function RotatingText(props: { class?: string; initialMessage?: JSXElement }) {
   const textArr = [
     'Generating witty dialog',
     'The bits are breeding',
@@ -46,7 +46,9 @@ export function RotatingText(props: { class?: string }) {
   return (
     <div class={css.root} data-rotator>
       <div class={join(css.ellipsis, css.slide, props.class)} data-first data-show>
-        <Text message="Submitting & verifying your info" />
+        <Show when={!props.initialMessage} fallback={props.initialMessage}>
+          <Text message="Submitting & verifying your info" />
+        </Show>
       </div>
       <For each={textArr}>{(text) => <div class={join(css.ellipsis, css.slide, props.class)}>{text}</div>}</For>
     </div>

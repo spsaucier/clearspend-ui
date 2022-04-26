@@ -67,8 +67,7 @@ export default function Employees() {
           component={media.large ? EmployeesTable : EmployeesList}
           data={usersStore.data!}
           params={usersStore.params}
-          // TODO: CAP-1013 will enable us to let them navigate to card details screen again
-          onClick={(id: string) => (canManageUsers(permissions()) ? navigate(`/employees/view/${id}`) : null)}
+          onClick={(id: string) => navigate(`/employees/view/${id}`)}
           onCardClick={setCardID}
           onChangeParams={onPageSizeChange(usersStore.setParams, (size) =>
             storage.set(EMPLOYEES_PAGE_SIZE_STORAGE_KEY, size),

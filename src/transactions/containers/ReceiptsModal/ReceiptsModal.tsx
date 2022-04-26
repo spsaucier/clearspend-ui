@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { createMemo, For, Show, onMount } from 'solid-js';
 import { Text } from 'solid-i18n';
-import createSlider from 'solid-slider';
+import { createSlider } from 'solid-slider';
 import { Portal } from 'solid-js/web';
 
 import { Modal } from '_common/components/Modal';
@@ -49,7 +48,7 @@ export function ReceiptsModal(props: {
       props.onClose();
     } else {
       setTimeout(() => {
-        slider()?.destroy();
+        slider().destroy();
         create(ref);
       }, MS_FOR_SLIDE_TRANSITION);
     }
@@ -81,8 +80,8 @@ export function ReceiptsModal(props: {
               <For each={props.receipts}>
                 {(receipt) => (
                   <div class={css.keenSliderSlide}>
-                    <Show when={receipt.type === FileTypes.PDF} fallback={<img src={receipt?.uri} alt="Receipt" />}>
-                      <PdfView uri={receipt?.uri} />
+                    <Show when={receipt.type === FileTypes.PDF} fallback={<img src={receipt.uri} alt="Receipt" />}>
+                      <PdfView uri={receipt.uri} />
                     </Show>
                   </div>
                 )}

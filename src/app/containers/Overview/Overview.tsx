@@ -10,7 +10,7 @@ import { useMediaContext } from '_common/api/media/context';
 import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
-import { canManageFunds, canRead } from 'allocations/utils/permissions';
+import { canManageFunds, canRead, hasSomeManagerRole } from 'allocations/utils/permissions';
 
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpending } from '../../stores/spending';
@@ -42,7 +42,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
-  const { currentUser } = useBusiness();
+  const { currentUserRoles } = useBusiness();
 
   const initPeriod = searchParams.period || TimePeriod.year;
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
@@ -86,7 +86,10 @@ export function Overview(props: Readonly<OverviewProps>) {
         </TabList>
       </Show>
       <Show
-        when={showTopSpendingSection() && (currentUser().type === 'BUSINESS_OWNER' || canRead(props.userPermissions))}
+        when={
+          showTopSpendingSection() &&
+          (canRead(props.userPermissions) || (!allocationId() && hasSomeManagerRole(currentUserRoles())))
+        }
       >
         <div class={css.section}>
           <h3 class={css.title}>

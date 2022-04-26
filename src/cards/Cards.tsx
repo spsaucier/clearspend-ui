@@ -10,21 +10,19 @@ import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
-import { canManageCards, canManageUsers } from 'allocations/utils/permissions';
+import { canManageCards, hasSomeManagerRole } from 'allocations/utils/permissions';
 
 import { useBusiness } from '../app/containers/Main/context';
 
 import { CardsData } from './components/CardsData';
 import { CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_CARD_PARAMS } from './constants';
 import { useCards } from './stores/cards';
-import { CardPreview } from './containers/CardPreview/CardPreview';
 
 export default function Cards() {
   const navigate = useNavigate();
   const media = useMediaContext();
-  const { permissions } = useBusiness();
+  const { permissions, currentUserRoles } = useBusiness();
 
-  const [cardId, setCardId] = createSignal<string | null>(null);
   const [uid, setUID] = createSignal<string | null>(null);
   const cardsStore = useCards({
     params: extendPageSize(DEFAULT_CARD_PARAMS, storage.get(CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_PAGE_SIZE)),
@@ -34,7 +32,7 @@ export default function Cards() {
     <Page
       title={<Text message="Cards" />}
       actions={
-        <Show when={canManageCards(permissions())}>
+        <Show when={canManageCards(permissions()) || hasSomeManagerRole(currentUserRoles())}>
           <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/edit')}>
             <Text message="New Card" />
           </Button>
@@ -48,8 +46,7 @@ export default function Cards() {
         data={cardsStore.data}
         onReload={cardsStore.reload}
         params={cardsStore.params}
-        // TODO: CAP-1013 will enable us to let them navigate to card details screen again
-        onCardClick={(id) => (canManageUsers(permissions()) ? navigate(`/cards/view/${id}`) : setCardId(id))}
+        onCardClick={(id) => navigate(`/cards/view/${id}`)}
         onUserClick={setUID}
         onChangeParams={onPageSizeChange(cardsStore.setParams, (size) =>
           storage.set(CARDS_PAGE_SIZE_STORAGE_KEY, size),
@@ -62,9 +59,6 @@ export default function Cards() {
         noPadding={true}
       >
         <EmployeePreview uid={uid()!} />
-      </Drawer>
-      <Drawer open={Boolean(cardId())} title={<Text message="Card Details" />} onClose={() => setCardId(null)}>
-        <CardPreview cardID={cardId()!} />
       </Drawer>
     </Page>
   );
