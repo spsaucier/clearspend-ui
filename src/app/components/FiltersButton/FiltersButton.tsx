@@ -22,7 +22,7 @@ export function FiltersButton(props: Readonly<FiltersButtonProps>) {
   };
 
   return (
-    <Button view="ghost" disabled={props.disabled} onClick={props.onClick}>
+    <Button view="ghost" disabled={props.disabled} onClick={props.onClick} data-name="Filters">
       <span class={css.inner}>
         <span class={css.text}>
           <Show when={props.label} fallback={<Text message="Filters" />}>

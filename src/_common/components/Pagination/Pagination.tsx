@@ -45,6 +45,7 @@ export function Pagination(props: Readonly<PaginationProps>) {
           class={css.size}
           value={String(props.pageSize)}
           onChange={(val) => props.onChange(0, parseInt(val, 10))}
+          data-name="Items per page"
         >
           <Index each={PER_PAGE}>
             {(val) => (

@@ -14,10 +14,16 @@ interface FiltersControlsProps {
 export function FiltersControls(props: Readonly<FiltersControlsProps>) {
   return (
     <div class={join(css.root, props.class)}>
-      <Button view="ghost" onClick={props.onReset}>
+      <Button view="ghost" onClick={props.onReset} data-name="Reset filters">
         <Text message="Reset" />
       </Button>
-      <Button type="primary" htmlType="submit" class={css.confirm} onClick={props.onConfirm}>
+      <Button
+        type="primary"
+        htmlType="submit"
+        class={css.confirm}
+        onClick={props.onConfirm}
+        data-name="Confirm filters"
+      >
         <Text message="Confirm" />
       </Button>
     </div>

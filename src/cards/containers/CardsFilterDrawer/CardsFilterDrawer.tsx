@@ -42,6 +42,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               placeholder={String(i18n.t('Search by allocation name'))}
               valueRender={(id) => allocations.data!.find((item) => item.allocationId === id)?.name}
               onChange={handlers.allocations}
+              data-name="Pick Allocations"
             >
               <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
             </MultiSelect>

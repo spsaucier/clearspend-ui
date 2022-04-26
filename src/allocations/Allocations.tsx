@@ -113,6 +113,7 @@ export default function Allocations() {
                   onClick={() =>
                     navigate('/allocations/edit', { state: { parentAllocationId: current()?.allocationId } })
                   }
+                  data-name="Create allocation"
                 >
                   <Text message="New Allocation" />
                 </Button>
@@ -122,6 +123,7 @@ export default function Allocations() {
                   icon="add"
                   size="lg"
                   onClick={() => navigate('/cards/edit', { state: { allocationId: current()?.allocationId } })}
+                  data-name="Create card"
                 >
                   <Text message="New Card" />
                 </Button>

@@ -110,7 +110,11 @@ export function Overview(props: Readonly<OverviewProps>) {
           <Text message="Recent Activity" />
         </h3>
         <Dynamic
-          component={canManageFunds(props.userPermissions) ? Ledger : Transactions}
+          component={
+            canManageFunds(props.userPermissions) || (!allocationId() && hasSomeManagerRole(currentUserRoles()))
+              ? Ledger
+              : Transactions
+          }
           table={media.large}
           allocationId={allocationId()}
           dateRange={dateRangeToISO(getTimePeriod(period()))}

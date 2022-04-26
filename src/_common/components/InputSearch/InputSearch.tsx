@@ -25,5 +25,13 @@ export function InputSearch(props: Readonly<InputSearchProps>) {
 
   onCleanup(() => clearTimeout(timer));
 
-  return <Input {...props} value={search()} suffix={<Icon name="search" size="sm" />} onChange={onChange} />;
+  return (
+    <Input
+      {...props}
+      value={search()}
+      suffix={<Icon name="search" size="sm" />}
+      onChange={onChange}
+      data-name="Search"
+    />
+  );
 }
