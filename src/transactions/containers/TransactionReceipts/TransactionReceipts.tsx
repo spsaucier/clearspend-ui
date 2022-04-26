@@ -69,7 +69,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
       })
       .then((data) => {
         props.onUpdate(data);
-        if (typeof initialIdx !== 'undefined') {
+        if (typeof initialIdx() !== 'undefined') {
           setInitialIdx(0);
         }
         setDeletingId();
