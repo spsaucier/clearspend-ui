@@ -1,5 +1,5 @@
 import { Routes, Route } from 'solid-app-router';
-import { createEffect } from 'solid-js';
+import { onMount } from 'solid-js';
 import * as FS from '@fullstory/browser';
 import mixpanel from 'mixpanel-browser';
 
@@ -14,7 +14,7 @@ import { ResetPassword } from './pages/ResetPassword';
 
 export function App() {
   if (location.hostname !== 'localhost') {
-    createEffect(() => {
+    onMount(() => {
       mixpanel.init(
         (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',
         {
@@ -22,11 +22,9 @@ export function App() {
           ignore_dnt: true,
         },
       );
-      const isDeployedDev = (window as CSWindow).clearspend_env?.NODE_ENV === 'development';
       FS.init({
         orgId: 'o-19RE1Q-na1',
-        // debug: isDeployedDev,
-        devMode: !(window as CSWindow).clearspend_env || isDeployedDev, // devMode disables FullStory
+        devMode: location.hostname !== 'app.clearspend.com', // disables FullStory
       });
     });
   }
