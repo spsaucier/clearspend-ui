@@ -25,3 +25,19 @@
 .edit-button {
   margin-top: var(--pd-24);
 }
+
+.refresh-button {
+  margin: var(--pd-8) 0;
+}
+
+.refresh-button-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.refresh-button-container {
+  display: flex;
+  width: 320px;
+  flex-direction: row;
+  justify-content: end;
+}
