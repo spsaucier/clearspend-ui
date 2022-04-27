@@ -1,12 +1,12 @@
-import type { AccessibleAllocation } from 'allocations/types';
+import type { Allocation } from 'generated/capital';
 
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getParentsChain } from '../../utils/getParentsChain';
 
 export function getDefaultExpanded(
   currentID: string,
-  current: readonly Readonly<AccessibleAllocation>[],
-  items: readonly Readonly<AccessibleAllocation>[],
+  current: readonly Readonly<Allocation>[],
+  items: readonly Readonly<Allocation>[],
 ) {
   const currentAllocation = items.find(allocationWithID(currentID));
   const parents = getParentsChain(items, currentAllocation);

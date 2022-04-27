@@ -1,4 +1,4 @@
-import type { UserData, UpdateAllocationRequest, UserRolesAndPermissionsRecord, Allocation } from 'generated/capital';
+import type { UserData, UpdateAllocationRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 export type AllocationPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['allocationPermissions']>;
 
@@ -19,10 +19,6 @@ export enum LimitPeriod {
   DAILY = 'DAILY',
   MONTHLY = 'MONTHLY',
   INSTANT = 'INSTANT',
-}
-
-export interface AccessibleAllocation extends Allocation {
-  inaccessible?: boolean;
 }
 
 export interface Limit {

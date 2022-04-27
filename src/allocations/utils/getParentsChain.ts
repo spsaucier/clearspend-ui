@@ -1,12 +1,9 @@
 import type { Allocation } from 'generated/capital';
 
-import type { AccessibleAllocation } from '../types';
-
 import { allocationWithID } from './allocationWithID';
 
 interface Options {
   excludeRoot: boolean;
-  excludeInaccessible: boolean;
 }
 
 export function getParentsChain<T extends Allocation>(
@@ -23,7 +20,5 @@ export function getParentsChain<T extends Allocation>(
     next = item;
   }
 
-  return options?.excludeInaccessible
-    ? result.reverse().filter((item) => !(item as AccessibleAllocation).inaccessible)
-    : result.reverse();
+  return result.reverse();
 }

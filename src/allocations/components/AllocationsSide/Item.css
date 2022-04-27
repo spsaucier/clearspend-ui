@@ -6,7 +6,7 @@
   border-right: 3px solid transparent;
   transition: background-color 0.3s, border-right-color 0.3s;
 
-  &:hover:not(.active):not(.inaccessible) {
+  &:hover:not(.active) {
     color: var(--tw-black);
     background-color: var(--tw-gray-10);
     border-right-color: var(--tw-gray-10);
@@ -38,10 +38,6 @@
   @nest .active & {
     cursor: default;
   }
-
-  @nest .inaccessible & {
-    cursor: not-allowed;
-  }
 }
 
 .active {
@@ -49,10 +45,6 @@
   background-color: var(--tw-white);
   border-right-color: var(--tw-primary-border);
   cursor: default;
-}
-
-.inaccessible {
-  opacity: 0.4;
 }
 
 .icon {

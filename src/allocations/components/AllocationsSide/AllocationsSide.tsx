@@ -4,14 +4,13 @@ import { useI18n } from 'solid-i18n';
 
 import { InputSearch } from '_common/components/InputSearch';
 import { Divider } from '_common/components/Divider';
-import type { AccessibleAllocation } from 'allocations/types';
+import type { Allocation } from 'generated/capital';
 
 import { getRootAllocation } from '../../utils/getRootAllocation';
 import { useMediaContext } from '../../../_common/api/media/context';
 import { AllocationSelect } from '../AllocationSelect';
-import { byName } from '../AllocationSelect/utils';
 import { canManageCards } from '../../utils/permissions';
-import { Breadcrumbs } from '../Breadcrumbs';
+import { createSortedNestedArray, parentsChain } from '../AllocationSelect/utils';
 
 import { Item } from './Item';
 import { List } from './List';
@@ -20,9 +19,11 @@ import css from './AllocationsSide.css';
 
 interface AllocationsSideProps {
   currentID: string;
-  items: readonly Readonly<AccessibleAllocation>[] | null;
+  items: readonly Readonly<Allocation>[] | null;
   onAllocationChange: () => void;
 }
+
+const PX_INDENT = 15;
 
 export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
   const i18n = useI18n();
@@ -31,11 +32,17 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
 
   const [search, setSearch] = createSignal('');
   const root = createMemo(() => getRootAllocation(props.items));
-  const sortedItems = createMemo(() => (props.items ? [...props.items].sort(byName) : []));
 
   const found = createMemo(() => {
     const target = search().toLowerCase();
-    return target ? sortedItems().filter((item) => item.name.toLowerCase().includes(target)) : [];
+    return target && props.items ? props.items.filter((item) => item.name.toLowerCase().includes(target)) : [];
+  });
+
+  const allocations = createMemo(() => {
+    if (getRootAllocation(props.items)) {
+      return createSortedNestedArray(props.items);
+    }
+    return props.items?.map((a) => ({ ...a, nestLevel: parentsChain(a, [...props.items!]).length })) || [];
   });
 
   return (
@@ -67,14 +74,18 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
           <Show
             when={root()}
             fallback={
-              <For each={props.items}>
+              <For each={allocations()}>
                 {(item) => (
                   <Item
                     data={item}
                     active={props.currentID === item.allocationId}
                     class={css.item}
                     onClick={props.onAllocationChange}
-                    title={<Breadcrumbs current={item} items={props.items!} />}
+                    title={
+                      <span style={{ 'padding-left': `${PX_INDENT * Math.max(item.nestLevel - 1, 0)}px` }}>
+                        {item.name}
+                      </span>
+                    }
                   />
                 )}
               </For>
@@ -111,7 +122,7 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                   <List
                     currentID={props.currentID}
                     parentID={data.allocationId}
-                    items={sortedItems()}
+                    items={props.items!}
                     itemClass={css.item}
                     onSelect={props.onAllocationChange}
                   />

@@ -18,7 +18,7 @@ import type { UpdateAllocationRequest } from 'generated/capital';
 import { useMediaContext } from '_common/api/media/context';
 import { Tag } from '_common/components/Tag';
 
-import { byName } from './components/AllocationSelect/utils';
+import { byNameChain } from './components/AllocationSelect/utils';
 import { AllocationsSide } from './components/AllocationsSide';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
@@ -30,9 +30,7 @@ import { ManageBalanceButton } from './containers/ManageBalanceButton';
 import { ManageBalance } from './containers/ManageBalance';
 import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
-import { getFirstAccessibleAllocation } from './utils/getRootAllocation';
 import { allocationWithID } from './utils/allocationWithID';
-import { getAccessibleAllocations } from './utils/getAccessibleAllocations';
 import { getAllocationPermissions, canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
 import { getAllocation, updateAllocation } from './services';
 
@@ -57,14 +55,15 @@ export default function Allocations() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
   const allocations = useAllocations();
-  const accessibleAllocations = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
 
   const onAllocationChange = () => setTab(Tabs.cards, true);
 
+  const sortedItems = createMemo(() =>
+    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
+  );
+
   const current = createMemo(() => {
-    return params.id
-      ? allocations.data?.find(allocationWithID(params.id))
-      : getFirstAccessibleAllocation([...accessibleAllocations()].sort(byName));
+    return params.id ? sortedItems().find(allocationWithID(params.id)) : sortedItems()[0];
   });
 
   const [data, status, , setAllocationIdParam, reload, mutate] = useResource(getAllocation, undefined, false);
@@ -102,7 +101,7 @@ export default function Allocations() {
             <div class={css.actions}>
               <ManageBalanceButton
                 allocationId={current()!.allocationId}
-                allocations={accessibleAllocations()}
+                allocations={sortedItems()}
                 userPermissions={userPermissions()}
                 onClick={setManageId}
               />
@@ -133,7 +132,7 @@ export default function Allocations() {
           side={
             <AllocationsSide
               currentID={current()!.allocationId}
-              items={accessibleAllocations()}
+              items={sortedItems()}
               onAllocationChange={onAllocationChange}
             />
           }
@@ -187,7 +186,7 @@ export default function Allocations() {
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
             <ManageBalance
               allocationId={manageId()!}
-              allocations={accessibleAllocations()}
+              allocations={sortedItems()}
               onReload={allocations.reload}
               onClose={() => setManageId()}
             />

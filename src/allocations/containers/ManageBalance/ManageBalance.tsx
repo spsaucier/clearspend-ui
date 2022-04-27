@@ -21,7 +21,6 @@ import { targetById, ManageBalanceForm } from '../../components/ManageBalanceFor
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getParentsChain } from '../../utils/getParentsChain';
-import type { AccessibleAllocation } from '../../types';
 
 import css from './ManageBalance.css';
 
@@ -32,7 +31,7 @@ enum Tabs {
 
 interface ManageBalanceProps {
   allocationId: string;
-  allocations: readonly Readonly<AccessibleAllocation>[];
+  allocations: readonly Readonly<Allocation>[];
   onReload: () => Promise<unknown>;
   onClose: () => void;
 }
@@ -53,7 +52,7 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const targets = createMemo(() => {
     const allocation = current();
     return [
-      ...getParentsChain(props.allocations, allocation, { excludeInaccessible: true }),
+      ...getParentsChain(props.allocations, allocation),
       ...((!allocation.parentAllocationId && accounts()) || []),
     ];
   });

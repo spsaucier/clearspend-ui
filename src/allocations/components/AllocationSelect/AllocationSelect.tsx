@@ -10,8 +10,9 @@ import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 import { AllocationView } from '../AllocationView';
 import { useBusiness } from '../../../app/containers/Main/context';
 import { Breadcrumbs } from '../Breadcrumbs';
+import { getRootAllocation } from '../../utils/getRootAllocation';
 
-import { createSortedNestedArray } from './utils';
+import { createSortedNestedArray, parentsChain } from './utils';
 
 import css from './AllocationSelect.css';
 
@@ -48,12 +49,21 @@ export function AllocationSelect(props: Readonly<AllocationSelectProps>) {
     );
   };
 
+  const byPermissionsCheck = (a: Allocation) => {
+    const currentPermissions = currentUserRoles().find((r) => r.allocationId === a.allocationId);
+    if (!props.permissionCheck || !currentPermissions) return true;
+    return props.permissionCheck(currentPermissions);
+  };
+
   const allocations = createMemo(() => {
-    return createSortedNestedArray(props.items).filter((a) => {
-      const currentPermissions = currentUserRoles().find((r) => r.allocationId === a.allocationId);
-      if (!props.permissionCheck || !currentPermissions) return true;
-      return props.permissionCheck(currentPermissions);
-    });
+    if (getRootAllocation(props.items)) {
+      return createSortedNestedArray(props.items).filter(byPermissionsCheck);
+    }
+    return (
+      props.items
+        ?.map((a) => ({ ...a, nestLevel: parentsChain(a, [...props.items!]).length }))
+        .filter(byPermissionsCheck) || []
+    );
   });
 
   return (

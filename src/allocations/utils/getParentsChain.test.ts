@@ -1,9 +1,7 @@
 import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
 
-import type { Account } from 'generated/capital';
-
-import type { AccessibleAllocation } from '../types';
+import type { Account, Allocation } from 'generated/capital';
 
 import { getParentsChain } from './getParentsChain';
 
@@ -18,16 +16,15 @@ const ACCOUNT: Account = {
   ledgerBalance: {},
 };
 
-const ROOT: AccessibleAllocation = {
+const ROOT: Allocation = {
   allocationId: 'a',
   name: '',
   ownerId: '',
   account: ACCOUNT,
   childrenAllocationIds: ['b', 'd'],
-  inaccessible: true,
 };
 
-const B: AccessibleAllocation = {
+const B: Allocation = {
   allocationId: 'b',
   name: '',
   ownerId: '',
@@ -36,7 +33,7 @@ const B: AccessibleAllocation = {
   childrenAllocationIds: ['c'],
 };
 
-const C: AccessibleAllocation = {
+const C: Allocation = {
   allocationId: 'c',
   name: '',
   ownerId: '',
@@ -44,16 +41,15 @@ const C: AccessibleAllocation = {
   parentAllocationId: 'b',
 };
 
-const D: AccessibleAllocation = {
+const D: Allocation = {
   allocationId: 'd',
   name: '',
   ownerId: '',
   account: ACCOUNT,
   parentAllocationId: 'a',
-  inaccessible: true,
 };
 
-const ALLOCATIONS: readonly Readonly<AccessibleAllocation>[] = [ROOT, B, C, D];
+const ALLOCATIONS: readonly Readonly<Allocation>[] = [ROOT, B, C, D];
 
 test('it should return parents', () => {
   assert.equal(getParentsChain(ALLOCATIONS, undefined), []);
@@ -65,13 +61,6 @@ test('it should return parents', () => {
 
 test('it should return parents without root item', () => {
   const options = { excludeRoot: true };
-  assert.equal(getParentsChain(ALLOCATIONS, B, options), []);
-  assert.equal(getParentsChain(ALLOCATIONS, C, options), [B]);
-  assert.equal(getParentsChain(ALLOCATIONS, D, options), []);
-});
-
-test('it should return parents without inaccessible items', () => {
-  const options = { excludeInaccessible: true };
   assert.equal(getParentsChain(ALLOCATIONS, B, options), []);
   assert.equal(getParentsChain(ALLOCATIONS, C, options), [B]);
   assert.equal(getParentsChain(ALLOCATIONS, D, options), []);

@@ -23,9 +23,9 @@ import {
 } from 'allocations/utils/permissions';
 import { useCards } from 'cards/stores/cards';
 import { DEFAULT_CARD_PARAMS } from 'cards/constants';
-import { getAccessibleAllocations } from 'allocations/utils/getAccessibleAllocations';
 import { getTotalAvailableBalance } from 'allocations/utils/getTotalAvailableBalance';
 import { ALLOCATIONS_START_COUNT } from 'app/constants/common';
+import { byNameChain } from 'allocations/components/AllocationSelect/utils';
 
 import { Page } from '../../components/Page';
 import { Landing } from '../../containers/Landing';
@@ -45,20 +45,23 @@ export default function Dashboard() {
 
   const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
   const allocations = useAllocations({ initValue: [] });
-  const allocationItems = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
-  const accessibleAllocations = createMemo(() => allocationItems().filter((item) => !item.inaccessible));
 
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
-  const allocationCount = createMemo(() => allocationItems().length);
+
+  const sortedItems = createMemo(() =>
+    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
+  );
 
   const currentAllocationId = createMemo(() => {
     if (allocation() === ALL_ALLOCATIONS) {
-      return accessibleAllocations().length === 1
-        ? accessibleAllocations()[0]!.allocationId
-        : getRootAllocation(allocationItems())?.allocationId;
+      return sortedItems().length === 1
+        ? sortedItems()[0]!.allocationId
+        : getRootAllocation(sortedItems())?.allocationId;
     }
     return allocation();
   });
+
+  const allocationCount = createMemo(() => sortedItems().length);
 
   const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), currentAllocationId()));
 
@@ -67,7 +70,7 @@ export default function Dashboard() {
     setSearchParams({ allocation: id });
   };
 
-  const totalAllocationBalance = createMemo(() => getTotalAvailableBalance(accessibleAllocations()));
+  const totalAllocationBalance = createMemo(() => getTotalAvailableBalance(sortedItems()));
   const showAddBalance = createMemo(() => canManageFunds(permissions()) && totalAllocationBalance() === 0);
 
   return (
@@ -76,12 +79,12 @@ export default function Dashboard() {
       contentClass={css.content}
       extra={
         <Switch>
-          <Match when={accessibleAllocations().length === 1}>
-            <AllocationTag data={accessibleAllocations()[0]!} />
+          <Match when={sortedItems().length === 1}>
+            <AllocationTag data={sortedItems()[0]!} />
           </Match>
-          <Match when={accessibleAllocations().length}>
+          <Match when={sortedItems().length}>
             <AllocationSelect
-              items={allocationItems()}
+              items={sortedItems()}
               value={allocation()}
               class={css.allocations}
               onChange={onAllocationChange}
@@ -95,7 +98,7 @@ export default function Dashboard() {
         <div class={css.actions}>
           <ManageBalanceButton
             allocationId={currentAllocationId()!}
-            allocations={allocationItems()}
+            allocations={sortedItems()}
             userPermissions={userPermissions()}
             onClick={setManageId}
           />
@@ -158,7 +161,7 @@ export default function Dashboard() {
         <Match when={cardsStore.error}>
           <LoadingError onReload={cardsStore.reload} />
         </Match>
-        <Match when={(allocations.loading && !allocationItems().length) || (cardsStore.loading && !cardsStore.data)}>
+        <Match when={(allocations.loading && !sortedItems().length) || (cardsStore.loading && !cardsStore.data)}>
           <Loading />
         </Match>
         <Match when={!cardsCount()}>
@@ -172,7 +175,7 @@ export default function Dashboard() {
         <Match when={allocations.data}>
           <Overview
             allocationId={allocation()}
-            allocations={allocationItems()}
+            allocations={sortedItems()}
             userPermissions={userPermissions()}
             onAllocationChange={onAllocationChange}
           />
@@ -182,7 +185,7 @@ export default function Dashboard() {
         <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
           <ManageBalance
             allocationId={manageId()!}
-            allocations={allocationItems()}
+            allocations={sortedItems()}
             onReload={allocations.reload}
             onClose={() => setManageId()}
           />

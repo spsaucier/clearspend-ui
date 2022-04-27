@@ -4,13 +4,13 @@ import { NavLink } from 'solid-app-router';
 import { join } from '_common/utils/join';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
-import type { AccessibleAllocation } from 'allocations/types';
+import type { Allocation } from 'generated/capital';
 
 import css from './Item.css';
 
 interface ItemProps {
   root?: boolean;
-  data: Readonly<AccessibleAllocation>;
+  data: Readonly<Allocation>;
   active?: boolean;
   padding?: number;
   expanded?: boolean;
@@ -38,27 +38,17 @@ export function Item(props: Readonly<ItemProps>) {
         [css.small!]: Boolean(props.padding),
         [css.active!]: props.active,
         [css.expanded!]: props.expanded,
-        [css.inaccessible!]: props.data.inaccessible,
       }}
       style={{ 'padding-left': `${props.padding || 0}px` }}
     >
-      <Show
-        when={!props.data.inaccessible}
-        fallback={
-          <div class={css.item}>
-            <Title />
-          </div>
-        }
+      <NavLink
+        href={`/allocations/${props.data.allocationId}`}
+        class={css.item}
+        onClick={() => props.onClick(props.data.allocationId)}
       >
-        <NavLink
-          href={`/allocations/${props.data.allocationId}`}
-          class={css.item}
-          onClick={() => props.onClick(props.data.allocationId)}
-        >
-          <Title />
-        </NavLink>
-      </Show>
-      <Show when={props.hasChildren && !props.data.inaccessible}>
+        <Title />
+      </NavLink>
+      <Show when={props.hasChildren}>
         <Button
           view="ghost"
           icon={{ pos: 'left', name: 'chevron-right', class: css.moreIcon }}

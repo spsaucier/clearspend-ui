@@ -1,4 +1,5 @@
 import { AllocationRoles, AllocationUserRole } from 'allocations/types';
+import { getParentsChain } from 'allocations/utils/getParentsChain';
 import type { Allocation, User } from 'generated/capital';
 
 export interface AllocationWithChildNodes extends Allocation {
@@ -10,6 +11,17 @@ interface AllocationIndented extends Allocation {
 
 export const byName = (a: Allocation, b: Allocation) =>
   a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1;
+
+export const parentsChain = (allocation: Allocation, items: Allocation[]) => [
+  ...getParentsChain(items, allocation).map((a) => a.name),
+  allocation.name,
+];
+
+export const byNameChain = (a: Allocation, b: Allocation, items: Allocation[]) => {
+  const aChain = parentsChain(a, items);
+  const bChain = parentsChain(b, items);
+  return aChain.join('|').toLocaleLowerCase() > bChain.join('|').toLocaleLowerCase() ? 1 : -1;
+};
 
 export const byUserLastName = (a: User, b: User) =>
   (a.lastName || '').toLocaleLowerCase() > (b.lastName || '').toLocaleLowerCase() ? 1 : -1;

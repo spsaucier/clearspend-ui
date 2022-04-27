@@ -1,10 +1,9 @@
 import { Router } from 'solid-app-router';
 
-import { getAccessibleAllocations } from 'allocations/utils/getAccessibleAllocations';
-import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
-import { getFirstAccessibleAllocation, getRootAllocation } from 'allocations/utils/getRootAllocation';
+import type { Allocation } from 'generated/capital';
+import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 
-import { byName } from '../AllocationSelect/utils';
+import { byNameChain } from '../AllocationSelect/utils';
 
 import type { ListProps } from './List';
 import { List } from './List';
@@ -64,112 +63,10 @@ const allocations = [
 ];
 const root = getRootAllocation(allocations as unknown as Allocation[]);
 
-const multiManagerRoles = [
-  {
-    allocationId: '1d77bbeb-d765-43b8-a947-0d13e54cf871',
-    parentAllocationId: null,
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Employee',
-    inherited: false,
-    allocationPermissions: ['CATEGORIZE', 'LINK_RECEIPTS', 'VIEW_OWN'],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: '2587f140-93af-453a-904d-506eac12a53a',
-    parentAllocationId: '1d77bbeb-d765-43b8-a947-0d13e54cf871',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Employee',
-    inherited: true,
-    allocationPermissions: ['CATEGORIZE', 'LINK_RECEIPTS', 'VIEW_OWN'],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: '527b4e6c-a069-4d07-bd44-10fc04070f7d',
-    parentAllocationId: '1d77bbeb-d765-43b8-a947-0d13e54cf871',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Employee',
-    inherited: true,
-    allocationPermissions: ['CATEGORIZE', 'LINK_RECEIPTS', 'VIEW_OWN'],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: '7a2ed2cd-f517-428e-8b3e-bf7e13b1bb51',
-    parentAllocationId: '1d77bbeb-d765-43b8-a947-0d13e54cf871',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Employee',
-    inherited: true,
-    allocationPermissions: ['CATEGORIZE', 'LINK_RECEIPTS', 'VIEW_OWN'],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: 'aa469797-9b3b-46b5-8528-1312238c03d4',
-    parentAllocationId: '2587f140-93af-453a-904d-506eac12a53a',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Employee',
-    inherited: true,
-    allocationPermissions: ['CATEGORIZE', 'LINK_RECEIPTS', 'VIEW_OWN'],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: 'bdb01f17-5f1c-4e31-ad43-90fefb6e7954',
-    parentAllocationId: '527b4e6c-a069-4d07-bd44-10fc04070f7d',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Manager',
-    inherited: false,
-    allocationPermissions: [
-      'READ',
-      'CATEGORIZE',
-      'LINK_RECEIPTS',
-      'MANAGE_FUNDS',
-      'MANAGE_CARDS',
-      'MANAGE_PERMISSIONS',
-      'MANAGE_CONNECTIONS',
-      'VIEW_OWN',
-    ],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: 'c057f800-5920-4fda-a0db-14f7d3c454c4',
-    parentAllocationId: '2587f140-93af-453a-904d-506eac12a53a',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Manager',
-    inherited: false,
-    allocationPermissions: [
-      'READ',
-      'CATEGORIZE',
-      'LINK_RECEIPTS',
-      'MANAGE_FUNDS',
-      'MANAGE_CARDS',
-      'MANAGE_PERMISSIONS',
-      'MANAGE_CONNECTIONS',
-      'VIEW_OWN',
-    ],
-    globalUserPermissions: [],
-  },
-  {
-    allocationId: '88243a69-b24f-4695-a70e-9089ca0998ce',
-    parentAllocationId: 'bdb01f17-5f1c-4e31-ad43-90fefb6e7954',
-    user: { userId: '31551bd0-5f96-458e-9497-665f24ecdc84', type: 'EMPLOYEE', firstName: 'Multi', lastName: 'Manager' },
-    allocationRole: 'Manager',
-    inherited: true,
-    allocationPermissions: [
-      'READ',
-      'CATEGORIZE',
-      'LINK_RECEIPTS',
-      'MANAGE_FUNDS',
-      'MANAGE_CARDS',
-      'MANAGE_PERMISSIONS',
-      'MANAGE_CONNECTIONS',
-      'VIEW_OWN',
-    ],
-    globalUserPermissions: [],
-  },
-];
-const multiManagerAccessibleAllocations = getAccessibleAllocations(
-  allocations as unknown as Allocation[],
-  multiManagerRoles as UserRolesAndPermissionsRecord[],
+const multiManagerAccessibleAllocations = [...(allocations as unknown as Allocation[])].sort((a, b) =>
+  byNameChain(a, b, [...multiManagerAccessibleAllocations]),
 );
-const multiManagerCurrent = getFirstAccessibleAllocation([...multiManagerAccessibleAllocations].sort(byName));
+const multiManagerCurrent = multiManagerAccessibleAllocations[0];
 
 const argSets = {
   'Multi-Allocation Manager': {

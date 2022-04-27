@@ -14,11 +14,11 @@ import { useUsersList } from 'employees/stores/usersList';
 import type { CreateAllocationRequest, CreateUserRequest } from 'generated/capital';
 import { useBusiness } from 'app/containers/Main/context';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { byNameChain } from 'allocations/components/AllocationSelect/utils';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
 import { saveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
 import { useAllocations } from '../../stores/allocations';
-import { getAccessibleAllocations } from '../../utils/getAccessibleAllocations';
 import type { AllocationUserRole } from '../../types';
 
 export default function AllocationEdit() {
@@ -27,11 +27,13 @@ export default function AllocationEdit() {
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
 
-  const { currentUserRoles, reloadPermissions } = useBusiness();
+  const { reloadPermissions } = useBusiness();
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
   const allocations = useAllocations({ initValue: [] });
-  const allocationItems = createMemo(() => getAccessibleAllocations(allocations.data, currentUserRoles()));
+  const sortedItems = createMemo(() =>
+    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
+  );
 
   const [parentRoles, rolesStatus, params, setRolesId, reloadRoles, mutateRoles] = useResource(
     getAllocationRoles,
@@ -122,7 +124,7 @@ export default function AllocationEdit() {
           <EditAllocationForm
             users={users.data!}
             mccCategories={mcc.data!}
-            allocations={allocationItems()}
+            allocations={sortedItems()}
             parentRoles={parentRoles() ?? []}
             onChangeParent={onChangeParent}
             onAddEmployee={onAddEmployee}
