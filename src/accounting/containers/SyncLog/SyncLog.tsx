@@ -11,7 +11,7 @@ export function SyncLog() {
   });
   return (
     <div>
-      <Text message="Audit Log" />
+      <Text message="Audit History" />
       <SyncLogTable syncLogs={syncLogs()} />
     </div>
   );

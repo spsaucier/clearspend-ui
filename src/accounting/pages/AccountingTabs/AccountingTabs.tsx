@@ -100,7 +100,7 @@ export function AccountingTabs() {
             <Text message="Sync Transactions" />
           </Tab>
           <Tab value={Tabs.log}>
-            <Text message="Audit Log" />
+            <Text message="Audit History" />
           </Tab>
           <Tab value={Tabs.settings}>
             <Text message="Settings" />
