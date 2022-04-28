@@ -128,10 +128,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     }
   };
 
-  const onClickSync = () => {
+  const onClickSync = async () => {
     if (props.selectedTransactions && props.selectedTransactions.length > 0) {
       onSyncMultiple();
     } else {
+      const res = await getSyncableTransactionCount();
+      if (res.count) {
+        setSyncableCount(res.count);
+      }
       setSyncConfirmationOpen(true);
     }
   };
