@@ -2046,10 +2046,16 @@ export interface ConvertBusinessProspectResponse {
 }
 
 export interface OwnersProvidedRequest {
-  /** No other owners to provide */
+  /**
+   * No other owners to provide
+   * If this will be set to true, will send to stripe info that we have no owner to provide.
+   */
   noOtherOwnersToProvide?: boolean;
 
-  /** No executive to provide */
+  /**
+   * No executive to provide
+   * If this will be set to true, will send to stripe info that we have no executive to provide.
+   */
   noExecutiveToProvide?: boolean;
 }
 
@@ -3294,6 +3300,18 @@ export interface UpdateAccountActivityRequest {
   expenseCategoryId?: string;
 }
 
+export interface TermsAndConditionsResponse {
+  /** @format uuid */
+  userId?: string;
+
+  /** @format date-time */
+  acceptedTimestampByUser?: string;
+  isAcceptedTermsAndConditions?: boolean;
+
+  /** @format date-time */
+  documentTimestamp?: string;
+}
+
 export interface UpdateCardRequest {
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
@@ -3859,18 +3877,6 @@ export interface UserRolesAndPermissionsRecord {
     | 'CUSTOMER_SERVICE_MANAGER'
     | 'APPLICATION'
   )[];
-}
-
-export interface TermsAndConditionsResponse {
-  /** @format uuid */
-  userId?: string;
-
-  /** @format date-time */
-  acceptedTimestampByUser?: string;
-  isAcceptedTermsAndConditions?: boolean;
-
-  /** @format date-time */
-  documentTimestamp?: string;
 }
 
 export interface AllocationsAndPermissionsResponse {

@@ -53,8 +53,6 @@ export function CompanyProfile() {
           <span class={css.dataLabel}>
             <Text message="Corporate phone number" />:
           </span>
-          <span class={css.dataValue}>{formatPhone(business().businessPhone)}</span>
-          <CopyButton value={formatPhone(business().businessPhone)} class={css.copy} />
           <span class={join(css.dataValue, 'fs-mask')}>{formatPhone(business().businessPhone)}</span>
           <CopyButton value={formatPhone(business().businessPhone)} class={css.copy} />
         </DataRow>
