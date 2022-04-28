@@ -30,6 +30,8 @@ import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { TransactionReceipts } from '../TransactionReceipts';
+import { hasSomeManagerRole } from '../../../allocations/utils/permissions';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './TransactionPreview.css';
 
@@ -45,6 +47,40 @@ interface TransactionPreviewProps {
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onReport: () => void;
 }
+
+const AllocationCard = (props: { allocationName?: string }) => {
+  if (!props.allocationName) return null;
+
+  const { currentUserRoles } = useBusiness();
+  if (!hasSomeManagerRole(currentUserRoles())) {
+    return (
+      <>
+        <h4 class={css.title}>
+          <Text message="Allocation" />
+        </h4>
+        <AccountCard icon="allocations" title={props.allocationName} />
+      </>
+    );
+  }
+
+  const navigate = useNavigate();
+  const allocations = useAllocations({ initValue: [] });
+  // TODO: Replace accountName with allocationId after CAP-721
+  const allocation = createMemo(() => allocations.data?.find((item) => item.name === props.allocationName));
+  return (
+    <Show when={allocation()}>
+      <h4 class={css.title}>
+        <Text message="Allocation" />
+      </h4>
+      <AccountCard
+        icon="allocations"
+        title={allocation()!.name}
+        text={formatCurrency(getAvailableBalance(allocation()!))}
+        onClick={() => navigate(`/allocations/${allocation()!.allocationId}`)}
+      />
+    </Show>
+  );
+};
 
 export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   const i18n = useI18n();
@@ -66,10 +102,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       currency: transaction().merchant?.amount?.currency,
     });
   });
-
-  const allocations = useAllocations({ initValue: [] });
-  // TODO: Replace accountName with allocationId after CAP-721
-  const allocation = createMemo(() => allocations.data!.find((item) => item.name === transaction().accountName));
 
   const [note, setNote] = createSignal<string>();
   const notes = createMemo(() => transaction().notes || note());
@@ -356,17 +388,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             onClick={() => navigate(`/cards/view/${transaction().card?.cardId}`)}
           />
         </Show>
-        <Show when={allocation()}>
-          <h4 class={css.title}>
-            <Text message="Allocation" />
-          </h4>
-          <AccountCard
-            icon="allocations"
-            title={allocation()!.name}
-            text={formatCurrency(getAvailableBalance(allocation()!))}
-            onClick={() => navigate(`/allocations/${allocation()!.allocationId}`)}
-          />
-        </Show>
+        <AllocationCard allocationName={transaction().accountName} />
         <Show when={transaction().merchant}>
           <h4 class={css.title}>
             <Text message="Merchant" />

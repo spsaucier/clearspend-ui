@@ -8,8 +8,6 @@ import { TabList, Tab } from '_common/components/Tabs';
 import { Data } from 'app/components/Data';
 import { useBusiness } from 'app/containers/Main/context';
 import { getAccountActivity } from 'app/services/activity';
-import { useAllocations } from 'allocations/stores/allocations';
-import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { getUser } from 'employees/services';
 import type { CardType } from 'cards/types';
 import { TransactionsList } from 'transactions/components/TransactionsList';
@@ -36,7 +34,6 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
   const [tab, setTab] = createSignal(Tabs.transactions);
 
   const { currentUser } = useBusiness();
-  const allocations = useAllocations();
   const [data, getCardRequestStatus, , , reload] = useResource(getCard, props.cardID);
   const [user, , , setUserID] = useResource(getUser, undefined, false);
 
@@ -52,8 +49,6 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
     setUserID(cardData.userId!);
     setActivityParams((prev) => ({ ...prev, cardId: cardData.cardId }));
   });
-
-  const allocation = createMemo(() => allocations.data?.find(allocationWithID(card()?.allocationId)));
 
   const showActivate = createMemo(() => {
     const cardData = card();
@@ -103,8 +98,8 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
               <CardInfo
                 limits={data()?.limits}
                 user={user()}
-                allocation={allocation()!}
-                allocations={allocations.data!}
+                cardData={data()}
+                allocationId={data()?.card.allocationId}
               />
             </Match>
           </Switch>

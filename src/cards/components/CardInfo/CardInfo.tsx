@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { Link } from 'solid-app-router';
 
@@ -7,23 +7,52 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
-import type { Allocation, CurrencyLimit, User } from 'generated/capital';
+import type { Allocation, CardDetailsResponse, CurrencyLimit, User } from 'generated/capital';
+import { useAllocations } from 'allocations/stores/allocations';
+import type { Store } from '_common/utils/store';
 
 import { BalanceInfo } from '../BalanceInfo';
+import { hasSomeManagerRole } from '../../../allocations/utils/permissions';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './CardInfo.css';
 
 interface CardInfoProps {
   limits?: CurrencyLimit[];
+  cardData: CardDetailsResponse | null;
   user: Readonly<User | null>;
-  allocation: Readonly<Allocation>;
-  allocations: readonly Readonly<Allocation>[];
+  allocationId: string | undefined;
   class?: string;
 }
 
 export function CardInfo(props: Readonly<CardInfoProps>) {
+  const { currentUserRoles } = useBusiness();
   const limits = props.limits?.[0]?.typeMap.PURCHASE;
+
+  let allocations: Store<readonly Readonly<Allocation>[], unknown> = {
+      data: null,
+      loading: false,
+      error: undefined,
+      params: undefined,
+      reload: function (): Promise<unknown> {
+        throw new Error('Function not implemented.');
+      },
+      setData: function (): void {
+        throw new Error('Function not implemented.');
+      },
+      setParams: function (): void {
+        throw new Error('Function not implemented.');
+      },
+    },
+    allocation;
+  if (hasSomeManagerRole(currentUserRoles())) {
+    allocations = useAllocations();
+    if (allocations.data) {
+      allocation = createMemo(
+        () => allocations.data?.find(allocationWithID(props.allocationId)) as Allocation | undefined,
+      );
+    }
+  }
   return (
     <div class={join(css.root, props.class)}>
       <div class={css.item}>
@@ -31,7 +60,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <Text message="Available Balance" />
         </h4>
         <div class={css.value}>
-          <strong>{formatCurrency(getAvailableBalance(props.allocation))}</strong>
+          <strong>{formatCurrency(props.cardData?.availableBalance.amount || 0)}</strong>
           <BalanceInfo />
         </div>
         <div class={css.note}>
@@ -60,28 +89,37 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
         <h4 class={css.title}>
           <Text message="Allocation" />
         </h4>
-        <Link class={css.value} href={`/allocations/${props.allocation.allocationId}`}>
-          <strong class={css.name}>{props.allocation.name}</strong>
-          <Icon name="chevron-right" class={css.chevron} />
-        </Link>
-        <Show when={props.allocation.parentAllocationId}>
-          <span class={css.note}>
-            {props.allocations.find(allocationWithID(props.allocation.parentAllocationId))?.name}
-          </span>
+        <Show
+          when={allocation?.()}
+          fallback={
+            <div class={css.value}>
+              <strong class={css.name}>{props.cardData?.allocationName}</strong>
+            </div>
+          }
+        >
+          <>
+            <Link class={css.value} href={`/allocations/${props.allocationId}`}>
+              <strong class={css.name}>{allocation?.()?.name}</strong>
+              <Icon name="chevron-right" class={css.chevron} />
+            </Link>
+            <Show when={allocation?.()?.parentAllocationId}>
+              <span class={css.note}>
+                {allocations.data?.find(allocationWithID(allocation?.()?.parentAllocationId))?.name}
+              </span>
+            </Show>
+          </>
         </Show>
       </div>
-      <Show when={props.user}>
-        <div class={css.item}>
-          <h4 class={css.title}>
-            <Text message="Employee" />
-          </h4>
-          <Link class={css.value} href={`/employees/view/${props.user?.userId}`}>
-            <strong class={css.name}>{formatName(props.user!)}</strong>
-            <Icon name="chevron-right" class={css.chevron} />
-          </Link>
-          <span class={join(css.note, 'fs-mask')}>{props.user?.email}</span>
-        </div>
-      </Show>
+      <div class={css.item}>
+        <h4 class={css.title}>
+          <Text message="Employee" />
+        </h4>
+        <Link class={css.value} href={`/employees/view/${props.user?.userId}`}>
+          <strong class={css.name}>{formatName(props.user!)}</strong>
+          <Icon name="chevron-right" class={css.chevron} />
+        </Link>
+        <span class={join(css.note, 'fs-mask')}>{props.user?.email}</span>
+      </div>
     </div>
   );
 }

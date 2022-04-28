@@ -14,11 +14,9 @@ import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import { CardControls } from 'allocations/containers/CardControls';
-import { useAllocations } from 'allocations/stores/allocations';
-import { allocationWithID } from 'allocations/utils/allocationWithID';
 import { getAllocationPermissions, canManagePermissions } from 'allocations/utils/permissions';
 import { getUser } from 'employees/services';
-import type { Allocation, UpdateCardRequest } from 'generated/capital';
+import type { UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
 import { canActivateCard } from 'cards/utils/canActivateCard';
@@ -53,7 +51,6 @@ export default function CardView() {
   const [showDetails, setShowDetails] = createSignal(false);
 
   const { currentUser, currentUserRoles } = useBusiness();
-  const allocations = useAllocations();
 
   const [data, status, , , reload, mutate] = useResource(getCard, params.id);
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
@@ -67,10 +64,6 @@ export default function CardView() {
       setUserID(cardData.userId!);
     }
   });
-
-  const allocation = createMemo(
-    () => allocations.data?.find(allocationWithID(card()?.allocationId)) as Allocation | undefined,
-  );
 
   const onChangeStatus = (cardId: string, block: boolean) => {
     return (block ? blockCard(cardId) : unblockCard(cardId)).then(() => reload());
@@ -88,22 +81,24 @@ export default function CardView() {
     setShowDetails(!showDetails());
   };
 
-  const CardInfoBlock = () => (
-    <Data
-      data={allocation() && user()}
-      loading={allocations.loading || uStatus().loading}
-      error={allocations.error || uStatus().error}
-      onReload={() => Promise.all([allocations.reload(), reloadUser()]).catch(getNoop())}
-    >
-      <CardInfo
-        user={user()!}
-        allocation={allocation()!}
-        allocations={allocations.data!}
-        class={css.info}
-        limits={data()?.limits}
-      />
-    </Data>
-  );
+  const CardInfoBlock = () => {
+    return (
+      <Data
+        data={user()}
+        loading={uStatus().loading}
+        error={uStatus().error}
+        onReload={() => Promise.all([reloadUser()]).catch(getNoop())}
+      >
+        <CardInfo
+          user={user()}
+          cardData={data()}
+          allocationId={card()?.allocationId}
+          class={css.info}
+          limits={data()?.limits}
+        />
+      </Data>
+    );
+  };
 
   return (
     <Page
