@@ -17,6 +17,8 @@ export const ACTIVITY_TYPES: readonly TransactionType[] = [
   'CARD_FUND_RETURN',
 ];
 
+export const ACCOUNTING_ACTIVITY_TYPES: readonly TransactionType[] = ['NETWORK_CAPTURE'];
+
 export const LEDGER_TYPES: readonly LedgerActivityType[] = [
   'BANK_DEPOSIT_STRIPE',
   'BANK_DEPOSIT_ACH',
@@ -32,6 +34,11 @@ export const LEDGER_TYPES: readonly LedgerActivityType[] = [
 export const DEFAULT_TRANSACTIONS_PARAMS: Readonly<AccountActivityRequest> = {
   pageRequest: { ...DEFAULT_PAGE_REQUEST },
   types: [...ACTIVITY_TYPES],
+};
+
+export const ACCOUNTING_TRANSACTIONS_PARAMS: Readonly<AccountActivityRequest> = {
+  pageRequest: { ...DEFAULT_PAGE_REQUEST },
+  types: [...ACCOUNTING_ACTIVITY_TYPES],
 };
 
 export const DEFAULT_LEDGER_PARAMS: Readonly<LedgerActivityRequest> = {
