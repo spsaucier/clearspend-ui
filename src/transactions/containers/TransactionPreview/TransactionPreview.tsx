@@ -20,7 +20,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
-import { syncTransaction } from 'accounting/services';
+import { syncTransaction, unlockTransaction } from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 
 import { DeclineReason } from '../../components/DeclineReason';
@@ -162,10 +162,10 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     });
   };
 
-  const [, setUnsyncingTransaction] = wrapAction(syncTransaction);
-  const onUnsyncTransaction = () => {
+  const [, setUnlockingTransaction] = wrapAction(unlockTransaction);
+  const onUnlockTransaction = () => {
     props.onUpdate({ ...transaction(), syncStatus: 'READY' });
-    setUnsyncingTransaction(transaction().accountActivityId!).catch(() => {
+    setUnlockingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
@@ -181,7 +181,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const onUnlock = () => {
     setUnlockSyncConfirmationOpen(false);
-    onUnsyncTransaction();
+    onUnlockTransaction();
   };
 
   return (
@@ -319,6 +319,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <SelectExpenseCategory
               icon="search"
               value={expenseCategory()}
+              categoryName={transaction().expenseDetails?.categoryName}
               items={activeCategories()}
               placeholder={String(i18n.t('Assign a category'))}
               error={!categoryIsActive(expenseCategory())}

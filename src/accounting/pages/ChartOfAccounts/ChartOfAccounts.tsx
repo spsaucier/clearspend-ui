@@ -76,6 +76,7 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
             setShowRoadblock={setShowRoadblock}
             setUnselectedCategories={setUnselectedCategories}
             setRoadblockRequestParameters={setRoadblockRequestParameters}
+            showDeleted={false}
           />
         </Page>
       </Match>

@@ -62,7 +62,10 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     try {
       await Promise.all([
         deleteCompanyConnection(),
-        transactionData.map((item) => setActivityExpenseCategory(item.accountActivityId!, null, item.notes || '')),
+        transactionData.forEach((item) => {
+          if (item.syncStatus !== 'SYNCED_LOCKED')
+            setActivityExpenseCategory(item.accountActivityId!, null, item.notes || '');
+        }),
       ]);
       messages.success({
         title: i18n.t('Success'),

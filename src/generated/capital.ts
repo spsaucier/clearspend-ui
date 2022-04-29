@@ -1896,9 +1896,6 @@ export interface Allocation {
   /** @format uuid */
   allocationId: string;
   name: string;
-
-  /** @format uuid */
-  ownerId: string;
   account: Account;
 
   /** @format uuid */
@@ -2183,6 +2180,7 @@ export interface BusinessNotificationData {
 export interface TwoFactorStartLoggedInResponse {
   twoFactorId?: string;
   methodId?: string;
+  trustChallenge?: string;
 }
 
 export interface DeviceInfo {
@@ -2299,9 +2297,11 @@ export interface ForgotPasswordRequest {
 }
 
 export interface ChangePasswordRequest {
-  username?: string;
   currentPassword?: string;
   newPassword?: string;
+  trustChallenge?: string;
+  twoFactorId?: string;
+  twoFactorCode?: string;
 }
 
 export interface ChangePasswordResponse {
@@ -2321,9 +2321,6 @@ export interface CreateAllocationRequest {
    * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
    */
   parentAllocationId: string;
-
-  /** @format uuid */
-  ownerId: string;
   amount: Amount;
   limits: CurrencyLimit[];
   disabledMccGroups: (
@@ -3743,9 +3740,6 @@ export interface UpdateAllocationRequest {
    * @example 48104ecb-1343-4cc1-b6f2-e6cc88e9a80f
    */
   parentAllocationId?: string;
-
-  /** @format uuid */
-  ownerId?: string;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
     | 'CHILD_CARE'
@@ -3769,7 +3763,6 @@ export interface UpdateAllocationRequest {
 
 export interface AllocationDetailsResponse {
   allocation?: Allocation;
-  owner?: UserData;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
     | 'CHILD_CARE'
@@ -3868,6 +3861,7 @@ export interface UserRolesAndPermissionsRecord {
     | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
     | 'LINK_BANK_ACCOUNTS'
+    | 'MANAGE_CATEGORIES'
   )[];
   globalUserPermissions?: (
     | 'BATCH_ONBOARD'
@@ -3910,19 +3904,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4172,9 +4158,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4794,6 +4788,7 @@ export interface AllocationRolePermissionRecord {
     | 'MANAGE_CONNECTIONS'
     | 'VIEW_OWN'
     | 'LINK_BANK_ACCOUNTS'
+    | 'MANAGE_CATEGORIES'
   )[];
 }
 

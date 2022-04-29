@@ -27,6 +27,11 @@ export async function syncTransaction(transactionId: string) {
   return (await service.post<Readonly<SyncTransactionResponse>>(`/codat/sync/${transactionId}`)).data;
 }
 
+export async function unlockTransaction(transactionId: string) {
+  return (await service.post<Readonly<SyncTransactionResponse>>(`/users/account-activity/${transactionId}/unlock`))
+    .data;
+}
+
 export async function syncMultipleTransactions(transactionIds: string[]) {
   return (await service.post<Readonly<SyncTransactionResponse[]>>(`/codat/sync`, transactionIds)).data;
 }
