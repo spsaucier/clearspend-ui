@@ -28,7 +28,6 @@ export function getFormOptions(categories: readonly Readonly<MccGroup>[], parent
 }
 
 export function convertFormData(
-  ownerId: string,
   data: Readonly<FormValues>,
   categories: readonly Readonly<MccGroup>[],
 ): Readonly<CreateAllocationRequest> {
@@ -36,7 +35,6 @@ export function convertFormData(
     name: data.name,
     amount: { currency: 'USD', amount: parseAmount(data.amount) },
     parentAllocationId: data.parent,
-    ownerId,
     ...convertFormLimits(data, categories),
   };
 }

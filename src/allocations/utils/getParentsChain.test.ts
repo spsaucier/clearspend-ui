@@ -19,7 +19,6 @@ const ACCOUNT: Account = {
 const ROOT: Allocation = {
   allocationId: 'a',
   name: '',
-  ownerId: '',
   account: ACCOUNT,
   childrenAllocationIds: ['b', 'd'],
 };
@@ -27,7 +26,6 @@ const ROOT: Allocation = {
 const B: Allocation = {
   allocationId: 'b',
   name: '',
-  ownerId: '',
   account: ACCOUNT,
   parentAllocationId: 'a',
   childrenAllocationIds: ['c'],
@@ -36,7 +34,6 @@ const B: Allocation = {
 const C: Allocation = {
   allocationId: 'c',
   name: '',
-  ownerId: '',
   account: ACCOUNT,
   parentAllocationId: 'b',
 };
@@ -44,7 +41,6 @@ const C: Allocation = {
 const D: Allocation = {
   allocationId: 'd',
   name: '',
-  ownerId: '',
   account: ACCOUNT,
   parentAllocationId: 'a',
 };

@@ -24,7 +24,7 @@ export default function SetPassword() {
 
   const onPasswordUpdate = async (newPassword: string) => {
     const { username, password, changePasswordId } = state as LocationState;
-    await changePasswordById(changePasswordId, { username, currentPassword: password, newPassword });
+    await changePasswordById(changePasswordId, { currentPassword: password, newPassword });
     const user = await login(username, newPassword);
     onSuccessLogin({ user, navigate, overridePath: state?.returnUrl });
     messages.success({

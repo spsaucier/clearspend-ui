@@ -8,7 +8,6 @@ import { Option, Select } from '_common/components/Select';
 import { Drawer } from '_common/components/Drawer';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
-import { useBusiness } from 'app/containers/Main/context';
 import { PageActions } from 'app/components/Page';
 import { EditEmployeeFlatForm } from 'employees/components/EditEmployeeFlatForm';
 import { NewEmployeeButton } from 'employees/components/SelectEmployee';
@@ -56,7 +55,6 @@ interface EditAllocationFormProps {
 export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
-  const { currentUser } = useBusiness();
 
   const [loading, save] = wrapAction(props.onSave);
 
@@ -107,7 +105,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
 
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
-    await save(convertFormData(currentUser().userId, values(), props.mccCategories), [
+    await save(convertFormData(values(), props.mccCategories), [
       ...localUserRoles(),
       ...parentChangedUserRoles(),
     ]).catch(() => {

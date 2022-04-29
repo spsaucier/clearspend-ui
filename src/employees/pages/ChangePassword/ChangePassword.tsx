@@ -9,7 +9,6 @@ import { Page, PageActions } from 'app/components/Page';
 import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { minLength, samePassword } from 'signup/components/PasswordForm/rules';
-import { useBusiness } from 'app/containers/Main/context';
 import { changePassword } from 'app/services/auth';
 
 import css from './ChangePassword.css';
@@ -24,7 +23,6 @@ export default function ChangePassword() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
-  const { currentUser } = useBusiness();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { current: '', password: '', confirm: '' },
@@ -36,7 +34,6 @@ export default function ChangePassword() {
 
     try {
       await changePassword({
-        username: currentUser().email,
         currentPassword: values().current,
         newPassword: values().password,
       });

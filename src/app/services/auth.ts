@@ -46,11 +46,11 @@ export async function resetPassword(params: ResetPasswordRequest) {
   return resetResponse.data;
 }
 
-export async function changePassword(params: Readonly<Required<ChangePasswordRequest>>) {
+export async function changePassword(params: Readonly<ChangePasswordRequest>) {
   await service.post('/authentication/change-password', params);
 }
 
-export async function changePasswordById(changePasswordId: string, params: Readonly<Required<ChangePasswordRequest>>) {
+export async function changePasswordById(changePasswordId: string, params: Readonly<ChangePasswordRequest>) {
   return (
     await service.post<Readonly<ChangePasswordResponse>>(`/authentication/change-password/${changePasswordId}`, params)
   ).data;
