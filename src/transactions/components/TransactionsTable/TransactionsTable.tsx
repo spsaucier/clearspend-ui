@@ -47,13 +47,13 @@ interface TransactionsTableProps {
   dateRange?: Readonly<DateRange>;
   onCardClick?: (id: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  onDeselectTransaction?: (id: string) => void;
+  onDeselectTransaction?: (id?: string) => void;
   onReload: () => Promise<unknown>;
   onRowClick: (activityId: string) => void;
   onSelectTransaction?: (id: string) => void;
-  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
+  onUpdateTransaction: (transactionData: Readonly<AccountActivityResponse[]>) => void;
   params: Readonly<AccountActivityRequest>;
-  selectedTransactions?: string[];
+  selectedTransactions: string[];
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;
   showUserFilter?: boolean;
@@ -64,6 +64,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const messages = useMessages();
 
   const [syncConfirmationOpen, setSyncConfirmationOpen] = createSignal(false);
+  const [syncBeingInitialized, setSyncBeingInitialized] = createSignal(false);
   const [syncableCount, setSyncableCount] = createSignal(0);
   const [exporting, exportData] = wrapAction(exportAccountActivity);
 
@@ -74,8 +75,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     }
   });
 
-  const transactionsSelected = createMemo(() => {
-    return props.selectedTransactions && props.selectedTransactions.length > 0;
+  const hasSelectedTransactions = createMemo(() => {
+    return props.selectedTransactions.length > 0;
+  });
+
+  const hasSelectableTransactions = createMemo(() => {
+    return !!props.data.content?.find((t) => t.syncStatus === 'READY');
   });
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
@@ -99,45 +104,54 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     );
   };
 
-  const onSyncMultiple = () => {
-    setSyncConfirmationOpen(false);
-    if (props.selectedTransactions && props.selectedTransactions.length > 0) {
-      syncMultipleTransactions(props.selectedTransactions);
-      const selectedTransactionRecords = props.data.content?.filter(
-        (transaction) =>
-          transaction.accountActivityId &&
-          props.selectedTransactions &&
-          props.selectedTransactions.includes(transaction.accountActivityId),
-      );
-      if (selectedTransactionRecords) {
-        selectedTransactionRecords.forEach((transaction) =>
-          props.onUpdate({ ...transaction, syncStatus: 'SYNCED_LOCKED' }),
-        );
-      }
-      props.selectedTransactions.forEach((id) => {
-        if (props.onDeselectTransaction) {
-          props.onDeselectTransaction(id);
-        }
-      });
+  const onClickSync = async () => {
+    if (hasSelectedTransactions()) {
+      syncSelected();
     } else {
-      syncAllTransactions();
-      const syncableTransactions = props.data.content?.filter((transaction) => transaction.syncStatus === 'READY');
-      if (syncableTransactions) {
-        syncableTransactions.forEach((transaction) => props.onUpdate({ ...transaction, syncStatus: 'SYNCED_LOCKED' }));
+      try {
+        const res = await getSyncableTransactionCount();
+        if (res.count) {
+          setSyncableCount(res.count);
+        }
+        setSyncConfirmationOpen(true);
+      } catch (error: unknown) {
+        messages.error({ title: i18n.t('Something went wrong') });
       }
     }
   };
 
-  const onClickSync = async () => {
-    if (props.selectedTransactions && props.selectedTransactions.length > 0) {
-      onSyncMultiple();
-    } else {
-      const res = await getSyncableTransactionCount();
-      if (res.count) {
-        setSyncableCount(res.count);
+  const syncSelected = async () => {
+    setSyncBeingInitialized(true);
+    setSyncConfirmationOpen(false);
+    try {
+      await syncMultipleTransactions(props.selectedTransactions);
+      const selectedTransactionRecords = props.data.content?.filter(
+        (transaction) =>
+          transaction.accountActivityId && props.selectedTransactions.includes(transaction.accountActivityId),
+      );
+      if (selectedTransactionRecords) {
+        props.onUpdateTransaction(selectedTransactionRecords.map((t) => ({ ...t, syncStatus: 'SYNCED_LOCKED' })));
       }
-      setSyncConfirmationOpen(true);
+      props.onDeselectTransaction?.();
+    } catch (error: unknown) {
+      messages.error({ title: i18n.t('Something went wrong') });
     }
+    setSyncBeingInitialized(false);
+  };
+
+  const syncAll = async () => {
+    setSyncBeingInitialized(true);
+    setSyncConfirmationOpen(false);
+    try {
+      await syncAllTransactions();
+      const syncableTransactions = props.data.content?.filter((transaction) => transaction.syncStatus === 'READY');
+      if (syncableTransactions) {
+        props.onUpdateTransaction(syncableTransactions.map((t) => ({ ...t, syncStatus: 'SYNCED_LOCKED' })));
+      }
+    } catch (error: unknown) {
+      messages.error({ title: i18n.t('Something went wrong') });
+    }
+    setSyncBeingInitialized(false);
   };
 
   const filters = useTransactionsFilters(
@@ -161,7 +175,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         } else if (
           item.expenseDetails?.expenseCategoryId !== undefined &&
           item.accountActivityId !== undefined &&
-          props.selectedTransactions &&
           props.onSelectTransaction &&
           props.onDeselectTransaction
         ) {
@@ -330,15 +343,25 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             content={
               <div class={css.syncPopupContainer}>
                 <div class={css.syncPopupTextContainer}>
-                  <strong>Sync transactions?</strong>
-                  <Text message={`You have ${syncableCount()} transactions ready to sync.`} />
+                  <strong>Sync {conditionalS('transaction', syncableCount())}?</strong>
+                  <Text
+                    message={`You have ${syncableCount()} ${conditionalS(
+                      'transaction',
+                      syncableCount(),
+                    )} ready to sync.`}
+                  />
                 </div>
                 <div class={css.syncButtonContainer}>
                   <Button type="default" view="ghost" onClick={() => setSyncConfirmationOpen(false)}>
                     No, cancel
                   </Button>
-                  <Button type="primary" onClick={onSyncMultiple}>
-                    Yes, sync transactions
+                  <Button
+                    type="primary"
+                    loading={syncBeingInitialized()}
+                    onClick={hasSelectedTransactions() ? syncSelected : syncAll}
+                    disabled={syncBeingInitialized()}
+                  >
+                    Yes, sync {conditionalS('transaction', syncableCount())}
                   </Button>
                 </div>
               </div>
@@ -346,16 +369,20 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           >
             <Button
               type="primary"
-              disabled={getSyncablePageTransactions.length > 0}
+              loading={syncBeingInitialized()}
+              disabled={
+                syncBeingInitialized() || !hasSelectableTransactions() || getSyncablePageTransactions.length > 0
+              }
               icon={{ name: 'refresh', pos: 'right' }}
               onClick={onClickSync}
             >
               <Text
                 message={
-                  transactionsSelected()
-                    ? `Sync ${props.selectedTransactions?.length} Transaction${
-                        props.selectedTransactions?.length && props.selectedTransactions.length > 1 ? 's' : ''
-                      }`
+                  hasSelectedTransactions()
+                    ? `Sync ${props.selectedTransactions.length} ${conditionalS(
+                        'Transaction',
+                        props.selectedTransactions.length,
+                      )}`
                     : 'Sync All Transactions'
                 }
               />
@@ -398,3 +425,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     </div>
   );
 }
+
+const conditionalS = (word: string, itemCount: number) => {
+  return `${word}${itemCount > 1 ? 's' : ''}`;
+};

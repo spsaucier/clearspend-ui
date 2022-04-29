@@ -28,12 +28,12 @@ interface TransactionsDataProps {
   error: unknown;
   loading: boolean;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  onDeselectTransaction?: (id: string) => void;
+  onDeselectTransaction?: (id?: string) => void;
   onReload: () => Promise<unknown>;
   onSelectTransaction?: (id: string) => void;
   onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   params: Readonly<AccountActivityRequest>;
-  selectedTransactions?: string[];
+  selectedTransactions: string[];
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;
   showUserFilter?: boolean;
@@ -49,10 +49,15 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
     getActivityById,
   );
 
-  const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
+  const onUpdateTransaction = (transactions: Readonly<AccountActivityResponse[]>) => {
     props.onUpdateData((prev) => ({
       ...prev,
-      content: prev.content?.map((item) => (item.accountActivityId === data.accountActivityId ? data : item)),
+      content: prev.content?.map((currentTransaction) => {
+        const updatedTransaction = transactions.find(
+          (t) => t.accountActivityId === currentTransaction.accountActivityId,
+        );
+        return updatedTransaction ?? currentTransaction;
+      }),
     }));
   };
 
@@ -69,7 +74,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onReload={props.onReload}
         onRowClick={preview.changeID}
         onSelectTransaction={props.onSelectTransaction}
-        onUpdate={onUpdateTransaction}
+        onUpdateTransaction={onUpdateTransaction}
         params={props.params}
         selectedTransactions={props.selectedTransactions}
         showAccountingAdminView={props.showAccountingAdminView}

@@ -98,6 +98,10 @@
   justify-content: flex-end;
 }
 
+.sync-button-container > button:first-child {
+  margin-right: var(--pd-10);
+}
+
 .sync-popup-text-container {
   display: flex;
   flex-direction: column;

@@ -22,7 +22,7 @@ interface AccountingOverviewProps {
   onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   selectedTransactions: Accessor<string[]>;
   onSelectTransaction: (id: string) => void;
-  onDeselectTransaction: (id: string) => void;
+  onDeselectTransaction: (id?: string) => void;
 }
 
 export function AccountingOverview(props: Readonly<AccountingOverviewProps>) {

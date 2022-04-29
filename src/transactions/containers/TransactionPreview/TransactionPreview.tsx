@@ -44,7 +44,7 @@ const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
 interface TransactionPreviewProps {
   showAccountingAdminView?: boolean;
   transaction: Readonly<AccountActivityResponse>;
-  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
+  onUpdate: (data: Readonly<AccountActivityResponse[]>) => void;
   onReport: () => void;
 }
 
@@ -114,7 +114,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     })
       .then((data) => {
         batch(() => {
-          props.onUpdate(data);
+          props.onUpdate([data]);
           setNote(undefined);
           messages.success({
             title: i18n.t('Success'),
@@ -140,7 +140,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     saveExpenseCategory(props.transaction.accountActivityId!, categoryId || null, notes() || '')
       .then((data) => {
         batch(() => {
-          props.onUpdate({ ...data, syncStatus: 'READY' });
+          props.onUpdate([{ ...data, syncStatus: 'READY' }]);
           setExpenseCategory(categoryId);
           messages.success({
             title: i18n.t('Success'),
@@ -156,7 +156,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
   const onSyncTransaction = () => {
-    props.onUpdate({ ...transaction(), syncStatus: 'SYNCED_LOCKED' });
+    props.onUpdate([{ ...transaction(), syncStatus: 'SYNCED_LOCKED' }]);
     setSyncingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
@@ -164,7 +164,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const [, setUnlockingTransaction] = wrapAction(unlockTransaction);
   const onUnlockTransaction = () => {
-    props.onUpdate({ ...transaction(), syncStatus: 'READY' });
+    props.onUpdate([{ ...transaction(), syncStatus: 'READY' }]);
     setUnlockingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });

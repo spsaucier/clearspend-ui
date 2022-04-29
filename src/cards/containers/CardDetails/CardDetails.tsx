@@ -44,7 +44,9 @@ export function CardDetails(props: CardDetailsProps) {
           setError();
         });
       })
-      .catch(setError);
+      .catch((e) => {
+        setError(e);
+      });
   };
 
   const retrieve = async () => {

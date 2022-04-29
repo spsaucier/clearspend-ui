@@ -56,9 +56,13 @@ export function AccountingTabs() {
     setViewingUpdateDetailsDrawer(false);
   };
 
-  const onDeselectTransaction = (id: string) => {
-    const newSelectedTransactions = selectedTransactions();
-    setSelectedTransactions(newSelectedTransactions.filter((transactionId) => transactionId !== id));
+  const onDeselectTransaction = (id?: string) => {
+    if (id) {
+      const newSelectedTransactions = selectedTransactions();
+      setSelectedTransactions(newSelectedTransactions.filter((transactionId) => transactionId !== id));
+    } else {
+      setSelectedTransactions([]);
+    }
   };
 
   const navigate = useNavigate();

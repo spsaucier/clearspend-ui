@@ -9,7 +9,7 @@ interface SyncSelectIconProps {
   id: string;
   selectedTransactions: string[];
   onSelectTransaction: (id: string) => void;
-  onDeselectTransaction: (id: string) => void;
+  onDeselectTransaction: (id?: string) => void;
 }
 
 export function SyncSelectIcon(props: SyncSelectIconProps) {

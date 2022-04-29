@@ -53,12 +53,13 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
     true,
   );
 
-  const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
+  const onUpdateTransaction = (data: Readonly<AccountActivityResponse[]>) => {
     props.onUpdateTransaction((prev) => ({
       ...prev,
-      content: prev.content?.map((item) =>
-        item.accountActivityId === data.accountActivityId ? activityToLedger(data, item) : item,
-      ),
+      content: prev.content?.map((currentTransaction) => {
+        const updatedTransaction = data.find((t) => t.accountActivityId === currentTransaction.accountActivityId);
+        return updatedTransaction ? activityToLedger(updatedTransaction, currentTransaction) : currentTransaction;
+      }),
     }));
   };
 
