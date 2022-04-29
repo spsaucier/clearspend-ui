@@ -105,7 +105,12 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
           onReport={toggleReportModal}
         />
       </Drawer>
-      <TransactionReportModal open={reportModal()} onClose={toggleReportModal} />
+      <TransactionReportModal
+        open={reportModal()}
+        onClose={toggleReportModal}
+        activityId={preview.transaction()?.accountActivityId}
+        userEmail={preview.transaction()?.user?.userInfo?.email}
+      />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={setCardID}>
         <CardPreview cardID={cardID()!} />
       </Drawer>

@@ -213,7 +213,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       ),
     },
     {
-      name: 'card',
+      name: 'allocation',
       title: <Text message="Allocation" />,
       render: (item) => (
         <div>

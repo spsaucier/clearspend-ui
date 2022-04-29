@@ -89,7 +89,12 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
           onReport={toggleReportModal}
         />
       </Drawer>
-      <TransactionReportModal open={reportModal()} onClose={toggleReportModal} />
+      <TransactionReportModal
+        open={reportModal()}
+        onClose={toggleReportModal}
+        activityId={preview.transaction()?.accountActivityId}
+        cardId={preview.transaction()?.card?.cardId}
+      />
       <Drawer open={Boolean(cardID())} title={<Text message="Card summary" />} onClose={setCardID}>
         <CardPreview cardID={cardID()!} />
       </Drawer>

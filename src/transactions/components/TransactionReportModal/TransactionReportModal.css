@@ -4,6 +4,10 @@
   line-height: 1.33;
 }
 
+.first-button {
+  margin-bottom: 15px;
+}
+
 .links {
   margin: var(--pd-24) 0;
 }

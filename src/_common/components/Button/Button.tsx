@@ -33,6 +33,7 @@ export interface ButtonProps {
   onClick?: (event: MouseEvent) => void;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  target?: string;
   'data-name'?: string;
 }
 
@@ -82,6 +83,7 @@ export function Button(props: Readonly<ButtonProps>) {
     onClick: merged.onClick,
     onMouseEnter: merged.onMouseEnter,
     onMouseLeave: merged.onMouseLeave,
+    target: merged.target,
     'data-name': merged['data-name'],
   }));
 
