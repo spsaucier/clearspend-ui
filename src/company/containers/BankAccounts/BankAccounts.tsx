@@ -13,6 +13,8 @@ import {
 } from 'onboarding/services/accounts';
 import { useMessages } from 'app/containers/Messages/context';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
+import { RelinkAccountButton } from 'onboarding/containers/LinkAccount/RelinkAccountButton';
+import { useLoc } from '_common/api/router';
 
 import { AccountItem } from '../../components/AccountItem';
 
@@ -21,6 +23,7 @@ import css from './BankAccounts.css';
 export function BankAccounts() {
   const [accounts, accountsStatus, , , refetchAccounts] = useResource(getBankAccounts);
   const messages = useMessages();
+  const location = useLoc<{ relink: boolean }>();
 
   const onAddAccount = async (token: string, accountName?: string) => {
     try {
@@ -69,7 +72,16 @@ export function BankAccounts() {
         onReload={refetchAccounts}
       >
         <Show when={accounts()![0]} fallback={<LinkAccount onSuccess={onAddAccount} />}>
-          {(account) => <AccountItem data={account} onUnlink={onRemoveAccount} />}
+          {(account) => (
+            <>
+              <AccountItem data={account} onUnlink={onRemoveAccount} />
+              <Show when={location.search.indexOf('relink') > -1}>
+                <div style={{ margin: '5px 0' }}>
+                  <RelinkAccountButton onSuccess={onAddAccount} bankAccountId={account.businessBankAccountId} />
+                </div>
+              </Show>
+            </>
+          )}
         </Show>
       </Data>
     </Section>

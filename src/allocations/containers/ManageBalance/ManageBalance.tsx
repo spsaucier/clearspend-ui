@@ -1,5 +1,6 @@
 import { createSignal, createMemo, batch, Switch, Match, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
+import { useNavigate } from 'solid-app-router';
 
 import { isString } from '_common/utils/isString';
 import { useResource } from '_common/utils/useResource';
@@ -39,6 +40,7 @@ interface ManageBalanceProps {
 export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const [tab, setTab] = createSignal(Tabs.add);
   const messages = useMessages();
+  const navigate = useNavigate();
 
   const current = createMemo(() => props.allocations.find(allocationWithID(props.allocationId))!);
   const [successManageData, setSuccessManageData] = createSignal<Readonly<ManageBalanceSuccessData>>();
@@ -66,11 +68,22 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
     const { name: currentName, allocationId: sourceAllocationId } = current()!;
     try {
       const transactionResult = targetIsBankAccount
-        ? await bankTransaction(isWithdrawal ? 'WITHDRAW' : 'DEPOSIT', id, amount).catch((e: unknown) => {
-            if (isFetchError<{ message?: string }>(e)) {
+        ? await bankTransaction(isWithdrawal ? 'WITHDRAW' : 'DEPOSIT', id, amount).catch((e: { status: number }) => {
+            const withdrawalOrDeposit = isWithdrawal ? i18n.t('withdrawal') : i18n.t('deposit');
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+            if (e.status === 428) {
+              messages.error({
+                title: i18n.t('Unable to complete {withdrawalOrDeposit}', {
+                  withdrawalOrDeposit: String(withdrawalOrDeposit),
+                }),
+                message: i18n.t("You'll need to relink your bank account to make further {withdrawalOrDeposit}s", {
+                  withdrawalOrDeposit: String(withdrawalOrDeposit),
+                }),
+              });
+              navigate('/settings?tab=accounts&relink');
+            } else if (isFetchError<{ message?: string }>(e)) {
               const message = e.data.message;
               if (isString(message)) {
-                const withdrawalOrDeposit = isWithdrawal ? i18n.t('withdrawal') : i18n.t('deposit');
                 if (message.indexOf('exceeded allowed operation amount of limitType') > -1) {
                   const period = message.split('for period ')[1] || '';
                   messages.error({
@@ -81,7 +94,9 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
                   });
                 } else {
                   messages.error({
-                    title: `Unable to complete ${withdrawalOrDeposit}`,
+                    title: i18n.t('Unable to complete {withdrawalOrDeposit}', {
+                      withdrawalOrDeposit: String(withdrawalOrDeposit),
+                    }),
                     message,
                   });
                 }

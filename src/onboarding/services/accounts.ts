@@ -10,6 +10,11 @@ export async function getLinkToken() {
   return (await service.get<LinkTokenResponse>('/business-bank-accounts/link-token')).data.linkToken;
 }
 
+export async function getRelinkToken(businessBankAccountId: string) {
+  return (await service.get<LinkTokenResponse>(`/business-bank-accounts/re-link/${businessBankAccountId}`)).data
+    .linkToken;
+}
+
 export async function linkBankAccounts(publicToken: string) {
   return (
     await service.get<readonly Readonly<Required<BankAccount>>[]>(

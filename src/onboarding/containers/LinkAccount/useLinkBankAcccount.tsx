@@ -2,7 +2,7 @@ import { useI18n } from 'solid-i18n';
 import { createSignal, createMemo } from 'solid-js';
 import { useScript } from 'solid-use-script';
 
-import { getLinkToken } from 'onboarding/services/accounts';
+import { getLinkToken, getRelinkToken } from 'onboarding/services/accounts';
 import { useMessages } from 'app/containers/Messages/context';
 
 const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
@@ -10,6 +10,7 @@ const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
 export default function useLinkBankAccount(
   onSuccess: (token: string, accountName?: string | undefined) => Promise<unknown>,
   verifyOnLoad = false,
+  bankAccountId = '',
 ) {
   const i18n = useI18n();
   const messages = useMessages();
@@ -23,7 +24,11 @@ export default function useLinkBankAccount(
   const hasError = createMemo(() => scriptError() !== null || token() instanceof Error);
   const isLoading = createMemo(() => !!loading() || !!init() || !!fetchingUpdatedStatus());
 
-  getLinkToken().then(setToken).catch(setToken);
+  if (bankAccountId) {
+    getRelinkToken(bankAccountId).then(setToken).catch(setToken);
+  } else {
+    getLinkToken().then(setToken).catch(setToken);
+  }
 
   const handler = createMemo(() => {
     const linkToken = token();
