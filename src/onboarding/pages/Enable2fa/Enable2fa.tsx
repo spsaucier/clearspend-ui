@@ -52,7 +52,7 @@ export default function Enable2fa() {
   const onPhoneConfirm = async (otp: string) => {
     try {
       await complete2faEnrollment({ destination: number(), code: otp, method: 'sms' });
-      await updateCurrentUser({ ...currentUser, phone: number() });
+      await updateCurrentUser({ ...currentUser(), phone: number() });
       sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
       messages.success({ title: `${formatPhone(number())} set as authentication method` });
       navigate('/');

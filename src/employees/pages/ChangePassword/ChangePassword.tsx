@@ -43,6 +43,7 @@ export default function ChangePassword() {
       });
       navigate('/profile');
     } catch (e: unknown) {
+      console.warn(e);
       messages.error({
         title: i18n.t('Error'),
         message: i18n.t('Something went wrong'),
