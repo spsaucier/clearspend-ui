@@ -188,47 +188,47 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} />
       <DeclineReason details={transaction().declineDetails} class={css.declineReason} />
-      <div class={css.summary}>
-        <Show when={transaction().merchant}>
-          <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
-        </Show>
-        <div class={css.amount}>{displayAmount()}</div>
-        <div class={css.merchant}>
-          {transaction().merchant?.name}
-          <span> &#8226; </span>
-          {formatMerchantType(transaction().merchant?.type)}
-        </div>
-        <div class={css.date}>
-          <TransactionDateTime date={transaction().activityTime} />
-        </div>
-        <Show when={props.showAccountingAdminView}>
-          <div class={css.syncTag}>
-            {/* TODO: establish enum in BE, use it for rendering & delete below function */}
-            <Switch
-              fallback={
-                <Tag size="sm" type={SYNC_STATUS_TYPES.READY}>
-                  <Icon class={css.syncTagIcon} size="sm" name="sync" />
-                  <span>Ready to sync</span>
-                </Tag>
-              }
-            >
-              <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
-                <Tag size="sm" type={SYNC_STATUS_TYPES.SYNCED_LOCKED} class={css.syncedLockedTag}>
-                  <Icon class={css.syncTagIcon} size="sm" name="lock" />
-                  <Text message="Synced and locked" />
-                </Tag>
-              </Match>
-              <Match when={transaction().syncStatus !== 'READY'}>
-                <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
-                  <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
-                  <Text message="Not ready to sync" />
-                </Tag>
-              </Match>
-            </Switch>
-          </div>
-        </Show>
-      </div>
       <div class={css.scroll}>
+        <div class={css.summary}>
+          <Show when={transaction().merchant}>
+            <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
+          </Show>
+          <div class={css.amount}>{displayAmount()}</div>
+          <div class={css.merchant}>
+            {transaction().merchant?.name}
+            <span> &#8226; </span>
+            {formatMerchantType(transaction().merchant?.type)}
+          </div>
+          <div class={css.date}>
+            <TransactionDateTime date={transaction().activityTime} />
+          </div>
+          <Show when={props.showAccountingAdminView}>
+            <div class={css.syncTag}>
+              {/* TODO: establish enum in BE, use it for rendering & delete below function */}
+              <Switch
+                fallback={
+                  <Tag size="sm" type={SYNC_STATUS_TYPES.READY}>
+                    <Icon class={css.syncTagIcon} size="sm" name="sync" />
+                    <span>Ready to sync</span>
+                  </Tag>
+                }
+              >
+                <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
+                  <Tag size="sm" type={SYNC_STATUS_TYPES.SYNCED_LOCKED} class={css.syncedLockedTag}>
+                    <Icon class={css.syncTagIcon} size="sm" name="lock" />
+                    <Text message="Synced and locked" />
+                  </Tag>
+                </Match>
+                <Match when={transaction().syncStatus !== 'READY'}>
+                  <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
+                    <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
+                    <Text message="Not ready to sync" />
+                  </Tag>
+                </Match>
+              </Switch>
+            </div>
+          </Show>
+        </div>
         <Show when={props.showAccountingAdminView}>
           <div class={css.accounting}>
             <h4 class={css.accountingTitle}>
