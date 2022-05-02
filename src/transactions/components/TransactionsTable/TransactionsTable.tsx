@@ -173,8 +173,8 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
             </div>
           );
         } else if (
-          item.expenseDetails?.expenseCategoryId !== undefined &&
-          item.accountActivityId !== undefined &&
+          item.syncStatus === 'READY' &&
+          item.accountActivityId &&
           props.onSelectTransaction &&
           props.onDeselectTransaction
         ) {

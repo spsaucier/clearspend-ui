@@ -4695,6 +4695,7 @@ export interface BankAccount {
   name?: string;
   routingNumber?: string;
   accountNumber?: string;
+  accountLinkStatus?: 'LINKED' | 'MICROTRANSACTION_PENDING' | 'RE_LINK_REQUIRED';
 }
 
 export interface LinkTokenResponse {
