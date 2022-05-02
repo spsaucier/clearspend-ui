@@ -63,7 +63,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
   const columns: readonly Readonly<TableColumn<LedgerActivityResponse>>[] = [
     {
       name: 'date',
-      title: <Text message="Date & Time" />,
+      title: <Text message="Date" />,
       render: (item) => <ActivityDate date={item.activityTime} />,
     },
     {
@@ -100,7 +100,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     },
     {
       name: 'missing',
-      title: <Text message="Missing Details" />,
+      title: <></>,
       render: (item) => <MissingDetails data={item} />,
     },
   ];

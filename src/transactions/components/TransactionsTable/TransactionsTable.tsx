@@ -197,7 +197,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     },
     {
       name: 'date',
-      title: <Text message="Date & Time" />,
+      title: <Text message="Date" />,
       render: (item) => <ActivityDate date={item.activityTime} />,
     },
     {
