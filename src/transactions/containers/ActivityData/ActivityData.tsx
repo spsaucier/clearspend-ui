@@ -7,7 +7,7 @@ import { Drawer } from '_common/components/Drawer';
 import { useBool } from '_common/utils/useBool';
 import { download } from '_common/utils/download';
 import { Data } from 'app/components/Data';
-import { exportAccountActivity, getActivityById } from 'app/services/activity';
+import { exportLedgerActivity, getActivityById } from 'app/services/activity';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { CardPreview } from 'cards/containers/CardPreview';
@@ -64,7 +64,7 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
   };
 
   const onExport = (params: Readonly<LedgerActivityRequest>) => {
-    return exportAccountActivity(params).then((file) => {
+    return exportLedgerActivity(params).then((file) => {
       sendAnalyticsEvent({ name: Events.EXPORT_LEDGER });
       return download(file, 'activity.csv');
     });

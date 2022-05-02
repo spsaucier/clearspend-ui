@@ -18,12 +18,16 @@ export async function getAccountActivity(params: Readonly<AccountActivityRequest
   return (await service.post<PagedDataAccountActivityResponse>('/account-activity', params)).data;
 }
 
+export async function exportAccountActivity(params: Readonly<AccountActivityRequest>) {
+  return (await service.post<Blob>('/account-activity/export-csv', params, { respType: RespType.blob })).data;
+}
+
 export async function getLedgerActivity(params: Readonly<LedgerActivityRequest>) {
   return (await service.post<PagedDataLedgerActivityResponse>('/account-activity/ledger', params)).data;
 }
 
-export async function exportAccountActivity(params: Readonly<AccountActivityRequest>) {
-  return (await service.post<Blob>('/account-activity/export-csv', params, { respType: RespType.blob })).data;
+export async function exportLedgerActivity(params: Readonly<LedgerActivityRequest>) {
+  return (await service.post<Blob>('/account-activity/ledger/export-csv', params, { respType: RespType.blob })).data;
 }
 
 export async function getGraphData(params: Readonly<GraphDataRequest>) {
