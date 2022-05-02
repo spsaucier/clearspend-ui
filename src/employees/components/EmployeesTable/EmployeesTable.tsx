@@ -148,6 +148,16 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
         order={props.params.pageRequest?.orderBy}
         onChangeOrder={changeRequestOrder(props.onChangeParams)}
       />
+      <Filters
+        side={
+          <Pagination
+            current={props.params.pageRequest?.pageNumber || 0}
+            pageSize={props.params.pageRequest?.pageSize || 0}
+            total={props.data.totalElements || 0}
+            onChange={changeRequestPage(props.onChangeParams)}
+          />
+        }
+      />
       <Drawer
         noPadding
         open={filterPanelOpen()}

@@ -151,6 +151,16 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
           data={props.data.content || []}
         />
       </Show>
+      <Filters
+        side={
+          <Pagination
+            current={props.params.pageRequest.pageNumber}
+            pageSize={props.params.pageRequest.pageSize}
+            total={props.data.totalElements || 0}
+            onChange={changeRequestPage(props.onChangeParams)}
+          />
+        }
+      />
 
       <Drawer
         noPadding

@@ -401,6 +401,16 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
           onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>
+      <Filters
+        side={
+          <Pagination
+            current={props.params.pageRequest.pageNumber}
+            pageSize={props.params.pageRequest.pageSize}
+            total={props.data.totalElements || 0}
+            onChange={changeRequestPage(props.onChangeParams)}
+          />
+        }
+      />
       <Drawer
         noPadding
         open={filters.showFilters()}

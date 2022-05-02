@@ -4,7 +4,7 @@ import css from './Filters.css';
 
 interface FiltersProps {
   side: JSXElement;
-  children: JSXElement;
+  children?: JSXElement;
 }
 
 export function Filters(props: Readonly<FiltersProps>) {
