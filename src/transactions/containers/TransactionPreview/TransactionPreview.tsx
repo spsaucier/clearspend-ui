@@ -22,6 +22,7 @@ import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
 import { syncTransaction, unlockTransaction } from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
+import { CopyButton } from 'app/components/CopyButton';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -430,6 +431,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <span>{originalAmount()}</span>
           </div>
         </Show>
+        <div class={css.detail}>
+          <Text message="ID" />
+          <span>
+            {transaction().accountActivityId}
+            <CopyButton value={transaction().accountActivityId!} class={css.copy} />
+          </span>
+        </div>
       </div>
       <div class={css.actions}>
         <Button onClick={() => props.onReport()} wide icon={{ name: 'alert', pos: 'right' }}>
