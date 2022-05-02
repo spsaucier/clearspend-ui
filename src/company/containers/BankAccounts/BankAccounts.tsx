@@ -75,7 +75,7 @@ export function BankAccounts() {
           {(account) => (
             <>
               <AccountItem data={account} onUnlink={onRemoveAccount} />
-              <Show when={location.search.indexOf('relink') > -1}>
+              <Show when={location.search.indexOf('relink') > -1 || account.accountLinkStatus === 'RE_LINK_REQUIRED'}>
                 <div style={{ margin: '5px 0' }}>
                   <RelinkAccountButton onSuccess={onAddAccount} bankAccountId={account.businessBankAccountId} />
                 </div>
