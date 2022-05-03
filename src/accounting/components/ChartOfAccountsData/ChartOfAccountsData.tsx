@@ -25,6 +25,7 @@ interface ChartOfAccountsDataProps {
   setRoadblockRequestParameters?: (newValue: DeepReadonly<AddChartOfAccountsMappingRequest | null>[]) => void;
   saveOnChange?: boolean;
   showDeleted?: boolean;
+  showUpdateButton?: boolean;
 }
 
 export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
@@ -41,6 +42,7 @@ export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
         setRoadblockRequestParameters={props.setRoadblockRequestParameters}
         saveOnChange={props.saveOnChange || false}
         showDeleted={props.showDeleted}
+        showUpdateButton={props.showUpdateButton}
       />
     </Data>
   );

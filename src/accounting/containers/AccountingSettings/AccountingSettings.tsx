@@ -14,7 +14,6 @@ import {
   deleteCompanyConnection,
   postCodatCreditCard,
   setCodatCreditCardforBusiness,
-  resyncChartOfAccounts,
 } from 'accounting/services';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import { Drawer } from '_common/components/Drawer';
@@ -25,7 +24,6 @@ import {
   useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
 import { useRecentUpdateNotifications } from 'accounting/stores/updateNotifications';
-import { Icon } from '_common/components/Icon';
 import { useBusiness } from 'app/containers/Main/context';
 
 import css from './AccountingSettings.css';
@@ -47,7 +45,6 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const [newCardName, setNewCardName] = createSignal<string>('ClearSpend Card');
 
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
-  const [refreshButtonDisabled, setRefreshButtonDisabled] = createSignal<boolean>(false);
 
   // TODO replace with notification endpoint that dismisses on logout
   const updateNotifications = useRecentUpdateNotifications();
@@ -90,11 +87,6 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     }
   };
 
-  const refreshChartOfAccounts = () => {
-    resyncChartOfAccounts();
-    setRefreshButtonDisabled(true);
-  };
-
   const saveNewCreditCard = async (cardName: string) => {
     setNewCardName(cardName);
     setEditingNewCardName(false);
@@ -132,19 +124,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       >
         <AutomaticUpdates name="automatic-updates-toggle" />
       </Section>
-      <Section
-        title={<Text message="Chart of Accounts" />}
-        // description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
-        class={css.section}
-      >
-        <div class={css.refreshButtonContainer}>
-          <Button class={css.refreshButton} onClick={refreshChartOfAccounts} disabled={refreshButtonDisabled()}>
-            <div class={css.refreshButtonContent}>
-              <Icon name={'refresh'} />
-              <Text message="Update Chart of Accounts" />
-            </div>
-          </Button>
-        </div>
+      <Section title={<Text message="Chart of Accounts" />} class={css.section}>
         <ChartOfAccountsData
           loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
           error={integrationExpenseCategoryStore.error}
@@ -158,6 +138,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
           }}
           saveOnChange={true}
           showDeleted={false}
+          showUpdateButton={true}
         />
       </Section>
       <Section

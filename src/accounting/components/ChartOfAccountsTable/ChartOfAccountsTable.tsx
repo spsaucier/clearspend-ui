@@ -16,6 +16,7 @@ import type {
   ChartOfAccountsMappingResponse,
   CodatAccountNested,
 } from 'generated/capital';
+import { resyncChartOfAccounts } from 'accounting/services';
 
 import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory } from '../SelectExpenseCategory';
@@ -38,6 +39,7 @@ interface ChartOfAccountsTableProps {
   setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
   saveOnChange: boolean;
   showDeleted?: boolean;
+  showUpdateButton?: boolean;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
@@ -46,8 +48,11 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
 
   const activeCategories = createMemo(() => categories.data!.filter((category) => category.status === 'ACTIVE'));
 
+  const [refreshButtonDisabled, setRefreshButtonDisabled] = createSignal<boolean>(false);
+
   const initialState = generateInitialCategoryMap(props.data);
   const [state, setState] = createStore(initialState);
+
   const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
   const flattenedData = createMemo(() => {
     if (props.showDeleted) {
@@ -81,6 +86,11 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
     }
   };
   const [savingMapping, saveMapping] = wrapAction(handleSave);
+
+  const refreshChartOfAccounts = () => {
+    resyncChartOfAccounts();
+    setRefreshButtonDisabled(true);
+  };
 
   const getNestedCSSlevel = (account: FlattenedIntegrationAccount) => {
     switch (account.level) {
@@ -239,14 +249,26 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
 
   return (
     <div class={css.tableContainer}>
-      <InputSearch
-        delay={400}
-        placeholder={String(i18n.t('Search'))}
-        class={css.search}
-        onSearch={() => {
-          // TODO
-        }}
-      />
+      <div class={css.topContainer}>
+        <InputSearch
+          delay={400}
+          placeholder={String(i18n.t('Search'))}
+          class={css.search}
+          onSearch={() => {
+            // TODO
+          }}
+        />
+        <Show when={props.showUpdateButton}>
+          <div>
+            <Button class={css.refreshButton} onClick={refreshChartOfAccounts} disabled={refreshButtonDisabled()}>
+              <div class={css.refreshButtonContent}>
+                <Icon name={'refresh'} />
+                <Text message="Update Chart of Accounts" />
+              </div>
+            </Button>
+          </div>
+        </Show>
+      </div>
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
         <div class={css.table}>
           <Table columns={columns} data={flattenedData()} cellClass={css.cell} />

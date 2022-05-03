@@ -98,3 +98,18 @@
 .new-account-text {
   color: var(--tw-gray-60);
 }
+
+.refresh-button {
+  margin: var(--pd-8) 0;
+}
+
+.refresh-button-content {
+  display: flex;
+  flex-direction: row;
+}
+
+.top-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
