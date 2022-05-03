@@ -4,7 +4,7 @@ import { Text } from 'solid-i18n';
 import { Popover } from '_common/components/Popover';
 import { Icon } from '_common/components/Icon';
 import { join } from '_common/utils/join';
-import type { LedgerActivityResponse, LedgerMerchantAccount } from 'generated/capital';
+import type { LedgerActivityResponse, LedgerMerchantAccount, Merchant } from 'generated/capital';
 
 import { isActivityType } from '../../utils/isActivityType';
 import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
@@ -12,45 +12,62 @@ import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import css from './MissingDetails.css';
 
 interface MissingDetailsProps {
-  data: Readonly<LedgerActivityResponse>;
+  data: Readonly<LedgerActivityResponse & { merchant?: Merchant }>;
+  checkMerchant?: boolean;
 }
 
 export function MissingDetails(props: Readonly<MissingDetailsProps>) {
-  const expense = createMemo(() => !props.data.expenseDetails?.expenseCategoryId);
+  const expenseMissing = createMemo(() => !props.data.expenseDetails?.expenseCategoryId);
+  const merchantMissing = createMemo(() => props.checkMerchant && !props.data.merchant?.name);
 
-  const receipts = createMemo(() => {
+  const receiptMissing = createMemo(() => {
     const account = props.data.targetAccount;
+    const isMerchant = props.data.merchant || account?.type === 'MERCHANT';
+
     return (
-      account?.type === 'MERCHANT' &&
+      isMerchant &&
       isAllowedReceipts((account as LedgerMerchantAccount).merchantInfo, props.data.status) &&
       !props.data.receipt?.receiptId?.length
     );
   });
 
   return (
-    <Show when={isActivityType(props.data.type) && (receipts() || expense()) && props.data.status !== 'DECLINED'}>
+    <Show
+      when={
+        isActivityType(props.data.type) &&
+        (receiptMissing() || expenseMissing() || merchantMissing()) &&
+        props.data.status !== 'DECLINED' &&
+        props.data.type !== 'NETWORK_REFUND'
+      }
+    >
       <Popover
         balloon
         trigger="hover"
         position="bottom-right"
         content={
           <div class={css.popupContent}>
-            <Show when={expense()}>
+            <Show when={expenseMissing()}>
               <Text message="Expense category is missing." />
             </Show>
-            <Show when={receipts()}>
+            <Show when={receiptMissing()}>
               <Text message="Receipt is missing." />
+            </Show>
+            <Show when={merchantMissing()}>
+              <Text message="Vendor is missing." />
             </Show>
           </div>
         }
       >
         {(args) => (
           <div {...args} class={css.root}>
-            <Show when={expense()}>
+            <Show when={expenseMissing()}>
               <Icon name="tag" class={join(css.icon, css.expense)} />
             </Show>
-            <Show when={receipts()}>
+            <Show when={receiptMissing()}>
               <Icon name="receipt" class={css.icon} />
+            </Show>
+            <Show when={merchantMissing()}>
+              <Icon name="channel-ecommerce" class={css.icon} />
             </Show>
           </div>
         )}

@@ -1,7 +1,6 @@
 import { createMemo, createSignal, onMount, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
-import { join } from '_common/utils/join';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { Setter } from '_common/types/common';
@@ -38,6 +37,7 @@ import { MerchantLogo } from '../MerchantLogo';
 import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
+import { MissingDetails } from '../MissingDetails';
 
 import css from './TransactionsTable.css';
 
@@ -273,16 +273,9 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       ),
     },
     {
-      name: 'receipt',
-      title: <Text message="Receipt" />,
-      render: (item) => (
-        <div class={css.receiptCell}>
-          <Icon
-            name={item.receipt?.receiptId?.length ? 'receipt' : 'receipt-unavailable'}
-            class={join(css.receipt, !item.receipt?.receiptId && css.receiptEmpty)}
-          />
-        </div>
-      ),
+      name: 'missing',
+      title: <></>,
+      render: (item) => <MissingDetails data={item} checkMerchant={props.showAccountingAdminView} />,
     },
   ];
 

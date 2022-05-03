@@ -20,21 +20,6 @@
   gap: var(--pd-10);
 }
 
-.receipt-cell {
-  padding: var(--pd-10);
-  padding-top: 0;
-  cursor: pointer;
-}
-
-.receipt {
-  margin-top: -4px;
-  cursor: pointer;
-}
-
-.receipt-empty {
-  color: var(--tw-gray-40);
-}
-
 .sub,
 .merchant-type {
   margin-top: var(--pd-2);
