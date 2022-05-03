@@ -5,7 +5,7 @@ import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
 import type { IntegrationAccountMap } from './types';
 
 export const getAccountType = (account: FlattenedIntegrationAccount) => {
-  return account.fullyQualifiedCategory?.split('.').pop();
+  return account.fullyQualifiedCategory?.split('.')[2];
 };
 
 export const generateInitialCategoryMap = (accounts: CodatAccountNested[]) => {

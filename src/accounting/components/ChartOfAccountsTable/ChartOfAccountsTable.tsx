@@ -160,7 +160,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       name: 'accountType',
       title: (
         <div class={css.columnTitle}>
-          <Text message="Account Type" />
+          <Text message="Detail Type" />
         </div>
       ),
       render: (item) => (
