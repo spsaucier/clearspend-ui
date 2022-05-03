@@ -12,11 +12,9 @@ interface AutomaticUpdatesProps {
 }
 
 export function AutomaticUpdates(props: Readonly<AutomaticUpdatesProps>) {
-  const business = useBusiness();
+  const { business, mutate } = useBusiness();
   const [autoUpdatesStatus, setAutoUpdatesStatus] = createSignal<boolean>(
-    business.business().autoCreateExpenseCategories !== undefined
-      ? business.business().autoCreateExpenseCategories!
-      : false,
+    business().autoCreateExpenseCategories !== undefined ? business().autoCreateExpenseCategories! : false,
   );
 
   const toggleAutoUpdatesStatus = async (status: boolean) => {
@@ -30,6 +28,7 @@ export function AutomaticUpdates(props: Readonly<AutomaticUpdatesProps>) {
   const onToggleAutomaticStatus = () => {
     autoUpdatesStatus() ? setAutoUpdatesStatus(false) : setAutoUpdatesStatus(true);
     toggleAutoUpdatesStatus(autoUpdatesStatus());
+    mutate({ business: { ...business(), autoCreateExpenseCategories: autoUpdatesStatus() } });
   };
 
   return (
