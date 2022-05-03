@@ -14,7 +14,12 @@ export function ledgerToActivity(data: LedgerActivityResponse): AccountActivityR
     ...rest,
     accountName: cardInfo?.allocationName || '',
     card: cardInfo,
-    merchant: targetAccount?.type === 'MERCHANT' ? (targetAccount as LedgerMerchantAccount).merchantInfo : undefined,
+    merchant:
+      targetAccount?.type === 'MERCHANT'
+        ? (targetAccount as LedgerMerchantAccount).merchantInfo
+        : sourceAccount?.type === 'MERCHANT'
+        ? (sourceAccount as LedgerMerchantAccount).merchantInfo
+        : undefined,
   };
 }
 

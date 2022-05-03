@@ -11,9 +11,10 @@ const messages = defineMessages({
   CANCELED: { message: 'Canceled' },
   CREDIT: { message: 'Credit' },
   PROCESSED: { message: 'Processed' },
+  NETWORK_REFUND: { message: 'Refunded' },
 });
 
-export function formatActivityStatus(value: ActivityStatus | undefined) {
+export function formatActivityStatus(value: ActivityStatus | 'NETWORK_REFUND' | undefined) {
   const message = value && messages[value];
   return message ? i18n.t(message) : '';
 }

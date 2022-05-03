@@ -254,7 +254,12 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       name: 'amount',
       title: <Text message="Amount • Status" />,
       render: (item) => (
-        <TransactionsTableAmount status={item.status} amount={item.amount} requestedAmount={item.requestedAmount} />
+        <TransactionsTableAmount
+          status={item.status}
+          type={item.type}
+          amount={item.amount}
+          requestedAmount={item.requestedAmount}
+        />
       ),
     },
     {

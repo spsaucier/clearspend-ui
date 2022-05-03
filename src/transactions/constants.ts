@@ -50,22 +50,24 @@ export const DEFAULT_ACTIVITY_PARAMS: Readonly<LedgerActivityRequest> = {
   pageRequest: { ...DEFAULT_PAGE_REQUEST },
 };
 
-export const STATUS_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
+export const STATUS_ICONS: Record<ActivityStatus | 'NETWORK_REFUND', keyof typeof IconName> = {
   APPROVED: 'confirm',
   PROCESSED: 'confirm',
   DECLINED: 'cancel',
   CANCELED: 'cancel',
   PENDING: 'clock',
   CREDIT: 'card',
+  NETWORK_REFUND: 'sync',
 };
 
-export const STATUS_FILL_ICONS: Record<ActivityStatus, keyof typeof IconName> = {
+export const STATUS_FILL_ICONS: Record<ActivityStatus | 'NETWORK_REFUND', keyof typeof IconName> = {
   APPROVED: 'confirm-circle-filled',
   PROCESSED: 'confirm-circle-filled',
   DECLINED: 'cancel-rounded',
   CANCELED: 'cancel-rounded',
   PENDING: 'clock-fill',
   CREDIT: 'card-fill',
+  NETWORK_REFUND: 'sync',
 };
 
 export const ACTIVITY_TYPE_TITLES: Partial<Readonly<Record<ActivityType, JSXElement>>> = {

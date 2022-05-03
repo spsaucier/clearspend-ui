@@ -3,7 +3,7 @@ import { Text } from 'solid-i18n';
 
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Tooltip } from '_common/components/Tooltip';
-import type { LedgerActivityResponse, Amount } from 'generated/capital';
+import type { LedgerActivityResponse, Amount, AccountActivityResponse } from 'generated/capital';
 import { join } from '_common/utils/join';
 
 import { formatActivityStatus } from '../../utils/formatActivityStatus';
@@ -17,6 +17,7 @@ interface ActivityAmountProps {
   amount: Readonly<Amount> | undefined;
   amountClass?: string;
   requestedAmount: Readonly<Amount> | undefined;
+  type?: AccountActivityResponse['type'];
 }
 
 export function ActivityAmount(props: Readonly<ActivityAmountProps>) {
@@ -34,6 +35,9 @@ export function ActivityAmount(props: Readonly<ActivityAmountProps>) {
             <div class={join(css.status, props.status === 'DECLINED' ? css.statusError : '')}>
               {formatActivityStatus(props.status)}
             </div>
+          </Show>
+          <Show when={props.type === 'NETWORK_REFUND'}>
+            <div class={join(css.status, css.statusWarning)}>{formatActivityStatus('NETWORK_REFUND')}</div>
           </Show>
         </div>
       )}

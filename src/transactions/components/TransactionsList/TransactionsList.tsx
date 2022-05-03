@@ -17,13 +17,14 @@ import type { ActivityStatus } from '../../types';
 
 import css from './TransactionsList.css';
 
-const STATUS_TYPES: Record<ActivityStatus, Required<TagProps>['type']> = {
+const STATUS_TYPES: Record<ActivityStatus | 'NETWORK_REFUND', Required<TagProps>['type']> = {
   APPROVED: 'success',
   PROCESSED: 'success',
   DECLINED: 'danger',
   CANCELED: 'danger',
   PENDING: 'default',
   CREDIT: 'default',
+  NETWORK_REFUND: 'default',
 };
 
 interface TransactionsListProps {
@@ -52,6 +53,7 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
       >
         <For each={props.data.content}>
           {(item) => {
+            const actingStatus = item.type === 'NETWORK_REFUND' ? 'NETWORK_REFUND' : item.status!;
             const date = createMemo(() => new Date(item.activityTime || ''));
 
             return (
@@ -66,8 +68,8 @@ export function TransactionsList(props: Readonly<TransactionsListProps>) {
                   </div>
                 </div>
                 <div class={css.side}>
-                  <Tag size="sm" type={STATUS_TYPES[item.status!]}>
-                    <Icon name={STATUS_ICONS[item.status!]} size="sm" />
+                  <Tag size="sm" type={STATUS_TYPES[actingStatus]}>
+                    <Icon name={STATUS_ICONS[actingStatus]} size="sm" />
                     {formatCurrency(item.requestedAmount?.amount || item.amount?.amount || 0)}
                   </Tag>
                   <div class={css.time}>

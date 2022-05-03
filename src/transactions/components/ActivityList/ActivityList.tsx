@@ -25,13 +25,14 @@ import type { ActivityStatus } from '../../types';
 
 import css from './ActivityList.css';
 
-const STATUS_TYPES: Record<ActivityStatus, Required<TagProps>['type']> = {
+const STATUS_TYPES: Record<ActivityStatus | 'NETWORK_REFUND', Required<TagProps>['type']> = {
   APPROVED: 'success',
   PROCESSED: 'success',
   DECLINED: 'danger',
   CANCELED: 'danger',
   PENDING: 'default',
   CREDIT: 'default',
+  NETWORK_REFUND: 'default',
 };
 
 interface ActivityListProps {
@@ -60,6 +61,7 @@ export function ActivityList(props: Readonly<ActivityListProps>) {
       >
         <For each={props.data.content}>
           {(item) => {
+            const actingStatus = item.type === 'NETWORK_REFUND' ? 'NETWORK_REFUND' : item.status!;
             const account = item.targetAccount;
 
             return (
@@ -100,8 +102,10 @@ export function ActivityList(props: Readonly<ActivityListProps>) {
                   </div>
                 </div>
                 <div class={css.side}>
-                  <Tag size="sm" type={item.status && STATUS_TYPES[item.status]}>
-                    <Show when={item.status}>{(status) => <Icon name={STATUS_ICONS[status]} size="sm" />}</Show>
+                  <Tag size="sm" type={STATUS_TYPES[actingStatus]}>
+                    <Show when={actingStatus}>
+                      <Icon name={STATUS_ICONS[actingStatus]} size="sm" />
+                    </Show>
                     {formatCurrency(item.requestedAmount?.amount || item.amount?.amount || 0)}
                   </Tag>
                   <div class={css.time}>

@@ -11,6 +11,7 @@ import { useBusiness } from 'app/containers/Main/context';
 import type { Allocation, BankAccount } from 'generated/capital';
 import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
+import { canManageFunds } from 'allocations/utils/permissions';
 
 import { BankTransferNotice } from '../BankTransferNotice';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
@@ -38,7 +39,7 @@ interface ManageBalanceFormProps {
 export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
-  const { currentUser } = useBusiness();
+  const { permissions } = useBusiness();
 
   const [loading, update] = wrapAction(props.onUpdate);
 
@@ -100,7 +101,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
         </Show>
       </Form>
       <div class={css.footer}>
-        <Show when={currentUser().type === 'BUSINESS_OWNER'}>
+        <Show when={canManageFunds(permissions())}>
           <InternalBankAccount heading={<Text message="Add funds via ACH or wire" />} />
         </Show>
         <Show when={isBankAccount(selectedTarget())}>

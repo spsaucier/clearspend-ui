@@ -17,6 +17,10 @@
   background: var(--tw-red-70);
 }
 
+.warning {
+  background-color: var(--tw-amber-70);
+}
+
 .icon {
   margin-right: var(--pd-4);
 }

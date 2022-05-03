@@ -187,7 +187,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   return (
     <div class={css.root}>
-      <TransactionPreviewStatus status={transaction().status!} />
+      <TransactionPreviewStatus status={transaction().status!} type={transaction().type} />
       <DeclineReason details={transaction().declineDetails} class={css.declineReason} />
       <div class={css.scroll}>
         <div class={css.summary}>

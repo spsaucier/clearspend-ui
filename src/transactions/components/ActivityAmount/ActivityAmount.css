@@ -6,3 +6,7 @@
 .status-error {
   color: var(--tw-red-70);
 }
+
+.status-warning {
+  color: var(--tw-amber-80);
+}

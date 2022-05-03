@@ -95,7 +95,12 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
       name: 'amount',
       title: <Text message="Amount" />,
       render: (item) => (
-        <ActivityAmount status={item.status} amount={item.amount} requestedAmount={item.requestedAmount} />
+        <ActivityAmount
+          status={item.status}
+          amount={item.amount}
+          type={item.type}
+          requestedAmount={item.requestedAmount}
+        />
       ),
     },
     {
