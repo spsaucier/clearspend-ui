@@ -69,6 +69,7 @@ export function convertFormLimits(
     disabledPaymentTypes: PAYMENT_TYPES.map((item) => item.key).filter(
       (id) => !data.channels.includes(id),
     ) as ControlsData['disabledPaymentTypes'],
+    disableForeign: !data.international,
   };
 }
 

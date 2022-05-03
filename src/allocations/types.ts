@@ -33,7 +33,7 @@ export interface Limits {
 
 export type ControlsData = Pick<
   Required<UpdateAllocationRequest>,
-  'limits' | 'disabledMccGroups' | 'disabledPaymentTypes'
+  'limits' | 'disabledMccGroups' | 'disabledPaymentTypes' | 'disableForeign'
 >;
 
 export interface FormLimits {

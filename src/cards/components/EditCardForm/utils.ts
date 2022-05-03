@@ -63,7 +63,6 @@ export function convertFormData(
     currency: 'USD',
     cardType: data.types,
     isPersonal: data.personal,
-    disableForeign: !data.international,
     shippingAddress: {
       streetLine1: data.streetLine1,
       streetLine2: data.streetLine2,

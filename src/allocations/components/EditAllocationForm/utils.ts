@@ -36,7 +36,6 @@ export function convertFormData(
     name: data.name,
     amount: { currency: 'USD', amount: parseAmount(data.amount) },
     parentAllocationId: data.parent,
-    disableForeign: !data.international,
     ...convertFormLimits(data, categories),
   };
 }
