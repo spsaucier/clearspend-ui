@@ -28,3 +28,10 @@
 .add-card-icon {
   margin: 4px;
 }
+
+.card-container {
+  display: flex;
+  height: 400px;
+  flex-direction: column;
+  overflow: auto;
+}

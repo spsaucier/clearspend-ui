@@ -23,7 +23,9 @@ export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblo
     () =>
       expenseCategories.data?.filter(
         (category) =>
-          category.expenseCategoryId !== undefined && props.unusedCategories().includes(category.expenseCategoryId),
+          category.status !== 'DISABLED' &&
+          category.expenseCategoryId !== undefined &&
+          props.unusedCategories().includes(category.expenseCategoryId),
       ),
     [props.unusedCategories],
   );

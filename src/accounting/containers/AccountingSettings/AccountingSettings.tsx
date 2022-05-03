@@ -19,17 +19,14 @@ import {
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
-import type {
-  AddChartOfAccountsMappingRequest,
-  CodatBankAccount,
-  PagedDataAccountActivityResponse,
-} from 'generated/capital';
+import type { AddChartOfAccountsMappingRequest, PagedDataAccountActivityResponse } from 'generated/capital';
 import {
   useIntegrationExpenseCategoryMappings,
   useStoredIntegrationExpenseCategories,
 } from 'accounting/stores/integrationExpenseCategories';
 import { useRecentUpdateNotifications } from 'accounting/stores/updateNotifications';
 import { Icon } from '_common/components/Icon';
+import { useBusiness } from 'app/containers/Main/context';
 
 import css from './AccountingSettings.css';
 
@@ -41,10 +38,14 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   const i18n = useI18n();
   const navigate = useNavigate();
   const messages = useMessages();
+  const { business } = useBusiness();
+
   const [open, setOpen] = createSignal(false);
   const [unlinkingIntegration, setUnlinkingIntegration] = createSignal(false);
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
-  const [selectedCardName, setSelectedCardName] = createSignal<string>('');
+  const [selectedCardId, setSelectedCardId] = createSignal<string>(business().codatCreditCardId || '');
+  const [newCardName, setNewCardName] = createSignal<string>('ClearSpend Card');
+
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
   const [refreshButtonDisabled, setRefreshButtonDisabled] = createSignal<boolean>(false);
 
@@ -79,10 +80,10 @@ export function AccountingSettings(props: AccountingSettingsProps) {
     }
   };
 
-  const saveSelectedCreditCard = async (card: CodatBankAccount) => {
+  const saveSelectedCreditCard = async (cardId: string) => {
     try {
       await setCodatCreditCardforBusiness({
-        accountId: card.id,
+        accountId: cardId,
       });
     } catch {
       // TODO: handle error
@@ -95,7 +96,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   };
 
   const saveNewCreditCard = async (cardName: string) => {
-    setSelectedCardName(cardName);
+    setNewCardName(cardName);
     setEditingNewCardName(false);
 
     try {
@@ -104,6 +105,14 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       });
     } catch {
       // TODO: handle error
+    }
+  };
+
+  const onSaveCreditCard = async () => {
+    if (selectedCardId() === '') {
+      saveNewCreditCard(newCardName()).catch();
+    } else {
+      saveSelectedCreditCard(selectedCardId()).catch();
     }
   };
 
@@ -157,29 +166,35 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         class={css.section}
       >
         <CreditCardSelect
-          selectedCardName={selectedCardName}
-          onChange={(card: CodatBankAccount) => saveSelectedCreditCard(card)}
+          newCardName={newCardName}
+          selectedCardId={selectedCardId}
+          setSelectedCardId={setSelectedCardId}
           setCanEditNewCard={setCanEditNewCard}
-          setSelectedCardName={setSelectedCardName}
         ></CreditCardSelect>
-        <Show when={canEditNewCard()}>
-          <Button
-            class={css.editButton}
-            onClick={() => setEditingNewCardName(true)}
-            icon={{ name: 'edit', pos: 'left' }}
-          >
-            <Text message="Edit Card Name" />
+        <div class={css.creditCardButtons}>
+          <Button onClick={onSaveCreditCard} class={css.editButton}>
+            <Text message={'Save'} />
           </Button>
-        </Show>
+          <Show when={canEditNewCard()}>
+            <Button
+              class={css.editButton}
+              onClick={() => setEditingNewCardName(true)}
+              icon={{ name: 'edit', pos: 'left' }}
+            >
+              <Text message="Edit Card Name" />
+            </Button>
+          </Show>
+        </div>
         <Drawer
           open={editingNewCardName()}
           title={<Text message="New Card" />}
           onClose={() => setEditingNewCardName(false)}
         >
           <EditCardNameForm
-            oldCardName={selectedCardName}
+            cardName={newCardName}
             onSave={(data: string) => {
-              saveNewCreditCard(data);
+              setNewCardName(data);
+              setEditingNewCardName(false);
             }}
           />
         </Drawer>

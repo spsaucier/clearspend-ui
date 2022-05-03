@@ -9,21 +9,24 @@ import { getCodatCreditCards } from 'accounting/services';
 import css from './EditCardNameForm.css';
 
 interface EditCardNameFormProps {
-  oldCardName: Accessor<string>;
+  cardName: Accessor<string>;
   onSave: (name: string) => void;
 }
 
 export function EditCardNameForm(props: Readonly<EditCardNameFormProps>) {
-  const [newCardName, setNewCardName] = createSignal<string>(props.oldCardName());
+  const [newCardName, setNewCardName] = createSignal<string>(props.cardName());
   const [isCardNameValid, setIsCardNameValid] = createSignal<boolean>(true);
   const [creditCards] = useResource(getCodatCreditCards);
 
   const checkNewCardName = (cardName: string) => {
+    setIsCardNameValid(true);
     creditCards()?.results?.forEach((card) => {
       if (card.accountName === cardName) setIsCardNameValid(false);
     });
     if (isCardNameValid()) setNewCardName(cardName);
   };
+
+  checkNewCardName(props.cardName());
 
   return (
     <div class={css.root}>
@@ -42,7 +45,7 @@ export function EditCardNameForm(props: Readonly<EditCardNameFormProps>) {
           </div>
         </Show>
       </div>
-      <Button onClick={() => props.onSave(newCardName())} disabled={newCardName() === ''}>
+      <Button onClick={() => props.onSave(newCardName())} disabled={newCardName() === '' || !isCardNameValid()}>
         <Text message="Save" />
       </Button>
     </div>

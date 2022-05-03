@@ -3,12 +3,13 @@ import { createSignal, Show } from 'solid-js';
 
 import { Page } from 'app/components/Page';
 import { Button } from '_common/components/Button';
-import { postCodatCreditCard } from 'accounting/services';
+import { postCodatCreditCard, setCodatCreditCardforBusiness } from 'accounting/services';
 import { CancelConfirmationButton } from 'accounting/components/CancelConfirmationButton';
 import { wrapAction } from '_common/utils/wrapAction';
 import { CreditCardSelect } from '_common/components/CreditCardSelect/CreditCardSelect';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
+import { useBusiness } from 'app/containers/Main/context';
 
 import css from './AddCreditCardForm.css';
 
@@ -19,10 +20,12 @@ interface AddCreditCardFormProps {
 
 export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
   const { onNext } = props;
-  const [selectedCardName, setSelectedCardName] = createSignal<string>('');
+  const { business } = useBusiness();
+  const [selectedCardId, setSelectedCardId] = createSignal<string>(business().codatCreditCardId || '');
   const [loading, postCC] = wrapAction(postCodatCreditCard);
   const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
   const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
+  const [newCardName, setNewCardName] = createSignal<string>('ClearSpend Card');
 
   const saveNewCreditCard = async (cardName: string) => {
     try {
@@ -35,16 +38,26 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
     }
   };
 
-  const onClickNext = async () => {
-    saveNewCreditCard(selectedCardName())
-      .then(() => onNext())
-      .catch();
+  const saveSelectedCreditCard = async (cardId: string) => {
+    try {
+      await setCodatCreditCardforBusiness({
+        accountId: cardId,
+      });
+    } catch {
+      // TODO: handle error
+    }
   };
 
-  const onSave = async (cardName: string) => {
-    setSelectedCardName(cardName);
-    setEditingNewCardName(false);
-    saveNewCreditCard(cardName);
+  const onClickNext = async () => {
+    if (selectedCardId() === '') {
+      saveNewCreditCard(newCardName())
+        .then(() => onNext())
+        .catch();
+    } else {
+      saveSelectedCreditCard(selectedCardId())
+        .then(() => onNext())
+        .catch();
+    }
   };
 
   return (
@@ -58,9 +71,11 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
             {/* <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." /> */}
           </div>
           <CreditCardSelect
-            selectedCardName={selectedCardName}
+            newCardName={newCardName}
+            // onChange={(card: CodatBankAccount) => saveSelectedCreditCard(card)}
+            selectedCardId={selectedCardId}
+            setSelectedCardId={setSelectedCardId}
             setCanEditNewCard={setCanEditNewCard}
-            setSelectedCardName={setSelectedCardName}
           ></CreditCardSelect>
           <Show when={canEditNewCard()}>
             <Button
@@ -77,9 +92,10 @@ export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
             onClose={() => setEditingNewCardName(false)}
           >
             <EditCardNameForm
-              oldCardName={selectedCardName}
+              cardName={newCardName}
               onSave={(data: string) => {
-                onSave(data);
+                setNewCardName(data);
+                setEditingNewCardName(false);
               }}
             />
           </Drawer>

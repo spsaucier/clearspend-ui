@@ -23,7 +23,8 @@
 }
 
 .edit-button {
-  margin-top: var(--pd-24);
+  margin-top: var(--pd-16);
+  margin-right: var(--pd-8);
 }
 
 .refresh-button {
@@ -40,4 +41,9 @@
   width: 320px;
   flex-direction: row;
   justify-content: end;
+}
+
+.credit-card-buttons {
+  display: flex;
+  flex-direction: row;
 }

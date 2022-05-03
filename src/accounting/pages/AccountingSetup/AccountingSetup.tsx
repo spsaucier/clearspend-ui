@@ -58,6 +58,7 @@ export default function AccountingSetup() {
   const onCompleteChartOfAccounts = async () => {
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
     mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE } });
+    refetch();
     navigate('/accounting?notification=setup');
   };
 
