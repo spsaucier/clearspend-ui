@@ -9,9 +9,3 @@
     max-width: 400px;
   }
 }
-
-.box {
-  @media (--bp-medium) {
-    max-width: 460px;
-  }
-}

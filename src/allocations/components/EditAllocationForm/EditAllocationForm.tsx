@@ -24,12 +24,10 @@ import type {
   UserRolesAndPermissionsRecord,
 } from 'generated/capital';
 import type { MccGroup } from 'transactions/types';
+import { LimitsForm } from 'cards/components/LimitsForm/LimitsForm';
 
 import { AllocationSelect } from '../AllocationSelect';
 import { AllocationRole } from '../AllocationRole';
-import { SwitchPaymentTypes } from '../SwitchPaymentTypes';
-import { SwitchMccCategories } from '../SwitchMccCategories';
-import { SwitchLimits } from '../SwitchLimits';
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { canManageCards } from '../../utils/permissions';
@@ -258,26 +256,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           />
         }
       >
-        <FormItem multiple label={<Text message="Purchases" />}>
-          <SwitchLimits
-            name="purchases"
-            value={values().purchasesLimits}
-            maxAmount={maxAmount()}
-            class={css.box}
-            onChange={handlers.purchasesLimits}
-          />
-        </FormItem>
-        <FormItem multiple label={<Text message="Categories" />}>
-          <SwitchMccCategories
-            value={values().categories}
-            items={props.mccCategories}
-            class={css.box}
-            onChange={handlers.categories}
-          />
-        </FormItem>
-        <FormItem multiple label={<Text message="Payment types" />}>
-          <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
-        </FormItem>
+        <LimitsForm values={values()} maxAmount={maxAmount()} handlers={handlers} mccCategories={props.mccCategories} />
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />

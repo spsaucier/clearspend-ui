@@ -14,6 +14,7 @@ export function getFormOptions(
     defaultValues: {
       categories: getCategories(data, categories),
       channels: getChannels(data),
+      international: false,
       purchasesLimits: getPurchasesLimits(data),
     },
   };

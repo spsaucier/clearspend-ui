@@ -17,6 +17,7 @@ export function getFormOptions(categories: readonly Readonly<MccGroup>[], parent
       amount: '',
       categories: [...categories],
       channels: PAYMENT_TYPES.map((item) => item.key),
+      international: false,
       purchasesLimits: { ...DEFAULT_LIMITS },
     },
     rules: {
@@ -35,6 +36,7 @@ export function convertFormData(
     name: data.name,
     amount: { currency: 'USD', amount: parseAmount(data.amount) },
     parentAllocationId: data.parent,
+    disableForeign: !data.international,
     ...convertFormLimits(data, categories),
   };
 }

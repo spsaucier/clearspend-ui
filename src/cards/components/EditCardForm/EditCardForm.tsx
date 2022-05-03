@@ -10,9 +10,6 @@ import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
-import { SwitchLimits } from 'allocations/components/SwitchLimits';
-import { SwitchMccCategories } from 'allocations/components/SwitchMccCategories';
-import { SwitchPaymentTypes } from 'allocations/components/SwitchPaymentTypes';
 import { getAllocation } from 'allocations/services';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import {
@@ -45,6 +42,7 @@ import { CardType } from 'cards/types';
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
 import { formatNameString } from '../../../employees/utils/formatName';
+import { LimitsForm } from '../LimitsForm/LimitsForm';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
@@ -223,26 +221,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           />
         }
       >
-        <FormItem multiple label={<Text message="Purchases" />}>
-          <SwitchLimits
-            name="purchases"
-            value={values().purchasesLimits}
-            maxAmount={maxAmount()}
-            class={css.box}
-            onChange={handlers.purchasesLimits}
-          />
-        </FormItem>
-        <FormItem multiple label={<Text message="Categories" />}>
-          <SwitchMccCategories
-            value={values().categories}
-            items={props.mccCategories}
-            class={css.box}
-            onChange={handlers.categories}
-          />
-        </FormItem>
-        <FormItem multiple label={<Text message="Payment types" />}>
-          <SwitchPaymentTypes value={values().channels} class={css.box} onChange={handlers.channels} />
-        </FormItem>
+        <LimitsForm values={values()} maxAmount={maxAmount()} handlers={handlers} mccCategories={props.mccCategories} />
         <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Section>
       <Drawer open={showEmployee()} title={<Text message="New Employee" />} onClose={toggleShowEmployee}>

@@ -1,0 +1,24 @@
+.box {
+  @media (--bp-medium) {
+    max-width: 460px;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-16);
+  }
+}
+
+.icon {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  margin-top: -4px;
+  margin-left: 10px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-gray-60);
+  vertical-align: middle;
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-8);
+}

@@ -2,4 +2,8 @@
   @media (--bp-medium) {
     max-width: 460px;
   }
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-16);
+  }
 }
