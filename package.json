@@ -51,6 +51,7 @@
     "@storybook/builder-webpack5": "6.4.22",
     "@storybook/html": "6.4.22",
     "@storybook/manager-webpack5": "6.4.22",
+    "@types/intercom-web": "^2.8.18",
     "@types/mixpanel-browser": "^2.35.8",
     "@typescript-eslint/eslint-plugin": "5.20.0",
     "@typescript-eslint/parser": "5.20.0",

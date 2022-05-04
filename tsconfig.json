@@ -25,7 +25,7 @@
     "forceConsistentCasingInFileNames": true,
     "importsNotUsedAsValues": "error",
     "importHelpers": true,
-    "types": [],
+    "types": ["@types/intercom-web"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js"
   },

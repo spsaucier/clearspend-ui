@@ -2,6 +2,7 @@ import { Routes, Route } from 'solid-app-router';
 import { onMount } from 'solid-js';
 import * as FS from '@fullstory/browser';
 import mixpanel from 'mixpanel-browser';
+import { useScript } from 'solid-use-script';
 
 import { SignUp } from 'signup';
 import { SetPassword } from 'onboarding/pages/SetPassword';
@@ -12,8 +13,11 @@ import { Login, Login2fa } from './pages/Login';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 
+const INTERCOM_SCRIPT = 'https://widget.intercom.io/widget/l381dwob';
+
 export function App() {
   if (location.hostname !== 'localhost') {
+    useScript(INTERCOM_SCRIPT);
     onMount(() => {
       mixpanel.init(
         (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',

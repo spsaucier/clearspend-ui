@@ -65,6 +65,7 @@ export interface VendorAnalyticsEvent extends AnalyticsEvent {
 export enum AnalyticsVendor {
   Mixpanel = 'mixpanel',
   FullStory = 'fullstory',
+  Intercom = 'intercom',
 }
 
 export enum AnalyticsEventType {
@@ -126,13 +127,39 @@ const vendorActions = {
         break;
     }
   },
+  [AnalyticsVendor.Intercom]: async ({ name, type, data }: AnalyticsEvent) => {
+    switch (type) {
+      case AnalyticsEventType.AddUserProperties:
+        Intercom('boot', {
+          hide_default_launcher: true,
+          api_base: 'https://api-iam.intercom.io',
+          app_id: 'l381dwob',
+          name: formatNameString(data), // Full name
+          email: data?.email, // Email address
+        });
+        FS.identify(data?.userId, {
+          displayName: formatNameString(data),
+          email: data?.email,
+        });
+        FS.setUserVars({
+          company: data?.businessId,
+        });
+        break;
+      case AnalyticsEventType.Logout:
+        FS.anonymize();
+        break;
+      default:
+        FS.log(name || JSON.stringify(data) || '');
+        break;
+    }
+  },
 };
 
 export const sendAnalyticsEvent = ({
   name,
   data,
   type = AnalyticsEventType.Track,
-  vendors = [AnalyticsVendor.Mixpanel, AnalyticsVendor.FullStory],
+  vendors = [AnalyticsVendor.Mixpanel, AnalyticsVendor.FullStory, AnalyticsVendor.Intercom],
 }: VendorAnalyticsEvent) => {
   if (location.hostname !== 'localhost') {
     vendors.forEach(async (vendor: AnalyticsVendor) => {
