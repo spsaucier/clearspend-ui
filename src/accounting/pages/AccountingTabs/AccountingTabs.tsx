@@ -148,7 +148,7 @@ export function AccountingTabs() {
             }}
           >
             <div class={css.notificationContainer}>
-              <div>
+              <div class={css.notificationMessageContainer}>
                 {updateNotifications.data &&
                   updateNotifications.data.map((notification) => (
                     <ChartOfAccountsUpdateText notification={notification} />

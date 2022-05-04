@@ -7,6 +7,14 @@
 
 .notification-button {
   display: flex;
+  padding: 12px 0 0;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.notification-message-container {
+  display: flex;
+  padding: 4px 0;
+  flex-direction: column;
+  overflow: auto;
 }
