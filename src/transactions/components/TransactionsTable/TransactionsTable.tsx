@@ -1,6 +1,7 @@
 import { createMemo, createSignal, onMount, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
+import { i18n as i18nUtil } from '_common/api/intl';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { Setter } from '_common/types/common';
@@ -374,16 +375,13 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
               icon={{ name: 'refresh', pos: 'right' }}
               onClick={onClickSync}
             >
-              <Text
-                message={
-                  hasSelectedTransactions()
-                    ? `Sync ${props.selectedTransactions.length} ${conditionalS(
-                        'Transaction',
-                        props.selectedTransactions.length,
-                      )}`
-                    : 'Sync All Transactions'
-                }
-              />
+              <span>
+                {getSyncButtonMessage(
+                  hasSelectedTransactions(),
+                  syncBeingInitialized(),
+                  props.selectedTransactions.length,
+                )}
+              </span>
             </Button>
           </Popover>
         </Show>
@@ -433,6 +431,18 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     </div>
   );
 }
+
+const getSyncButtonMessage = (hasSelected: boolean, inProgress: boolean, selectedLength: number) => {
+  if (inProgress) {
+    return i18nUtil.t(`Sync In Progress`);
+  }
+  return hasSelected
+    ? i18nUtil.t('Sync {transactionCount} {transactionWord}', {
+        transactionCount: selectedLength,
+        transactionWord: conditionalS(String(i18nUtil.t('Transaction')), selectedLength),
+      })
+    : i18nUtil.t('Sync All Transactions');
+};
 
 const conditionalS = (word: string, itemCount: number) => {
   return `${word}${itemCount > 1 ? 's' : ''}`;

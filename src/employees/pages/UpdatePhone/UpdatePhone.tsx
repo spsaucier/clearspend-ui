@@ -38,7 +38,7 @@ export default function UpdatePhone() {
 
     messages.success({
       title: i18n.t('Success'),
-      message: i18n.t(`We have sent a confirmation code to ${formatPhone(values().phone)}`),
+      message: i18n.t('We have sent a confirmation code to {phone}', { phone: formatPhone(values().phone) }),
     });
 
     navigate('/profile/phone-verify', { state: { phone: values().phone } });
