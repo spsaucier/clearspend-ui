@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Show, createSignal } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
@@ -10,6 +10,11 @@ import { Section } from 'app/components/Section';
 import { useMessages } from 'app/containers/Messages/context';
 import { minLength, samePassword } from 'signup/components/PasswordForm/rules';
 import { changePassword } from 'app/services/auth';
+import { HttpStatus } from '_common/api/fetch/types';
+import { Button } from '_common/components/Button';
+import { Modal, ModalCard } from '_common/components/Modal';
+
+import { InputCode } from '../../../_common/components/InputCode/InputCode';
 
 import css from './ChangePassword.css';
 
@@ -23,6 +28,10 @@ export default function ChangePassword() {
   const i18n = useI18n();
   const messages = useMessages();
   const navigate = useNavigate();
+  const [trustChallenge, setTrustChallenge] = createSignal<string>();
+  const [twoFactorId, setTwoFactorId] = createSignal<string>();
+  const [open2faPrompt, setOpen2faPrompt] = createSignal(false);
+  const [twoFactorCode, setTwoFactorCode] = createSignal<string>();
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { current: '', password: '', confirm: '' },
@@ -33,15 +42,27 @@ export default function ChangePassword() {
     if (hasErrors(trigger())) return;
 
     try {
-      await changePassword({
+      const res = await changePassword({
         currentPassword: values().current,
         newPassword: values().password,
+        trustChallenge: trustChallenge(),
+        twoFactorId: twoFactorId(),
+        twoFactorCode: twoFactorCode(),
       });
-      messages.success({
-        title: i18n.t('Success'),
-        message: i18n.t('The password has been successfully updated.'),
-      });
-      navigate('/profile');
+      if (res.status === HttpStatus.StepUpRequired) {
+        if ('trustChallenge' in res.data) {
+          setTrustChallenge(res.data.trustChallenge);
+          setTwoFactorId(res.data.twoFactorId);
+          setTwoFactorCode();
+          setOpen2faPrompt(true);
+        }
+      } else {
+        messages.success({
+          title: i18n.t('Success'),
+          message: i18n.t('The password has been successfully updated.'),
+        });
+        navigate('/profile');
+      }
     } catch (e: unknown) {
       messages.error({
         title: i18n.t('Error'),
@@ -91,6 +112,27 @@ export default function ChangePassword() {
       <Show when={isDirty()}>
         <PageActions action={<Text message="Update Password" />} onCancel={reset} onSave={onUpdate} />
       </Show>
+      <Modal isOpen={open2faPrompt()} onClose={() => setOpen2faPrompt(false)}>
+        <ModalCard
+          onClose={() => setOpen2faPrompt(false)}
+          title={<Text message="Enter 2FA Code" />}
+          actions={
+            <Button
+              size="lg"
+              type="primary"
+              onClick={() => {
+                setOpen2faPrompt(false);
+                onUpdate();
+              }}
+              data-name="submit-code"
+            >
+              <Text message="Submit Code" />
+            </Button>
+          }
+        >
+          <InputCode value={twoFactorCode() || ''} onChange={setTwoFactorCode} codeLength={6} />
+        </ModalCard>
+      </Modal>
     </Page>
   );
 }

@@ -8,6 +8,7 @@ import type {
   TwoFactorLoginRequest,
   ChangePasswordRequest,
   ChangePasswordResponse,
+  TwoFactorStartLoggedInResponse,
 } from 'generated/capital';
 
 export async function login(username: string, password: string) {
@@ -47,7 +48,10 @@ export async function resetPassword(params: ResetPasswordRequest) {
 }
 
 export async function changePassword(params: Readonly<ChangePasswordRequest>) {
-  await service.post('/authentication/change-password', params);
+  return service.post<ChangePasswordResponse | TwoFactorStartLoggedInResponse>(
+    '/authentication/change-password',
+    params,
+  );
 }
 
 export async function changePasswordById(changePasswordId: string, params: Readonly<ChangePasswordRequest>) {

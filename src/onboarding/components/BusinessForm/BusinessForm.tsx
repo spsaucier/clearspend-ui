@@ -68,7 +68,7 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
 
   return (
     <Form onSubmit={wrapSubmit(onSubmit)}>
-      <Section title={<Text message="Business details" />} class={css.section}>
+      <Section title={<Text message="Business Details" />} class={css.section}>
         <div class={css.wrapper}>
           <FormItem label={<Text message="Legal entity name" />} error={errors().name}>
             <Input name="business-name" value={values().name} error={Boolean(errors().name)} onChange={handlers.name} />
