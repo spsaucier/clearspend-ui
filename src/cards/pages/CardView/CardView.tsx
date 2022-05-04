@@ -207,7 +207,6 @@ export default function CardView() {
               id={card()!.cardId!}
               data={data()!}
               allocationId={card()!.allocationId}
-              maxAmount={data()!.availableBalance}
               onSave={onUpdateCard}
             />
           </Match>

@@ -7,7 +7,6 @@ import { Form, createForm, hasErrors } from '_common/components/Form';
 import { PageActions } from 'app/components/Page';
 import { useMessages } from 'app/containers/Messages/context';
 import { ResetLimits } from 'cards/components/ResetLimits';
-import type { Amount } from 'generated/capital';
 import type { MccGroup } from 'transactions/types';
 import { LimitsForm } from 'cards/components/LimitsForm/LimitsForm';
 
@@ -28,7 +27,6 @@ import css from './CardControlsForm.css';
 
 interface CardControlsFormProps {
   data: Readonly<ControlsData>;
-  maxAmount: Readonly<Amount>;
   allocationId?: string;
   mccCategories: readonly Readonly<MccGroup>[];
   onSave: (data: Readonly<ControlsData>) => Promise<unknown>;
@@ -68,12 +66,7 @@ export function CardControlsForm(props: Readonly<CardControlsFormProps>) {
 
   return (
     <Form>
-      <LimitsForm
-        values={values()}
-        maxAmount={props.maxAmount}
-        handlers={handlers}
-        mccCategories={props.mccCategories}
-      />
+      <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
       <Show when={allocation()}>
         <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Show>

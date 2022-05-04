@@ -31,7 +31,6 @@ import type {
   CreateUserResponse,
   IssueCardRequest,
   UserData,
-  Amount,
   User,
 } from 'generated/capital';
 import { getBusiness } from 'app/services/businesses';
@@ -103,10 +102,6 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const allocation = createMemo(() => {
     const id = values().allocationId;
     return Boolean(id) ? props.allocations.find(allocationWithID(id)) : undefined;
-  });
-
-  const maxAmount = createMemo(() => {
-    return allocation()?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
   });
 
   const ownerName = createMemo(() => {
@@ -221,7 +216,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           />
         }
       >
-        <LimitsForm values={values()} maxAmount={maxAmount()} handlers={handlers} mccCategories={props.mccCategories} />
+        <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
         <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Section>
       <Drawer open={showEmployee()} title={<Text message="New Employee" />} onClose={toggleShowEmployee}>

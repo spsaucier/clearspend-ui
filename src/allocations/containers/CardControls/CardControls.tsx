@@ -3,7 +3,6 @@ import { Text } from 'solid-i18n';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { useMCC } from 'app/stores/mcc';
-import type { Amount } from 'generated/capital';
 
 import { CardControlsForm } from '../../components/CardControlsForm';
 import type { ControlsData } from '../../types';
@@ -12,7 +11,6 @@ interface CardControlsProps {
   id: string;
   allocationId?: string;
   data: Readonly<ControlsData>;
-  maxAmount: Readonly<Amount>;
   onSave: (allocationId: string, data: Readonly<ControlsData>) => Promise<unknown>;
 }
 
@@ -34,7 +32,6 @@ export function CardControls(props: Readonly<CardControlsProps>) {
       >
         <CardControlsForm
           data={props.data}
-          maxAmount={props.maxAmount}
           mccCategories={mcc.data!}
           allocationId={props.allocationId}
           onSave={(values) => props.onSave(props.id, values)}

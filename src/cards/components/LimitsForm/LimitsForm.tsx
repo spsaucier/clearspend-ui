@@ -22,7 +22,7 @@ interface FormValues {
 interface LimitsFormProps {
   values: FormValues;
   handlers: Readonly<FormHandlers<FormValues>>;
-  maxAmount: Readonly<Amount>;
+  maxAmount?: Readonly<Amount>;
   mccCategories: readonly Readonly<MccGroup>[];
 }
 

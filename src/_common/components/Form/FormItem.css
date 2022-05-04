@@ -1,6 +1,9 @@
 .root {
   margin: 0 0 var(--pd-8);
-  margin-bottom: var(--pd-32);
+
+  &:not(:last-child) {
+    margin-bottom: var(--pd-32);
+  }
 }
 
 .root.dark {

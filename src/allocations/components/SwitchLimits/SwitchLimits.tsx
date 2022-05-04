@@ -16,18 +16,18 @@ import css from './SwitchLimits.css';
 interface SwitchLimitsProps {
   name: string;
   value: Readonly<Limits>;
-  maxAmount: Readonly<Amount>;
+  maxAmount?: Readonly<Amount>;
   class?: string;
   onChange: (value: Limits) => void;
 }
 
 export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
   const i18n = useI18n();
-  const maxAmount = createMemo(() => formatCurrency(props.maxAmount.amount || 0));
+  const maxAmount = createMemo(() => props.maxAmount?.amount && formatCurrency(props.maxAmount.amount));
 
   const onEnableChange = (name: LimitPeriod) => {
     return (enabled: boolean) => {
-      props.onChange({ ...props.value, [name]: enabled ? { amount: '' } : null });
+      props.onChange({ ...props.value, [name]: enabled ? { amount: '' } : undefined });
     };
   };
 
@@ -45,7 +45,10 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         onChange={onEnableChange(LimitPeriod.DAILY)}
         name={`${props.name}-daily-limit`}
       >
-        <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
+        <FormItem
+          label={<Text message="Amount" />}
+          extra={maxAmount() ? <Text message="Max value: {amount}" amount={maxAmount()!} /> : undefined}
+        >
           <InputCurrency
             name={`${props.name}-daily-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}
@@ -60,7 +63,10 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         onChange={onEnableChange(LimitPeriod.MONTHLY)}
         name={`${props.name}-monthly-limit`}
       >
-        <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
+        <FormItem
+          label={<Text message="Amount" />}
+          extra={maxAmount() ? <Text message="Max value: {amount}" amount={maxAmount()!} /> : undefined}
+        >
           <InputCurrency
             name={`${props.name}-monthly-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}
@@ -75,7 +81,10 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
         onChange={onEnableChange(LimitPeriod.INSTANT)}
         name={`${props.name}-transaction-limit`}
       >
-        <FormItem label={<Text message="Amount" />} extra={<Text message="Max value: {amount}" amount={maxAmount()} />}>
+        <FormItem
+          label={<Text message="Amount" />}
+          extra={maxAmount() ? <Text message="Max value: {amount}" amount={maxAmount()!} /> : undefined}
+        >
           <InputCurrency
             name={`${props.name}-instant-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}

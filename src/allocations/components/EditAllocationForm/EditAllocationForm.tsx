@@ -16,7 +16,6 @@ import { InputCurrency } from '_common/components/InputCurrency';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   Allocation,
-  Amount,
   CreateAllocationRequest,
   CreateUserRequest,
   CreateUserResponse,
@@ -28,7 +27,6 @@ import { LimitsForm } from 'cards/components/LimitsForm/LimitsForm';
 
 import { AllocationSelect } from '../AllocationSelect';
 import { AllocationRole } from '../AllocationRole';
-import { allocationWithID } from '../../utils/allocationWithID';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { canManageCards } from '../../utils/permissions';
 import { AllocationRoles, AllocationUserRole } from '../../types';
@@ -110,11 +108,6 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
       messages.error({ title: i18n.t('Something went wrong') });
     });
   };
-
-  const maxAmount = createMemo(() => {
-    const parent = props.allocations.find(allocationWithID(values().parent));
-    return parent?.account.availableBalance || ({ currency: 'UNSPECIFIED', amount: 0 } as Amount);
-  });
 
   const userRoles = createMemo<AllocationUserRole[]>(() => {
     return [
@@ -256,7 +249,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
           />
         }
       >
-        <LimitsForm values={values()} maxAmount={maxAmount()} handlers={handlers} mccCategories={props.mccCategories} />
+        <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
       </Section>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />

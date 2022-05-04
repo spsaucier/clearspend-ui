@@ -171,12 +171,7 @@ export default function Allocations() {
             </Match>
             <Match when={tab() === Tabs.controls}>
               <Data error={status().error} loading={status().loading} data={data()} onReload={reload}>
-                <CardControls
-                  id={data()!.allocation.allocationId}
-                  data={data()!}
-                  maxAmount={data()!.allocation.account.availableBalance || { currency: 'UNSPECIFIED', amount: 0 }}
-                  onSave={onUpdateAllocation}
-                />
+                <CardControls id={data()!.allocation.allocationId} data={data()!} onSave={onUpdateAllocation} />
               </Data>
             </Match>
             <Match when={tab() === Tabs.settings}>
