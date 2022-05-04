@@ -12,8 +12,8 @@ export interface ReviewDetails {
   refetch: () => Promise<unknown>;
 }
 
-const REFETCH_MS_CHECK_APPLICATION_STATUS = 10000; // 10 seconds
-const MAX_REFETCH_MS_CHECK_APPLICATION_STATUS = 60000; // 60 seconds
+const REFETCH_MS_CHECK_APPLICATION_STATUS = 9000; // 9 seconds
+const MAX_REFETCH_MS_CHECK_APPLICATION_STATUS = 100000; // 100 seconds
 
 export function Review(props: Readonly<ReviewDetails>) {
   const [totalWaitTime, setTotalWaitTime] = createSignal<number>(0);

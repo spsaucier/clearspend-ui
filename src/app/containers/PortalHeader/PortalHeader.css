@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  width: 100vw;
+  max-width: 100%;
+  height: auto;
+  padding: var(--pd-8);
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--tw-dark-green);
+
+  @media (--bp-medium) {
+    flex-direction: row;
+  }
+}
+
+.branding {
+  padding: var(--pd-8);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}

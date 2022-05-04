@@ -1,16 +1,18 @@
 import { keys } from 'solid-create-form/lib/utils';
 import { For } from 'solid-js';
 
-import { Button, ButtonProps } from '_common/components/Button/Button';
+import type { ButtonProps } from '_common/components/Button/Button';
 import { IconName } from '_common/components/Icon';
+
+import { FlatButton } from './FlatButton';
 
 const ButtonTypes: ButtonProps['type'][] = ['default', 'primary', 'danger'];
 const ButtonViews: ButtonProps['view'][] = ['default', 'second', 'ghost'];
 const ButtonSizes: ButtonProps['size'][] = ['sm', 'md', 'lg'];
 
 export default {
-  title: 'Common/Button - Button',
-  component: Button,
+  title: 'Common/Button - FlatButton',
+  component: FlatButton,
   argTypes: {
     size: {
       options: ['sm', 'md', 'lg'],
@@ -42,6 +44,7 @@ export default {
     disabled: false,
   },
 };
+
 export const Default = (args: ButtonProps) => (
   <div>
     <For each={ButtonViews}>
@@ -64,11 +67,11 @@ export const Default = (args: ButtonProps) => (
                       {(size) => {
                         return (
                           <span style={{ 'margin-right': '25px' }}>
-                            <Button {...args} size={size} type={type} view={view} />
+                            <FlatButton {...args} size={size} type={type} view={view} />
                             &nbsp;&nbsp;&nbsp;
-                            <Button {...args} size={size} type={type} view={view} href="#">
+                            <FlatButton {...args} size={size} type={type} view={view} href="#">
                               Link
-                            </Button>
+                            </FlatButton>
                             <div style={{ 'margin-top': '10px' }}>
                               {view} - {type} - {size}
                             </div>

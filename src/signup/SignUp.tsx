@@ -130,11 +130,7 @@ export default function SignUp() {
 
     setRelationshipToBusiness(relationshipToBusiness);
 
-    if (
-      isOwnerOf25 ||
-      isExecutive ||
-      [BusinessTypeCategory.INDIVIDUAL, BusinessTypeCategory.NONPROFIT].includes(businessTypeCategory)
-    ) {
+    if (isOwnerOf25 || isExecutive || [BusinessTypeCategory.INDIVIDUAL].includes(businessTypeCategory)) {
       await onSignup();
     } else {
       next(Step.SorryButStep);
