@@ -36,7 +36,7 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
       personal: false,
       categories: [],
       channels: [],
-      international: false,
+      international: true,
       purchasesLimits: getDefaultLimits(),
       ...getEmptyAddress(),
     },

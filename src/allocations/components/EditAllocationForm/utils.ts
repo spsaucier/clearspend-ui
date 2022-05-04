@@ -17,7 +17,7 @@ export function getFormOptions(categories: readonly Readonly<MccGroup>[], parent
       amount: '',
       categories: [...categories],
       channels: PAYMENT_TYPES.map((item) => item.key),
-      international: false,
+      international: true,
       purchasesLimits: { ...DEFAULT_LIMITS },
     },
     rules: {
