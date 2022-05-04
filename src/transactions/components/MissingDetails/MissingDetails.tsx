@@ -31,13 +31,18 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
     );
   });
 
+  const validType = createMemo(() => props.data.status !== 'DECLINED' && props.data.type !== 'NETWORK_REFUND');
+
+  const foreignCurrency = createMemo(() => {
+    const currency = props.data.amount?.currency;
+    return Boolean(currency) && currency !== 'USD';
+  });
+
   return (
     <Show
       when={
         isActivityType(props.data.type) &&
-        (receiptMissing() || expenseMissing() || merchantMissing()) &&
-        props.data.status !== 'DECLINED' &&
-        props.data.type !== 'NETWORK_REFUND'
+        (foreignCurrency() || (validType() && (receiptMissing() || expenseMissing() || merchantMissing())))
       }
     >
       <Popover
@@ -46,28 +51,38 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
         position="bottom-right"
         content={
           <div class={css.popupContent}>
-            <Show when={expenseMissing()}>
-              <Text message="Expense category is missing." />
+            <Show when={foreignCurrency()}>
+              <Text message="Foreign currency." />
             </Show>
-            <Show when={receiptMissing()}>
-              <Text message="Receipt is missing." />
-            </Show>
-            <Show when={merchantMissing()}>
-              <Text message="Vendor is missing." />
+            <Show when={validType()}>
+              <Show when={expenseMissing()}>
+                <Text message="Expense category is missing." />
+              </Show>
+              <Show when={receiptMissing()}>
+                <Text message="Receipt is missing." />
+              </Show>
+              <Show when={merchantMissing()}>
+                <Text message="Vendor is missing." />
+              </Show>
             </Show>
           </div>
         }
       >
         {(args) => (
           <div {...args} class={css.root}>
-            <Show when={expenseMissing()}>
-              <Icon name="tag" class={join(css.icon, css.expense)} />
+            <Show when={foreignCurrency()}>
+              <Icon name="globe" class={css.icon} />
             </Show>
-            <Show when={receiptMissing()}>
-              <Icon name="receipt" class={css.icon} />
-            </Show>
-            <Show when={merchantMissing()}>
-              <Icon name="channel-ecommerce" class={css.icon} />
+            <Show when={validType()}>
+              <Show when={expenseMissing()}>
+                <Icon name="tag" class={join(css.icon, css.expense)} />
+              </Show>
+              <Show when={receiptMissing()}>
+                <Icon name="receipt" class={css.icon} />
+              </Show>
+              <Show when={merchantMissing()}>
+                <Icon name="channel-ecommerce" class={css.icon} />
+              </Show>
             </Show>
           </div>
         )}

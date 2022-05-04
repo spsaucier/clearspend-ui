@@ -29,7 +29,11 @@ export function ActivityAccount(props: Readonly<ActivityAccountProps>) {
             {(allocation) => (
               <Account
                 icon="allocations"
-                name={<Link href={`/allocations/${allocation.allocationId}`}>{allocation.name}</Link>}
+                name={
+                  <Link href={`/allocations/${allocation.allocationId}`} onClick={(event) => event.stopPropagation()}>
+                    {allocation.name}
+                  </Link>
+                }
               />
             )}
           </Match>

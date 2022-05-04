@@ -10,7 +10,7 @@ import { formatActivityStatus } from '../../utils/formatActivityStatus';
 
 import css from './ActivityAmount.css';
 
-const VISIBLE_STATUSES: readonly LedgerActivityResponse['status'][] = ['APPROVED', 'PENDING', 'DECLINED'];
+const VISIBLE_STATUSES: readonly LedgerActivityResponse['status'][] = ['PENDING', 'DECLINED'];
 
 interface ActivityAmountProps {
   status: LedgerActivityResponse['status'];
@@ -32,7 +32,7 @@ export function ActivityAmount(props: Readonly<ActivityAmountProps>) {
             {formatCurrency(props.requestedAmount?.amount || props.amount?.amount || 0)}
           </div>
           <Show when={VISIBLE_STATUSES.includes(props.status)}>
-            <div class={join(css.status, props.status === 'DECLINED' ? css.statusError : '')}>
+            <div class={join(css.status, props.status === 'DECLINED' && css.statusError)}>
               {formatActivityStatus(props.status)}
             </div>
           </Show>

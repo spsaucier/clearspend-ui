@@ -12,6 +12,7 @@ interface LinkProps {
   href: string;
   class?: string;
   darkMode?: boolean;
+  onClick?: (event: MouseEvent) => void;
   children: JSXElement;
 }
 
@@ -29,12 +30,13 @@ export function Link(props: Readonly<LinkProps>) {
             target: '_blank',
             rel: 'noopener noreferrer',
           })}
+          onClick={props.onClick}
         >
           {props.children}
         </a>
       }
     >
-      <NavLink href={props.href} class={cls()}>
+      <NavLink href={props.href} class={cls()} onClick={props.onClick}>
         {props.children}
       </NavLink>
     </Show>

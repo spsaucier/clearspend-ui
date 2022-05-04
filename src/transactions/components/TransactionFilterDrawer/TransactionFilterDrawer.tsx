@@ -149,7 +149,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
           <FilterBox title={<Text message="Transaction Type" />}>
             <CheckboxGroup value={values().types} onChange={handlers.types}>
               <For each={Object.entries(ACTIVITY_TYPE_TITLES)}>
-                {([value, title]) => <Checkbox value={value}>{title}</Checkbox>}
+                {([value, msg]) => <Checkbox value={value}>{i18n.t(msg)}</Checkbox>}
               </For>
             </CheckboxGroup>
           </FilterBox>

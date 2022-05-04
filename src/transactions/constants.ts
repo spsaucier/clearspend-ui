@@ -1,4 +1,6 @@
 import type { JSXElement } from 'solid-js';
+import { defineMessages } from 'solid-i18n';
+import type { I18nMessage } from 'i18n-mini/lib/types';
 
 import { i18n } from '_common/api/intl';
 import type { IconName } from '_common/components/Icon';
@@ -70,21 +72,21 @@ export const STATUS_FILL_ICONS: Record<ActivityStatus | 'NETWORK_REFUND', keyof 
   NETWORK_REFUND: 'sync',
 };
 
-export const ACTIVITY_TYPE_TITLES: Partial<Readonly<Record<ActivityType, JSXElement>>> = {
-  NETWORK_CAPTURE: i18n.t('Payment'),
-  NETWORK_AUTHORIZATION: i18n.t('Payment'),
-  NETWORK_REFUND: i18n.t('Refund'),
-  CARD_FUND_RETURN: i18n.t('Card Funding Return'),
-  BANK_DEPOSIT_ACH: i18n.t('Deposit (ACH push)'),
-  BANK_DEPOSIT_STRIPE: i18n.t('Deposit (ACH pull)'),
-  BANK_DEPOSIT_WIRE: i18n.t('Deposit (Wire)'),
-  BANK_DEPOSIT_RETURN: i18n.t('Deposit Return'),
-  BANK_WITHDRAWAL: i18n.t('Withdrawal'),
-  BANK_WITHDRAWAL_RETURN: i18n.t('Withdrawal Return'),
-  MANUAL: i18n.t('Transfer'),
-  REALLOCATE: i18n.t('Reallocation'),
-  FEE: i18n.t('Fee'),
-};
+export const ACTIVITY_TYPE_TITLES: Readonly<Record<ActivityType, I18nMessage>> = defineMessages({
+  NETWORK_CAPTURE: { message: 'Card Payment' },
+  NETWORK_AUTHORIZATION: { message: 'Card Authorization' },
+  NETWORK_REFUND: { message: 'Refund' },
+  CARD_FUND_RETURN: { message: 'Card Funding Return' },
+  BANK_DEPOSIT_STRIPE: { message: 'Transfer In' },
+  BANK_DEPOSIT_ACH: { message: 'Transfer In (ACH)' },
+  BANK_DEPOSIT_WIRE: { message: 'Transfer In (Wire)' },
+  BANK_DEPOSIT_RETURN: { message: 'Transfer In Reversal' },
+  BANK_WITHDRAWAL: { message: 'Transfer Out' },
+  BANK_WITHDRAWAL_RETURN: { message: 'Transfer Out Reversal' },
+  MANUAL: { message: 'Transfer' },
+  REALLOCATE: { message: 'Reallocation' },
+  FEE: { message: 'Fee' },
+});
 
 export const MERCHANT_CATEGORIES: Readonly<Record<MccGroup, { icon: keyof typeof IconName; name: JSXElement }>> = {
   CHILD_CARE: { icon: 'mcc-child-care', name: i18n.t('Child Care') },

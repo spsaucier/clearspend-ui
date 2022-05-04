@@ -54,6 +54,7 @@ export enum IconName {
   'file-text' = 'file-text',
   filters = 'filters',
   freeze = 'freeze',
+  globe = 'globe',
   information = 'information',
   keyboard = 'keyboard',
   'l-tab' = 'l-tab',

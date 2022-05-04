@@ -18,9 +18,10 @@ import type { DateRange } from 'app/types/common';
 import type { LedgerActivityRequest, PagedDataLedgerActivityResponse, LedgerActivityResponse } from 'generated/capital';
 import { Option, Select } from '_common/components/Select';
 
-import { ACTIVITY_TYPE_TITLES, LEDGER_TYPES, ACTIVITY_TYPES } from '../../constants';
+import { LEDGER_TYPES, ACTIVITY_TYPES } from '../../constants';
 import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
+import { ActivityType } from '../ActivityType';
 import { ActivityUser } from '../ActivityUser';
 import { ActivityAccount } from '../ActivityAccount';
 import { ActivityAmount } from '../ActivityAmount';
@@ -67,29 +68,30 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
       render: (item) => <ActivityDate date={item.activityTime} />,
     },
     {
-      name: 'type',
-      title: <Text message="Activity Type" />,
-      render: (item) => (
-        <>
-          <div>{ACTIVITY_TYPE_TITLES[item.type!]}</div>
-          <div class={css.sub}>{item.expenseDetails?.categoryName}</div>
-        </>
-      ),
-    },
-    {
-      name: 'user',
-      title: <Text message="User" />,
-      render: (item) => <ActivityUser data={item.user} onUserClick={props.onUserClick} />,
-    },
-    {
       name: 'source',
-      title: <Text message="Source" />,
+      title: <Text message="Account" />,
       render: (item) => <ActivityAccount account={item.sourceAccount} onCardClick={props.onCardClick} />,
     },
     {
+      name: 'type',
+      title: <Text message="Transaction Type" />,
+      render: (item) => (
+        <ActivityType
+          withdrawal={Math.sign(item.amount?.amount || 0) === -1}
+          type={item.type}
+          category={item.expenseDetails?.categoryName}
+        />
+      ),
+    },
+    {
       name: 'destination',
-      title: <Text message="Destination" />,
+      title: <Text message="Reference" />,
       render: (item) => <ActivityAccount account={item.targetAccount} onCardClick={props.onCardClick} />,
+    },
+    {
+      name: 'user',
+      title: <Text message="Employee" />,
+      render: (item) => <ActivityUser data={item.user} onUserClick={props.onUserClick} />,
     },
     {
       name: 'amount',
