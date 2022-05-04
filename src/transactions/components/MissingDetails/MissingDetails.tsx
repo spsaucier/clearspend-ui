@@ -26,7 +26,7 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
 
     return (
       isMerchant &&
-      isAllowedReceipts((account as LedgerMerchantAccount).merchantInfo, props.data.status) &&
+      isAllowedReceipts((account as LedgerMerchantAccount | undefined)?.merchantInfo, props.data.status) &&
       !props.data.receipt?.receiptId?.length
     );
   });
