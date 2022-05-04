@@ -5,10 +5,10 @@ import type { Setter } from '_common/types/common';
 import type { SearchUserRequest } from 'generated/capital';
 import { createForm, Form } from '_common/components/Form';
 import { MultiSelect, Option } from '_common/components/MultiSelect';
-import { useAllocations } from 'allocations/stores/allocations';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
+import { useBusiness } from 'app/containers/Main/context';
 
 import css from './EmployeeFilterDrawer.css';
 
@@ -30,7 +30,7 @@ interface EmployeeFilterDrawerProps {
 }
 
 export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>) {
-  const allocations = useAllocations({ initValue: [] });
+  const { allocations } = useBusiness();
 
   const { values, handlers } = createForm<FormValues>({
     defaultValues: {
@@ -65,9 +65,9 @@ export function EmployeeFilterDrawer(props: Readonly<EmployeeFilterDrawerProps>)
             value={values().allocationIDs}
             onChange={handlers.allocationIDs}
             // TODO: Should it work without valueRender?
-            valueRender={(value) => allocations.data!.find((item) => item.allocationId === value)?.name}
+            valueRender={(value) => allocations().find((item) => item.allocationId === value)?.name}
           >
-            <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
+            <For each={allocations()}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
           </MultiSelect>
         </FilterBox>
         <FilterBox title={<Text message="Card Type" />}>

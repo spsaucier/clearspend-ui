@@ -4,11 +4,11 @@ import { useI18n, Text } from 'solid-i18n';
 import { createForm, Form, FormItem } from '_common/components/Form';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { Checkbox, CheckboxGroup } from '_common/components/Checkbox';
-import { FilterBox } from 'app/components/FilterBox';
-import { FiltersControls } from 'app/components/FiltersControls';
 import { MultiSelect } from '_common/components/MultiSelect/MultiSelect';
 import { Option } from '_common/components/MultiSelect/Option';
-import { useAllocations } from 'allocations/stores/allocations';
+import { FilterBox } from 'app/components/FilterBox';
+import { FiltersControls } from 'app/components/FiltersControls';
+import { useBusiness } from 'app/containers/Main/context';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
 
@@ -19,8 +19,9 @@ import css from './CardsFilterDrawer.css';
 
 export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
   const i18n = useI18n();
+
+  const { allocations } = useBusiness();
   const users = useUsersList({ initValue: [] });
-  const allocations = useAllocations({ initValue: [] });
 
   const { values, handlers } = createForm(getFormOptions(props.params));
 
@@ -40,11 +41,11 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               name="allocations"
               value={values().allocations}
               placeholder={String(i18n.t('Search by allocation name'))}
-              valueRender={(id) => allocations.data!.find((item) => item.allocationId === id)?.name}
+              valueRender={(id) => allocations().find((item) => item.allocationId === id)?.name}
               onChange={handlers.allocations}
               data-name="Pick Allocations"
             >
-              <For each={allocations.data!}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
+              <For each={allocations()}>{(item) => <Option value={item.allocationId}>{item.name}</Option>}</For>
             </MultiSelect>
           </FilterBox>
         </Show>
@@ -97,10 +98,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               name="employees"
               value={values().users}
               placeholder={String(i18n.t('Search by employee name'))}
-              valueRender={(id) => {
-                const user = users.data!.find((item) => item.userId === id);
-                return `${user?.firstName} ${user?.lastName}`;
-              }}
+              valueRender={(id) => formatName(users.data!.find((item) => item.userId === id))}
               onChange={handlers.users}
             >
               <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>

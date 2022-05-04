@@ -28,7 +28,6 @@ import { CardControls } from './containers/CardControls';
 import { Settings } from './containers/Settings';
 import { ManageBalanceButton } from './containers/ManageBalanceButton';
 import { ManageBalance } from './containers/ManageBalance';
-import { useAllocations } from './stores/allocations';
 import { getAvailableBalance } from './utils/getAvailableBalance';
 import { allocationWithID } from './utils/allocationWithID';
 import { getAllocationPermissions, canManageFunds, canManageCards, canManagePermissions } from './utils/permissions';
@@ -49,18 +48,19 @@ export default function Allocations() {
   const messages = useMessages();
   const params = useParams<{ id?: string }>();
   const media = useMediaContext();
-  const { currentUserRoles } = useBusiness();
+
+  const { allocations, currentUserRoles, reloadPermissions } = useBusiness();
   const [cardsCount, setCardsCount] = createSignal<number>();
 
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.cards);
   const [manageId, setManageId] = createSignal<string>();
-  const allocations = useAllocations();
 
   const onAllocationChange = () => setTab(Tabs.cards, true);
 
-  const sortedItems = createMemo(() =>
-    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
-  );
+  const sortedItems = createMemo(() => {
+    const items = allocations();
+    return [...items].sort((a, b) => byNameChain(a, b, items));
+  });
 
   const current = createMemo(() => {
     return params.id ? sortedItems().find(allocationWithID(params.id)) : sortedItems()[0];
@@ -91,12 +91,12 @@ export default function Allocations() {
   };
 
   return (
-    <Data data={allocations.data} loading={allocations.loading} error={allocations.error} onReload={allocations.reload}>
+    <>
       <Show when={current()}>
         <Page
           title={media.medium && formatCurrency(getAvailableBalance(current()!))}
           titleClass={css.title}
-          breadcrumbs={media.medium && <Breadcrumbs current={current()!} items={allocations.data!} />}
+          breadcrumbs={media.medium && <Breadcrumbs current={current()!} items={allocations()} />}
           actions={
             <div class={css.actions}>
               <ManageBalanceButton
@@ -161,7 +161,7 @@ export default function Allocations() {
           </TabList>
           <Switch>
             <Match when={tab() === Tabs.cards}>
-              <Cards current={current()!} allocations={allocations.data!} setCardsCount={setCardsCount} />
+              <Cards current={current()!} allocations={allocations()} setCardsCount={setCardsCount} />
             </Match>
             <Match when={tab() === Tabs.transactions}>
               <Dynamic
@@ -180,19 +180,19 @@ export default function Allocations() {
               </Data>
             </Match>
             <Match when={tab() === Tabs.settings}>
-              <Settings allocation={current()!} onReload={allocations.reload} permissions={userPermissions} />
+              <Settings allocation={current()!} onReload={reloadPermissions} permissions={userPermissions} />
             </Match>
           </Switch>
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
             <ManageBalance
               allocationId={manageId()!}
               allocations={sortedItems()}
-              onReload={allocations.reload}
+              onReload={reloadPermissions}
               onClose={() => setManageId()}
             />
           </Drawer>
         </Page>
       </Show>
-    </Data>
+    </>
   );
 }

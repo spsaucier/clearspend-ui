@@ -11,8 +11,8 @@ import { Radio, RadioGroup } from '_common/components/Radio';
 import { SelectDateRange } from '_common/components/SelectDateRange';
 import { FilterBox } from 'app/components/FilterBox';
 import { FiltersControls } from 'app/components/FiltersControls';
+import { useBusiness } from 'app/containers/Main/context';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
-import { useAllocations } from 'allocations/stores/allocations';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { useUsersList } from 'employees/stores/usersList';
 import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
@@ -40,7 +40,7 @@ interface TransactionFilterDrawerProps {
 export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerProps>) {
   const i18n = useI18n();
 
-  const allocations = useAllocations({ initValue: [], skip: !props.showAllocationFilter });
+  const { allocations } = useBusiness();
   const expenseCategories = useExpenseCategories({ initValue: [] });
 
   const { values, handlers } = createForm<FormValues>(getFormOptions(props.params));
@@ -60,7 +60,7 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
           <FilterBox title={<Text message="Allocation" />}>
             <AllocationSelect
               showAllAsOption
-              items={allocations.data!}
+              items={allocations()}
               value={values().allocation}
               onChange={handlers.allocation}
             />

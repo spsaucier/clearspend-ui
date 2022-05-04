@@ -11,7 +11,6 @@ import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
-import { useAllocations } from 'allocations/stores/allocations';
 import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
@@ -52,7 +51,8 @@ interface TransactionPreviewProps {
 const AllocationCard = (props: { allocationName?: string }) => {
   if (!props.allocationName) return null;
 
-  const { currentUserRoles } = useBusiness();
+  const { allocations, currentUserRoles } = useBusiness();
+
   if (!hasSomeManagerRole(currentUserRoles())) {
     return (
       <>
@@ -65,9 +65,10 @@ const AllocationCard = (props: { allocationName?: string }) => {
   }
 
   const navigate = useNavigate();
-  const allocations = useAllocations({ initValue: [] });
+
   // TODO: Replace accountName with allocationId after CAP-721
-  const allocation = createMemo(() => allocations.data?.find((item) => item.name === props.allocationName));
+  const allocation = createMemo(() => allocations().find((item) => item.name === props.allocationName));
+
   return (
     <Show when={allocation()}>
       <h4 class={css.title}>

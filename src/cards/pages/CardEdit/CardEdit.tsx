@@ -6,8 +6,8 @@ import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { useMessages } from 'app/containers/Messages/context';
+import { useBusiness } from 'app/containers/Main/context';
 import { useMCC } from 'app/stores/mcc';
-import { useAllocations } from 'allocations/stores/allocations';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
 import type { CreateUserRequest, IssueCardRequest } from 'generated/capital';
@@ -25,8 +25,8 @@ export default function CardEdit() {
   const [errorLevel, setErrorLevel] = createSignal('');
 
   const mcc = useMCC({ initValue: [] });
-  const allocations = useAllocations({ initValue: [] });
   const users = useUsersList({ initValue: [] });
+  const { allocations } = useBusiness();
 
   const onAddEmployee = async (userData: Readonly<CreateUserRequest>) => {
     const resp = await saveUser(userData);
@@ -99,25 +99,22 @@ export default function CardEdit() {
   return (
     <Page title={<Text message="New Card" />}>
       <Switch>
-        <Match when={allocations.error}>
-          <LoadingError onReload={allocations.reload} />
-        </Match>
         <Match when={mcc.error}>
           <LoadingError onReload={mcc.reload} />
         </Match>
         <Match when={users.error}>
           <LoadingError onReload={users.reload} />
         </Match>
-        <Match when={allocations.loading || (users.loading && !users.data?.length) || mcc.loading}>
+        <Match when={(users.loading && !users.data?.length) || mcc.loading}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length && mcc.data?.length}>
+        <Match when={mcc.data?.length}>
           <EditCardForm
             userId={location.state?.userId}
             allocationId={location.state?.allocationId}
             users={users.data!}
             mccCategories={mcc.data!}
-            allocations={allocations.data!}
+            allocations={allocations()}
             onAddEmployee={onAddEmployee}
             onSave={onSave}
           />

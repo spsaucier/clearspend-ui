@@ -7,12 +7,9 @@ import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import type { Allocation, CardDetailsResponse, CurrencyLimit, User } from 'generated/capital';
-import { useAllocations } from 'allocations/stores/allocations';
-import type { Store } from '_common/utils/store';
+import type { CardDetailsResponse, CurrencyLimit, User } from 'generated/capital';
 
 import { BalanceInfo } from '../BalanceInfo';
-import { hasSomeManagerRole } from '../../../allocations/utils/permissions';
 import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './CardInfo.css';
@@ -26,33 +23,12 @@ interface CardInfoProps {
 }
 
 export function CardInfo(props: Readonly<CardInfoProps>) {
-  const { currentUserRoles } = useBusiness();
+  const { allocations } = useBusiness();
   const limits = props.limits?.[0]?.typeMap.PURCHASE;
 
-  let allocations: Store<readonly Readonly<Allocation>[], unknown> = {
-      data: null,
-      loading: false,
-      error: undefined,
-      params: undefined,
-      reload: function (): Promise<unknown> {
-        throw new Error('Function not implemented.');
-      },
-      setData: function (): void {
-        throw new Error('Function not implemented.');
-      },
-      setParams: function (): void {
-        throw new Error('Function not implemented.');
-      },
-    },
-    allocation;
-  if (hasSomeManagerRole(currentUserRoles())) {
-    allocations = useAllocations();
-    if (allocations.data) {
-      allocation = createMemo(
-        () => allocations.data?.find(allocationWithID(props.allocationId)) as Allocation | undefined,
-      );
-    }
-  }
+  const allocation = createMemo(() => allocations().find(allocationWithID(props.allocationId)));
+  const parentAllocation = createMemo(() => allocations().find(allocationWithID(allocation()?.parentAllocationId)));
+
   return (
     <div class={join(css.root, props.class)}>
       <div class={css.item}>
@@ -90,7 +66,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <Text message="Allocation" />
         </h4>
         <Show
-          when={allocation?.()}
+          when={allocation()}
           fallback={
             <div class={css.value}>
               <strong class={css.name}>{props.cardData?.allocationName}</strong>
@@ -98,14 +74,12 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           }
         >
           <>
-            <Link class={css.value} href={`/allocations/${props.allocationId}`}>
-              <strong class={css.name}>{allocation?.()?.name}</strong>
+            <Link class={css.value} href={`/allocations/${allocation()!.allocationId}`}>
+              <strong class={css.name}>{allocation()!.name}</strong>
               <Icon name="chevron-right" class={css.chevron} />
             </Link>
-            <Show when={allocation?.()?.parentAllocationId}>
-              <span class={css.note}>
-                {allocations.data?.find(allocationWithID(allocation?.()?.parentAllocationId))?.name}
-              </span>
+            <Show when={parentAllocation()}>
+              <span class={css.note}>{parentAllocation()!.name}</span>
             </Show>
           </>
         </Show>

@@ -12,7 +12,6 @@ import { AllocationTag } from 'allocations/components/AllocationTag';
 import { ALL_ALLOCATIONS, AllocationSelect } from 'allocations/components/AllocationSelect';
 import { ManageBalanceButton } from 'allocations/containers/ManageBalanceButton';
 import { ManageBalance } from 'allocations/containers/ManageBalance';
-import { useAllocations } from 'allocations/stores/allocations';
 import { getRootAllocation } from 'allocations/utils/getRootAllocation';
 import {
   getAllocationPermissions,
@@ -37,20 +36,20 @@ import css from './Dashboard.css';
 export default function Dashboard() {
   const navigate = useNav();
   const [searchParams, setSearchParams] = useSearchParams<{ allocation?: string }>();
-  const { currentUser, permissions, currentUserRoles } = useBusiness();
+  const { currentUser, permissions, allocations, currentUserRoles, reloadPermissions } = useBusiness();
 
   const [allocation, setAllocation] = createSignal<string>(searchParams.allocation || ALL_ALLOCATIONS);
 
   const [manageId, setManageId] = createSignal<string>();
 
   const cardsStore = useCards({ params: DEFAULT_CARD_PARAMS });
-  const allocations = useAllocations({ initValue: [] });
 
   const cardsCount = createMemo(() => cardsStore.data?.totalElements || 0);
 
-  const sortedItems = createMemo(() =>
-    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
-  );
+  const sortedItems = createMemo(() => {
+    const items = allocations();
+    return [...items].sort((a, b) => byNameChain(a, b, items));
+  });
 
   const currentAllocationId = createMemo(() => {
     if (allocation() === ALL_ALLOCATIONS) {
@@ -62,7 +61,6 @@ export default function Dashboard() {
   });
 
   const allocationCount = createMemo(() => sortedItems().length);
-
   const userPermissions = createMemo(() => getAllocationPermissions(currentUserRoles(), currentAllocationId()));
 
   const onAllocationChange = (id: string) => {
@@ -154,14 +152,20 @@ export default function Dashboard() {
         </div>
       }
     >
-      <Switch>
-        <Match when={allocations.error}>
-          <LoadingError onReload={allocations.reload} />
-        </Match>
+      <Switch
+        fallback={
+          <Overview
+            allocationId={allocation()}
+            allocations={sortedItems()}
+            userPermissions={userPermissions()}
+            onAllocationChange={onAllocationChange}
+          />
+        }
+      >
         <Match when={cardsStore.error}>
           <LoadingError onReload={cardsStore.reload} />
         </Match>
-        <Match when={(allocations.loading && !sortedItems().length) || (cardsStore.loading && !cardsStore.data)}>
+        <Match when={cardsStore.loading && !cardsStore.data}>
           <Loading />
         </Match>
         <Match when={!cardsCount()}>
@@ -172,21 +176,13 @@ export default function Dashboard() {
             showIssueCard={!cardsCount() && totalAllocationBalance() > 0}
           />
         </Match>
-        <Match when={allocations.data}>
-          <Overview
-            allocationId={allocation()}
-            allocations={sortedItems()}
-            userPermissions={userPermissions()}
-            onAllocationChange={onAllocationChange}
-          />
-        </Match>
       </Switch>
       <Show when={canManageFunds(userPermissions())}>
         <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>
           <ManageBalance
             allocationId={manageId()!}
             allocations={sortedItems()}
-            onReload={allocations.reload}
+            onReload={reloadPermissions}
             onClose={() => setManageId()}
           />
         </Drawer>

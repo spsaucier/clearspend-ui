@@ -18,7 +18,6 @@ import { byNameChain } from 'allocations/components/AllocationSelect/utils';
 
 import { EditAllocationForm } from '../../components/EditAllocationForm';
 import { saveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
-import { useAllocations } from '../../stores/allocations';
 import type { AllocationUserRole } from '../../types';
 
 export default function AllocationEdit() {
@@ -27,13 +26,14 @@ export default function AllocationEdit() {
   const navigate = useNav();
   const location = useLoc<{ parentAllocationId: string }>();
 
-  const { reloadPermissions } = useBusiness();
+  const { allocations, reloadPermissions } = useBusiness();
   const mcc = useMCC({ initValue: [] });
   const users = useUsersList({ initValue: [] });
-  const allocations = useAllocations({ initValue: [] });
-  const sortedItems = createMemo(() =>
-    allocations.data ? [...allocations.data].sort((a, b) => byNameChain(a, b, [...allocations.data!])) : [],
-  );
+
+  const sortedItems = createMemo(() => {
+    const items = allocations();
+    return [...items].sort((a, b) => byNameChain(a, b, items));
+  });
 
   const [parentRoles, rolesStatus, params, setRolesId, reloadRoles, mutateRoles] = useResource(
     getAllocationRoles,
@@ -42,8 +42,8 @@ export default function AllocationEdit() {
   );
 
   createEffect(() => {
-    if (allocations.data?.[0]) {
-      setRolesId(location.state?.parentAllocationId || allocations.data[0].allocationId);
+    if (allocations()[0]) {
+      setRolesId(location.state?.parentAllocationId || allocations()[0]!.allocationId);
     }
   });
 
@@ -66,7 +66,7 @@ export default function AllocationEdit() {
     try {
       const allocationId = await saveAllocation(allocation).catch((e: { data: { message: string } }) => {
         if (e.data.message.indexOf('does not have sufficient funds') > -1) {
-          const parentAllocation = allocations.data?.find((a) => a.allocationId === allocation.parentAllocationId);
+          const parentAllocation = allocations().find((a) => a.allocationId === allocation.parentAllocationId);
           messages.error({
             title: i18n.t('{parent} has insufficient funds', {
               parent: parentAllocation?.name ? `"${parentAllocation.name}"` : 'Parent allocation',
@@ -105,9 +105,6 @@ export default function AllocationEdit() {
   return (
     <Page title={<Text message="New Allocation" />}>
       <Switch>
-        <Match when={allocations.error}>
-          <LoadingError onReload={allocations.reload} />
-        </Match>
         <Match when={mcc.error}>
           <LoadingError onReload={mcc.reload} />
         </Match>
@@ -117,10 +114,10 @@ export default function AllocationEdit() {
         <Match when={rolesStatus().error}>
           <LoadingError onReload={reloadRoles} />
         </Match>
-        <Match when={allocations.loading || mcc.loading || (users.loading && !users.data?.length)}>
+        <Match when={mcc.loading || (users.loading && !users.data?.length)}>
           <Loading />
         </Match>
-        <Match when={allocations.data?.length && mcc.data?.length}>
+        <Match when={mcc.data?.length}>
           <EditAllocationForm
             users={users.data!}
             mccCategories={mcc.data!}
