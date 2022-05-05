@@ -34,14 +34,12 @@ function extendUserParams(params: Readonly<CreateUserRequest>, pass = true) {
   };
 }
 
-// TODO: save and edit should return User modal
-
 export async function saveUser(params: Readonly<CreateUserRequest>) {
   return (await service.post<Readonly<CreateUserResponse>>('/users', extendUserParams(params))).data;
 }
 
 export const updateCurrentUser = async (user: User) =>
-  (await service.post<Readonly<UpdateUserRequest>>(`/users/${user.userId}`, { ...user })).data;
+  (await service.patch<Readonly<UpdateUserRequest>>(`/users/${user.userId}`, { ...user })).data;
 
 export async function editUser(userId: string, params: Readonly<UpdateUserRequest>) {
   return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
