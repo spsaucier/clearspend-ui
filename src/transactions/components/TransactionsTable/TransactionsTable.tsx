@@ -39,6 +39,8 @@ import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { MissingDetails } from '../MissingDetails';
+import { canManageConnections } from '../../../allocations/utils/permissions';
+import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './TransactionsTable.css';
 
@@ -63,18 +65,21 @@ interface TransactionsTableProps {
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
   const messages = useMessages();
+  const { permissions } = useBusiness();
 
   const [syncConfirmationOpen, setSyncConfirmationOpen] = createSignal(false);
   const [syncBeingInitialized, setSyncBeingInitialized] = createSignal(false);
   const [syncableCount, setSyncableCount] = createSignal(0);
   const [exporting, exportData] = wrapAction(exportAccountActivity);
 
-  onMount(async () => {
-    const res = await getSyncableTransactionCount();
-    if (res.count) {
-      setSyncableCount(res.count);
-    }
-  });
+  if (canManageConnections(permissions())) {
+    onMount(async () => {
+      const res = await getSyncableTransactionCount();
+      if (res.count) {
+        setSyncableCount(res.count);
+      }
+    });
+  }
 
   const hasSelectedTransactions = createMemo(() => {
     return props.selectedTransactions.length > 0;
