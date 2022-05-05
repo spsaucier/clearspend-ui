@@ -395,6 +395,7 @@ const getNextStepFromRequirements = (
   possiblyPendingReview?: boolean,
 ): OnboardingStep => {
   const hasKybFieldRequirements = reviewRequirements.kybRequiredFields.length > 0;
+  const kycFieldRequirementValues = Object.values(reviewRequirements.kycRequiredFields);
   const hasKycFieldRequirements = Object.keys(reviewRequirements.kycRequiredFields).length > 0;
   const hasDocumentRequirements =
     reviewRequirements.kycRequiredDocuments.length > 0 || reviewRequirements.kybRequiredDocuments.length > 0;
@@ -403,7 +404,15 @@ const getNextStepFromRequirements = (
   if (hasKybFieldRequirements) {
     return OnboardingStep.BUSINESS;
   } else if (hasKycFieldRequirements) {
-    return OnboardingStep.BUSINESS_OWNERS;
+    if (
+      hasDocumentRequirements &&
+      kycFieldRequirementValues.length > 0 &&
+      kycFieldRequirementValues.find((r) => r.length === 1 && r[0] === 'ssn_last_4')
+    ) {
+      return OnboardingStep.SOFT_FAIL;
+    } else {
+      return OnboardingStep.BUSINESS_OWNERS;
+    }
   } else if (hasDocumentRequirements && !possiblyPendingReview) {
     return OnboardingStep.SOFT_FAIL;
   } else {
