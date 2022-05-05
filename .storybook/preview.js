@@ -10,13 +10,21 @@ export const parameters = {
   actions: { argTypesRegex: '^on.+' },
 };
 
+let dispose;
+
 export const decorators = [
-  (Story) =>
-    createRoot(() => (
-      <div>
-        <I18nProvider i18n={i18n}>
-          <Story />
-        </I18nProvider>
-      </div>
-    )),
+  (Story) => {
+    dispose?.();
+
+    return createRoot((d) => {
+      dispose = d;
+      return (
+        <div>
+          <I18nProvider i18n={i18n}>
+            <Story />
+          </I18nProvider>
+        </div>
+      );
+    });
+  },
 ];

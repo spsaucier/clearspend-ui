@@ -105,6 +105,10 @@
   overflow: hidden;
 }
 
+.dark {
+  background-color: var(--tw-gray-20);
+}
+
 .no-padding {
   padding: 0;
 }

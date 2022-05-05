@@ -8,10 +8,11 @@ import { Button } from '../Button';
 
 import css from './Drawer.css';
 
-interface DrawerProps {
+export interface DrawerProps {
   open: boolean;
   noPadding?: boolean;
   title: JSXElement;
+  darkMode?: boolean;
   children: JSXElement;
   onClose: () => void;
 }
@@ -30,7 +31,7 @@ export function Drawer(props: Readonly<DrawerProps>) {
                 <h3 class={css.title}>{props.title}</h3>
                 <Button view="ghost" size="sm" icon="cancel" class={css.close} onClick={() => props.onClose()} />
               </header>
-              <div class={css.content} classList={{ [css.noPadding!]: props.noPadding }}>
+              <div class={css.content} classList={{ [css.dark!]: props.darkMode, [css.noPadding!]: props.noPadding }}>
                 {props.children}
               </div>
             </section>

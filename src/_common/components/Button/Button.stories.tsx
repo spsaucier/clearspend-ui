@@ -1,29 +1,20 @@
+import { For, type JSXElement } from 'solid-js';
 import { keys } from 'solid-create-form/lib/utils';
-import { For } from 'solid-js';
 
-import { Button, ButtonProps } from '_common/components/Button/Button';
-import { IconName } from '_common/components/Icon';
+import { FlatButton, FlatButtonProps } from 'signup/components/Button';
 
-const ButtonTypes: ButtonProps['type'][] = ['default', 'primary', 'danger'];
-const ButtonViews: ButtonProps['view'][] = ['default', 'second', 'ghost'];
-const ButtonSizes: ButtonProps['size'][] = ['sm', 'md', 'lg'];
+import { IconName } from '../Icon';
+
+import { Button, ButtonProps } from './Button';
+
+const TYPES: ButtonProps['type'][] = ['default', 'primary', 'danger'];
+const VIEWS: ButtonProps['view'][] = ['default', 'second', 'ghost'];
+const SIZES: ButtonProps['size'][] = ['lg', 'md', 'sm'];
 
 export default {
-  title: 'Common/Button - Button',
+  title: 'Common/Button',
   component: Button,
   argTypes: {
-    size: {
-      options: ['sm', 'md', 'lg'],
-      control: { type: 'radio' },
-    },
-    type: {
-      options: ['default', 'primary', 'danger'],
-      control: { type: 'radio' },
-    },
-    view: {
-      options: ['default', 'second', 'ghost'],
-      control: { type: 'radio' },
-    },
     icon: {
       options: [...keys(IconName)].sort(),
       control: { type: 'select' },
@@ -34,55 +25,66 @@ export default {
     onClick: { action: 'clicked', table: { disable: true } },
   },
   args: {
-    size: 'md',
-    type: 'default',
-    view: 'default',
     children: 'Button',
     loading: false,
     disabled: false,
   },
 };
-export const Default = (args: ButtonProps) => (
-  <div>
-    <For each={ButtonViews}>
-      {(view) => {
-        return (
-          <div>
-            <For each={ButtonTypes}>
-              {(type) => {
-                return (
-                  <div
-                    style={{
-                      'margin-bottom': '25px',
-                      display: 'flex',
-                      'grid-gap': '1=20px',
-                      'justify-content': 'center',
-                      'align-items': 'center',
-                    }}
-                  >
-                    <For each={ButtonSizes}>
-                      {(size) => {
-                        return (
-                          <span style={{ 'margin-right': '25px' }}>
-                            <Button {...args} size={size} type={type} view={view} />
-                            &nbsp;&nbsp;&nbsp;
-                            <Button {...args} size={size} type={type} view={view} href="#">
-                              Link
-                            </Button>
-                            <div style={{ 'margin-top': '10px' }}>
-                              {view} - {type} - {size}
-                            </div>
-                          </span>
-                        );
-                      }}
-                    </For>
-                  </div>
-                );
-              }}
+
+function mapRender(
+  render: (view: ButtonProps['view'], type: ButtonProps['type'], size: ButtonProps['size']) => JSXElement,
+) {
+  return (
+    <div>
+      <For each={VIEWS}>
+        {(view) => (
+          <div style={{ display: 'flex', 'flex-direction': 'column', gap: '26px' }}>
+            <For each={TYPES}>
+              {(type) => (
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '20px',
+                    'justify-content': 'center',
+                    'align-items': 'center',
+                  }}
+                >
+                  <For each={SIZES}>
+                    {(size) => (
+                      <span style={{ 'margin-right': '20px' }}>
+                        <div style={{ display: 'flex', gap: '10px' }}>{render(view, type, size)}</div>
+                        <div style={{ 'margin-top': '10px' }}>
+                          {view} - {type} - {size}
+                        </div>
+                      </span>
+                    )}
+                  </For>
+                </div>
+              )}
             </For>
           </div>
-        );
-      }}
-    </For>
-  </div>
-);
+        )}
+      </For>
+    </div>
+  );
+}
+
+export const Default = (args: ButtonProps) =>
+  mapRender((view, type, size) => (
+    <>
+      <Button {...args} size={size} type={type} view={view} />
+      <Button {...args} size={size} type={type} view={view} href="#">
+        Link
+      </Button>
+    </>
+  ));
+
+export const Flat = (args: FlatButtonProps) =>
+  mapRender((view, type, size) => (
+    <>
+      <FlatButton {...args} size={size} type={type} view={view} />
+      <FlatButton {...args} size={size} type={type} view={view} href="#">
+        Link
+      </FlatButton>
+    </>
+  ));

@@ -8,7 +8,7 @@ import { isString } from '../../utils/isString';
 
 import css from './Button.css';
 
-type IconType = keyof typeof IconName;
+export type IconType = keyof typeof IconName;
 
 export interface IconProps {
   name: IconType;

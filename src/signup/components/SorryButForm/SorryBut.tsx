@@ -9,7 +9,7 @@ import { useSignup } from 'signup/store';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
-import { FlatButton } from '../Button/FlatButton';
+import { FlatButton } from '../Button';
 
 interface SorryButFormValues {
   ownerEmail: string;
@@ -45,7 +45,7 @@ export function SorryButForm(props: Readonly<SorryButFormProps>) {
       <Description size="small">
         <Text message="If a company representative is available to sign up your company, they can restart the sign up process by clicking below." />
       </Description>
-      <FlatButton type="primary" htmlType="submit" hideIcon={true} onClick={onStartOver}>
+      <FlatButton type="primary" htmlType="submit" icon={null} onClick={onStartOver}>
         <Text message="Start over" />
       </FlatButton>
       {/* TODO: Re-add this form when CAP-718 done */}

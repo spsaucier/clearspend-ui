@@ -7,7 +7,7 @@ import { wrapAction } from '_common/utils/wrapAction';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
-import { FlatButton } from '../Button/FlatButton';
+import { FlatButton } from '../Button';
 
 import { createTimer } from './utils';
 
@@ -84,7 +84,7 @@ export function VerifyForm(props: Readonly<VerifyFormProps>) {
           />
         </FormItem>
         <Show when={props.onResend}>
-          <FlatButton hideIcon={true} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
+          <FlatButton icon={null} loading={loading() || resending()} disabled={secondsLeft() > 0} onClick={resend}>
             <Show when={secondsLeft() > 0} fallback={<Text message="Resend code" />}>
               <Text message="Resend code in {seconds} sec" seconds={secondsLeft()} />
             </Show>
