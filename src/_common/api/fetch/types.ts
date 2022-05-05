@@ -3,6 +3,7 @@ export type FetchMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT';
 export enum HttpStatus {
   OK = 200,
   Accepted = 202,
+  NoContent = 204,
   StepUpRequired = 242,
   AccessDenied = 401,
   NotFound = 404,

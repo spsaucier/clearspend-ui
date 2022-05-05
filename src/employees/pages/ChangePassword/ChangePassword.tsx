@@ -24,6 +24,24 @@ interface FormValues {
   confirm: string;
 }
 
+interface PasswordErrors {
+  data?: {
+    fieldErrors?: {
+      [key: string]: {
+        code: string;
+        message: string;
+      }[];
+    };
+    generalErrors?: {
+      [key: string]: {
+        code: string;
+        message: string;
+      }[];
+    };
+  };
+  status: number;
+}
+
 export default function ChangePassword() {
   const i18n = useI18n();
   const messages = useMessages();
@@ -48,6 +66,27 @@ export default function ChangePassword() {
         trustChallenge: trustChallenge(),
         twoFactorId: twoFactorId(),
         twoFactorCode: twoFactorCode(),
+      }).catch((e: PasswordErrors) => {
+        if (e.data?.fieldErrors?.password && e.data.fieldErrors.password[0]?.code === '[previouslyUsed]password') {
+          messages.error({
+            title: i18n.t('Unable to update password'),
+            message: i18n.t('You cannot use a previously used password'),
+          });
+        } else {
+          messages.error({
+            title: i18n.t('Failed to update password'),
+            message:
+              // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+              e.status === 404
+                ? i18n.t('Are you sure you entered the correct password?')
+                : e.data?.fieldErrors?.password
+                ? e.data.fieldErrors.password[0]?.message
+                : '',
+          });
+        }
+        // eslint-disable-next-line no-console
+        console.error(e);
+        throw new Error(JSON.stringify(e));
       });
       if (res.status === HttpStatus.StepUpRequired) {
         if ('trustChallenge' in res.data) {
@@ -56,7 +95,7 @@ export default function ChangePassword() {
           setTwoFactorCode();
           setOpen2faPrompt(true);
         }
-      } else {
+      } else if (res.status === HttpStatus.NoContent) {
         messages.success({
           title: i18n.t('Success'),
           message: i18n.t('The password has been successfully updated.'),
@@ -64,10 +103,10 @@ export default function ChangePassword() {
         navigate('/profile');
       }
     } catch (e: unknown) {
-      messages.error({
-        title: i18n.t('Error'),
-        message: i18n.t('Something went wrong'),
-      });
+      reset();
+      setTrustChallenge();
+      setTwoFactorId();
+      setTwoFactorCode();
     }
   };
 
@@ -130,6 +169,9 @@ export default function ChangePassword() {
             </Button>
           }
         >
+          <p>
+            <Text message="We have sent a code to your phone via SMS." />
+          </p>
           <InputCode value={twoFactorCode() || ''} onChange={setTwoFactorCode} codeLength={6} />
         </ModalCard>
       </Modal>
