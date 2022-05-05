@@ -12,7 +12,7 @@ interface AllocationIndented extends Allocation {
 export const byName = (a: Allocation, b: Allocation) =>
   a.name.toLocaleLowerCase() > b.name.toLocaleLowerCase() ? 1 : -1;
 
-export const parentsChain = (allocation: Allocation, items: Allocation[]) => [
+export const parentsChain = (allocation: Allocation, items: readonly Allocation[]) => [
   ...getParentsChain(items, allocation).map((a) => a.name),
   allocation.name,
 ];

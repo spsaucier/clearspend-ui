@@ -1,4 +1,4 @@
-import { Show, JSXElement } from 'solid-js';
+import { Show } from 'solid-js';
 import { NavLink } from 'solid-app-router';
 
 import { join } from '_common/utils/join';
@@ -9,28 +9,17 @@ import type { Allocation } from 'generated/capital';
 import css from './Item.css';
 
 interface ItemProps {
-  root?: boolean;
   data: Readonly<Allocation>;
   active?: boolean;
   padding?: number;
   expanded?: boolean;
   hasChildren?: boolean;
-  title?: JSXElement;
   class?: string;
   onClick: (id: string) => void;
   onSwitch?: (id: string) => void;
 }
 
 export function Item(props: Readonly<ItemProps>) {
-  const Title = () => (
-    <>
-      <Show when={props.root}>
-        <Icon name="company" class={css.icon} />
-      </Show>
-      <span class={css.name}>{props.title ?? props.data.name}</span>
-    </>
-  );
-
   return (
     <div
       class={join(css.root, props.class)}
@@ -46,7 +35,10 @@ export function Item(props: Readonly<ItemProps>) {
         class={css.item}
         onClick={() => props.onClick(props.data.allocationId)}
       >
-        <Title />
+        <Show when={!props.data.parentAllocationId}>
+          <Icon name="company" class={css.icon} />
+        </Show>
+        <span class={css.name}>{props.data.name}</span>
       </NavLink>
       <Show when={props.hasChildren}>
         <Button

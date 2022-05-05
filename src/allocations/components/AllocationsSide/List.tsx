@@ -3,14 +3,12 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import type { Allocation } from 'generated/capital';
 
 import { allocationWithID } from '../../utils/allocationWithID';
-import { Breadcrumbs } from '../Breadcrumbs';
 
+import { CHILD_PADDING_PX } from './constants';
 import { getDefaultExpanded } from './utils';
 import { Item } from './Item';
 
 import css from './List.css';
-
-const CHILD_PADDING_PX = 16;
 
 export interface ListProps {
   currentID: string;
@@ -22,22 +20,6 @@ export interface ListProps {
 }
 
 export function List(props: Readonly<ListProps>) {
-  if (!props.parentID) {
-    return (
-      <For each={props.items}>
-        {(item) => (
-          <Item
-            data={item}
-            active={props.currentID === item.allocationId}
-            padding={props.padding}
-            onClick={props.onSelect}
-            onSwitch={onSwitch}
-            title={<Breadcrumbs current={item} items={props.items} />}
-          />
-        )}
-      </For>
-    );
-  }
   const siblings = createMemo(() => props.items.filter((item) => item.parentAllocationId === props.parentID));
 
   const [expanded, setExpanded] = createSignal<Record<string, boolean>>(
