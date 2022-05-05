@@ -9,6 +9,7 @@ import type {
   PagedDataLedgerActivityResponse,
   PagedDataAccountActivityResponse,
   UpdateAccountActivityRequest,
+  LedgerActivityResponse,
 } from 'generated/capital';
 import type { ReceiptData } from 'transactions/types';
 
@@ -55,6 +56,10 @@ export async function getSpending(params: Readonly<ChartDataRequest>) {
 
 export async function getActivityById(activityId: string) {
   return (await service.get<Readonly<AccountActivityResponse>>(`/account-activity/${activityId}`)).data;
+}
+
+export async function getLedgerActivityById(activityId: string) {
+  return (await service.get<Readonly<LedgerActivityResponse>>(`/account-activity/ledger/${activityId}`)).data;
 }
 
 export async function setActivityNote(activityId: string, activityUpdate: UpdateAccountActivityRequest) {

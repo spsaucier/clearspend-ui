@@ -5,9 +5,8 @@ import { Modal, ModalCard } from '_common/components/Modal';
 import { Button } from '_common/components/Button';
 import { Link } from '_common/components/Link';
 import { Icon } from '_common/components/Icon';
-import { getCard } from 'cards/services';
-import { getUser } from 'employees/services';
 import { useResource } from '_common/utils/useResource';
+import { getLedgerActivityById } from 'app/services/activity';
 
 import { useBusiness } from '../../../app/containers/Main/context';
 
@@ -28,22 +27,18 @@ export function TransactionReportModal(props: ReportModalViewProps) {
     setEmail(props.userEmail);
   });
 
-  // Unfortunately, AccountActivityResponse does not include user email,
-  // so we have to go thru card -> user to get it
-  if (props.open && !email() && props.cardId) {
-    const [data] = useResource(getCard, props.cardId);
-    const [user, , , setUserID] = useResource(getUser, undefined, false);
-    createEffect(() => {
-      if (data()?.card.userId) {
-        setUserID(data()!.card.userId!);
-      }
-    });
-    createEffect(() => {
-      if (user()?.email) {
-        setEmail(user()?.email);
-      }
-    });
-  }
+  // AccountActivityResponse does not include user email,
+  // so we have to go Ledger to get it
+  createEffect(async () => {
+    if (props.open && !email()) {
+      const [activity] = useResource(getLedgerActivityById, props.activityId);
+      createEffect(() => {
+        if (activity()) {
+          setEmail(activity()?.user?.userInfo?.email);
+        }
+      });
+    }
+  });
 
   return (
     <Modal isOpen={props.open} onClose={props.onClose}>
