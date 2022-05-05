@@ -1,0 +1,23 @@
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  padding: var(--pd-8) var(--pd-12);
+  align-items: center;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background: var(--tw-primary-light);
+    outline: none;
+  }
+}
+
+.popover {
+  width: 100%;
+  padding: 0;
+}

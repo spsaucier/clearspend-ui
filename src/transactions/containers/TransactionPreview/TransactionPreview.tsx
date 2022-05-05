@@ -19,9 +19,11 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
-import { syncTransaction, unlockTransaction } from 'accounting/services';
+import { getClosestVendorsToTarget, syncTransaction, unlockTransaction } from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 import { CopyButton } from 'app/components/CopyButton';
+import { SelectVendor } from 'accounting/components/SelectVendor';
+import { useResource } from '_common/utils/useResource';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -186,6 +188,15 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     onUnlockTransaction();
   };
 
+  const [vendors, reload, params, setParams] = useResource(getClosestVendorsToTarget, {
+    target: transaction().merchant?.name || '',
+    limit: 5,
+  });
+  const onChangeVendorSearch = (newTarget: string) => {
+    setParams({ ...params(), target: newTarget });
+    reload();
+  };
+
   return (
     <div class={css.root}>
       <TransactionPreviewStatus status={transaction().status!} type={transaction().type} />
@@ -250,6 +261,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               <span>
                 {props.transaction.lastSyncTime ? new Date(props.transaction.lastSyncTime).toLocaleString() : 'N/A'}
               </span>
+            </div>
+            <div class={css.vendorSelectContainer}>
+              <SelectVendor
+                items={vendors()?.results || []}
+                onChangeTarget={onChangeVendorSearch}
+                defaultSearchName={transaction().merchant?.name || ''}
+              />
             </div>
             <Switch
               fallback={

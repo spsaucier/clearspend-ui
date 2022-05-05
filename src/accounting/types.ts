@@ -12,3 +12,8 @@ export interface UpdateBusinessAccountingStepRequest {
 export interface UpdateAutoCreateExpenseCategoriesRequest {
   autoCreateExpenseCategories: Boolean;
 }
+
+export interface getClosestVendorsRequest {
+  limit: number;
+  target: string;
+}

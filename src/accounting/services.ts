@@ -10,6 +10,7 @@ import type {
   CreateCreditCardRequest,
   ExpenseCategory,
   GetChartOfAccountsMappingResponse,
+  GetSuppliersResponse,
   PagedDataSyncLogResponse,
   SetCreditCardRequest,
   SyncCountResponse,
@@ -17,7 +18,11 @@ import type {
   SyncTransactionResponse,
 } from 'generated/capital';
 
-import type { UpdateBusinessAccountingStepRequest, UpdateAutoCreateExpenseCategoriesRequest } from './types';
+import type {
+  UpdateBusinessAccountingStepRequest,
+  UpdateAutoCreateExpenseCategoriesRequest,
+  getClosestVendorsRequest,
+} from './types';
 
 export async function getCompanyConnection(): Promise<boolean> {
   return (await service.get<Readonly<boolean>>(`/codat/connection-status`)).data;
@@ -133,4 +138,12 @@ export async function acceptChartOfAccountsNotifications() {
 
 export async function resyncChartOfAccounts() {
   return (await service.post<Readonly<boolean>>('/chart-of-accounts/resync')).data;
+}
+
+export async function getClosestVendorsToTarget(params: Readonly<getClosestVendorsRequest>) {
+  return (
+    await service.get<Readonly<GetSuppliersResponse>>(
+      `/codat/accounting-suppliers?target=${params.target}&limit=${params.limit}`,
+    )
+  ).data;
 }
