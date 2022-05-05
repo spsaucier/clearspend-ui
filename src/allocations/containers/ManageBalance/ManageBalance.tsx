@@ -8,7 +8,7 @@ import { Tab, TabList } from '_common/components/Tabs';
 import { Loading } from 'app/components/Loading';
 import { LoadingError } from 'app/components/LoadingError';
 import { makeTransaction } from 'app/services/businesses';
-import { isBankAccount } from 'onboarding/components/BankAccounts';
+import { isBankAccount } from 'onboarding/components/Accounts';
 import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
@@ -21,7 +21,8 @@ import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { allocationWithID } from '../../utils/allocationWithID';
-import { getParentsChain } from '../../utils/getParentsChain';
+import { useBusiness } from '../../../app/containers/Main/context';
+import { allocationsWhereCanManageFunds } from '../../utils/permissions';
 
 import css from './ManageBalance.css';
 
@@ -38,6 +39,7 @@ interface ManageBalanceProps {
 }
 
 export function ManageBalance(props: Readonly<ManageBalanceProps>) {
+  const { currentUserRoles } = useBusiness();
   const [tab, setTab] = createSignal(Tabs.add);
   const messages = useMessages();
   const navigate = useNavigate();
@@ -54,7 +56,10 @@ export function ManageBalance(props: Readonly<ManageBalanceProps>) {
   const targets = createMemo(() => {
     const allocation = current();
     return [
-      ...getParentsChain(props.allocations, allocation),
+      ...allocationsWhereCanManageFunds(
+        props.allocations.filter((a) => a.allocationId !== allocation.allocationId),
+        currentUserRoles(),
+      ),
       ...((!allocation.parentAllocationId && accounts()) || []),
     ];
   });

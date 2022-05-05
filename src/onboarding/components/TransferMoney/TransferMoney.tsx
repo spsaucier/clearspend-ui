@@ -13,7 +13,7 @@ import { parseAmount } from '_common/formatters/amount';
 import type { BankAccount } from 'generated/capital';
 import { registerBankAccount } from 'onboarding/services/accounts';
 
-import { BankAccounts } from '../BankAccounts';
+import { Accounts } from '../Accounts';
 
 import { DEPOSIT_MIN_AMOUNT, validAmount } from './rules';
 
@@ -99,7 +99,7 @@ export function TransferMoney(props: Readonly<TransferMoneyProps>) {
       <Section title={<Text message="Funding source" />} class={css.section}>
         <div class={css.wrapper}>
           <FormItem error={errors().account}>
-            <BankAccounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
+            <Accounts accounts={props.accounts} value={values().account} onChange={handlers.account} />
           </FormItem>
         </div>
         <p>

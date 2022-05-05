@@ -9,7 +9,7 @@ import { Button } from '_common/components/Button';
 import { useMessages } from 'app/containers/Messages/context';
 import { useBusiness } from 'app/containers/Main/context';
 import type { Allocation, BankAccount } from 'generated/capital';
-import { isBankAccount, BankAccounts } from 'onboarding/components/BankAccounts';
+import { isBankAccount, Accounts } from 'onboarding/components/Accounts';
 import { InternalBankAccount } from 'onboarding/components/InternalBankAccount/InternalBankAccount';
 import { canManageFunds } from 'allocations/utils/permissions';
 
@@ -83,7 +83,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
       <Form class={css.form}>
         <Show when={!props.withdraw}>
           <FormItem multiple label={<Text message="Choose the source" />}>
-            <BankAccounts value={values().target} accounts={props.targets} onChange={handlers.target} />
+            <Accounts value={values().target} accounts={props.targets} onChange={handlers.target} />
           </FormItem>
         </Show>
         <FormItem label={<Text message="Enter amount" />} error={errors().amount}>
@@ -96,7 +96,7 @@ export function ManageBalanceForm(props: Readonly<ManageBalanceFormProps>) {
         </FormItem>
         <Show when={props.withdraw}>
           <FormItem multiple label={<Text message="Choose the destination" />}>
-            <BankAccounts value={values().target} accounts={props.targets} onChange={handlers.target} />
+            <Accounts value={values().target} accounts={props.targets} onChange={handlers.target} />
           </FormItem>
         </Show>
       </Form>

@@ -8,7 +8,7 @@ import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatAccountNumber } from 'cards/utils/formatAccountNumber';
 import type { BankAccount, Allocation } from 'generated/capital';
 
-import css from './BankAccounts.css';
+import css from './Accounts.css';
 
 export function isBankAccount(
   value: Readonly<Required<BankAccount> | Allocation> | undefined,
@@ -16,13 +16,13 @@ export function isBankAccount(
   return !!value && 'businessBankAccountId' in value;
 }
 
-interface BankAccountsProps {
+interface AccountsProps {
   value?: string;
   accounts: readonly Readonly<Required<BankAccount> | Allocation>[];
   onChange?: (value: string) => void;
 }
 
-export function BankAccounts(props: Readonly<BankAccountsProps>) {
+export function Accounts(props: Readonly<AccountsProps>) {
   return (
     <RadioGroup
       empty

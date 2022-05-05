@@ -1,4 +1,4 @@
-import type { UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 import { AllocationPermissions, AllocationRoles } from '../types';
 
@@ -61,3 +61,13 @@ export const byAllowableRoles = (r: UserRolesAndPermissionsRecord) =>
   [AllocationRoles.Admin, AllocationRoles.Manager, AllocationRoles.ViewOnly].includes(
     r.allocationRole as AllocationRoles,
   );
+
+export const allocationsWhereCanManageFunds = (
+  allocations: Readonly<Allocation[]>,
+  currentUserRoles: Readonly<UserRolesAndPermissionsRecord[]>,
+) =>
+  allocations.filter((a) => {
+    const permissions = currentUserRoles.find((r) => r.allocationId === a.allocationId);
+    if (!permissions) return false;
+    return canManageFunds(permissions);
+  });
