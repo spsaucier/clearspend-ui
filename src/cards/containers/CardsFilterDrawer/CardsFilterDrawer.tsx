@@ -78,7 +78,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               <Text message="Not frozen" />
             </Checkbox>
             <Checkbox value="CANCELLED">
-              <Text message="Suspended" />
+              <Text message="Cancelled" />
             </Checkbox>
           </CheckboxGroup>
         </FilterBox>
