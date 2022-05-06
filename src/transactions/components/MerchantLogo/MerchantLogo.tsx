@@ -14,7 +14,7 @@ interface MerchantLogoProps {
 export function MerchantLogo(props: Readonly<MerchantLogoProps>) {
   return (
     <img
-      src={props.data!.merchantLogoUrl || URL + encodeURIComponent(props.data!.name || '')}
+      src={props.data!.merchantLogoUrl || URL + encodeURIComponent((props.data!.name || '').replace(/ /g, '+'))}
       alt="Merchant logo"
       class={join(css.root, props.class)}
       classList={{

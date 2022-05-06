@@ -206,7 +206,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           <Show when={transaction().merchant}>
             <MerchantLogo size="lg" data={transaction().merchant!} class={css.merchantLogo} />
           </Show>
-          <div class={css.amount}>{displayAmount()}</div>
+          <div class={css.amount}>{transaction().status === 'PENDING' ? requestedAmount() : displayAmount()}</div>
           <div class={css.merchant}>
             {transaction().merchant?.name}
             <span> &#8226; </span>
@@ -444,7 +444,9 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </div>
         </Show>
         <div class={css.detail}>
-          <Text message="Posted Amount" />
+          <Show when={transaction().status === 'PENDING'} fallback={<Text message="Posted Amount" />}>
+            <Text message="Hold Amount" />
+          </Show>
           <span>{displayAmount()}</span>
         </div>
         <Show when={originalAmount()}>

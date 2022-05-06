@@ -80,26 +80,6 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             </Select>
           </FilterBox>
         </Show>
-        <FilterBox title={<Text message="Amount" />}>
-          <div class={css.minMaxInputWrapper}>
-            <FormItem label={<Text message="Min value" />} class={css.inputAmount}>
-              <InputCurrency
-                name="min-amount"
-                placeholder={'0.00'}
-                value={values().amountMin}
-                onChange={handlers.amountMin}
-              />
-            </FormItem>
-            <FormItem label={<Text message="Max value" />} class={css.inputAmount}>
-              <InputCurrency
-                name="max-amount"
-                placeholder={'0.00'}
-                value={values().amountMax}
-                onChange={handlers.amountMax}
-              />
-            </FormItem>
-          </div>
-        </FilterBox>
         <FilterBox title={<Text message="Expense Category" />}>
           <MultiSelect
             value={values().categories}
@@ -161,6 +141,26 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
         </FilterBox>
         <FilterBox title={<Text message="Transaction Date" />}>
           <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
+        </FilterBox>
+        <FilterBox title={<Text message="Amount" />}>
+          <div class={css.minMaxInputWrapper}>
+            <FormItem label={<Text message="Min value" />} class={css.inputAmount}>
+              <InputCurrency
+                name="min-amount"
+                placeholder={'0.00'}
+                value={values().amountMin}
+                onChange={handlers.amountMin}
+              />
+            </FormItem>
+            <FormItem label={<Text message="Max value" />} class={css.inputAmount}>
+              <InputCurrency
+                name="max-amount"
+                placeholder={'0.00'}
+                value={values().amountMax}
+                onChange={handlers.amountMax}
+              />
+            </FormItem>
+          </div>
         </FilterBox>
         <Show when={props.showTypeFilter}>
           <FilterBox title={<Text message="Transaction Type" />}>

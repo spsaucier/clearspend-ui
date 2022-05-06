@@ -143,7 +143,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       </Section>
       <Section
         title={<Text message="Credit Card account" />}
-        description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
+        // description={<Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." />}
         class={css.section}
       >
         <CreditCardSelect
