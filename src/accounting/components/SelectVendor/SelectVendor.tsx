@@ -36,11 +36,7 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
         }
       >
         <div onClick={() => setOpen(true)}>
-          <InputSearch
-            delay={400}
-            placeholder={String(i18n.t('Search transactions...'))}
-            onSearch={props.onChangeTarget}
-          />
+          <InputSearch delay={400} placeholder={String(i18n.t('Select a vendor'))} onSearch={props.onChangeTarget} />
         </div>
       </Popover>
     </div>

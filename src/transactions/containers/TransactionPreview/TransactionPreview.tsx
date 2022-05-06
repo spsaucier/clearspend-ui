@@ -263,6 +263,9 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               </span>
             </div>
             <div class={css.vendorSelectContainer}>
+              <div class={css.optionTitle}>
+                <Text message="Vendor" />
+              </div>
               <SelectVendor
                 items={vendors()?.results || []}
                 onChangeTarget={onChangeVendorSearch}
