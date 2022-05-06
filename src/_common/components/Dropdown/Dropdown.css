@@ -4,6 +4,7 @@
 
 .popup {
   padding: 0;
+  overflow: hidden;
 }
 
 .menu {

@@ -74,6 +74,7 @@
   --pd-16: 16px;
   --pd-20: 20px;
   --pd-24: 24px;
+  --pd-28: 28px;
   --pd-32: 32px;
   --pd-40: 40px;
   --pd-48: 48px;
@@ -150,6 +151,7 @@
   --tw-primary-content: var(--tw-accent-50);
   --tw-primary-bg: var(--tw-accent-30);
   --tw-primary-border: var(--tw-accent-30);
+  --tw-primary-hover: var(--tw-accent-20);
   --tw-primary-light: var(--tw-accent-10);
 }
 

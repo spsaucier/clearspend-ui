@@ -1,0 +1,105 @@
+.root {
+  position: relative;
+  max-width: 306px;
+  height: 104px;
+  background: var(--tw-primary-bg) url('assets/texture.png') center center;
+  background-size: cover;
+  border-radius: var(--radius-10);
+  transition: background-color 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: default;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+    border: 3px solid var(--tw-accent-30);
+    border-radius: 14px;
+    transition: opacity 0.3s;
+    box-shadow: inset 0 0 0 2px var(--tw-dark-green);
+    opacity: 0;
+  }
+
+  &:hover {
+    background-color: var(--tw-primary-hover);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+.my {
+  background-color: var(--tw-gray-20);
+
+  &:hover {
+    background-color: var(--tw-gray-20);
+  }
+}
+
+.invite {
+  background-color: var(--tw-dark-green);
+
+  &:hover {
+    background-color: var(--tw-dark-green);
+  }
+}
+
+.wrapper {
+  position: relative;
+  padding: var(--pd-28);
+}
+
+.header {
+  margin-bottom: var(--pd-4);
+  color: var(--tw-gray-90);
+
+  @nest .invite & {
+    color: var(--tw-accent-20);
+  }
+}
+
+.amount {
+  color: var(--tw-accent-90);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: var(--pd-4);
+
+  @nest .invite & {
+    color: var(--tw-white);
+  }
+}
+
+.name {
+  font-size: var(--text-20);
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.more {
+  width: 24px;
+  height: 24px;
+  color: var(--tw-accent-80);
+  border-radius: var(--radius-4);
+
+  &:hover {
+    background-color: var(--tw-accent-40);
+  }
+
+  @nest .invite & {
+    color: var(--tw-white);
+
+    &:hover {
+      color: var(--tw-accent-20);
+      background-color: var(--tw-accent-100);
+    }
+  }
+}

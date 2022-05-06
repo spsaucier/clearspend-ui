@@ -79,7 +79,10 @@ export function Popover(props: Readonly<PopoverProps>) {
       {trigger}
       <Show when={opened()}>
         <Portal>
-          <div class={css.root} style={calcDialogStyle(pos(), trigger)}>
+          <div
+            class={join(css.root, merged.balloon && css.balloon, getPosClass(pos()))}
+            style={calcDialogStyle(pos(), trigger)}
+          >
             <div
               id={merged.id}
               role="dialog"
@@ -87,7 +90,7 @@ export function Popover(props: Readonly<PopoverProps>) {
                 dialog = el;
                 if (typeof props.ref === 'function') props.ref(el);
               }}
-              class={join(css.popover, merged.balloon && css.balloon, getPosClass(pos()), merged.class)}
+              class={join(css.popover, merged.class)}
             >
               {merged.content}
             </div>

@@ -7,6 +7,48 @@
   z-index: var(--z-index-dropdown);
 }
 
+.balloon::before {
+  content: '';
+  position: absolute;
+  display: flex;
+  width: 0;
+  height: 0;
+  border: v-arrow-size solid transparent;
+  border-bottom-color: var(--tw-white);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.top::before {
+  top: 0;
+  left: 50%;
+  transform: translate3d(-50%, calc(v-balloon-gap * -1), 0) rotate(180deg);
+}
+
+.bottom::before {
+  bottom: 0;
+  left: 50%;
+  transform: translate3d(-50%, v-balloon-gap, 0);
+}
+
+.left,
+.right,
+.center {
+  position: absolute;
+}
+
+.middle-left::before {
+  top: 50%;
+  right: -2px;
+  transform: translate3d(0, -50%, 0) rotate(90deg);
+}
+
+.middle-right::before {
+  top: 50%;
+  left: -2px;
+  transform: translate3d(0, -50%, 0) rotate(270deg);
+}
+
 .popover {
   position: absolute;
   display: flex;
@@ -17,104 +59,53 @@
   border-radius: var(--radius-8);
   transform: translate3d(0, 0, 0);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
 
-.balloon {
-  &::before {
-    content: '';
-    position: absolute;
-    display: flex;
-    width: 0;
-    height: 0;
-    border: v-arrow-size solid transparent;
-    border-bottom-color: var(--tw-white);
-    pointer-events: none;
-  }
-}
-
-.top {
-  bottom: v-default-gap;
-
-  &::before {
-    top: 100%;
-    transform: rotate(180deg);
+  @nest .top & {
+    bottom: v-default-gap;
   }
 
-  &.balloon {
+  @nest .top.balloon & {
     bottom: v-balloon-gap;
   }
-}
 
-.bottom {
-  top: v-default-gap;
-
-  &::before {
-    bottom: 100%;
+  @nest .bottom & {
+    top: v-default-gap;
   }
 
-  &.balloon {
+  @nest .bottom.balloon & {
     top: v-balloon-gap;
   }
-}
 
-.left {
-  left: 0;
-
-  &::before {
-    left: var(--pd-16);
+  @nest .left & {
+    left: 0;
   }
-}
 
-.center {
-  left: 50%;
-  transform: translate3d(-50%, 0, 0);
-
-  &::before {
+  @nest .center & {
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
-}
 
-.right {
-  right: 0;
-
-  &::before {
-    right: var(--pd-16);
-  }
-}
-
-.middle-left {
-  top: 50%;
-  right: v-default-gap;
-  transform: translate3d(0, -50%, 0);
-
-  &::before {
-    top: 50%;
+  @nest .right & {
     right: 0;
-    transform: translate3d(100%, -50%, 0) rotate(90deg);
   }
 
-  &.balloon {
+  @nest .middle-left & {
+    top: 50%;
+    right: v-default-gap;
+    transform: translate3d(0, -50%, 0);
+  }
+
+  @nest .middle-left.balloon & {
     right: v-balloon-gap;
   }
-}
 
-.middle-right {
-  top: 50%;
-  left: v-default-gap;
-  transform: translate3d(0, -50%, 0);
-
-  &::before {
+  @nest .middle-right & {
     top: 50%;
-    left: 0;
-    transform: translate3d(-100%, -50%, 0) rotate(270deg);
+    left: v-default-gap;
+    transform: translate3d(0, -50%, 0);
   }
 
-  &.balloon {
+  @nest .middle-right.balloon & {
     left: v-balloon-gap;
   }
-}
-
-.top.center::before {
-  transform: translateX(-50%) rotate(180deg);
 }

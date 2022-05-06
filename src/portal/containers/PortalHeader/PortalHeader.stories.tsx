@@ -1,7 +1,7 @@
 import { PortalHeader } from './PortalHeader';
 
 export default {
-  title: 'Composite/Portal - Header',
+  title: 'Portal/Header',
   component: PortalHeader,
 };
 

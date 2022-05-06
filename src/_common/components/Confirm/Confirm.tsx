@@ -13,20 +13,32 @@ export interface FuncProps {
   onClick?: () => void;
 }
 
-export interface ConfirmProps {
+interface BaseProps {
   question: JSXElement;
   confirmText: JSXElement;
   position?: PopoverPosition;
   class?: string;
   onConfirm: () => void;
+}
+
+interface ControlledProps extends BaseProps {
+  open: boolean;
+  onCancel: () => void;
+  children: JSXElement;
+}
+
+export interface UncontrolledProps extends BaseProps {
   children: (props: FuncProps) => JSXElement;
 }
 
+export type ConfirmProps = ControlledProps | UncontrolledProps;
+
 export function Confirm(props: Readonly<ConfirmProps>) {
-  let onCancel: (() => void) | undefined;
+  let closePopover: (() => void) | undefined;
+  const onCancel = () => ('open' in props ? props.onCancel() : closePopover?.());
 
   const onConfirm = () => {
-    onCancel?.();
+    onCancel();
     props.onConfirm();
   };
 
@@ -49,11 +61,15 @@ export function Confirm(props: Readonly<ConfirmProps>) {
         </>
       }
       class={join(css.root, props.class)}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      {...('open' in props ? { open: props.open, onClickOutside: props.onCancel } : ({} as any))}
     >
-      {(args) => {
-        onCancel = args.onClick;
-        return props.children(args);
-      }}
+      {!('open' in props)
+        ? (args) => {
+            closePopover = args.onClick;
+            return props.children(args);
+          }
+        : (props.children as JSXElement)}
     </Popover>
   );
 }
