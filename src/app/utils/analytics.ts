@@ -131,7 +131,7 @@ const vendorActions = {
     switch (type) {
       case AnalyticsEventType.AddUserProperties:
         Intercom('boot', {
-          hide_default_launcher: true,
+          hide_default_launcher: false,
           api_base: 'https://api-iam.intercom.io',
           app_id: 'l381dwob',
           name: formatNameString(data), // Full name

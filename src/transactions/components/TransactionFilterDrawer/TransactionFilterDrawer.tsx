@@ -66,6 +66,20 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             />
           </FilterBox>
         </Show>
+        <Show when={props.showUserFilter}>
+          <FilterBox title={<Text message="Employees" />}>
+            <Select
+              name="userId"
+              placeholder={String(i18n.t('Search by employee name'))}
+              value={values().userId}
+              onChange={handlers.userId}
+            >
+              <For each={sortedUsers()}>
+                {(item) => <SelectOption value={item.userId!}>{formatName(item)}</SelectOption>}
+              </For>
+            </Select>
+          </FilterBox>
+        </Show>
         <FilterBox title={<Text message="Amount" />}>
           <div class={css.minMaxInputWrapper}>
             <FormItem label={<Text message="Min value" />} class={css.inputAmount}>
@@ -145,6 +159,9 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
             </Radio>
           </RadioGroup>
         </FilterBox>
+        <FilterBox title={<Text message="Transaction Date" />}>
+          <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
+        </FilterBox>
         <Show when={props.showTypeFilter}>
           <FilterBox title={<Text message="Transaction Type" />}>
             <CheckboxGroup value={values().types} onChange={handlers.types}>
@@ -152,23 +169,6 @@ export function TransactionFilterDrawer(props: Readonly<TransactionFilterDrawerP
                 {([value, msg]) => <Checkbox value={value}>{i18n.t(msg)}</Checkbox>}
               </For>
             </CheckboxGroup>
-          </FilterBox>
-        </Show>
-        <FilterBox title={<Text message="Transaction Date" />}>
-          <SelectDateRange value={values().date} maxDate={new Date()} onChange={handlers.date} />
-        </FilterBox>
-        <Show when={props.showUserFilter}>
-          <FilterBox title={<Text message="Employees" />}>
-            <Select
-              name="userId"
-              placeholder={String(i18n.t('Search by employee name'))}
-              value={values().userId}
-              onChange={handlers.userId}
-            >
-              <For each={sortedUsers()}>
-                {(item) => <SelectOption value={item.userId!}>{formatName(item)}</SelectOption>}
-              </For>
-            </Select>
           </FilterBox>
         </Show>
       </Form>
