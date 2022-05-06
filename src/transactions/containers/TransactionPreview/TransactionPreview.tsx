@@ -144,7 +144,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     saveExpenseCategory(props.transaction.accountActivityId!, categoryId || null, notes() || '')
       .then((data) => {
         batch(() => {
-          props.onUpdate([{ ...data, syncStatus: 'READY' }]);
+          props.onUpdate([{ ...data, syncStatus: categoryId ? 'READY' : 'NOT_READY' }]);
           setExpenseCategory(categoryId);
           messages.success({
             title: i18n.t('Success'),
