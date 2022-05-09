@@ -3,11 +3,12 @@ import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
 import { getNoop } from '_common/utils/getNoop';
-import { Button } from '_common/components/Button';
-import { Dropdown, MenuItem } from '_common/components/Dropdown';
+import { MenuItem } from '_common/components/Dropdown';
 import { Confirm } from '_common/components/Confirm';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import type { Amount } from 'generated/capital';
+
+import { MoreVerticalDropdown } from '../MoreVerticalDropdown/MoreVerticalDropdown';
 
 import css from './PinnedClient.css';
 
@@ -58,33 +59,26 @@ export function PinnedClient(props: Readonly<PinnedClientProps>) {
           </div>
           <div class={css.content}>
             <div class={css.name}>{props.name}</div>
-            <Dropdown
-              position="bottom-right"
-              menu={
-                <>
-                  <Show when={props.type === 'invite'}>
-                    <MenuItem onClick={props.onInviteClick}>
-                      <Text message="Resend invite" />
-                    </MenuItem>
-                  </Show>
-                  <Show when={props.type !== 'invite'}>
-                    <MenuItem onClick={props.onSettingsClick}>
-                      <Text message="Account settings" />
-                    </MenuItem>
-                  </Show>
-                  <MenuItem onClick={props.onUnpinClick}>
-                    <Text message="Unpin account" />
-                  </MenuItem>
-                  <Show when={props.type === 'invite'}>
-                    <MenuItem onClick={() => setShowDeleteConfirm(true)}>
-                      <Text message="Delete account" />
-                    </MenuItem>
-                  </Show>
-                </>
-              }
-            >
-              <Button view="ghost" icon="more-vertical" class={css.more} />
-            </Dropdown>
+            <MoreVerticalDropdown>
+              <Show when={props.type === 'invite'}>
+                <MenuItem onClick={props.onInviteClick}>
+                  <Text message="Resend invite" />
+                </MenuItem>
+              </Show>
+              <Show when={props.type !== 'invite'}>
+                <MenuItem onClick={props.onSettingsClick}>
+                  <Text message="Account settings" />
+                </MenuItem>
+              </Show>
+              <MenuItem onClick={props.onUnpinClick}>
+                <Text message="Unpin account" />
+              </MenuItem>
+              <Show when={props.type === 'invite'}>
+                <MenuItem onClick={() => setShowDeleteConfirm(true)}>
+                  <Text message="Delete account" />
+                </MenuItem>
+              </Show>
+            </MoreVerticalDropdown>
           </div>
         </div>
       </Confirm>

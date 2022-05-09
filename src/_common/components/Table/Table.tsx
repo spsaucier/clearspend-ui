@@ -17,6 +17,7 @@ export interface TableProps<T extends {}> {
   rowClass?: string;
   onRowClick?: (data: T) => void;
   onChangeOrder?: (value: Readonly<OrderBy>[] | undefined) => void;
+  darkMode?: boolean;
 }
 
 export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
@@ -30,7 +31,7 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
   };
 
   return (
-    <table class={join(css.root, props.class)}>
+    <table class={join(css.root, props.class, props.darkMode ?? css.dark)}>
       <thead class={css.head}>
         <tr>
           <For each={props.columns}>

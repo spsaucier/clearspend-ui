@@ -6,6 +6,7 @@
   border: 0;
   border-spacing: 0;
   border-collapse: collapse;
+  cursor: default;
 }
 
 .head {
@@ -50,4 +51,38 @@
 .td {
   padding: 20px var(--pd-12);
   vertical-align: top;
+}
+
+/* DARK MODE - TABLE STYLING */
+.dark.root {
+  border: 1px solid var(--tw-dark-lime-mint);
+  border-radius: 10px;
+  border-collapse: unset;
+}
+
+.dark.root thead,
+.dark.root tr,
+.dark.root th {
+  border-radius: 10px;
+}
+
+.dark > .head,
+.dark {
+  background-color: var(--tw-dark-green);
+  border-color: transparent;
+}
+
+.dark > .head {
+  border-radius: 10px;
+  box-shadow: unset;
+}
+
+.dark .row {
+  &:nth-child(odd) {
+    background: var(--tw-dark-lime-mint);
+  }
+
+  &:hover {
+    background: var(--tw-dark-lime-mint);
+  }
 }

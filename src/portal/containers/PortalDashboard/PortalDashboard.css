@@ -1,0 +1,32 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  max-width: 100vw;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: var(--tw-dark-green);
+  overflow-x: hidden;
+}
+
+.content {
+  display: flex;
+  padding: var(--pd-72) var(--pd-98);
+  color: white;
+  z-index: 1;
+}
+
+.background-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--tw-dark-lime-mint);
+  overflow: hidden;
+  -webkit-mask-image: url(http://localhost:6006/static/media/src/app/assets/shape.svg);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: -64vw 0;
+  -webkit-mask-size: 130vw 130vh;
+  mask-image: url(http://localhost:6006/static/media/src/app/assets/shape.svg);
+  mask-repeat: no-repeat;
+  mask-position: -64vw 0;
+  mask-size: 130vw 130vh;
+}

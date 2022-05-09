@@ -1,0 +1,39 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: var(--tw-gray-20);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.logo {
+  margin-bottom: var(--pd-28);
+}
+
+.root > span:first-of-type {
+  margin-bottom: var(--pd-10);
+  color: var(--tw-white);
+  font-size: var(--text-28);
+  font-weight: var(--font-700);
+  line-height: var(--line-36);
+  letter-spacing: 0.01em;
+}
+
+.btn-wrapper {
+  margin-top: var(--pd-28);
+}
+
+.btn-wrapper > button {
+  margin-right: var(--pd-10);
+}
+
+.cube {
+  position: absolute;
+  top: 22vh;
+  right: 10vw;
+  width: 420px;
+  opacity: 0.5;
+  z-index: -1;
+}

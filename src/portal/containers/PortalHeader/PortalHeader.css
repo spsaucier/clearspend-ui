@@ -14,6 +14,14 @@
   }
 }
 
+.line-break {
+  width: 100vw;
+  max-width: 100%;
+  min-height: 8px;
+  background-color: var(--tw-accent-100);
+  border-bottom: 1px solid var(--tw-accent-90);
+}
+
 .branding {
   padding: var(--pd-8);
   color: white;

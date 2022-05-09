@@ -16,28 +16,31 @@ interface PortalHeaderProps {
 
 export function PortalHeader(props: Readonly<PortalHeaderProps>) {
   return (
-    <div class={css.wrapper}>
-      <div class={css.branding}>{props.branding}</div>
-      <div style={{ flex: 1 }} />
-      <div>
-        <For each={props.navigationItems}>
-          {(navItem) => {
-            return (
-              <HeaderButton
-                isActive={navItem.label === props.selectedLabel}
-                hideIcon={true}
-                type={'primary'}
-                view="ghost"
-                size="sm"
-                onClick={navItem.onClick}
-                href={navItem.href}
-              >
-                {navItem.label}
-              </HeaderButton>
-            );
-          }}
-        </For>
+    <>
+      <div class={css.wrapper}>
+        <div class={css.branding}>{props.branding}</div>
+        <div style={{ flex: 1 }} />
+        <div>
+          <For each={props.navigationItems}>
+            {(navItem) => {
+              return (
+                <HeaderButton
+                  isActive={navItem.label === props.selectedLabel}
+                  hideIcon={true}
+                  type={'primary'}
+                  view="ghost"
+                  size="sm"
+                  onClick={navItem.onClick}
+                  href={navItem.href}
+                >
+                  {navItem.label}
+                </HeaderButton>
+              );
+            }}
+          </For>
+        </div>
       </div>
-    </div>
+      <div class={css.lineBreak} />
+    </>
   );
 }

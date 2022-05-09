@@ -1,0 +1,23 @@
+.more {
+  width: 24px;
+  height: 24px;
+  color: var(--tw-accent-80);
+  border-radius: var(--radius-4);
+
+  &:hover {
+    background-color: var(--tw-accent-40);
+  }
+
+  @nest .invite & {
+    color: var(--tw-white);
+
+    &:hover {
+      color: var(--tw-accent-20);
+      background-color: var(--tw-accent-100);
+    }
+  }
+}
+
+.more.light {
+  color: var(--tw-primary-bg);
+}
