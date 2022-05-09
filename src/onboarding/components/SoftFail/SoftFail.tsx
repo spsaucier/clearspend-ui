@@ -17,7 +17,7 @@ import css from './SoftFail.css';
 export interface SoftFailProps {
   kybRequiredDocuments: readonly Readonly<RequiredDocument>[] | undefined;
   kycRequiredDocuments: readonly Readonly<KycDocuments>[] | undefined;
-  onNext: (data: Readonly<FormData>) => Promise<unknown>;
+  onNext: (data?: Readonly<FormData>) => Promise<unknown>;
   setLoadingModalOpen: (open: boolean) => void;
 }
 
@@ -55,16 +55,19 @@ export function SoftFail(props: Readonly<SoftFailProps>) {
     const formData = new FormData();
 
     const fileInputs = formElement.getElementsByTagName('input');
+    let hasDocumentsToSubmit = false;
     for (const file in fileInputs) {
       if (fileInputs.hasOwnProperty(file)) {
         const inputElement: HTMLInputElement = fileInputs[file] as HTMLInputElement;
         const fileList: FileList | null = inputElement.files;
         if (fileList && fileList.length > 0) {
           formData.append('documentList', fileList[0] as File, `${inputElement.name}${fileList[0]?.name}`);
+          hasDocumentsToSubmit = true;
         }
       }
     }
-    next(formData).catch((exception: ExceptionData) => {
+
+    next(hasDocumentsToSubmit ? formData : undefined).catch((exception: ExceptionData) => {
       messages.error({ title: 'Something went wrong.', message: exception.data.message });
     });
   };

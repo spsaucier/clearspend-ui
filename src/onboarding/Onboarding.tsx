@@ -112,7 +112,11 @@ export default function Onboarding() {
           const reviewRequirements = await getApplicationReviewRequirements();
           setRequirements(reviewRequirements);
 
-          const nextStep = getNextStepFromRequirements(reviewRequirements, possiblyPendingReview);
+          const nextStep = getNextStepFromRequirements(
+            reviewRequirements,
+            possiblyPendingReview,
+            business()?.onboardingStep as OnboardingStep,
+          );
           setStep(nextStep);
         } catch (error: unknown) {
           messages.error({ title: 'Something went wrong' });
@@ -184,10 +188,12 @@ export default function Onboarding() {
     setLoadingModalOpen(false);
   };
 
-  const onSoftFail = async (data: Readonly<{}>) => {
-    await uploadForApplicationReview(data);
-    setLoadingModalOpen(false);
-    sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_SUBMITTED });
+  const onSoftFail = async (data?: Readonly<{}>) => {
+    if (data) {
+      await uploadForApplicationReview(data);
+      setLoadingModalOpen(false);
+      sendAnalyticsEvent({ name: Events.SUPPLEMENTAL_INFO_SUBMITTED });
+    }
     setStep(OnboardingStep.REVIEW);
   };
 
@@ -393,6 +399,7 @@ const getMinutesRemaining = (currentStep?: OnboardingStep) => {
 const getNextStepFromRequirements = (
   reviewRequirements: ManualReviewResponse,
   possiblyPendingReview?: boolean,
+  currentOnboardingStep?: OnboardingStep,
 ): OnboardingStep => {
   const hasKybFieldRequirements = reviewRequirements.kybRequiredFields.length > 0;
   const kycFieldRequirementValues = Object.values(reviewRequirements.kycRequiredFields);
@@ -419,7 +426,11 @@ const getNextStepFromRequirements = (
     if (!hasPendingVerificationRequirements && !possiblyPendingReview) {
       return OnboardingStep.LINK_ACCOUNT;
     } else {
-      return OnboardingStep.REVIEW;
+      if (currentOnboardingStep) {
+        return currentOnboardingStep;
+      } else {
+        return OnboardingStep.REVIEW;
+      }
     }
   }
 };
