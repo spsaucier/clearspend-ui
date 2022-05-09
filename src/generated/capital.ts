@@ -1472,6 +1472,17 @@ export interface SyncLogResponse {
   transactionId?: string;
 }
 
+export interface CreateAssignSupplierRequest {
+  /** @format uuid */
+  accountActivityId?: string;
+  supplierName?: string;
+}
+
+export interface CreateAssignSupplierResponse {
+  /** @format uuid */
+  accountActivityId?: string;
+}
+
 export interface CreateCreditCardRequest {
   accountName?: string;
 }
@@ -4493,10 +4504,9 @@ export interface CodatSupplier {
 }
 
 export interface GetSuppliersResponse {
-  results?: CodatSupplier[];
-
   /** @format int32 */
   totalElements?: number;
+  results?: CodatSupplier[];
 }
 
 export interface AccountBalance {

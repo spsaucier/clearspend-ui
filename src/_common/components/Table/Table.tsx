@@ -31,7 +31,7 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
   };
 
   return (
-    <table class={join(css.root, props.class, props.darkMode ?? css.dark)}>
+    <table class={join(css.root, props.class, props.darkMode && css.dark)}>
       <thead class={css.head}>
         <tr>
           <For each={props.columns}>

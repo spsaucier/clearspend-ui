@@ -53,7 +53,7 @@ const DATA: readonly Mock[] = [
 export const DashboardWithTable = () => {
   return (
     <PortalDashboard>
-      <Table columns={COLUMNS} data={DATA} />
+      <Table columns={COLUMNS} data={DATA} darkMode={true} />
     </PortalDashboard>
   );
 };
