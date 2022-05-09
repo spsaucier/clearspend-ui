@@ -1,12 +1,14 @@
+import { i18n } from '_common/api/intl';
 import type { FormOptions } from '_common/components/Form';
 import { required, requiredIf } from '_common/components/Form/rules/required';
-import { validEmail, validOwnershipPercentage, validPhone, validZipCode } from '_common/components/Form/rules/patterns';
+import { validEmail, validPhone, validZipCode, type ValidationRuleFn } from '_common/components/Form/rules/patterns';
 import { dateToString } from '_common/api/dates';
 import { cleanSSN } from '_common/formatters/ssn';
 import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { Business, CreateOrUpdateBusinessOwnerRequest, User } from 'generated/capital';
 import { BusinessType } from 'app/types/businesses';
 
+import { OWNERSHIP_FULL_PERCENTAGE, OWNERSHIP_MIN_PERCENT } from './constants';
 import type { FormValues } from './types';
 
 interface Props {
@@ -107,6 +109,16 @@ export function convertFormData(data: Readonly<FormValues>): Readonly<CreateOrUp
     address: { ...address, country: 'USA' },
   };
 }
+
+export const validOwnershipPercentage: ValidationRuleFn = (value) => {
+  const percent = +value;
+  return (
+    (percent <= OWNERSHIP_FULL_PERCENTAGE && percent >= OWNERSHIP_MIN_PERCENT) ||
+    String(i18n.t('Must be at least {min}%', { min: OWNERSHIP_MIN_PERCENT }))
+  );
+};
+
+export const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
 
 export function kycHasExecutiveError(kycErrors?: Readonly<{ [key: string]: string[] }>): boolean {
   let hasExecutiveError = false;

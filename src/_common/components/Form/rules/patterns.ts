@@ -1,7 +1,7 @@
-import { FULL_OWNERSHIP_PERCENTAGE } from 'onboarding/components/TeamForm/TeamForm';
 import { i18n } from '_common/api/intl';
 
 export type ValidationRuleFn = (value: string) => boolean | string;
+
 export const validEmail: ValidationRuleFn = (value) => {
   return !!value.match(/^[^@]+@[^@.]+\.[^@]+$/) || 'Invalid email';
 };
@@ -23,13 +23,6 @@ export const validCode: ValidationRuleFn = (value) => {
   return /^\d{4}$/.test(value) || String(i18n.t('Inappropriate value'));
 };
 
-const percentOwnershipMinimum = 25;
-export const validOwnershipPercentage: ValidationRuleFn = (value) => {
-  return (
-    (+value <= FULL_OWNERSHIP_PERCENTAGE && +value >= percentOwnershipMinimum) || String(i18n.t('Must be at least 25%'))
-  );
-};
-
 export const validStreetLine1: ValidationRuleFn = (value) => {
-  return !!(value.toLocaleLowerCase().replace('.', '').indexOf('po ') !== 0) || 'PO Boxes are not allowed';
+  return value.toLocaleLowerCase().replace('.', '').indexOf('po ') !== 0 || 'PO Boxes are not allowed';
 };

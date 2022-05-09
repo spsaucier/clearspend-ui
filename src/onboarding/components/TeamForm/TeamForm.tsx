@@ -16,7 +16,8 @@ import { LeadershipTable } from '../LeadershipTable';
 
 import { CurrentUserForm } from './CurrentUserForm';
 import { AddEditLeaderForm } from './AddEditLeaderForm';
-import { kycHasExecutiveError } from './utils';
+import { OWNERSHIP_FULL_PERCENTAGE } from './constants';
+import { kycHasExecutiveError, hasOwner } from './utils';
 
 import css from './TeamForm.css';
 
@@ -29,12 +30,6 @@ interface TeamFormProps {
   onLeaderUpdate: (leaderId: string) => void;
   setLoadingModalOpen: (loading: boolean) => void;
 }
-
-const hasOwner = (leader: CreateOrUpdateBusinessOwnerRequest) => !!leader.relationshipOwner;
-
-export const ONBOARDING_LEADERS_KEY = 'ONBOARDING_LEADERS_KEY';
-
-export const FULL_OWNERSHIP_PERCENTAGE = 100;
 
 export function TeamForm(props: Readonly<TeamFormProps>) {
   const media = useMediaContext();
@@ -123,7 +118,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
   const showLeadershipTable = () => {
     const hasLeaders = leaders().length > 0;
     const signUpLeaderProvidedTaxId = leaders()[0]?.taxIdentificationNumber;
-    const hasFullOwnershipOwner = leaders().find((l) => l.percentageOwnership === FULL_OWNERSHIP_PERCENTAGE);
+    const hasFullOwnershipOwner = leaders().find((l) => l.percentageOwnership === OWNERSHIP_FULL_PERCENTAGE);
 
     return hasLeaders && signUpLeaderProvidedTaxId && !showAddingNewLeader() && !hasFullOwnershipOwner;
   };
@@ -138,7 +133,7 @@ export function TeamForm(props: Readonly<TeamFormProps>) {
             props.setLoadingModalOpen(true);
             await updateOwner({ ...businessOwner, id: props.currentUser.userId });
             await refetchOwnersList();
-            if (businessOwner.percentageOwnership === FULL_OWNERSHIP_PERCENTAGE) {
+            if (businessOwner.percentageOwnership === OWNERSHIP_FULL_PERCENTAGE) {
               next();
             } else {
               props.setLoadingModalOpen(false);

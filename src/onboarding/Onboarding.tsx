@@ -46,7 +46,7 @@ import {
 import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, ManualReviewResponse, RequiredDocument } from './components/SoftFail/types';
-import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/TeamForm';
+import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/constants';
 import LinkAccountStep from './containers/LinkAccount/LinkAccountStep';
 import type { BusinessWithBusinessName } from './components/BusinessForm/BusinessForm';
 
