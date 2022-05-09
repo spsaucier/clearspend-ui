@@ -2,6 +2,10 @@
   margin: var(--pd-16) 0 var(--pd-32);
 }
 
+.automatic-updates {
+  max-width: 344px;
+}
+
 .unlink {
   padding: var(--pd-16);
   color: var(--tw-red-80);

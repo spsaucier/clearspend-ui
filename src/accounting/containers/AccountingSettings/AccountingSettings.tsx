@@ -111,7 +111,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   return (
     <div>
       <Section
-        title="Automatic updates"
+        title={<Text message="Automatic updates" />}
         description={
           <Text
             message={
@@ -122,7 +122,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         }
         class={css.section}
       >
-        <AutomaticUpdates name="automatic-updates-toggle" />
+        <AutomaticUpdates name="automatic-updates-toggle" class={css.automaticUpdates} />
       </Section>
       <Section title={<Text message="Chart of Accounts" />} class={css.section}>
         <ChartOfAccountsData

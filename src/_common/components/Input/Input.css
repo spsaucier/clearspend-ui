@@ -50,6 +50,7 @@
 
   &:disabled {
     color: var(--tw-gray-60);
+    background-color: transparent;
     cursor: not-allowed;
   }
 

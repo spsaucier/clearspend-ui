@@ -5,10 +5,9 @@ import { SwitchBox } from 'app/components/SwitchBox';
 import { postAutoCreateExpenseCategories } from 'accounting/services';
 import { useBusiness } from 'app/containers/Main/context';
 
-import css from './AutomaticUpdates.css';
-
 interface AutomaticUpdatesProps {
   name: Readonly<string>;
+  class?: string;
 }
 
 export function AutomaticUpdates(props: Readonly<AutomaticUpdatesProps>) {
@@ -32,7 +31,7 @@ export function AutomaticUpdates(props: Readonly<AutomaticUpdatesProps>) {
   };
 
   return (
-    <div class={css.root}>
+    <div class={props.class}>
       <SwitchBox
         checked={autoUpdatesStatus()}
         label={<Text message="Automatic updates" />}

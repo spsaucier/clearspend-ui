@@ -1,5 +1,0 @@
-.root {
-  display: grid;
-  grid-gap: var(--pd-12);
-  width: fit-content;
-}

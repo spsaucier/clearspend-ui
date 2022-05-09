@@ -57,7 +57,6 @@ export enum IconName {
   globe = 'globe',
   information = 'information',
   keyboard = 'keyboard',
-  'l-tab' = 'l-tab',
   lock = 'lock',
   'mcc-child-care' = 'mcc-child-care',
   'mcc-digital-goods' = 'mcc-digital-goods',

@@ -1,7 +1,7 @@
 @value v-icon-size: 32px;
 
 .search {
-  width: 320px;
+  width: 226px;
 }
 
 .table-container {
@@ -20,31 +20,6 @@
 .table {
   margin: var(--pd-24) 0;
   overflow: auto;
-}
-
-.column-title {
-  font-family: var(--font-header);
-  font-size: var(--text-12);
-  line-height: 1.33;
-}
-
-.nested-level {
-  display: flex;
-  align-items: bottom;
-  flex-direction: 'row';
-  justify-content: left;
-}
-
-.nested-level-3 {
-  margin-left: var(--pd-24);
-}
-
-.nested-level-4 {
-  margin-left: var(--pd-48);
-}
-
-.nested-level-5 {
-  margin-left: var(--pd-72);
 }
 
 .expense-category-cell {
@@ -85,31 +60,8 @@
   color: var(--tw-accent-30);
 }
 
-.category-name-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.category-primary-name {
-  display: flex;
-  flex-direction: row;
-}
-
-.new-account-text {
-  color: var(--tw-gray-60);
-}
-
-.refresh-button {
-  margin: var(--pd-8) 0;
-}
-
-.refresh-button-content {
-  display: flex;
-  flex-direction: row;
-}
-
 .top-container {
   display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 }

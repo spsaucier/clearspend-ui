@@ -18,6 +18,7 @@
 .th {
   padding: var(--pd-12);
   font: inherit;
+  font-family: var(--font-header);
 }
 
 .has-sorter {

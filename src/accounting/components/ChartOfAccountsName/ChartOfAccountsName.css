@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.nested-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 var(--pd-8) 6px 0;
+  border: 1px solid var(--tw-gray-30);
+  border-top: 0;
+  border-right: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.new {
+  color: var(--tw-gray-60);
+}

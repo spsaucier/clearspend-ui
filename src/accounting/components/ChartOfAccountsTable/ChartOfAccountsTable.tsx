@@ -8,7 +8,6 @@ import { Table, TableColumn } from '_common/components/Table';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
-import { join } from '_common/utils/join';
 import { wrapAction } from '_common/utils/wrapAction';
 import type {
   AddChartOfAccountsMappingRequest,
@@ -21,9 +20,9 @@ import { resyncChartOfAccounts } from 'accounting/services';
 import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
 import { SelectExpenseCategory } from '../SelectExpenseCategory';
 import { CancelConfirmationButton } from '../CancelConfirmationButton';
+import { ChartOfAccountsName } from '../ChartOfAccountsName';
 
 import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
-import { NestedLevels } from './types';
 
 import css from './ChartOfAccountsTable.css';
 
@@ -92,100 +91,36 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
     setRefreshButtonDisabled(true);
   };
 
-  const getNestedCSSlevel = (account: FlattenedIntegrationAccount) => {
-    switch (account.level) {
-      case NestedLevels.Three:
-        return css.nestedLevel3;
-      case NestedLevels.Four:
-        return css.nestedLevel4;
-      case NestedLevels.Five:
-        return css.nestedLevel5;
-      default:
-        return undefined;
-    }
-  };
-
   const columns: readonly Readonly<TableColumn<FlattenedIntegrationAccount>>[] = [
     {
       name: 'mappedIcon',
-      title: <></>,
       render: (item) => {
         const categoryMapped = Object.values(state).find((mapping) => mapping?.accountRef === item.id) !== undefined;
         return (
-          <div>
-            {categoryMapped ? (
-              <div class={css.mappedIcon}>
-                <Icon name="confirm-circle-filled" />
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
+          <Show when={categoryMapped}>
+            <Icon name="confirm-circle-filled" class={css.mappedIcon} />
+          </Show>
         );
       },
     },
     {
       name: 'accountName',
-      title: (
-        <div class={css.columnTitle}>
-          <Text message="QuickBooks Online chart of Accounts" />
-        </div>
-      ),
-      render: (item) => {
-        return (
-          <div class={join(css.nestedLevel, getNestedCSSlevel(item))}>
-            <div class={css.categoryPrimaryName}>
-              {item.level > 1 && <Icon name="l-tab" style={{ color: 'transparent' }} />}
-              <div class={css.categoryNameContainer}>
-                <Text message={item.name || ''} />
-                {item.isNew ? (
-                  <div class={css.newAccountText}>
-                    <Text message={'New Account'} />
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-            </div>
-          </div>
-        );
-      },
+      title: <Text message="QuickBooks Online chart of Accounts" />,
+      render: (item) => <ChartOfAccountsName data={item} />,
     },
     {
       name: 'type',
-      title: (
-        <div class={css.columnTitle}>
-          <Text message="Type" />
-        </div>
-      ),
-      render: (item) => {
-        return (
-          <div>
-            <Text message={item.fullyQualifiedName?.split('.')[1] || ''} />
-          </div>
-        );
-      },
+      title: <Text message="Type" />,
+      render: (item) => item.fullyQualifiedName?.split('.')[1],
     },
     {
       name: 'accountType',
-      title: (
-        <div class={css.columnTitle}>
-          <Text message="Detail Type" />
-        </div>
-      ),
-      render: (item) => (
-        <div>
-          <Text message={getAccountType(item)!.replace(/[A-Z]/g, ' $&').trim()} />
-        </div>
-      ),
+      title: <Text message="Detail Type" />,
+      render: (item) => getAccountType(item)!.replace(/[A-Z]/g, ' $&').trim(),
     },
     {
       name: 'expenseCategory',
-      title: (
-        <div class={css.columnTitle}>
-          <Text message="ClearSpend expense category" />
-        </div>
-      ),
+      title: <Text message="ClearSpend expense category" />,
       render: (item) => {
         const target = props.mappings?.find((mapping) => mapping.accountRef === item.id)?.expenseCategoryId;
         const initId = target && categories.data?.some((ec) => ec.expenseCategoryId === target) ? target : undefined;
@@ -254,19 +189,15 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
           delay={400}
           placeholder={String(i18n.t('Search'))}
           class={css.search}
+          disabled
           onSearch={() => {
             // TODO
           }}
         />
         <Show when={props.showUpdateButton}>
-          <div>
-            <Button class={css.refreshButton} onClick={refreshChartOfAccounts} disabled={refreshButtonDisabled()}>
-              <div class={css.refreshButtonContent}>
-                <Icon name={'refresh'} />
-                <Text message="Update Chart of Accounts" />
-              </div>
-            </Button>
-          </div>
+          <Button icon="refresh" disabled={refreshButtonDisabled()} onClick={refreshChartOfAccounts}>
+            <Text message="Update Chart of Accounts" />
+          </Button>
         </Show>
       </div>
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
