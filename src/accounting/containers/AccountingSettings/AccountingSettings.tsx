@@ -3,7 +3,7 @@ import { createSignal, Show } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
 
 import { Section } from 'app/components/Section';
-import { setActivityExpenseCategory } from 'app/services/activity';
+import { setActivityDetails } from 'app/services/activity';
 import { useMessages } from 'app/containers/Messages/context';
 import { AutomaticUpdates } from 'accounting/components/AutomaticUpdates';
 import { Button } from '_common/components/Button';
@@ -62,7 +62,7 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         deleteCompanyConnection(),
         transactionData.forEach((item) => {
           if (item.syncStatus !== 'SYNCED_LOCKED')
-            setActivityExpenseCategory(item.accountActivityId!, null, item.notes || '');
+            setActivityDetails(item.accountActivityId!, null, item.notes || '', null, null);
         }),
       ]);
       messages.success({

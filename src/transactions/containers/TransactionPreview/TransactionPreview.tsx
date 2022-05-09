@@ -2,7 +2,7 @@ import { useNavigate } from 'solid-app-router';
 import { useI18n, Text } from 'solid-i18n';
 import { createSignal, createMemo, batch, Show, Switch, Match } from 'solid-js';
 
-import type { AccountActivityResponse } from 'generated/capital';
+import type { AccountActivityResponse, CodatSupplier } from 'generated/capital';
 import { KEY_CODES } from '_common/constants/keyboard';
 import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
@@ -14,7 +14,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import { formatName } from 'employees/utils/formatName';
-import { setActivityNote, setActivityExpenseCategory } from 'app/services/activity';
+import { setActivityNote, setActivityDetails } from 'app/services/activity';
 import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
@@ -133,7 +133,9 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
   const [expenseCategory, setExpenseCategory] = createSignal(transaction().expenseDetails?.expenseCategoryId);
-  const [savingExpenseCategory, saveExpenseCategory] = wrapAction(setActivityExpenseCategory);
+  const [supplierId, setSupplierId] = createSignal(transaction().merchant?.codatSupplierId);
+  const [supplierName, setSupplierName] = createSignal(transaction().merchant?.codatSupplierName);
+  const [updatingActivityDetails, updateActivityDetails] = wrapAction(setActivityDetails);
   const activeCategories = createMemo(() => expenseCategories.data!.filter((category) => category.status === 'ACTIVE'));
 
   const categoryIsActive = (categoryId: string | undefined | null): boolean => {
@@ -141,11 +143,42 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   };
 
   const onSaveExpenseCategory = (categoryId: string | undefined) => {
-    saveExpenseCategory(props.transaction.accountActivityId!, categoryId || null, notes() || '')
+    updateActivityDetails(
+      props.transaction.accountActivityId!,
+      categoryId || null,
+      notes() || '',
+      supplierId() || null,
+      supplierName() || null,
+    )
       .then((data) => {
         batch(() => {
-          props.onUpdate([{ ...data, syncStatus: categoryId ? 'READY' : 'NOT_READY' }]);
+          props.onUpdate([{ ...data, syncStatus: categoryId && supplierId() ? 'READY' : 'NOT_READY' }]);
           setExpenseCategory(categoryId);
+          messages.success({
+            title: i18n.t('Success'),
+            message: i18n.t('Your changes have been successfully saved.'),
+          });
+        });
+      })
+      .catch(() => {
+        setExpenseCategory(undefined);
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
+  const onSaveVendor = (supplier: CodatSupplier) => {
+    updateActivityDetails(
+      props.transaction.accountActivityId!,
+      expenseCategory() || null,
+      notes() || '',
+      supplier.id || null,
+      supplier.supplierName || null,
+    )
+      .then((data) => {
+        batch(() => {
+          props.onUpdate([{ ...data, syncStatus: expenseCategory() && supplier.id ? 'READY' : 'NOT_READY' }]);
+          setSupplierId(supplier.id);
+          setSupplierName(supplier.supplierName);
           messages.success({
             title: i18n.t('Success'),
             message: i18n.t('Your changes have been successfully saved.'),
@@ -267,9 +300,11 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 <Text message="Vendor" />
               </div>
               <SelectVendor
+                value={props.transaction.merchant?.codatSupplierName}
                 items={vendors()?.results || []}
                 onChangeTarget={onChangeVendorSearch}
                 defaultSearchName={transaction().merchant?.name || ''}
+                onSelect={onSaveVendor}
               />
             </div>
             <Switch
@@ -346,7 +381,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               items={activeCategories()}
               placeholder={String(i18n.t('Assign a category'))}
               error={!categoryIsActive(expenseCategory())}
-              loading={savingExpenseCategory()}
+              loading={updatingActivityDetails()}
               disabled={transaction().syncStatus === 'SYNCED_LOCKED'}
               onChange={onSaveExpenseCategory}
             />

@@ -68,11 +68,19 @@ export async function setActivityNote(activityId: string, activityUpdate: Update
   ).data;
 }
 
-export async function setActivityExpenseCategory(activityId: string, expenseCategoryId: string | null, notes: string) {
+export async function setActivityDetails(
+  activityId: string,
+  expenseCategoryId: string | null,
+  notes: string,
+  supplierId: string | null,
+  supplierName: string | null,
+) {
   return (
     await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}`, {
       notes,
       expenseCategoryId,
+      supplierId,
+      supplierName,
     })
   ).data;
 }

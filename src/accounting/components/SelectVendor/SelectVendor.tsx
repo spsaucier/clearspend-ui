@@ -12,6 +12,8 @@ interface SelectVendorProps {
   defaultSearchName: string;
   onChangeTarget: (target: string) => void;
   items: CodatSupplier[];
+  onSelect: (supplier: CodatSupplier) => void;
+  value: string | undefined;
 }
 
 export function SelectVendor(props: Readonly<SelectVendorProps>) {
@@ -27,7 +29,13 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
           <div class={css.dropdownContainer}>
             <For each={props.items}>
               {(item) => (
-                <div class={css.option} onClick={() => setOpen(false)}>
+                <div
+                  class={css.option}
+                  onClick={() => {
+                    setOpen(false);
+                    props.onSelect(item);
+                  }}
+                >
                   <Text message={item.supplierName || ''} />
                 </div>
               )}
@@ -36,7 +44,12 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
         }
       >
         <div onClick={() => setOpen(true)}>
-          <InputSearch delay={400} placeholder={String(i18n.t('Select a vendor'))} onSearch={props.onChangeTarget} />
+          <InputSearch
+            delay={400}
+            placeholder={String(i18n.t('Select a vendor'))}
+            onSearch={props.onChangeTarget}
+            value={props.value}
+          />
         </div>
       </Popover>
     </div>
