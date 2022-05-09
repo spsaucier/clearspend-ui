@@ -59,7 +59,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
       </SwitchBox>
       <SwitchBox
         checked={Boolean(props.value[LimitPeriod.MONTHLY])}
-        label={<Text message="Monthly limit" />}
+        label={<Text message="30-day limit" />}
         onChange={onEnableChange(LimitPeriod.MONTHLY)}
         name={`${props.name}-monthly-limit`}
       >

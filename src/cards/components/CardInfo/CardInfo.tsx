@@ -53,7 +53,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           </Show>
           <Show when={limits?.MONTHLY?.amount}>
             <div>
-              <Text message="Monthly limit: " />
+              <Text message="30-day limit: " />
               <span>{`${
                 limits?.MONTHLY?.usedAmount ? `${formatCurrency(limits.MONTHLY.usedAmount || 0)} / ` : ''
               }${formatCurrency(limits?.MONTHLY?.amount || 0)}`}</span>
