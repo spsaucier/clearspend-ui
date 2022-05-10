@@ -7,7 +7,7 @@ import { Drawer } from '_common/components/Drawer';
 import { useBool } from '_common/utils/useBool';
 import { download } from '_common/utils/download';
 import { Data } from 'app/components/Data';
-import { exportLedgerActivity, getActivityById } from 'app/services/activity';
+import { exportLedgerActivity, getLedgerActivityById } from 'app/services/activity';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { CardPreview } from 'cards/containers/CardPreview';
@@ -49,8 +49,7 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
 
   const preview = usePreviewTransaction(
     createMemo(() => props.data?.content),
-    getActivityById,
-    true,
+    getLedgerActivityById,
   );
 
   const onUpdateTransaction = (data: Readonly<AccountActivityResponse[]>) => {

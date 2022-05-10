@@ -3,17 +3,14 @@ import { useI18n } from 'solid-i18n';
 import { useSearchParams } from 'solid-app-router';
 
 import { useMessages } from 'app/containers/Messages/context';
-import type { AccountActivityResponse } from 'generated/capital';
 
 import type { ActivityType } from '../types';
 
-import { activityToLedger } from './convertTypes';
 import { isActivityType } from './isActivityType';
 
 export function usePreviewTransaction<T extends { accountActivityId?: string; type?: ActivityType }>(
   transactions: Accessor<T[] | undefined>,
-  fetchTransactions: (id: string) => Promise<Readonly<AccountActivityResponse>>,
-  convert?: boolean, // TODO: waiting for an API
+  fetchTransactions: (id: string) => Promise<Readonly<T>>,
 ) {
   const i18n = useI18n();
   const messages = useMessages();
@@ -34,8 +31,7 @@ export function usePreviewTransaction<T extends { accountActivityId?: string; ty
     fetchTransactions(activityId)
       .then((data) => {
         batch(() => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setCacheTransaction((convert ? activityToLedger(data) : data) as any);
+          setCacheTransaction(() => data);
           setSelectID(activityId);
         });
       })
