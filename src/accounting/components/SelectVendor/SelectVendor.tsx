@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { InputSearch } from '_common/components/InputSearch';
@@ -11,6 +11,7 @@ import css from './SelectVendor.css';
 
 interface SelectVendorProps {
   defaultSearchName: string;
+  merchantName: string | undefined;
   onChangeTarget: (target: string) => void;
   items: CodatSupplier[];
   onSelect: (supplier: CodatSupplier) => void;
@@ -20,12 +21,16 @@ interface SelectVendorProps {
 
 export function SelectVendor(props: Readonly<SelectVendorProps>) {
   const [open, setOpen] = createSignal(false);
-  const [searchValue, setSearchValue] = createSignal(props.value);
+  const [searchValue, setSearchValue] = createSignal(props.value || '');
 
   const onChangeSearch = (value: string) => {
     setSearchValue(value);
     props.onChangeTarget(value);
   };
+
+  const vendorExists = createMemo(
+    () => props.items.filter((supplier) => supplier.supplierName === searchValue()).length > 0,
+  );
 
   return (
     <div>
@@ -49,16 +54,18 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
                 </div>
               )}
             </For>
-            <div
-              class={css.create}
-              onClick={() => {
-                setOpen(false);
-                props.onCreate(searchValue() !== '' ? searchValue()! : props.value!);
-              }}
-            >
-              <Icon name="add-circle-outline" size="sm" class={css.icon} />
-              <Text message="Create {name}" name={searchValue() !== '' ? searchValue()! : props.value!} />
-            </div>
+            <Show when={!vendorExists()}>
+              <div
+                class={css.create}
+                onClick={() => {
+                  setOpen(false);
+                  props.onCreate(searchValue() !== '' ? searchValue()! : props.value!);
+                }}
+              >
+                <Icon name="add-circle-outline" size="sm" class={css.icon} />
+                <Text message="Create {name}" name={searchValue() !== '' ? searchValue()! : props.merchantName!} />
+              </div>
+            </Show>
           </div>
         }
       >

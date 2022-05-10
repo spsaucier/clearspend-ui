@@ -316,6 +316,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               </div>
               <SelectVendor
                 value={props.transaction.merchant?.codatSupplierName}
+                merchantName={props.transaction.merchant?.name}
                 items={vendors()?.results || []}
                 onChangeTarget={onChangeVendorSearch}
                 defaultSearchName={transaction().merchant?.name || ''}

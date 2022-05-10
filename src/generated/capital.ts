@@ -2152,7 +2152,7 @@ export interface Account {
   businessId: string;
 
   /** @format uuid */
-  allocationId: string;
+  allocationId?: string;
 
   /** @format uuid */
   ledgerAccountId: string;
@@ -3505,11 +3505,6 @@ export interface UpdateUserResponse {
   errorMessage?: string;
 }
 
-export interface UpdateCardStatusRequest {
-  /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
-}
-
 export interface Card {
   /** @format uuid */
   cardId?: string;
@@ -3543,6 +3538,16 @@ export interface Card {
   lastFour?: string;
   address?: Address;
   externalRef?: string;
+}
+
+export interface CardAndAccount {
+  card?: Card;
+  account?: Account;
+}
+
+export interface UpdateCardStatusRequest {
+  /** @example CARDHOLDER_REQUESTED */
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
 }
 
 export interface ActivateCardRequest {
@@ -3613,9 +3618,9 @@ export interface UpdateCardRequest {
 
 export interface CardDetailsResponse {
   card: Card;
-  ledgerBalance: Amount;
-  availableBalance: Amount;
-  allocationName: string;
+  ledgerBalance?: Amount;
+  availableBalance?: Amount;
+  allocationName?: string;
   limits?: CurrencyLimit[];
   disabledMccGroups?: (
     | 'CHILD_CARE'
@@ -4187,19 +4192,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4449,9 +4446,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4504,9 +4509,10 @@ export interface CodatSupplier {
 }
 
 export interface GetSuppliersResponse {
+  results?: CodatSupplier[];
+
   /** @format int32 */
   totalElements?: number;
-  results?: CodatSupplier[];
 }
 
 export interface AccountBalance {
