@@ -19,7 +19,12 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
-import { getClosestVendorsToTarget, syncTransaction, unlockTransaction } from 'accounting/services';
+import {
+  createNewVendorForActivity,
+  getClosestVendorsToTarget,
+  syncTransaction,
+  unlockTransaction,
+} from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 import { CopyButton } from 'app/components/CopyButton';
 import { SelectVendor } from 'accounting/components/SelectVendor';
@@ -191,6 +196,16 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       });
   };
 
+  const onCreateVendor = (newSupplierName: string) => {
+    createNewVendorForActivity({ supplierName: newSupplierName, accountActivityId: transaction().accountActivityId });
+    props.onUpdate([
+      {
+        ...transaction(),
+        merchant: { ...transaction().merchant, codatSupplierName: newSupplierName, codatSupplierId: '-1' },
+      },
+    ]);
+  };
+
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
   const onSyncTransaction = () => {
     props.onUpdate([{ ...transaction(), syncStatus: 'SYNCED_LOCKED' }]);
@@ -305,6 +320,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 onChangeTarget={onChangeVendorSearch}
                 defaultSearchName={transaction().merchant?.name || ''}
                 onSelect={onSaveVendor}
+                onCreate={onCreateVendor}
               />
             </div>
             <Switch

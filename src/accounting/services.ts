@@ -16,6 +16,8 @@ import type {
   SyncCountResponse,
   SyncLogRequest,
   SyncTransactionResponse,
+  CreateAssignSupplierRequest,
+  CreateAssignSupplierResponse,
 } from 'generated/capital';
 
 import type {
@@ -146,4 +148,8 @@ export async function getClosestVendorsToTarget(params: Readonly<getClosestVendo
       `/codat/accounting-suppliers?target=${params.target}&limit=${params.limit}`,
     )
   ).data;
+}
+
+export async function createNewVendorForActivity(params: Readonly<CreateAssignSupplierRequest>) {
+  return (await service.post<Readonly<CreateAssignSupplierResponse>>(`/codat/create-assign-vendor`, params)).data;
 }

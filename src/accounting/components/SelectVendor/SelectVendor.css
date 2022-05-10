@@ -21,3 +21,27 @@
   width: 100%;
   padding: 0;
 }
+
+.icon {
+  margin-right: var(--pd-8);
+  flex-shrink: 0;
+  color: var(--tw-primary-bg);
+}
+
+.create {
+  display: flex;
+  margin: 0;
+  padding: var(--pd-8) var(--pd-12);
+  align-items: flex-start;
+  color: var(--tw-black);
+  font: inherit;
+  text-align: left;
+  vertical-align: middle;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--tw-primary-light);
+  }
+}
