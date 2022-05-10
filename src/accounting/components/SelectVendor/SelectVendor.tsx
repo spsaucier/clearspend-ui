@@ -72,6 +72,7 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
         <div onClick={() => setOpen(true)}>
           <InputSearch
             delay={400}
+            error={!props.value}
             placeholder={String(i18n.t('Select a vendor'))}
             onSearch={onChangeSearch}
             value={props.value}
