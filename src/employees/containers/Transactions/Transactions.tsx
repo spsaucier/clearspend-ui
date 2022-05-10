@@ -30,7 +30,6 @@ export function Transactions(props: Readonly<TransactionsProps>) {
       onReload={reload}
       onChangeParams={onPageSizeChange(setParams, (size) => storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size))}
       onUpdateData={mutate}
-      selectedTransactions={[]}
     />
   );
 }

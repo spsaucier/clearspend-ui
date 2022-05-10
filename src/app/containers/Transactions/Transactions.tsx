@@ -47,7 +47,6 @@ export function Transactions(props: Readonly<TransactionsProps>) {
           (id: string | undefined) => props.onAllocationChange(id || ALL_ALLOCATIONS),
         )}
         onUpdateData={store.setData}
-        selectedTransactions={[]}
       />
     </Data>
   );

@@ -1,0 +1,1 @@
+export { SyncTableButton } from './SyncTableButton';

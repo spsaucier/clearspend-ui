@@ -1,7 +1,6 @@
-import { createMemo, createSignal, onMount, Show } from 'solid-js';
+import { createMemo, createSignal, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
-import { i18n as i18nUtil } from '_common/api/intl';
 import { wrapAction } from '_common/utils/wrapAction';
 import { download } from '_common/utils/download';
 import type { Setter } from '_common/types/common';
@@ -9,7 +8,6 @@ import { InputSearch } from '_common/components/InputSearch';
 import { Button } from '_common/components/Button';
 import { Pagination } from '_common/components/Pagination';
 import { Table, TableColumn } from '_common/components/Table';
-import { Icon } from '_common/components/Icon';
 import { useMessages } from 'app/containers/Messages/context';
 import { Filters } from 'app/components/Filters';
 import { Empty } from 'app/components/Empty';
@@ -27,10 +25,9 @@ import { Drawer } from '_common/components/Drawer';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
-import { SyncSelectIcon } from 'accounting/components/SyncSelectIcon';
-import { getSyncableTransactionCount, syncAllTransactions, syncMultipleTransactions } from 'accounting/services';
+import { SyncStatus } from 'accounting/components/SyncStatus';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
-import { Popover } from '_common/components/Popover';
+import { SyncTableButton } from 'accounting/containers/SyncTableButton';
 
 import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
@@ -39,8 +36,6 @@ import { TransactionsTableAmount } from '../TransactionsTableAmount';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { MissingDetails } from '../MissingDetails';
-import { canManageConnections } from '../../../allocations/utils/permissions';
-import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './TransactionsTable.css';
 
@@ -50,13 +45,10 @@ interface TransactionsTableProps {
   dateRange?: Readonly<DateRange>;
   onCardClick?: (id: string) => void;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  onDeselectTransaction?: (id?: string) => void;
   onReload: () => Promise<unknown>;
   onRowClick: (activityId: string) => void;
-  onSelectTransaction?: (id: string) => void;
   onUpdateTransaction: (transactionData: Readonly<AccountActivityResponse[]>) => void;
   params: Readonly<AccountActivityRequest>;
-  selectedTransactions: string[];
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;
   showUserFilter?: boolean;
@@ -65,29 +57,16 @@ interface TransactionsTableProps {
 export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const i18n = useI18n();
   const messages = useMessages();
-  const { permissions } = useBusiness();
 
-  const [syncConfirmationOpen, setSyncConfirmationOpen] = createSignal(false);
-  const [syncBeingInitialized, setSyncBeingInitialized] = createSignal(false);
-  const [syncableCount, setSyncableCount] = createSignal(0);
   const [exporting, exportData] = wrapAction(exportAccountActivity);
 
-  if (canManageConnections(permissions())) {
-    onMount(async () => {
-      const res = await getSyncableTransactionCount();
-      if (res.count) {
-        setSyncableCount(res.count);
-      }
-    });
-  }
+  const [selectedIds, setSelectedIds] = createSignal<string[]>([]);
 
-  const hasSelectedTransactions = createMemo(() => {
-    return props.selectedTransactions.length > 0;
-  });
-
-  const hasSelectableTransactions = createMemo(() => {
-    return !!props.data.content?.find((t) => t.syncStatus === 'READY');
-  });
+  const onChangeSelectedTransactions = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((transactionId) => transactionId !== id) : [...prev, id],
+    );
+  };
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
 
@@ -110,56 +89,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     );
   };
 
-  const onClickSync = async () => {
-    if (hasSelectedTransactions()) {
-      syncSelected();
-    } else {
-      try {
-        const res = await getSyncableTransactionCount();
-        if (res.count) {
-          setSyncableCount(res.count);
-        }
-        setSyncConfirmationOpen(true);
-      } catch (error: unknown) {
-        messages.error({ title: i18n.t('Something went wrong') });
-      }
-    }
-  };
-
-  const syncSelected = async () => {
-    setSyncBeingInitialized(true);
-    setSyncConfirmationOpen(false);
-    try {
-      await syncMultipleTransactions(props.selectedTransactions);
-      const selectedTransactionRecords = props.data.content?.filter(
-        (transaction) =>
-          transaction.accountActivityId && props.selectedTransactions.includes(transaction.accountActivityId),
-      );
-      if (selectedTransactionRecords) {
-        props.onUpdateTransaction(selectedTransactionRecords.map((t) => ({ ...t, syncStatus: 'SYNCED_LOCKED' })));
-      }
-      props.onDeselectTransaction?.();
-    } catch (error: unknown) {
-      messages.error({ title: i18n.t('Something went wrong') });
-    }
-    setSyncBeingInitialized(false);
-  };
-
-  const syncAll = async () => {
-    setSyncBeingInitialized(true);
-    setSyncConfirmationOpen(false);
-    try {
-      await syncAllTransactions();
-      const syncableTransactions = props.data.content?.filter((transaction) => transaction.syncStatus === 'READY');
-      if (syncableTransactions) {
-        props.onUpdateTransaction(syncableTransactions.map((t) => ({ ...t, syncStatus: 'SYNCED_LOCKED' })));
-      }
-    } catch (error: unknown) {
-      messages.error({ title: i18n.t('Something went wrong') });
-    }
-    setSyncBeingInitialized(false);
-  };
-
   const filters = useTransactionsFilters(
     createMemo(() => props.params),
     props.dateRange,
@@ -170,36 +99,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
       name: 'sync',
-      title: null,
-      render: (item) => {
-        if (item.syncStatus === 'SYNCED_LOCKED') {
-          return (
-            <div class={css.lockDot}>
-              <Icon name={'lock'} class={css.lock} />
-            </div>
-          );
-        } else if (
-          item.syncStatus === 'READY' &&
-          item.accountActivityId &&
-          props.onSelectTransaction &&
-          props.onDeselectTransaction
-        ) {
-          return (
-            <SyncSelectIcon
-              id={item.accountActivityId}
-              selectedTransactions={props.selectedTransactions}
-              onSelectTransaction={props.onSelectTransaction}
-              onDeselectTransaction={props.onDeselectTransaction}
-            />
-          );
-        } else {
-          return (
-            <div class={css.errorDot}>
-              <Icon name={'error-circle'} class={css.error} />
-            </div>
-          );
-        }
-      },
+      render: (item) => (
+        <SyncStatus
+          activityId={item.accountActivityId!}
+          selectedIds={selectedIds()}
+          status={item.syncStatus}
+          onChangeSelected={onChangeSelectedTransactions}
+        />
+      ),
     },
     {
       name: 'date',
@@ -296,15 +203,6 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       });
   };
 
-  const getSyncablePageTransactions = () => {
-    return [
-      ...new Set([
-        props.data.content?.filter((transaction) => transaction.syncStatus! === 'READY'),
-        props.selectedTransactions,
-      ]),
-    ];
-  };
-
   return (
     <div class={props.class}>
       <Filters
@@ -338,57 +236,15 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         >
           <Text message="Export" />
         </Button>
-        <Show when={props.showAccountingAdminView}>
-          <Popover
-            balloon
-            open={syncConfirmationOpen()}
-            onClickOutside={() => setSyncConfirmationOpen(false)}
-            class={css.syncPopupRoot}
-            content={
-              <div class={css.syncPopupContainer}>
-                <div class={css.syncPopupTextContainer}>
-                  <strong>Sync {conditionalS('transaction', syncableCount())}?</strong>
-                  <Text
-                    message={`You have ${syncableCount()} ${conditionalS(
-                      'transaction',
-                      syncableCount(),
-                    )} ready to sync.`}
-                  />
-                </div>
-                <div class={css.syncButtonContainer}>
-                  <Button type="default" view="ghost" onClick={() => setSyncConfirmationOpen(false)}>
-                    No, cancel
-                  </Button>
-                  <Button
-                    type="primary"
-                    loading={syncBeingInitialized()}
-                    onClick={hasSelectedTransactions() ? syncSelected : syncAll}
-                    disabled={syncBeingInitialized()}
-                  >
-                    Yes, sync {conditionalS('transaction', syncableCount())}
-                  </Button>
-                </div>
-              </div>
-            }
-          >
-            <Button
-              type="primary"
-              loading={syncBeingInitialized()}
-              disabled={
-                syncBeingInitialized() || !hasSelectableTransactions() || getSyncablePageTransactions.length > 0
-              }
-              icon={{ name: 'refresh', pos: 'right' }}
-              onClick={onClickSync}
-            >
-              <span>
-                {getSyncButtonMessage(
-                  hasSelectedTransactions(),
-                  syncBeingInitialized(),
-                  props.selectedTransactions.length,
-                )}
-              </span>
-            </Button>
-          </Popover>
+        <Show when={props.showAccountingAdminView && props.data.content}>
+          {(transactions) => (
+            <SyncTableButton
+              selectedIds={selectedIds()}
+              transactions={transactions}
+              onResetSelection={() => setSelectedIds([])}
+              onReloadTransactions={props.onReload}
+            />
+          )}
         </Show>
       </Filters>
       <Show
@@ -436,19 +292,3 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     </div>
   );
 }
-
-const getSyncButtonMessage = (hasSelected: boolean, inProgress: boolean, selectedLength: number) => {
-  if (inProgress) {
-    return i18nUtil.t(`Sync In Progress`);
-  }
-  return hasSelected
-    ? i18nUtil.t('Sync {transactionCount} {transactionWord}', {
-        transactionCount: selectedLength,
-        transactionWord: conditionalS(String(i18nUtil.t('Transaction')), selectedLength),
-      })
-    : i18nUtil.t('Sync All Transactions');
-};
-
-const conditionalS = (word: string, itemCount: number) => {
-  return `${word}${itemCount > 1 ? 's' : ''}`;
-};

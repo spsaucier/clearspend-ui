@@ -1,6 +1,6 @@
 import { createMemo, mergeProps } from 'solid-js';
 
-import { Button, ButtonProps, IconProps, IconType } from '_common/components/Button/Button';
+import { Button, type ButtonProps, type IconProps, type IconType } from '_common/components/Button';
 
 import css from './FlatButton.css';
 

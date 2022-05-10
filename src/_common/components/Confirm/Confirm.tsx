@@ -5,9 +5,12 @@ import { join } from '_common/utils/join';
 
 import { Popover } from '../Popover';
 import type { PopoverPosition } from '../Popover';
-import { Button } from '../Button';
+import { Button, type ButtonProps, type IconProps } from '../Button';
 
 import css from './Confirm.css';
+
+const NO_ICON = null;
+const DEFAULT_CONFIRM_ICON: IconProps = { name: 'confirm', pos: 'right' };
 
 export interface FuncProps {
   onClick?: () => void;
@@ -16,6 +19,9 @@ export interface FuncProps {
 interface BaseProps {
   question: JSXElement;
   confirmText: JSXElement;
+  confirmType?: Required<ButtonProps>['type'];
+  confirmView?: Required<ButtonProps>['view'];
+  confirmIcon?: Required<ButtonProps>['icon'] | null;
   position?: PopoverPosition;
   class?: string;
   onConfirm: () => void;
@@ -54,7 +60,12 @@ export function Confirm(props: Readonly<ConfirmProps>) {
             <Button view="ghost" onClick={onCancel}>
               <Text message="Cancel" />
             </Button>
-            <Button type="danger" view="second" icon={{ name: 'confirm', pos: 'right' }} onClick={onConfirm}>
+            <Button
+              type={props.confirmType || 'danger'}
+              view={props.confirmView || 'second'}
+              icon={props.confirmIcon === NO_ICON ? undefined : props.confirmIcon || DEFAULT_CONFIRM_ICON}
+              onClick={onConfirm}
+            >
               {props.confirmText}
             </Button>
           </div>

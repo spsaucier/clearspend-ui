@@ -28,12 +28,9 @@ interface TransactionsDataProps {
   error: unknown;
   loading: boolean;
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
-  onDeselectTransaction?: (id?: string) => void;
   onReload: () => Promise<unknown>;
-  onSelectTransaction?: (id: string) => void;
   onUpdateData: (setter: SetterFunc<Readonly<PagedDataAccountActivityResponse>>) => void;
   params: Readonly<AccountActivityRequest>;
-  selectedTransactions: string[];
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;
   showUserFilter?: boolean;
@@ -70,13 +67,10 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         dateRange={props.dateRange}
         onCardClick={setCardID}
         onChangeParams={props.onChangeParams}
-        onDeselectTransaction={props.onDeselectTransaction}
         onReload={props.onReload}
         onRowClick={preview.changeID}
-        onSelectTransaction={props.onSelectTransaction}
         onUpdateTransaction={onUpdateTransaction}
         params={props.params}
-        selectedTransactions={props.selectedTransactions}
         showAccountingAdminView={props.showAccountingAdminView}
         showAllocationFilter={props.showAllocationFilter}
         showUserFilter={props.showUserFilter}

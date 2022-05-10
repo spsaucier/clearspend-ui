@@ -40,29 +40,13 @@ export function AccountingTabs() {
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
 
   const { business } = useBusiness();
-  const [selectedTransactions, setSelectedTransactions] = createSignal<string[]>([]);
   const [viewingUpdateDetailsDrawer, setViewingUpdateDetailsDrawer] = createSignal(false);
   const updateNotifications = useUpdateNotifications();
-
-  const onSelectTransaction = (id: string) => {
-    if (!selectedTransactions().includes(id)) {
-      setSelectedTransactions([...selectedTransactions(), id]);
-    }
-  };
 
   const onDismissNotifications = () => {
     acceptChartOfAccountsNotifications();
     updateNotifications.setData([]);
     setViewingUpdateDetailsDrawer(false);
-  };
-
-  const onDeselectTransaction = (id?: string) => {
-    if (id) {
-      const newSelectedTransactions = selectedTransactions();
-      setSelectedTransactions(newSelectedTransactions.filter((transactionId) => transactionId !== id));
-    } else {
-      setSelectedTransactions([]);
-    }
   };
 
   const navigate = useNavigate();
@@ -128,9 +112,6 @@ export function AccountingTabs() {
                   storage.set(ACTIVITY_PAGE_SIZE_STORAGE_KEY, size),
                 )}
                 onUpdateData={activityStore.setData}
-                selectedTransactions={selectedTransactions}
-                onSelectTransaction={onSelectTransaction}
-                onDeselectTransaction={onDeselectTransaction}
               />
             </Match>
             <Match when={tab() === Tabs.log}>

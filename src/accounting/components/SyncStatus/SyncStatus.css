@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  color: var(--tw-gray-50);
+  background-color: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+  border-radius: 50%;
+}
+
+.lock {
+  color: var(--tw-accent-80);
+  background-color: var(--tw-accent-10);
+  border-color: var(--tw-accent-20);
+}
+
+.sync {
+  color: var(--tw-accent-60);
+}
+
+.checkbox-wrapper {
+  background-color: transparent;
+  border-color: transparent;
+}

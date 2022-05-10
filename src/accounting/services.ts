@@ -89,7 +89,7 @@ export async function getIntegrationExpenseCategoryMappings() {
   return (await service.get<Readonly<GetChartOfAccountsMappingResponse>>('/chart-of-accounts/mappings')).data;
 }
 
-export async function getSyncableTransactionCount() {
+export async function getSyncTransactionCount() {
   return (await service.get<Readonly<SyncCountResponse>>('/codat/sync-count')).data;
 }
 
