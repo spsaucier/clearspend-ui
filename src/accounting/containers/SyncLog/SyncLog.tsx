@@ -1,5 +1,3 @@
-import { Text } from 'solid-i18n';
-
 import { getSyncLogs } from 'accounting/services';
 import { useResource } from '_common/utils/useResource';
 import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
@@ -11,7 +9,6 @@ export function SyncLog() {
   });
   return (
     <div>
-      <Text message="Audit History" />
       <SyncLogTable syncLogs={syncLogs()} />
     </div>
   );
