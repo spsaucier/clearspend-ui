@@ -29,6 +29,7 @@ import { getNoop } from '_common/utils/getNoop';
 import { CopyButton } from 'app/components/CopyButton';
 import { SelectVendor } from 'accounting/components/SelectVendor';
 import { useResource } from '_common/utils/useResource';
+import { paymentType } from 'transactions/components/DeclineReason/constants';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -506,10 +507,16 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <span>{originalAmount()}</span>
           </div>
         </Show>
-        <Show when={transaction().paymentDetails?.foreignTransactionFee}>
+        <Show when={transaction().paymentDetails?.foreign || transaction().paymentDetails?.foreignTransactionFee}>
           <div class={css.detail}>
             <Text message="Foreign exchange fee" />
             <span>{formatCurrency(transaction().paymentDetails?.foreignTransactionFee || 0)}</span>
+          </div>
+        </Show>
+        <Show when={transaction().paymentDetails?.paymentType}>
+          <div class={css.detail}>
+            <Text message="Payment type" />
+            <span>{paymentType[transaction().paymentDetails!.paymentType!]}</span>
           </div>
         </Show>
         <div class={css.detail}>

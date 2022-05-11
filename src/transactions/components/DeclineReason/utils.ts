@@ -2,7 +2,7 @@ import { i18n } from '_common/api/intl';
 import type { AccountActivityResponse } from 'generated/capital';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 
-import { declineReasons } from './constants';
+import { declineReasons, paymentType } from './constants';
 
 export function getReasonText(details: Required<AccountActivityResponse>['declineDetails']) {
   const reason = declineReasons[details.reason!] || details.reason || '';
@@ -21,7 +21,7 @@ export function getReasonText(details: Required<AccountActivityResponse>['declin
     } else if (details.paymentType) {
       return i18n.t('{reason}: {paymentType} not permitted on this {entityType}', {
         reason: String(reason),
-        paymentType: details.paymentType.toLowerCase().replace(/_/g, ''),
+        paymentType: String(paymentType[details.paymentType]),
         entityType: details.entityType?.toLowerCase() || 'card',
       });
     }

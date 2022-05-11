@@ -1,6 +1,6 @@
 import type { JSXElement } from 'solid-js';
 
-import type { DeclineDetails } from 'generated/capital';
+import type { DeclineDetails, PaymentDetails } from 'generated/capital';
 import { i18n } from '_common/api/intl';
 
 export const declineReasons: Partial<Readonly<Record<NonNullable<DeclineDetails['reason']>, JSXElement>>> = {
@@ -24,4 +24,10 @@ export const declineReasons: Partial<Readonly<Record<NonNullable<DeclineDetails[
   ST_FAILED: i18n.t('Failed'),
   ST_CANCELLED: i18n.t('Cancelled'),
   ST_UNKNOWN: i18n.t('Unknown reason'),
+};
+
+export const paymentType: Readonly<Record<NonNullable<PaymentDetails['paymentType']>, JSXElement>> = {
+  POS: i18n.t('Point-of-sale'),
+  ONLINE: i18n.t('Online'),
+  MANUAL_ENTRY: i18n.t('Manual entry'),
 };
