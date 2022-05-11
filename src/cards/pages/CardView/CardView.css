@@ -10,6 +10,18 @@
   display: inline-block;
 }
 
+.card {
+  @media (--bp-large) {
+    max-width: 26vw;
+    height: auto;
+  }
+}
+
+.info-wrapper {
+  /* we can't set max-width to .info (with grid) because it breaks layout in some cases */
+  max-width: 920px;
+}
+
 .info {
   margin-top: var(--pd-24);
 }

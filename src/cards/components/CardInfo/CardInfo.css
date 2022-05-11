@@ -1,17 +1,15 @@
 .root {
-  display: flex;
+  display: grid;
   margin: var(--pd-8) 0;
-  flex-wrap: wrap;
-  gap: var(--pd-16);
+  grid-gap: var(--pd-16);
+}
+
+.row-view {
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
 }
 
 .item {
-  width: 250px;
   padding: var(--pd-8) 0;
-
-  @media (--bp-large) {
-    width: 280px;
-  }
 }
 
 .title {
@@ -44,7 +42,7 @@
 
 .note {
   display: block;
-  margin-top: var(--pd-10);
+  margin-top: var(--pd-8);
   padding-right: var(--pd-24);
   color: var(--tw-gray-60);
   white-space: nowrap;

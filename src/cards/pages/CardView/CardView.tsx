@@ -81,7 +81,7 @@ export default function CardView() {
     setShowDetails(!showDetails());
   };
 
-  const CardInfoBlock = () => {
+  const CardInfoBlock = (infoProps: { rowView?: boolean }) => {
     return (
       <Data
         data={user()}
@@ -90,6 +90,7 @@ export default function CardView() {
         onReload={() => Promise.all([reloadUser()]).catch(getNoop())}
       >
         <CardInfo
+          rowView={infoProps.rowView}
           user={user()}
           cardData={data()}
           allocationId={card()?.allocationId}
@@ -162,6 +163,7 @@ export default function CardView() {
                   number={card()!.lastFour || ''}
                   status={card()!.status}
                   activated={card()!.activated}
+                  class={css.card}
                 />
               </div>
             )}
@@ -170,7 +172,9 @@ export default function CardView() {
       }
       headerContent={
         <Show when={card() && media.medium}>
-          <CardInfoBlock />
+          <div class={css.infoWrapper}>
+            <CardInfoBlock rowView />
+          </div>
         </Show>
       }
     >

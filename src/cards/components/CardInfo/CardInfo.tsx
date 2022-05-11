@@ -15,6 +15,7 @@ import { useBusiness } from '../../../app/containers/Main/context';
 import css from './CardInfo.css';
 
 interface CardInfoProps {
+  rowView?: boolean;
   limits?: CurrencyLimit[];
   cardData: CardDetailsResponse | null;
   user: Readonly<User | null>;
@@ -30,7 +31,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
   const parentAllocation = createMemo(() => allocations().find(allocationWithID(allocation()?.parentAllocationId)));
 
   return (
-    <div class={join(css.root, props.class)}>
+    <div class={join(css.root, props.rowView && css.rowView, props.class)}>
       <div class={css.item}>
         <h4 class={css.title}>
           <Text message="Available Balance" />

@@ -22,6 +22,7 @@
 .wrapper {
   @media (--bp-medium) {
     display: flex;
+    max-width: 980px;
   }
 }
 
@@ -62,11 +63,7 @@
   flex-grow: 1;
 
   @media (--bp-medium) {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  }
-
-  @media (--bp-wide) {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(max(118px, calc(100% / 3 - var(--pd-16) * 2)), 1fr));
   }
 }
 

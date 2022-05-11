@@ -55,13 +55,12 @@
 }
 
 .header-main {
-  display: grid;
-  justify-items: flex-start;
-  grid-gap: var(--pd-24);
+  display: flex;
+  gap: var(--pd-24);
+  flex-wrap: wrap;
 
   @media (--bp-medium) {
     align-items: center;
-    grid-auto-flow: column;
     justify-content: space-between;
   }
 }
