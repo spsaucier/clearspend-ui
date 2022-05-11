@@ -707,6 +707,7 @@ export interface DeclineDetails {
   reason?:
     | 'INSUFFICIENT_FUNDS'
     | 'INVALID_CARD_STATUS'
+    | 'UNLINKED_CARD'
     | 'CARD_NOT_FOUND'
     | 'LIMIT_EXCEEDED'
     | 'OPERATION_LIMIT_EXCEEDED'
@@ -3518,7 +3519,7 @@ export interface Card {
   /** @format uuid */
   accountId?: string;
   status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
   fundingType?: 'POOLED' | 'INDIVIDUAL';
 
   /** @format date-time */
@@ -3547,7 +3548,7 @@ export interface CardAndAccount {
 
 export interface UpdateCardStatusRequest {
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
 }
 
 export interface ActivateCardRequest {
@@ -3555,7 +3556,7 @@ export interface ActivateCardRequest {
   lastFour?: string;
 
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
 }
 
 export interface UpdateCardAccountRequest {

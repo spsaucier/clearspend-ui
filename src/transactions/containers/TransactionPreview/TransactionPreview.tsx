@@ -444,8 +444,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <div class={css.row}>
               <Icon size="md" name="alert" class={css.icon} />
               <div class={css.text}>
-                The transaction has been synced with your accounting software. Expense category and comments can not be
-                changed.
+                <Text message="The transaction has been synced with your accounting software. Expense category and comments can not be changed." />
               </div>
             </div>
           </Show>
@@ -470,7 +469,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <Text message="Merchant" />
           </h4>
           <div class={css.detail}>
-            <Text message="Merchant Name" />
+            <Text message="Merchant name" />
             <span>{transaction().merchant!.name}</span>
           </div>
           <div class={css.detail}>
@@ -478,33 +477,39 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <span>{transaction().merchant!.merchantNumber}</span>
           </div>
           <div class={css.detail}>
-            <Text message="Merchant Category" />
+            <Text message="Merchant category" />
             <span>{MERCHANT_CATEGORIES[transaction().merchant!.merchantCategoryGroup!].name}</span>
           </div>
         </Show>
         <h4 class={css.title}>
-          <Text message="Transaction Details" />
+          <Text message="Transaction details" />
         </h4>
         <div class={css.detail}>
-          <Text message="Posted On" />
+          <Text message="Posted on" />
           <TransactionDateTime date={transaction().activityTime} />
         </div>
         <Show when={requestedAmount()}>
           <div class={css.detail}>
-            <Text message="Requested Amount" />
+            <Text message="Requested amount" />
             <span>{requestedAmount()}</span>
           </div>
         </Show>
         <div class={css.detail}>
-          <Show when={transaction().status === 'PENDING'} fallback={<Text message="Posted Amount" />}>
-            <Text message="Hold Amount" />
+          <Show when={transaction().status === 'PENDING'} fallback={<Text message="Posted amount" />}>
+            <Text message="Hold amount" />
           </Show>
           <span>{displayAmount()}</span>
         </div>
         <Show when={originalAmount()}>
           <div class={css.detail}>
-            <Text message="Original Amount" />
+            <Text message="Original amount" />
             <span>{originalAmount()}</span>
+          </div>
+        </Show>
+        <Show when={transaction().paymentDetails?.foreignTransactionFee}>
+          <div class={css.detail}>
+            <Text message="Foreign exchange fee" />
+            <span>{formatCurrency(transaction().paymentDetails?.foreignTransactionFee || 0)}</span>
           </div>
         </Show>
         <div class={css.detail}>
