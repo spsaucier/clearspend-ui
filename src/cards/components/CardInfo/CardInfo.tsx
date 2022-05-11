@@ -36,7 +36,7 @@ export function CardInfo(props: Readonly<CardInfoProps>) {
           <Text message="Available Balance" />
         </h4>
         <div class={css.value}>
-          <strong>{formatCurrency(props.cardData?.availableBalance.amount || 0)}</strong>
+          <strong>{formatCurrency(props.cardData?.availableBalance?.amount || 0)}</strong>
           <BalanceInfo />
         </div>
         <div class={css.note}>
