@@ -9,9 +9,9 @@ import { Icon } from '_common/components/Icon';
 
 import { Header } from '../Header';
 import { Description } from '../Description';
-// eslint-disable-next-line css-modules/no-unused-class
-import css from '../../SignUp.css';
 import { FlatButton } from '../Button/FlatButton';
+
+import css from './BusinessDetailsForm.css';
 
 interface BusinessDetailsFormValues {
   businessTypeCategory: BusinessTypeCategory;
