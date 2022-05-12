@@ -45,23 +45,6 @@
   font-size: var(--text-18);
 }
 
-.radio-label {
-  font-size: var(--text-14);
-  line-height: 1.4;
-}
-
-.radio-extra {
-  display: flex;
-  margin-top: var(--pd-12);
-  font-size: var(--text-12);
-  line-height: 1.33;
-}
-
-.radio-extra svg {
-  width: 60px;
-  margin-right: var(--pd-12);
-}
-
 .side {
   position: absolute;
   top: 0;

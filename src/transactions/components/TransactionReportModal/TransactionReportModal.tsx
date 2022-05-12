@@ -7,8 +7,7 @@ import { Link } from '_common/components/Link';
 import { Icon } from '_common/components/Icon';
 import { useResource } from '_common/utils/useResource';
 import { getLedgerActivityById } from 'app/services/activity';
-
-import { useBusiness } from '../../../app/containers/Main/context';
+import { useBusiness } from 'app/containers/Main/context';
 
 import css from './TransactionReportModal.css';
 

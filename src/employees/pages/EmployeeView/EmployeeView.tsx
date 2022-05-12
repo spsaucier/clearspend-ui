@@ -12,6 +12,7 @@ import { Page } from 'app/components/Page';
 import { LoadingError } from 'app/components/LoadingError';
 import { Loading } from 'app/components/Loading';
 import { BackLink } from 'app/components/BackLink';
+import { useBusiness } from 'app/containers/Main/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import type { FormValues } from 'employees/components/EditEmployeeForm/types';
 import { canManageCards, canManageUsers } from 'allocations/utils/permissions';
@@ -21,7 +22,6 @@ import { Transactions } from '../../containers/Transactions';
 import { Cards } from '../../containers/Cards';
 import { getUser, editUser } from '../../services';
 import { formatName } from '../../utils/formatName';
-import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './EmployeeView.css';
 

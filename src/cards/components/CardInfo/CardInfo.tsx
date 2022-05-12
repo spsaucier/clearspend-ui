@@ -6,11 +6,11 @@ import { join } from '_common/utils/join';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
+import { useBusiness } from 'app/containers/Main/context';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
 import type { CardDetailsResponse, CurrencyLimit, User } from 'generated/capital';
 
 import { BalanceInfo } from '../BalanceInfo';
-import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './CardInfo.css';
 

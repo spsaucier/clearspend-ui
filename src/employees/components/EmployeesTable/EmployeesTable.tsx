@@ -19,11 +19,11 @@ import { Drawer } from '_common/components/Drawer';
 import { Checkbox } from '_common/components/Checkbox';
 import { FiltersButton } from 'app/components/FiltersButton';
 import { InputSearch } from '_common/components/InputSearch';
+import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 
 import { formatName } from '../../utils/formatName';
 import { exportUsers } from '../../services';
 import { EmployeeFilterDrawer } from '../EmployeeFilterDrawer';
-import { Events, sendAnalyticsEvent } from '../../../app/utils/analytics';
 
 import css from './EmployeesTable.css';
 

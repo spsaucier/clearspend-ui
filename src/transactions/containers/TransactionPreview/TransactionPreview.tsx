@@ -27,6 +27,8 @@ import {
 } from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 import { CopyButton } from 'app/components/CopyButton';
+import { hasSomeManagerRole } from 'allocations/utils/permissions';
+import { useBusiness } from 'app/containers/Main/context';
 import { SelectVendor } from 'accounting/components/SelectVendor';
 import { useResource } from '_common/utils/useResource';
 import { paymentType } from 'transactions/components/DeclineReason/constants';
@@ -38,8 +40,6 @@ import { TransactionDateTime } from '../../components/TransactionDateTime';
 import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { TransactionReceipts } from '../TransactionReceipts';
-import { hasSomeManagerRole } from '../../../allocations/utils/permissions';
-import { useBusiness } from '../../../app/containers/Main/context';
 
 import css from './TransactionPreview.css';
 

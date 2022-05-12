@@ -9,6 +9,7 @@ import { Drawer } from '_common/components/Drawer';
 import { Section } from 'app/components/Section';
 import { SwitchBox } from 'app/components/SwitchBox';
 import { PageActions } from 'app/components/Page';
+import { useBusiness } from 'app/containers/Main/context';
 import { AllocationSelect } from 'allocations/components/AllocationSelect';
 import { getAllocation } from 'allocations/services';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
@@ -33,7 +34,6 @@ import type {
   UserData,
   User,
 } from 'generated/capital';
-import { getBusiness } from 'app/services/businesses';
 import { getUser } from 'employees/services';
 import type { MccGroup } from 'transactions/types';
 import { CardType } from 'cards/types';
@@ -61,6 +61,8 @@ interface EditCardFormProps {
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
   let skipUpdates = false;
 
+  const { business } = useBusiness();
+
   const [showEmployee, toggleShowEmployee] = useBool();
   const [loading, save] = wrapAction(props.onSave);
   const [employee, setEmployee] = createSignal<User>();
@@ -74,7 +76,6 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
     props.allocationId,
     Boolean(props.allocationId),
   );
-  const [business] = useResource(getBusiness, null);
 
   const onAddEmployee = async (data: Readonly<CreateUserRequest>) => {
     const resp = await props.onAddEmployee(data);
@@ -106,8 +107,8 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
 
   const ownerName = createMemo(() => {
     const { employee: userId, personal } = values();
-    const user = !!userId && personal ? props.users.find((item) => item.userId === userId) : undefined;
-    return user && formatNameString(user);
+    const user = !!userId && personal && props.users.find((item) => item.userId === userId);
+    return user ? formatNameString(user) : business().businessName;
   });
 
   createEffect(() => {
@@ -199,7 +200,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           <FormItem error={errors().streetLine1 || errors().locality || errors().region || errors().postalCode}>
             <AddressSelect
               onChange={handleAddressChange}
-              businessAddress={business()?.address}
+              businessAddress={business().address}
               employeeAddress={employee()?.address}
             />
           </FormItem>

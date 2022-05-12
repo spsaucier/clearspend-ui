@@ -8,11 +8,10 @@ import { DEFAULT_PAGE_SIZE } from '_common/components/Pagination';
 import { Button } from '_common/components/Button';
 import { Drawer } from '_common/components/Drawer';
 import { Page } from 'app/components/Page';
+import { useBusiness } from 'app/containers/Main/context';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { EmployeePreview } from 'employees/containers/EmployeePreview';
 import { canManageCards, hasSomeManagerRole } from 'allocations/utils/permissions';
-
-import { useBusiness } from '../app/containers/Main/context';
 
 import { CardsData } from './components/CardsData';
 import { CARDS_PAGE_SIZE_STORAGE_KEY, DEFAULT_CARD_PARAMS } from './constants';

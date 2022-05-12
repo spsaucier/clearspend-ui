@@ -8,8 +8,7 @@ import { canManageCards } from 'allocations/utils/permissions';
 import type { CodatBankAccount } from 'generated/capital';
 import { getCodatCreditCards } from 'accounting/services';
 import { useResource } from '_common/utils/useResource';
-
-import { useBusiness } from '../../../app/containers/Main/context';
+import { useBusiness } from 'app/containers/Main/context';
 
 import css from './CreditCardSelect.css';
 

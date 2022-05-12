@@ -3,12 +3,12 @@ import { For, createMemo } from 'solid-js';
 import { Select, Option } from '_common/components/Select';
 import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { i18n } from '_common/api/intl';
+import { useBusiness } from 'app/containers/Main/context';
 
 import { allocationWithID } from '../../utils/allocationWithID';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { getTotalAvailableBalance } from '../../utils/getTotalAvailableBalance';
 import { AllocationView } from '../AllocationView';
-import { useBusiness } from '../../../app/containers/Main/context';
 import { Breadcrumbs } from '../Breadcrumbs';
 import { getRootAllocation } from '../../utils/getRootAllocation';
 

@@ -8,13 +8,12 @@ import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword, resendOtp } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
 import { login } from 'app/services/auth';
+import { Events, sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
+import { useMessages } from 'app/containers/Messages/context';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
 import { Button } from '_common/components/Button';
 import type { BusinessProspectData } from 'generated/capital';
 import { i18n } from '_common/api/intl';
-
-import { Events, sendAnalyticsEvent, AnalyticsEventType } from '../app/utils/analytics';
-import { useMessages } from '../app/containers/Messages/context';
 
 import { AccountSetUpForm } from './components/AccountSetUpForm';
 import { PhoneForm } from './components/PhoneForm';
@@ -25,8 +24,8 @@ import { BusinessDetailsForm } from './components/BusinessDetailsForm/BusinessDe
 import { SorryButForm } from './components/SorryButForm/SorryBut';
 import { EasyStarted } from './components/EasyStarted';
 
-// eslint-disable-next-line css-modules/no-unused-class
 import css from './SignUp.css';
+
 enum Step {
   AccountSetUpStep,
   EmailOtpStep, // TODO: move to after AccountSetUpStep when backend is ready

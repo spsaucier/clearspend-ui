@@ -2,9 +2,8 @@ import { createSignal, Match, onMount, Show, Switch } from 'solid-js';
 import { Navigate } from 'solid-app-router';
 
 import { Loading } from 'app/components/Loading';
-
-import { useBusiness } from '../app/containers/Main/context';
-import { canManageConnections } from '../allocations/utils/permissions';
+import { useBusiness } from 'app/containers/Main/context';
+import { canManageConnections } from 'allocations/utils/permissions';
 
 import { AccountingTabs } from './pages/AccountingTabs';
 import { Integrations } from './pages/Integrations';

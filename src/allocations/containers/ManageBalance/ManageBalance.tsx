@@ -13,6 +13,7 @@ import { getBankAccounts, bankTransaction } from 'onboarding/services/accounts';
 import type { Allocation, BusinessFundAllocationResponse } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { useMessages } from 'app/containers/Messages/context';
+import { useBusiness } from 'app/containers/Main/context';
 import { isFetchError } from '_common/api/fetch/isFetchError';
 import { i18n } from '_common/api/intl';
 
@@ -21,7 +22,6 @@ import { AllocationView } from '../../components/AllocationView';
 import { targetById, ManageBalanceForm } from '../../components/ManageBalanceForm';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { allocationWithID } from '../../utils/allocationWithID';
-import { useBusiness } from '../../../app/containers/Main/context';
 import { allocationsWhereCanManageFunds } from '../../utils/permissions';
 
 import css from './ManageBalance.css';

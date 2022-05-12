@@ -11,12 +11,11 @@ import { Button } from '_common/components/Button';
 import { Page } from 'app/components/Page';
 import { Data } from 'app/components/Data';
 import { DEFAULT_PAGE_REQUEST } from 'app/constants/common';
+import { useBusiness } from 'app/containers/Main/context';
 import { extendPageSize, onPageSizeChange } from 'app/utils/pageSizeParam';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { SearchUserRequest } from 'generated/capital';
 import { canManageUsers } from 'allocations/utils/permissions';
-
-import { useBusiness } from '../app/containers/Main/context';
 
 import { EmployeesList } from './components/EmployeesList';
 import { EmployeesTable } from './components/EmployeesTable';
