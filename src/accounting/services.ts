@@ -18,6 +18,7 @@ import type {
   SyncTransactionResponse,
   CreateAssignSupplierRequest,
   CreateAssignSupplierResponse,
+  CodatCategory,
 } from 'generated/capital';
 
 import type {
@@ -152,4 +153,8 @@ export async function getClosestVendorsToTarget(params: Readonly<getClosestVendo
 
 export async function createNewVendorForActivity(params: Readonly<CreateAssignSupplierRequest>) {
   return (await service.post<Readonly<CreateAssignSupplierResponse>>(`/codat/create-assign-vendor`, params)).data;
+}
+
+export async function getClassesForBusiness() {
+  return (await service.get<Readonly<CodatCategory[]>>('/codat/classes')).data;
 }

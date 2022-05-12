@@ -32,6 +32,8 @@ import { useBusiness } from 'app/containers/Main/context';
 import { SelectVendor } from 'accounting/components/SelectVendor';
 import { useResource } from '_common/utils/useResource';
 import { paymentType } from 'transactions/components/DeclineReason/constants';
+import { useClasses } from 'accounting/stores/classes';
+import { SelectClass } from 'accounting/components/SelectClass';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -138,6 +140,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   };
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
+  const classes = useClasses();
   const [expenseCategory, setExpenseCategory] = createSignal(transaction().expenseDetails?.expenseCategoryId);
   const [supplierId, setSupplierId] = createSignal(transaction().merchant?.codatSupplierId);
   const [supplierName, setSupplierName] = createSignal(transaction().merchant?.codatSupplierName);
@@ -241,6 +244,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     target: transaction().merchant?.name || '',
     limit: 5,
   });
+
   const onChangeVendorSearch = (newTarget: string) => {
     setParams({ ...params(), target: newTarget === '' ? transaction().merchant?.name || '' : newTarget });
     reload();
@@ -311,7 +315,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 {props.transaction.lastSyncTime ? new Date(props.transaction.lastSyncTime).toLocaleString() : 'N/A'}
               </span>
             </div>
-            <div class={css.vendorSelectContainer}>
+            <div class={css.fieldSelectContainer}>
               <div class={css.optionTitle}>
                 <Text message="Vendor" />
               </div>
@@ -324,6 +328,14 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 onSelect={onSaveVendor}
                 onCreate={onCreateVendor}
               />
+            </div>
+            <div class={css.fieldSelectContainer}>
+              <div>
+                <div class={css.optionTitle}>
+                  <Text message="Class" />
+                </div>
+                <SelectClass items={classes.data!} icon="search" />
+              </div>
             </div>
             <Switch
               fallback={
