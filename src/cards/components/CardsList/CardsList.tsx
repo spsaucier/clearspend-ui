@@ -38,7 +38,7 @@ export function CardsList(props: Readonly<CardsListProps>) {
         <For each={props.data.content}>
           {(item) => (
             <div class={css.item} onClick={() => props.onCardClick(item.cardId!)}>
-              <CardIcon type={item.cardType as CardTypeType} />
+              <CardIcon status={item.cardStatus} type={item.cardType as CardTypeType} />
               <div>
                 <div class={css.name}>{formatCardNumber(item.cardNumber, item.activated)}</div>
                 <CardType type={item.cardType as CardTypeType} class={css.sub} />

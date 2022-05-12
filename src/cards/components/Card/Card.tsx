@@ -26,8 +26,9 @@ export function Card(props: Readonly<CardProps>) {
   const isPhysical = createMemo(() => props.type === CardType.PHYSICAL);
   const isActivated = createMemo(() => props.activated !== false);
   const isFrozen = createMemo(() => isActivated() && props.status === 'INACTIVE');
+  const isCancelled = createMemo(() => props.status === 'CANCELLED');
 
-  const opacity = createMemo(() => (isFrozen() ? '.1' : isActivated() ? '1' : '.2'));
+  const opacity = createMemo(() => (isFrozen() || isCancelled() ? '.1' : isActivated() ? '1' : '.2'));
 
   return (
     <svg
@@ -42,8 +43,11 @@ export function Card(props: Readonly<CardProps>) {
         <stop offset="0" stop-color="#fff" />
         <stop offset="1" stop-color="#afffc6" />
       </linearGradient>
-      <path fill={isFrozen() ? '#02302F' : isPhysical() ? '#43fa76' : 'url(#card-lg-a)'} d="M0 0h306v194H0z" />
-      <Show when={!isPhysical() && !isFrozen()}>
+      <path
+        fill={isFrozen() || isCancelled() ? '#02302F' : isPhysical() ? '#43fa76' : 'url(#card-lg-a)'}
+        d="M0 0h306v194H0z"
+      />
+      <Show when={!isPhysical() && !isFrozen() && !isCancelled()}>
         <linearGradient id="card-lg-b" gradientUnits="userSpaceOnUse" x1="153" y1="8.4" x2="153" y2="380.2">
           <stop offset="0" stop-color="#fff" stop-opacity="0" />
           <stop offset=".2" stop-color="#effff4" stop-opacity=".2" />
@@ -51,7 +55,7 @@ export function Card(props: Readonly<CardProps>) {
         </linearGradient>
         <path fill="url(#card-lg-b)" d="M0 0h306v194H0z" />
       </Show>
-      <Show when={!isFrozen()}>
+      <Show when={!isFrozen() && !isCancelled()}>
         <path
           fill={isPhysical() ? '#000' : '#afffc6'}
           opacity={isPhysical() ? '0.03' : '0.3'}
@@ -78,7 +82,7 @@ export function Card(props: Readonly<CardProps>) {
           }
         />
       </Show>
-      <Show when={isPhysical() && isActivated() && !isFrozen() && props.number !== undefined}>
+      <Show when={isPhysical() && isActivated() && !isFrozen() && !isCancelled() && props.number !== undefined}>
         <radialGradient id="card-lg-c" cx="47.5" cy="101" r="21.4" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#fff" />
           <stop offset="1" stop-color="#dddcda" />
@@ -94,7 +98,7 @@ export function Card(props: Readonly<CardProps>) {
         />
       </Show>
       <path
-        fill={isFrozen() ? '#fff' : '#000'}
+        fill={isFrozen() || isCancelled() ? '#fff' : '#000'}
         opacity={opacity()}
         d={
           'M283.8 24.6c0-.2-.1-.5-.3-.6l-7.8-3.9c-.4-.2-.7-.1-.7.3v2.4l8.8 3.3v-1.5zm-4 6.5c0 .3.2.5.4.5h' +
@@ -158,6 +162,13 @@ export function Card(props: Readonly<CardProps>) {
             </g>
             <text x="48" y="45" fill="#fff" class={css.frozen}>
               {i18n.t('Frozen')}
+            </text>
+          </>
+        </Match>
+        <Match when={props.status === 'CANCELLED'}>
+          <>
+            <text x="22" y="45" fill="#fff" class={css.frozen}>
+              {i18n.t('Cancelled')}
             </text>
           </>
         </Match>

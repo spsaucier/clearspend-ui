@@ -1,14 +1,18 @@
 import { createMemo } from 'solid-js';
 
+import type { Card } from 'generated/capital';
+
 import { CardType } from '../../types';
 
 import css from './CardIcon.css';
 
 interface CardIconProps {
   type: CardType;
+  status: Card['status'];
 }
 
 export function CardIcon(props: Readonly<CardIconProps>) {
+  const isCancelled = createMemo(() => props.status === 'CANCELLED');
   const isPhysical = createMemo(() => props.type === CardType.PHYSICAL);
 
   return (
@@ -18,9 +22,9 @@ export function CardIcon(props: Readonly<CardIconProps>) {
         <stop offset=".5" stop-color="#dcffe6" />
         <stop offset="1" stop-color="#afffc6" />
       </linearGradient>
-      <path fill={isPhysical() ? '#5bea83' : 'url(#b)'} d="M0 0h24v15H0z" />
+      <path fill={isCancelled() ? '#000' : isPhysical() ? '#5bea83' : 'url(#b)'} d="M0 0h24v15H0z" />
       <path
-        fill={isPhysical() ? '#000' : '#afffc6'}
+        fill={isCancelled() ? '#555' : isPhysical() ? '#000' : '#afffc6'}
         opacity={isPhysical() ? '0.1' : '0.7'}
         d={
           'm12.9 9 .6.3c.2.1.5 0 .7-.1L16.8 8a40.7 40.7 0 0 0-4.9-3.1c-5.5-3-9-3.2-11.9-2.8v1.4c2.3.2 5 ' +

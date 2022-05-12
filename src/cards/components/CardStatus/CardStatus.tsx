@@ -22,9 +22,9 @@ const MESSAGES = defineMessages({
 type Status = Required<Card>['status'];
 
 const MAP: Readonly<Record<Status, Settings>> = {
-  ACTIVE: { type: 'success', icon: 'freeze', title: MESSAGES.active },
+  ACTIVE: { type: 'success', icon: 'confirm-circle', title: MESSAGES.active },
   INACTIVE: { type: 'danger', icon: 'freeze', title: MESSAGES.inactive },
-  CANCELLED: { type: 'danger', icon: 'freeze', title: MESSAGES.cancelled },
+  CANCELLED: { type: 'default', icon: 'cancel-circle', title: MESSAGES.cancelled },
 };
 
 interface CardStatusProps {
@@ -44,7 +44,7 @@ export function CardStatus(props: Readonly<CardStatusProps>) {
     <Show when={settings()}>
       <Tag size="xs" type={settings().type} class={props.class}>
         <Icon name={settings().icon} size="xs" />
-        <span>{i18n.t(settings().title)}</span>
+        <span>&nbsp;{i18n.t(settings().title)}</span>
       </Tag>
     </Show>
   );

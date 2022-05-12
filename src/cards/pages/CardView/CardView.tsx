@@ -14,12 +14,16 @@ import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import { CardControls } from 'allocations/containers/CardControls';
-import { getAllocationPermissions, canManagePermissions } from 'allocations/utils/permissions';
+import { getAllocationPermissions, canManagePermissions, canManageCards } from 'allocations/utils/permissions';
 import { getUser } from 'employees/services';
-import type { UpdateCardRequest } from 'generated/capital';
+import type { CardDetailsResponse, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
 import { canActivateCard } from 'cards/utils/canActivateCard';
+import { Section } from 'app/components/Section';
+import { Button } from '_common/components/Button';
+import { Confirm } from '_common/components/Confirm';
+import { Tag } from '_common/components/Tag';
 
 import { Card } from '../../components/Card';
 import { CardActions } from '../../components/CardActions';
@@ -28,7 +32,7 @@ import { Transactions } from '../../containers/Transactions';
 import { Statements } from '../../containers/Statements';
 import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
-import { getCard, updateCard, blockCard, unblockCard } from '../../services';
+import { getCard, updateCard, blockCard, unblockCard, cancelCard } from '../../services';
 import type { CardType } from '../../types';
 
 import css from './CardView.css';
@@ -37,6 +41,7 @@ enum Tabs {
   transactions = 'transactions',
   controls = 'controls',
   info = 'info',
+  settings = 'settings',
   statements = 'statements',
 }
 
@@ -49,6 +54,7 @@ export default function CardView() {
 
   const [tab, setTab] = usePageTabs<Tabs>(Tabs.transactions);
   const [showDetails, setShowDetails] = createSignal(false);
+  const [cancelling, setCancelling] = createSignal(false);
 
   const { currentUser, currentUserRoles } = useBusiness();
 
@@ -75,6 +81,29 @@ export default function CardView() {
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),
     });
+  };
+
+  const onCancelCard = async (cardId: string) => {
+    setCancelling(true);
+    cancelCard(cardId)
+      .then((cancelledCard) => {
+        mutate({
+          ...(data() as Required<CardDetailsResponse>),
+          card: cancelledCard,
+        });
+        messages.success({
+          title: i18n.t('Success'),
+          message: i18n.t('Card successfully cancelled.'),
+        });
+        setCancelling(false);
+      })
+      .catch((e: { data: { message: string } }) => {
+        messages.error({
+          title: i18n.t('Error'),
+          message: e.data.message || i18n.t('Unable to cancel card'),
+        });
+        setCancelling(false);
+      });
   };
 
   const toggleDetails = async () => {
@@ -110,7 +139,14 @@ export default function CardView() {
       }
       title={
         <Show when={card()} fallback={<Text message="Loading..." />}>
-          {formatCardNumber(card()!.lastFour, card()!.activated)}
+          <>
+            {formatCardNumber(card()!.lastFour, card()!.activated)}
+            <Show when={card()?.status === 'CANCELLED'}>
+              <Tag type="danger" class={css.titleTag}>
+                <Text message="Cancelled" />
+              </Tag>
+            </Show>
+          </>
         </Show>
       }
       subtitle={
@@ -151,7 +187,14 @@ export default function CardView() {
             class={css.frozenPopup}
             content={
               <>
-                <Text message="Card is frozen" class={css.frozenPopupTitle!} />
+                <Switch>
+                  <Match when={card()!.status === 'INACTIVE'}>
+                    <Text message="Card is frozen" class={css.frozenPopupTitle!} />
+                  </Match>
+                  <Match when={card()!.status === 'CANCELLED'}>
+                    <Text message="Card is cancelled" class={css.frozenPopupTitle!} />
+                  </Match>
+                </Switch>
                 <Text message="Cardholder cannot perform any activity with this card." />
               </>
             }
@@ -188,6 +231,11 @@ export default function CardView() {
               <Text message="Spend Controls" />
             </Tab>
           </Show>
+          <Show when={canManageCards(permissions())}>
+            <Tab value={Tabs.settings}>
+              <Text message="Card Settings" />
+            </Tab>
+          </Show>
           {!media.medium && (
             <Tab value={Tabs.info}>
               <Text message="Info" />
@@ -213,6 +261,31 @@ export default function CardView() {
               allocationId={card()!.allocationId}
               onSave={onUpdateCard}
             />
+          </Match>
+          <Match when={tab() === Tabs.settings}>
+            <Section
+              title={i18n.t('Cancel (archive) card')}
+              description={i18n.t(
+                'Cancelling this card will permanently block it from authorizing new transactions. Any previously authorized transactions will still be processed.',
+              )}
+            >
+              <Confirm
+                position="bottom-center"
+                question={
+                  <div>
+                    <Text message="Are you sure you want to permanently cancel this card? This cannot be undone." />
+                  </div>
+                }
+                confirmText={<Text message="Continue" />}
+                onConfirm={() => onCancelCard(card()!.cardId!)}
+              >
+                {(args) => (
+                  <Button loading={cancelling()} type="danger" view="second" icon="archive" size="lg" {...args}>
+                    {i18n.t('Cancel Card')}
+                  </Button>
+                )}
+              </Confirm>
+            </Section>
           </Match>
           <Match when={tab() === Tabs.statements}>
             <Statements

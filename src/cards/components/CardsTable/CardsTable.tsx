@@ -57,7 +57,7 @@ export function CardsTable(props: Readonly<CardsTableProps>) {
       class: css.number,
       render: (item) => (
         <div class={css.card}>
-          <CardIcon type={item.cardType as CardTypeType} />
+          <CardIcon status={item.cardStatus} type={item.cardType as CardTypeType} />
           <div>
             {formatCardNumber(item.cardNumber, item.activated)}
             <CardType type={item.cardType as CardTypeType} class={css.type} />

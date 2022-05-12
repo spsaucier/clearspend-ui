@@ -36,6 +36,12 @@ export async function revealCardKey(params: Readonly<RevealCardRequest>) {
   return (await service.post<Readonly<RevealCardResponse>>(`/cards/reveal`, params)).data;
 }
 
+export async function cancelCard(cardId: string) {
+  return (
+    await service.patch<Readonly<Card>>(`/users/cards/${cardId}/cancel`, { statusReason: 'CARDHOLDER_REQUESTED' })
+  ).data;
+}
+
 export async function getCardStatement(params: Required<CardStatementRequest>) {
   return (await service.post<Blob>('/card-statement', params, { respType: RespType.blob })).data;
 }
