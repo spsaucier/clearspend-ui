@@ -29,7 +29,10 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
   };
 
   const vendorExists = createMemo(
-    () => props.items.filter((supplier) => supplier.supplierName === searchValue()).length > 0,
+    () =>
+      props.items.filter(
+        (supplier) => supplier.supplierName === (searchValue() === '' ? props.merchantName : searchValue()),
+      ).length > 0,
   );
 
   return (
@@ -59,7 +62,7 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
                 class={css.create}
                 onClick={() => {
                   setOpen(false);
-                  props.onCreate(searchValue() !== '' ? searchValue()! : props.value!);
+                  props.onCreate(searchValue() !== '' ? searchValue()! : props.merchantName!);
                 }}
               >
                 <Icon name="add-circle-outline" size="sm" class={css.icon} />

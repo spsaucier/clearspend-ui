@@ -242,7 +242,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     limit: 5,
   });
   const onChangeVendorSearch = (newTarget: string) => {
-    setParams({ ...params(), target: newTarget });
+    setParams({ ...params(), target: newTarget === '' ? transaction().merchant?.name || '' : newTarget });
     reload();
   };
 
