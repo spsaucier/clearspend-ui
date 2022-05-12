@@ -51,7 +51,14 @@ export function EmployeesTable(props: Readonly<EmployeesTableProps>) {
       // orderBy: ['lastName', 'firstName'],
       title: <Text message="Employee" />,
       class: css.name,
-      render: (item) => formatName(item.userData),
+      render: (item) => (
+        <div>
+          <div>{formatName(item.userData)}</div>
+          <Show when={item.archived}>
+            <Text message="Archived" class={css.sub!} />
+          </Show>
+        </div>
+      ),
       onClick: (item) => props.onClick(item.userData?.userId || ''),
     },
     {

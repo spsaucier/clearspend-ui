@@ -38,11 +38,12 @@ export async function saveUser(params: Readonly<CreateUserRequest>) {
   return (await service.post<Readonly<CreateUserResponse>>('/users', extendUserParams(params))).data;
 }
 
-export const updateCurrentUser = async (user: User) =>
-  (await service.patch<Readonly<UpdateUserRequest>>(`/users/${user.userId}`, { ...user })).data;
-
 export async function editUser(userId: string, params: Readonly<UpdateUserRequest>) {
   return (await service.patch(`/users/${userId}`, extendUserParams(params, false))).data;
+}
+
+export async function archiveUser(userId: string) {
+  return (await service.patch<boolean>(`/users/${userId}/archive`)).data;
 }
 
 export async function getUserCards() {

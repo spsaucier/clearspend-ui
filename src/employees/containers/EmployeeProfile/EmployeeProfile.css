@@ -1,0 +1,7 @@
+.section {
+  margin: var(--pd-24) 0;
+}
+
+.update-button {
+  margin-top: var(--pd-24);
+}

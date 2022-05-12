@@ -1,4 +1,4 @@
-import { createMemo, Index, Accessor } from 'solid-js';
+import { createMemo, For } from 'solid-js';
 import { defineMessages } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -68,8 +68,8 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
     });
   });
 
-  const renderItem = (item: Accessor<MenuItemOptions>) => (
-    <MenuItem {...item()} expanded={expanded()} onClick={props.onItemClick} />
+  const renderItem = (item: MenuItemOptions) => (
+    <MenuItem {...item} expanded={expanded()} onClick={props.onItemClick} />
   );
 
   return (
@@ -80,10 +80,10 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
           [css.mainGrow!]: props.view !== MenuView.mobile,
         }}
       >
-        <Index each={mainItems()}>{renderItem}</Index>
+        <For each={mainItems()}>{renderItem}</For>
       </div>
       <div>
-        <Index each={SECOND_ITEMS}>{renderItem}</Index>
+        <For each={SECOND_ITEMS}>{renderItem}</For>
       </div>
     </nav>
   );

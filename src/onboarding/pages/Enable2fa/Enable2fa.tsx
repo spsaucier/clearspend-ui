@@ -49,7 +49,8 @@ export default function Enable2fa() {
     try {
       await complete2faEnrollment({ destination: number(), code: otp, method: 'sms' });
       // TODO: Re-enable this when permission is working correctly for self-update
-      // await updateCurrentUser({ ...currentUser(), phone: number() });
+      // TODO: + mutate currentUser in business context
+      // await editUser(currentUser().userId, { ...currentUser(), phone: number() });
       sendAnalyticsEvent({ name: Events.VERIFY_MOBILE });
       messages.success({ title: `${formatPhone(number())} set as authentication method` });
       navigate('/');
