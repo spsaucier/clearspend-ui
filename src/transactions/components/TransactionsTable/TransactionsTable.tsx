@@ -2,6 +2,7 @@ import { createMemo, createSignal, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { wrapAction } from '_common/utils/wrapAction';
+import { toggleArray } from '_common/utils/array';
 import { download } from '_common/utils/download';
 import type { Setter } from '_common/types/common';
 import { InputSearch } from '_common/components/InputSearch';
@@ -26,6 +27,7 @@ import { FiltersButton } from 'app/components/FiltersButton';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import type { DateRange } from 'app/types/common';
 import { SyncStatus } from 'accounting/components/SyncStatus';
+import { SyncCheckbox } from 'accounting/components/SyncCheckbox';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SyncTableButton } from 'accounting/containers/SyncTableButton';
 
@@ -61,12 +63,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const [exporting, exportData] = wrapAction(exportAccountActivity);
 
   const [selectedIds, setSelectedIds] = createSignal<string[]>([]);
-
-  const onChangeSelectedTransactions = (id: string) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((transactionId) => transactionId !== id) : [...prev, id],
-    );
-  };
+  const onChangeSelectedTransactions = (id: string) => setSelectedIds((prev) => toggleArray(prev, id));
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
 
@@ -99,6 +96,14 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
   const columns: readonly Readonly<TableColumn<AccountActivityResponse>>[] = [
     {
       name: 'sync',
+      title: (
+        <SyncCheckbox
+          selected={selectedIds()}
+          items={props.data.content}
+          class={css.syncCheckbox}
+          onChange={setSelectedIds}
+        />
+      ),
       render: (item) => (
         <SyncStatus
           activityId={item.accountActivityId!}
@@ -254,7 +259,8 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
         <Table
           columns={columns.filter((column) => column.name !== 'sync' || props.showAccountingAdminView)}
           data={props.data.content as []}
-          rowClass={css.row}
+          idProp="accountActivityId"
+          selectedIds={selectedIds()}
           onRowClick={(item) => props.onRowClick(item.accountActivityId!)}
         />
       </Show>

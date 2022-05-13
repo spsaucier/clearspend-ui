@@ -6,12 +6,14 @@ export default {
   component: Checkbox,
   argTypes: {
     checked: { control: { type: 'boolean' } },
+    indeterminate: { control: { type: 'boolean' } },
     disabled: { control: { type: 'boolean' } },
     children: { control: { type: 'text' } },
     onChange: { action: 'changed', table: { disable: true } },
   },
   args: {
     checked: false,
+    indeterminate: false,
     disabled: false,
     children: 'Checkbox',
   },

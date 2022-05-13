@@ -2,8 +2,8 @@
   width: 320px;
 }
 
-.row {
-  cursor: pointer;
+.sync-checkbox {
+  margin-left: 2px;
 }
 
 .card {

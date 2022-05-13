@@ -1,4 +1,5 @@
 import { isString } from '../../utils/isString';
+import { toSortedString } from '../../utils/array';
 
 import type { Sorter, Direction, TableColumn, OrderBy } from './types';
 
@@ -12,10 +13,6 @@ export function updateSorter(name: string, current: Sorter | undefined): Readonl
   return { name, direction: changeDirection(current?.name === name ? current.direction : undefined) };
 }
 
-function toStr(keys: readonly string[] | undefined): string | undefined {
-  return keys?.slice().sort().join(' ');
-}
-
 export function getInitSorter<T extends {}>(
   columns: readonly TableColumn<T>[],
   orderBy: readonly Partial<OrderBy>[] | undefined,
@@ -26,7 +23,7 @@ export function getInitSorter<T extends {}>(
   const direction = orderBy[0]!.direction;
   if (!keys.length || !direction) return undefined;
 
-  const found = columns.find((column) => toStr(column.orderBy) === toStr(keys));
+  const found = columns.find((column) => toSortedString(column.orderBy) === toSortedString(keys));
   return found && { name: found.name, direction };
 }
 

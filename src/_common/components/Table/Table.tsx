@@ -14,7 +14,8 @@ export interface TableProps<T extends {}> {
   order?: readonly Partial<OrderBy>[];
   class?: string;
   cellClass?: string;
-  rowClass?: string;
+  idProp?: KeysOfType<Required<T>, string>;
+  selectedIds?: string[];
   onRowClick?: (data: T) => void;
   onChangeOrder?: (value: Readonly<OrderBy>[] | undefined) => void;
   darkMode?: boolean;
@@ -61,7 +62,14 @@ export function Table<T extends {}>(props: Readonly<TableProps<T>>) {
       <tbody>
         <For each={props.data}>
           {(row: T) => (
-            <tr class={join(css.row, props.rowClass)} onClick={() => props.onRowClick?.(row)}>
+            <tr
+              class={join(
+                css.row,
+                props.onRowClick && css.interactive,
+                props.idProp && props.selectedIds?.includes(row[props.idProp] as unknown as string) && css.selected,
+              )}
+              onClick={() => props.onRowClick?.(row)}
+            >
               <For each={props.columns}>
                 {(column) => {
                   return (

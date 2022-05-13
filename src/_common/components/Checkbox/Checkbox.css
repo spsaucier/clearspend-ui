@@ -22,7 +22,7 @@
   background-color: transparent;
   cursor: pointer;
 
-  @nest .input:checked + & {
+  @nest .input:checked + &, .input[aria-checked='mixed'] + & {
     background-color: var(--tw-primary-bg);
     border-color: var(--tw-primary-bg);
 
@@ -37,7 +37,7 @@
     cursor: not-allowed;
   }
 
-  @nest .input:checked:disabled + & {
+  @nest .input:checked:disabled + &, .input[aria-checked='mixed']:disabled + & {
     background-color: var(--tw-gray-30);
   }
 }

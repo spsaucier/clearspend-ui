@@ -16,6 +16,8 @@ interface CSWindow extends Window {
 
 declare type ValuesOf<T extends unknown[]> = T[number];
 
+declare type KeysOfType<T, U> = { [P in keyof T]: T[P] extends U ? P : never }[keyof T];
+
 declare type DateString = string & { __isDateString: true };
 
 declare module '*.css' {

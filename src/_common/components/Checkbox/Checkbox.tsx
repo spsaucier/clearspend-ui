@@ -3,7 +3,7 @@ import type { JSX } from 'solid-js';
 
 import { isString } from '../../utils/isString';
 import { join } from '../../utils/join';
-import { toggleArray } from '../../utils/toggleArray';
+import { toggleArray } from '../../utils/array';
 
 import { Tick } from './Tick';
 import type { CheckboxValue, CheckboxProps } from './types';
@@ -35,11 +35,12 @@ export function Checkbox<T extends CheckboxValue>(props: Readonly<CheckboxProps<
         data-name={name()}
         checked={checked()}
         disabled={disabled()}
+        aria-checked={props.indeterminate ? 'mixed' : (String(checked()) as 'true' | 'false')}
         class={css.input}
         onChange={onChange}
       />
       <Show when={!group.empty} fallback={props.children}>
-        <Tick darkMode={props.darkMode} class={css.control} />
+        <Tick darkMode={props.darkMode} indeterminate={props.indeterminate} class={css.control} />
         <Show when={props.children}>
           <span class={css.label}>{props.children}</span>
         </Show>

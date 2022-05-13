@@ -15,6 +15,7 @@ export interface CheckboxGroupProps<T> {
 export interface CheckboxProps<T> {
   value?: T;
   checked?: boolean;
+  indeterminate?: boolean;
   class?: string;
   disabled?: boolean;
   children?: JSXElement;

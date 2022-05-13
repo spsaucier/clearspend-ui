@@ -214,7 +214,6 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
         <Table
           columns={columns}
           data={props.data.content!}
-          class={css.row}
           onRowClick={(data) => props.onRowClick?.(data.accountActivityId!)}
         />
       </Show>
