@@ -33,7 +33,8 @@ import { SelectVendor } from 'accounting/components/SelectVendor';
 import { useResource } from '_common/utils/useResource';
 import { paymentType } from 'transactions/components/DeclineReason/constants';
 import { useClasses } from 'accounting/stores/classes';
-import { SelectClass } from 'accounting/components/SelectClass';
+import { SelectCategory } from 'accounting/components/SelectCategory/SelectCategory';
+import { useLocations } from 'accounting/stores/locations';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -141,6 +142,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
   const classes = useClasses();
+  const locations = useLocations();
   const [expenseCategory, setExpenseCategory] = createSignal(transaction().expenseDetails?.expenseCategoryId);
   const [supplierId, setSupplierId] = createSignal(transaction().merchant?.codatSupplierId);
   const [supplierName, setSupplierName] = createSignal(transaction().merchant?.codatSupplierName);
@@ -334,7 +336,15 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                 <div class={css.optionTitle}>
                   <Text message="Class" />
                 </div>
-                <SelectClass items={classes.data!} icon="search" />
+                <SelectCategory items={classes.data!} icon="search" />
+              </div>
+            </div>
+            <div class={css.fieldSelectContainer}>
+              <div>
+                <div class={css.optionTitle}>
+                  <Text message="Location" />
+                </div>
+                <SelectCategory items={locations.data!} icon="search" />
               </div>
             </div>
             <Switch

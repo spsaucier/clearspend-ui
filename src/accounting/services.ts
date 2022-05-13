@@ -158,3 +158,7 @@ export async function createNewVendorForActivity(params: Readonly<CreateAssignSu
 export async function getClassesForBusiness() {
   return (await service.get<Readonly<CodatCategory[]>>('/codat/classes')).data;
 }
+
+export async function getLocationsForBusiness() {
+  return (await service.get<Readonly<CodatCategory[]>>('/codat/locations')).data;
+}

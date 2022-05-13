@@ -17,7 +17,7 @@ interface SelectClassProps {
   categoryName?: string | undefined;
 }
 
-export function SelectClass(props: SelectClassProps) {
+export function SelectCategory(props: SelectClassProps) {
   return (
     <Select
       closeOnClear
