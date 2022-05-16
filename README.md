@@ -10,7 +10,7 @@ It is built with [SolidJS](solidjs.com/), which is similar to React.
 - Node 14.17+
 - NPM 7.16+
 
-### On Mac, against remote back-end
+### Against remote back-end
 
 ```
 cp .env.dev.example .env.dev
@@ -18,15 +18,16 @@ npm i
 npm start
 ```
 
-### On Linux, against local backend
+### Against local backend
 
-Additional Requirements:
+Additional Requirements For Linux:
 - linux or [wsl](https://docs.microsoft.com/en-us/windows/wsl/install)
 - /etc/hosts lists `127.0.0.1 localhost` (which might include more synonyms)
 
-1. Create `.env.dev` with next content `DEV_API=https://%domain%`
-1. uncomment `pathRewrite: { '^/api': '' }` in `webpack.config.js`
-1. `dnf install npm`
+1. Create `.env.dev` with the content
+    ```sh
+    DEV_API=http://localhost:8080
+    USE_API_REWRITE=1
+    ```
 1. `npm i`
-1. `export DEV_API='http://localhost:8080'`
 1. `npm start -- --port=8081`

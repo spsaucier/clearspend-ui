@@ -432,6 +432,7 @@ export interface UserData {
   type?: 'EMPLOYEE' | 'BUSINESS_OWNER';
   firstName?: string;
   lastName?: string;
+  archived?: boolean;
 }
 
 export interface UserPageData {
@@ -4071,6 +4072,21 @@ export interface AllocationDetailsResponse {
   )[];
   disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
   disableForeign?: boolean;
+}
+
+export interface StopAllCardsRequest {
+  applyToChildAllocations?: boolean;
+  cancelVirtualCards?: boolean;
+  stopPhysicalCardsType?: 'CANCEL' | 'UNLINK' | 'NONE';
+}
+
+export interface StopAllCardsResponse {
+  cancelledCards?: string[];
+  unlinkedCards?: string[];
+}
+
+export interface ArchiveAllocationResponse {
+  archivedAllocationIds?: string[];
 }
 
 export interface User {
