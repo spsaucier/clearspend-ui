@@ -549,11 +549,13 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
           </span>
         </div>
       </div>
-      <div class={css.actions}>
-        <Button onClick={() => props.onReport()} wide icon={{ name: 'alert', pos: 'right' }}>
-          <Text message="Report an issue" />
-        </Button>
-      </div>
+      <Show when={transaction().status === 'APPROVED'}>
+        <div class={css.actions}>
+          <Button onClick={() => props.onReport()} wide icon={{ name: 'alert', pos: 'right' }}>
+            <Text message="Report an issue" />
+          </Button>
+        </div>
+      </Show>
     </div>
   );
 }
