@@ -8,7 +8,6 @@ import { Icon } from '_common/components/Icon';
 import { Input } from '_common/components/Input';
 import { formatCurrency } from '_common/api/intl/formatCurrency';
 import { Button } from '_common/components/Button';
-import { Popover } from '_common/components/Popover';
 import { AccountCard } from 'app/components/AccountCard';
 import { useMessages } from 'app/containers/Messages/context';
 import { getAvailableBalance } from 'allocations/utils/getAvailableBalance';
@@ -19,22 +18,11 @@ import { wrapAction } from '_common/utils/wrapAction';
 import { Tag, TagProps } from '_common/components/Tag';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SelectExpenseCategory } from 'accounting/components/SelectExpenseCategory';
-import {
-  createNewVendorForActivity,
-  getClosestVendorsToTarget,
-  syncTransaction,
-  unlockTransaction,
-} from 'accounting/services';
 import { getNoop } from '_common/utils/getNoop';
 import { CopyButton } from 'app/components/CopyButton';
 import { hasSomeManagerRole } from 'allocations/utils/permissions';
 import { useBusiness } from 'app/containers/Main/context';
-import { SelectVendor } from 'accounting/components/SelectVendor';
-import { useResource } from '_common/utils/useResource';
 import { paymentType } from 'transactions/components/DeclineReason/constants';
-import { useClasses } from 'accounting/stores/classes';
-import { SelectCategory } from 'accounting/components/SelectCategory/SelectCategory';
-import { useLocations } from 'accounting/stores/locations';
 
 import { DeclineReason } from '../../components/DeclineReason';
 import { MerchantLogo } from '../../components/MerchantLogo';
@@ -44,6 +32,8 @@ import { formatMerchantType } from '../../utils/formatMerchantType';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { TransactionReceipts } from '../TransactionReceipts';
 
+import { TransactionAccounting } from './TransactionAccounting';
+
 import css from './TransactionPreview.css';
 
 const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
@@ -52,7 +42,7 @@ const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
   SYNCED_LOCKED: 'default',
 };
 
-interface TransactionPreviewProps {
+export interface TransactionPreviewProps {
   showAccountingAdminView?: boolean;
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse[]>) => void;
@@ -141,8 +131,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
   };
 
   const expenseCategories = useExpenseCategories({ initValue: [] });
-  const classes = useClasses();
-  const locations = useLocations();
   const [expenseCategory, setExpenseCategory] = createSignal(transaction().expenseDetails?.expenseCategoryId);
   const [supplierId, setSupplierId] = createSignal(transaction().merchant?.codatSupplierId);
   const [supplierName, setSupplierName] = createSignal(transaction().merchant?.codatSupplierName);
@@ -202,55 +190,11 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
       });
   };
 
-  const onCreateVendor = (newSupplierName: string) => {
-    createNewVendorForActivity({ supplierName: newSupplierName, accountActivityId: transaction().accountActivityId });
-    props.onUpdate([
-      {
-        ...transaction(),
-        merchant: { ...transaction().merchant, codatSupplierName: newSupplierName, codatSupplierId: '-1' },
-      },
-    ]);
-  };
-
-  const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
-  const onSyncTransaction = () => {
-    props.onUpdate([{ ...transaction(), syncStatus: 'SYNCED_LOCKED' }]);
-    setSyncingTransaction(transaction().accountActivityId!).catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
-    });
-  };
-
-  const [, setUnlockingTransaction] = wrapAction(unlockTransaction);
-  const onUnlockTransaction = () => {
-    props.onUpdate([{ ...transaction(), syncStatus: 'READY' }]);
-    setUnlockingTransaction(transaction().accountActivityId!).catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
-    });
-  };
-
   const canSubmitNote = createMemo(() => {
     return (note() === '' && transaction().notes !== '') || (note() && note() !== transaction().notes);
   });
 
   const isSyncedLockedDashboard = !props.showAccountingAdminView && transaction().syncStatus === 'SYNCED_LOCKED';
-
-  const [unlockSyncConfirmationOpen, setUnlockSyncConfirmationOpen] = createSignal(false);
-  const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
-
-  const onUnlock = () => {
-    setUnlockSyncConfirmationOpen(false);
-    onUnlockTransaction();
-  };
-
-  const [vendors, reload, params, setParams] = useResource(getClosestVendorsToTarget, {
-    target: transaction().merchant?.name || '',
-    limit: 5,
-  });
-
-  const onChangeVendorSearch = (newTarget: string) => {
-    setParams({ ...params(), target: newTarget === '' ? transaction().merchant?.name || '' : newTarget });
-    reload();
-  };
 
   return (
     <div class={css.root}>
@@ -297,117 +241,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             </div>
           </Show>
         </div>
-        <Show when={props.showAccountingAdminView}>
-          <div class={css.accounting}>
-            <h4 class={css.accountingTitle}>
-              <Text message="Accounting" />
-            </h4>
-            <div class={css.detail}>
-              <Text message="Status" />
-              {/* TODO: establish enum in BE, use it for rendering & delete below function */}
-              <Switch fallback={<span>Ready to sync</span>}>
-                <Match when={transaction().syncStatus !== 'READY'}>
-                  <span>Not ready to sync</span>
-                </Match>
-              </Switch>
-            </div>
-            <div class={css.detail}>
-              <Text message="Last Sync" />
-              <span>
-                {props.transaction.lastSyncTime ? new Date(props.transaction.lastSyncTime).toLocaleString() : 'N/A'}
-              </span>
-            </div>
-            <div class={css.fieldSelectContainer}>
-              <div class={css.optionTitle}>
-                <Text message="Vendor" />
-              </div>
-              <SelectVendor
-                value={props.transaction.merchant?.codatSupplierName}
-                merchantName={props.transaction.merchant?.name}
-                items={vendors()?.results || []}
-                onChangeTarget={onChangeVendorSearch}
-                defaultSearchName={transaction().merchant?.name || ''}
-                onSelect={onSaveVendor}
-                onCreate={onCreateVendor}
-              />
-            </div>
-            <div class={css.fieldSelectContainer}>
-              <div>
-                <div class={css.optionTitle}>
-                  <Text message="Class" />
-                </div>
-                <SelectCategory items={classes.data!} icon="search" />
-              </div>
-            </div>
-            <div class={css.fieldSelectContainer}>
-              <div>
-                <div class={css.optionTitle}>
-                  <Text message="Location" />
-                </div>
-                <SelectCategory items={locations.data!} icon="search" />
-              </div>
-            </div>
-            <Switch
-              fallback={
-                <Button
-                  wide
-                  icon="sync"
-                  disabled={
-                    transaction().syncStatus !== 'READY' || syncingTransaction() || !categoryIsActive(expenseCategory())
-                  }
-                  onClick={onSyncTransaction}
-                  data-name="sync-transaction-button"
-                >
-                  <Text message="Sync transaction" />
-                </Button>
-              }
-            >
-              <Match when={transaction().syncStatus === 'SYNCED_LOCKED'}>
-                <Popover
-                  balloon
-                  position="bottom-center"
-                  open={unlockSyncConfirmationOpen()}
-                  onClickOutside={() => setUnlockSyncConfirmationOpen(false)}
-                  trigger="click"
-                  leaveDelay={0}
-                  class={css.popup}
-                  content={
-                    <div>
-                      <Text message="Are you sure?" class={css.popupTitle!} />
-                      <div class={css.popupContent}>
-                        <Text message="This transaction has already been synced. Syncing this transaction again will create a duplicate transaction in your accounting system." />
-                        <div class={css.footer}>
-                          <Button
-                            type="default"
-                            view="ghost"
-                            onClick={onCancelUnlock}
-                            data-name="keep-locked-transaction-button"
-                          >
-                            <Text message="No, keep locked" />
-                          </Button>
-                          <Button type="danger" onClick={onUnlock} data-name="unlock-transaction-button">
-                            <Text message="Unlock" />
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  }
-                >
-                  {() => (
-                    <Button
-                      wide
-                      icon="lock"
-                      onClick={() => setUnlockSyncConfirmationOpen(true)}
-                      data-name="unlock-transaction-button"
-                    >
-                      <Text message="Unlock" />
-                    </Button>
-                  )}
-                </Popover>
-              </Match>
-            </Switch>
-          </div>
-        </Show>
+        <TransactionAccounting {...props} onSaveVendor={onSaveVendor} active={categoryIsActive(expenseCategory())} />
         <div class={css.properties}>
           <TransactionReceipts data={transaction()} onUpdate={props.onUpdate} />
           <div class={css.expenseCategory}>

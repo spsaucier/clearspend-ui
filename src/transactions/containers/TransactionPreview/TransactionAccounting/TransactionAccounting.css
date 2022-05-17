@@ -1,0 +1,55 @@
+.accounting {
+  margin-bottom: var(--pd-24);
+  padding-bottom: var(--pd-24);
+  border-bottom: 1px dashed var(--tw-gray-40);
+}
+
+.accounting-title {
+  margin-top: 0;
+  font: inherit;
+  font-size: var(--text-12);
+  line-height: 1.33;
+  letter-spacing: var(--ls-2);
+  text-transform: uppercase;
+}
+
+.popup {
+  width: 312px;
+}
+
+.popup-title {
+  font-weight: var(--font-700);
+}
+
+.popup-content {
+  margin-top: var(--pd-4);
+}
+
+.footer {
+  display: flex;
+  margin-top: var(--pd-16);
+  justify-content: flex-end;
+  grid-gap: var(--pd-8);
+}
+
+.field-select-container {
+  padding: 0 0 12px;
+}
+
+.option-title {
+  margin-bottom: var(--pd-4);
+  font-size: var(--text-12);
+  line-height: 1.33;
+}
+
+.detail {
+  display: flex;
+  margin: var(--pd-12) 0;
+  justify-content: space-between;
+  font-size: var(--text-12);
+  line-height: 1.33;
+
+  & > *:first-child {
+    color: var(--tw-gray-60);
+  }
+}
