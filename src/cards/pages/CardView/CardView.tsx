@@ -231,7 +231,7 @@ export default function CardView() {
               <Text message="Spend Controls" />
             </Tab>
           </Show>
-          <Show when={canManageCards(permissions())}>
+          <Show when={canManageCards(permissions()) && card()?.status !== 'CANCELLED'}>
             <Tab value={Tabs.settings}>
               <Text message="Card Settings" />
             </Tab>
