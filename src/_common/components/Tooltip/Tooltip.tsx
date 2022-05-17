@@ -37,6 +37,7 @@ export function Tooltip(props: Readonly<TooltipProps>) {
       content={merged.message}
       disabled={merged.disabled}
       class={join(css.root, merged.class)}
+      caretClass={css.caret}
     >
       {merged.children}
     </Popover>

@@ -19,6 +19,7 @@ interface BaseProps {
   content: JSXElement;
   disabled?: boolean;
   class?: string;
+  caretClass?: string;
 }
 
 export interface ControlledProps extends BaseProps {

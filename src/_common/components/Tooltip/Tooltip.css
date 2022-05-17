@@ -6,7 +6,9 @@
   text-align: center;
   background: var(--tw-black);
   box-shadow: none;
+}
 
+.caret {
   &::before {
     border-bottom-color: var(--tw-black);
   }

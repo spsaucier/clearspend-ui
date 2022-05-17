@@ -80,7 +80,12 @@ export function Popover(props: Readonly<PopoverProps>) {
       <Show when={opened()}>
         <Portal>
           <div
-            class={join(css.root, merged.balloon && css.balloon, getPosClass(pos()))}
+            class={join(
+              css.root,
+              merged.balloon && css.balloon,
+              merged.balloon && merged.caretClass,
+              getPosClass(pos()),
+            )}
             style={calcDialogStyle(pos(), trigger)}
           >
             <div
