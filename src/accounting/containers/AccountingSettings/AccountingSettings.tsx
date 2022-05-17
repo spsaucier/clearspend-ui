@@ -8,7 +8,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { AutomaticUpdates } from 'accounting/components/AutomaticUpdates';
 import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
-import { CreditCardSelect } from '_common/components/CreditCardSelect/CreditCardSelect';
+import { CreditCardSelect } from 'accounting/components/CreditCardSelect';
 import {
   postIntegrationExpenseCategoryMappings,
   deleteCompanyConnection,

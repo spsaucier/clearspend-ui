@@ -6,7 +6,7 @@ import { Button } from '_common/components/Button';
 import { postCodatCreditCard, setCodatCreditCardforBusiness } from 'accounting/services';
 import { CancelConfirmationButton } from 'accounting/components/CancelConfirmationButton';
 import { wrapAction } from '_common/utils/wrapAction';
-import { CreditCardSelect } from '_common/components/CreditCardSelect/CreditCardSelect';
+import { CreditCardSelect } from 'accounting/components/CreditCardSelect';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
 import { useBusiness } from 'app/containers/Main/context';
