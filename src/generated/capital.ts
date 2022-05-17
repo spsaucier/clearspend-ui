@@ -328,7 +328,6 @@ export interface Business {
   accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
   autoCreateExpenseCategories?: boolean;
   mcc?: string;
-  foreignTransactionFee?: number;
   businessName?: string;
   accountNumber?: string;
   routingNumber?: string;
@@ -3645,17 +3644,6 @@ export interface CardDetailsResponse {
   disableForeign?: boolean;
 }
 
-export interface BusinessLimit {
-  limits?: LimitRecord[];
-  operationLimits?: LimitOperationRecord[];
-
-  /** @format int32 */
-  issuedPhysicalCardsLimit?: number;
-
-  /** @format int32 */
-  issuedPhysicalCardsTotal?: number;
-}
-
 export interface BusinessLimitOperationRecord {
   businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
   limitOperationPeriods?: LimitPeriodOperationRecord[];
@@ -3664,6 +3652,20 @@ export interface BusinessLimitOperationRecord {
 export interface BusinessLimitRecord {
   businessLimitType?: 'ACH_DEPOSIT' | 'ACH_WITHDRAW' | 'PURCHASE';
   limitPeriods?: LimitPeriodRecord[];
+}
+
+export interface BusinessSettings {
+  limits?: LimitRecord[];
+  operationLimits?: LimitOperationRecord[];
+
+  /** @format int32 */
+  issuedPhysicalCardsLimit?: number;
+
+  /** @format int32 */
+  issuedPhysicalCardsTotal?: number;
+  foreignTransactionFee?: number;
+  achFundsAvailabilityMode?: 'STANDARD' | 'FAST' | 'IMMEDIATE';
+  immediateAchFundsLimit?: number;
 }
 
 export interface LimitOperationRecord {
@@ -4016,6 +4018,13 @@ export interface LimitRecord {
   businessLimits?: BusinessLimitRecord[];
 }
 
+export interface ChangePhoneNumberRequest {
+  changingNumber?: string;
+  trustChallenge?: string;
+  twoFactorId?: string;
+  twoFactorCode?: string;
+}
+
 export interface UpdateAllocationRequest {
   /**
    * name of the department/ allocation
@@ -4209,19 +4218,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4471,9 +4472,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4547,10 +4556,9 @@ export interface CodatSupplier {
 }
 
 export interface GetSuppliersResponse {
-  results?: CodatSupplier[];
-
   /** @format int32 */
   totalElements?: number;
+  results?: CodatSupplier[];
 }
 
 export interface AccountBalance {

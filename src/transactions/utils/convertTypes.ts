@@ -3,6 +3,7 @@ import type {
   AccountActivityResponse,
   LedgerCardAccount,
   LedgerMerchantAccount,
+  LedgerAccount,
 } from 'generated/capital';
 
 export function ledgerToActivity(data: LedgerActivityResponse): AccountActivityResponse {
@@ -29,11 +30,15 @@ export function activityToLedger(
 ): LedgerActivityResponse {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { accountName, card, merchant, ...rest } = data;
+  const isRefund = rest.type === 'NETWORK_REFUND';
+  const cardAccount = card && { type: 'CARD' as LedgerAccount['type'], cardInfo: card };
+  const merchantAccount = merchant && { type: 'MERCHANT' as LedgerAccount['type'], merchantInfo: merchant };
+
   return {
     ...rest,
     user: original?.user,
     hold: original?.hold,
-    sourceAccount: card && { type: 'CARD', cardInfo: card },
-    targetAccount: merchant && { type: 'MERCHANT', merchantInfo: merchant },
+    sourceAccount: isRefund ? merchantAccount : cardAccount,
+    targetAccount: isRefund ? cardAccount : merchantAccount,
   };
 }

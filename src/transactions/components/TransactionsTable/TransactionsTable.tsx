@@ -30,6 +30,7 @@ import { SyncStatus } from 'accounting/components/SyncStatus';
 import { SyncCheckbox } from 'accounting/components/SyncCheckbox';
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { SyncTableButton } from 'accounting/containers/SyncTableButton';
+import { activityToLedger } from 'transactions/utils/convertTypes';
 
 import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
@@ -193,7 +194,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
     {
       name: 'missing',
       title: <></>,
-      render: (item) => <MissingDetails data={item} checkMerchant={props.showAccountingAdminView} />,
+      render: (item) => <MissingDetails data={activityToLedger(item)} checkMerchant={props.showAccountingAdminView} />,
     },
   ];
 

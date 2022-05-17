@@ -4,7 +4,7 @@ import { Text } from 'solid-i18n';
 import { Popover } from '_common/components/Popover';
 import { Icon } from '_common/components/Icon';
 import { join } from '_common/utils/join';
-import type { LedgerActivityResponse, LedgerMerchantAccount, Merchant } from 'generated/capital';
+import type { LedgerActivityResponse, LedgerMerchantAccount } from 'generated/capital';
 
 import { isActivityType } from '../../utils/isActivityType';
 import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
@@ -12,20 +12,24 @@ import { isAllowedReceipts } from '../../utils/isAllowedReceipts';
 import css from './MissingDetails.css';
 
 interface MissingDetailsProps {
-  data: Readonly<LedgerActivityResponse & { merchant?: Merchant }>;
+  data: Readonly<LedgerActivityResponse>;
   checkMerchant?: boolean;
 }
 
 export function MissingDetails(props: Readonly<MissingDetailsProps>) {
   const expenseMissing = createMemo(() => !props.data.expenseDetails?.expenseCategoryId);
-  const merchantMissing = createMemo(() => props.checkMerchant && !props.data.merchant?.name);
+  const merchantMissing = createMemo(
+    () =>
+      props.checkMerchant &&
+      !(props.data.targetAccount as LedgerMerchantAccount | undefined)?.merchantInfo?.codatSupplierName,
+  );
 
   const receiptMissing = createMemo(() => {
     const account = props.data.targetAccount;
-    const isMerchant = props.data.merchant || account?.type === 'MERCHANT';
+    const hasMerchant = account?.type === 'MERCHANT';
 
     return (
-      isMerchant &&
+      hasMerchant &&
       isAllowedReceipts((account as LedgerMerchantAccount | undefined)?.merchantInfo, props.data.status) &&
       !props.data.receipt?.receiptId?.length
     );
