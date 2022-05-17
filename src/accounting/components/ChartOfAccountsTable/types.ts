@@ -1,3 +1,9 @@
-import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
+import type { CodatAccountNested, AddChartOfAccountsMappingRequest } from 'generated/capital';
 
-export type IntegrationAccountMap = Record<string, Readonly<AddChartOfAccountsMappingRequest> | null>;
+export interface FlattenedIntegrationAccount extends Omit<CodatAccountNested, 'children'> {
+  parentId: string | undefined;
+  level: number;
+  isNew: boolean;
+}
+
+export type ChartOfAccountsMap = Record<string, AddChartOfAccountsMappingRequest | undefined>;

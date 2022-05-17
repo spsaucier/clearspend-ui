@@ -29,12 +29,7 @@ export function SelectEmployee(props: Readonly<SelectEmployeeProps>) {
       name="employee"
       value={props.value}
       placeholder={String(i18n.t('Search by employee name'))}
-      popupRender={(list) => (
-        <>
-          {list}
-          <NewEmployeeButton onClick={props.onAddClick} />
-        </>
-      )}
+      popupSuffix={<NewEmployeeButton onClick={props.onAddClick} />}
       error={props.error}
       onChange={props.onChange}
     >

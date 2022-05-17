@@ -1,7 +1,7 @@
 import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
+import type { FlattenedIntegrationAccount } from '../ChartOfAccountsTable/types';
 
 import css from './ChartOfAccountsName.css';
 

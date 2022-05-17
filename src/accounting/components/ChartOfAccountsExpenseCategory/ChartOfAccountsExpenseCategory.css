@@ -1,0 +1,11 @@
+.root {
+  display: grid;
+  grid-template-columns: 1fr 24px;
+  grid-gap: var(--pd-12);
+  align-items: center;
+}
+
+.cancel {
+  width: auto;
+  height: auto;
+}

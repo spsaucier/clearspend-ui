@@ -1,44 +1,43 @@
-import type { BusinessNotification, CodatAccountNested } from 'generated/capital';
+import type { BusinessNotification, CodatAccountNested, ChartOfAccountsMappingResponse } from 'generated/capital';
 
-import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
-
-import type { IntegrationAccountMap } from './types';
+import type { ChartOfAccountsMap, FlattenedIntegrationAccount } from './types';
 
 export const getAccountType = (account: FlattenedIntegrationAccount) => {
   return account.fullyQualifiedCategory?.split('.')[2];
 };
 
-export const generateInitialCategoryMap = (accounts: CodatAccountNested[]) => {
-  const categoryMap: IntegrationAccountMap = {};
-  accounts.forEach((account) => {
-    categoryMap[account.id!] = null;
-  });
-  return categoryMap;
-};
+export function isNewAccount(qName: string | undefined, notifications: readonly Readonly<BusinessNotification>[]) {
+  return notifications.some((item) => item.type === 'CHART_OF_ACCOUNTS_CREATED' && item.data?.newValue === qName);
+}
 
-export const flattenNestedIntegrationAccounts = (
-  accounts: CodatAccountNested[],
-  notifications: Readonly<BusinessNotification[]>,
-  currentLevel = 1,
-): FlattenedIntegrationAccount[] => {
-  return accounts.reduce<FlattenedIntegrationAccount[]>((flattenedAccounts, currentValue) => {
-    let newArray = flattenedAccounts;
-    newArray.push({
-      ...currentValue,
-      level: currentLevel,
-      hasChildren: currentValue.children?.length !== 0,
-      isNew:
-        notifications.findIndex(
-          (notification) =>
-            notification.type === 'CHART_OF_ACCOUNTS_CREATED' &&
-            notification.data?.newValue &&
-            notification.data.newValue === currentValue.fullyQualifiedName,
-        ) !== -1,
-    });
-    if (currentValue.children?.length) {
-      const nestedAccounts = flattenNestedIntegrationAccounts(currentValue.children!, notifications, currentLevel + 1);
-      newArray = newArray.concat(nestedAccounts);
+export function flatCodatAccounts(
+  accounts: readonly Readonly<CodatAccountNested>[],
+  notifications: readonly Readonly<BusinessNotification>[],
+): readonly Readonly<FlattenedIntegrationAccount>[] {
+  return accounts.reduce<FlattenedIntegrationAccount[]>((acc, current) => {
+    function next(items: CodatAccountNested[], level = 1, parentId?: string) {
+      items.forEach((item) => {
+        const { children, ...account } = item;
+        acc.push({
+          ...account,
+          isNew: isNewAccount(account.fullyQualifiedName, notifications),
+          parentId,
+          level,
+        });
+        if (children?.length) next(children, level + 1, item.id);
+      });
     }
-    return newArray;
+    next([current]);
+    return acc;
   }, []);
+}
+
+export const getCategoryMap = (
+  accounts: readonly Readonly<FlattenedIntegrationAccount>[],
+  mappings: readonly Readonly<ChartOfAccountsMappingResponse>[],
+) => {
+  return accounts.reduce<ChartOfAccountsMap>((acc, item) => {
+    acc[item.id!] = mappings!.find((mapping) => mapping.accountRef === item.id);
+    return acc;
+  }, {});
 };

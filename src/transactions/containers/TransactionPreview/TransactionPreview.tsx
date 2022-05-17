@@ -251,7 +251,6 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <SelectExpenseCategory
               icon="search"
               value={expenseCategory()}
-              categoryName={transaction().expenseDetails?.categoryName}
               items={activeCategories()}
               placeholder={String(i18n.t('Assign a category'))}
               error={!categoryIsActive(expenseCategory())}

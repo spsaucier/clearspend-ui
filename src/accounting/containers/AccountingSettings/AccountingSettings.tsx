@@ -19,10 +19,6 @@ import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
 import type { AddChartOfAccountsMappingRequest, PagedDataAccountActivityResponse } from 'generated/capital';
-import {
-  useIntegrationExpenseCategoryMappings,
-  useStoredIntegrationExpenseCategories,
-} from 'accounting/stores/integrationExpenseCategories';
 import { useRecentUpdateNotifications } from 'accounting/stores/updateNotifications';
 import { useBusiness } from 'app/containers/Main/context';
 
@@ -48,10 +44,11 @@ export function AccountingSettings(props: AccountingSettingsProps) {
 
   // TODO replace with notification endpoint that dismisses on logout
   const updateNotifications = useRecentUpdateNotifications();
-  const integrationExpenseCategoryStore = useStoredIntegrationExpenseCategories();
-  const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
-  const handleSave = (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) =>
-    postIntegrationExpenseCategoryMappings(mappings);
+
+  const handleSave = (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) =>
+    postIntegrationExpenseCategoryMappings(mappings).catch(() => {
+      messages.error({ title: i18n.t('Something went wrong') });
+    });
 
   const transactionData = props.data?.content ?? [];
 
@@ -126,19 +123,10 @@ export function AccountingSettings(props: AccountingSettingsProps) {
       </Section>
       <Section title={<Text message="Chart of Accounts" />} class={css.section}>
         <ChartOfAccountsData
-          loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
-          error={integrationExpenseCategoryStore.error}
-          data={integrationExpenseCategoryStore.data}
-          newCategories={updateNotifications.data || []}
-          mappings={integrationExpenseCategoryMappingStore.data}
+          saveOnChange
+          showUpdateButton
+          newCategories={updateNotifications.data}
           onSave={handleSave}
-          onReload={async () => {
-            integrationExpenseCategoryStore.reload();
-            integrationExpenseCategoryMappingStore.reload();
-          }}
-          saveOnChange={true}
-          showDeleted={false}
-          showUpdateButton={true}
         />
       </Section>
       <Section

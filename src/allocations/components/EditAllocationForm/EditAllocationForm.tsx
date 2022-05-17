@@ -198,12 +198,7 @@ export function EditAllocationForm(props: Readonly<EditAllocationFormProps>) {
             name="employee"
             placeholder={String(i18n.t('Search by employee name'))}
             disabled={!values().parent}
-            popupRender={(list) => (
-              <>
-                {list}
-                <NewEmployeeButton onClick={toggleEmployeeDrawer} />
-              </>
-            )}
+            popupSuffix={<NewEmployeeButton onClick={toggleEmployeeDrawer} />}
             onChange={onAddRole}
           >
             <For each={sortedUsers()}>

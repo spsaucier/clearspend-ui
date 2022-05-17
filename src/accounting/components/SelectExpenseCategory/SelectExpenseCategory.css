@@ -1,3 +1,7 @@
+.popup {
+  min-width: 280px;
+}
+
 .create {
   display: flex;
   margin: 0;
@@ -22,7 +26,7 @@
   color: var(--tw-primary-bg);
 }
 
-.category-hierarchy {
+.path {
   display: block;
   color: var(--tw-gray-60);
   font-size: var(--text-12);

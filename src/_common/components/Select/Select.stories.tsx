@@ -61,13 +61,8 @@ export const CustomPopupRender = (args: SelectProps) => {
       <Select
         {...args}
         value={value()}
-        popupRender={(list) => (
-          <>
-            <div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>
-            {list}
-            <div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>
-          </>
-        )}
+        popupPrefix={<div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>}
+        popupSuffix={<div style={{ padding: 'var(--pd-8) var(--pd-12)' }}>Custom markup</div>}
         onChange={onChange}
       >
         <Option value="MKT">Marketing</Option>

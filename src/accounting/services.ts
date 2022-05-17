@@ -95,7 +95,7 @@ export async function getSyncTransactionCount() {
 }
 
 export async function postIntegrationExpenseCategoryMappings(
-  params: Readonly<AddChartOfAccountsMappingRequest | null>[],
+  params: readonly Readonly<AddChartOfAccountsMappingRequest>[],
 ) {
   return (await service.post<Readonly<ChartOfAccountsMappingResponse>>('/chart-of-accounts/mappings', params)).data;
 }

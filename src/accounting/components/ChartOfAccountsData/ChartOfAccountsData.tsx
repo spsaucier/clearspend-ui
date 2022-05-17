@@ -1,48 +1,53 @@
-import type { DeepReadonly } from 'solid-js/store';
-
 import { Data } from 'app/components/Data';
-import type {
-  AddChartOfAccountsMappingRequest,
-  BusinessNotification,
-  CodatAccountNestedResponse,
-  GetChartOfAccountsMappingResponse,
-} from 'generated/capital';
+import type { AddChartOfAccountsMappingRequest, BusinessNotification } from 'generated/capital';
 
 import { ChartOfAccountsTable } from '../ChartOfAccountsTable';
+import {
+  useIntegrationExpenseCategoryMappings,
+  useStoredIntegrationExpenseCategories,
+} from '../../stores/integrationExpenseCategories';
+import { useExpenseCategories } from '../../stores/expenseCategories';
 
 interface ChartOfAccountsDataProps {
-  loading: boolean;
-  error: unknown;
-  data: Readonly<CodatAccountNestedResponse> | null;
-  newCategories: Readonly<BusinessNotification[]>;
-  mappings: Readonly<GetChartOfAccountsMappingResponse> | null;
-  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
-  onReload: () => Promise<unknown>;
-  onCancel?: () => void;
-  onSkip?: () => void;
-  setShowRoadblock?: (newValue: boolean) => void;
-  setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
-  setRoadblockRequestParameters?: (newValue: DeepReadonly<AddChartOfAccountsMappingRequest | null>[]) => void;
+  newCategories?: readonly Readonly<BusinessNotification>[] | null;
   saveOnChange?: boolean;
-  showDeleted?: boolean;
   showUpdateButton?: boolean;
+  onSave: (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) => void;
+  onSetRoadblock?: (
+    mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[],
+    unmappedIds: readonly string[],
+  ) => void;
+  onCancel?: () => void;
 }
 
 export function ChartOfAccountsData(props: Readonly<ChartOfAccountsDataProps>) {
+  const data = useStoredIntegrationExpenseCategories();
+  const mappings = useIntegrationExpenseCategoryMappings();
+  const categories = useExpenseCategories();
+
   return (
-    <Data data={props.data} loading={props.loading} error={props.error} onReload={props.onReload}>
+    <Data
+      data={data.data && mappings.data && categories.data}
+      loading={data.loading || mappings.loading || categories.loading}
+      error={data.error || mappings.error || categories.error}
+      onReload={async () =>
+        Promise.all([
+          data.error && data.reload(),
+          mappings.error && mappings.reload(),
+          categories.error && categories.reload(),
+        ])
+      }
+    >
       <ChartOfAccountsTable
-        data={props.data?.results!}
-        newCategories={props.newCategories}
-        mappings={props.mappings?.results}
-        onSave={props.onSave}
-        onCancel={props.onCancel}
-        setShowRoadblock={props.setShowRoadblock}
-        setUnselectedCategories={props.setUnselectedCategories}
-        setRoadblockRequestParameters={props.setRoadblockRequestParameters}
-        saveOnChange={props.saveOnChange || false}
-        showDeleted={props.showDeleted}
+        newCategories={props.newCategories || null}
+        data={data.data!.results!}
+        mappings={mappings.data!.results!}
+        categories={categories.data!}
         showUpdateButton={props.showUpdateButton}
+        saveOnChange={props.saveOnChange}
+        onSave={props.onSave}
+        onSetRoadblock={props.onSetRoadblock}
+        onCancel={props.onCancel}
       />
     </Data>
   );

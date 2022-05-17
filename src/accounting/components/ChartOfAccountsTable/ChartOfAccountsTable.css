@@ -1,5 +1,3 @@
-@value v-icon-size: 32px;
-
 .search {
   width: 226px;
 }
@@ -22,13 +20,6 @@
   overflow: auto;
 }
 
-.expense-category-cell {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  grid-gap: var(--pd-12);
-  align-items: center;
-}
-
 .table-buttons {
   position: sticky;
   bottom: 0;
@@ -42,18 +33,6 @@
 
 .done {
   margin-left: var(--pd-8);
-}
-
-.cancel {
-  display: flex;
-  width: v-icon-size;
-  height: v-icon-size;
-  align-items: center;
-  justify-content: center;
-}
-
-.cancel-icon {
-  color: var(--tw-primary-content);
 }
 
 .mapped-icon {

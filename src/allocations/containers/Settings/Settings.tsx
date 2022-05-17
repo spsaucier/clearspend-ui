@@ -252,12 +252,7 @@ export function Settings(props: Readonly<SettingsProps>) {
             <Select
               name="employee"
               placeholder={String(i18n.t('Search by employee name'))}
-              popupRender={(list) => (
-                <>
-                  {list}
-                  <NewEmployeeButton onClick={toggleEmployeeDrawer} />
-                </>
-              )}
+              popupSuffix={<NewEmployeeButton onClick={toggleEmployeeDrawer} />}
               onChange={onAddRole}
             >
               <For each={sortedUsers()}>

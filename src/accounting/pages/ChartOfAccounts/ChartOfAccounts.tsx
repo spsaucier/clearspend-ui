@@ -1,16 +1,11 @@
 import { Text } from 'solid-i18n';
-import { createSignal, Match, Switch } from 'solid-js';
-import type { DeepReadonly } from 'solid-js/store';
+import { createSignal, Match, Switch, batch } from 'solid-js';
 
 import { Page } from 'app/components/Page';
-import {
-  useIntegrationExpenseCategories,
-  useIntegrationExpenseCategoryMappings,
-} from 'accounting/stores/integrationExpenseCategories';
 import { postIntegrationExpenseCategoryMappings, updateChartOfAccounts } from 'accounting/services';
 import { useMessages } from 'app/containers/Messages/context';
 import { i18n } from '_common/api/intl';
-import { UnselectedCategoriesRoadblock } from 'accounting/components/UnselectedCategoriesRoadblock/UnselectedCategoriesRoadblock';
+import { UnselectedCategoriesRoadblock } from 'accounting/components/UnselectedCategoriesRoadblock';
 import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
 import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 
@@ -23,21 +18,17 @@ interface ChartOfAccountsProps {
 
 export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
   const messages = useMessages();
-  const integrationExpenseCategoryStore = useIntegrationExpenseCategories();
-  const integrationExpenseCategoryMappingStore = useIntegrationExpenseCategoryMappings();
 
   const [showRoadblock, setShowRoadblock] = createSignal(false);
-  const [unselectedCategories, setUnselectedCategories] = createSignal<(string | undefined)[]>([]);
+  const [unselectedCategories, setUnselectedCategories] = createSignal<readonly string[]>([]);
   const [roadblockRequestParameters, setRoadblockRequestParameters] =
-    createSignal<DeepReadonly<AddChartOfAccountsMappingRequest | null>[]>();
-  const handleSave = (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => {
-    postIntegrationExpenseCategoryMappings(mappings).catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
-    });
-    updateChartOfAccounts().catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
-    });
-    props.onNext();
+    createSignal<readonly Readonly<AddChartOfAccountsMappingRequest>[]>();
+
+  const handleSave = (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) => {
+    postIntegrationExpenseCategoryMappings(mappings)
+      .then(() => updateChartOfAccounts())
+      .then(() => props.onNext())
+      .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
   };
 
   return (
@@ -61,22 +52,15 @@ export function ChartOfAccounts(props: Readonly<ChartOfAccountsProps>) {
             </p>
           </div>
           <ChartOfAccountsData
-            loading={integrationExpenseCategoryStore.loading || integrationExpenseCategoryMappingStore.loading}
-            newCategories={[]}
-            error={integrationExpenseCategoryStore.error}
-            data={integrationExpenseCategoryStore.data}
-            mappings={integrationExpenseCategoryMappingStore.data}
             onSave={handleSave}
-            onReload={async () => {
-              integrationExpenseCategoryStore.reload();
-              integrationExpenseCategoryMappingStore.reload();
+            onSetRoadblock={(mappings, unmappedIds) => {
+              batch(() => {
+                setShowRoadblock(true);
+                setUnselectedCategories(unmappedIds);
+                setRoadblockRequestParameters(mappings);
+              });
             }}
             onCancel={props.onCancel}
-            onSkip={props.onNext}
-            setShowRoadblock={setShowRoadblock}
-            setUnselectedCategories={setUnselectedCategories}
-            setRoadblockRequestParameters={setRoadblockRequestParameters}
-            showDeleted={false}
           />
         </Page>
       </Match>

@@ -116,12 +116,6 @@ export function Select(props: Readonly<SelectProps>) {
     }
   };
 
-  const renderList = () => (
-    <ul class={css.list} ref={list}>
-      <SelectContext.Provider value={{ value: props.value, onChange, close }}>{options()}</SelectContext.Provider>
-    </ul>
-  );
-
   const renderedValue = createMemo<JSXElement>(() =>
     typeof props.valueRender === 'function' && props.value && isString(props.value)
       ? props.valueRender(props.value, selected()!)
@@ -133,7 +127,15 @@ export function Select(props: Readonly<SelectProps>) {
       open={open()}
       class={join(css.popup, props.popupClass)}
       position="bottom-left"
-      content={props.popupRender ? props.popupRender(renderList()) : renderList()}
+      content={
+        <>
+          {props.popupPrefix}
+          <ul class={css.list} ref={list}>
+            <SelectContext.Provider value={{ value: props.value, onChange, close }}>{options()}</SelectContext.Provider>
+          </ul>
+          {props.popupSuffix}
+        </>
+      }
     >
       <div
         class={join(css.root, props.class, props.darkMode && css.dark)}

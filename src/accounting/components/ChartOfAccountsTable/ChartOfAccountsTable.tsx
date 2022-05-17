@@ -1,11 +1,11 @@
 import { Text, useI18n } from 'solid-i18n';
-import { batch, createMemo, createSignal, Show } from 'solid-js';
-import { createStore, DeepReadonly } from 'solid-js/store';
+import { createMemo, createSignal, Show } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
+import { getNoop } from '_common/utils/getNoop';
 import { Empty } from 'app/components/Empty';
 import { InputSearch } from '_common/components/InputSearch';
 import { Table, TableColumn } from '_common/components/Table';
-import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Button } from '_common/components/Button';
 import { Icon } from '_common/components/Icon';
 import { wrapAction } from '_common/utils/wrapAction';
@@ -14,79 +14,67 @@ import type {
   BusinessNotification,
   ChartOfAccountsMappingResponse,
   CodatAccountNested,
+  ExpenseCategory,
 } from 'generated/capital';
 import { resyncChartOfAccounts } from 'accounting/services';
 
-import type { FlattenedIntegrationAccount } from '../ChartOfAccountsData/types';
-import { SelectExpenseCategory } from '../SelectExpenseCategory';
 import { CancelConfirmationButton } from '../CancelConfirmationButton';
 import { ChartOfAccountsName } from '../ChartOfAccountsName';
+import { ChartOfAccountsExpenseCategory } from '../ChartOfAccountsExpenseCategory';
 
-import { flattenNestedIntegrationAccounts, generateInitialCategoryMap, getAccountType } from './utils';
+import { flatCodatAccounts, getCategoryMap, getAccountType } from './utils';
+import type { FlattenedIntegrationAccount } from './types';
 
 import css from './ChartOfAccountsTable.css';
 
 interface ChartOfAccountsTableProps {
-  data: CodatAccountNested[];
-  newCategories: Readonly<BusinessNotification[]>;
-  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
-  mappings?: ChartOfAccountsMappingResponse[] | undefined;
-  onCancel?: () => void;
-  onSkip?: () => void;
-  setShowRoadblock?: (newValue: boolean) => void;
-  setRoadblockRequestParameters?: (newValue: DeepReadonly<AddChartOfAccountsMappingRequest | null>[]) => void;
-  setUnselectedCategories?: (newValue: (string | undefined)[]) => void;
-  saveOnChange: boolean;
-  showDeleted?: boolean;
+  saveOnChange?: boolean;
   showUpdateButton?: boolean;
+  data: readonly Readonly<CodatAccountNested>[];
+  mappings: readonly Readonly<ChartOfAccountsMappingResponse>[];
+  categories: readonly Readonly<ExpenseCategory>[];
+  newCategories: readonly Readonly<BusinessNotification>[] | null;
+  onSave: (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) => void;
+  onSetRoadblock?: (
+    mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[],
+    unmappedIds: readonly string[],
+  ) => void;
+  onCancel?: () => void;
 }
 
 export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>) {
   const i18n = useI18n();
-  const categories = useExpenseCategories({ initValue: [] });
-
-  const activeCategories = createMemo(() => categories.data!.filter((category) => category.status === 'ACTIVE'));
 
   const [refreshButtonDisabled, setRefreshButtonDisabled] = createSignal<boolean>(false);
 
-  const initialState = generateInitialCategoryMap(props.data);
-  const [state, setState] = createStore(initialState);
-
-  const selectedCategories = createMemo(() => Object.values(state).map((mapping) => mapping?.expenseCategoryId));
-  const flattenedData = createMemo(() => {
-    if (props.showDeleted) {
-      return flattenNestedIntegrationAccounts(props.data, props.newCategories);
-    }
-    return flattenNestedIntegrationAccounts(
+  const accounts = createMemo(() => {
+    return flatCodatAccounts(
       props.data.filter((category) => category.updateStatus !== 'DELETED'),
-      props.newCategories,
+      props.newCategories || [],
     );
   });
 
-  const handleSave = async () => {
-    const requestParams = Object.values(state).filter(
-      (value) => value != null && (value.expenseCategoryId || value.expenseCategoryName),
+  const [map, setMap] = createStore(getCategoryMap(accounts(), props.mappings));
+
+  const categories = createMemo(() => props.categories.filter((category) => category.status === 'ACTIVE'));
+  const selected = createMemo(() => Object.values(map).map((mapping) => mapping?.expenseCategoryId));
+
+  const [savingMapping, saveMapping] = wrapAction(async () => {
+    const requestParams = Object.values(map).filter(
+      (value): value is AddChartOfAccountsMappingRequest =>
+        !!(value && (value.expenseCategoryId || value.expenseCategoryName)),
     );
-    const unmappedCategories = categories.data?.filter(
-      (category) => !selectedCategories().includes(category.expenseCategoryId),
-    );
-    if (
-      unmappedCategories !== undefined &&
-      unmappedCategories.length !== 0 &&
-      props.setUnselectedCategories &&
-      props.setRoadblockRequestParameters &&
-      props.setShowRoadblock
-    ) {
-      props.setShowRoadblock(true);
-      props.setUnselectedCategories(unmappedCategories.map((category) => category.expenseCategoryId));
-      props.setRoadblockRequestParameters(requestParams);
-    } else {
-      await props.onSave(requestParams);
-    }
-  };
-  const [savingMapping, saveMapping] = wrapAction(handleSave);
+    const unmappedIds = props.categories
+      .filter((category) => !selected().includes(category.expenseCategoryId))
+      .map((category) => category.expenseCategoryId!);
+
+    unmappedIds.length && props.onSetRoadblock
+      ? props.onSetRoadblock(requestParams, unmappedIds)
+      : await props.onSave(requestParams);
+  });
 
   const refreshChartOfAccounts = () => {
+    // TODO await/handle error?
     resyncChartOfAccounts();
     setRefreshButtonDisabled(true);
   };
@@ -94,14 +82,11 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
   const columns: readonly Readonly<TableColumn<FlattenedIntegrationAccount>>[] = [
     {
       name: 'mappedIcon',
-      render: (item) => {
-        const categoryMapped = Object.values(state).find((mapping) => mapping?.accountRef === item.id) !== undefined;
-        return (
-          <Show when={categoryMapped}>
-            <Icon name="confirm-circle-filled" class={css.mappedIcon} />
-          </Show>
-        );
-      },
+      render: (item) => (
+        <Show when={Boolean(map[item.id!])}>
+          <Icon name="confirm-circle-filled" class={css.mappedIcon} />
+        </Show>
+      ),
     },
     {
       name: 'accountName',
@@ -121,64 +106,19 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
     {
       name: 'expenseCategory',
       title: <Text message="ClearSpend expense category" />,
-      render: (item) => {
-        const target = props.mappings?.find((mapping) => mapping.accountRef === item.id)?.expenseCategoryId;
-        const initId = target && categories.data?.some((ec) => ec.expenseCategoryId === target) ? target : undefined;
-        if (initId) setState(item.id!, { accountRef: item.id, expenseCategoryId: initId });
-        const [expenseCategory, setExpenseCategory] = createSignal<string | undefined>(initId);
-
-        function onChangeExpenseCategory(id: string | undefined, name?: string) {
-          batch(() => {
-            name === undefined ? setExpenseCategory(id) : setExpenseCategory(name);
-            setState(item.id!, {
-              accountRef: item.id,
-              expenseCategoryId: id,
-              expenseCategoryName: name || categories.data?.find((ec) => ec.expenseCategoryId === id)?.categoryName,
-              fullyQualifiedCategory: item.fullyQualifiedCategory,
-            });
-          });
-          if (props.saveOnChange) saveMapping();
-        }
-
-        function onChange(value: string | undefined) {
-          if (value === item.name) {
-            onChangeExpenseCategory(undefined, value);
-          } else {
-            onChangeExpenseCategory(value, undefined);
-          }
-        }
-
-        return (
-          <div class={css.expenseCategoryCell}>
-            <SelectExpenseCategory
-              createName={item.name}
-              value={expenseCategory()}
-              items={[{ categoryName: item.name, expenseCategoryId: item.name }, ...activeCategories()]}
-              placeholder={String(i18n.t('Assign expense category'))}
-              isDisableCategory={(id) => selectedCategories().includes(id)}
-              onChange={onChange}
-            />
-            <div class={css.cancel}>
-              <Show when={expenseCategory() !== undefined}>
-                <Button
-                  icon="cancel"
-                  view="ghost"
-                  class={css.cancelIcon}
-                  onClick={() => {
-                    setExpenseCategory(undefined);
-                    batch(() => {
-                      setState(item.id!, null);
-                    });
-                    if (props.saveOnChange) {
-                      saveMapping();
-                    }
-                  }}
-                />
-              </Show>
-            </div>
-          </div>
-        );
-      },
+      render: (item) => (
+        <ChartOfAccountsExpenseCategory
+          categories={categories()}
+          accounts={accounts()}
+          account={item}
+          dataMap={map}
+          selected={selected()}
+          onChange={(id, data) => {
+            setMap(id, data);
+            if (props.saveOnChange) saveMapping().catch(getNoop(true));
+          }}
+        />
+      ),
     },
   ];
 
@@ -202,17 +142,12 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
       </div>
       <Show when={props.data.length} fallback={<Empty message={<Text message="There are no accounts" />} />}>
         <div class={css.table}>
-          <Table columns={columns} data={flattenedData()} cellClass={css.cell} />
+          <Table columns={columns} data={accounts()} cellClass={css.cell} />
         </div>
         <Show when={!props.saveOnChange}>
           <div class={css.tableButtons}>
             <Show when={!!props.onCancel}>
               <CancelConfirmationButton onCancel={props.onCancel!} />
-            </Show>
-            <Show when={!!props.onSkip}>
-              <Button onClick={props.onSkip}>
-                <Text message="Skip Setup" />
-              </Button>
             </Show>
             <Button
               loading={savingMapping()}
@@ -222,7 +157,7 @@ export function ChartOfAccountsTable(props: Readonly<ChartOfAccountsTableProps>)
               icon={{ name: 'confirm', pos: 'right' }}
               onClick={saveMapping}
             >
-              <Text message="Done" />
+              <Text message="Save changes" />
             </Button>
           </div>
         </Show>

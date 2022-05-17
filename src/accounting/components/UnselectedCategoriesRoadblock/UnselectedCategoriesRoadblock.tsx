@@ -1,6 +1,5 @@
 import { Accessor, createMemo, For } from 'solid-js';
 import { Text } from 'solid-i18n';
-import type { DeepReadonly } from 'solid-js/store';
 
 import { useExpenseCategories } from 'accounting/stores/expenseCategories';
 import { Page } from 'app/components/Page';
@@ -11,10 +10,10 @@ import type { AddChartOfAccountsMappingRequest } from 'generated/capital';
 import css from './UnselectedCategoriesRoadblock.css';
 
 interface UnselectedCategoriesRoadblockProps {
-  unusedCategories: Accessor<(string | undefined)[]>;
+  unusedCategories: Accessor<readonly string[]>;
   onBack: () => void;
-  onSave: (mappings: Readonly<AddChartOfAccountsMappingRequest | null>[]) => void;
-  roadblockRequestParameters?: DeepReadonly<AddChartOfAccountsMappingRequest | null>[];
+  onSave: (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) => void;
+  roadblockRequestParameters?: readonly Readonly<AddChartOfAccountsMappingRequest>[];
 }
 
 export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblockProps) {
@@ -35,6 +34,7 @@ export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblo
       await props.onSave(props.roadblockRequestParameters);
       const unusedIds = unusedCategoriesMap()?.map((category) => category.expenseCategoryId);
       if (unusedIds) {
+        // TODO await/handle error?
         disableCategories(unusedIds);
       }
     }
