@@ -23,28 +23,28 @@ export function usePreviewTransaction<T extends { accountActivityId?: string; ty
     const activityId = searchParams.transaction;
     if (!activityId) return;
 
-    if (transactions()?.some((item) => item.accountActivityId === activityId)) {
-      setSelectID(activityId);
-      return;
-    }
-
-    fetchTransactions(activityId)
-      .then((data) => {
-        batch(() => {
-          setCacheTransaction(() => data);
-          setSelectID(activityId);
-        });
-      })
-      .catch(() => {
-        messages.error({ title: String(i18n.t('Unable to fetch data for selected transaction.')) });
-      });
+    setID(activityId, true);
   });
 
-  const changeID = (id?: string) => {
+  const setID = (id?: string, skipSearchParams?: boolean) => {
     batch(() => {
+      if (!skipSearchParams) setSearchParams({ transaction: id });
       setSelectID(id);
-      setSearchParams({ transaction: id });
-      if (!id) setCacheTransaction(undefined);
+      if (!id) {
+        setCacheTransaction(undefined);
+        return;
+      }
+      fetchTransactions(id)
+        .then((data) => {
+          batch(() => {
+            setCacheTransaction(() => data);
+          });
+        })
+        .catch(() => {
+          if (!cacheTransaction()) {
+            messages.error({ title: String(i18n.t('Unable to fetch data for selected transaction.')) });
+          }
+        });
     });
   };
 
@@ -62,5 +62,5 @@ export function usePreviewTransaction<T extends { accountActivityId?: string; ty
     return item && isActivityType(item.type);
   });
 
-  return { id: selectID, transaction, isActivity, changeID };
+  return { id: selectID, transaction, isActivity, setID };
 }

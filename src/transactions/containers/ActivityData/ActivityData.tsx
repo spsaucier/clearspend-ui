@@ -82,14 +82,14 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
         onExport={onExport}
         onCardClick={setCardID}
         onUserClick={setUserID}
-        onRowClick={preview.changeID}
+        onRowClick={preview.setID}
         onChangeParams={props.onChangeParams}
       />
       <Drawer
         noPadding
         open={preview.isActivity() === false}
         title={<Text message="Transaction Details" />}
-        onClose={preview.changeID}
+        onClose={preview.setID}
       >
         <LedgerPreview data={preview.transaction()!} onReport={toggleReportModal} />
       </Drawer>
@@ -97,7 +97,7 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
         noPadding
         open={preview.isActivity() === true}
         title={<Text message="Transaction Details" />}
-        onClose={preview.changeID}
+        onClose={preview.setID}
       >
         <TransactionPreview
           transaction={ledgerToActivity(preview.transaction()!)}

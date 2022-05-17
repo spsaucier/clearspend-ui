@@ -30,11 +30,11 @@ test('it should return correct id and data for items from preloaded list', () =>
   assert.is(result.id(), undefined);
   assert.is(result.transaction(), undefined);
 
-  result.changeID(A.accountActivityId);
+  result.setID(A.accountActivityId);
   assert.equal(result.id(), A.accountActivityId);
   assert.equal(result.transaction(), A);
 
-  result.changeID();
+  result.setID();
   assert.is(result.id(), undefined);
   assert.is(result.transaction(), undefined);
 
@@ -51,14 +51,14 @@ test('it should update the returned data after transaction updates', () => {
     return null;
   });
 
-  result.changeID(C.accountActivityId);
+  result.setID(C.accountActivityId);
   assert.equal(result.id(), C.accountActivityId);
   assert.is(result.transaction(), undefined);
 
   signal[1]([C]);
   assert.equal(result.transaction(), C);
 
-  result.changeID();
+  result.setID();
   dispose();
 });
 
@@ -75,14 +75,12 @@ test('it should use fetch transaction function', async () => {
   });
 
   assert.ok(fetcher.called);
-  assert.is(result.id(), undefined);
-  assert.is(result.transaction(), undefined);
 
   await updates();
   assert.is(result.id(), Z.accountActivityId);
   assert.equal(result.transaction(), Z);
 
-  result.changeID();
+  result.setID();
   locationController.restore();
   dispose();
 });

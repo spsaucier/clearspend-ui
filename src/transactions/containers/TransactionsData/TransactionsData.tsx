@@ -68,7 +68,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onCardClick={setCardID}
         onChangeParams={props.onChangeParams}
         onReload={props.onReload}
-        onRowClick={preview.changeID}
+        onRowClick={preview.setID}
         onUpdateTransaction={onUpdateTransaction}
         params={props.params}
         showAccountingAdminView={props.showAccountingAdminView}
@@ -79,7 +79,7 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         noPadding
         open={Boolean(preview.transaction())}
         title={<Text message="Transaction Details" />}
-        onClose={() => preview.changeID()}
+        onClose={() => preview.setID()}
       >
         <TransactionPreview
           transaction={preview.transaction()!}
