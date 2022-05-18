@@ -47,7 +47,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
     onUnlockTransaction();
   };
 
-  const [vendors, reload, params, setParams] = useResource(getClosestVendorsToTarget, {
+  const [vendors, reload, params, setParams, , mutate] = useResource(getClosestVendorsToTarget, {
     target: transaction().merchant?.name || '',
     limit: 5,
   });
@@ -65,6 +65,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
         merchant: { ...transaction().merchant, codatSupplierName: newSupplierName, codatSupplierId: '-1' },
       },
     ]);
+    mutate({ ...vendors(), results: [...(vendors()?.results || []), { id: '-1', supplierName: newSupplierName }] });
   };
 
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
