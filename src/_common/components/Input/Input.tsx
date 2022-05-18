@@ -1,4 +1,4 @@
-import { createMemo, Show, type JSXElement } from 'solid-js';
+import { createMemo, Show, type JSX, type JSXElement } from 'solid-js';
 
 import type { JSXEvent } from '../../types/common';
 import { join } from '../../utils/join';
@@ -34,6 +34,7 @@ export interface InputProps extends SharedProps {
   ref?: HTMLInputElement | ((el: HTMLInputElement) => void);
   type?: 'text' | 'password' | 'email' | 'tel' | 'file' | 'number';
   onChange?: (value: string, event: JSXEvent<HTMLInputElement, InputEvent>) => void;
+  onBlur?: JSX.HTMLAttributes<HTMLInputElement>['onBlur'];
 }
 
 export interface TextAreaProps extends SharedProps {
@@ -41,6 +42,7 @@ export interface TextAreaProps extends SharedProps {
   rows?: number;
   ref?: HTMLTextAreaElement | ((el: HTMLTextAreaElement) => void);
   onChange?: (value: string, event: JSXEvent<HTMLTextAreaElement, InputEvent>) => void;
+  onBlur?: JSX.HTMLAttributes<HTMLTextAreaElement>['onBlur'];
 }
 
 export function Input(props: Readonly<InputProps | TextAreaProps>) {
@@ -79,6 +81,7 @@ export function Input(props: Readonly<InputProps | TextAreaProps>) {
     onPaste: props.onPaste,
     onFocusIn: props.onFocusIn,
     onFocusOut: props.onFocusOut,
+    onBlur: props.onBlur as JSX.HTMLAttributes<HTMLElement>['onBlur'],
   }));
 
   return (

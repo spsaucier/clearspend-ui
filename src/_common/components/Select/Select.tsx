@@ -144,6 +144,7 @@ export function Select(props: Readonly<SelectProps>) {
         data-loading={props.loading ? 'true' : ''}
       >
         <Input
+          onBlur={props.onBlur}
           ref={input}
           darkMode={props.darkMode}
           name={props.name}

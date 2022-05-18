@@ -1,10 +1,12 @@
 import { Text } from 'solid-i18n';
 import { createMemo, For, batch, Show, Accessor } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 import { FormHandlers, FormItem } from '_common/components/Form';
 import { Input } from '_common/components/Input';
 import { Select, SelectState, Option } from '_common/components/Select';
 import { useAddressSuggestions, formatSuggestion } from 'app/utils/useAddressSuggestions';
+import { compose } from '_common/utils/compose';
 
 import type { AddressValues } from './types';
 
@@ -15,6 +17,8 @@ interface AddressFormItemsProps {
   errors: Readonly<Partial<Record<keyof AddressValues, string>>>;
   handlers: Readonly<FormHandlers<AddressValues>>;
 }
+
+type AutoComplete = 'on' | 'chrome-off';
 
 export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
   const { loading, suggestions } = useAddressSuggestions(
@@ -43,6 +47,28 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
     }
   };
 
+  const [autoComplete, setAutocomplete] = createStore<{
+    streetLine1: AutoComplete;
+    streetLine2: AutoComplete;
+    locality: AutoComplete;
+    region: AutoComplete;
+    postalCode: AutoComplete;
+  }>({
+    streetLine1: 'on',
+    streetLine2: 'on',
+    locality: 'on',
+    region: 'on',
+    postalCode: 'on',
+  });
+
+  const setAutocompleteWrapper = (field: keyof typeof autoComplete) => (value: string) => {
+    if (value.length === 0) {
+      setAutocomplete(field, 'on');
+    } else {
+      setAutocomplete(field, 'chrome-off');
+    }
+  };
+
   return (
     <>
       <FormItem label={<Text message="Street address" />} error={props.errors.streetLine1} class={css.item}>
@@ -51,21 +77,21 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
           fallback={
             <Input
               class="fs-mask"
-              autoComplete="chrome-off"
+              autoComplete={autoComplete.streetLine1}
               name="streetLine1"
               value={props.values().streetLine1}
               error={Boolean(props.errors.streetLine1)}
-              onChange={props.handlers.streetLine1}
+              onChange={compose(props.handlers.streetLine1, setAutocompleteWrapper('streetLine1'))}
             />
           }
         >
           <Select
             class="fs-mask"
-            autoComplete="chrome-off"
+            autoComplete={autoComplete.streetLine1}
             name="streetLine1"
             value={props.values().streetLine1}
             error={Boolean(props.errors.streetLine1)}
-            onChange={onChangeStreetLine1}
+            onChange={compose(onChangeStreetLine1, setAutocompleteWrapper('streetLine1'))}
             changeOnSearch
             loading={loading()}
           >
@@ -82,41 +108,41 @@ export function AddressFormItems(props: Readonly<AddressFormItemsProps>) {
       >
         <Input
           class="fs-mask"
-          autoComplete="chrome-off"
+          autoComplete={autoComplete.streetLine2}
           name="streetLine2"
           type="text"
           value={props.values().streetLine2}
           error={Boolean(props.errors.streetLine2)}
-          onChange={props.handlers.streetLine2}
+          onChange={compose(props.handlers.streetLine2, setAutocompleteWrapper('streetLine2'))}
         />
       </FormItem>
       <FormItem label={<Text message="City" />} error={props.errors.locality} class={css.item}>
         <Input
-          autoComplete="chrome-off"
+          autoComplete={autoComplete.locality}
           name="locality"
           type="text"
           value={props.values().locality}
           error={Boolean(props.errors.locality)}
-          onChange={props.handlers.locality}
+          onChange={compose(props.handlers.locality, setAutocompleteWrapper('locality'))}
         />
       </FormItem>
       <FormItem label={<Text message="State" />} error={props.errors.region} class={css.item}>
         <SelectState
-          autoComplete="chrome-off"
+          autoComplete={autoComplete.region}
           value={props.values().region}
           error={Boolean(props.errors.region)}
-          onChange={props.handlers.region}
+          onChange={compose(props.handlers.region, setAutocompleteWrapper('region'))}
         />
       </FormItem>
       <FormItem label={<Text message="ZIP Code" />} error={props.errors.postalCode} class={css.item}>
         <Input
-          autoComplete="chrome-off"
+          autoComplete={autoComplete.postalCode}
           name="postalCode"
           type="text"
           value={props.values().postalCode}
           maxLength={5}
           error={Boolean(props.errors.postalCode)}
-          onChange={props.handlers.postalCode}
+          onChange={compose(props.handlers.postalCode, setAutocompleteWrapper('postalCode'))}
         />
       </FormItem>
     </>

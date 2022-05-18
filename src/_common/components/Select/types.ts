@@ -1,4 +1,4 @@
-import type { JSXElement } from 'solid-js';
+import type { JSX, JSXElement } from 'solid-js';
 
 import type { IconName } from '../Icon';
 
@@ -10,6 +10,7 @@ export interface OptionProps {
 }
 
 export interface SelectProps {
+  onBlur?: JSX.HTMLAttributes<HTMLInputElement>['onBlur'];
   name?: string;
   value?: string;
   valueRender?: (value: string, text: string) => JSXElement;
