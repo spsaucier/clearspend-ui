@@ -83,8 +83,9 @@ export function Input(props: Readonly<InputProps | TextAreaProps>) {
 
   return (
     <div
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !!props.class,
         [css.dark!]: props.darkMode,
         [css.autoHeight!]: (props as TextAreaProps).useTextArea,
         [css.error!]: props.error,

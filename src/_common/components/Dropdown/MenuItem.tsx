@@ -1,6 +1,5 @@
 import { JSXElement, useContext } from 'solid-js';
 
-import { join } from '../../utils/join';
 import { KEY_CODES } from '../../constants/keyboard';
 
 import { DropdownContext } from './context';
@@ -50,8 +49,11 @@ export function MenuItem(props: Readonly<MenuItemProps>) {
     <li
       tabIndex="0"
       data-name={props.name}
-      class={join(css.root, props.class)}
-      classList={{ [css.disabled!]: props.disabled }}
+      class={css.root}
+      classList={{
+        [props.class!]: !!props.class,
+        [css.disabled!]: props.disabled,
+      }}
       onClick={onClick}
       onKeyDown={onKeyDown}
     >

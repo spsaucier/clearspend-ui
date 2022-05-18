@@ -1,7 +1,6 @@
 import { Show } from 'solid-js';
 import { NavLink } from 'solid-app-router';
 
-import { join } from '_common/utils/join';
 import { Icon } from '_common/components/Icon';
 import { Button } from '_common/components/Button';
 import type { Allocation } from 'generated/capital';
@@ -22,8 +21,9 @@ interface ItemProps {
 export function Item(props: Readonly<ItemProps>) {
   return (
     <div
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !!props.class,
         [css.small!]: Boolean(props.padding),
         [css.active!]: props.active,
         [css.expanded!]: props.expanded,

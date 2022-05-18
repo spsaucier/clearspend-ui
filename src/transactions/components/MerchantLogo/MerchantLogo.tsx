@@ -1,4 +1,3 @@
-import { join } from '_common/utils/join';
 import type { Merchant } from 'generated/capital';
 
 import css from './MerchantLogo.css';
@@ -16,8 +15,9 @@ export function MerchantLogo(props: Readonly<MerchantLogoProps>) {
     <img
       src={props.data!.merchantLogoUrl || URL + encodeURIComponent((props.data!.name || '').replace(/ /g, '+'))}
       alt="Merchant logo"
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !props.class,
         [css.sm!]: props.size === 'sm',
         [css.lg!]: props.size === 'lg',
       }}

@@ -1,7 +1,5 @@
 import type { JSXElement } from 'solid-js';
 
-import { join } from '../../utils/join';
-
 import { useTabsContext } from './context';
 
 import css from './Tab.css';
@@ -19,8 +17,11 @@ export function Tab<T = string>(props: Readonly<TabProps<T>>) {
 
   return (
     <button
-      class={join(css.root, props.class)}
-      classList={{ [css.active!]: context.value === props.value }}
+      class={css.root}
+      classList={{
+        [props.class!]: !!props.class,
+        [css.active!]: context.value === props.value,
+      }}
       onClick={onClick}
     >
       {props.children}

@@ -1,7 +1,5 @@
 import { JSXElement, Show } from 'solid-js';
 
-import { join } from '../../utils/join';
-
 import css from './Tag.css';
 
 export interface TagProps {
@@ -18,8 +16,9 @@ export function Tag(props: Readonly<TagProps>) {
   return (
     <span
       tabIndex={props.tabIndex}
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !!props.class,
         [css.sm!]: props.size === 'sm',
         [css.xs!]: props.size === 'xs',
         [css.secondary!]: props.type === 'secondary',

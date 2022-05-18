@@ -1,7 +1,6 @@
 import { useContext, createMemo, Show } from 'solid-js';
 
 import { Icon } from '../Icon';
-import { join } from '../../utils/join';
 import { KEY_CODES } from '../../constants/keyboard';
 
 import { SelectContext } from './context';
@@ -41,8 +40,9 @@ export function Option(props: Readonly<OptionProps>) {
   return (
     <li
       data-value={props.value}
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !!props.class,
         [css.active!]: active(),
         [css.disabled!]: props.disabled,
       }}

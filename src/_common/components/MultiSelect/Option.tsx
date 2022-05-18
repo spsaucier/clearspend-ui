@@ -2,8 +2,6 @@ import { useContext, createMemo, createSignal } from 'solid-js';
 
 import { KEY_CODES } from '_common/constants/keyboard';
 
-import { join } from '../../utils/join';
-
 import { MultiSelectContext } from './context';
 import type { OptionProps } from './types';
 
@@ -41,8 +39,9 @@ export function Option(props: Readonly<OptionProps>) {
   return (
     <li
       data-value={props.value}
-      class={join(css.root, props.class)}
+      class={css.root}
       classList={{
+        [props.class!]: !!props.class,
         [css.active!]: isActive(),
         [css.disabled!]: props.disabled,
       }}

@@ -1,7 +1,6 @@
 import { createSignal, Switch, Match, Show, type JSXElement } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { join } from '_common/utils/join';
 import { getNoop } from '_common/utils/getNoop';
 import { MenuItem } from '_common/components/Dropdown';
 import { Confirm } from '_common/components/Confirm';
@@ -28,8 +27,12 @@ export function PinnedClient(props: Readonly<PinnedClientProps>) {
 
   return (
     <div
-      class={join(css.root, props.class)}
-      classList={{ [css.my!]: props.type === 'my', [css.invite!]: props.type === 'invite' }}
+      class={css.root}
+      classList={{
+        [props.class!]: !!props.class,
+        [css.my!]: props.type === 'my',
+        [css.invite!]: props.type === 'invite',
+      }}
     >
       <Confirm
         open={showDeleteConfirm()}
