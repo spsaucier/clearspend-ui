@@ -1,11 +1,9 @@
 import { Text } from 'solid-i18n';
 import { Show } from 'solid-js';
 
-import { canManageUsers } from 'allocations/utils/permissions';
+import { AddButton } from '_common/components/Select';
 import { useBusiness } from 'app/containers/Main/context';
-import { Icon } from '_common/components/Icon';
-
-import css from './NewEmployeeButton.css';
+import { canManageUsers } from 'allocations/utils/permissions';
 
 interface NewEmployeeButtonProps {
   onClick: () => void;
@@ -16,10 +14,9 @@ export function NewEmployeeButton(props: Readonly<NewEmployeeButtonProps>) {
 
   return (
     <Show when={canManageUsers(permissions())}>
-      <button id="add-employee" class={css.button} onClick={props.onClick}>
-        <Icon name="add-circle-outline" size="sm" class={css.icon} />
+      <AddButton id="add-employee" onClick={props.onClick}>
         <Text message="Add New Employee" />
-      </button>
+      </AddButton>
     </Show>
   );
 }

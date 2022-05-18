@@ -26,12 +26,12 @@
   color: var(--tw-red-80);
 }
 
-.edit-button {
-  margin-top: var(--pd-16);
-  margin-right: var(--pd-8);
+.credit-card {
+  max-width: 312px;
+  margin-bottom: var(--pd-24);
 }
 
 .credit-card-buttons {
   display: flex;
-  flex-direction: row;
+  gap: var(--pd-8);
 }

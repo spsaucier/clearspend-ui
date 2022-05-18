@@ -1,15 +1,20 @@
-import { Text } from 'solid-i18n';
-import { createSignal, Show } from 'solid-js';
+import { batch, createMemo, createSignal, Show } from 'solid-js';
+import { useI18n, Text } from 'solid-i18n';
 
-import { Page } from 'app/components/Page';
+import { useResource } from '_common/utils/useResource';
+import { FormItem } from '_common/components/Form';
+import { Page, PageActions } from 'app/components/Page';
+import { Section } from 'app/components/Section';
+import { Data } from 'app/components/Data';
 import { Button } from '_common/components/Button';
-import { postCodatCreditCard, setCodatCreditCardforBusiness } from 'accounting/services';
-import { CancelConfirmationButton } from 'accounting/components/CancelConfirmationButton';
-import { wrapAction } from '_common/utils/wrapAction';
-import { CreditCardSelect } from 'accounting/components/CreditCardSelect';
+import { canManageCards } from 'allocations/utils/permissions';
+import { getCodatCreditCards, addBusinessCreditCard, updateBusinessCreditCard } from 'accounting/services';
+import { CreditCardSelect, NEW_CREDIT_CARD_ID } from 'accounting/components/CreditCardSelect';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
 import { useBusiness } from 'app/containers/Main/context';
+import { useMessages } from 'app/containers/Messages/context';
+import type { CodatBankAccount } from 'generated/capital';
 
 import css from './AddCreditCardForm.css';
 
@@ -19,94 +24,88 @@ interface AddCreditCardFormProps {
 }
 
 export function AddCreditCardForm(props: Readonly<AddCreditCardFormProps>) {
-  const { onNext } = props;
-  const { business } = useBusiness();
-  const [selectedCardId, setSelectedCardId] = createSignal<string>(business().codatCreditCardId || '');
-  const [loading, postCC] = wrapAction(postCodatCreditCard);
-  const [editingNewCardName, setEditingNewCardName] = createSignal<boolean>(false);
-  const [canEditNewCard, setCanEditNewCard] = createSignal<boolean>(false);
-  const [newCardName, setNewCardName] = createSignal<string>('ClearSpend Card');
+  const i18n = useI18n();
+  const messages = useMessages();
+  const { business, permissions } = useBusiness();
 
-  const saveNewCreditCard = async (cardName: string) => {
-    try {
-      await postCC({
-        accountName: cardName,
-      });
-    } catch {
-      // TODO: handle error
-      throw new Error();
-    }
-  };
+  const [savingCard, setSavingCard] = createSignal(false);
+  const [creditCards, cardsStatus, , , reloadCards] = useResource(getCodatCreditCards);
+  const [newCreditCard, setNewCreditCard] = createSignal<Required<CodatBankAccount>>();
+  const [selectedCardId, setSelectedCardId] = createSignal<string | undefined>(business().codatCreditCardId);
+  const [openEditCardName, setOpenEditCardName] = createSignal(false);
 
-  const saveSelectedCreditCard = async (cardId: string) => {
-    try {
-      await setCodatCreditCardforBusiness({
-        accountId: cardId,
-      });
-    } catch {
-      // TODO: handle error
-    }
-  };
+  const cards = createMemo(() => {
+    const items = creditCards();
+    const newCard = newCreditCard();
+    return items ? (newCard ? [newCard, ...items] : items) : [];
+  });
 
   const onClickNext = async () => {
-    if (selectedCardId() === '') {
-      saveNewCreditCard(newCardName())
-        .then(() => onNext())
-        .catch();
-    } else {
-      saveSelectedCreditCard(selectedCardId())
-        .then(() => onNext())
-        .catch();
-    }
+    setSavingCard(true);
+    const cardId = selectedCardId()!;
+    const newCard = newCreditCard();
+    const isNew = cardId === NEW_CREDIT_CARD_ID;
+
+    (isNew && newCard ? addBusinessCreditCard(newCard.accountName) : updateBusinessCreditCard(cardId))
+      .then(() => props.onNext())
+      .catch(() => {
+        setSavingCard(false);
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
   };
 
   return (
     <div class={css.root}>
-      <Page title={<Text message="Set Up your QuickBooks Online Integration" />} class={css.pageWrapper}>
-        <div class={css.formWrapper}>
-          <div class={css.innerWrap}>
-            <h2 class={css.addCardFormTitle}>
-              <Text message="Credit Card Account" />
-            </h2>
-            {/* <Text message="Lorem ipsum dolor sit amet, consectetur adipiscing elit." /> */}
-          </div>
-          <CreditCardSelect
-            newCardName={newCardName}
-            // onChange={(card: CodatBankAccount) => saveSelectedCreditCard(card)}
-            selectedCardId={selectedCardId}
-            setSelectedCardId={setSelectedCardId}
-            setCanEditNewCard={setCanEditNewCard}
-          ></CreditCardSelect>
-          <Show when={canEditNewCard()}>
-            <Button
-              class={css.editButton}
-              onClick={() => setEditingNewCardName(true)}
-              icon={{ name: 'edit', pos: 'left' }}
-            >
-              <Text message="Edit Card Name" />
-            </Button>
-          </Show>
-          <Drawer
-            open={editingNewCardName()}
-            title={<Text message="New Card" />}
-            onClose={() => setEditingNewCardName(false)}
-          >
-            <EditCardNameForm
-              cardName={newCardName}
-              onSave={(data: string) => {
-                setNewCardName(data);
-                setEditingNewCardName(false);
-              }}
+      <Page title={<Text message="Set Up your QuickBooks Online Integration" />}>
+        <Section
+          title={<Text message="Credit card account" />}
+          description={
+            <Text
+              message={
+                'QuickBooks needs a credit card account to associate with expenses that are synced from ClearSpend. ' +
+                'This credit card account will be the same for all synced transactions.'
+              }
             />
-          </Drawer>
-        </div>
+          }
+        >
+          <Data data={creditCards()} loading={cardsStatus().loading} error={cardsStatus().error} onReload={reloadCards}>
+            <FormItem label={<Text message="Select card" />} class={css.creditCard}>
+              <CreditCardSelect
+                items={cards()}
+                value={selectedCardId()}
+                onCreate={canManageCards(permissions()) ? setNewCreditCard : undefined}
+                onChange={(id) => {
+                  batch(() => {
+                    setSelectedCardId(id);
+                    if (id !== NEW_CREDIT_CARD_ID) setNewCreditCard(undefined);
+                  });
+                }}
+              />
+            </FormItem>
+            <Show when={newCreditCard()}>
+              <Button icon="edit" disabled={savingCard()} onClick={() => setOpenEditCardName(true)}>
+                <Text message="Edit Card Name" />
+              </Button>
+            </Show>
+            <Drawer
+              open={openEditCardName() && Boolean(newCreditCard())}
+              title={<Text message="New Card" />}
+              onClose={() => setOpenEditCardName(false)}
+            >
+              <EditCardNameForm
+                cardName={newCreditCard()!.accountName}
+                onSave={(accountName: string) => {
+                  batch(() => {
+                    setNewCreditCard((prev) => prev && { ...prev, accountName });
+                    setOpenEditCardName(false);
+                  });
+                }}
+              />
+            </Drawer>
+          </Data>
+        </Section>
+        <PageActions action={<Text message="Next" />} onCancel={props.onCancel} onSave={onClickNext} />
       </Page>
-      <div class={css.footer}>
-        <CancelConfirmationButton onCancel={props.onCancel} />
-        <Button onClick={onClickNext} type="primary" loading={loading()} class={css.nextButton}>
-          <Text message="Next" />
-        </Button>
-      </div>
     </div>
   );
 }

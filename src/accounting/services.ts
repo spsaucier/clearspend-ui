@@ -7,18 +7,17 @@ import type {
   CodatAccountNestedResponse,
   CodatBankAccountsResponse,
   CodatCreateBankAccountResponse,
-  CreateCreditCardRequest,
   ExpenseCategory,
   GetChartOfAccountsMappingResponse,
   GetSuppliersResponse,
   PagedDataSyncLogResponse,
-  SetCreditCardRequest,
   SyncCountResponse,
   SyncLogRequest,
   SyncTransactionResponse,
   CreateAssignSupplierRequest,
   CreateAssignSupplierResponse,
   CodatCategory,
+  CodatBankAccount,
 } from 'generated/capital';
 
 import type {
@@ -49,15 +48,16 @@ export async function syncAllTransactions() {
 }
 
 export async function getCodatCreditCards() {
-  return (await service.get<Readonly<CodatBankAccountsResponse>>(`/codat/bank-accounts`)).data;
+  return (await service.get<Readonly<CodatBankAccountsResponse>>(`/codat/bank-accounts`)).data
+    .results as readonly Required<Readonly<CodatBankAccount>>[];
 }
 
-export async function postCodatCreditCard(params: Readonly<CreateCreditCardRequest>) {
-  return (await service.post<Readonly<CodatCreateBankAccountResponse>>(`/codat/bank-accounts`, params)).data;
+export async function addBusinessCreditCard(accountName: string) {
+  return (await service.post<Readonly<CodatCreateBankAccountResponse>>(`/codat/bank-accounts`, { accountName })).data;
 }
 
-export async function setCodatCreditCardforBusiness(params: Readonly<SetCreditCardRequest>) {
-  return (await service.put<Readonly<Boolean>>(`/codat/bank-accounts`, params)).data;
+export async function updateBusinessCreditCard(accountId: string) {
+  return (await service.put<Readonly<Boolean>>(`/codat/bank-accounts`, { accountId })).data;
 }
 
 export async function postAccountingStepToBusiness(params: Readonly<UpdateBusinessAccountingStepRequest>) {

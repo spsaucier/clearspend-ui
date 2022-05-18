@@ -1,4 +1,4 @@
-import { Accessor, createSignal, Show } from 'solid-js';
+import { createSignal, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { Button } from '_common/components/Button';
@@ -9,24 +9,24 @@ import { getCodatCreditCards } from 'accounting/services';
 import css from './EditCardNameForm.css';
 
 interface EditCardNameFormProps {
-  cardName: Accessor<string>;
+  cardName: string;
   onSave: (name: string) => void;
 }
 
 export function EditCardNameForm(props: Readonly<EditCardNameFormProps>) {
-  const [newCardName, setNewCardName] = createSignal<string>(props.cardName());
+  const [newCardName, setNewCardName] = createSignal<string>(props.cardName);
   const [isCardNameValid, setIsCardNameValid] = createSignal<boolean>(true);
   const [creditCards] = useResource(getCodatCreditCards);
 
   const checkNewCardName = (cardName: string) => {
     setIsCardNameValid(true);
-    creditCards()?.results?.forEach((card) => {
+    creditCards()?.forEach((card) => {
       if (card.accountName === cardName) setIsCardNameValid(false);
     });
     if (isCardNameValid()) setNewCardName(cardName);
   };
 
-  checkNewCardName(props.cardName());
+  checkNewCardName(props.cardName);
 
   return (
     <div class={css.root}>
