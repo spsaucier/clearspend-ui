@@ -31,7 +31,15 @@ export function Pagination(props: Readonly<PaginationProps>) {
 
     if (items.length <= MAX_BUTTONS) return items;
 
-    if (index < SLICE_COUNT || index > items.length - 1 - SLICE_COUNT) {
+    if (index === SLICE_COUNT - 1) {
+      return [...items.slice(0, SLICE_COUNT + 1), undefined, ...items.slice(-SLICE_COUNT + 1)];
+    }
+
+    if (index === items.length - SLICE_COUNT) {
+      return [...items.slice(0, SLICE_COUNT - 1), undefined, ...items.slice(-SLICE_COUNT - 1)];
+    }
+
+    if (index < SLICE_COUNT - 1 || index > items.length - SLICE_COUNT) {
       return [...items.slice(0, SLICE_COUNT), undefined, ...items.slice(-SLICE_COUNT)];
     }
 
