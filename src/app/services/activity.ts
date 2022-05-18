@@ -85,6 +85,22 @@ export async function setActivityDetails(
   ).data;
 }
 
+export async function setActivityClass(activityId: string, classId: string) {
+  return (
+    await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}/class`, {
+      classId,
+    })
+  ).data;
+}
+
+export async function setActivityLocation(activityId: string, locationId: string) {
+  return (
+    await service.patch<Readonly<AccountActivityResponse>>(`/users/account-activity/${activityId}/location`, {
+      locationId,
+    })
+  ).data;
+}
+
 export async function uploadReceipt(activityId: string, data: FormData) {
   const { receiptId } = (await service.post<Readonly<{ receiptId: string }>>('/images/receipts', data)).data;
   await service.post<void>(`/users/account-activity/${activityId}/receipts/${receiptId}/link`);

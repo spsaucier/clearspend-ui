@@ -1,4 +1,4 @@
-import { createMemo, createSignal, Switch, Match } from 'solid-js';
+import { createMemo, createSignal, Switch, Match, batch, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { SelectCategory } from 'accounting/components/SelectCategory/SelectCategory';
@@ -18,6 +18,7 @@ import { Popover } from '_common/components/Popover';
 import { useResource } from '_common/utils/useResource';
 import { wrapAction } from '_common/utils/wrapAction';
 import { i18n } from '_common/api/intl';
+import { setActivityClass, setActivityLocation } from 'app/services/activity';
 
 import type { TransactionPreviewProps } from '../TransactionPreview';
 
@@ -38,6 +39,12 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
   const locations = useLocations();
 
   const transaction = createMemo(() => props.transaction);
+
+  const [, updateActivityClass] = wrapAction(setActivityClass);
+  const [, updateActivityLocation] = wrapAction(setActivityLocation);
+
+  const [location, setLocation] = createSignal(transaction().accountingDetails?.codatLocationId);
+  const [codatClass, setCodatClass] = createSignal(transaction().accountingDetails?.codatClassId);
 
   const [unlockSyncConfirmationOpen, setUnlockSyncConfirmationOpen] = createSignal(false);
   const onCancelUnlock = () => setUnlockSyncConfirmationOpen(false);
@@ -66,6 +73,40 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
       },
     ]);
     mutate({ ...vendors(), results: [...(vendors()?.results || []), { id: '-1', supplierName: newSupplierName }] });
+  };
+
+  const onSaveClass = (codatClassId: string) => {
+    updateActivityClass(transaction().accountActivityId!, codatClassId)
+      .then((data) => {
+        batch(() => {
+          props.onUpdate([data]);
+          setCodatClass(data.accountingDetails?.codatClassId);
+          messages.success({
+            title: i18n.t('Success'),
+            message: i18n.t('Your changes have been successfully saved.'),
+          });
+        });
+      })
+      .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
+  };
+
+  const onSaveLocation = (codatLocationId: string) => {
+    updateActivityLocation(transaction().accountActivityId!, codatLocationId)
+      .then((data) => {
+        batch(() => {
+          props.onUpdate([data]);
+          setLocation(data.accountingDetails?.codatLocationId);
+          messages.success({
+            title: i18n.t('Success'),
+            message: i18n.t('Your changes have been successfully saved.'),
+          });
+        });
+      })
+      .catch(() => {
+        messages.error({ title: i18n.t('Something went wrong') });
+      });
   };
 
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
@@ -118,22 +159,26 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
           onCreate={onCreateVendor}
         />
       </div>
-      <div class={css.fieldSelectContainer}>
-        <div>
-          <div class={css.optionTitle}>
-            <Text message="Class" />
+      <Show when={classes.data}>
+        <div class={css.fieldSelectContainer}>
+          <div>
+            <div class={css.optionTitle}>
+              <Text message="Class" />
+            </div>
+            <SelectCategory value={codatClass()} items={classes.data!} onChange={onSaveClass} icon="search" />
           </div>
-          <SelectCategory items={classes.data!} icon="search" />
         </div>
-      </div>
-      <div class={css.fieldSelectContainer}>
-        <div>
-          <div class={css.optionTitle}>
-            <Text message="Location" />
+      </Show>
+      <Show when={locations.data}>
+        <div class={css.fieldSelectContainer}>
+          <div>
+            <div class={css.optionTitle}>
+              <Text message="Location" />
+            </div>
+            <SelectCategory value={location()} items={locations.data!} onChange={onSaveLocation} icon="search" />
           </div>
-          <SelectCategory items={locations.data!} icon="search" />
         </div>
-      </div>
+      </Show>
       <Switch
         fallback={
           <Button

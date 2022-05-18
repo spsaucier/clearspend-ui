@@ -13,7 +13,7 @@ interface SelectClassProps {
   error?: boolean;
   loading?: boolean;
   disabled?: boolean;
-  onChange?: (value: string | undefined) => void;
+  onChange?: (value: string) => void;
   categoryName?: string | undefined;
 }
 
