@@ -9,6 +9,7 @@ import { events } from '_common/api/events';
 import { useResource } from '_common/utils/useResource';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
+import { formatNameString } from 'employees/utils/formatName';
 
 import { getUsers, getBusiness } from '../../services/businesses';
 import { getAllPermissions } from '../../services/permissions';
@@ -48,6 +49,9 @@ export default function Main() {
       (window as CSWindow).clearspend_env?.LAUNCHDARKLY_CLIENT_ID || process.env.LAUNCHDARKLY_CLIENT_ID,
       {
         key: data()?.currentUser?.userId,
+        secondary: data()?.currentUser?.businessId,
+        email: data()?.currentUser?.email,
+        name: formatNameString(data()?.currentUser || {}),
       },
     );
     await client.waitForInitialization();

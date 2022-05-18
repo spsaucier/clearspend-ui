@@ -40,6 +40,24 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
   return (
     <div class={join(css.root, props.class)}>
       <SwitchBox
+        checked={Boolean(props.value[LimitPeriod.INSTANT])}
+        label={<Text message="Transaction limit" />}
+        onChange={onEnableChange(LimitPeriod.INSTANT)}
+        name={`${props.name}-transaction-limit`}
+      >
+        <FormItem
+          label={<Text message="Amount" />}
+          extra={maxAmount() ? <Text message="Max value: {amount}" amount={maxAmount()!} /> : undefined}
+        >
+          <InputCurrency
+            name={`${props.name}-instant-limit-amount`}
+            placeholder={String(i18n.t('Enter amount'))}
+            value={props.value[LimitPeriod.INSTANT]?.amount || ''}
+            onChange={onLimitChange(LimitPeriod.INSTANT)}
+          />
+        </FormItem>
+      </SwitchBox>
+      <SwitchBox
         checked={Boolean(props.value[LimitPeriod.DAILY])}
         label={<Text message="Daily limit" />}
         onChange={onEnableChange(LimitPeriod.DAILY)}
@@ -72,24 +90,6 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
             placeholder={String(i18n.t('Enter amount'))}
             value={props.value[LimitPeriod.MONTHLY]?.amount || ''}
             onChange={onLimitChange(LimitPeriod.MONTHLY)}
-          />
-        </FormItem>
-      </SwitchBox>
-      <SwitchBox
-        checked={Boolean(props.value[LimitPeriod.INSTANT])}
-        label={<Text message="Transaction limit" />}
-        onChange={onEnableChange(LimitPeriod.INSTANT)}
-        name={`${props.name}-transaction-limit`}
-      >
-        <FormItem
-          label={<Text message="Amount" />}
-          extra={maxAmount() ? <Text message="Max value: {amount}" amount={maxAmount()!} /> : undefined}
-        >
-          <InputCurrency
-            name={`${props.name}-instant-limit-amount`}
-            placeholder={String(i18n.t('Enter amount'))}
-            value={props.value[LimitPeriod.INSTANT]?.amount || ''}
-            onChange={onLimitChange(LimitPeriod.INSTANT)}
           />
         </FormItem>
       </SwitchBox>

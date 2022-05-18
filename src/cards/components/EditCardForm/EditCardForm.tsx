@@ -108,7 +108,7 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
   const ownerName = createMemo(() => {
     const { employee: userId, personal } = values();
     const user = !!userId && personal && props.users.find((item) => item.userId === userId);
-    return user ? formatNameString(user) : business().businessName;
+    return user ? formatNameString(user) : business().businessName || business().legalName;
   });
 
   createEffect(() => {
@@ -159,7 +159,9 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
             value={values().allocationId}
             placeholder={String(i18n.t('Select allocation'))}
             error={Boolean(errors().allocationId)}
-            onChange={handlers.allocationId}
+            onChange={(id) => {
+              if (id) handlers.allocationId(id);
+            }}
           />
         </FormItem>
         <FormItem label={<Text message="Employee" />} error={errors().employee} class={css.field}>
@@ -206,20 +208,22 @@ export function EditCardForm(props: Readonly<EditCardFormProps>) {
           </FormItem>
         </Section>
       </Show>
-      <Section
-        title={<Text message="Spend Controls" />}
-        description={
-          <Text
-            message={
-              'Set limits for how much can be spent with this card for each transaction, ' +
-              'or over the course of a day or o month.'
-            }
-          />
-        }
-      >
-        <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
-        <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
-      </Section>
+      <Show when={values().allocationId}>
+        <Section
+          title={<Text message="Spend Controls" />}
+          description={
+            <Text
+              message={
+                'Set limits for how much can be spent with this card for each transaction, ' +
+                'or over the course of a day or month.'
+              }
+            />
+          }
+        >
+          <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
+          <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
+        </Section>
+      </Show>
       <Drawer open={showEmployee()} title={<Text message="New Employee" />} onClose={toggleShowEmployee}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>

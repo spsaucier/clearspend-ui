@@ -1,5 +1,5 @@
 import { Text } from 'solid-i18n';
-import { createMemo } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 
 import { formatPhone } from '_common/formatters/phone';
 import { formatAddress } from '_common/formatters/address';
@@ -35,6 +35,15 @@ export function CompanyProfile() {
           <span class={css.dataValue}>{business().legalName}</span>
           <CopyButton value={business().legalName!} class={css.copy} />
         </DataRow>
+        <Show when={business().businessName}>
+          <DataRow icon="company" class={css.data}>
+            <span class={css.dataLabel}>
+              <Text message="Business DBA name" />:
+            </span>
+            <span class={css.dataValue}>{business().businessName}</span>
+            <CopyButton value={business().businessName!} class={css.copy} />
+          </DataRow>
+        </Show>
         <DataRow icon="file-text" class={css.data}>
           <span class={css.dataLabel}>
             <Text message="Legal entity type" />:
