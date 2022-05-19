@@ -328,6 +328,12 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <Text message="Merchant name" />
             <span>{transaction().merchant!.name}</span>
           </div>
+          <Show when={transaction().merchant?.statementDescriptor}>
+            <div class={css.detail}>
+              <Text message="Statement descriptor" />
+              <span>{transaction().merchant?.statementDescriptor!}</span>
+            </div>
+          </Show>
           <div class={css.detail}>
             <Text message="Merchant ID" />
             <span>{transaction().merchant!.merchantNumber}</span>

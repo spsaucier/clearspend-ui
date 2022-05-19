@@ -1325,6 +1325,7 @@ export interface Merchant {
     | 'ZWE';
   codatSupplierName?: string;
   codatSupplierId?: string;
+  statementDescriptor?: string;
 }
 
 export type OperationLimitExceeded = DeclineDetails & {
@@ -2758,6 +2759,7 @@ export interface LedgerActivityResponse {
     | OperationLimitExceeded
     | SpendControlViolated;
   paymentDetails?: PaymentDetails;
+  statementDescriptor?: string;
 }
 
 export type LedgerAllocationAccount = LedgerAccount & {
