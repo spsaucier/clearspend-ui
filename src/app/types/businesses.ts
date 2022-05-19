@@ -20,6 +20,9 @@ export enum BusinessType {
   PUBLIC_CORPORATION = 'PUBLIC_CORPORATION',
   INCORPORATED_NON_PROFIT = 'INCORPORATED_NON_PROFIT',
   INDIVIDUAL = 'INDIVIDUAL',
+  ACCOUNTING_FIRM = 'ACCOUNTING_FIRM',
+  BANK = 'BANK',
+  CONSULTING_FIRM = 'CONSULTING_FIRM',
 }
 
 export const BusinessTypeI18n = {
@@ -34,6 +37,9 @@ export const BusinessTypeI18n = {
   [BusinessType.PUBLIC_CORPORATION]: String(i18n.t('Public corporation')),
   [BusinessType.INCORPORATED_NON_PROFIT]: String(i18n.t('Incorporated non-profit')),
   [BusinessType.INDIVIDUAL]: String(i18n.t('Individual')),
+  [BusinessType.ACCOUNTING_FIRM]: String(i18n.t('Accounting Firm')),
+  [BusinessType.BANK]: String(i18n.t('Bank')),
+  [BusinessType.CONSULTING_FIRM]: String(i18n.t('Consulting Firm')),
 };
 
 export enum OnboardingStep {
