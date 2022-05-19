@@ -213,6 +213,7 @@ export default function Onboarding() {
 
   const checkReviewStatus = async () => {
     await refetchOnboardingState();
+    setRequirements(await getApplicationReviewRequirements());
     if (business()?.onboardingStep !== 'REVIEW') {
       setPendingVerification([]);
       setStep(business()?.onboardingStep as OnboardingStep);
