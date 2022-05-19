@@ -1349,8 +1349,8 @@ export interface PagedDataAccountActivityResponse {
 
 export interface PaymentDetails {
   paymentType?: 'POS' | 'ONLINE' | 'MANUAL_ENTRY';
-  foreignTransactionFee?: number;
-  foreign?: boolean;
+  foreignTransactionFee?: Amount;
+  foreignTransaction?: boolean;
 }
 
 export interface ReceiptDetails {
@@ -1404,16 +1404,6 @@ export interface KycFailRequest {
   to?: string;
   firstName?: string;
   reasons?: string[];
-}
-
-export interface CreateBusinessOwnerRequest {
-  /** @format uuid */
-  businessId?: string;
-
-  /** @format uuid */
-  businessOwnerId?: string;
-  username?: string;
-  password?: string;
 }
 
 export interface TransactBankAccountRequest {
@@ -1957,6 +1947,12 @@ export interface IssueCardRequest {
   )[];
   disabledPaymentTypes: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
   disableForeign: boolean;
+
+  /** The Stripe reference for a previously cancelled card that this is replacing */
+  replacementFor?: string;
+
+  /** The reason this card is a replacement. Required if replacementFor is provided. If LOST or STOLEN, the card must have had a similar reason set in Stripe for its cancellation */
+  replacementReason?: 'LOST' | 'STOLEN' | 'DAMAGED' | 'EXPIRED';
 
   /** @example DEBIT */
   binType?: 'DEBIT';
@@ -2582,6 +2578,8 @@ export interface ForgotPasswordRequest {
 }
 
 export interface ChangePasswordRequest {
+  /** @format uuid */
+  userId?: string;
   currentPassword?: string;
   newPassword?: string;
   trustChallenge?: string;
@@ -3532,7 +3530,7 @@ export interface Card {
   /** @format uuid */
   accountId?: string;
   status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
   fundingType?: 'POOLED' | 'INDIVIDUAL';
 
   /** @format date-time */
@@ -3561,7 +3559,7 @@ export interface CardAndAccount {
 
 export interface UpdateCardStatusRequest {
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
 }
 
 export interface ActivateCardRequest {
@@ -3569,7 +3567,7 @@ export interface ActivateCardRequest {
   lastFour?: string;
 
   /** @example CARDHOLDER_REQUESTED */
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
 }
 
 export interface UpdateCardAccountRequest {
@@ -3686,7 +3684,7 @@ export interface BusinessSettings {
 
   /** @format int32 */
   issuedPhysicalCardsTotal?: number;
-  foreignTransactionFee?: number;
+  foreignTransactionFeePercents?: number;
   achFundsAvailabilityMode?: 'STANDARD' | 'FAST' | 'IMMEDIATE';
   immediateAchFundsLimit?: number;
 }
@@ -4042,6 +4040,11 @@ export interface LimitRecord {
 }
 
 export interface ChangePhoneNumberRequest {
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  businessId?: string;
   changingNumber?: string;
   trustChallenge?: string;
   twoFactorId?: string;

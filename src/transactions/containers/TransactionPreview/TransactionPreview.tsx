@@ -368,10 +368,15 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
             <span>{originalAmount()}</span>
           </div>
         </Show>
-        <Show when={transaction().paymentDetails?.foreign || transaction().paymentDetails?.foreignTransactionFee}>
+        <Show
+          when={
+            transaction().paymentDetails?.foreignTransaction ||
+            transaction().paymentDetails?.foreignTransactionFee?.amount
+          }
+        >
           <div class={css.detail}>
             <Text message="Foreign exchange fee" />
-            <span>{formatCurrency(transaction().paymentDetails?.foreignTransactionFee || 0)}</span>
+            <span>{formatCurrency(transaction().paymentDetails?.foreignTransactionFee?.amount || 0)}</span>
           </div>
         </Show>
         <Show when={transaction().paymentDetails?.paymentType}>
