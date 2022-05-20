@@ -19,52 +19,12 @@ import { AccountSetUpForm } from './components/AccountSetUpForm';
 import { PhoneForm } from './components/PhoneForm';
 import { VerifyForm } from './components/VerifyForm';
 import { PasswordForm } from './components/PasswordForm';
-import { useSignup, SignupStore } from './store';
+import { getInitStep, Step, useSignup } from './store';
 import { BusinessDetailsForm } from './components/BusinessDetailsForm/BusinessDetailsForm';
 import { SorryButForm } from './components/SorryButForm/SorryBut';
 import { EasyStarted } from './components/EasyStarted';
 
 import css from './SignUp.css';
-
-enum Step {
-  AccountSetUpStep,
-  EmailOtpStep, // TODO: move to after AccountSetUpStep when backend is ready
-  BusinessTypeCategoryStep, // now contains BusinessTypeStep and RelationshipToBusinessStep, todo: rename
-  PhoneStep,
-  PhoneOtpStep,
-  PasswordStep,
-  SorryButStep,
-}
-
-function getInitStep(store: SignupStore): Step {
-  const {
-    first,
-    last,
-    businessTypeCategory,
-    businessType,
-    relationshipToBusiness,
-    phone,
-    email,
-    emailVerified,
-    phoneVerified,
-  } = store;
-  switch (true) {
-    case !first || !last || !email:
-      return Step.AccountSetUpStep;
-    case !emailVerified:
-      return Step.EmailOtpStep;
-    case !businessTypeCategory || !businessType || !relationshipToBusiness:
-      return Step.BusinessTypeCategoryStep;
-    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER) && relationshipToBusiness.length === 1:
-      return Step.SorryButStep;
-    case !phone:
-      return Step.PhoneStep;
-    case !phoneVerified:
-      return Step.PhoneOtpStep;
-    default:
-      return Step.PasswordStep;
-  }
-}
 
 export default function SignUp() {
   const [searchParams] = useSearchParams<{ email?: string }>();

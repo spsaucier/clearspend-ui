@@ -1,11 +1,12 @@
 import { createStore } from 'solid-js/store';
 
-import type { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
+import type { BusinessType, BusinessTypeCategory } from 'app/types/businesses';
+import { RelationshipToBusiness } from 'app/types/businesses';
 import { storage } from '_common/api/storage';
 
 const STORAGE_KEY = 'signup';
 
-export interface SignupStore {
+interface SignupStore {
   first?: string;
   last?: string;
   email?: string;
@@ -56,4 +57,44 @@ export function useSignup() {
     },
     resetStore,
   };
+}
+
+export enum Step {
+  AccountSetUpStep,
+  EmailOtpStep, // TODO: move to after AccountSetUpStep when backend is ready
+  BusinessTypeCategoryStep, // now contains BusinessTypeStep and RelationshipToBusinessStep, todo: rename
+  PhoneStep,
+  PhoneOtpStep,
+  PasswordStep,
+  SorryButStep,
+}
+
+export function getInitStep(store: SignupStore): Step {
+  const {
+    first,
+    last,
+    businessTypeCategory,
+    businessType,
+    relationshipToBusiness,
+    phone,
+    email,
+    emailVerified,
+    phoneVerified,
+  } = store;
+  switch (true) {
+    case !first || !last || !email:
+      return Step.AccountSetUpStep;
+    case !emailVerified:
+      return Step.EmailOtpStep;
+    case !businessTypeCategory || !businessType || !relationshipToBusiness:
+      return Step.BusinessTypeCategoryStep;
+    case relationshipToBusiness?.includes(RelationshipToBusiness.OTHER) && relationshipToBusiness.length === 1:
+      return Step.SorryButStep;
+    case !phone:
+      return Step.PhoneStep;
+    case !phoneVerified:
+      return Step.PhoneOtpStep;
+    default:
+      return Step.PasswordStep;
+  }
 }

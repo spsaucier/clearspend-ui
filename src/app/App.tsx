@@ -4,7 +4,7 @@ import * as FS from '@fullstory/browser';
 import mixpanel from 'mixpanel-browser';
 import { useScript } from 'solid-use-script';
 
-import { SignUp } from 'signup';
+import { AccountingSignUp, SignUp } from 'signup';
 import { SetPassword } from 'onboarding/pages/SetPassword';
 
 import { Main } from './containers/Main';
@@ -39,6 +39,7 @@ export function App() {
         <Route path="/set-password" element={<SetPassword />} />
         <Route path="/login-2fa" element={<Login2fa />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/accounting-signup" element={<AccountingSignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/forgot-password/:token" element={<ResetPassword />} />
         <Route path="/*all" element={<Main />} />
