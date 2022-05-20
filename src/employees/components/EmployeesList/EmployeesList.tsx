@@ -1,11 +1,11 @@
 import { For, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { Input } from '_common/components/Input';
-import { Icon } from '_common/components/Icon';
 import type { Setter } from '_common/types/common';
 import { formatCardNumber } from 'cards/utils/formatCardNumber';
 import type { PagedDataUserPageData, SearchUserRequest } from 'generated/capital';
+import { InputSearch } from '_common/components/InputSearch';
+import { changeRequestSearch } from 'app/utils/changeRequestSearch';
 
 import { formatName } from '../../utils/formatName';
 
@@ -20,7 +20,12 @@ interface EmployeesListProps {
 export function EmployeesList(props: Readonly<EmployeesListProps>) {
   return (
     <div>
-      <Input disabled placeholder="Search employees..." suffix={<Icon name="search" size="sm" />} class={css.search} />
+      <InputSearch
+        delay={400}
+        onSearch={changeRequestSearch(props.onChangeParams)}
+        placeholder="Search employees..."
+        class={css.search}
+      />
       <For each={props.data.content}>
         {(item) => {
           const [card, ...rest] = item.cardInfoList || [];

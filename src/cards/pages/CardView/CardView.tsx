@@ -223,6 +223,11 @@ export default function CardView() {
     >
       <Data data={card()} loading={status().loading} error={status().error} onReload={reload}>
         <TabList value={tab()} onChange={setTab}>
+          {!media.medium && (
+            <Tab value={Tabs.info}>
+              <Text message="Info" />
+            </Tab>
+          )}
           <Tab value={Tabs.transactions}>
             <Text message="Transactions" />
           </Tab>
@@ -236,11 +241,6 @@ export default function CardView() {
               <Text message="Card Settings" />
             </Tab>
           </Show>
-          {!media.medium && (
-            <Tab value={Tabs.info}>
-              <Text message="Info" />
-            </Tab>
-          )}
           {card()!.activated && (
             <Tab value={Tabs.statements}>
               <Text message="Statements" />
