@@ -15,7 +15,6 @@ import { PhoneForm } from './components/PhoneForm';
 import { SorryButForm } from './components/SorryButForm/SorryBut';
 import { BusinessDetailsForm } from './components/BusinessDetailsForm/BusinessDetailsForm';
 // import { i18n } from '_common/api/intl';
-
 import { Step, useSignup } from './store';
 
 import css from './SignUp.css';
