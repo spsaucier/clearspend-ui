@@ -4228,6 +4228,22 @@ export interface AllocationsAndPermissionsResponse {
   userRoles?: UserRolesAndPermissionsRecord[];
 }
 
+export interface PartnerBusiness {
+  /** @format uuid */
+  businessId?: string;
+  legalName?: string;
+  businessName?: string;
+  ledgerBalance?: Amount;
+  onboardingStep?:
+    | 'BUSINESS'
+    | 'BUSINESS_OWNERS'
+    | 'SOFT_FAIL'
+    | 'REVIEW'
+    | 'LINK_ACCOUNT'
+    | 'TRANSFER_MONEY'
+    | 'COMPLETE';
+}
+
 export interface CreateTestDataResponse {
   businesses?: TestBusiness[];
 }
