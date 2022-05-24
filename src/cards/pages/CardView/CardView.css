@@ -34,9 +34,3 @@
   margin-bottom: var(--pd-4);
   font-weight: var(--font-700);
 }
-
-.title-tag {
-  margin-left: 7px;
-  font-size: var(--text-14);
-  font-weight: var(--font-400);
-}

@@ -7,6 +7,7 @@ import { PAYMENT_TYPES } from '../../constants/limits';
 interface SwitchPaymentTypesProps {
   value: readonly string[];
   class?: string;
+  disabled?: boolean;
   onChange: (value: string[]) => void;
 }
 
@@ -18,6 +19,7 @@ export function SwitchPaymentTypes(props: Readonly<SwitchPaymentTypesProps>) {
       allTitle={<Text message="All payment types" />}
       items={PAYMENT_TYPES}
       class={props.class}
+      disabled={props.disabled}
       onChange={props.onChange}
     />
   );

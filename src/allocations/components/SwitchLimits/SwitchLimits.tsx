@@ -18,6 +18,7 @@ interface SwitchLimitsProps {
   value: Readonly<Limits>;
   maxAmount?: Readonly<Amount>;
   class?: string;
+  disabled?: boolean;
   onChange: (value: Limits) => void;
 }
 
@@ -42,6 +43,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
       <SwitchBox
         checked={Boolean(props.value[LimitPeriod.INSTANT])}
         label={<Text message="Transaction limit" />}
+        disabled={props.disabled}
         onChange={onEnableChange(LimitPeriod.INSTANT)}
         name={`${props.name}-transaction-limit`}
       >
@@ -53,6 +55,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
             name={`${props.name}-instant-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}
             value={props.value[LimitPeriod.INSTANT]?.amount || ''}
+            disabled={props.disabled}
             onChange={onLimitChange(LimitPeriod.INSTANT)}
           />
         </FormItem>
@@ -60,6 +63,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
       <SwitchBox
         checked={Boolean(props.value[LimitPeriod.DAILY])}
         label={<Text message="Daily limit" />}
+        disabled={props.disabled}
         onChange={onEnableChange(LimitPeriod.DAILY)}
         name={`${props.name}-daily-limit`}
       >
@@ -71,6 +75,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
             name={`${props.name}-daily-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}
             value={props.value[LimitPeriod.DAILY]?.amount || ''}
+            disabled={props.disabled}
             onChange={onLimitChange(LimitPeriod.DAILY)}
           />
         </FormItem>
@@ -78,6 +83,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
       <SwitchBox
         checked={Boolean(props.value[LimitPeriod.MONTHLY])}
         label={<Text message="30-day limit" />}
+        disabled={props.disabled}
         onChange={onEnableChange(LimitPeriod.MONTHLY)}
         name={`${props.name}-monthly-limit`}
       >
@@ -89,6 +95,7 @@ export function SwitchLimits(props: Readonly<SwitchLimitsProps>) {
             name={`${props.name}-monthly-limit-amount`}
             placeholder={String(i18n.t('Enter amount'))}
             value={props.value[LimitPeriod.MONTHLY]?.amount || ''}
+            disabled={props.disabled}
             onChange={onLimitChange(LimitPeriod.MONTHLY)}
           />
         </FormItem>

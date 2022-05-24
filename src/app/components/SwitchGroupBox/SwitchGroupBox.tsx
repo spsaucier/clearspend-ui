@@ -19,6 +19,7 @@ interface SwitchGroupBoxProps {
   allTitle: JSXElement;
   items: readonly Readonly<SwitchGroupBoxItem>[];
   class?: string;
+  disabled?: boolean;
   onChange: (value: string[]) => void;
 }
 
@@ -40,6 +41,7 @@ export function SwitchGroupBox(props: Readonly<SwitchGroupBoxProps>) {
         <Switch
           name={props.name ? `${props.name}-all` : undefined}
           value={props.value.length === props.items.length}
+          disabled={props.disabled}
           onChange={onAllChange}
         />
       </label>
@@ -54,6 +56,7 @@ export function SwitchGroupBox(props: Readonly<SwitchGroupBoxProps>) {
               <Switch
                 name={props.name ? `${props.name}-${item.key}` : item.key}
                 value={props.value.includes(item.key)}
+                disabled={props.disabled}
                 onChange={onItemChange(item.key)}
               />
             </label>

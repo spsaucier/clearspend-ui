@@ -1,10 +1,14 @@
+.section {
+  margin: var(--pd-24) 0;
+}
+
 .field {
   @media (--bp-large) {
     max-width: 400px;
   }
 }
 
-.subheader {
+.description-header {
   margin: 0 0 var(--pd-4);
   color: var(--tw-black);
   font-family: var(--font-header);
@@ -12,11 +16,7 @@
   font-weight: var(--font-400);
 }
 
-.content {
+.description-content {
   display: block;
   margin: 0 0 var(--pd-8);
-}
-
-.role-description {
-  margin-top: 18px;
 }

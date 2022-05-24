@@ -66,8 +66,8 @@ export const allocationsWhereCanManageFunds = (
   allocations: Readonly<Allocation[]>,
   currentUserRoles: Readonly<UserRolesAndPermissionsRecord[]>,
 ) =>
-  allocations.filter((a) => {
-    const permissions = currentUserRoles.find((r) => r.allocationId === a.allocationId);
-    if (!permissions) return false;
-    return canManageFunds(permissions);
+  allocations.filter((item) => {
+    if (item.archived) return false;
+    const permissions = currentUserRoles.find(allocationWithID(item.allocationId));
+    return permissions && canManageFunds(permissions);
   });

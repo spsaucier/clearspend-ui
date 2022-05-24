@@ -9,6 +9,7 @@ interface SwitchMccCategoriesProps {
   value: readonly string[];
   items: readonly Readonly<MccGroup>[];
   class?: string;
+  disabled?: boolean;
   onChange: (value: string[]) => void;
 }
 
@@ -22,6 +23,7 @@ export function SwitchMccCategories(props: Readonly<SwitchMccCategoriesProps>) {
       allTitle={<Text message="All categories" />}
       items={items()}
       class={props.class}
+      disabled={props.disabled}
       onChange={props.onChange}
     />
   );

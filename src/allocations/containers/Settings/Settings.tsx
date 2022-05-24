@@ -1,8 +1,11 @@
-import { createSignal, createMemo, Show, For, Accessor } from 'solid-js';
+import { createSignal, createMemo, Show, For } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
+import { isFetchError } from '_common/api/fetch/isFetchError';
 import { useBool } from '_common/utils/useBool';
 import { useResource } from '_common/utils/useResource';
+import { Button } from '_common/components/Button';
+import { Confirm } from '_common/components/Confirm';
 import { Select, Option } from '_common/components/Select';
 import { Drawer } from '_common/components/Drawer';
 import { wrapAction } from '_common/utils/wrapAction';
@@ -17,15 +20,16 @@ import { NewEmployeeButton } from 'employees/components/SelectEmployee';
 import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
 import { formatName, formatNameString } from 'employees/utils/formatName';
-import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord, ControllerError } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { Loading } from 'app/components/Loading';
 
 import { AllocationRole } from '../../components/AllocationRole';
-import { updateAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
+import { updateAllocation, archiveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
+import { getAvailableBalance } from '../../utils/getAvailableBalance';
 import { canManagePermissions, canLinkBankAccounts, canManageFunds } from '../../utils/permissions';
 
 import { getRolesList, getRolesUpdates } from './utils';
@@ -38,8 +42,8 @@ interface FormValues {
 
 interface SettingsProps {
   allocation: Readonly<Allocation>;
+  permissions: Readonly<UserRolesAndPermissionsRecord> | null;
   onReload: () => Promise<unknown>;
-  permissions: Accessor<Readonly<UserRolesAndPermissionsRecord> | null>;
 }
 
 const IDLE_MS = 100;
@@ -193,66 +197,85 @@ export function Settings(props: Readonly<SettingsProps>) {
 
   const allocationHasParent = Boolean(props.allocation.parentAllocationId);
 
+  const [archiving, archive] = wrapAction(archiveAllocation);
+
+  const onArchive = () => {
+    archive(props.allocation.allocationId)
+      .then(() => {
+        messages.success({ title: i18n.t('Allocation successfully archived') });
+        return props.onReload();
+      })
+      .catch((error) =>
+        messages.error({
+          title: i18n.t('Something went wrong'),
+          message: isFetchError<ControllerError>(error) ? error.data.message : undefined,
+        }),
+      );
+  };
+
+  const isDisabled = createMemo(() => props.allocation.archived);
+
   return (
     <Form>
-      <Show when={canManageFunds(props.permissions())}>
-        <Section title={<Text message="Allocation details" />}>
+      <Show when={canManageFunds(props.permissions)}>
+        <Section title={<Text message="Allocation details" />} class={css.section}>
           <FormItem label={<Text message="Name" />} class={css.field} error={errors().name}>
             <Input
               name="allocation-label"
               value={values().name}
               error={Boolean(errors().name)}
+              disabled={isDisabled()}
               onChange={handlers.name}
             />
           </FormItem>
         </Section>
       </Show>
-      <Show when={canManagePermissions(props.permissions())}>
+      <Show when={canManagePermissions(props.permissions)}>
         <Section
           title={<Text message="Access" />}
           description={
             <>
-              <Text message="Add users who can view or manage this allocation." class={css.content!} />
-              <Show when={!allocationHasParent && canLinkBankAccounts(props.permissions())}>
-                <div class={css.roleDescription}>
-                  <h5 class={css.subheader}>
-                    <Text message="Admin" />
-                  </h5>
-                  <Text
-                    message={
-                      'Admins can deposit, withdraw, and reallocate funds, view and manage all allocations, company settings, and ' +
-                      'accounting details, create additional allocations, add employees, and issue cards.'
-                    }
-                    class={css.content!}
-                  />
-                </div>
-              </Show>
-              <div class={css.roleDescription}>
-                <h5 class={css.subheader}>
-                  <Text message="Manage" />
+              <Text message="Add users who can view or manage this allocation." class={css.descriptionContent!} />
+              <Show when={!allocationHasParent && canLinkBankAccounts(props.permissions)}>
+                <h5 class={css.descriptionHeader}>
+                  <Text message="Admin" />
                 </h5>
                 <Text
                   message={
-                    'Managers can reallocate funds between allocations that they manage, create additional sub-allocations, ' +
+                    'Admins can deposit, withdraw, and reallocate funds, view and manage all allocations, ' +
+                    'company settings, and accounting details, create additional allocations, add employees, ' +
                     'and issue cards.'
                   }
-                  class={css.content!}
+                  class={css.descriptionContent!}
                 />
-              </div>
-              <div class={css.roleDescription}>
-                <h5 class={css.subheader}>
-                  <Text message="View only" />
-                </h5>
-                <Text message="Viewers can see balances, employees, cards, and transactions." class={css.content!} />
-              </div>
+              </Show>
+              <h5 class={css.descriptionHeader}>
+                <Text message="Manage" />
+              </h5>
+              <Text
+                message={
+                  'Managers can reallocate funds between allocations that they manage, ' +
+                  'create additional sub-allocations, and issue cards.'
+                }
+                class={css.descriptionContent!}
+              />
+              <h5 class={css.descriptionHeader}>
+                <Text message="View only" />
+              </h5>
+              <Text
+                message="Viewers can see balances, employees, cards, and transactions."
+                class={css.descriptionContent!}
+              />
             </>
           }
+          class={css.section}
         >
           <FormItem label={<Text message="Add a user role" />} class={css.field}>
             <Select
               name="employee"
               placeholder={String(i18n.t('Search by employee name'))}
               popupSuffix={<NewEmployeeButton onClick={toggleEmployeeDrawer} />}
+              disabled={isDisabled()}
               onChange={onAddRole}
             >
               <For each={sortedUsers()}>
@@ -279,14 +302,20 @@ export function Settings(props: Readonly<SettingsProps>) {
           >
             <For each={sortedRoles()}>
               {(role) => {
-                const disabled = role.user.userId === props.permissions()?.user?.userId;
-                const cannotBePromoted =
-                  role.inherited &&
-                  [
-                    AllocationRoles.Admin,
-                    props.permissions()?.allocationRole,
-                    allocationHasParent ? AllocationRoles.Manager : undefined,
-                  ].includes(role.role);
+                const disabled = createMemo<boolean>(
+                  () => isDisabled() || role.user.userId === props.permissions?.user?.userId,
+                );
+
+                const cannotBePromoted = createMemo<boolean>(
+                  () =>
+                    role.inherited &&
+                    [
+                      AllocationRoles.Admin,
+                      props.permissions?.allocationRole,
+                      allocationHasParent ? AllocationRoles.Manager : undefined,
+                    ].includes(role.role),
+                );
+
                 return (
                   <Show when={!removedRoles()[role.user.userId!]}>
                     <AllocationRole
@@ -295,8 +324,8 @@ export function Settings(props: Readonly<SettingsProps>) {
                       role={role.role}
                       inherited={role.inherited}
                       class={css.field}
-                      onChange={disabled || cannotBePromoted ? undefined : onChangeRole}
-                      onDelete={disabled ? undefined : onRemoveRole}
+                      onChange={disabled() || cannotBePromoted() ? undefined : onChangeRole}
+                      onDelete={disabled() ? undefined : onRemoveRole}
                       permissions={props.permissions}
                     />
                   </Show>
@@ -304,6 +333,30 @@ export function Settings(props: Readonly<SettingsProps>) {
               }}
             </For>
           </Show>
+        </Section>
+      </Show>
+      <Show when={canManagePermissions(props.permissions) && !props.allocation.archived}>
+        <Section title={<Text message="Archive" />} class={css.section}>
+          <Confirm
+            position="top-center"
+            question={<Text message="Are you sure you want to archive this allocation?" />}
+            confirmText={<Text message="Continue" />}
+            onConfirm={onArchive}
+          >
+            {({ onClick }) => (
+              <Button
+                size="lg"
+                icon="archive"
+                type="danger"
+                view="second"
+                loading={archiving()}
+                disabled={getAvailableBalance(props.allocation) !== 0}
+                onClick={onClick}
+              >
+                <Text message="Archive allocation" />
+              </Button>
+            )}
+          </Confirm>
         </Section>
       </Show>
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>

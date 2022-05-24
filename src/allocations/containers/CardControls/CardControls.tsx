@@ -11,6 +11,7 @@ interface CardControlsProps {
   id: string;
   allocationId?: string;
   data: Readonly<ControlsData>;
+  disabled?: boolean;
   onSave: (allocationId: string, data: Readonly<ControlsData>) => Promise<unknown>;
 }
 
@@ -34,6 +35,7 @@ export function CardControls(props: Readonly<CardControlsProps>) {
           data={props.data}
           mccCategories={mcc.data!}
           allocationId={props.allocationId}
+          disabled={props.disabled}
           onSave={(values) => props.onSave(props.id, values)}
         />
       </Section>

@@ -24,6 +24,7 @@ interface LimitsFormProps {
   handlers: Readonly<FormHandlers<FormValues>>;
   maxAmount?: Readonly<Amount>;
   mccCategories: readonly Readonly<MccGroup>[];
+  disabled?: boolean;
 }
 
 export const LimitsForm = (props: LimitsFormProps) => (
@@ -34,6 +35,7 @@ export const LimitsForm = (props: LimitsFormProps) => (
         value={props.values.purchasesLimits}
         maxAmount={props.maxAmount}
         class={css.box}
+        disabled={props.disabled}
         onChange={props.handlers.purchasesLimits}
       />
     </FormItem>
@@ -42,16 +44,23 @@ export const LimitsForm = (props: LimitsFormProps) => (
         value={props.values.categories}
         items={props.mccCategories}
         class={css.box}
+        disabled={props.disabled}
         onChange={props.handlers.categories}
       />
     </FormItem>
     <FormItem multiple label={<Text message="Payment types" />}>
-      <SwitchPaymentTypes value={props.values.channels} class={css.box} onChange={props.handlers.channels} />
+      <SwitchPaymentTypes
+        value={props.values.channels}
+        class={css.box}
+        disabled={props.disabled}
+        onChange={props.handlers.channels}
+      />
       <SwitchBox
         name="international"
         checked={props.values.international}
         onChange={props.handlers.international}
         class={css.box}
+        disabled={props.disabled}
         label={
           <>
             <span>

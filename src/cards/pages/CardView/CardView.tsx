@@ -62,6 +62,7 @@ export default function CardView() {
   const [user, uStatus, , setUserID, reloadUser] = useResource(getUser, undefined, false);
 
   const card = createMemo(() => data()?.card);
+  const isCancelled = createMemo(() => card()?.status === 'CANCELLED');
   const permissions = createMemo(() => getAllocationPermissions(currentUserRoles(), card()?.allocationId));
 
   createEffect(() => {
@@ -139,14 +140,14 @@ export default function CardView() {
       }
       title={
         <Show when={card()} fallback={<Text message="Loading..." />}>
-          <>
-            {formatCardNumber(card()!.lastFour, card()!.activated)}
-            <Show when={card()?.status === 'CANCELLED'}>
-              <Tag type="danger" class={css.titleTag}>
-                <Text message="Cancelled" />
-              </Tag>
-            </Show>
-          </>
+          {formatCardNumber(card()!.lastFour, card()!.activated)}
+        </Show>
+      }
+      extra={
+        <Show when={isCancelled()}>
+          <Tag type="danger">
+            <Text message="Cancelled" />
+          </Tag>
         </Show>
       }
       subtitle={
@@ -259,6 +260,7 @@ export default function CardView() {
               id={card()!.cardId!}
               data={data()!}
               allocationId={card()!.allocationId}
+              disabled={isCancelled()}
               onSave={onUpdateCard}
             />
           </Match>

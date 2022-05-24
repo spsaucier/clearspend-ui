@@ -97,37 +97,46 @@ export default function Allocations() {
           title={media.medium && formatCurrency(getAvailableBalance(current()!))}
           titleClass={css.title}
           breadcrumbs={media.medium && <Breadcrumbs current={current()!} items={allocations()} />}
+          extra={
+            <Show when={current()!.archived}>
+              <Tag type="danger">
+                <Text message="Archived" />
+              </Tag>
+            </Show>
+          }
           actions={
-            <div class={css.actions}>
-              <ManageBalanceButton
-                allocationId={current()!.allocationId}
-                allocations={sortedItems()}
-                userPermissions={userPermissions()}
-                onClick={setManageId}
-              />
-              <Show when={canManageFunds(userPermissions())}>
-                <Button
-                  size="lg"
-                  icon="add"
-                  onClick={() =>
-                    navigate('/allocations/edit', { state: { parentAllocationId: current()?.allocationId } })
-                  }
-                  data-name="Create allocation"
-                >
-                  <Text message="New Allocation" />
-                </Button>
-              </Show>
-              <Show when={canManageCards(userPermissions())}>
-                <Button
-                  icon="add"
-                  size="lg"
-                  onClick={() => navigate('/cards/edit', { state: { allocationId: current()?.allocationId } })}
-                  data-name="Create card"
-                >
-                  <Text message="New Card" />
-                </Button>
-              </Show>
-            </div>
+            <Show when={!current()!.archived}>
+              <div class={css.actions}>
+                <ManageBalanceButton
+                  allocationId={current()!.allocationId}
+                  allocations={sortedItems()}
+                  userPermissions={userPermissions()}
+                  onClick={setManageId}
+                />
+                <Show when={canManageFunds(userPermissions())}>
+                  <Button
+                    size="lg"
+                    icon="add"
+                    onClick={() =>
+                      navigate('/allocations/edit', { state: { parentAllocationId: current()!.allocationId } })
+                    }
+                    data-name="Create allocation"
+                  >
+                    <Text message="New Allocation" />
+                  </Button>
+                </Show>
+                <Show when={canManageCards(userPermissions())}>
+                  <Button
+                    icon="add"
+                    size="lg"
+                    onClick={() => navigate('/cards/edit', { state: { allocationId: current()!.allocationId } })}
+                    data-name="Create card"
+                  >
+                    <Text message="New Card" />
+                  </Button>
+                </Show>
+              </div>
+            </Show>
           }
           side={
             <AllocationsSide
@@ -171,11 +180,16 @@ export default function Allocations() {
             </Match>
             <Match when={tab() === Tabs.controls}>
               <Data error={status().error} loading={status().loading} data={data()} onReload={reload}>
-                <CardControls id={data()!.allocation.allocationId} data={data()!} onSave={onUpdateAllocation} />
+                <CardControls
+                  id={data()!.allocation.allocationId}
+                  data={data()!}
+                  onSave={onUpdateAllocation}
+                  disabled={current()!.archived}
+                />
               </Data>
             </Match>
             <Match when={tab() === Tabs.settings}>
-              <Settings allocation={current()!} onReload={reloadPermissions} permissions={userPermissions} />
+              <Settings allocation={current()!} onReload={reloadPermissions} permissions={userPermissions()} />
             </Match>
           </Switch>
           <Drawer open={Boolean(manageId())} title={<Text message="Manage balance" />} onClose={() => setManageId()}>

@@ -29,6 +29,7 @@ interface CardControlsFormProps {
   data: Readonly<ControlsData>;
   allocationId?: string;
   mccCategories: readonly Readonly<MccGroup>[];
+  disabled?: boolean;
   onSave: (data: Readonly<ControlsData>) => Promise<unknown>;
 }
 
@@ -66,8 +67,8 @@ export function CardControlsForm(props: Readonly<CardControlsFormProps>) {
 
   return (
     <Form>
-      <LimitsForm values={values()} handlers={handlers} mccCategories={props.mccCategories} />
-      <Show when={allocation()}>
+      <LimitsForm values={values()} handlers={handlers} disabled={props.disabled} mccCategories={props.mccCategories} />
+      <Show when={allocation() && !props.disabled}>
         <ResetLimits disabled={isSameLimits()} class={css.box} onClick={onResetLimits} />
       </Show>
       <Show when={isDirty()}>

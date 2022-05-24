@@ -1,4 +1,4 @@
-import { Show, Switch, Match, Accessor } from 'solid-js';
+import { Show, Switch, Match } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
@@ -19,7 +19,7 @@ interface AllocationRoleProps extends AllocationUserRole {
   allocation?: Allocation;
   onChange?: (userId: string, role: AllocationRoles) => void;
   onDelete?: (userId: string) => void;
-  permissions?: Accessor<Readonly<UserRolesAndPermissionsRecord> | null>;
+  permissions?: Readonly<UserRolesAndPermissionsRecord> | null;
 }
 
 export function AllocationRole(props: Readonly<AllocationRoleProps>) {
@@ -41,7 +41,7 @@ export function AllocationRole(props: Readonly<AllocationRoleProps>) {
         <Show
           when={
             !Boolean(props.allocation?.parentAllocationId) &&
-            props.permissions?.()?.allocationRole === AllocationRoles.Admin
+            props.permissions?.allocationRole === AllocationRoles.Admin
           }
         >
           <Option value={AllocationRoles.Admin}>

@@ -5,6 +5,7 @@ import type {
   UpdateAllocationRequest,
   AllocationDetailsResponse,
   UserAllocationRolesResponse,
+  ArchiveAllocationResponse,
 } from 'generated/capital';
 
 import type { AllocationRoles } from './types';
@@ -27,6 +28,11 @@ export async function saveAllocation(params: Readonly<CreateAllocationRequest>) 
 
 export async function updateAllocation(allocationId: string, params: Readonly<UpdateAllocationRequest>) {
   return (await service.patch<Readonly<Required<AllocationDetailsResponse>>>(`/allocations/${allocationId}`, params))
+    .data;
+}
+
+export async function archiveAllocation(allocationId: string) {
+  return (await service.patch<Readonly<Required<ArchiveAllocationResponse>>>(`/allocations/${allocationId}/archive`))
     .data;
 }
 
