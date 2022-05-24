@@ -38,11 +38,14 @@ export interface ButtonProps {
 }
 
 export function Button(props: Readonly<ButtonProps>) {
-  const merged = mergeProps({ type: 'default', view: 'default', size: 'md', htmlType: 'button' }, props);
+  const merged = mergeProps(
+    { type: 'default' as const, view: 'default' as const, size: 'md' as const, htmlType: 'button' as const },
+    props,
+  );
 
   const icon: Accessor<Readonly<IconProps> | undefined> = createMemo(() => {
     if (!merged.icon) return undefined;
-    return isString(merged.icon) ? { name: merged.icon, pos: 'left' } : merged.icon;
+    return isString(merged.icon) ? { name: merged.icon, pos: 'left' as const } : merged.icon;
   });
 
   const iconEl = createMemo(() => {

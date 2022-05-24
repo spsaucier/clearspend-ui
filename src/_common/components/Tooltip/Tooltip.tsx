@@ -23,7 +23,7 @@ export interface TooltipProps {
 
 export function Tooltip(props: Readonly<TooltipProps>) {
   const merged = mergeProps(
-    { position: 'top-center', enterDelay: DEFAULT_ENTER_DELAY, leaveDelay: DEFAULT_LEAVE_DELAY },
+    { position: 'top-center' as const, enterDelay: DEFAULT_ENTER_DELAY, leaveDelay: DEFAULT_LEAVE_DELAY },
     props,
   );
 

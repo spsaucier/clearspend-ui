@@ -2,7 +2,7 @@ import type { JSXElement } from 'solid-js';
 
 import { callValue } from '../../utils/callValue';
 
-export function getOptions(elements: JSXElement): readonly HTMLElement[] {
+export function getOptions(elements: JSXElement): HTMLElement[] {
   const items = callValue(elements);
   if (!Array.isArray(items)) return [];
 

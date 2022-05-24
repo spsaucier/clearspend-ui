@@ -6,6 +6,7 @@ import { createRoot, createSignal, type Signal } from 'solid-js';
 import * as assert from 'uvu/assert';
 
 import { create, type Store } from './store';
+import { cloneObject } from './cloneObject';
 import { wait } from './wait';
 import { getNoop } from './getNoop';
 
@@ -20,15 +21,18 @@ test('is should have expected structure', () => {
     store = create(() => Promise.resolve())();
   });
 
-  assert.equal(store, {
-    loading: true,
-    error: null,
-    data: null,
-    params: null,
-    reload: store.reload,
-    setData: store.setData,
-    setParams: store.setParams,
-  });
+  assert.equal(
+    { ...store },
+    {
+      loading: true,
+      error: null,
+      data: null,
+      params: null,
+      reload: store.reload,
+      setData: store.setData,
+      setParams: store.setParams,
+    },
+  );
 
   dispose();
 });
@@ -87,13 +91,13 @@ test('it should fetch & update data', async () => {
   assert.not(store.data);
 
   await wait(0);
-  assert.equal(store.data, [0]);
+  assert.equal(cloneObject(store.data), [0]);
 
   store.setData([1]);
-  assert.equal(store.data, [1]);
+  assert.equal(cloneObject(store.data), [1]);
 
   store.setData((prev) => [...prev, 1]);
-  assert.equal(store.data, [1, 1]);
+  assert.equal(cloneObject(store.data), [1, 1]);
 
   dispose();
 });
@@ -125,17 +129,17 @@ test('it should handle params', async () => {
     store = create(fetcher.fn)({ params: { id: 'foo' } });
   });
 
-  assert.equal(store.params, { id: 'foo' });
+  assert.equal(store.params.id, 'foo');
   await wait(0);
   assert.equal(store.data, 'foo');
 
   store.setParams({ id: 'bar' });
-  assert.equal(store.params, { id: 'bar' });
+  assert.equal(store.params.id, 'bar');
   await wait(0);
   assert.equal(store.data, 'bar');
 
   store.setParams((prev) => ({ id: `#${prev.id}` }));
-  assert.equal(store.params, { id: '#bar' });
+  assert.equal(store.params.id, '#bar');
   await wait(0);
   assert.equal(store.data, '#bar');
   assert.is(fetcher.callCount, 3);
@@ -177,12 +181,12 @@ test('it should handle dependencies', async () => {
     store = create(fetcher.fn)({ params: { test: signal[0]() }, deps: () => ({ test: signal[0]() }) });
   });
 
-  assert.equal(store.params, { test: 'a' });
+  assert.equal(store.params.test, 'a');
   await wait(0);
   assert.equal(store.data, 'a');
 
   signal[1]('b');
-  assert.equal(store.params, { test: 'b' });
+  assert.equal(store.params.test, 'b');
   await wait(0);
   assert.is(fetcher.callCount, 2);
   assert.equal(store.data, 'b');

@@ -10,8 +10,8 @@ import type { PopoverPosition, ControlledProps, PopoverProps } from './types';
 import css from './Popover.css';
 
 const DEFAULT_PROPS = {
-  trigger: 'click',
-  position: 'bottom-left',
+  trigger: 'click' as const,
+  position: 'bottom-left' as const,
   enterDelay: 300,
   leaveDelay: 150,
 };

@@ -12,7 +12,7 @@ export interface FlatButtonProps extends Omit<ButtonProps, 'icon'> {
 }
 
 export function FlatButton(props: Readonly<FlatButtonProps>) {
-  const merged: FlatButtonProps = mergeProps({ size: 'lg', icon: DEFAULT_ICON }, props);
+  const merged: FlatButtonProps = mergeProps({ size: 'lg' as const, icon: DEFAULT_ICON }, props);
 
   const icon = createMemo<IconType | IconProps | undefined>(() => (merged.icon === NO_ICON ? undefined : merged.icon));
 

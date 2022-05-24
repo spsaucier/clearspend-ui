@@ -85,7 +85,11 @@ export function create<T, P>(fetcher: (params: P) => Promise<T>) {
     if (!options?.skip) store.reload().catch(getNoop());
 
     if (options?.deps) {
-      useDeferEffect((params) => store.setParams((prev) => ({ ...prev, ...params })), options.deps);
+      useDeferEffect((params) => {
+        setStore((prev) => ({ ...prev, params: { ...prev.params, ...params } }));
+        // NOTE: Starting from SolidJS 1.4, there is a 'gap' between setStore and applying the changes, inside effects.
+        setTimeout(() => store.reload().catch(getNoop()), 0);
+      }, options.deps);
     }
 
     onCleanup(() => {

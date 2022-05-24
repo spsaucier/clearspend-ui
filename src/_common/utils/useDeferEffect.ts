@@ -1,8 +1,9 @@
-import { createEffect, on, type Accessor, type ReturnTypes } from 'solid-js';
+import { createEffect, on } from 'solid-js';
+import type { Accessor, AccessorArray } from 'solid-js/types/reactive/signal';
 
-export function useDeferEffect<D extends Accessor<unknown> | Accessor<unknown>[]>(
-  fn: (current: ReturnTypes<D>, prev: ReturnTypes<D> | undefined) => void,
-  deps: D,
+export function useDeferEffect<D extends unknown>(
+  fn: (current: D, prev: D | undefined) => void,
+  deps: AccessorArray<D> | Accessor<D>,
 ) {
   createEffect(on(deps, (current, prev) => fn(current, prev), { defer: true }));
 }
