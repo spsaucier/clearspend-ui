@@ -52,13 +52,18 @@ export function ActivityData(props: Readonly<ActivityDataProps>) {
     getLedgerActivityById,
   );
 
-  const onUpdateTransaction = (data: Readonly<AccountActivityResponse[]>) => {
+  const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
+    preview.updateCache(
+      activityToLedger(
+        data,
+        props.data?.content?.find((item) => item.accountActivityId === data.accountActivityId),
+      ),
+    );
     props.onUpdateTransaction((prev) => ({
       ...prev,
-      content: prev.content?.map((currentTransaction) => {
-        const updatedTransaction = data.find((t) => t.accountActivityId === currentTransaction.accountActivityId);
-        return updatedTransaction ? activityToLedger(updatedTransaction, currentTransaction) : currentTransaction;
-      }),
+      content: prev.content?.map((current) =>
+        current.accountActivityId === data.accountActivityId ? activityToLedger(data, current) : current,
+      ),
     }));
   };
 

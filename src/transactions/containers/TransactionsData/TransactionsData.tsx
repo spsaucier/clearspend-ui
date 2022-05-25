@@ -46,15 +46,11 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
     getActivityById,
   );
 
-  const onUpdateTransaction = (transactions: Readonly<AccountActivityResponse[]>) => {
+  const onUpdateTransaction = (data: Readonly<AccountActivityResponse>) => {
+    preview.updateCache(data);
     props.onUpdateData((prev) => ({
       ...prev,
-      content: prev.content?.map((currentTransaction) => {
-        const updatedTransaction = transactions.find(
-          (t) => t.accountActivityId === currentTransaction.accountActivityId,
-        );
-        return updatedTransaction ?? currentTransaction;
-      }),
+      content: prev.content?.map((current) => (current.accountActivityId === data.accountActivityId ? data : current)),
     }));
   };
 
@@ -69,7 +65,6 @@ export function TransactionsData(props: Readonly<TransactionsDataProps>) {
         onChangeParams={props.onChangeParams}
         onReload={props.onReload}
         onRowClick={preview.setID}
-        onUpdateTransaction={onUpdateTransaction}
         params={props.params}
         showAccountingAdminView={props.showAccountingAdminView}
         showAllocationFilter={props.showAllocationFilter}

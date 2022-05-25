@@ -66,12 +66,10 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
 
   const onCreateVendor = (newSupplierName: string) => {
     createNewVendorForActivity({ supplierName: newSupplierName, accountActivityId: transaction().accountActivityId });
-    props.onUpdate([
-      {
-        ...transaction(),
-        merchant: { ...transaction().merchant, codatSupplierName: newSupplierName, codatSupplierId: '-1' },
-      },
-    ]);
+    props.onUpdate({
+      ...transaction(),
+      merchant: { ...transaction().merchant, codatSupplierName: newSupplierName, codatSupplierId: '-1' },
+    });
     mutate({ ...vendors(), results: [...(vendors()?.results || []), { id: '-1', supplierName: newSupplierName }] });
   };
 
@@ -79,7 +77,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
     updateActivityClass(transaction().accountActivityId!, codatClassId)
       .then((data) => {
         batch(() => {
-          props.onUpdate([data]);
+          props.onUpdate(data);
           setCodatClass(data.accountingDetails?.codatClassId);
           messages.success({
             title: i18n.t('Success'),
@@ -96,7 +94,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
     updateActivityLocation(transaction().accountActivityId!, codatLocationId)
       .then((data) => {
         batch(() => {
-          props.onUpdate([data]);
+          props.onUpdate(data);
           setLocation(data.accountingDetails?.codatLocationId);
           messages.success({
             title: i18n.t('Success'),
@@ -111,7 +109,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
 
   const [syncingTransaction, setSyncingTransaction] = wrapAction(syncTransaction);
   const onSyncTransaction = () => {
-    props.onUpdate([{ ...transaction(), syncStatus: 'SYNCED_LOCKED' }]);
+    props.onUpdate({ ...transaction(), syncStatus: 'SYNCED_LOCKED' });
     setSyncingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
@@ -119,7 +117,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
 
   const [, setUnlockingTransaction] = wrapAction(unlockTransaction);
   const onUnlockTransaction = () => {
-    props.onUpdate([{ ...transaction(), syncStatus: 'READY' }]);
+    props.onUpdate({ ...transaction(), syncStatus: 'READY' });
     setUnlockingTransaction(transaction().accountActivityId!).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });

@@ -62,5 +62,5 @@ export function usePreviewTransaction<T extends { accountActivityId?: string; ty
     return item && isActivityType(item.type);
   });
 
-  return { id: selectID, transaction, isActivity, setID };
+  return { id: selectID, transaction, isActivity, setID, updateCache: setCacheTransaction };
 }

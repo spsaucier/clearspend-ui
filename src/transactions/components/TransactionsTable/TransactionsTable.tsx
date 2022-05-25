@@ -50,7 +50,6 @@ interface TransactionsTableProps {
   onChangeParams: Setter<Readonly<AccountActivityRequest>>;
   onReload: () => Promise<unknown>;
   onRowClick: (activityId: string) => void;
-  onUpdateTransaction: (transactionData: Readonly<AccountActivityResponse[]>) => void;
   params: Readonly<AccountActivityRequest>;
   showAccountingAdminView?: boolean;
   showAllocationFilter?: boolean;

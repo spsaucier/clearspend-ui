@@ -25,7 +25,7 @@ const RECEIPT_FILE_TYPES = [FileTypes.JPG, FileTypes.PNG, FileTypes.PDF];
 
 interface TransactionReceiptsProps {
   data: Readonly<AccountActivityResponse>;
-  onUpdate: (data: Readonly<AccountActivityResponse[]>) => void;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
 }
 
 export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
@@ -46,7 +46,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
     upload(files)
       .then(() => getActivityById(props.data.accountActivityId!))
       .then((updatedTransaction) => {
-        props.onUpdate([updatedTransaction]);
+        props.onUpdate(updatedTransaction);
         return reload();
       })
       .catch(() => messages.error({ title: i18n.t('Something went wrong') }));
@@ -68,7 +68,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
         return getActivityById(props.data.accountActivityId!);
       })
       .then((updatedTransaction) => {
-        props.onUpdate([updatedTransaction]);
+        props.onUpdate(updatedTransaction);
         if (typeof initialIdx() !== 'undefined') {
           setInitialIdx(0);
         }

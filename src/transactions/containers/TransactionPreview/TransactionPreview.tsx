@@ -45,7 +45,7 @@ const SYNC_STATUS_TYPES: Record<string, Required<TagProps>['type']> = {
 export interface TransactionPreviewProps {
   showAccountingAdminView?: boolean;
   transaction: Readonly<AccountActivityResponse>;
-  onUpdate: (data: Readonly<AccountActivityResponse[]>) => void;
+  onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onReport: () => void;
 }
 
@@ -117,7 +117,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     })
       .then((data) => {
         batch(() => {
-          props.onUpdate([data]);
+          props.onUpdate(data);
           setNote(undefined);
           messages.success({
             title: i18n.t('Success'),
@@ -151,7 +151,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     )
       .then((data) => {
         batch(() => {
-          props.onUpdate([{ ...data, syncStatus: categoryId && supplierId() ? 'READY' : 'NOT_READY' }]);
+          props.onUpdate({ ...data, syncStatus: categoryId && supplierId() ? 'READY' : 'NOT_READY' });
           setExpenseCategory(categoryId);
           messages.success({
             title: i18n.t('Success'),
@@ -175,7 +175,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     )
       .then((data) => {
         batch(() => {
-          props.onUpdate([{ ...data, syncStatus: expenseCategory() && supplier.id ? 'READY' : 'NOT_READY' }]);
+          props.onUpdate({ ...data, syncStatus: expenseCategory() && supplier.id ? 'READY' : 'NOT_READY' });
           setSupplierId(supplier.id);
           setSupplierName(supplier.supplierName);
           messages.success({
