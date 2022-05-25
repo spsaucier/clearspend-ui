@@ -1,7 +1,7 @@
 .root {
   display: flex;
   align-items: center;
-  color: var(--tw-gray-60);
+  color: var(--tw-gray-50);
   font-size: var(--text-14);
   border-right: 3px solid transparent;
   transition: background-color 0.3s, border-right-color 0.3s;
@@ -11,6 +11,10 @@
     background-color: var(--tw-gray-10);
     border-right-color: var(--tw-gray-10);
   }
+}
+
+.is-root {
+  color: var(--tw-gray-60);
 }
 
 .small {

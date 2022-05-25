@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { createMemo, Show } from 'solid-js';
 import { NavLink } from 'solid-app-router';
 
 import { Icon } from '_common/components/Icon';
@@ -19,11 +19,14 @@ interface ItemProps {
 }
 
 export function Item(props: Readonly<ItemProps>) {
+  const isRoot = createMemo(() => !props.data.parentAllocationId);
+
   return (
     <div
       class={css.root}
       classList={{
         [props.class!]: !!props.class,
+        [css.isRoot!]: isRoot(),
         [css.small!]: Boolean(props.padding),
         [css.active!]: props.active,
         [css.expanded!]: props.expanded,
@@ -35,7 +38,7 @@ export function Item(props: Readonly<ItemProps>) {
         class={css.item}
         onClick={() => props.onClick(props.data.allocationId)}
       >
-        <Show when={!props.data.parentAllocationId}>
+        <Show when={isRoot()}>
           <Icon name="company" class={css.icon} />
         </Show>
         <span class={css.name}>{props.data.name}</span>

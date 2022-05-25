@@ -34,7 +34,15 @@ export function List(props: Readonly<ListProps>) {
   return (
     <For each={siblings()}>
       {(item) => {
-        const hasChildren = createMemo(() => Boolean(item.childrenAllocationIds?.length));
+        const hasChildren = createMemo(() =>
+          Boolean(
+            item.childrenAllocationIds?.reduce<string[]>((acc, curr) => {
+              if (props.items.some((i) => i.allocationId === curr)) acc.push(curr);
+              return acc;
+            }, []).length,
+          ),
+        );
+
         const showSubmenu = createMemo(() => hasChildren() && expanded()[item.allocationId]);
 
         const withBorder = createMemo(() => {

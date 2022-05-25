@@ -1,0 +1,47 @@
+.divider {
+  margin: 0;
+}
+
+.button {
+  display: flex;
+  width: 100%;
+  height: auto;
+  min-height: 40px;
+  margin: var(--pd-8) 0;
+  padding: var(--pd-8);
+  justify-content: flex-start;
+  color: var(--tw-gray-50);
+  font-size: var(--text-14);
+  text-align: left;
+  border-right: 3px solid transparent;
+  border-radius: 0;
+
+  &:hover {
+    background-color: var(--tw-white);
+  }
+
+  & > span {
+    width: 100%;
+  }
+}
+
+.expanded {
+  display: flex;
+}
+
+.content {
+  display: grid;
+  width: 100%;
+  align-items: center;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: var(--pd-8);
+}
+
+.more {
+  transition: transform 0.3s;
+  transform-origin: center;
+
+  @nest .expanded & {
+    transform: rotate(90deg);
+  }
+}

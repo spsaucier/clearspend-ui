@@ -14,6 +14,7 @@ import { canManageCards } from '../../utils/permissions';
 import { Item } from './Item';
 import { List } from './List';
 import { LimitedList } from './LimitedList';
+import { ArchivedList } from './ArchivedList';
 import { getItemsByName } from './utils';
 
 import css from './AllocationsSide.css';
@@ -83,7 +84,13 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                     <List
                       currentID={props.currentID}
                       parentID={data.allocationId}
-                      items={props.items!}
+                      items={props.items!.filter((item) => !item.archived)}
+                      itemClass={css.item}
+                      onSelect={props.onAllocationChange}
+                    />
+                    <ArchivedList
+                      currentID={props.currentID}
+                      items={props.items}
                       itemClass={css.item}
                       onSelect={props.onAllocationChange}
                     />
