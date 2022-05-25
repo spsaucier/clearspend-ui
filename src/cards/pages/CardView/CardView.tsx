@@ -97,6 +97,7 @@ export default function CardView() {
           message: i18n.t('Card successfully cancelled.'),
         });
         setCancelling(false);
+        setTab(Tabs.transactions);
       })
       .catch((e: { data: { message: string } }) => {
         messages.error({
