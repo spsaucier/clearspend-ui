@@ -5,6 +5,7 @@ import type { ILineChartData } from 'micro-charts/lib/linechart/types';
 import { formatCurrency } from '../../api/intl/formatCurrency';
 
 import { useResize } from './useResize';
+import { CHART_FONT, CHART_ROW_FONT_SIZE, CHART_ROW_COLOR, CHART_ROW_STROKE } from './constants';
 
 import css from './LineChart.css';
 
@@ -23,10 +24,10 @@ function draw(canvas: HTMLCanvasElement, data: readonly Readonly<ILineChartData>
     lineFill: ['rgba(239, 246, 255, 0)', '#DEFBE6'],
     pointRadius: 0,
     rowCount: 3,
-    rowStroke: 0.2,
-    rowColor: '#9ca3af',
-    rowFont: '"Neue Montreal", system, -apple-system, BlinkMacSystemFont',
-    rowFontSize: 10,
+    rowStroke: CHART_ROW_STROKE,
+    rowColor: CHART_ROW_COLOR,
+    rowFont: CHART_FONT,
+    rowFontSize: CHART_ROW_FONT_SIZE,
     rowRenderValue: (value: number) => formatCurrency(value, { fractions: 0 }),
   });
 }

@@ -1,0 +1,1 @@
+export { AllocationsSpendingBarChart } from './AllocationsSpendingBarChart';
