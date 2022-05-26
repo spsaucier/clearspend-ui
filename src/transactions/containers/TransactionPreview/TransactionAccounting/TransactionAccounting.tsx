@@ -55,7 +55,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
   };
 
   const [vendors, reload, params, setParams, , mutate] = useResource(getClosestVendorsToTarget, {
-    target: transaction().merchant?.name || '',
+    target: transaction().merchant?.codatSupplierName || transaction().merchant?.name || '',
     limit: 5,
   });
 
@@ -148,7 +148,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
           <Text message="Vendor" />
         </div>
         <SelectVendor
-          value={props.transaction.merchant?.codatSupplierName}
+          value={transaction().merchant?.codatSupplierName}
           merchantName={props.transaction.merchant?.name}
           items={vendors()?.results || []}
           onChangeTarget={onChangeVendorSearch}

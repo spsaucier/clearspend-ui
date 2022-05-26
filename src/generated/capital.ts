@@ -331,6 +331,7 @@ export interface Business {
   accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
   autoCreateExpenseCategories?: boolean;
   mcc?: string;
+  partnerType?: 'CLIENT' | 'PARTNER' | 'BOTH';
   businessName?: string;
   accountNumber?: string;
   routingNumber?: string;
@@ -2560,7 +2561,7 @@ export interface UserLoginResponse {
 
 export interface FirstTwoFactorValidateRequest {
   code?: string;
-  method?: 'email' | 'sms' | 'authenticator';
+  method?: 'sms' | 'email';
   destination?: string;
 }
 
@@ -2570,7 +2571,7 @@ export interface TwoFactorResponse {
 
 export interface FirstTwoFactorSendRequest {
   destination?: string;
-  method?: 'email' | 'sms' | 'authenticator';
+  method?: 'sms' | 'email';
 }
 
 export interface ResetPasswordRequest {
@@ -3580,20 +3581,6 @@ export interface ActivateCardRequest {
   statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
 }
 
-export interface UpdateCardAccountRequest {
-  /**
-   * @format uuid
-   * @example c9609768-647d-4f00-b755-e474cc761c33
-   */
-  allocationId?: string;
-
-  /**
-   * @format uuid
-   * @example 54826974-c2e3-4eee-a305-ba6f847748e8
-   */
-  accountId?: string;
-}
-
 export interface UpdateAccountActivityRequest {
   notes: string;
 
@@ -3673,6 +3660,7 @@ export interface CardDetailsResponse {
   )[];
   disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
   disableForeign?: boolean;
+  allowedAllocationIds?: string[];
 }
 
 export interface BusinessLimitOperationRecord {
@@ -4049,13 +4037,14 @@ export interface LimitRecord {
   businessLimits?: BusinessLimitRecord[];
 }
 
-export interface ChangePhoneNumberRequest {
+export interface ChangeMethodRequest {
   /** @format uuid */
   userId?: string;
 
   /** @format uuid */
   businessId?: string;
-  changingNumber?: string;
+  destination?: string;
+  method?: 'sms' | 'email';
   trustChallenge?: string;
   twoFactorId?: string;
   twoFactorCode?: string;
@@ -4231,9 +4220,8 @@ export interface AllocationsAndPermissionsResponse {
 export interface PartnerBusiness {
   /** @format uuid */
   businessId?: string;
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
-  businessName?: string;
-  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4242,6 +4230,8 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+  businessName?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface CreateTestDataResponse {
@@ -4270,19 +4260,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4532,9 +4514,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */

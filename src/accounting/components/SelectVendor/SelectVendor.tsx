@@ -1,11 +1,11 @@
-import { createMemo, createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, For, onCleanup, Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
-import { InputSearch } from '_common/components/InputSearch';
 import { i18n } from '_common/api/intl';
 import { Popover } from '_common/components/Popover';
 import type { CodatSupplier } from 'generated/capital';
 import { Icon } from '_common/components/Icon';
+import { Input } from '_common/components/Input';
 
 import css from './SelectVendor.css';
 
@@ -19,14 +19,25 @@ interface SelectVendorProps {
   onCreate: (supplierName: string) => void;
 }
 
+const SEARCH_DELAY = 400;
+
 export function SelectVendor(props: Readonly<SelectVendorProps>) {
   const [open, setOpen] = createSignal(false);
   const [searchValue, setSearchValue] = createSignal(props.value || '');
+
+  let timer: number;
 
   const onChangeSearch = (value: string) => {
     setSearchValue(value);
     props.onChangeTarget(value);
   };
+
+  const onChange = (value: string) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => onChangeSearch(value), SEARCH_DELAY);
+  };
+
+  onCleanup(() => clearTimeout(timer));
 
   const vendorExists = createMemo(
     () =>
@@ -50,6 +61,7 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
                   class={css.option}
                   onClick={() => {
                     setOpen(false);
+                    setSearchValue(item.supplierName!);
                     props.onSelect(item);
                   }}
                 >
@@ -73,12 +85,13 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
         }
       >
         <div onClick={() => setOpen(true)}>
-          <InputSearch
-            delay={400}
-            error={!props.value}
+          <Input
+            {...props}
             placeholder={String(i18n.t('Select a vendor'))}
-            onSearch={onChangeSearch}
-            value={props.value}
+            value={searchValue()}
+            suffix={<Icon name="search" size="sm" />}
+            onChange={onChange}
+            data-name="Search"
           />
         </div>
       </Popover>
