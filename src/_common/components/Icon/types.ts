@@ -19,6 +19,7 @@ export enum IconName {
   'arrow-down' = 'arrow-down',
   'arrow-left' = 'arrow-left',
   'arrow-right' = 'arrow-right',
+  'arrow-square-out' = 'arrow-square-out',
   'audit-logs' = 'audit-logs',
   calendar = 'calendar',
   cancel = 'cancel',

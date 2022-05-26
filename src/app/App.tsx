@@ -6,6 +6,7 @@ import { useScript } from 'solid-use-script';
 
 import { AccountingSignUp, SignUp } from 'signup';
 import { SetPassword } from 'onboarding/pages/SetPassword';
+import TermsAndConditions from 'signup/TermsAndConditions';
 
 import { Main } from './containers/Main';
 import { Messages } from './containers/Messages';
@@ -39,6 +40,7 @@ export function App() {
         <Route path="/set-password" element={<SetPassword />} />
         <Route path="/login-2fa" element={<Login2fa />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/toc" element={<TermsAndConditions />} />
         <Route path="/accounting-signup" element={<AccountingSignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/forgot-password/:token" element={<ResetPassword />} />

@@ -14,5 +14,6 @@
 }
 
 .large {
+  max-width: 880px;
   font-size: var(--text-46);
 }

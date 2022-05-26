@@ -10,6 +10,8 @@ import { useResource } from '_common/utils/useResource';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
 import { formatNameString } from 'employees/utils/formatName';
+import { getToCTimestamp } from 'app/services/auth';
+import { wrapAction } from '_common/utils/wrapAction';
 
 import { getUsers, getBusiness } from '../../services/businesses';
 import { getAllPermissions } from '../../services/permissions';
@@ -59,17 +61,39 @@ export default function Main() {
     return client;
   });
 
+  const [fetchingToCTimestamp, fetchTocTimestamp] = wrapAction(getToCTimestamp);
+
+  createEffect(async () => {
+    if (data()) {
+      try {
+        const tosTimestamp = await fetchTocTimestamp();
+
+        if (tosTimestamp.isAcceptedTermsAndConditions) {
+          const acceptedDatetime = new Date(tosTimestamp.acceptedTimestampByUser!);
+
+          const updatedDatetime = new Date(tosTimestamp.documentTimestamp!);
+
+          if (acceptedDatetime < updatedDatetime) {
+            navigate('/toc');
+          }
+        }
+      } catch (tosTimestampGetError: unknown) {
+        navigate('/toc');
+      }
+    }
+  });
+
   return (
     <Switch>
       <Match when={status().error}>
         <Fault onReload={refetch} />
       </Match>
-      <Match when={status().loading && !data()}>
+      <Match when={(status().loading || fetchingToCTimestamp()) && !data()}>
         <div class={css.loading}>
           <Spin />
         </div>
       </Match>
-      <Match when={data()}>
+      <Match when={data() && !fetchingToCTimestamp()}>
         <BusinessContext.Provider
           value={{
             business,

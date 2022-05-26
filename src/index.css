@@ -18,6 +18,7 @@
 
   /* accent */
   --tw-accent-100: #234941;
+  --tw-accent-95: #0d3d3d;
   --tw-accent-90: #2e614e;
   --tw-accent-80: #357457;
   --tw-accent-70: #3b885f;
@@ -67,6 +68,7 @@
   /* PADDING & MARGIN */
   --pd-2: 2px;
   --pd-4: 4px;
+  --pd-6: 6px;
   --pd-8: 8px;
   --pd-10: 10px;
   --pd-12: 12px;

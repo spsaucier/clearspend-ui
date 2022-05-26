@@ -1,0 +1,16 @@
+.link-text-button {
+  display: flex;
+  max-width: 320px;
+  margin-bottom: var(--pd-24);
+  padding: var(--pd-8) var(--pd-20);
+  align-items: center;
+  justify-content: space-between;
+  color: var(--tw-accent-30);
+  text-decoration: none;
+  background-color: var(--tw-accent-95);
+  border-radius: var(--radius-4);
+}
+
+.link-text-button svg {
+  fill: transparent;
+}

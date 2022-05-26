@@ -7,7 +7,7 @@ import { useMediaContext } from '_common/api/media/context';
 import { formatPhone } from '_common/formatters/phone';
 import { confirmOTP, signup, setPhone, setPassword, resendOtp } from 'onboarding/services/onboarding';
 import { ProspectStatus, IdentifierType } from 'onboarding/types';
-import { login } from 'app/services/auth';
+import { acceptToC, login } from 'app/services/auth';
 import { Events, sendAnalyticsEvent, AnalyticsEventType } from 'app/utils/analytics';
 import { useMessages } from 'app/containers/Messages/context';
 import { BusinessType, BusinessTypeCategory, RelationshipToBusiness } from 'app/types/businesses';
@@ -218,6 +218,8 @@ export default function SignUp() {
   const onPasswordUpdate = async (password: string) => {
     await setPassword(store.pid!, password);
     await login(store.email!, password);
+    await acceptToC();
+
     cleanup();
     sendAnalyticsEvent({ name: Events.SET_PASSWORD });
     sendAnalyticsEvent({ type: AnalyticsEventType.Identify, name: store.email });

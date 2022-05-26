@@ -9,6 +9,7 @@ import type {
   ChangePasswordRequest,
   ChangePasswordResponse,
   TwoFactorStartLoggedInResponse,
+  TermsAndConditionsResponse,
 } from 'generated/capital';
 
 export async function login(username: string, password: string) {
@@ -22,6 +23,14 @@ export async function loginWith2fa(params: TwoFactorLoginRequest) {
 
 export async function logout() {
   await service.post('/authentication/logout');
+}
+
+export async function getToCTimestamp() {
+  return (await service.get<TermsAndConditionsResponse>('/terms-and-conditions/timestamp-details')).data;
+}
+
+export async function acceptToC() {
+  return (await service.patch<null>(`/terms-and-conditions`)).data;
 }
 
 export async function send2faEnrollmentCode(params: FirstTwoFactorSendRequest) {
