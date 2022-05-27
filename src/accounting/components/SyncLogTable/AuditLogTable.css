@@ -1,0 +1,13 @@
+.detail-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtext {
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+}
+
+.accent-text {
+  color: var(--tw-accent-50);
+}

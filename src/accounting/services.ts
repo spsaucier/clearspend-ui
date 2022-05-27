@@ -10,14 +10,13 @@ import type {
   ExpenseCategory,
   GetChartOfAccountsMappingResponse,
   GetSuppliersResponse,
-  PagedDataSyncLogResponse,
   SyncCountResponse,
-  SyncLogRequest,
   SyncTransactionResponse,
   CreateAssignSupplierRequest,
   CreateAssignSupplierResponse,
   CodatCategory,
   CodatBankAccount,
+  AuditLogDisplayValue,
 } from 'generated/capital';
 
 import type {
@@ -103,8 +102,8 @@ export async function postIntegrationExpenseCategoryMappings(
 export async function deleteIntegrationExpenseCategoryMappings() {
   await service.remove('/chart-of-accounts/mappings');
 }
-export async function getSyncLogs(params: Readonly<SyncLogRequest>) {
-  return (await service.post<Readonly<PagedDataSyncLogResponse>>('/codat/sync-log', params)).data;
+export async function getAuditLogs(limit: number) {
+  return (await service.get<Readonly<AuditLogDisplayValue[]>>(`/codat/audit-log?limit=${limit}`)).data;
 }
 
 export async function deleteCompanyConnection() {

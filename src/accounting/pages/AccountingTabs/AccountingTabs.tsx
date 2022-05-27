@@ -12,7 +12,7 @@ import { dateRangeToISO } from 'app/utils/dateRangeToISO';
 import { Data } from 'app/components/Data';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import { AccountingSettings } from 'accounting/containers/AccountingSettings';
-import { SyncLog } from 'accounting/containers/SyncLog';
+import { SyncLog } from 'accounting/containers/AuditLog';
 import { AccountingTimePeriod, getAccountingTimePeriod } from 'accounting/pages/AccountingTabs/utils';
 import { AccountingOverview } from 'accounting/containers/AccountingOverview';
 import { ACTIVITY_PAGE_SIZE_STORAGE_KEY, ACCOUNTING_TRANSACTIONS_PARAMS } from 'transactions/constants';
