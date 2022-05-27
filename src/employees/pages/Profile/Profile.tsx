@@ -16,6 +16,7 @@ import { useBusiness } from 'app/containers/Main/context';
 import { Card } from 'cards/components/Card';
 import { CardPreview } from 'cards/containers/CardPreview';
 import type { CardType } from 'cards/types';
+import { clearCurrentBusinessId } from '_common/api/businessId';
 
 import { ProfileInfo } from '../../components/ProfileInfo';
 import { getUser } from '../../services';
@@ -32,7 +33,12 @@ export default function Profile() {
 
   const cards = useUserCards();
   const [cardID, setCardID] = createSignal<string>();
-  const [loading, logoutAction] = wrapAction(() => logout().then(() => events.emit(AppEvent.Logout)));
+  const [loading, logoutAction] = wrapAction(() =>
+    logout().then(() => {
+      events.emit(AppEvent.Logout);
+      clearCurrentBusinessId();
+    }),
+  );
 
   return (
     <Page

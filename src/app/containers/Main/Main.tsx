@@ -10,6 +10,7 @@ import { useResource } from '_common/utils/useResource';
 import { Onboarding } from 'onboarding';
 import { HardFail } from 'app/pages/HardFail';
 import { formatNameString } from 'employees/utils/formatName';
+import { setCurrentBusinessId } from '_common/api/businessId';
 import { getToCTimestamp } from 'app/services/auth';
 import { wrapAction } from '_common/utils/wrapAction';
 
@@ -61,6 +62,12 @@ export default function Main() {
     return client;
   });
 
+  createEffect(() => {
+    const businessId = data()?.business?.businessId;
+    if (businessId) {
+      setCurrentBusinessId(businessId);
+    }
+  });
   const [fetchingToCTimestamp, fetchTocTimestamp] = wrapAction(getToCTimestamp);
 
   createEffect(async () => {

@@ -2,6 +2,7 @@ import { fetch } from '_common/api/fetch';
 import { FetchOptions, HttpStatus, FetchResponse } from '_common/api/fetch/types';
 import { events } from '_common/api/events';
 import type { ControllerError } from 'generated/capital';
+import { getCurrentBusinessId } from '_common/api/businessId';
 
 import { AppEvent } from '../types/common';
 
@@ -59,24 +60,35 @@ function wrapFetch<T = unknown>(fetcher: Promise<FetchResponse<T>>): Promise<Fet
     });
 }
 
+function mergeHeadersIntoOptions(options: Partial<FetchOptions> = {}): Partial<FetchOptions> {
+  const businessId = getCurrentBusinessId();
+  return {
+    ...options,
+    headers: {
+      ...options.headers,
+      ...(businessId && { 'X-Company-ID': businessId }),
+    },
+  };
+}
+
 async function get<T = unknown>(url: string, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('GET', prefixUrl(url), undefined, options));
+  return wrapFetch(fetch<T>('GET', prefixUrl(url), undefined, mergeHeadersIntoOptions(options)));
 }
 
 async function post<T = unknown>(url: string, params?: object | string, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('POST', prefixUrl(url), params, options));
+  return wrapFetch(fetch<T>('POST', prefixUrl(url), params, mergeHeadersIntoOptions(options)));
 }
 
 async function patch<T = unknown>(url: string, params?: object | string, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('PATCH', prefixUrl(url), params, options));
+  return wrapFetch(fetch<T>('PATCH', prefixUrl(url), params, mergeHeadersIntoOptions(options)));
 }
 
 async function put<T = unknown>(url: string, params?: object | string, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('PUT', prefixUrl(url), params, options));
+  return wrapFetch(fetch<T>('PUT', prefixUrl(url), params, mergeHeadersIntoOptions(options)));
 }
 
 async function remove<T = unknown>(url: string, params?: object, options?: Partial<FetchOptions>) {
-  return wrapFetch(fetch<T>('DELETE', prefixUrl(url), params, options));
+  return wrapFetch(fetch<T>('DELETE', prefixUrl(url), params, mergeHeadersIntoOptions(options)));
 }
 
 export const service = { get, post, patch, put, remove };
