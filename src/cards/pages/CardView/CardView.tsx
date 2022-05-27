@@ -19,7 +19,6 @@ import { getUser } from 'employees/services';
 import type { CardDetailsResponse, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
-import { canActivateCard } from 'cards/utils/canActivateCard';
 import { Section } from 'app/components/Section';
 import { Button } from '_common/components/Button';
 import { Confirm } from '_common/components/Confirm';
@@ -32,6 +31,7 @@ import { Transactions } from '../../containers/Transactions';
 import { Statements } from '../../containers/Statements';
 import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
+import { canSeeCardDetails } from '../../utils/canSeeCardDetails';
 import { getCard, updateCard, blockCard, unblockCard, cancelCard } from '../../services';
 import type { CardType } from '../../types';
 
@@ -158,7 +158,7 @@ export default function CardView() {
             fallback={<Text message="This card will be mailed out in 1-2 business days." />}
           >
             <Show
-              when={canActivateCard({ ...card() }, currentUser())}
+              when={canSeeCardDetails({ ...card() }, currentUser())}
               fallback={<Text message="This card can be activated only by the cardholder. " />}
             >
               <Text message="When this card arrives in the mail, follow the instructions provided to activate it." />

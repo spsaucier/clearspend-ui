@@ -8,6 +8,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import type { User, Card } from 'generated/capital';
 
 import { canActivateCard } from '../../utils/canActivateCard';
+import { canSeeCardDetails } from '../../utils/canSeeCardDetails';
 
 interface CardActionsProps {
   user: Readonly<User>;
@@ -43,7 +44,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
         </Show>
       </Match>
       <Match when={props.card.activated}>
-        <Show when={canActivateCard(props.card, props.user)}>
+        <Show when={canSeeCardDetails(props.card, props.user)}>
           <Button size="lg" icon="view" onClick={props.onShowDetails}>
             <Text message="Card Details" />
           </Button>
