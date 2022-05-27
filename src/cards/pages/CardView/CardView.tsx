@@ -16,7 +16,6 @@ import { usePageTabs } from 'app/utils/usePageTabs';
 import { CardControls } from 'allocations/containers/CardControls';
 import { getAllocationPermissions, canManagePermissions, canManageCards } from 'allocations/utils/permissions';
 import { getUser } from 'employees/services';
-import type { CardDetailsResponse, UpdateCardRequest } from 'generated/capital';
 import { Drawer } from '_common/components/Drawer';
 import { useMediaContext } from '_common/api/media/context';
 import { Section } from 'app/components/Section';
@@ -33,7 +32,7 @@ import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { canSeeCardDetails } from '../../utils/canSeeCardDetails';
 import { getCard, updateCard, blockCard, unblockCard, cancelCard } from '../../services';
-import type { CardType } from '../../types';
+import type { CardType, LegacyCardDetailsResponse, LegacyUpdateCardRequest } from '../../types';
 
 import css from './CardView.css';
 
@@ -76,8 +75,8 @@ export default function CardView() {
     return (block ? blockCard(cardId) : unblockCard(cardId)).then(() => reload());
   };
 
-  const onUpdateCard = async (cardId: string, updates: Readonly<UpdateCardRequest>) => {
-    mutate(await updateCard(cardId, updates));
+  const onUpdateCard = async (cardId: string, updates: Readonly<LegacyUpdateCardRequest>) => {
+    mutate(await updateCard(cardId, data()?.card.allocationId ?? '', updates));
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),
@@ -89,7 +88,7 @@ export default function CardView() {
     cancelCard(cardId)
       .then((cancelledCard) => {
         mutate({
-          ...(data() as Required<CardDetailsResponse>),
+          ...(data() as Required<LegacyCardDetailsResponse>),
           card: cancelledCard,
         });
         messages.success({

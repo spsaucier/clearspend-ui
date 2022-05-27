@@ -10,9 +10,9 @@ import { useBusiness } from 'app/containers/Main/context';
 import { useMCC } from 'app/stores/mcc';
 import { saveUser } from 'employees/services';
 import { useUsersList } from 'employees/stores/usersList';
-import type { CreateUserRequest, IssueCardRequest } from 'generated/capital';
+import type { CreateUserRequest } from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
-import { CardType } from 'cards/types';
+import { CardType, LegacyIssueCardRequest } from 'cards/types';
 
 import { EditCardForm } from '../../components/EditCardForm';
 import { saveCard } from '../../services';
@@ -39,7 +39,7 @@ export default function CardEdit() {
     return resp;
   };
 
-  const onSave = async (data: Readonly<IssueCardRequest>) => {
+  const onSave = async (data: Readonly<LegacyIssueCardRequest>) => {
     const resp = await saveCard(data).catch((e: { data?: { message?: string } }) => {
       setErrorLevel('WARNING');
       if (e.data?.message === 'Physical card issuance limit exceeded') {

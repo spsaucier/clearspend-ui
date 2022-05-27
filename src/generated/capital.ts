@@ -536,6 +536,7 @@ export interface AccountActivityResponse {
     | AddressPostalCodeMismatch
     | LimitExceeded
     | OperationLimitExceeded
+    | RecordNotFound
     | SpendControlViolated;
   paymentDetails?: PaymentDetails;
   accountingDetails?: AccountingDetails;
@@ -734,6 +735,7 @@ export interface DeclineDetails {
     | 'OPERATION_LIMIT_EXCEEDED'
     | 'SPEND_CONTROL_VIOLATED'
     | 'ADDRESS_POSTAL_CODE_MISMATCH'
+    | 'RECORD_NOT_FOUND'
     | 'CVC_MISMATCH'
     | 'EXPIRY_MISMATCH'
     | 'BUSINESS_SUSPENSION'
@@ -1367,6 +1369,8 @@ export interface ReceiptDetails {
   receiptId?: string[];
 }
 
+export type RecordNotFound = DeclineDetails & { message?: string };
+
 export type SpendControlViolated = DeclineDetails & {
   entityId?: string;
   entityType?: 'UNKNOWN' | 'ALLOCATION' | 'CARD' | 'BUSINESS';
@@ -1607,6 +1611,51 @@ export interface GetChartOfAccountsMappingResponse {
   results?: ChartOfAccountsMappingResponse[];
 }
 
+/**
+ * The allocations to assign to this card and any customizations of their spend controls. Leaving spend control fields as null will default to the allocation's spend controls.
+ */
+export interface CardAllocationSpendControls {
+  /**
+   * The ID of the allocation connected with this card.
+   * @format uuid
+   */
+  allocationId: string;
+
+  /** The name of the allocation connected with this card. */
+  allocationName?: string;
+
+  /** Currency limits for this card/allocation pair. If a create/update operation and this is null, the existing value for the allocation/card will be used. */
+  limits?: CurrencyLimit[];
+
+  /** Disabled MCC Groups for this card/allocation pair. If a create/update operation and this is null, the existing value for the allocation/card will be used. */
+  disabledMccGroups?: (
+    | 'CHILD_CARE'
+    | 'DIGITAL_GOODS'
+    | 'EDUCATION'
+    | 'ENTERTAINMENT'
+    | 'FOOD_BEVERAGE'
+    | 'GAMBLING'
+    | 'GOVERNMENT'
+    | 'HEALTH'
+    | 'MEMBERSHIPS'
+    | 'MONEY_TRANSFER'
+    | 'SERVICES'
+    | 'SHOPPING'
+    | 'TRAVEL'
+    | 'UTILITIES'
+    | 'OTHER'
+  )[];
+
+  /** Disabled Payment Types for this card/allocation pair. If a create/update operation and this is null, the existing value for the allocation/card will be used. */
+  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
+
+  /** Disable foreign transactions for this card/allocation pair. If a create/update operation and this is null, the existing value for the allocation/card will be used. */
+  disableForeign?: boolean;
+}
+
+/**
+ * Currency limits for this card/allocation pair. If a create/update operation and this is null, the existing value for the allocation/card will be used.
+ */
 export interface CurrencyLimit {
   currency:
     | 'UNSPECIFIED'
@@ -1781,12 +1830,6 @@ export interface IssueCardRequest {
 
   /**
    * @format uuid
-   * @example 28104ecb-1343-4cc1-b6f2-e6cc88e9a80f
-   */
-  allocationId: string;
-
-  /**
-   * @format uuid
    * @example 38104ecb-1343-4cc1-b6f2-e6cc88e9a80f
    */
   userId: string;
@@ -1956,26 +1999,9 @@ export interface IssueCardRequest {
     | 'ZMW'
     | 'ZWL';
   isPersonal: boolean;
-  limits: CurrencyLimit[];
-  disabledMccGroups: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
-  )[];
-  disabledPaymentTypes: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
-  disableForeign: boolean;
+
+  /** The allocations to assign to this card and any customizations of their spend controls. Leaving spend control fields as null will default to the allocation's spend controls.  */
+  allocationSpendControls?: CardAllocationSpendControls[];
 
   /** The Stripe reference for a previously cancelled card that this is replacing */
   replacementFor?: string;
@@ -2802,6 +2828,7 @@ export interface LedgerActivityResponse {
     | AddressPostalCodeMismatch
     | LimitExceeded
     | OperationLimitExceeded
+    | RecordNotFound
     | SpendControlViolated;
   paymentDetails?: PaymentDetails;
   statementDescriptor?: string;
@@ -3597,6 +3624,7 @@ export interface Card {
   lastFour?: string;
   address?: Address;
   externalRef?: string;
+  availableAllocationIds?: string[];
 }
 
 export interface CardAndAccount {
@@ -3648,55 +3676,19 @@ export interface TermsAndConditionsResponse {
   documentTimestamp?: string;
 }
 
-export interface UpdateCardRequest {
-  limits?: CurrencyLimit[];
-  disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
-  )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
-  disableForeign?: boolean;
+export interface UpdateCardSpendControlsRequest {
+  allocationSpendControls?: CardAllocationSpendControls[];
 }
 
 export interface CardDetailsResponse {
   card: Card;
   ledgerBalance?: Amount;
   availableBalance?: Amount;
-  allocationName?: string;
-  limits?: CurrencyLimit[];
-  disabledMccGroups?: (
-    | 'CHILD_CARE'
-    | 'DIGITAL_GOODS'
-    | 'EDUCATION'
-    | 'ENTERTAINMENT'
-    | 'FOOD_BEVERAGE'
-    | 'GAMBLING'
-    | 'GOVERNMENT'
-    | 'HEALTH'
-    | 'MEMBERSHIPS'
-    | 'MONEY_TRANSFER'
-    | 'SERVICES'
-    | 'SHOPPING'
-    | 'TRAVEL'
-    | 'UTILITIES'
-    | 'OTHER'
-  )[];
-  disabledPaymentTypes?: ('POS' | 'ONLINE' | 'MANUAL_ENTRY')[];
-  disableForeign?: boolean;
-  allowedAllocationIds?: string[];
+
+  /** @format uuid */
+  linkedAllocationId?: string;
+  linkedAllocationName?: string;
+  allowedAllocationsAndLimits?: CardAllocationSpendControls[];
 }
 
 export interface BusinessLimitOperationRecord {

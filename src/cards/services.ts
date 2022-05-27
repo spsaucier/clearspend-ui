@@ -3,25 +3,36 @@ import type {
   Card,
   CardDetailsResponse,
   CardStatementRequest,
-  IssueCardRequest,
   IssueCardResponse,
   PagedDataSearchCardData,
   RevealCardRequest,
   RevealCardResponse,
   SearchCardRequest,
-  UpdateCardRequest,
 } from 'generated/capital';
 
-export async function getCard(cardId: Card['cardId']) {
-  return (await service.get<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`)).data;
+import type { LegacyCardDetailsResponse, LegacyIssueCardRequest, LegacyUpdateCardRequest } from './types';
+import { legacyCardDetailsConversion, legacyIssueCardConversion, legacyUpdateCardConversion } from './types';
+
+export async function getCard(cardId: Card['cardId']): Promise<Readonly<Required<LegacyCardDetailsResponse>>> {
+  const data = (await service.get<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`)).data;
+  return legacyCardDetailsConversion(data);
 }
 
-export async function saveCard(params: Readonly<IssueCardRequest>) {
-  return (await service.post<readonly Readonly<IssueCardResponse>[]>('/cards', params)).data;
+export async function saveCard(params: Readonly<LegacyIssueCardRequest>) {
+  const convertedParams = legacyIssueCardConversion(params);
+  return (await service.post<readonly Readonly<IssueCardResponse>[]>('/cards', convertedParams)).data;
 }
 
-export async function updateCard(cardId: string, params: Readonly<UpdateCardRequest>) {
-  return (await service.patch<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`, params)).data;
+export async function updateCard(
+  cardId: string,
+  allocationId: string,
+  params: Readonly<LegacyUpdateCardRequest>,
+): Promise<Readonly<Required<LegacyCardDetailsResponse>>> {
+  const convertedParams = legacyUpdateCardConversion(params, allocationId);
+  const data = (
+    await service.patch<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}/controls`, convertedParams)
+  ).data;
+  return legacyCardDetailsConversion(data);
 }
 
 export async function searchCards(params: Readonly<SearchCardRequest>) {

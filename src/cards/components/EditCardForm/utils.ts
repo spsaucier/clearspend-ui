@@ -2,12 +2,11 @@ import { i18n } from '_common/api/intl';
 import type { FormOptions } from '_common/components/Form';
 import { required } from '_common/components/Form/rules/required';
 import { isString } from '_common/utils/isString';
-import type { IssueCardRequest } from 'generated/capital';
 import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
 import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { MccGroup } from 'transactions/types';
 
-import { CardType } from '../../types';
+import { CardType, LegacyIssueCardRequest } from '../../types';
 
 import type { FormValues } from './types';
 
@@ -55,7 +54,7 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
 export function convertFormData(
   data: Readonly<FormValues>,
   categories: readonly Readonly<MccGroup>[],
-): Readonly<IssueCardRequest> {
+): Readonly<LegacyIssueCardRequest> {
   return {
     binType: 'DEBIT',
     allocationId: data.allocationId,

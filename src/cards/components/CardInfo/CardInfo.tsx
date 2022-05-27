@@ -8,8 +8,9 @@ import { Icon } from '_common/components/Icon';
 import { formatName } from 'employees/utils/formatName';
 import { useBusiness } from 'app/containers/Main/context';
 import { allocationWithID } from 'allocations/utils/allocationWithID';
-import type { CardDetailsResponse, CurrencyLimit, User } from 'generated/capital';
+import type { CurrencyLimit, User } from 'generated/capital';
 
+import type { LegacyCardDetailsResponse } from '../../types';
 import { BalanceInfo } from '../BalanceInfo';
 
 import css from './CardInfo.css';
@@ -17,7 +18,7 @@ import css from './CardInfo.css';
 interface CardInfoProps {
   rowView?: boolean;
   limits?: CurrencyLimit[];
-  cardData: CardDetailsResponse | null;
+  cardData: LegacyCardDetailsResponse | null;
   user: Readonly<User | null>;
   allocationId: string | undefined;
   class?: string;

@@ -30,13 +30,12 @@ import type {
   AllocationDetailsResponse,
   CreateUserRequest,
   CreateUserResponse,
-  IssueCardRequest,
   UserData,
   User,
 } from 'generated/capital';
 import { getUser } from 'employees/services';
 import type { MccGroup } from 'transactions/types';
-import { CardType } from 'cards/types';
+import { CardType, LegacyIssueCardRequest } from 'cards/types';
 
 import { CardTypeSelect } from '../CardTypeSelect';
 import { ResetLimits } from '../ResetLimits';
@@ -55,7 +54,7 @@ interface EditCardFormProps {
   allocations: readonly Readonly<Allocation>[];
   mccCategories: readonly Readonly<MccGroup>[];
   onAddEmployee: (userData: Readonly<CreateUserRequest>) => Promise<Readonly<CreateUserResponse>>;
-  onSave: (params: Readonly<IssueCardRequest>) => Promise<Readonly<void>>;
+  onSave: (params: Readonly<LegacyIssueCardRequest>) => Promise<Readonly<void>>;
 }
 
 export function EditCardForm(props: Readonly<EditCardFormProps>) {
