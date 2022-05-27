@@ -14,6 +14,7 @@ import { Button } from '_common/components/Button';
 import { AddCreditCardForm } from '../AddCreditCardForm';
 import { ChartOfAccounts } from '../ChartOfAccounts';
 import { AwaitingCodatSync } from '../AwaitingCodatSync/AwaitingCodatSync';
+import { ClassesSetup } from '../ClassesSetup';
 
 const REFETCH_MS_CHECK_ACCOUNTING_STEP = 3000; // 3 seconds
 
@@ -43,6 +44,13 @@ export default function AccountingSetup() {
     mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.MAP_CATEGORIES } });
   };
 
+  const onSetupClasses = async () => {
+    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
+    mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE } });
+    refetch();
+    navigate('/accounting?notification=setup');
+  };
+
   const getCompanyConnectionState = async () => {
     const res = await getCompanyConnection();
     setHasIntegrationConnection(res);
@@ -56,10 +64,8 @@ export default function AccountingSetup() {
   });
 
   const onCompleteChartOfAccounts = async () => {
-    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.COMPLETE });
-    mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.COMPLETE } });
-    refetch();
-    navigate('/accounting?notification=setup');
+    postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.SETUP_CLASSES });
+    mutate({ business: { ...business(), accountingSetupStep: AccountSetupStep.SETUP_CLASSES } });
   };
 
   const onCancelAccountingSetup = async () => {
@@ -67,6 +73,7 @@ export default function AccountingSetup() {
     deleteIntegrationExpenseCategoryMappings();
     await deleteIntegrationConnection();
     postAccountingStepToBusiness({ accountingSetupStep: AccountSetupStep.ADD_CREDIT_CARD });
+    navigate('/accounting');
   };
 
   return (
@@ -83,6 +90,9 @@ export default function AccountingSetup() {
             </Match>
             <Match when={business().accountingSetupStep === AccountSetupStep.MAP_CATEGORIES}>
               <ChartOfAccounts onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
+            </Match>
+            <Match when={business().accountingSetupStep === AccountSetupStep.SETUP_CLASSES}>
+              <ClassesSetup onNext={onSetupClasses} onCancel={onCancelAccountingSetup} />
             </Match>
           </Switch>
         </Match>

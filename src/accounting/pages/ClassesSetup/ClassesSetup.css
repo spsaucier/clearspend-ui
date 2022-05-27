@@ -1,0 +1,30 @@
+.page-body {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.table-buttons {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  padding: var(--pd-12) var(--pd-48);
+  justify-content: flex-end;
+  background: var(--tw-gray-10);
+  border-top: 2px solid var(--tw-gray-60);
+}
+
+.done {
+  margin-left: var(--pd-8);
+}
+
+.root {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.page-content {
+  padding: 0;
+}

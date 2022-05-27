@@ -67,7 +67,7 @@ export function UnselectedCategoriesRoadblock(props: UnselectedCategoriesRoadblo
             <Text message="Back" />
           </Button>
           <Button class={css.done} type="primary" icon={{ name: 'confirm', pos: 'right' }} onClick={handleSave}>
-            <Text message="Done" />
+            <Text message="Save changes" />
           </Button>
         </div>
       </div>
