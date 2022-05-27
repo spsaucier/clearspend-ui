@@ -44,7 +44,7 @@ export function CardActions(props: Readonly<CardActionsProps>) {
         </Show>
       </Match>
       <Match when={props.card.activated}>
-        <Show when={canSeeCardDetails(props.card, props.user)}>
+        <Show when={canSeeCardDetails(props.card, props.user) && props.card.status !== 'CANCELLED'}>
           <Button size="lg" icon="view" onClick={props.onShowDetails}>
             <Text message="Card Details" />
           </Button>

@@ -298,9 +298,11 @@ export default function CardView() {
             />
           </Match>
         </Switch>
-        <Drawer open={showDetails() && !!user()} title={<Text message="Card details" />} onClose={toggleDetails}>
-          <CardDetails card={card()!} user={user()!} onClose={toggleDetails} />
-        </Drawer>
+        <Show when={!isCancelled}>
+          <Drawer open={showDetails() && !!user()} title={<Text message="Card details" />} onClose={toggleDetails}>
+            <CardDetails card={card()!} user={user()!} onClose={toggleDetails} />
+          </Drawer>
+        </Show>
       </Data>
     </Page>
   );

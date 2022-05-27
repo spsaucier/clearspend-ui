@@ -1390,6 +1390,25 @@ export type SpendControlViolated = DeclineDetails & {
   foreignDisabled?: boolean;
 };
 
+export interface CardStatementRequest {
+  /** @format uuid */
+  cardId?: string;
+
+  /** @format date-time */
+  startDate?: string;
+
+  /** @format date-time */
+  endDate?: string;
+}
+
+export interface BusinessStatementRequest {
+  /** @format date-time */
+  startDate?: string;
+
+  /** @format date-time */
+  endDate?: string;
+}
+
 export interface NetworkMessageRequest {
   /** @format uuid */
   cardId?: string;
@@ -2040,17 +2059,6 @@ export interface EphemeralKeyRequest {
   apiVersion?: string;
 }
 
-export interface CardStatementRequest {
-  /** @format uuid */
-  cardId?: string;
-
-  /** @format date-time */
-  startDate?: string;
-
-  /** @format date-time */
-  endDate?: string;
-}
-
 export interface BusinessStatusResponse {
   /** @format uuid */
   businessId?: string;
@@ -2683,6 +2691,22 @@ export interface AllocationFundCardResponse {
   allocationLedgerBalance?: Amount;
 }
 
+export interface AllocationAutoTopUpConfigCreateRequest {
+  /** @format int32 */
+  monthlyDay: number;
+  amount: Amount;
+}
+
+export interface AllocationAutoTopUpConfigResponse {
+  /** @format uuid */
+  id?: string;
+
+  /** @format int32 */
+  monthlyDay?: number;
+  amount?: Amount;
+  active?: boolean;
+}
+
 export interface LedgerActivityRequest {
   /** @format uuid */
   allocationId?: string;
@@ -2765,8 +2789,8 @@ export interface LedgerActivityResponse {
   requestedAmount?: Amount;
   syncStatus?: 'SYNCED_LOCKED' | 'READY' | 'NOT_READY';
   hold?: LedgerHoldInfo;
-  sourceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
-  targetAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+  account?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
+  referenceAccount?: LedgerAllocationAccount | LedgerBankAccount | LedgerCardAccount | LedgerMerchantAccount;
   receipt?: ReceiptDetails;
   notes?: string;
   expenseDetails?: ExpenseDetails;
@@ -4135,6 +4159,16 @@ export interface ArchiveAllocationResponse {
   archivedAllocationIds?: string[];
 }
 
+export interface AllocationAutoTopUpConfigUpdateRequest {
+  /** @format uuid */
+  id: string;
+
+  /** @format int32 */
+  monthlyDay: number;
+  amount: Amount;
+  active: boolean;
+}
+
 export interface User {
   /** @format uuid */
   userId?: string;
@@ -4234,8 +4268,6 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
-  businessName?: string;
-  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4244,6 +4276,8 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+  businessName?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface CreateTestDataResponse {
@@ -4612,6 +4646,10 @@ export interface AuditLogDisplayValue {
 
   /** @format date-time */
   auditTime?: string;
+
+  /** @format int64 */
+  timestamp?: number;
+  userId?: string;
 }
 
 export interface CodatSupplier {
