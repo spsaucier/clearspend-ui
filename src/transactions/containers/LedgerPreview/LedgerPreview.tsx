@@ -27,7 +27,7 @@ interface LedgerPreviewProps {
 
 export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
   const icon = createMemo(() => {
-    const type = props.data.targetAccount?.type;
+    const type = props.data.referenceAccount?.type;
     return type && ICONS[type];
   });
 
@@ -45,11 +45,11 @@ export function LedgerPreview(props: Readonly<LedgerPreviewProps>) {
         <h4 class={css.title}>
           <Text message="Source Account" />
         </h4>
-        <LedgerAccount account={props.data.sourceAccount} />
+        <LedgerAccount account={props.data.account} />
         <h4 class={css.title}>
           <Text message="Destination Account" />
         </h4>
-        <LedgerAccount account={props.data.targetAccount} />
+        <LedgerAccount account={props.data.referenceAccount} />
         <h4 class={css.title}>
           <Text message="Transaction Details" />
         </h4>

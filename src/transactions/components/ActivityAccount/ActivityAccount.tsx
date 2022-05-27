@@ -16,7 +16,7 @@ import { MerchantLogo } from '../MerchantLogo';
 import css from './ActivityAccount.css';
 
 interface ActivityAccountProps {
-  account: LedgerActivityResponse['sourceAccount'];
+  account: LedgerActivityResponse['account'];
   onCardClick?: (cardId: string) => void;
 }
 

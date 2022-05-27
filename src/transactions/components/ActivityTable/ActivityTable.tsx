@@ -70,7 +70,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     {
       name: 'source',
       title: <Text message="Account" />,
-      render: (item) => <ActivityAccount account={item.sourceAccount} onCardClick={props.onCardClick} />,
+      render: (item) => <ActivityAccount account={item.account} onCardClick={props.onCardClick} />,
     },
     {
       name: 'type',
@@ -86,7 +86,7 @@ export function ActivityTable(props: Readonly<ActivityTableProps>) {
     {
       name: 'destination',
       title: <Text message="Reference" />,
-      render: (item) => <ActivityAccount account={item.targetAccount} onCardClick={props.onCardClick} />,
+      render: (item) => <ActivityAccount account={item.referenceAccount} onCardClick={props.onCardClick} />,
     },
     {
       name: 'user',

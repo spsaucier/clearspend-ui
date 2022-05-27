@@ -62,7 +62,7 @@ export function ActivityList(props: Readonly<ActivityListProps>) {
         <For each={props.data.content}>
           {(item) => {
             const actingStatus = item.type === 'NETWORK_REFUND' ? 'NETWORK_REFUND' : item.status!;
-            const account = item.targetAccount;
+            const account = item.referenceAccount;
 
             return (
               <div class={css.item} onClick={() => props.onRowClick?.(item.accountActivityId!)}>

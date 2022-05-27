@@ -12,7 +12,7 @@ import type {
 } from 'generated/capital';
 
 interface LedgerAccountProps {
-  account: LedgerActivityResponse['sourceAccount'];
+  account: LedgerActivityResponse['account'];
 }
 
 export function LedgerAccount(props: Readonly<LedgerAccountProps>) {

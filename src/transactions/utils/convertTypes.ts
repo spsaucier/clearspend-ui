@@ -8,18 +8,18 @@ import type {
 
 export function ledgerToActivity(data: LedgerActivityResponse): AccountActivityResponse {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user, hold, sourceAccount, targetAccount, ...rest } = data;
-  const cardInfo = sourceAccount?.type === 'CARD' ? (sourceAccount as LedgerCardAccount).cardInfo : undefined;
+  const { user, hold, account, referenceAccount, ...rest } = data;
+  const cardInfo = account?.type === 'CARD' ? (account as LedgerCardAccount).cardInfo : undefined;
 
   return {
     ...rest,
     accountName: cardInfo?.allocationName || '',
     card: cardInfo,
     merchant:
-      targetAccount?.type === 'MERCHANT'
-        ? (targetAccount as LedgerMerchantAccount).merchantInfo
-        : sourceAccount?.type === 'MERCHANT'
-        ? (sourceAccount as LedgerMerchantAccount).merchantInfo
+      referenceAccount?.type === 'MERCHANT'
+        ? (referenceAccount as LedgerMerchantAccount).merchantInfo
+        : account?.type === 'MERCHANT'
+        ? (account as LedgerMerchantAccount).merchantInfo
         : undefined,
   };
 }
@@ -38,7 +38,7 @@ export function activityToLedger(
     ...rest,
     user: original?.user,
     hold: original?.hold,
-    sourceAccount: isRefund ? merchantAccount : cardAccount,
-    targetAccount: isRefund ? cardAccount : merchantAccount,
+    account: isRefund ? merchantAccount : cardAccount,
+    referenceAccount: isRefund ? cardAccount : merchantAccount,
   };
 }

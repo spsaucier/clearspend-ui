@@ -21,11 +21,11 @@ export function MissingDetails(props: Readonly<MissingDetailsProps>) {
   const merchantMissing = createMemo(
     () =>
       props.checkMerchant &&
-      !(props.data.targetAccount as LedgerMerchantAccount | undefined)?.merchantInfo?.codatSupplierName,
+      !(props.data.referenceAccount as LedgerMerchantAccount | undefined)?.merchantInfo?.codatSupplierName,
   );
 
   const receiptMissing = createMemo(() => {
-    const account = props.data.targetAccount;
+    const account = props.data.referenceAccount;
     const hasMerchant = account?.type === 'MERCHANT';
 
     return (
