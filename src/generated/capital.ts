@@ -328,7 +328,13 @@ export interface Business {
     | 'COMPLETE';
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
-  accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  accountingSetupStep?:
+    | 'AWAITING_SYNC'
+    | 'ADD_CREDIT_CARD'
+    | 'MAP_CATEGORIES'
+    | 'SETUP_CLASSES'
+    | 'SETUP_LOCATIONS'
+    | 'COMPLETE';
   autoCreateExpenseCategories?: boolean;
   mcc?: string;
   partnerType?: 'CLIENT' | 'PARTNER' | 'BOTH';
@@ -2193,7 +2199,13 @@ export interface Allocation {
 }
 
 export interface UpdateBusinessAccountingStepRequest {
-  accountingSetupStep?: 'AWAITING_SYNC' | 'ADD_CREDIT_CARD' | 'MAP_CATEGORIES' | 'COMPLETE';
+  accountingSetupStep?:
+    | 'AWAITING_SYNC'
+    | 'ADD_CREDIT_CARD'
+    | 'MAP_CATEGORIES'
+    | 'SETUP_CLASSES'
+    | 'SETUP_LOCATIONS'
+    | 'COMPLETE';
 }
 
 export interface CreateOrUpdateBusinessProspectRequest {
@@ -4222,6 +4234,8 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
+  businessName?: string;
+  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4230,8 +4244,6 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
-  businessName?: string;
-  ledgerBalance?: Amount;
 }
 
 export interface CreateTestDataResponse {
@@ -4588,6 +4600,18 @@ export interface CodatBankAccount {
 
 export interface CodatBankAccountsResponse {
   results?: CodatBankAccount[];
+}
+
+export interface AuditLogDisplayValue {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  eventType?: string;
+  changedValue?: string;
+  transactionId?: string;
+
+  /** @format date-time */
+  auditTime?: string;
 }
 
 export interface CodatSupplier {
