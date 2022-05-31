@@ -54,7 +54,7 @@ export async function cancelCard(cardId: string) {
 }
 
 export async function getCardStatement(params: Required<CardStatementRequest>) {
-  return (await service.post<Blob>('/card-statement', params, { respType: RespType.blob })).data;
+  return (await service.post<Blob>('/statements/card', params, { respType: RespType.blob })).data;
 }
 
 export async function blockCard(cardId: string) {
