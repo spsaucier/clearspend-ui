@@ -40,6 +40,14 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
 
   onCleanup(() => clearTimeout(timer));
 
+  const onCreateVendor = () => {
+    setOpen(false);
+    props.onCreate(searchValue() !== '' ? searchValue()! : props.merchantName!);
+    if (searchValue() === '') {
+      setSearchValue(props.merchantName!);
+    }
+  };
+
   const vendorExists = createMemo(
     () =>
       props.items.filter(
@@ -71,13 +79,7 @@ export function SelectVendor(props: Readonly<SelectVendorProps>) {
               )}
             </For>
             <Show when={!vendorExists()}>
-              <div
-                class={css.create}
-                onClick={() => {
-                  setOpen(false);
-                  props.onCreate(searchValue() !== '' ? searchValue()! : props.merchantName!);
-                }}
-              >
+              <div class={css.create} onClick={onCreateVendor}>
                 <Icon name="add-circle-outline" size="sm" class={css.icon} />
                 <Text message="Create {name}" name={searchValue() !== '' ? searchValue()! : props.merchantName!} />
               </div>

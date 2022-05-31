@@ -115,6 +115,8 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
     saveNote(props.transaction.accountActivityId!, {
       notes: note()!,
       expenseCategoryId: props.transaction.expenseDetails?.expenseCategoryId,
+      supplierId: props.transaction.merchant?.codatSupplierId,
+      supplierName: props.transaction.merchant?.codatSupplierName,
     })
       .then((data) => {
         batch(() => {
