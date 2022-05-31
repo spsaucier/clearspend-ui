@@ -27,6 +27,7 @@ import css from './TransactionAccounting.css';
 interface TransactionAccountingProps extends TransactionPreviewProps {
   onSaveVendor: (supplier: CodatSupplier) => void;
   active: boolean;
+  editingDisabled?: boolean;
 }
 
 export const TransactionAccounting = (props: Readonly<TransactionAccountingProps>) => {
@@ -148,6 +149,7 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
           <Text message="Vendor" />
         </div>
         <SelectVendor
+          disabled={props.editingDisabled}
           value={transaction().merchant?.codatSupplierName}
           merchantName={props.transaction.merchant?.name}
           items={vendors()?.results || []}
@@ -163,7 +165,13 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
             <div class={css.optionTitle}>
               <Text message="Class" />
             </div>
-            <SelectCategory value={codatClass()} items={classes.data!} onChange={onSaveClass} icon="search" />
+            <SelectCategory
+              disabled={props.editingDisabled}
+              value={codatClass()}
+              items={classes.data!}
+              onChange={onSaveClass}
+              icon="search"
+            />
           </div>
         </div>
       </Show>
@@ -173,7 +181,13 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
             <div class={css.optionTitle}>
               <Text message="Location" />
             </div>
-            <SelectCategory value={location()} items={locations.data!} onChange={onSaveLocation} icon="search" />
+            <SelectCategory
+              disabled={props.editingDisabled}
+              value={location()}
+              items={locations.data!}
+              onChange={onSaveLocation}
+              icon="search"
+            />
           </div>
         </div>
       </Show>
@@ -182,7 +196,9 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
           <Button
             wide
             icon="sync"
-            disabled={transaction().syncStatus !== 'READY' || syncingTransaction() || !props.active}
+            disabled={
+              props.editingDisabled || transaction().syncStatus !== 'READY' || syncingTransaction() || !props.active
+            }
             onClick={onSyncTransaction}
             data-name="sync-transaction-button"
           >
@@ -213,7 +229,12 @@ export const TransactionAccounting = (props: Readonly<TransactionAccountingProps
                     >
                       <Text message="No, keep locked" />
                     </Button>
-                    <Button type="danger" onClick={onUnlock} data-name="unlock-transaction-button">
+                    <Button
+                      disabled={props.editingDisabled}
+                      type="danger"
+                      onClick={onUnlock}
+                      data-name="unlock-transaction-button"
+                    >
                       <Text message="Unlock" />
                     </Button>
                   </div>

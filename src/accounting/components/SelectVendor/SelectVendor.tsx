@@ -17,6 +17,7 @@ interface SelectVendorProps {
   onSelect: (supplier: CodatSupplier) => void;
   value: string | undefined;
   onCreate: (supplierName: string) => void;
+  disabled?: boolean;
 }
 
 const SEARCH_DELAY = 400;

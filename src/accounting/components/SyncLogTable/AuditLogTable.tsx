@@ -7,6 +7,7 @@ import css from './AuditLogTable.css';
 
 interface AuditLogTableProps {
   auditLogs: Readonly<AuditLogDisplayValue[]> | null;
+  onViewTransactionDetails: (transactionId: string) => void;
 }
 
 export function AuditLogTable(props: AuditLogTableProps) {
@@ -58,8 +59,13 @@ export function AuditLogTable(props: AuditLogTableProps) {
     {
       name: 'details',
       title: 'Details',
-      render: () => (
-        <div class={css.accentText}>
+      render: (item) => (
+        <div
+          class={css.accentText}
+          onClick={() => {
+            props.onViewTransactionDetails(item.transactionId!);
+          }}
+        >
           <Text message="View Transaction" />
         </div>
       ),

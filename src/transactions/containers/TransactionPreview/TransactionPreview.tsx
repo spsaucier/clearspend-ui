@@ -47,6 +47,7 @@ export interface TransactionPreviewProps {
   transaction: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
   onReport: () => void;
+  editingDisabled?: boolean;
 }
 
 const AllocationCard = (props: { allocationName?: string }) => {
@@ -243,7 +244,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
         </div>
         <TransactionAccounting {...props} onSaveVendor={onSaveVendor} active={categoryIsActive(expenseCategory())} />
         <div class={css.properties}>
-          <TransactionReceipts data={transaction()} onUpdate={props.onUpdate} />
+          <TransactionReceipts disabled={props.editingDisabled} data={transaction()} onUpdate={props.onUpdate} />
           <div class={css.expenseCategory}>
             <div class={css.optionTitle}>
               <Text message="Expense Category" />
@@ -255,7 +256,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               placeholder={String(i18n.t('Assign a category'))}
               error={!categoryIsActive(expenseCategory())}
               loading={updatingActivityDetails()}
-              disabled={transaction().syncStatus === 'SYNCED_LOCKED'}
+              disabled={transaction().syncStatus === 'SYNCED_LOCKED' || props.editingDisabled}
               onChange={onSaveExpenseCategory}
             />
             <Show when={!categoryIsActive(expenseCategory())}>
@@ -286,7 +287,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               }
               placeholder={String(i18n.t('Add transaction comments'))}
               value={notes()}
-              disabled={savingNote() || transaction().syncStatus === 'SYNCED_LOCKED'}
+              disabled={savingNote() || transaction().syncStatus === 'SYNCED_LOCKED' || props.editingDisabled}
               onKeyDown={(event: KeyboardEvent) => {
                 if (event.keyCode === KEY_CODES.Enter && canSubmitNote()) {
                   onSaveNote();

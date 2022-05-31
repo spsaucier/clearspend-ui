@@ -26,6 +26,7 @@ const RECEIPT_FILE_TYPES = [FileTypes.JPG, FileTypes.PNG, FileTypes.PDF];
 interface TransactionReceiptsProps {
   data: Readonly<AccountActivityResponse>;
   onUpdate: (data: Readonly<AccountActivityResponse>) => void;
+  disabled?: boolean;
 }
 
 export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
@@ -115,6 +116,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
                   fallback={
                     <div class={css.empty}>
                       <Button
+                        disabled={props.disabled}
                         type="primary"
                         view="second"
                         icon="add-receipt"
@@ -152,6 +154,7 @@ export function TransactionReceipts(props: Readonly<TransactionReceiptsProps>) {
                       )}
                     </For>
                     <Button
+                      disabled={props.disabled}
                       view="second"
                       icon="add-receipt"
                       loading={uploading()}
