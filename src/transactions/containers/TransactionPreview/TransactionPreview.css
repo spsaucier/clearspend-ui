@@ -122,9 +122,21 @@
 }
 
 .synced-locked-tag {
-  color: var(--tw-gray-20);
-  background: var(--tw-gray-80);
-  border: 1px solid var(--tw-gray-60);
+  color: var(--tw-accent-80);
+  background: var(--tw-accent-10);
+  border: 1px solid var(--tw-green-20);
+}
+
+.sync-ready-tag {
+  color: var(--tw-accent-60);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
+}
+
+.sync-not-ready-tag {
+  color: var(--tw-gray-50);
+  background: var(--tw-gray-10);
+  border: 1px solid var(--tw-gray-20);
 }
 
 .row {

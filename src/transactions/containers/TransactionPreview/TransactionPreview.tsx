@@ -220,7 +220,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
               {/* TODO: establish enum in BE, use it for rendering & delete below function */}
               <Switch
                 fallback={
-                  <Tag size="sm" type={SYNC_STATUS_TYPES.READY}>
+                  <Tag size="sm" type={SYNC_STATUS_TYPES.READY} class={css.syncReadyTag}>
                     <Icon class={css.syncTagIcon} size="sm" name="sync" />
                     <span>Ready to sync</span>
                   </Tag>
@@ -233,7 +233,7 @@ export function TransactionPreview(props: Readonly<TransactionPreviewProps>) {
                   </Tag>
                 </Match>
                 <Match when={transaction().syncStatus !== 'READY'}>
-                  <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY}>
+                  <Tag size="sm" type={SYNC_STATUS_TYPES.NOT_READY} class={css.syncNotReadyTag}>
                     <Icon class={css.syncTagIcon} size="sm" name="warning-rounded" />
                     <Text message="Not ready to sync" />
                   </Tag>
