@@ -24,6 +24,7 @@ export function getFormOptions(
       description: prefill?.description ?? '',
       employerIdentificationNumber: prefill?.employerIdentificationNumber ?? '',
       phone: prefill?.businessPhone ?? '',
+      timeZone: prefill?.timeZone ?? '',
       streetLine1: prefill?.address?.streetLine1 ?? '',
       streetLine2: prefill?.address?.streetLine2 ?? '',
       locality: prefill?.address?.locality ?? '',
@@ -37,6 +38,7 @@ export function getFormOptions(
       mcc: [required],
       employerIdentificationNumber: [required, (val) => validEIN(cleanEIN(val))],
       phone: [validPhone],
+      timeZone: [required],
       streetLine1: [required],
       locality: [required],
       region: [required],
@@ -47,12 +49,14 @@ export function getFormOptions(
 }
 
 export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBusinessProspectRequest | UpdateBusiness> {
-  const { name, employerIdentificationNumber, businessName, phone, mcc, url, description, type, ...address } = data;
+  const { name, employerIdentificationNumber, businessName, phone, timeZone, mcc, url, description, type, ...address } =
+    data;
   return {
     legalName: name,
     employerIdentificationNumber: cleanEIN(employerIdentificationNumber),
     businessPhone: phone,
     address: { ...address, country: 'USA' },
+    timeZone: timeZone as NonNullable<UpdateBusiness['timeZone']>,
     mcc,
     url,
     businessType: type as UpdateBusiness['businessType'],

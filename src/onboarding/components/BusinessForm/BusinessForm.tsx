@@ -15,6 +15,7 @@ import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { Select, Option } from '_common/components/Select';
 import { BUSINESS_MCC } from 'app/types/mcc';
 import { BusinessTypeI18n, BusinessType } from 'app/types/businesses';
+import { TIMEZONES } from 'app/types/timezone';
 
 import { getFormOptions, convertFormData, BUSINESS_DESCRIPTION_MAX_LENGTH } from './utils';
 import type { FormValues } from './types';
@@ -30,7 +31,10 @@ const reMapStripeToClearspendFields = (stripeKey: string) => {
 };
 
 // temp
-export type BusinessWithBusinessName = Business & { businessName: string };
+export type BusinessWithBusinessName = Business & {
+  businessName: string;
+  timeZone: NonNullable<UpdateBusiness['timeZone']>;
+};
 
 interface BusinessFormProps {
   onNext: (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
@@ -98,6 +102,19 @@ export function BusinessForm(props: Readonly<BusinessFormProps>) {
               error={Boolean(errors().phone)}
               onChange={handlers.phone}
             />
+          </FormItem>
+          <FormItem label={<Text message="Timezone" />} error={errors().timeZone}>
+            <Select
+              placeholder={String(i18n.t('Select a timezone'))}
+              name="timeZone"
+              value={`${values().timeZone}`}
+              error={Boolean(errors().timeZone)}
+              onChange={(value) => handlers.timeZone(value)}
+            >
+              <For each={Object.entries(TIMEZONES)}>
+                {([val, display]) => <Option value={`${val}`}>{display}</Option>}
+              </For>
+            </Select>
           </FormItem>
         </div>
       </Section>

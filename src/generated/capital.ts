@@ -536,7 +536,6 @@ export interface AccountActivityResponse {
     | AddressPostalCodeMismatch
     | LimitExceeded
     | OperationLimitExceeded
-    | RecordNotFound
     | SpendControlViolated;
   paymentDetails?: PaymentDetails;
   accountingDetails?: AccountingDetails;
@@ -735,7 +734,6 @@ export interface DeclineDetails {
     | 'OPERATION_LIMIT_EXCEEDED'
     | 'SPEND_CONTROL_VIOLATED'
     | 'ADDRESS_POSTAL_CODE_MISMATCH'
-    | 'RECORD_NOT_FOUND'
     | 'CVC_MISMATCH'
     | 'EXPIRY_MISMATCH'
     | 'BUSINESS_SUSPENSION'
@@ -1368,8 +1366,6 @@ export interface PaymentDetails {
 export interface ReceiptDetails {
   receiptId?: string[];
 }
-
-export type RecordNotFound = DeclineDetails & { message?: string };
 
 export type SpendControlViolated = DeclineDetails & {
   entityId?: string;
@@ -2025,6 +2021,53 @@ export interface IssueCardResponse {
   errorMessage?: string;
 }
 
+export interface Card {
+  /** @format uuid */
+  cardId?: string;
+
+  /** @format uuid */
+  allocationId?: string;
+
+  /** @format uuid */
+  userId?: string;
+
+  /** @format uuid */
+  accountId?: string;
+  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
+  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
+  fundingType?: 'POOLED' | 'INDIVIDUAL';
+
+  /** @format date-time */
+  issueDate?: string;
+
+  /** @format date */
+  expirationDate?: string;
+  activated?: boolean;
+
+  /** @format date-time */
+  activationDate?: string;
+  cardLine3?: string;
+  cardLine4?: string;
+  type?: 'PHYSICAL' | 'VIRTUAL';
+  superseded?: boolean;
+  cardNumber?: string;
+  lastFour?: string;
+  address?: Address;
+  externalRef?: string;
+  availableAllocationIds?: string[];
+}
+
+export interface CardDetailsResponse {
+  card: Card;
+  ledgerBalance?: Amount;
+  availableBalance?: Amount;
+
+  /** @format uuid */
+  linkedAllocationId?: string;
+  linkedAllocationName?: string;
+  allowedAllocationsAndLimits?: CardAllocationSpendControls[];
+}
+
 export interface SearchCardRequest {
   pageRequest: PageRequest;
   users?: string[];
@@ -2171,6 +2214,7 @@ export interface UpdateBusiness {
   mcc?: string;
   description?: string;
   url?: string;
+  timeZone?: 'US_EASTERN' | 'US_CENTRAL' | 'US_MOUNTAIN' | 'US_PACIFIC' | 'US_ALASKA' | 'US_HAWAII';
 }
 
 export interface BusinessReallocationRequest {
@@ -2358,6 +2402,12 @@ export interface ConvertBusinessProspectRequest {
    * @example Business small description
    */
   description: string;
+
+  /**
+   * Timezone
+   * @example US_CENTRAL
+   */
+  timeZone: 'US_EASTERN' | 'US_CENTRAL' | 'US_MOUNTAIN' | 'US_PACIFIC' | 'US_ALASKA' | 'US_HAWAII';
 
   /**
    * Doing business as name if is different by company name
@@ -2828,7 +2878,6 @@ export interface LedgerActivityResponse {
     | AddressPostalCodeMismatch
     | LimitExceeded
     | OperationLimitExceeded
-    | RecordNotFound
     | SpendControlViolated;
   paymentDetails?: PaymentDetails;
   statementDescriptor?: string;
@@ -3591,42 +3640,6 @@ export interface UpdateUserResponse {
   errorMessage?: string;
 }
 
-export interface Card {
-  /** @format uuid */
-  cardId?: string;
-
-  /** @format uuid */
-  allocationId?: string;
-
-  /** @format uuid */
-  userId?: string;
-
-  /** @format uuid */
-  accountId?: string;
-  status?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
-  statusReason?: 'NONE' | 'CARDHOLDER_REQUESTED' | 'USER_ARCHIVED' | 'LOST' | 'STOLEN';
-  fundingType?: 'POOLED' | 'INDIVIDUAL';
-
-  /** @format date-time */
-  issueDate?: string;
-
-  /** @format date */
-  expirationDate?: string;
-  activated?: boolean;
-
-  /** @format date-time */
-  activationDate?: string;
-  cardLine3?: string;
-  cardLine4?: string;
-  type?: 'PHYSICAL' | 'VIRTUAL';
-  superseded?: boolean;
-  cardNumber?: string;
-  lastFour?: string;
-  address?: Address;
-  externalRef?: string;
-  availableAllocationIds?: string[];
-}
-
 export interface CardAndAccount {
   card?: Card;
   account?: Account;
@@ -3678,17 +3691,6 @@ export interface TermsAndConditionsResponse {
 
 export interface UpdateCardSpendControlsRequest {
   allocationSpendControls?: CardAllocationSpendControls[];
-}
-
-export interface CardDetailsResponse {
-  card: Card;
-  ledgerBalance?: Amount;
-  availableBalance?: Amount;
-
-  /** @format uuid */
-  linkedAllocationId?: string;
-  linkedAllocationName?: string;
-  allowedAllocationsAndLimits?: CardAllocationSpendControls[];
 }
 
 export interface BusinessLimitOperationRecord {
@@ -4260,6 +4262,8 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
+  businessName?: string;
+  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4268,8 +4272,6 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
-  businessName?: string;
-  ledgerBalance?: Amount;
 }
 
 export interface CreateTestDataResponse {
@@ -4298,19 +4300,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4560,9 +4554,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -5242,4 +5244,12 @@ export interface AllocationRolePermissionRecord {
 
 export interface AllocationRolePermissionsResponse {
   userAllocationRoleList: AllocationRolePermissionRecord[];
+}
+
+export interface CardAllocationDetails {
+  /**
+   * The ID of the allocation connected with this card.
+   * @format uuid
+   */
+  allocationId: string;
 }

@@ -9,4 +9,5 @@ export interface FormValues extends AddressValues {
   employerIdentificationNumber: string;
   phone: string;
   businessName: string;
+  timeZone: string;
 }
