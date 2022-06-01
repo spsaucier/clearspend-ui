@@ -28,3 +28,13 @@
 .page-content {
   padding: 0;
 }
+
+.select {
+  max-width: 268px;
+}
+
+.table {
+  margin: var(--pd-24) 0;
+  padding: var(--pd-16) var(--pd-48) var(--pd-24);
+  overflow: auto;
+}
