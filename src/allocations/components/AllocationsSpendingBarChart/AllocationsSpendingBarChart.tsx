@@ -34,6 +34,11 @@ export interface AllocationsSpendingData {
 
 interface AllocationsSpendingBarChartProps {
   data: readonly Readonly<AllocationsSpendingData>[];
+  percent?: boolean;
+}
+
+interface ChartData extends IBarChartData {
+  percentages?: number[];
 }
 
 export function AllocationsSpendingBarChart(props: Readonly<AllocationsSpendingBarChartProps>) {
@@ -41,23 +46,20 @@ export function AllocationsSpendingBarChart(props: Readonly<AllocationsSpendingB
 
   const [tooltip, setTooltip] = createSignal<Readonly<TooltipData>>();
 
-  const chartData = createMemo<IBarChartData[]>(() => {
-    const maxAmount = Math.ceil(
-      props.data.reduce((res, curr) => {
-        return Math.max(res, ...curr.spending.map((spending) => spending.amount.amount));
-      }, 0),
-    );
-
+  const chartData = createMemo<ChartData[]>(() => {
     return props.data.map((item, idx) => {
+      const total = item.spending.reduce((a, b) => a + b.amount.amount, 0);
+      const percentages = item.spending.map((spending) => (spending.amount.amount * TOTAL_PERCENT) / total);
       return {
         id: idx.toString(),
         label: i18n.formatDateTime(item.from, { month: 'short' }),
-        values: item.spending.map((spending) => (spending.amount.amount * TOTAL_PERCENT) / maxAmount),
+        values: props.percent ? percentages : item.spending.map((spending) => spending.amount.amount),
+        percentages,
       };
     });
   });
 
-  const onHover = (value?: IBarHoverData<Readonly<IBarChartData>>) => {
+  const onHover = (value?: IBarHoverData<Readonly<ChartData>>) => {
     const idx = value?.dataIndex;
 
     if (!value || idx === undefined) {
@@ -71,7 +73,7 @@ export function AllocationsSpendingBarChart(props: Readonly<AllocationsSpendingB
       x: value.clientX,
       y: value.clientY,
       name: data.allocationName,
-      percent: value.data.values[idx]!,
+      percent: value.data.percentages?.[idx]!,
       amount: data.amount,
     });
   };
@@ -88,7 +90,15 @@ export function AllocationsSpendingBarChart(props: Readonly<AllocationsSpendingB
           )}
         </For>
       </ul>
-      <BarChart stacked height={260} barWidth={18} data={chartData()} colors={COLORS} onHover={onHover} />
+      <BarChart
+        stacked
+        height={260}
+        barWidth={18}
+        data={chartData()}
+        colors={COLORS}
+        onHover={onHover}
+        percent={props.percent}
+      />
       <Show when={tooltip()}>
         {(data) => (
           <Portal>
