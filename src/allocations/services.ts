@@ -6,6 +6,9 @@ import type {
   AllocationDetailsResponse,
   UserAllocationRolesResponse,
   ArchiveAllocationResponse,
+  AllocationAutoTopUpConfigResponse,
+  AllocationAutoTopUpConfigCreateRequest,
+  AllocationAutoTopUpConfigUpdateRequest,
 } from 'generated/capital';
 
 import type { AllocationRoles } from './types';
@@ -51,4 +54,46 @@ export async function createOrUpdateAllocationRole(allocationId: string, userId:
 
 export async function removeAllocationRole(allocationId: string, userId: string) {
   await service.remove(`/user-allocation-roles/allocation/${allocationId}/user/${userId}`);
+}
+
+export async function getAllocationAutoTopUpConfig(allocationId: string) {
+  try {
+    const autoTopUpConfigs = (
+      await service.get<AllocationAutoTopUpConfigResponse[]>(`/allocation/${allocationId}/auto-top-up`)
+    ).data;
+    // Currently only support one, but backend allows for multiple for future
+    return autoTopUpConfigs.length > 0 ? autoTopUpConfigs[0] : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export async function createAllocationAutoTopUpConfig(
+  allocationId: string,
+  autoTopUpConfig: AllocationAutoTopUpConfigCreateRequest,
+) {
+  try {
+    return await service.post(`/allocation/${allocationId}/auto-top-up`, autoTopUpConfig);
+  } catch {
+    return undefined;
+  }
+}
+
+export async function removeAllocationAutoTopUpConfig(autoTopUpId: string) {
+  try {
+    return await service.remove(`/allocation/auto-top-up/${autoTopUpId}`);
+  } catch {
+    return undefined;
+  }
+}
+
+export async function updateAllocationAutoTopUpConfig(
+  allocationId: string,
+  autoTopUpConfig: AllocationAutoTopUpConfigUpdateRequest,
+) {
+  try {
+    return await service.patch(`/allocation/${allocationId}/auto-top-up`, autoTopUpConfig);
+  } catch {
+    return undefined;
+  }
 }

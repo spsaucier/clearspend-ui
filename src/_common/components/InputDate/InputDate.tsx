@@ -23,6 +23,7 @@ export interface InputDateProps {
   value?: ReadonlyDate | number;
   error?: boolean;
   placeholder?: string;
+  disabled?: boolean;
   onChange?: (date: ReadonlyDate | undefined) => void;
 }
 
@@ -95,6 +96,7 @@ export function InputDate(props: Readonly<InputDateProps>) {
       }
     >
       <Input
+        disabled={props.disabled}
         ref={element}
         name={props.name}
         value={strValue()}

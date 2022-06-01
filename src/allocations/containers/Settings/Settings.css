@@ -20,3 +20,14 @@
   display: block;
   margin: 0 0 var(--pd-8);
 }
+
+.bordered-section > div {
+  padding: var(--pd-24) var(--pd-24) var(--pd-24);
+  flex-grow: unset;
+  border: 1px solid var(--tw-gray-20);
+  border-radius: var(--radius-10);
+}
+
+.left-offset-field {
+  margin-left: var(--pd-42);
+}

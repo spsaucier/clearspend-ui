@@ -1,4 +1,4 @@
-import { createSignal, createMemo, Show, For } from 'solid-js';
+import { createSignal, createMemo, Show, For, onMount } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { isFetchError } from '_common/api/fetch/isFetchError';
@@ -20,12 +20,31 @@ import { NewEmployeeButton } from 'employees/components/SelectEmployee';
 import { useUsersList } from 'employees/stores/usersList';
 import { saveUser } from 'employees/services';
 import { formatName, formatNameString } from 'employees/utils/formatName';
-import type { Allocation, CreateUserRequest, UserRolesAndPermissionsRecord, ControllerError } from 'generated/capital';
+import type {
+  Allocation,
+  CreateUserRequest,
+  UserRolesAndPermissionsRecord,
+  ControllerError,
+  AllocationAutoTopUpConfigCreateRequest,
+} from 'generated/capital';
 import { Events, sendAnalyticsEvent } from 'app/utils/analytics';
 import { Loading } from 'app/components/Loading';
+import { Switch } from '_common/components/Switch';
+import { InputCurrency } from '_common/components/InputCurrency';
+import { join } from '_common/utils/join';
+import { InputDate } from '_common/components/InputDate';
 
 import { AllocationRole } from '../../components/AllocationRole';
-import { updateAllocation, archiveAllocation, getAllocationRoles, createOrUpdateAllocationRole } from '../../services';
+import {
+  updateAllocation,
+  archiveAllocation,
+  getAllocationRoles,
+  createOrUpdateAllocationRole,
+  getAllocationAutoTopUpConfig,
+  createAllocationAutoTopUpConfig,
+  removeAllocationAutoTopUpConfig,
+  updateAllocationAutoTopUpConfig,
+} from '../../services';
 import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
@@ -47,6 +66,7 @@ interface SettingsProps {
 }
 
 const IDLE_MS = 100;
+const MAX_RECURRING_DEPOSIT_MONTH_DAY = 25;
 
 export function Settings(props: Readonly<SettingsProps>) {
   const i18n = useI18n();
@@ -57,8 +77,41 @@ export function Settings(props: Readonly<SettingsProps>) {
   const users = useUsersList({ initValue: [] });
 
   const [currentRoles, status, , , reloadCurrentRoles] = useResource(getAllocationRoles, props.allocation.allocationId);
+
   const [updatedRoles, setUpdatedRoles] = createSignal<AllocationUserRole[]>([]);
   const [removedRoles, setRemovedRoles] = createSignal<Record<string, Partial<AllocationUserRole>>>({});
+
+  const [autoTopUpMonthlyDate, setAutoTopUpMonthlyDate] = createSignal<number | undefined>();
+  const [autoTopUpAmount, setAutoTopUpAmount] = createSignal<number | undefined>();
+  const [autoTopUpConfigEnabled, setAutoTopUpConfigEnabled] = createSignal<boolean>(false);
+  const [currentConfigId, setCurrentConfigId] = createSignal<string | undefined>();
+  const [isDirtyConfig, setIsDirtyConfig] = createSignal<boolean>(false);
+
+  const fetchCurrentAutoTopUpConfig = async () => {
+    const currentAutoTopUpConfig = await getAllocationAutoTopUpConfig(props.allocation.allocationId);
+    setAutoTopUpMonthlyDate(currentAutoTopUpConfig?.monthlyDay);
+    setAutoTopUpAmount(currentAutoTopUpConfig?.amount?.amount);
+    if (currentAutoTopUpConfig?.id) {
+      setCurrentConfigId(currentAutoTopUpConfig.id);
+      setAutoTopUpConfigEnabled(true);
+    }
+    setIsDirtyConfig(false);
+  };
+
+  onMount(async () => {
+    try {
+      await fetchCurrentAutoTopUpConfig();
+    } catch (e: unknown) {
+      messages.error({ title: 'Something went wrong' });
+    }
+  });
+
+  const updateAutoTopUpConfig = (config: { monthlyDate?: number; amount?: number; enabled?: boolean }) => {
+    setIsDirtyConfig(true);
+    if (config.amount !== undefined) setAutoTopUpAmount(config.amount);
+    if (config.monthlyDate !== undefined) setAutoTopUpMonthlyDate(config.monthlyDate);
+    if (config.enabled !== undefined) setAutoTopUpConfigEnabled(config.enabled);
+  };
 
   const { values, errors, isDirty, handlers, trigger, reset } = createForm<FormValues>({
     defaultValues: { name: props.allocation.name },
@@ -113,6 +166,37 @@ export function Settings(props: Readonly<SettingsProps>) {
     setRemovedRoles({});
   };
 
+  const saveUpdatedAutoTopUpConfig = async (allocationId: string) => {
+    if (autoTopUpConfigEnabled()) {
+      if (autoTopUpMonthlyDate() && autoTopUpAmount()) {
+        const autoTopUpConfigParams: AllocationAutoTopUpConfigCreateRequest = {
+          monthlyDay:
+            autoTopUpMonthlyDate()! > MAX_RECURRING_DEPOSIT_MONTH_DAY
+              ? MAX_RECURRING_DEPOSIT_MONTH_DAY
+              : autoTopUpMonthlyDate()!,
+          amount: {
+            currency: 'USD',
+            amount: autoTopUpAmount()!,
+          },
+        };
+
+        if (currentConfigId()) {
+          await updateAllocationAutoTopUpConfig(allocationId, {
+            id: currentConfigId()!,
+            active: true,
+            ...autoTopUpConfigParams,
+          });
+        } else {
+          await createAllocationAutoTopUpConfig(allocationId, autoTopUpConfigParams);
+        }
+      }
+    } else if (currentConfigId()) {
+      await removeAllocationAutoTopUpConfig(currentConfigId()!);
+    }
+
+    await fetchCurrentAutoTopUpConfig();
+  };
+
   const onSubmit = async () => {
     if (loading() || hasErrors(trigger())) return;
     const { name } = values();
@@ -121,6 +205,8 @@ export function Settings(props: Readonly<SettingsProps>) {
     try {
       const allocationId = props.allocation.allocationId;
       const roles = getRolesUpdates(currentRoles() || [], updatedRoles(), removedRoles());
+
+      await saveUpdatedAutoTopUpConfig(allocationId);
 
       // NOTE: Temporary workaround until roles will be a part of saveAllocation() action.
       const createPromises = roles.create.map((item) => {
@@ -167,7 +253,6 @@ export function Settings(props: Readonly<SettingsProps>) {
         postSaveAllocationName = updated.allocation.name;
         await props.onReload();
       }
-
       await new Promise<void>((resolve) => {
         setTimeout(async () => {
           await reloadCurrentRoles();
@@ -335,6 +420,54 @@ export function Settings(props: Readonly<SettingsProps>) {
           </Show>
         </Section>
       </Show>
+      <Show when={canManageFunds(props.permissions)}>
+        <Section
+          class={css.borderedSection}
+          title={<Text message="Recurring deposit" />}
+          description={
+            <>
+              <Text
+                message="Automatically transfer money from a bank account to this allocation every month."
+                class={css.descriptionContent!}
+              />
+            </>
+          }
+        >
+          <FormItem class={css.field}>
+            <Switch
+              name={'recurring-monthly-deposit'}
+              value={autoTopUpConfigEnabled()}
+              onChange={(enabled) => updateAutoTopUpConfig({ enabled })}
+            >
+              Recurring monthly deposit
+            </Switch>
+          </FormItem>
+          <FormItem label={<Text message="Amount:" />} class={join(css.field, css.leftOffsetField)}>
+            <InputCurrency
+              name="recurring-monthly-deposit-amount"
+              placeholder={'0.00'}
+              value={`${autoTopUpAmount() ?? 0}`}
+              onChange={(amount) => updateAutoTopUpConfig({ amount: +amount })}
+              disabled={!autoTopUpConfigEnabled()}
+            />
+          </FormItem>
+          <FormItem
+            label={<Text message="Start deposits on:" />}
+            extra={
+              <Text message="Payments that fall on a weekend or holiday will be changed to previous business day." />
+            }
+            class={join(css.field, css.leftOffsetField)}
+          >
+            <InputDate
+              name="recurring-monthly-deposit-date"
+              placeholder={String(i18n.t('Select a date'))}
+              value={autoTopUpMonthlyDate() ? new Date().setDate(autoTopUpMonthlyDate()!) : undefined}
+              onChange={(day) => updateAutoTopUpConfig({ monthlyDate: day?.getDate() })}
+              disabled={!autoTopUpConfigEnabled()}
+            />
+          </FormItem>
+        </Section>
+      </Show>
       <Show when={canManagePermissions(props.permissions) && !props.allocation.archived}>
         <Section title={<Text message="Archive" />} class={css.section}>
           <Confirm
@@ -362,7 +495,11 @@ export function Settings(props: Readonly<SettingsProps>) {
       <Drawer open={showEmployeeDrawer()} title={<Text message="New Employee" />} onClose={toggleEmployeeDrawer}>
         <EditEmployeeFlatForm onSave={onAddEmployee} />
       </Drawer>
-      <Show when={isDirty() || Boolean(updatedRoles().length) || Boolean(Object.keys(removedRoles()).length)}>
+      <Show
+        when={
+          isDirty() || Boolean(updatedRoles().length) || Boolean(Object.keys(removedRoles()).length) || isDirtyConfig()
+        }
+      >
         <PageActions action={<Text message="Update Allocation" />} onCancel={onReset} onSave={onSubmit} />
       </Show>
     </Form>
