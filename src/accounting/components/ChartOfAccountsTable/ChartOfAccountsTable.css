@@ -41,6 +41,7 @@
 
 .top-container {
   display: flex;
+  padding: 0 var(--pd-48);
   align-items: center;
   justify-content: space-between;
 }

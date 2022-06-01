@@ -18,6 +18,7 @@ import { CompanySettings } from 'company';
 import { Accounting } from 'accounting';
 import AccountingSetup from 'accounting/pages/AccountingSetup/AccountingSetup';
 import { Enable2fa } from 'onboarding/pages/Enable2fa';
+import { ChartOfAccounts } from 'accounting/pages/ChartOfAccounts';
 
 import { MainLayout } from '../../components/MainLayout';
 import { Sidebar } from '../../components/Sidebar';
@@ -27,6 +28,7 @@ export function MainRoutes() {
   return (
     <Routes>
       <Route path="/accounting-setup" element={<AccountingSetup />} />
+      <Route path="/chart-of-accounts" element={<ChartOfAccounts />} />
       <Route path="/enable-2fa" element={<Enable2fa />} />
       <Route
         path="/*all"

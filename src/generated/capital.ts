@@ -1479,31 +1479,6 @@ export interface SyncTransactionResponse {
   codatResponse?: CodatSyncDirectCostResponse;
 }
 
-export interface SyncLogRequest {
-  pageRequest: PageRequest;
-}
-
-export interface PagedDataSyncLogResponse {
-  /** @format int32 */
-  pageNumber?: number;
-
-  /** @format int32 */
-  pageSize?: number;
-
-  /** @format int64 */
-  totalElements?: number;
-  content?: SyncLogResponse[];
-}
-
-export interface SyncLogResponse {
-  /** @format date-time */
-  startTime?: string;
-  firstName?: string;
-  lastName?: string;
-  status?: string;
-  transactionId?: string;
-}
-
 export interface CreateAssignSupplierRequest {
   /** @format uuid */
   accountActivityId?: string;
@@ -4262,8 +4237,6 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
-  businessName?: string;
-  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4272,6 +4245,8 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+  businessName?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface CreateTestDataResponse {

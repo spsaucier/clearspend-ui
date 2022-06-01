@@ -12,7 +12,7 @@ import { AccountSetupStep } from 'app/types/businesses';
 import { Button } from '_common/components/Button';
 
 import { AddCreditCardForm } from '../AddCreditCardForm';
-import { ChartOfAccounts } from '../ChartOfAccounts';
+import { ChartOfAccountsSetup } from '../ChartOfAccountsSetup';
 import { AwaitingCodatSync } from '../AwaitingCodatSync/AwaitingCodatSync';
 import { ClassesSetup } from '../ClassesSetup';
 
@@ -89,7 +89,7 @@ export default function AccountingSetup() {
               <AddCreditCardForm onNext={onUpdateCreditCard} onCancel={onCancelAccountingSetup} />
             </Match>
             <Match when={business().accountingSetupStep === AccountSetupStep.MAP_CATEGORIES}>
-              <ChartOfAccounts onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
+              <ChartOfAccountsSetup onNext={onCompleteChartOfAccounts} onCancel={onCancelAccountingSetup} />
             </Match>
             <Match when={business().accountingSetupStep === AccountSetupStep.SETUP_CLASSES}>
               <ClassesSetup onNext={onSetupClasses} onCancel={onCancelAccountingSetup} />

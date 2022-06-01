@@ -1,0 +1,1 @@
+export { ChartOfAccountsSetup } from './ChartOfAccountsSetup';

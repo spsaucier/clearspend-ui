@@ -14,22 +14,15 @@ import { Popover } from '_common/components/Popover';
 import { Data } from 'app/components/Data';
 import { CreditCardSelect, NEW_CREDIT_CARD_ID } from 'accounting/components/CreditCardSelect';
 import {
-  postIntegrationExpenseCategoryMappings,
   deleteCompanyConnection,
   addBusinessCreditCard,
   updateBusinessCreditCard,
   getCodatCreditCards,
 } from 'accounting/services';
-import { ChartOfAccountsData } from 'accounting/components/ChartOfAccountsData';
 import { Drawer } from '_common/components/Drawer';
 import { EditCardNameForm } from 'accounting/components/EditCardNameForm';
-import type {
-  AddChartOfAccountsMappingRequest,
-  PagedDataAccountActivityResponse,
-  CodatBankAccount,
-} from 'generated/capital';
+import type { PagedDataAccountActivityResponse, CodatBankAccount } from 'generated/capital';
 import { canManageCards } from 'allocations/utils/permissions';
-import { useRecentUpdateNotifications } from 'accounting/stores/updateNotifications';
 import { useBusiness } from 'app/containers/Main/context';
 
 import css from './AccountingSettings.css';
@@ -61,12 +54,6 @@ export function AccountingSettings(props: AccountingSettingsProps) {
   });
 
   // TODO replace with notification endpoint that dismisses on logout
-  const updateNotifications = useRecentUpdateNotifications();
-
-  const handleSave = (mappings: readonly Readonly<AddChartOfAccountsMappingRequest>[]) =>
-    postIntegrationExpenseCategoryMappings(mappings).catch(() => {
-      messages.error({ title: i18n.t('Something went wrong') });
-    });
 
   const transactionData = props.data?.content ?? [];
 
@@ -139,12 +126,13 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         <AutomaticUpdates name="automatic-updates-toggle" class={css.automaticUpdates} />
       </Section>
       <Section title={<Text message="Chart of Accounts" />} class={css.section}>
-        <ChartOfAccountsData
-          saveOnChange
-          showUpdateButton
-          newCategories={updateNotifications.data}
-          onSave={handleSave}
-        />
+        <Button
+          onClick={() => {
+            navigate('/chart-of-accounts');
+          }}
+        >
+          <Text message="Manage Chart of Accounts" />
+        </Button>
       </Section>
       <Section
         title={<Text message="Credit card account" />}
