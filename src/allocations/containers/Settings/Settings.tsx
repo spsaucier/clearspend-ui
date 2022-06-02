@@ -367,14 +367,16 @@ export function Settings(props: Readonly<SettingsProps>) {
             >
               <For each={sortedUsers()}>
                 {(item) => (
-                  <Option
-                    value={item.userId!}
-                    disabled={
-                      sortedRoles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]
-                    }
-                  >
-                    {formatName(item)}
-                  </Option>
+                  <Show when={!item.archived}>
+                    <Option
+                      value={item.userId!}
+                      disabled={
+                        sortedRoles().some((role) => role.user.userId === item.userId) && !removedRoles()[item.userId!]
+                      }
+                    >
+                      {formatName(item)}
+                    </Option>
+                  </Show>
                 )}
               </For>
             </Select>
