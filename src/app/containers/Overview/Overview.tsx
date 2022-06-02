@@ -1,4 +1,4 @@
-import { createSignal, Index, Show, batch, createMemo } from 'solid-js';
+import { createSignal, Index, Show, batch, createMemo, Match, Switch } from 'solid-js';
 import { Dynamic } from 'solid-js/web';
 import { useSearchParams } from 'solid-app-router';
 import { Text } from 'solid-i18n';
@@ -11,6 +11,8 @@ import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capita
 import { Data } from 'app/components/Data';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
 import { canManageFunds, canRead, hasSomeManagerRole } from 'allocations/utils/permissions';
+import { usePageTabs } from 'app/utils/usePageTabs';
+import { BusinessStatements } from 'transactions/components/BusinessStatements/BusinessStatements';
 
 import { SpendingByWidget } from '../../components/SpendingByWidget';
 import { useSpending } from '../../stores/spending';
@@ -38,9 +40,17 @@ interface OverviewProps {
   onAllocationChange: (id: string) => void;
 }
 
+enum OverviewTabs {
+  recentActivity = 'recentActivity',
+  statements = 'statements',
+}
+
 export function Overview(props: Readonly<OverviewProps>) {
   const media = useMediaContext();
   const navigate = useNav();
+
+  const [tab, setTab] = usePageTabs<OverviewTabs>(OverviewTabs.recentActivity);
+
   const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
   const { currentUserRoles } = useBusiness();
 
@@ -106,22 +116,35 @@ export function Overview(props: Readonly<OverviewProps>) {
         </div>
       </Show>
       <div class={css.section}>
-        <h3 class={css.title}>
-          <Text message="Recent Activity" />
-        </h3>
-        <Dynamic
-          component={
-            canManageFunds(props.userPermissions) || (!allocationId() && hasSomeManagerRole(currentUserRoles()))
-              ? Ledger
-              : Transactions
-          }
-          table={media.large}
-          allocationId={allocationId()}
-          dateRange={dateRangeToISO(getTimePeriod(period()))}
-          class={css.transactions}
-          onCardClick={(cardId: string) => navigate(`/cards/view/${cardId}`)}
-          onAllocationChange={props.onAllocationChange}
-        />
+        <TabList value={tab()} onChange={setTab}>
+          <Tab value={OverviewTabs.recentActivity}>
+            <Text message="Recent Activity" />
+          </Tab>
+          <Tab value={OverviewTabs.statements}>
+            <Text message="Statements" />
+          </Tab>
+        </TabList>
+
+        <Switch>
+          <Match when={tab() === OverviewTabs.recentActivity}>
+            <Dynamic
+              component={
+                canManageFunds(props.userPermissions) || (!allocationId() && hasSomeManagerRole(currentUserRoles()))
+                  ? Ledger
+                  : Transactions
+              }
+              table={media.large}
+              allocationId={allocationId()}
+              dateRange={dateRangeToISO(getTimePeriod(period()))}
+              class={css.transactions}
+              onCardClick={(cardId: string) => navigate(`/cards/view/${cardId}`)}
+              onAllocationChange={props.onAllocationChange}
+            />
+          </Match>
+          <Match when={tab() === OverviewTabs.statements}>
+            <BusinessStatements />
+          </Match>
+        </Switch>
       </div>
     </div>
   );

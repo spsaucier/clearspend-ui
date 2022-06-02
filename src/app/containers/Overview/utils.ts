@@ -36,3 +36,8 @@ export function getTimePeriod(period: TimePeriod): [from: ReadonlyDate, to: Read
       return [startOfDay(today), endOfDay(today)];
   }
 }
+
+export function subtractYears(numOfYears: number, date = new Date()) {
+  date.setFullYear(date.getFullYear() - numOfYears);
+  return date;
+}

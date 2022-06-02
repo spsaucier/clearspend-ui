@@ -1,5 +1,6 @@
 import { RespType, service } from 'app/utils/service';
 import type {
+  BusinessStatementRequest,
   Card,
   CardDetailsResponse,
   CardStatementRequest,
@@ -55,6 +56,10 @@ export async function cancelCard(cardId: string) {
 
 export async function getCardStatement(params: Required<CardStatementRequest>) {
   return (await service.post<Blob>('/statements/card', params, { respType: RespType.blob })).data;
+}
+
+export async function getBusinessStatement(params: Required<BusinessStatementRequest>) {
+  return (await service.post<Blob>('/statements/business', params, { respType: RespType.blob })).data;
 }
 
 export async function blockCard(cardId: string) {

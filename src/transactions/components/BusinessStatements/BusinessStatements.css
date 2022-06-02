@@ -1,0 +1,8 @@
+.date-column {
+  width: 160px;
+}
+
+.date {
+  display: inline-block;
+  margin: var(--pd-10) 0;
+}

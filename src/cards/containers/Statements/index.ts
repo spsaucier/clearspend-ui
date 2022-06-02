@@ -1,1 +1,1 @@
-export { Statements } from './Statements';
+export { CardStatements } from './CardStatements';

@@ -22,12 +22,12 @@ import { Section } from 'app/components/Section';
 import { Button } from '_common/components/Button';
 import { Confirm } from '_common/components/Confirm';
 import { Tag } from '_common/components/Tag';
+import { CardStatements } from 'cards/containers/Statements';
 
 import { Card } from '../../components/Card';
 import { CardActions } from '../../components/CardActions';
 import { CardInfo } from '../../components/CardInfo';
 import { Transactions } from '../../containers/Transactions';
-import { Statements } from '../../containers/Statements';
 import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { canSeeCardDetails } from '../../utils/canSeeCardDetails';
@@ -290,7 +290,7 @@ export default function CardView() {
             </Section>
           </Match>
           <Match when={tab() === Tabs.statements}>
-            <Statements
+            <CardStatements
               cardId={card()!.cardId!}
               issueDate={card()!.issueDate!}
               expirationDate={card()!.expirationDate!}

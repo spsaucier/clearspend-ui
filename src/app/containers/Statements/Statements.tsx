@@ -1,43 +1,29 @@
 import { createMemo } from 'solid-js';
 import { Text, DateTime } from 'solid-i18n';
 
-import { shiftDate, startOfMonth, endOfMonth, dateToString } from '_common/api/dates';
+import { shiftDate, startOfMonth, endOfMonth } from '_common/api/dates';
 import { DateFormat } from '_common/api/intl/types';
 import { wrapAction } from '_common/utils/wrapAction';
 import { times } from '_common/utils/times';
-import { download } from '_common/utils/download';
 import { Table, TableColumn } from '_common/components/Table';
 import { Button } from '_common/components/Button';
-
-import { getCardStatement } from '../../services';
-
-import { getDateRange, getMonthDiff } from './utils';
+import { getDateRange, getMonthDiff } from 'cards/containers/Statements/utils';
 
 import css from './Statements.css';
 
-interface RowData {
+export interface StatementsRowData {
   start: ReadonlyDate;
   end: ReadonlyDate;
 }
 
 interface StatementsProps {
-  cardId: string;
-  issueDate: string;
-  expirationDate: string;
+  fromDate: string;
+  toDate: string;
+  onClick: (data: StatementsRowData) => Promise<void>;
 }
 
 export function Statements(props: Readonly<StatementsProps>) {
-  const onClick = async (data: RowData) => {
-    await getCardStatement({
-      cardId: props.cardId,
-      startDate: data.start.toISOString(),
-      endDate: data.end.toISOString(),
-    }).then((file) => {
-      download(file, `statements_${props.cardId}_${dateToString(data.start)}_${dateToString(data.end)}.pdf`);
-    });
-  };
-
-  const columns: readonly Readonly<TableColumn<RowData>>[] = [
+  const columns: readonly Readonly<TableColumn<StatementsRowData>>[] = [
     {
       name: 'date',
       title: <Text message="Date" />,
@@ -47,7 +33,7 @@ export function Statements(props: Readonly<StatementsProps>) {
     {
       name: 'download',
       render: (item) => {
-        const [loading, action] = wrapAction(() => onClick(item));
+        const [loading, action] = wrapAction(() => props.onClick(item));
         return (
           <Button icon="pdf" type="primary" view="ghost" loading={loading()} onClick={action}>
             <Text message="Download statement" />
@@ -57,8 +43,8 @@ export function Statements(props: Readonly<StatementsProps>) {
     },
   ];
 
-  const data = createMemo<RowData[]>(() => {
-    const [from, to] = getDateRange(props.issueDate, props.expirationDate);
+  const data = createMemo<StatementsRowData[]>(() => {
+    const [from, to] = getDateRange(props.fromDate, props.toDate);
 
     return times(getMonthDiff(from, to)).map((_, idx: number) => {
       const date = shiftDate(from, { months: idx });
