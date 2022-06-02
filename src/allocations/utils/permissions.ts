@@ -1,6 +1,6 @@
 import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 
-import { AllocationPermissions, AllocationRoles } from '../types';
+import { AllocationPermissions, AllocationRoles, GlobalUserPermissions } from '../types';
 
 import { allocationWithID } from './allocationWithID';
 
@@ -15,6 +15,10 @@ export function getAllocationPermissions(
 
 function can(permissions: Permissions, permission: AllocationPermissions) {
   return Boolean(permissions?.allocationPermissions?.includes(permission));
+}
+
+function is(permissions: Permissions, permission: GlobalUserPermissions) {
+  return Boolean(permissions?.globalUserPermissions?.includes(permission));
 }
 
 export function canLinkBankAccounts(permissions: Permissions): boolean {
@@ -47,6 +51,10 @@ export function canRead(permissions: Permissions): boolean {
 
 export function canLinkReceipts(permissions: Permissions): boolean {
   return can(permissions, 'LINK_RECEIPTS');
+}
+
+export function isCustomerService(permissions: Permissions): boolean {
+  return is(permissions, 'CUSTOMER_SERVICE');
 }
 
 export const hasSomeManagerRole = (roles: UserRolesAndPermissionsRecord[]) => {

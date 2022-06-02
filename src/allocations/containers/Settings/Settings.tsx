@@ -49,7 +49,7 @@ import { getAllocationUserRole } from '../../utils/getAllocationUserRole';
 import { type AllocationUserRole, AllocationRoles } from '../../types';
 import { byUserLastName, byRoleLastName, hideEmployees } from '../../components/AllocationSelect/utils';
 import { getAvailableBalance } from '../../utils/getAvailableBalance';
-import { canManagePermissions, canLinkBankAccounts, canManageFunds } from '../../utils/permissions';
+import { canManagePermissions, canLinkBankAccounts, canManageFunds, isCustomerService } from '../../utils/permissions';
 
 import { getRolesList, getRolesUpdates } from './utils';
 
@@ -164,6 +164,7 @@ export function Settings(props: Readonly<SettingsProps>) {
     reset(updates);
     setUpdatedRoles([]);
     setRemovedRoles({});
+    fetchCurrentAutoTopUpConfig();
   };
 
   const saveUpdatedAutoTopUpConfig = async (allocationId: string) => {
@@ -299,6 +300,7 @@ export function Settings(props: Readonly<SettingsProps>) {
   };
 
   const isDisabled = createMemo(() => props.allocation.archived);
+  const isRoot = createMemo(() => !props.allocation.parentAllocationId);
 
   return (
     <Form>
@@ -420,7 +422,7 @@ export function Settings(props: Readonly<SettingsProps>) {
           </Show>
         </Section>
       </Show>
-      <Show when={canManageFunds(props.permissions)}>
+      <Show when={isRoot() && (isCustomerService(props.permissions) || canManageFunds(props.permissions))}>
         <Section
           class={css.borderedSection}
           title={<Text message="Recurring deposit" />}

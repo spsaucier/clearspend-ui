@@ -1,6 +1,7 @@
 import type { UserData, UpdateAllocationRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 export type AllocationPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['allocationPermissions']>;
+export type GlobalUserPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['globalUserPermissions']>;
 
 export enum AllocationRoles {
   Admin = 'Admin',
