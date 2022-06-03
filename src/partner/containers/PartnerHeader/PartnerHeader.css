@@ -1,8 +1,10 @@
 .wrapper {
+  position: relative;
   display: flex;
   width: 100vw;
   max-width: 100%;
   height: auto;
+  margin-bottom: 9px;
   padding: var(--pd-8);
   align-items: center;
   flex-direction: column;
@@ -12,14 +14,18 @@
   @media (--bp-medium) {
     flex-direction: row;
   }
-}
 
-.line-break {
-  width: 100vw;
-  max-width: 100%;
-  min-height: 8px;
-  background-color: var(--tw-accent-100);
-  border-bottom: 1px solid var(--tw-accent-90);
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 8px;
+    background-color: var(--tw-accent-100);
+    border-bottom: 1px solid var(--tw-accent-90);
+  }
 }
 
 .branding {

@@ -4,9 +4,9 @@ import logo from 'app/assets/logo-green.svg';
 import cube from 'app/assets/cube.svg';
 import { Button } from '_common/components/Button';
 
-import css from './PortalEmptyDashboardContent.css';
+import css from './PartnerEmptyDashboardContent.css';
 
-export function PortalEmptyDashboardContent() {
+export function PartnerEmptyDashboardContent() {
   return (
     <div class={css.root}>
       <img class={css.logo} src={logo} alt="Company logo" width={189} height={70} />

@@ -1,18 +1,19 @@
 import type { JSXElement } from 'solid-js';
 
-import { PortalHeader } from '../PortalHeader';
+import { PartnerHeader } from '../PartnerHeader';
 
-import css from './PortalDashboard.css';
+import css from './PartnerDashboard.css';
 
-interface PortalDashboardProps {
+interface PartnerDashboardProps {
+  partnerName: string;
   children: JSXElement;
 }
 
-export function PortalDashboard(props: Readonly<PortalDashboardProps>) {
+export function PartnerDashboard(props: Readonly<PartnerDashboardProps>) {
   return (
     <div class={css.wrapper}>
-      <PortalHeader
-        branding={'West Side Accounting'}
+      <PartnerHeader
+        branding={props.partnerName}
         navigationItems={[
           {
             label: 'Accounts',
@@ -35,7 +36,6 @@ export function PortalDashboard(props: Readonly<PortalDashboardProps>) {
         ]}
         selectedLabel={'Accounts'}
       />
-      <div class={css.backgroundMask}></div>
       <div class={css.content}>{props.children}</div>
     </div>
   );

@@ -94,6 +94,9 @@ export default function AccountingSetup() {
             <Match when={business().accountingSetupStep === AccountSetupStep.SETUP_CLASSES}>
               <ClassesSetup onNext={onSetupClasses} onCancel={onCancelAccountingSetup} />
             </Match>
+            <Match when={business().accountingSetupStep === AccountSetupStep.SETUP_CLASSES}>
+              <ClassesSetup onNext={onSetupClasses} onCancel={onCancelAccountingSetup} />
+            </Match>
           </Switch>
         </Match>
       </Switch>

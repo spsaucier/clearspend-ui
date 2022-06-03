@@ -1,22 +1,22 @@
 import { Text } from 'solid-i18n';
 
-import { MoreVerticalDropdown } from 'portal/components/MoreVerticalDropdown/MoreVerticalDropdown';
+import { MoreVerticalDropdown } from 'partner/components/MoreVerticalDropdown/MoreVerticalDropdown';
 import { MenuItem } from '_common/components/Dropdown';
 import { Table, TableColumn } from '_common/components/Table';
 
-import { PortalDashboard } from './PortalDashboard';
-import { PortalEmptyDashboardContent } from './PortalEmptyDashboardContent';
+import { PartnerDashboard } from './PartnerDashboard';
+import { PartnerEmptyDashboardContent } from './PartnerEmptyDashboardContent';
 
 export default {
-  title: 'Portal/Dashboard',
-  component: PortalDashboard,
+  title: 'Partner/Dashboard',
+  component: PartnerDashboard,
 };
 
 export const DashboardEmpty = () => {
   return (
-    <PortalDashboard>
-      <PortalEmptyDashboardContent />
-    </PortalDashboard>
+    <PartnerDashboard partnerName="West Side Accounting">
+      <PartnerEmptyDashboardContent />
+    </PartnerDashboard>
   );
 };
 
@@ -52,8 +52,8 @@ const DATA: readonly Mock[] = [
 
 export const DashboardWithTable = () => {
   return (
-    <PortalDashboard>
+    <PartnerDashboard partnerName="West Side Accounting">
       <Table columns={COLUMNS} data={DATA} darkMode={true} />
-    </PortalDashboard>
+    </PartnerDashboard>
   );
 };

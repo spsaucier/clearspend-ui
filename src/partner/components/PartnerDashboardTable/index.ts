@@ -1,0 +1,1 @@
+export { PartnerDashboardTable } from './PartnerDashboardTable';

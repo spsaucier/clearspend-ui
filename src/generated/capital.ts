@@ -1463,6 +1463,10 @@ export interface ExpenseCategory {
   pathSegments?: string[];
 }
 
+export interface DeviceTokenRegistrationRequest {
+  deviceToken?: string;
+}
+
 export interface CodatError {
   itemId?: string;
   message?: string;
@@ -4257,6 +4261,13 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+}
+
+export interface NotificationHistoryResponse {
+  businessId?: string;
+  userId?: string;
+  accountActivityId?: string;
+  message?: string;
 }
 
 export interface CreateTestDataResponse {

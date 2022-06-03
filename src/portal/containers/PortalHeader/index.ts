@@ -1,1 +1,0 @@
-export { PortalHeader } from './PortalHeader';

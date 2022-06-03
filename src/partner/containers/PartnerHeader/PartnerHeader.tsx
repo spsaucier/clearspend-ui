@@ -2,9 +2,9 @@ import { For, JSXElement } from 'solid-js';
 
 import { HeaderButton } from './HeaderButton';
 
-import css from './PortalHeader.css';
+import css from './PartnerHeader.css';
 
-interface PortalHeaderProps {
+interface PartnerHeaderProps {
   branding: string | JSXElement;
   navigationItems: {
     label: string;
@@ -14,7 +14,7 @@ interface PortalHeaderProps {
   selectedLabel?: string;
 }
 
-export function PortalHeader(props: Readonly<PortalHeaderProps>) {
+export function PartnerHeader(props: Readonly<PartnerHeaderProps>) {
   return (
     <>
       <div class={css.wrapper}>
@@ -40,7 +40,6 @@ export function PortalHeader(props: Readonly<PortalHeaderProps>) {
           </For>
         </div>
       </div>
-      <div class={css.lineBreak} />
     </>
   );
 }

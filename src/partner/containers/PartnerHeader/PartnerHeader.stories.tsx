@@ -1,13 +1,13 @@
-import { PortalHeader } from './PortalHeader';
+import { PartnerHeader } from './PartnerHeader';
 
 export default {
-  title: 'Portal/Header',
-  component: PortalHeader,
+  title: 'Partner/Header',
+  component: PartnerHeader,
 };
 
 export const Default = () => {
   return (
-    <PortalHeader
+    <PartnerHeader
       branding={'West Side Accounting'}
       navigationItems={[
         {

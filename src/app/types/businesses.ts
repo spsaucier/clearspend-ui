@@ -67,6 +67,12 @@ export enum BusinessTypeCategory {
   NONPROFIT = 'NONPROFIT',
 }
 
+export enum BusinessPartnerType {
+  CLIENT = 'CLIENT',
+  PARTNER = 'PARTNER',
+  BOTH = 'BOTH',
+}
+
 export enum AccountSetupStep {
   AWAITING_SYNC = 'AWAITING_SYNC',
   ADD_CREDIT_CARD = 'ADD_CREDIT_CARD',

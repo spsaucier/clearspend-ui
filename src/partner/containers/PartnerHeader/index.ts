@@ -1,0 +1,1 @@
+export { PartnerHeader } from './PartnerHeader';
