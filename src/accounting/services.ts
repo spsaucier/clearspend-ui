@@ -17,6 +17,7 @@ import type {
   CodatCategory,
   CodatBankAccount,
   AuditLogDisplayValue,
+  SetCategoryNamesRequest,
 } from 'generated/capital';
 
 import type {
@@ -160,4 +161,8 @@ export async function getClassesForBusiness() {
 
 export async function getLocationsForBusiness() {
   return (await service.get<Readonly<CodatCategory[]>>('/codat/locations')).data;
+}
+
+export async function postClearspendNameForCategories(request: SetCategoryNamesRequest[]) {
+  return (await service.post<Readonly<boolean>>('/codat/category-names', request)).data;
 }
