@@ -12,7 +12,7 @@ export const validPhone: ValidationRuleFn = (value) => {
 };
 
 export const validEIN: ValidationRuleFn = (value) => {
-  return !!value.match(/^[1-9][0-9]{8}$/) || 'EIN should consist of 9 digits';
+  return !!value.match(/^[0-9]{9}$/) || 'EIN should consist of 9 digits';
 };
 
 export const validZipCode: ValidationRuleFn = (value) => {

@@ -336,8 +336,10 @@ export interface Business {
     | 'SETUP_LOCATIONS'
     | 'COMPLETE';
   autoCreateExpenseCategories?: boolean;
+  classRequiredForSync?: boolean;
   mcc?: string;
   partnerType?: 'CLIENT' | 'PARTNER' | 'BOTH';
+  businessEmail?: string;
   businessName?: string;
   accountNumber?: string;
   routingNumber?: string;
@@ -421,6 +423,7 @@ export interface SearchUserRequest {
 export interface CardInfo {
   /** @format uuid */
   cardId?: string;
+  cardholderType?: 'INDIVIDUAL' | 'BUSINESS';
   lastFour?: string;
   allocationName?: string;
   ownerFirstName?: string;
@@ -1999,6 +2002,7 @@ export interface IssueCardRequest {
 
   /** @example DEBIT */
   fundingType?: 'POOLED' | 'INDIVIDUAL';
+  cardholderType?: 'INDIVIDUAL' | 'BUSINESS';
   shippingAddress?: Address;
 }
 
@@ -2038,6 +2042,7 @@ export interface Card {
   cardLine3?: string;
   cardLine4?: string;
   type?: 'PHYSICAL' | 'VIRTUAL';
+  cardholderType?: 'INDIVIDUAL' | 'BUSINESS';
   superseded?: boolean;
   cardNumber?: string;
   lastFour?: string;
@@ -2094,6 +2099,7 @@ export interface SearchCardData {
   balance?: Amount;
   cardStatus?: 'ACTIVE' | 'INACTIVE' | 'CANCELLED';
   cardType?: 'PHYSICAL' | 'VIRTUAL';
+  cardholderType?: 'INDIVIDUAL' | 'BUSINESS';
   activated?: boolean;
 
   /** @format date-time */
