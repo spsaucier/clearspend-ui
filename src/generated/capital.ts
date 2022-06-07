@@ -2380,7 +2380,7 @@ export interface SetBusinessProspectPasswordRequest {
 export interface ConvertBusinessProspectRequest {
   legalName: string;
 
-  /** @pattern ^[1-9][0-9]{8}$ */
+  /** @pattern ^[0-9]{9}$ */
   employerIdentificationNumber: string;
 
   /**
@@ -2560,7 +2560,7 @@ export interface BusinessNotificationData {
   newValue?: string;
 }
 
-export interface TwoFactorStartLoggedInResponse {
+export interface TwoFactorStartResponse {
   twoFactorId?: string;
   methodId?: string;
   trustChallenge?: string;
@@ -2668,6 +2668,9 @@ export interface FirstTwoFactorSendRequest {
 export interface ResetPasswordRequest {
   changePasswordId?: string;
   newPassword?: string;
+  twoFactorCode?: string;
+  twoFactorId?: string;
+  trustChallenge?: string;
 }
 
 export interface LoginRequest {
@@ -4257,8 +4260,6 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
-  businessName?: string;
-  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4267,6 +4268,8 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+  businessName?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface NotificationHistoryResponse {

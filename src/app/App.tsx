@@ -17,9 +17,9 @@ import { ResetPassword } from './pages/ResetPassword';
 const INTERCOM_SCRIPT = 'https://widget.intercom.io/widget/l381dwob';
 
 export function App() {
-  if (location.hostname !== 'localhost') {
-    useScript(INTERCOM_SCRIPT);
+  if (location.hostname === 'app.clearspend.com') {
     onMount(() => {
+      useScript(INTERCOM_SCRIPT);
       mixpanel.init(
         (window as CSWindow).clearspend_env?.MIXPANEL_PROJECT_TOKEN || process.env.MIXPANEL_PROJECT_TOKEN || '',
         {
@@ -29,7 +29,7 @@ export function App() {
       );
       FS.init({
         orgId: 'o-19RE1Q-na1',
-        devMode: location.hostname !== 'app.clearspend.com', // disables FullStory
+        devMode: false, // disables FullStory
       });
     });
   }

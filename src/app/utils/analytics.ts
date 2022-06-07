@@ -161,7 +161,7 @@ export const sendAnalyticsEvent = ({
   type = AnalyticsEventType.Track,
   vendors = [AnalyticsVendor.Mixpanel, AnalyticsVendor.FullStory, AnalyticsVendor.Intercom],
 }: VendorAnalyticsEvent) => {
-  if (location.hostname !== 'localhost') {
+  if (location.hostname === 'app.clearspend.com') {
     vendors.forEach(async (vendor: AnalyticsVendor) => {
       try {
         const vendorAction = vendorActions[vendor];
