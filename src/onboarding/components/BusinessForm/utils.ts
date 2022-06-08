@@ -3,7 +3,7 @@ import { required } from '_common/components/Form/rules/required';
 import { maxLength } from '_common/components/Form/rules/maxLength';
 import { validPhone, validEIN, validZipCode } from '_common/components/Form/rules/patterns';
 import { cleanEIN } from '_common/formatters/ein';
-import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
+import type { Business, ConvertClientBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 
 import type { FormValues } from './types';
 import type { BusinessWithBusinessName } from './BusinessForm';
@@ -48,7 +48,9 @@ export function getFormOptions(
   };
 }
 
-export function convertFormData(data: Readonly<FormValues>): Readonly<ConvertBusinessProspectRequest | UpdateBusiness> {
+export function convertFormData(
+  data: Readonly<FormValues>,
+): Readonly<ConvertClientBusinessProspectRequest | UpdateBusiness> {
   const { name, employerIdentificationNumber, businessName, phone, timeZone, mcc, url, description, type, ...address } =
     data;
   return {

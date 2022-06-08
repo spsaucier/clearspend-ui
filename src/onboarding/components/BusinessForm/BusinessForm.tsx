@@ -10,7 +10,7 @@ import { formatEIN } from '_common/formatters/ein';
 import { useMediaContext } from '_common/api/media/context';
 import { wrapAction } from '_common/utils/wrapAction';
 import { getNoop } from '_common/utils/getNoop';
-import type { Business, ConvertBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
+import type { Business, ConvertClientBusinessProspectRequest, UpdateBusiness } from 'generated/capital';
 import { AddressFormItems } from 'employees/components/AddressFormItems';
 import { Select, Option } from '_common/components/Select';
 import { BUSINESS_MCC } from 'app/types/mcc';
@@ -37,7 +37,7 @@ export type BusinessWithBusinessName = Business & {
 };
 
 interface BusinessFormProps {
-  onNext: (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
+  onNext: (data: Readonly<ConvertClientBusinessProspectRequest | UpdateBusiness>) => Promise<unknown>;
   businessType: Business['businessType'];
   businessPrefills?: BusinessWithBusinessName;
   kybErrors?: readonly Readonly<string>[];

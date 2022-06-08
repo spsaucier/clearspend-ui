@@ -4,7 +4,7 @@ import type {
   BusinessProspectData,
   CreateBusinessProspectResponse,
   ValidateBusinessProspectIdentifierRequest,
-  ConvertBusinessProspectRequest,
+  ConvertClientBusinessProspectRequest,
   ConvertBusinessProspectResponse,
   CreateOrUpdateBusinessOwnerRequest,
   UpdateBusiness,
@@ -47,7 +47,7 @@ export async function setPassword(id: string, password: string) {
   return service.post(`/business-prospects/${id}/password`, { password });
 }
 
-export async function setBusinessInfo(id: string, params: Readonly<ConvertBusinessProspectRequest>) {
+export async function setBusinessInfo(id: string, params: Readonly<ConvertClientBusinessProspectRequest>) {
   return (await service.post<Readonly<ConvertBusinessProspectResponse>>(`/business-prospects/${id}/convert`, params))
     .data;
 }

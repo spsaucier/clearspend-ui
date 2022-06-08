@@ -17,7 +17,7 @@ import { uploadForApplicationReview } from 'app/services/review';
 import type {
   BankAccount,
   Business,
-  ConvertBusinessProspectRequest,
+  ConvertClientBusinessProspectRequest,
   UpdateBusiness,
   ControllerError,
 } from 'generated/capital';
@@ -125,7 +125,7 @@ export default function Onboarding() {
     }
   });
 
-  const onUpdateKYB = async (data: Readonly<ConvertBusinessProspectRequest | UpdateBusiness>) => {
+  const onUpdateKYB = async (data: Readonly<ConvertClientBusinessProspectRequest | UpdateBusiness>) => {
     try {
       setLoadingModalOpen(true);
       if (business()) {
@@ -135,7 +135,7 @@ export default function Onboarding() {
         await refetchOnboardingState();
       } else {
         // create
-        const resp = await setBusinessInfo(currentUser().userId!, data as ConvertBusinessProspectRequest);
+        const resp = await setBusinessInfo(currentUser().userId!, data as ConvertClientBusinessProspectRequest);
         mutate({ currentUser: { ...currentUser(), userId: resp.businessOwnerId! }, business: resp.business! });
       }
       sendAnalyticsEvent({ name: Events.SUBMIT_BUSINESS_DETAILS });

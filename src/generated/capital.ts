@@ -306,10 +306,7 @@ export interface Business {
     | 'PUBLIC_PARTNERSHIP'
     | 'PRIVATE_CORPORATION'
     | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT'
-    | 'ACCOUNTING_FIRM'
-    | 'BANK'
-    | 'CONSULTING_FIRM';
+    | 'INCORPORATED_NON_PROFIT';
   employerIdentificationNumber?: string;
 
   /**
@@ -2194,10 +2191,7 @@ export interface UpdateBusiness {
     | 'PUBLIC_PARTNERSHIP'
     | 'PRIVATE_CORPORATION'
     | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT'
-    | 'ACCOUNTING_FIRM'
-    | 'BANK'
-    | 'CONSULTING_FIRM';
+    | 'INCORPORATED_NON_PROFIT';
   employerIdentificationNumber?: string;
 
   /**
@@ -2314,10 +2308,7 @@ export interface CreateOrUpdateBusinessProspectRequest {
     | 'PUBLIC_PARTNERSHIP'
     | 'PRIVATE_CORPORATION'
     | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT'
-    | 'ACCOUNTING_FIRM'
-    | 'BANK'
-    | 'CONSULTING_FIRM';
+    | 'INCORPORATED_NON_PROFIT';
 
   /**
    * Relationship to business Owner
@@ -2377,7 +2368,25 @@ export interface SetBusinessProspectPasswordRequest {
   password?: string;
 }
 
-export interface ConvertBusinessProspectRequest {
+export interface ConvertPartnerBusinessProspectRequest {
+  legalName: string;
+
+  /**
+   * Timezone
+   * @example US_CENTRAL
+   */
+  timeZone: 'US_EASTERN' | 'US_CENTRAL' | 'US_MOUNTAIN' | 'US_PACIFIC' | 'US_ALASKA' | 'US_HAWAII';
+}
+
+export interface ConvertBusinessProspectResponse {
+  business?: Business;
+
+  /** @format uuid */
+  businessOwnerId?: string;
+  errorMessages?: string[];
+}
+
+export interface ConvertClientBusinessProspectRequest {
   legalName: string;
 
   /** @pattern ^[0-9]{9}$ */
@@ -2415,14 +2424,6 @@ export interface ConvertBusinessProspectRequest {
    * @example https://fecebook.com/business
    */
   url?: string;
-}
-
-export interface ConvertBusinessProspectResponse {
-  business?: Business;
-
-  /** @format uuid */
-  businessOwnerId?: string;
-  errorMessages?: string[];
 }
 
 export interface OwnersProvidedRequest {
@@ -4260,8 +4261,6 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
-  businessName?: string;
-  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4270,6 +4269,8 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
+  businessName?: string;
+  ledgerBalance?: Amount;
 }
 
 export interface NotificationHistoryResponse {
@@ -4305,19 +4306,11 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
-  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4567,9 +4560,17 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
-  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
+  title?: string;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
+  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -5094,10 +5095,7 @@ export interface BusinessProspectData {
     | 'PUBLIC_PARTNERSHIP'
     | 'PRIVATE_CORPORATION'
     | 'PUBLIC_CORPORATION'
-    | 'INCORPORATED_NON_PROFIT'
-    | 'ACCOUNTING_FIRM'
-    | 'BANK'
-    | 'CONSULTING_FIRM';
+    | 'INCORPORATED_NON_PROFIT';
 
   /**
    * Relationship to business Owner

@@ -7,7 +7,7 @@ export enum BusinessStatus {
   SUSPENDED = 'SUSPENDED',
 }
 
-// From ConvertBusinessProspectRequest['type']
+// From ConvertClientBusinessProspectRequest['type']
 export enum BusinessType {
   UNKNOWN = '',
   OTHER = 'OTHER',
