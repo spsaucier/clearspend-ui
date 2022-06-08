@@ -98,7 +98,13 @@ export function AllocationsSide(props: Readonly<AllocationsSideProps>) {
                 )}
               </Match>
               <Match when={!root()}>
-                <LimitedList
+                <List
+                  currentID={props.currentID}
+                  items={props.items!.filter((item) => !item.archived)}
+                  itemClass={css.item}
+                  onSelect={props.onAllocationChange}
+                />
+                <ArchivedList
                   currentID={props.currentID}
                   items={props.items}
                   itemClass={css.item}

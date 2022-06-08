@@ -4260,6 +4260,8 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
+  businessName?: string;
+  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4268,8 +4270,6 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
-  businessName?: string;
-  ledgerBalance?: Amount;
 }
 
 export interface NotificationHistoryResponse {

@@ -12,7 +12,7 @@ import css from './List.css';
 
 export interface ListProps {
   currentID: string;
-  parentID: string;
+  parentID?: string;
   items: readonly Readonly<Allocation>[];
   padding?: number;
   itemClass?: string;
@@ -20,7 +20,17 @@ export interface ListProps {
 }
 
 export function List(props: Readonly<ListProps>) {
-  const siblings = createMemo(() => props.items.filter((item) => item.parentAllocationId === props.parentID));
+  const allocationIDsList = () => {
+    return props.items.map((item) => item.allocationId);
+  };
+
+  const siblings = () => {
+    if (props.parentID) {
+      return props.items.filter((item) => item.parentAllocationId === props.parentID);
+    } else {
+      return props.items.filter((item) => allocationIDsList().indexOf(item.parentAllocationId!) === -1);
+    }
+  };
 
   const [expanded, setExpanded] = createSignal<Record<string, boolean>>(
     getDefaultExpanded(props.currentID, siblings(), props.items),
@@ -33,7 +43,7 @@ export function List(props: Readonly<ListProps>) {
 
   return (
     <For each={siblings()}>
-      {(item) => {
+      {(item, idx) => {
         const hasChildren = createMemo(() =>
           Boolean(
             item.childrenAllocationIds?.reduce<string[]>((acc, curr) => {
@@ -49,8 +59,12 @@ export function List(props: Readonly<ListProps>) {
           return showSubmenu() && !props.items.find(allocationWithID(item.parentAllocationId))?.parentAllocationId;
         });
 
+        const isLastItem = createMemo(() => {
+          return idx() === siblings().length - 1;
+        });
+
         return (
-          <div class={props.itemClass} classList={{ [css.withBorder!]: withBorder() }}>
+          <div class={props.itemClass} classList={{ [css.withBorder!]: withBorder() && !isLastItem() }}>
             <Item
               data={item}
               active={props.currentID === item.allocationId}
