@@ -74,6 +74,12 @@ export async function postAutoCreateExpenseCategories(params: Readonly<UpdateAut
   ).data;
 }
 
+export async function postClassCategoryRequired(params: Readonly<UpdateAutoCreateExpenseCategoriesRequest>) {
+  return (
+    await service.post<Readonly<UpdateAutoCreateExpenseCategoriesRequest>>(`/businesses/require-class-for-sync`, params)
+  ).data;
+}
+
 export async function deleteIntegrationConnection() {
   await service.remove('/codat/connection');
 }

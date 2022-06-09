@@ -9,6 +9,7 @@ import { Section } from 'app/components/Section';
 import { setActivityDetails } from 'app/services/activity';
 import { useMessages } from 'app/containers/Messages/context';
 import { AutomaticUpdates } from 'accounting/components/AutomaticUpdates';
+import { EnableClassCategory } from 'accounting/components/EnableClassCategory';
 import { Button } from '_common/components/Button';
 import { Popover } from '_common/components/Popover';
 import { Data } from 'app/components/Data';
@@ -124,6 +125,9 @@ export function AccountingSettings(props: AccountingSettingsProps) {
         class={css.section}
       >
         <AutomaticUpdates name="automatic-updates-toggle" class={css.automaticUpdates} />
+      </Section>
+      <Section title={<Text message="Class Required For Sync" />} class={css.section}>
+        <EnableClassCategory name="enable-category-required-for-sync-toggle" class={css.automaticUpdates} />
       </Section>
       <Section title={<Text message="Chart of Accounts" />} class={css.section}>
         <Button
