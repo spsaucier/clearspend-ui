@@ -292,11 +292,11 @@ export const legacyCardDetailsConversion = (
   ledgerBalance: data.ledgerBalance,
   availableBalance: data.availableBalance,
   allocationName: data.linkedAllocationName,
-  limits: data.allowedAllocationsAndLimits[0]?.limits ?? [],
-  disabledMccGroups: data.allowedAllocationsAndLimits[0]?.disabledMccGroups ?? [],
-  disabledPaymentTypes: data.allowedAllocationsAndLimits[0]?.disabledPaymentTypes ?? [],
-  disableForeign: data.allowedAllocationsAndLimits[0]?.disableForeign ?? false,
-  allowedAllocationIds: data.allowedAllocationsAndLimits.map((item) => item.allocationId),
+  limits: data.allocationSpendControls[0]?.limits ?? [],
+  disabledMccGroups: data.allocationSpendControls[0]?.disabledMccGroups ?? [],
+  disabledPaymentTypes: data.allocationSpendControls[0]?.disabledPaymentTypes ?? [],
+  disableForeign: data.allocationSpendControls[0]?.disableForeign ?? false,
+  allowedAllocationIds: data.allocationSpendControls.map((item) => item.allocationId),
 });
 export const legacyUpdateCardConversion = (
   data: Readonly<LegacyUpdateCardRequest>,

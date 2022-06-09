@@ -2056,7 +2056,7 @@ export interface CardDetailsResponse {
   /** @format uuid */
   linkedAllocationId?: string;
   linkedAllocationName?: string;
-  allowedAllocationsAndLimits?: CardAllocationSpendControls[];
+  allocationSpendControls?: CardAllocationSpendControls[];
 }
 
 export interface SearchCardRequest {
