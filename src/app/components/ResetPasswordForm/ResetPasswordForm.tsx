@@ -27,22 +27,15 @@ export function ResetPasswordForm(props: Readonly<ResetPasswordFormProps>) {
 
   const onSubmit = (data: Readonly<FormValues>) => {
     if (!loading()) {
-      submit(data.password)
-        .then(() => {
-          messages.success({
-            title: 'Reset Password Success',
-            message: 'Your password has been successfully changed. You may now log in with your new password.',
-          });
-        })
-        .catch((e: Error) => {
-          // eslint-disable-next-line no-console
-          console.info(e.message);
-          messages.error({
-            title: 'Something went wrong',
-            message:
-              'Perhaps your link is expired, or you entered a password you used previously. Please try the "Forgot Password" flow again.',
-          });
+      submit(data.password).catch((e: Error) => {
+        // eslint-disable-next-line no-console
+        console.info(e.message);
+        messages.error({
+          title: 'Something went wrong',
+          message:
+            'Perhaps your link is expired, or you entered a password you used previously. Please try the "Forgot Password" flow again.',
         });
+      });
     }
   };
 

@@ -13,6 +13,7 @@ import { changePassword } from 'app/services/auth';
 import { HttpStatus } from '_common/api/fetch/types';
 import { Button } from '_common/components/Button';
 import { Modal, ModalCard } from '_common/components/Modal';
+import { handlePasswordErrors } from 'app/utils/password';
 
 import { InputCode } from '../../../_common/components/InputCode/InputCode';
 
@@ -24,7 +25,7 @@ interface FormValues {
   confirm: string;
 }
 
-interface PasswordErrors {
+export interface PasswordErrors {
   data?: {
     fieldErrors?: {
       [key: string]: {
@@ -67,35 +68,16 @@ export default function ChangePassword() {
         twoFactorId: twoFactorId(),
         twoFactorCode: twoFactorCode(),
       }).catch((e: PasswordErrors) => {
-        if (e.data?.fieldErrors?.password && e.data.fieldErrors.password[0]?.code === '[previouslyUsed]password') {
-          messages.error({
-            title: i18n.t('Unable to update password'),
-            message: i18n.t('You cannot use a previously used password'),
-          });
-        } else {
-          messages.error({
-            title: i18n.t('Failed to update password'),
-            message:
-              // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-              e.status === 404
-                ? i18n.t('Are you sure you entered the correct password?')
-                : e.data?.fieldErrors?.password
-                ? e.data.fieldErrors.password[0]?.message
-                : '',
-          });
-        }
-        // eslint-disable-next-line no-console
-        console.error(e);
-        throw new Error(JSON.stringify(e));
+        handlePasswordErrors(e, messages);
       });
-      if (res.status === HttpStatus.StepUpRequired) {
+      if (res && res.status === HttpStatus.StepUpRequired) {
         if ('trustChallenge' in res.data) {
           setTrustChallenge(res.data.trustChallenge);
           setTwoFactorId(res.data.twoFactorId);
           setTwoFactorCode();
           setOpen2faPrompt(true);
         }
-      } else if (res.status === HttpStatus.NoContent) {
+      } else if (res && res.status === HttpStatus.NoContent) {
         messages.success({
           title: i18n.t('Success'),
           message: i18n.t('The password has been successfully updated.'),

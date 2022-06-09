@@ -52,8 +52,7 @@ export async function forgotPassword({ email }: ForgotPasswordRequest) {
 }
 
 export async function resetPassword(params: ResetPasswordRequest) {
-  const resetResponse = await service.post<ResetPasswordRequest>('/authentication/reset-password', params);
-  return resetResponse.data;
+  return service.post<ChangePasswordResponse | TwoFactorStartResponse>('/authentication/reset-password', params);
 }
 
 export async function changePassword(params: Readonly<ChangePasswordRequest>) {
