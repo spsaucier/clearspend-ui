@@ -65,6 +65,14 @@ export function CompanyProfile() {
           <span class={join(css.dataValue, 'fs-mask')}>{formatPhone(business().businessPhone)}</span>
           <CopyButton value={formatPhone(business().businessPhone)} class={css.copy} />
         </DataRow>
+        <Show when={business().timeZone}>
+          <DataRow icon="clock" class={css.data}>
+            <span class={css.dataLabel}>
+              <Text message="Timezone" />:
+            </span>
+            <span class={join(css.dataValue, 'fs-mask')}>{(business().timeZone || '').replace(/_/g, ' ')}</span>
+          </DataRow>
+        </Show>
       </Section>
       <Section title={<Text message="Business description" />} class={css.section}>
         <DataRow icon="file-text" class={css.data}>
