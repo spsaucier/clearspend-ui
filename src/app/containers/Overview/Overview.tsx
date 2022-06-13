@@ -10,7 +10,7 @@ import { useMediaContext } from '_common/api/media/context';
 import type { Allocation, UserRolesAndPermissionsRecord } from 'generated/capital';
 import { Data } from 'app/components/Data';
 import { ALL_ALLOCATIONS } from 'allocations/components/AllocationSelect';
-import { canManageFunds, canRead, hasSomeManagerRole } from 'allocations/utils/permissions';
+import { canManageFunds, canManageUsers, canRead, hasSomeManagerRole } from 'allocations/utils/permissions';
 import { usePageTabs } from 'app/utils/usePageTabs';
 import { BusinessStatements } from 'transactions/components/BusinessStatements/BusinessStatements';
 
@@ -52,7 +52,7 @@ export function Overview(props: Readonly<OverviewProps>) {
   const [tab, setTab] = usePageTabs<OverviewTabs>(OverviewTabs.recentActivity);
 
   const [searchParams, setSearchParams] = useSearchParams<{ period?: TimePeriod }>();
-  const { currentUserRoles } = useBusiness();
+  const { currentUserRoles, permissions } = useBusiness();
 
   const initPeriod = searchParams.period || TimePeriod.year;
   const [period, setPeriod] = createSignal<TimePeriod>(initPeriod);
@@ -116,14 +116,16 @@ export function Overview(props: Readonly<OverviewProps>) {
         </div>
       </Show>
       <div class={css.section}>
-        <TabList value={tab()} onChange={setTab}>
-          <Tab value={OverviewTabs.recentActivity}>
-            <Text message="Recent Activity" />
-          </Tab>
-          <Tab value={OverviewTabs.statements}>
-            <Text message="Statements" />
-          </Tab>
-        </TabList>
+        <Show when={canManageUsers(permissions())}>
+          <TabList value={tab()} onChange={setTab}>
+            <Tab value={OverviewTabs.recentActivity}>
+              <Text message="Recent Activity" />
+            </Tab>
+            <Tab value={OverviewTabs.statements}>
+              <Text message="Statements" />
+            </Tab>
+          </TabList>
+        </Show>
 
         <Switch>
           <Match when={tab() === OverviewTabs.recentActivity}>
