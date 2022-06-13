@@ -443,7 +443,7 @@ export function Settings(props: Readonly<SettingsProps>) {
               value={autoTopUpConfigEnabled()}
               onChange={(enabled) => updateAutoTopUpConfig({ enabled })}
             >
-              Recurring monthly deposit
+              <Text message="Recurring monthly deposit" />
             </Switch>
           </FormItem>
           <FormItem label={<Text message="Amount:" />} class={join(css.field, css.leftOffsetField)}>

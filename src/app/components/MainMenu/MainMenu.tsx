@@ -48,7 +48,7 @@ interface MainMenuProps {
 }
 
 export function MainMenu(props: Readonly<MainMenuProps>) {
-  const { permissions, currentUserRoles, ldClient } = useBusiness();
+  const { permissions, currentUserRoles } = useBusiness();
   const expanded = createMemo(() => [MenuView.expanded, MenuView.mobile].includes(props.view as MenuView));
 
   const mainItems = createMemo(() => {
@@ -57,7 +57,7 @@ export function MainMenu(props: Readonly<MainMenuProps>) {
         case TITLES.employees:
           return canManageCards(permissions()); // TODO: change to canViewEmployees based on Manage+ permissions at any allocation
         case TITLES.accounting:
-          return canManageConnections(permissions()) && ldClient()?.variation('menu.accounting', false);
+          return canManageConnections(permissions());
         case TITLES.company:
           return canLinkBankAccounts(permissions());
         case TITLES.allocations:
