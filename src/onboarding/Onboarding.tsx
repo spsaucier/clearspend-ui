@@ -1,12 +1,13 @@
-import { createSignal, batch, Show, Switch, Match, onMount } from 'solid-js';
+import { batch, createSignal, Match, onMount, Show, Switch } from 'solid-js';
 import { useNavigate } from 'solid-app-router';
-import { useI18n, Text } from 'solid-i18n';
+import { Text, useI18n } from 'solid-i18n';
 
 import logoLight from 'app/assets/Tagline_Lockup_White.svg';
 import { Icon } from '_common/components/Icon';
 import { storage } from '_common/api/storage';
 import { isFetchError } from '_common/api/fetch/isFetchError';
 import { useMediaContext } from '_common/api/media/context';
+import { HttpStatus } from '_common/api/fetch/types';
 import { MainLayout } from 'app/components/MainLayout';
 import { Page } from 'app/components/Page';
 import { useOnboardingBusiness } from 'app/containers/Main/context';
@@ -17,9 +18,9 @@ import { uploadForApplicationReview } from 'app/services/review';
 import type {
   BankAccount,
   Business,
+  ControllerError,
   ConvertClientBusinessProspectRequest,
   UpdateBusiness,
-  ControllerError,
 } from 'generated/capital';
 import { wrapAction } from '_common/utils/wrapAction';
 import { logout } from 'app/services/auth';
@@ -37,13 +38,13 @@ import { BusinessForm } from './components/BusinessForm';
 import { TeamForm } from './components/TeamForm';
 import { TransferMoney } from './components/TransferMoney';
 import {
-  getBusinessProspectInfo,
   getApplicationReviewRequirements,
+  getBusinessProspectInfo,
   setBusinessInfo,
   triggerBusinessOwners,
   updateBusinessInfo,
 } from './services/onboarding';
-import { linkBankAccounts, getBankAccounts, bankTransaction, registerBankAccount } from './services/accounts';
+import { bankTransaction, getBankAccounts, linkBankAccounts, registerBankAccount } from './services/accounts';
 import { Review, SoftFail } from './components/SoftFail';
 import type { KycDocuments, ManualReviewResponse, RequiredDocument } from './components/SoftFail/types';
 import { ONBOARDING_LEADERS_KEY } from './components/TeamForm/constants';
@@ -198,17 +199,23 @@ export default function Onboarding() {
   };
 
   const onGotVerifyToken = async (token: string, accountName?: string) => {
-    const bankAccounts = await linkBankAccounts(token);
-    batch(async () => {
-      const matchedAccounts = accountName
-        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
-        : bankAccounts.filter((account) => account.businessBankAccountId);
-      setAccounts(matchedAccounts);
-      storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
-      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+    const bankAccountsCall = await linkBankAccounts(token);
+    const bankAccounts = bankAccountsCall.data;
+    if (bankAccountsCall.status === HttpStatus.Accepted) {
       sendAnalyticsEvent({ name: Events.LINK_BANK });
-      setStep(OnboardingStep.TRANSFER_MONEY);
-    });
+      triggerCompleteOnboarding();
+    } else {
+      batch(async () => {
+        const matchedAccounts = accountName
+          ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+          : bankAccounts.filter((account) => account.businessBankAccountId);
+        setAccounts(matchedAccounts);
+        storage.set(ONBOARDING_BANK_ACCOUNTS_STORAGE_KEY, matchedAccounts);
+        await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+        sendAnalyticsEvent({ name: Events.LINK_BANK });
+        setStep(OnboardingStep.TRANSFER_MONEY);
+      });
+    }
   };
 
   const checkReviewStatus = async () => {

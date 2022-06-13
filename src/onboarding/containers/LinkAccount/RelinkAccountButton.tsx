@@ -11,6 +11,7 @@ interface LinkAccountProps {
   disabled?: boolean;
   onSuccess: (token: string, accountName?: string) => Promise<unknown>;
   bankAccountId: string;
+  isMicrodeposits?: boolean;
 }
 
 export function RelinkAccountButton(props: Readonly<LinkAccountProps>) {
@@ -37,7 +38,9 @@ export function RelinkAccountButton(props: Readonly<LinkAccountProps>) {
         disabled={props.disabled || loading()}
         onClick={() => plaidInstance()?.open()}
       >
-        <Text message="Relink Bank Account" />
+        <Show when={props.isMicrodeposits} fallback={<Text message="Relink Bank Account" />}>
+          <Text message="Enter Micro-Deposits" />
+        </Show>
       </Button>
     </Show>
   );

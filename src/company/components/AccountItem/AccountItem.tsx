@@ -1,4 +1,5 @@
 import { useI18n, Text } from 'solid-i18n';
+import { Show } from 'solid-js';
 
 import { wrapAction } from '_common/utils/wrapAction';
 import { Button } from '_common/components/Button';
@@ -29,8 +30,17 @@ export function AccountItem(props: Readonly<AccountItemProps>) {
     <div>
       <div class={css.card}>
         {/* TODO: render Bank logo */}
-        <div class={css.cardName}>{props.data.name}</div>
-        <div class={css.cardNumber}>{formatAccountNumber(props.data.accountNumber)}</div>
+        <Show
+          when={props.data.name && props.data.accountNumber}
+          fallback={
+            <div class={css.cardName}>
+              <Text message="Pending" />
+            </div>
+          }
+        >
+          <div class={css.cardName}>{props.data.name}</div>
+          <div class={css.cardNumber}>{formatAccountNumber(props.data.accountNumber)}</div>
+        </Show>
       </div>
       {/* TODO: expose bank name, type, status - see CAP-579
       <div class={css.info}>

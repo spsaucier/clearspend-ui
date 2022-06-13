@@ -349,6 +349,20 @@ export interface Business {
   formationDate?: string;
 }
 
+export interface BankAccount {
+  /** @format uuid */
+  businessBankAccountId?: string;
+  name?: string;
+  routingNumber?: string;
+  accountNumber?: string;
+  accountLinkStatus?:
+    | 'LINKED'
+    | 'MANUAL_MICROTRANSACTION_PENDING'
+    | 'RE_LINK_REQUIRED'
+    | 'AUTOMATIC_MICROTRANSACTOIN_PENDING'
+    | 'FAILED';
+}
+
 export interface CreateUserRequest {
   /**
    * The first name of the person
@@ -4261,6 +4275,8 @@ export interface PartnerBusiness {
   businessId?: string;
   status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
   legalName?: string;
+  businessName?: string;
+  ledgerBalance?: Amount;
   onboardingStep?:
     | 'BUSINESS'
     | 'BUSINESS_OWNERS'
@@ -4269,8 +4285,6 @@ export interface PartnerBusiness {
     | 'LINK_ACCOUNT'
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
-  businessName?: string;
-  ledgerBalance?: Amount;
 }
 
 export interface NotificationHistoryResponse {
@@ -4306,11 +4320,19 @@ export interface BusinessOwner {
   type?: 'UNSPECIFIED' | 'PRINCIPLE_OWNER' | 'ULTIMATE_BENEFICIAL_OWNER';
   firstName?: NullableEncryptedString;
   lastName?: NullableEncryptedString;
+  title?: string;
   relationshipOwner?: boolean;
   relationshipRepresentative?: boolean;
   relationshipExecutive?: boolean;
   relationshipDirector?: boolean;
+  percentageOwnership?: number;
+  address?: Address;
+  taxIdentificationNumber?: NullableEncryptedString;
   email?: string;
+  phone?: string;
+
+  /** @format date */
+  dateOfBirth?: string;
   countryOfCitizenship?:
     | 'UNSPECIFIED'
     | 'ABW'
@@ -4560,17 +4582,9 @@ export interface BusinessOwner {
     | 'ZAF'
     | 'ZMB'
     | 'ZWE';
+  subjectRef?: string;
   knowYourCustomerStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
   status?: 'ACTIVE' | 'RETIRED';
-  title?: string;
-  percentageOwnership?: number;
-  address?: Address;
-  taxIdentificationNumber?: NullableEncryptedString;
-  phone?: string;
-
-  /** @format date */
-  dateOfBirth?: string;
-  subjectRef?: string;
   stripePersonReference?: string;
 
   /** @format int64 */
@@ -4650,6 +4664,7 @@ export interface AuditLogDisplayValue {
   /** @format int64 */
   timestamp?: number;
   userId?: string;
+  groupSyncActivityIds?: string[];
 }
 
 export interface CodatSupplier {
@@ -4691,7 +4706,7 @@ export interface AccountBase {
   mask?: string;
   name?: string;
   officialName?: string;
-  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other' | 'ENUM_UNKNOWN';
   subtype?:
     | '401a'
     | '401k'
@@ -4702,6 +4717,7 @@ export interface AccountBase {
     | 'cash isa'
     | 'education savings account'
     | 'ebt'
+    | 'fixed annuity'
     | 'gic'
     | 'health reimbursement arrangement'
     | 'hsa'
@@ -4749,7 +4765,6 @@ export interface AccountBase {
     | 'commercial'
     | 'construction'
     | 'consumer'
-    | 'home'
     | 'home equity'
     | 'loan'
     | 'mortgage'
@@ -4763,8 +4778,11 @@ export interface AccountBase {
     | 'rewards'
     | 'safe deposit'
     | 'sarsep'
-    | 'null';
+    | 'payroll'
+    | 'null'
+    | 'ENUM_UNKNOWN';
   verificationStatus?:
+    | 'automatically_verified'
     | 'pending_automatic_verification'
     | 'pending_manual_verification'
     | 'manually_verified'
@@ -4778,7 +4796,7 @@ export interface AccountIdentity {
   mask?: string;
   name?: string;
   officialName?: string;
-  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other';
+  type?: 'investment' | 'credit' | 'depository' | 'loan' | 'brokerage' | 'other' | 'ENUM_UNKNOWN';
   subtype?:
     | '401a'
     | '401k'
@@ -4789,6 +4807,7 @@ export interface AccountIdentity {
     | 'cash isa'
     | 'education savings account'
     | 'ebt'
+    | 'fixed annuity'
     | 'gic'
     | 'health reimbursement arrangement'
     | 'hsa'
@@ -4836,7 +4855,6 @@ export interface AccountIdentity {
     | 'commercial'
     | 'construction'
     | 'consumer'
-    | 'home'
     | 'home equity'
     | 'loan'
     | 'mortgage'
@@ -4850,8 +4868,11 @@ export interface AccountIdentity {
     | 'rewards'
     | 'safe deposit'
     | 'sarsep'
-    | 'null';
+    | 'payroll'
+    | 'null'
+    | 'ENUM_UNKNOWN';
   verificationStatus?:
+    | 'automatically_verified'
     | 'pending_automatic_verification'
     | 'pending_manual_verification'
     | 'manually_verified'
@@ -4899,7 +4920,8 @@ export interface Error {
     | 'RECAPTCHA_ERROR'
     | 'OAUTH_ERROR'
     | 'PAYMENT_ERROR'
-    | 'BANK_TRANSFER_ERROR';
+    | 'BANK_TRANSFER_ERROR'
+    | 'INCOME_VERIFICATION_ERROR';
   errorCode?: string;
   errorMessage?: string;
   displayMessage?: string;
@@ -4937,6 +4959,10 @@ export interface Item {
     | 'income_verification'
     | 'deposit_switch'
     | 'standing_orders'
+    | 'transfer'
+    | 'employment'
+    | 'recurring_transactions'
+    | 'ENUM_UNKNOWN'
   )[];
   billedProducts?: (
     | 'assets'
@@ -4952,6 +4978,48 @@ export interface Item {
     | 'income_verification'
     | 'deposit_switch'
     | 'standing_orders'
+    | 'transfer'
+    | 'employment'
+    | 'recurring_transactions'
+    | 'ENUM_UNKNOWN'
+  )[];
+  products?: (
+    | 'assets'
+    | 'auth'
+    | 'balance'
+    | 'identity'
+    | 'investments'
+    | 'liabilities'
+    | 'payment_initiation'
+    | 'transactions'
+    | 'credit_details'
+    | 'income'
+    | 'income_verification'
+    | 'deposit_switch'
+    | 'standing_orders'
+    | 'transfer'
+    | 'employment'
+    | 'recurring_transactions'
+    | 'ENUM_UNKNOWN'
+  )[];
+  consentedProducts?: (
+    | 'assets'
+    | 'auth'
+    | 'balance'
+    | 'identity'
+    | 'investments'
+    | 'liabilities'
+    | 'payment_initiation'
+    | 'transactions'
+    | 'credit_details'
+    | 'income'
+    | 'income_verification'
+    | 'deposit_switch'
+    | 'standing_orders'
+    | 'transfer'
+    | 'employment'
+    | 'recurring_transactions'
+    | 'ENUM_UNKNOWN'
   )[];
 
   /** @format date-time */
@@ -5143,15 +5211,6 @@ export interface BusinessOwnerInfo {
   address?: Address;
   email?: string;
   phone?: string;
-}
-
-export interface BankAccount {
-  /** @format uuid */
-  businessBankAccountId?: string;
-  name?: string;
-  routingNumber?: string;
-  accountNumber?: string;
-  accountLinkStatus?: 'LINKED' | 'MICROTRANSACTION_PENDING' | 'RE_LINK_REQUIRED';
 }
 
 export interface LinkTokenResponse {

@@ -2,6 +2,7 @@ import { Text } from 'solid-i18n';
 import { createSignal, Show } from 'solid-js';
 
 import { useNav } from '_common/api/router';
+import { HttpStatus } from '_common/api/fetch/types';
 import { Button } from '_common/components/Button';
 import { useResource } from '_common/utils/useResource';
 import { Modal, ModalCard } from '_common/components/Modal';
@@ -14,6 +15,8 @@ import { useUsersList } from 'employees/stores/usersList';
 
 import { USERS_START_COUNT } from '../../constants/common';
 import { useMessages } from '../Messages/context';
+import { RelinkAccountButton } from '../../../onboarding/containers/LinkAccount/RelinkAccountButton';
+import { LinkAccount } from '../../../onboarding/containers/LinkAccount';
 
 import { LandingCard } from './LandingCard';
 
@@ -45,13 +48,18 @@ export function Landing(props: Readonly<LandingProps>) {
 
   const onAddAccount = async (token: string, accountName?: string) => {
     try {
-      const bankAccounts = await linkBankAccounts(token);
-      const matchedAccounts = accountName
-        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
-        : bankAccounts.filter((account) => account.businessBankAccountId);
-      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+      const bankAccountsCall = await linkBankAccounts(token);
+      if (bankAccountsCall.status === HttpStatus.Accepted) {
+        messages.success({ title: 'Bank account link initiated' });
+      } else {
+        const bankAccounts = bankAccountsCall.data;
+        const matchedAccounts = accountName
+          ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+          : bankAccounts.filter((account) => account.businessBankAccountId);
+        await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+        messages.success({ title: 'Bank account linked successfully' });
+      }
       sendAnalyticsEvent({ name: Events.LINK_BANK });
-      messages.success({ title: 'Bank account linked successfully' });
     } catch (e: unknown) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -87,6 +95,21 @@ export function Landing(props: Readonly<LandingProps>) {
           />
           <Show when={accounts()?.length === 0}>
             <LinkAccountButton onSuccess={onAddAccount} />
+          </Show>
+          <Show when={accounts() && accounts()![0]} fallback={<LinkAccount onSuccess={onAddAccount} />}>
+            {(account) => (
+              <>
+                <Show when={account.accountLinkStatus === 'MANUAL_MICROTRANSACTION_PENDING'}>
+                  <div style={{ margin: '5px 0' }}>
+                    <RelinkAccountButton
+                      isMicrodeposits
+                      onSuccess={onAddAccount}
+                      bankAccountId={account.businessBankAccountId}
+                    />
+                  </div>
+                </Show>
+              </>
+            )}
           </Show>
         </LandingCard>
       </Show>

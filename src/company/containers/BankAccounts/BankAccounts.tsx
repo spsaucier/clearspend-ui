@@ -2,6 +2,7 @@ import { Show } from 'solid-js';
 import { Text } from 'solid-i18n';
 
 import { useResource } from '_common/utils/useResource';
+import { HttpStatus } from '_common/api/fetch/types';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { LinkAccount } from 'onboarding/containers/LinkAccount';
@@ -27,19 +28,22 @@ export function BankAccounts() {
 
   const onAddAccount = async (token: string, accountName?: string) => {
     try {
-      const bankAccounts = await linkBankAccounts(token);
-      const matchedAccounts = accountName
-        ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
-        : bankAccounts.filter((account) => account.businessBankAccountId);
-      await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
-      sendAnalyticsEvent({ name: Events.LINK_BANK });
-      messages.success({ title: 'Bank account linked successfully' });
+      const bankAccountsCall = await linkBankAccounts(token);
+      if (bankAccountsCall.status === HttpStatus.OK) {
+        const bankAccounts = bankAccountsCall.data;
+        const matchedAccounts = accountName
+          ? bankAccounts.filter((account) => account.name === accountName && account.businessBankAccountId)
+          : bankAccounts.filter((account) => account.businessBankAccountId);
+        await Promise.all(matchedAccounts.map((account) => registerBankAccount(account.businessBankAccountId)));
+        sendAnalyticsEvent({ name: Events.LINK_BANK });
+        messages.success({ title: 'Bank account linked successfully' });
+      }
     } catch (e: unknown) {
       // eslint-disable-next-line no-console
       console.error(e);
       messages.error({ title: 'Unable to link bank account' });
     }
-    refetchAccounts();
+    await refetchAccounts();
   };
 
   const onRemoveAccount = async (businessBankAccountId: string) => {
@@ -78,6 +82,15 @@ export function BankAccounts() {
               <Show when={location.search.indexOf('relink') > -1 || account.accountLinkStatus === 'RE_LINK_REQUIRED'}>
                 <div style={{ margin: '5px 0' }}>
                   <RelinkAccountButton onSuccess={onAddAccount} bankAccountId={account.businessBankAccountId} />
+                </div>
+              </Show>
+              <Show when={account.accountLinkStatus === 'MANUAL_MICROTRANSACTION_PENDING'}>
+                <div style={{ margin: '5px 0' }}>
+                  <RelinkAccountButton
+                    isMicrodeposits
+                    onSuccess={onAddAccount}
+                    bankAccountId={account.businessBankAccountId}
+                  />
                 </div>
               </Show>
             </>

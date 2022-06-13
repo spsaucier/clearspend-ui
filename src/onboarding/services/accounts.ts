@@ -16,11 +16,9 @@ export async function getRelinkToken(businessBankAccountId: string) {
 }
 
 export async function linkBankAccounts(publicToken: string) {
-  return (
-    await service.get<readonly Readonly<Required<BankAccount>>[]>(
-      `/business-bank-accounts/link-token/${publicToken}/accounts`,
-    )
-  ).data;
+  return service.put<readonly Readonly<Required<BankAccount>>[]>(
+    `/business-bank-accounts/link-token/${publicToken}/accounts`,
+  );
 }
 
 export async function registerBankAccount(accountId: string) {
