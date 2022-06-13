@@ -472,7 +472,11 @@ export function Settings(props: Readonly<SettingsProps>) {
           </FormItem>
         </Section>
       </Show>
-      <Show when={canManagePermissions(props.permissions) && !props.allocation.archived}>
+      <Show
+        when={
+          canManagePermissions(props.permissions) && !props.allocation.archived && props.allocation.parentAllocationId
+        }
+      >
         <Section title={<Text message="Archive" />} class={css.section}>
           <Confirm
             position="top-center"
