@@ -2,7 +2,7 @@ import { useI18n } from 'solid-i18n';
 import { createSignal, createMemo } from 'solid-js';
 import { useScript } from 'solid-use-script';
 
-import { getLinkToken, getRelinkToken } from 'onboarding/services/accounts';
+import { getLinkToken, getRelinkToken, unregisterBankAccount } from 'onboarding/services/accounts';
 import { useMessages } from 'app/containers/Messages/context';
 
 const PLAID_SCRIPT = 'https://cdn.plaid.com/link/v2/stable/link-initialize.js';
@@ -30,6 +30,11 @@ export default function useLinkBankAccount(
     getLinkToken().then(setToken).catch(setToken);
   }
 
+  const removeAccount = () =>
+    unregisterBankAccount(bankAccountId).catch((e: { data?: { message: string } }) => {
+      messages.error({ title: 'Unable to unlink bank account', message: e.data?.message });
+    });
+
   const handler = createMemo(() => {
     const linkToken = token();
 
@@ -45,6 +50,13 @@ export default function useLinkBankAccount(
           messages.error({ title: i18n.t('Something went wrong') });
           setFetchingUpdatedStatus(false);
         });
+      },
+      onExit: (err, metadata) => {
+        // eslint-disable-next-line no-console
+        console.log(metadata);
+        if (err?.error_code === 'TOO_MANY_PLAID_VERIFICATION_ATTEMPTS') {
+          removeAccount();
+        }
       },
       onLoad: () => {
         setInit(false);
