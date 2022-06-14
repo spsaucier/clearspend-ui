@@ -149,12 +149,7 @@ export function Landing(props: Readonly<LandingProps>) {
           class={css.card}
           title={<Text message="Issue your first card" />}
           actions={
-            <Button
-              size="lg"
-              icon="card-add-new"
-              onClick={() => navigate('/cards/edit')}
-              data-name="landing-issue-card"
-            >
+            <Button size="lg" icon="card-add-new" onClick={() => navigate('/cards/new')} data-name="landing-issue-card">
               <Text message="Issue a card" />
             </Button>
           }

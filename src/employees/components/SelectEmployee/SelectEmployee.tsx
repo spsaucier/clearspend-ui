@@ -11,6 +11,7 @@ import { NewEmployeeButton } from './NewEmployeeButton';
 interface SelectEmployeeProps {
   value: string;
   error?: boolean;
+  disabled?: boolean;
   users: readonly Readonly<UserData>[];
   onAddClick: () => void;
   onChange: (value: string) => void;
@@ -28,6 +29,7 @@ export function SelectEmployee(props: Readonly<SelectEmployeeProps>) {
     <Select
       name="employee"
       value={props.value}
+      disabled={props.disabled}
       placeholder={String(i18n.t('Search by employee name'))}
       popupSuffix={<NewEmployeeButton onClick={props.onAddClick} />}
       error={props.error}

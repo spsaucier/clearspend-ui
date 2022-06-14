@@ -77,7 +77,7 @@ export default function EmployeeView() {
             type="primary"
             size="lg"
             icon="add"
-            onClick={() => navigate('/cards/edit', { state: { userId: user()?.userId } })}
+            onClick={() => navigate('/cards/new', { state: { userId: user()?.userId } })}
           >
             <Text message="New Card" />
           </Button>

@@ -130,7 +130,7 @@ export default function Dashboard() {
                         name="card"
                         onClick={() =>
                           navigate(
-                            '/cards/edit',
+                            '/cards/new',
                             canManageCards(userPermissions())
                               ? { state: { allocationId: currentAllocationId() } }
                               : undefined,

@@ -13,17 +13,17 @@ import { MainMenu } from '../MainMenu';
 
 import css from './Sidebar.css';
 
-const VIEW_STORAGE_KEY = 'menu_expanded';
+export const MENU_EXPANDED_KEY = 'menu_expanded';
 
 export function Sidebar() {
   const media = useMediaContext();
   const [menuOpen, toggleMenu] = useBool();
 
-  const [expand, setExpand] = createSignal(storage.get<boolean>(VIEW_STORAGE_KEY, false));
+  const [expand, setExpand] = createSignal(storage.get<boolean>(MENU_EXPANDED_KEY, false));
 
   const onChangeExpand = () => {
     setExpand((prev) => {
-      storage.set(VIEW_STORAGE_KEY, !prev);
+      storage.set(MENU_EXPANDED_KEY, !prev);
       return !prev;
     });
   };

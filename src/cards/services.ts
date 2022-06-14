@@ -2,38 +2,54 @@ import { RespType, service } from 'app/utils/service';
 import type {
   BusinessStatementRequest,
   Card,
+  CardAllocationSpendControls,
   CardDetailsResponse,
   CardStatementRequest,
+  CreateAllocationResponse,
+  IssueCardRequest,
   IssueCardResponse,
   PagedDataSearchCardData,
   RevealCardRequest,
   RevealCardResponse,
   SearchCardRequest,
+  UpdateCardSpendControlsRequest,
 } from 'generated/capital';
 
-import type { LegacyCardDetailsResponse, LegacyIssueCardRequest, LegacyUpdateCardRequest } from './types';
-import { legacyCardDetailsConversion, legacyIssueCardConversion, legacyUpdateCardConversion } from './types';
-
-export async function getCard(cardId: Card['cardId']): Promise<Readonly<Required<LegacyCardDetailsResponse>>> {
-  const data = (await service.get<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`)).data;
-  return legacyCardDetailsConversion(data);
+export async function getCard(cardId: Card['cardId']): Promise<Readonly<Required<CardDetailsResponse>>> {
+  return (await service.get<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}`)).data;
 }
 
-export async function saveCard(params: Readonly<LegacyIssueCardRequest>) {
-  const convertedParams = legacyIssueCardConversion(params);
-  return (await service.post<readonly Readonly<IssueCardResponse>[]>('/cards', convertedParams)).data;
+export async function saveCard(params: Readonly<IssueCardRequest>) {
+  return (await service.post<readonly Readonly<IssueCardResponse>[]>('/cards', params)).data;
 }
 
 export async function updateCard(
   cardId: string,
+  params: Readonly<UpdateCardSpendControlsRequest>,
+): Promise<Readonly<Required<CardDetailsResponse>>> {
+  return (await service.patch<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}/controls`, params)).data;
+}
+
+export async function linkAllocationToCard(
+  cardId: string,
   allocationId: string,
-  params: Readonly<LegacyUpdateCardRequest>,
-): Promise<Readonly<Required<LegacyCardDetailsResponse>>> {
-  const convertedParams = legacyUpdateCardConversion(params, allocationId);
-  const data = (
-    await service.patch<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}/controls`, convertedParams)
-  ).data;
-  return legacyCardDetailsConversion(data);
+): Promise<Readonly<Required<CardDetailsResponse>>> {
+  return (await service.patch<Readonly<Required<CardDetailsResponse>>>(`/users/cards/${cardId}/link/${allocationId}`))
+    .data;
+}
+
+export async function addAllocationsToCard(
+  cardId: string,
+  params: Readonly<CardAllocationSpendControls[]>,
+): Promise<Readonly<Required<CardDetailsResponse>>> {
+  return (await service.post<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}/allocations`, params)).data;
+}
+
+export async function removeAllocationsFromCard(
+  cardId: string,
+  params: Readonly<CreateAllocationResponse[]>,
+): Promise<Readonly<Required<CardDetailsResponse>>> {
+  return (await service.remove<Readonly<Required<CardDetailsResponse>>>(`/cards/${cardId}/allocations`, params)).data;
 }
 
 export async function searchCards(params: Readonly<SearchCardRequest>) {

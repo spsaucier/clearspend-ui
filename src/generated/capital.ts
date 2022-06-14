@@ -324,7 +324,7 @@ export interface Business {
     | 'TRANSFER_MONEY'
     | 'COMPLETE';
   knowYourBusinessStatus?: 'PENDING' | 'REVIEW' | 'FAIL' | 'PASS';
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'SUSPENDED_EXPENDITURE' | 'CLOSED';
   accountingSetupStep?:
     | 'AWAITING_SYNC'
     | 'ADD_CREDIT_CARD'
@@ -755,6 +755,7 @@ export interface DeclineDetails {
     | 'CVC_MISMATCH'
     | 'EXPIRY_MISMATCH'
     | 'BUSINESS_SUSPENSION'
+    | 'BUSINESS_SUSPENSION_EXPENDITURE'
     | 'ST_ACCOUNT_CLOSED'
     | 'ST_ACCOUNT_FROZEN'
     | 'ST_BANK_ACCOUNT_RESTRICTED'
@@ -2137,7 +2138,7 @@ export interface EphemeralKeyRequest {
 export interface BusinessStatusResponse {
   /** @format uuid */
   businessId?: string;
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'SUSPENDED_EXPENDITURE' | 'CLOSED';
 }
 
 export interface PlaidLogEntryRequest {
@@ -3728,6 +3729,9 @@ export interface BusinessSettings {
   foreignTransactionFeePercents?: number;
   achFundsAvailabilityMode?: 'STANDARD' | 'FAST' | 'IMMEDIATE';
   immediateAchFundsLimit?: number;
+
+  /** @format date-time */
+  negativeBalanceCorrectionScheduledTime?: string;
 }
 
 export interface LimitOperationRecord {
@@ -4273,7 +4277,7 @@ export interface AllocationsAndPermissionsResponse {
 export interface PartnerBusiness {
   /** @format uuid */
   businessId?: string;
-  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'CLOSED';
+  status?: 'ONBOARDING' | 'ACTIVE' | 'SUSPENDED' | 'SUSPENDED_EXPENDITURE' | 'CLOSED';
   legalName?: string;
   businessName?: string;
   ledgerBalance?: Amount;

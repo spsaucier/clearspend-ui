@@ -3,10 +3,9 @@ import { Text } from 'solid-i18n';
 
 import { join } from '_common/utils/join';
 import { createForm } from '_common/components/Form';
-import { AddressView } from '_common/components/AddressView';
 import { RadioGroup, Radio } from '_common/components/Radio';
-import { Button } from '_common/components/Button';
 import type { Address } from 'generated/capital';
+import { formatAddress } from '_common/formatters/address';
 
 import { AddressFormItems, AddressValues } from '../AddressFormItems';
 import { getEmptyAddress } from '../AddressFormItems/utils';
@@ -54,32 +53,39 @@ export function AddressSelect(props: Readonly<AddressSelectProps>) {
 
   return (
     <RadioGroup
-      empty
       name="delivery-address-type"
       value={addressType()}
       class={join(css.root, props.class)}
       onChange={onChangeAddressType}
     >
       <Show when={props.businessAddress}>
-        <Radio value={AddressType.Business} class={css.item}>
+        <Radio value={AddressType.Business} class={css.item} dotClass={css.dot}>
           <div class={css.content}>
-            <AddressView address={props.businessAddress!} label={<Text message="Business" />} icon="company" />
+            <div class={css.label}>
+              <Text message="Ship to business address" />
+            </div>
+            <div class={css.showWhenActive}>
+              <div class={join(css.address, 'fs-mask')}>{formatAddress(props.businessAddress!)}</div>
+            </div>
           </div>
         </Radio>
       </Show>
       <Show when={props.employeeAddress?.streetLine1}>
-        <Radio value={AddressType.Employee} class={css.item}>
+        <Radio value={AddressType.Employee} class={css.item} dotClass={css.dot}>
           <div class={css.content}>
-            <AddressView address={props.employeeAddress!} label={<Text message="Employee" />} icon="user" />
+            <div class={css.label}>
+              <Text message="Ship to employee address" />
+            </div>
+            <div class={css.showWhenActive}>
+              <div class={join(css.address, 'fs-mask')}>{formatAddress(props.employeeAddress!)}</div>
+            </div>
           </div>
         </Radio>
       </Show>
-      <Radio value={AddressType.New} class={css.item}>
-        <div class={css.specialContent}>
-          <div class={css.showWhenInactive}>
-            <Button icon="add" type="primary" view="ghost" class={css.noTouch}>
-              <Text message="New address" />
-            </Button>
+      <Radio value={AddressType.New} class={css.item} dotClass={css.dot}>
+        <div class={css.content}>
+          <div class={css.label}>
+            <Text message="Ship to custom address" />
           </div>
           <div class={css.showWhenActive}>
             <AddressFormItems values={values} errors={errors()} handlers={handlers} />

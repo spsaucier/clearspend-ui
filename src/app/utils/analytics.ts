@@ -8,6 +8,7 @@ import { formatNameString } from '../../employees/utils/formatName';
 
 export const Events = {
   ACTIVATE_CARD: 'Activate Card',
+  ADD_ALLOCATION_TO_PHYSICAL_CARD: 'Add allocation to physical card',
   APPLICATION_APPROVED: 'Application Approved',
   CREATE_ALLOCATION: 'Create Allocation',
   CREATE_CARD: 'Create Card',

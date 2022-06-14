@@ -32,7 +32,7 @@ export default function Cards() {
       title={<Text message="Cards" />}
       actions={
         <Show when={canManageCards(permissions()) || hasSomeManagerRole(currentUserRoles())}>
-          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/edit')} data-name="Add New Card">
+          <Button type="primary" size="lg" icon="add" onClick={() => navigate('/cards/new')} data-name="Add New Card">
             <Text message="New Card" />
           </Button>
         </Show>

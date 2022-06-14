@@ -1,4 +1,4 @@
-import type { UserData, UpdateAllocationRequest, UserRolesAndPermissionsRecord } from 'generated/capital';
+import type { UserData, UserRolesAndPermissionsRecord } from 'generated/capital';
 
 export type AllocationPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['allocationPermissions']>;
 export type GlobalUserPermissions = ValuesOf<Required<UserRolesAndPermissionsRecord>['globalUserPermissions']>;
@@ -31,11 +31,6 @@ export interface Limits {
   [LimitPeriod.MONTHLY]: Readonly<Limit> | null;
   [LimitPeriod.INSTANT]: Readonly<Limit> | null;
 }
-
-export type ControlsData = Pick<
-  Required<UpdateAllocationRequest>,
-  'limits' | 'disabledMccGroups' | 'disabledPaymentTypes' | 'disableForeign'
->;
 
 export interface FormLimits {
   categories: string[];

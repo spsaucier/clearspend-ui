@@ -10,6 +10,7 @@ export interface OptionProps {
 export interface MultiSelectProps {
   name?: string;
   value?: string[];
+  disabledValues?: Readonly<string[]>;
   valueRender?: (value: string) => JSXElement;
   disabled?: boolean;
   class?: string;

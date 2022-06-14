@@ -13,7 +13,6 @@ import { BackLink } from 'app/components/BackLink';
 import { useBusiness } from 'app/containers/Main/context';
 import { useMessages } from 'app/containers/Messages/context';
 import { usePageTabs } from 'app/utils/usePageTabs';
-import { CardControls } from 'allocations/containers/CardControls';
 import { getAllocationPermissions, canManagePermissions, canManageCards } from 'allocations/utils/permissions';
 import { getUser } from 'employees/services';
 import { Drawer } from '_common/components/Drawer';
@@ -23,6 +22,8 @@ import { Button } from '_common/components/Button';
 import { Confirm } from '_common/components/Confirm';
 import { Tag } from '_common/components/Tag';
 import { CardStatements } from 'cards/containers/Statements';
+import type { CardDetailsResponse, UpdateCardSpendControlsRequest } from 'generated/capital';
+import { CardControls } from 'cards/containers/CardControls/CardControls';
 
 import { Card } from '../../components/Card';
 import { CardActions } from '../../components/CardActions';
@@ -31,8 +32,8 @@ import { Transactions } from '../../containers/Transactions';
 import { CardDetails } from '../../containers/CardDetails';
 import { formatCardNumber } from '../../utils/formatCardNumber';
 import { canSeeCardDetails } from '../../utils/canSeeCardDetails';
-import { getCard, updateCard, blockCard, unblockCard, cancelCard } from '../../services';
-import type { CardType, LegacyCardDetailsResponse, LegacyUpdateCardRequest } from '../../types';
+import { getCard, updateCard, blockCard, unblockCard, cancelCard, linkAllocationToCard } from '../../services';
+import type { CardType } from '../../types';
 
 import css from './CardView.css';
 
@@ -43,6 +44,8 @@ enum Tabs {
   settings = 'settings',
   statements = 'statements',
 }
+
+const RELOAD_TIMEOUT_MS = 200;
 
 export default function CardView() {
   const i18n = useI18n();
@@ -75,8 +78,10 @@ export default function CardView() {
     return (block ? blockCard(cardId) : unblockCard(cardId)).then(() => reload());
   };
 
-  const onUpdateCard = async (cardId: string, updates: Readonly<LegacyUpdateCardRequest>) => {
-    mutate(await updateCard(cardId, data()?.card.allocationId ?? '', updates));
+  const onUpdateCard = async (cardId: string, updates: Readonly<UpdateCardSpendControlsRequest>) => {
+    if (updates.allocationSpendControls?.length) {
+      mutate(await updateCard(cardId, updates));
+    }
     messages.success({
       title: i18n.t('Success'),
       message: i18n.t('Changes successfully saved.'),
@@ -88,7 +93,7 @@ export default function CardView() {
     cancelCard(cardId)
       .then((cancelledCard) => {
         mutate({
-          ...(data() as Required<LegacyCardDetailsResponse>),
+          ...(data() as Required<CardDetailsResponse>),
           card: cancelledCard,
         });
         messages.success({
@@ -125,7 +130,19 @@ export default function CardView() {
           cardData={data()}
           allocationId={card()?.allocationId}
           class={css.info}
-          limits={data()?.limits}
+          limits={data()?.allocationSpendControls}
+          onUpdateLinkedAllocation={(id, name) => {
+            if (data()?.card.cardId && id) {
+              linkAllocationToCard(data()!.card.cardId!, id);
+              messages.success({ title: i18n.t('Updated active allocation to {name}', { name }) });
+              mutate({
+                ...(data() as Required<CardDetailsResponse>),
+                linkedAllocationId: id,
+                linkedAllocationName: name,
+              });
+              setTimeout(reload, RELOAD_TIMEOUT_MS);
+            }
+          }}
         />
       </Data>
     );
@@ -232,12 +249,12 @@ export default function CardView() {
           <Tab value={Tabs.transactions}>
             <Text message="Transactions" />
           </Tab>
-          <Show when={canManagePermissions(permissions())}>
+          <Show when={canManageCards(permissions()) && card()?.status !== 'CANCELLED'}>
             <Tab value={Tabs.controls}>
               <Text message="Spend Controls" />
             </Tab>
           </Show>
-          <Show when={canManageCards(permissions()) && card()?.status !== 'CANCELLED'}>
+          <Show when={canManagePermissions(permissions()) && card()?.status !== 'CANCELLED'}>
             <Tab value={Tabs.settings}>
               <Text message="Card Settings" />
             </Tab>
@@ -258,8 +275,8 @@ export default function CardView() {
           <Match when={tab() === Tabs.controls}>
             <CardControls
               id={card()!.cardId!}
-              data={data()!}
-              allocationId={card()!.allocationId}
+              data={data()}
+              allocationId={card()?.allocationId!}
               disabled={isCancelled()}
               onSave={onUpdateCard}
             />

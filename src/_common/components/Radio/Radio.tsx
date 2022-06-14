@@ -27,9 +27,9 @@ export function Radio<T extends RadioValue>(props: Readonly<RadioProps<T>>) {
         onChange={onChange}
       />
       <Show when={!group.empty} fallback={props.children}>
-        <span class={css.dot} />
+        <span class={join(css.dot, props.dotClass)} />
         <Show when={props.children}>
-          <span class={css.label}>{props.children}</span>
+          <span class={join(css.label, props.labelClass)}>{props.children}</span>
         </Show>
       </Show>
     </label>

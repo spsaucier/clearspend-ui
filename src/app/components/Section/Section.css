@@ -6,6 +6,10 @@
   @media (--bp-large) {
     flex-direction: row;
   }
+
+  & + & {
+    margin-top: var(--pd-20);
+  }
 }
 
 .header {

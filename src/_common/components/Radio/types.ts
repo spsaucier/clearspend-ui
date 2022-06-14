@@ -5,6 +5,8 @@ export type RadioValue = string | boolean;
 export interface RadioProps<T> {
   value: T;
   class?: string;
+  dotClass?: string;
+  labelClass?: string;
   disabled?: boolean;
   children?: JSXElement;
 }

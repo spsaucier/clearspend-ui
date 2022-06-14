@@ -29,30 +29,18 @@
 }
 
 .card {
-  width: 232px;
+  width: 100%;
   height: auto;
 }
 
 .type {
   display: flex;
   margin: var(--pd-8) 0 var(--pd-4);
+  margin-top: 0.8em;
   align-items: center;
   font-size: var(--text-16);
   font-weight: var(--font-400);
-  line-height: 1.5;
-}
-
-.control {
-  margin: 0 var(--pd-8) 0 0;
-
-  @nest .item > input:checked + .content & {
-    background-color: var(--tw-primary-bg);
-    border-color: var(--tw-primary-bg);
-
-    &::after {
-      opacity: 1;
-    }
-  }
+  line-height: 1.35;
 }
 
 .note {

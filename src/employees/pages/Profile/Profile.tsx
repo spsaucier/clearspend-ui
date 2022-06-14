@@ -1,4 +1,4 @@
-import { createSignal, For } from 'solid-js';
+import { createSignal, For, createMemo } from 'solid-js';
 import { Text } from 'solid-i18n';
 import { useNavigate } from 'solid-app-router';
 
@@ -15,7 +15,7 @@ import { Data } from 'app/components/Data';
 import { useBusiness } from 'app/containers/Main/context';
 import { Card } from 'cards/components/Card';
 import { CardPreview } from 'cards/containers/CardPreview';
-import type { CardType } from 'cards/types';
+import { CardType } from 'cards/types';
 import { clearCurrentBusinessId } from '_common/api/businessId';
 
 import { ProfileInfo } from '../../components/ProfileInfo';
@@ -33,6 +33,17 @@ export default function Profile() {
 
   const cards = useUserCards();
   const [cardID, setCardID] = createSignal<string>();
+  const sortedCards = createMemo(() =>
+    cards.data
+      ? [
+          ...cards.data
+            .filter((c) => c.card.status === 'ACTIVE')
+            .sort((c) => (c.card.type === CardType.PHYSICAL ? -1 : 1)),
+          ...cards.data.filter((c) => c.card.status === 'INACTIVE'),
+          ...cards.data.filter((c) => c.card.status === 'CANCELLED'),
+        ]
+      : [],
+  );
   const [loading, logoutAction] = wrapAction(() =>
     logout().then(() => {
       events.emit(AppEvent.Logout);
@@ -50,7 +61,11 @@ export default function Profile() {
         </Button>
       }
     >
-      <Section title={<Text message="Profile" />} description={'Your primary account information'} class={css.section}>
+      <Section
+        title={<Text message="Profile" />}
+        description={<Text message="Your primary account information" />}
+        class={css.section}
+      >
         <Data data={user()} error={userStatus().error} loading={userStatus().loading} onReload={reloadUser}>
           <ProfileInfo data={user()!} class={css.info} />
         </Data>
@@ -58,10 +73,14 @@ export default function Profile() {
           <Text message="Update Address" />
         </Button>
       </Section>
-      <Section title={<Text message="Cards" />} description={'All cards assigned to your account'} class={css.section}>
-        <Data data={cards.data} loading={cards.loading} error={cards.error} onReload={cards.reload}>
+      <Section
+        title={<Text message="Cards" />}
+        description={<Text message="All cards assigned to your account" />}
+        class={css.section}
+      >
+        <Data data={sortedCards()} loading={cards.loading} error={cards.error} onReload={cards.reload}>
           <div class={css.cards}>
-            <For each={cards.data}>
+            <For each={sortedCards()}>
               {(item) => (
                 <Card
                   type={item.card.type as CardType}
@@ -76,14 +95,18 @@ export default function Profile() {
           </div>
         </Data>
       </Section>
-      <Section title={<Text message="Password" />} description={'Change your current password'} class={css.section}>
+      <Section
+        title={<Text message="Password" />}
+        description={<Text message="Change your current password" />}
+        class={css.section}
+      >
         <Button size="lg" icon="edit" onClick={() => navigate('/profile/password')}>
           <Text message="Update Password" />
         </Button>
       </Section>
       <Section
         title={<Text message="Two-factor authentication" />}
-        description={'Update the mobile number used to secure your account.'}
+        description={<Text message="Update the mobile number used to secure your account." />}
         class={css.section}
       >
         <Button size="lg" icon="edit" onClick={() => navigate('/profile/phone')}>

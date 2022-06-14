@@ -13,7 +13,7 @@ import { AllocationEdit } from 'allocations/pages/AllocationEdit';
 import { Cards } from 'cards';
 import { CardView } from 'cards/pages/CardView';
 import { CardActivate } from 'cards/pages/CardActivate';
-import { CardEdit } from 'cards/pages/CardEdit';
+import { CardCreate } from 'cards/pages/CardCreate';
 import { CompanySettings } from 'company';
 import { Accounting } from 'accounting';
 import AccountingSetup from 'accounting/pages/AccountingSetup/AccountingSetup';
@@ -49,7 +49,7 @@ export function MainRoutes() {
               <Route path="/allocations/edit" element={<AllocationEdit />} />
 
               <Route path="/cards" element={<Cards />} />
-              <Route path="/cards/edit" element={<CardEdit />} />
+              <Route path="/cards/new" element={<CardCreate />} />
               <Route path="/cards/view/:id" element={<CardView />} />
               <Route path="/cards/activate/:id" element={<CardActivate />} />
 

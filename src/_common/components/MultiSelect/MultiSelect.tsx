@@ -111,9 +111,16 @@ export function MultiSelect(props: Readonly<MultiSelectProps>) {
             {(val) => (
               <Tag size="xs" class={css.selectedOption}>
                 <span>{resultRender(val)}</span>
-                <span onClick={() => onChange(val)}>
-                  <Icon size="xs" name="cancel" class={css.remove} />
-                </span>
+                <Show when={!props.disabledValues?.includes(val)}>
+                  <span
+                    onClick={() => {
+                      onChange(val);
+                      setOpen(false);
+                    }}
+                  >
+                    <Icon size="xs" name="cancel" class={css.remove} />
+                  </span>
+                </Show>
               </Tag>
             )}
           </For>

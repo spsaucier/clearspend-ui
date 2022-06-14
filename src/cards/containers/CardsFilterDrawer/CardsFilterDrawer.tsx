@@ -1,4 +1,4 @@
-import { For, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 import { useI18n, Text } from 'solid-i18n';
 
 import { createForm, Form, FormItem } from '_common/components/Form';
@@ -11,6 +11,7 @@ import { FiltersControls } from 'app/components/FiltersControls';
 import { useBusiness } from 'app/containers/Main/context';
 import { useUsersList } from 'employees/stores/usersList';
 import { formatName } from 'employees/utils/formatName';
+import { byUserLastName } from 'allocations/components/AllocationSelect/utils';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { CardsFilterDrawerProps } from './types';
@@ -31,6 +32,9 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
       ...convertFormData(values()),
     }));
   };
+
+  // TODO: Remove once we sort in BE: CAP-557
+  const sortedUsers = createMemo(() => [...users.data!].sort(byUserLastName));
 
   return (
     <Form class={css.root}>
@@ -92,7 +96,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
             </Checkbox>
           </CheckboxGroup>
         </FilterBox>
-        <Show when={!props.omitFilters?.includes('users')}>
+        <Show when={!props.omitFilters?.includes('users') && users.data}>
           <FilterBox title={<Text message="Employees" />}>
             <MultiSelect
               name="employees"
@@ -101,7 +105,7 @@ export function CardsFilterDrawer(props: Readonly<CardsFilterDrawerProps>) {
               valueRender={(id) => formatName(users.data!.find((item) => item.userId === id))}
               onChange={handlers.users}
             >
-              <For each={users.data!}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
+              <For each={sortedUsers()}>{(item) => <Option value={item.userId!}>{formatName(item)}</Option>}</For>
             </MultiSelect>
           </FilterBox>
         </Show>

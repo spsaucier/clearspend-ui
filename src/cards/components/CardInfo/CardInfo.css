@@ -49,3 +49,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
+.allocation-select {
+  width: 240px;
+  margin-top: var(--pd-16);
+}

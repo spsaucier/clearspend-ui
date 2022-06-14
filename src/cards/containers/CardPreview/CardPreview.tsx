@@ -96,10 +96,10 @@ export function CardPreview(props: Readonly<CardPreviewProps>) {
             </Match>
             <Match when={tab() === Tabs.details}>
               <CardInfo
-                limits={data()?.limits}
+                limits={data()?.allocationSpendControls}
                 user={user()}
                 cardData={data()}
-                allocationId={data()?.card.allocationId}
+                allocationId={data()?.linkedAllocationId}
               />
             </Match>
           </Switch>

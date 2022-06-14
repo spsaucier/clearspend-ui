@@ -9,6 +9,7 @@ import { useMessages } from 'app/containers/Messages/context';
 import { ResetLimits } from 'cards/components/ResetLimits';
 import type { MccGroup } from 'transactions/types';
 import { LimitsForm } from 'cards/components/LimitsForm/LimitsForm';
+import type { AllocationDetailsResponse, UpdateAllocationRequest } from 'generated/capital';
 
 import {
   getChannels,
@@ -18,22 +19,21 @@ import {
   checkSameLimits,
 } from '../../utils/convertFormLimits';
 import { getAllocation } from '../../services';
-import type { ControlsData } from '../../types';
 
 import { getFormOptions, convertFormData } from './utils';
 import type { FormValues } from './types';
 
-import css from './CardControlsForm.css';
+import css from './DefaultCardControlsForm.css';
 
-interface CardControlsFormProps {
-  data: Readonly<ControlsData>;
-  allocationId?: string;
+interface DefaultCardControlsFormProps {
+  data: Readonly<Required<AllocationDetailsResponse>>;
+  allocationId: string;
   mccCategories: readonly Readonly<MccGroup>[];
   disabled?: boolean;
-  onSave: (data: Readonly<ControlsData>) => Promise<unknown>;
+  onSave: (data: Readonly<UpdateAllocationRequest>) => Promise<unknown>;
 }
 
-export function CardControlsForm(props: Readonly<CardControlsFormProps>) {
+export function DefaultCardControlsForm(props: Readonly<DefaultCardControlsFormProps>) {
   const i18n = useI18n();
   const messages = useMessages();
   const [loading, save] = wrapAction(props.onSave);
@@ -48,7 +48,7 @@ export function CardControlsForm(props: Readonly<CardControlsFormProps>) {
     if (loading() || hasErrors(trigger())) return;
 
     const data = values();
-    await save(convertFormData(data, props.mccCategories)).catch(() => {
+    await save(convertFormData(data, props.allocationId, props.mccCategories)).catch(() => {
       messages.error({ title: i18n.t('Something went wrong') });
     });
     reset(data);

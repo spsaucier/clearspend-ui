@@ -10,8 +10,6 @@ import type {
   CardDetailsResponse,
 } from 'generated/capital';
 
-import { legacyCardDetailsConversion, LegacyCardDetailsResponse } from '../cards/types';
-
 export async function getUsers() {
   return (await service.get<readonly Readonly<UserData>[]>('/users/list')).data;
 }
@@ -48,7 +46,6 @@ export async function archiveUser(userId: string) {
   return (await service.patch<boolean>(`/users/${userId}/archive`)).data;
 }
 
-export async function getUserCards(): Promise<readonly Readonly<LegacyCardDetailsResponse>[]> {
-  const data = (await service.get<readonly Readonly<Required<CardDetailsResponse>>[]>('/users/cards')).data;
-  return data.map((r) => legacyCardDetailsConversion(r));
+export async function getUserCards(): Promise<readonly Readonly<CardDetailsResponse>[]> {
+  return (await service.get<readonly Readonly<Required<CardDetailsResponse>>[]>('/users/cards')).data;
 }

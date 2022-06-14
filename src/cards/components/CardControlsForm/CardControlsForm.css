@@ -1,0 +1,8 @@
+.root {
+  max-width: 502px;
+}
+
+.title-tag {
+  position: absolute;
+  margin-left: var(--pd-8);
+}

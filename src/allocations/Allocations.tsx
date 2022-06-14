@@ -24,7 +24,7 @@ import { Breadcrumbs } from './components/Breadcrumbs';
 import { Cards } from './containers/Cards';
 import { Transactions } from './containers/Transactions';
 import { Ledger } from './containers/Ledger';
-import { CardControls } from './containers/CardControls';
+import { DefaultCardControls } from './containers/DefaultCardControls';
 import { Settings } from './containers/Settings';
 import { ManageBalanceButton } from './containers/ManageBalanceButton';
 import { ManageBalance } from './containers/ManageBalance';
@@ -129,7 +129,7 @@ export default function Allocations() {
                   <Button
                     icon="add"
                     size="lg"
-                    onClick={() => navigate('/cards/edit', { state: { allocationId: current()!.allocationId } })}
+                    onClick={() => navigate('/cards/new', { state: { allocationId: current()!.allocationId } })}
                     data-name="Create card"
                   >
                     <Text message="New Card" />
@@ -180,8 +180,8 @@ export default function Allocations() {
             </Match>
             <Match when={tab() === Tabs.controls}>
               <Data error={status().error} loading={status().loading} data={data()} onReload={reload}>
-                <CardControls
-                  id={data()!.allocation.allocationId}
+                <DefaultCardControls
+                  allocationId={data()!.allocation.allocationId}
                   data={data()!}
                   onSave={onUpdateAllocation}
                   disabled={current()!.archived}

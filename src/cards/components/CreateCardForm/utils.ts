@@ -1,18 +1,15 @@
-import { i18n } from '_common/api/intl';
 import type { FormOptions } from '_common/components/Form';
-import { required } from '_common/components/Form/rules/required';
+import { oneRequired, required } from '_common/components/Form/rules/required';
 import { isString } from '_common/utils/isString';
-import { getDefaultLimits, convertFormLimits } from 'allocations/utils/convertFormLimits';
+import { convertFormLimits } from 'allocations/utils/convertFormLimits';
 import { getEmptyAddress } from 'employees/components/AddressFormItems/utils';
 import type { MccGroup } from 'transactions/types';
+import type { IssueCardRequest } from 'generated/capital';
+import type { FormLimits } from 'allocations/types';
 
-import { CardType, LegacyIssueCardRequest } from '../../types';
+import { CardType } from '../../types';
 
 import type { FormValues } from './types';
-
-function validTypes(value: readonly CardType[]): boolean | string {
-  return !!value.length || String(i18n.t('Required field'));
-}
 
 interface Options {
   userId: string;
@@ -20,7 +17,7 @@ interface Options {
 }
 
 export function requiredAddress(value: string, values: FormValues): boolean | string {
-  if (values.types.includes(CardType.PHYSICAL)) {
+  if (values.type === CardType.PHYSICAL) {
     return (isString(value) && !!value.trim()) || !!value || 'Please choose a delivery address';
   }
   return true;
@@ -29,20 +26,16 @@ export function requiredAddress(value: string, values: FormValues): boolean | st
 export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<FormValues> {
   return {
     defaultValues: {
-      allocationId: data.allocationId || '',
+      allocations: data.allocationId ? [data.allocationId] : [],
       employee: data.userId || '',
-      types: [],
-      personal: false,
-      categories: [],
-      channels: [],
-      international: true,
-      purchasesLimits: getDefaultLimits(),
+      type: '',
+      personal: true,
       ...getEmptyAddress(),
     },
     rules: {
-      allocationId: [required],
+      allocations: [oneRequired],
       employee: [required],
-      types: [validTypes],
+      type: [required],
       streetLine1: [requiredAddress],
       locality: [requiredAddress],
       region: [requiredAddress],
@@ -51,17 +44,30 @@ export function getFormOptions(data: Partial<Readonly<Options>>): FormOptions<Fo
   };
 }
 
+export const convertToSpendControls = (
+  allocationsMap: {
+    [allocationId: string]: FormLimits;
+  },
+  categories: readonly Readonly<MccGroup>[],
+) =>
+  Object.entries(allocationsMap).map(([allocationId, allocationData]) =>
+    convertFormLimits(allocationData, categories, allocationId),
+  );
+
 export function convertFormData(
   data: Readonly<FormValues>,
+  allocationsMap: {
+    [allocationId: string]: FormLimits;
+  },
   categories: readonly Readonly<MccGroup>[],
-): Readonly<LegacyIssueCardRequest> {
+): Readonly<IssueCardRequest> {
   return {
     binType: 'DEBIT',
-    allocationId: data.allocationId,
     userId: data.employee,
     currency: 'USD',
-    cardType: data.types,
+    cardType: [data.type === 'ADD_TO_PHYSICAL' ? 'PHYSICAL' : data.type || 'PHYSICAL'], // TODO: TS remove || 'PHYSICAL'
     isPersonal: data.personal,
+    allocationSpendControls: convertToSpendControls(allocationsMap, categories),
     shippingAddress: {
       streetLine1: data.streetLine1,
       streetLine2: data.streetLine2,
@@ -70,6 +76,5 @@ export function convertFormData(
       postalCode: data.postalCode,
       country: 'USA',
     },
-    ...convertFormLimits(data, categories),
   };
 }

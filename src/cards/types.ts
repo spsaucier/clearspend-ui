@@ -71,7 +71,8 @@ export interface LegacyUpdateCardRequest {
 }
 
 export interface LegacyIssueCardRequest {
-  cardType: ('PHYSICAL' | 'VIRTUAL')[];
+  cardType: 'PHYSICAL' | 'VIRTUAL' | 'ADD_TO_PHYSICAL';
+  cardId?: string;
 
   /**
    * @format uuid
@@ -315,7 +316,7 @@ export const legacyUpdateCardConversion = (
 export const legacyIssueCardConversion = (data: Readonly<LegacyIssueCardRequest>): Readonly<IssueCardRequest> => ({
   binType: data.binType,
   fundingType: data.fundingType,
-  cardType: data.cardType,
+  cardType: [data.cardType as CardType],
   userId: data.userId,
   currency: data.currency,
   isPersonal: data.isPersonal,

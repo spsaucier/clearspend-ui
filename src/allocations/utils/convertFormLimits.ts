@@ -2,27 +2,34 @@
   no-param-reassign,
   @typescript-eslint/no-explicit-any,
   @typescript-eslint/no-unsafe-member-access,
-  @typescript-eslint/no-unsafe-assignment
 */
 
 import { keys } from '_common/utils/keys';
 import { isEqual } from '_common/components/Form';
 import { parseAmount, formatAmount } from '_common/formatters/amount';
-import type { CurrencyLimit, LimitTypeMap, AllocationDetailsResponse } from 'generated/capital';
+import type {
+  CurrencyLimit,
+  LimitTypeMap,
+  CardAllocationSpendControls,
+  AllocationDetailsResponse,
+} from 'generated/capital';
 import type { MccGroup } from 'transactions/types';
 
 import { DEFAULT_LIMITS, PAYMENT_TYPES } from '../constants/limits';
-import type { Limits, FormLimits, ControlsData } from '../types';
+import type { Limits, FormLimits } from '../types';
 
 export function getDefaultLimits() {
   return { ...DEFAULT_LIMITS };
 }
 
-export function getCategories(data: Readonly<ControlsData>, categories: readonly Readonly<MccGroup>[]) {
+export function getCategories(
+  data: Omit<AllocationDetailsResponse, 'allocation'>,
+  categories: readonly Readonly<MccGroup>[],
+) {
   return categories.filter((id) => !data.disabledMccGroups!.includes(id!));
 }
 
-export function getChannels(data: Readonly<ControlsData>) {
+export function getChannels(data: Omit<AllocationDetailsResponse, 'allocation'>) {
   return PAYMENT_TYPES.map((item) => item.key).filter((id) => !data.disabledPaymentTypes!.includes(id as any));
 }
 
@@ -37,7 +44,7 @@ function formatLimits(limits: Readonly<Limits>) {
   );
 }
 
-export function getPurchasesLimits(data: Readonly<ControlsData>) {
+export function getPurchasesLimits(data: Omit<AllocationDetailsResponse, 'allocation'>) {
   return formatLimits((data.limits![0]!.typeMap as any).PURCHASE || {});
 }
 
@@ -55,8 +62,9 @@ function prepareLimits(limits: Readonly<Limits>) {
 export function convertFormLimits(
   data: Readonly<FormLimits>,
   categories: readonly Readonly<MccGroup>[],
-): Readonly<ControlsData> {
-  return {
+  allocationId?: string,
+): Readonly<CardAllocationSpendControls> {
+  const result = {
     limits: [
       {
         currency: 'USD',
@@ -68,28 +76,31 @@ export function convertFormLimits(
     disabledMccGroups: categories.filter((id) => !data.categories.includes(id!)),
     disabledPaymentTypes: PAYMENT_TYPES.map((item) => item.key).filter(
       (id) => !data.channels.includes(id),
-    ) as ControlsData['disabledPaymentTypes'],
+    ) as CardAllocationSpendControls['disabledPaymentTypes'],
     disableForeign: !data.international,
-  };
+  } as CardAllocationSpendControls;
+  if (allocationId) result.allocationId = allocationId;
+  return result;
 }
 
 export function checkSameLimits(
   data: Readonly<FormLimits>,
-  target: Required<AllocationDetailsResponse> | null,
+  target: Omit<AllocationDetailsResponse, 'allocation'> | null,
   categories: readonly Readonly<MccGroup>[],
 ): boolean {
   if (!target) return true;
-
   return isEqual(
-    {
-      categories: getCategories(target, categories),
-      channels: getChannels(target),
-      purchasesLimits: getPurchasesLimits(target),
-    },
     {
       categories: data.categories,
       channels: data.channels,
       purchasesLimits: data.purchasesLimits,
+      international: data.international,
+    },
+    {
+      categories: getCategories(target, categories),
+      channels: getChannels(target),
+      purchasesLimits: getPurchasesLimits(target),
+      international: !target.disableForeign,
     },
   );
 }

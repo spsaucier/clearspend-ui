@@ -3,19 +3,18 @@ import { Text } from 'solid-i18n';
 import { Section } from 'app/components/Section';
 import { Data } from 'app/components/Data';
 import { useMCC } from 'app/stores/mcc';
+import type { AllocationDetailsResponse, UpdateAllocationRequest } from 'generated/capital';
 
-import { CardControlsForm } from '../../components/CardControlsForm';
-import type { ControlsData } from '../../types';
+import { DefaultCardControlsForm } from '../../components/DefaultCardControlsForm';
 
-interface CardControlsProps {
-  id: string;
-  allocationId?: string;
-  data: Readonly<ControlsData>;
+interface DefaultCardControlsProps {
+  allocationId: string;
+  data: Readonly<Required<AllocationDetailsResponse>>;
   disabled?: boolean;
-  onSave: (allocationId: string, data: Readonly<ControlsData>) => Promise<unknown>;
+  onSave: (allocationId: string, data: Readonly<UpdateAllocationRequest>) => Promise<unknown>;
 }
 
-export function CardControls(props: Readonly<CardControlsProps>) {
+export function DefaultCardControls(props: Readonly<DefaultCardControlsProps>) {
   const mcc = useMCC();
 
   return (
@@ -31,12 +30,12 @@ export function CardControls(props: Readonly<CardControlsProps>) {
           />
         }
       >
-        <CardControlsForm
+        <DefaultCardControlsForm
           data={props.data}
           mccCategories={mcc.data!}
           allocationId={props.allocationId}
           disabled={props.disabled}
-          onSave={(values) => props.onSave(props.id, values)}
+          onSave={(values) => props.onSave(props.allocationId, values)}
         />
       </Section>
     </Data>
