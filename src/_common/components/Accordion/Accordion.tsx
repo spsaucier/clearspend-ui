@@ -1,5 +1,4 @@
 import { createUniqueId, JSXElement, createMemo, Index } from 'solid-js';
-import { autoAnimate } from 'solid-auto-animate';
 
 import { join } from '_common/utils/join';
 
@@ -15,12 +14,8 @@ export const Accordion = (props: AccordionProps) => {
   const id = createUniqueId();
   const items = createMemo(() => props.items);
 
-  // Required to prevent TS from removing the directive
-  // eslint-disable-next-line no-unused-expressions
-  autoAnimate;
-
   return (
-    <div class={join(css.tabs, props.class)} use:autoAnimate>
+    <div class={join(css.tabs, props.class)}>
       <Index each={items()}>
         {(item, idx) => (
           <div class={css.tab}>
