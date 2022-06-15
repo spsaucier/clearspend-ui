@@ -21,8 +21,8 @@ const MS_FOR_SLIDE_TRANSITION = 300;
 export function ReceiptsModal(props: {
   initialIdx: number;
   receipts: Readonly<ReceiptData>[];
-  onDelete: (id: string) => void;
-  deleting: boolean;
+  onDelete?: (id: string) => void;
+  deleting?: boolean;
   onClose: () => void;
 }) {
   let ref!: HTMLDivElement;
@@ -43,7 +43,7 @@ export function ReceiptsModal(props: {
         setTimeout(resolve, MS_FOR_SLIDE_TRANSITION);
       });
     }
-    await props.onDelete(idToDelete);
+    await props.onDelete?.(idToDelete);
     if (receiptsCount() <= 1) {
       props.onClose();
     } else {
@@ -100,18 +100,20 @@ export function ReceiptsModal(props: {
             >
               <Text message="Download" />
             </Button>
-            <Confirm
-              position="top-right"
-              question={<Text message="Are you sure you want to delete this receipt?" />}
-              confirmText={<Text message="Delete" />}
-              onConfirm={() => onDelete()}
-            >
-              {(args) => (
-                <Button size="lg" type="danger" view="second" icon="trash" loading={props.deleting} {...args}>
-                  <Text message="Delete" />
-                </Button>
-              )}
-            </Confirm>
+            <Show when={props.onDelete}>
+              <Confirm
+                position="top-right"
+                question={<Text message="Are you sure you want to delete this receipt?" />}
+                confirmText={<Text message="Delete" />}
+                onConfirm={() => onDelete()}
+              >
+                {(args) => (
+                  <Button size="lg" type="danger" view="second" icon="trash" loading={props.deleting} {...args}>
+                    <Text message="Delete" />
+                  </Button>
+                )}
+              </Confirm>
+            </Show>
           </div>
         </div>
       </Modal>

@@ -3,6 +3,16 @@
   gap: var(--pd-10);
 }
 
+.pill {
+  padding-top: var(--pd-2);
+  padding-right: var(--pd-8);
+  padding-bottom: 0;
+  padding-left: var(--pd-4);
+  border: 1px solid black;
+  border-radius: var(--radius-16);
+  gap: var(--pd-2);
+}
+
 .status {
   display: flex;
   width: 24px;
@@ -14,6 +24,13 @@
   background: var(--tw-gray-10);
   border: 1px solid var(--tw-gray-20);
   border-radius: var(--radius-8);
+}
+
+.plain-status {
+  width: 20px;
+  height: 20px;
+  margin-top: -1px;
+  border: 0;
 }
 
 .approved {
@@ -30,4 +47,8 @@
 
 .amount {
   font-weight: var(--font-700);
+}
+
+.pill .amount {
+  font-weight: var(--font-400);
 }

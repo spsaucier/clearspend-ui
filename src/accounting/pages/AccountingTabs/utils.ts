@@ -36,3 +36,15 @@ export function getAccountingTimePeriod(period: AccountingTimePeriod): [from: Re
       return [startOfDay(today), endOfDay(today)];
   }
 }
+
+const HALF_DAY_HOURS = 12;
+const MINUTES_DIGIT_CHECK = 10;
+export function formatAMPM(date: Date) {
+  let hours = date.getHours();
+  let minutes: string | number = date.getMinutes();
+  let ampm = hours >= HALF_DAY_HOURS ? 'PM' : 'AM';
+  hours = hours % HALF_DAY_HOURS;
+  hours = hours ? hours : HALF_DAY_HOURS; // the hour '0' should be '12'
+  minutes = minutes < MINUTES_DIGIT_CHECK ? '0' + minutes : minutes;
+  return hours + ':' + minutes + ' ' + ampm;
+}

@@ -1,0 +1,87 @@
+.root {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+}
+
+.heading {
+  margin-bottom: var(--pd-6);
+  font-family: var(--font-header);
+  font-size: var(--text-20);
+  font-weight: var(--font-700);
+  line-height: 1.4;
+}
+
+.name {
+  margin-bottom: var(--pd-6);
+  text-align: center;
+}
+
+.container,
+.scroll {
+  padding: 0 var(--pd-24) 15px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll {
+  flex-grow: 1;
+}
+
+.single-transaction-block {
+  display: flex;
+  padding: var(--pd-32) 0;
+  align-items: center;
+  border-bottom: 1px solid var(--tw-gray-30);
+  cursor: pointer;
+}
+
+.transaction-block-summary {
+  padding-left: var(--pd-10);
+  flex: 1;
+  color: var(--tw-gray-60);
+  font-size: var(--text-12);
+}
+
+.transaction-block-summary > div:first-child {
+  padding-bottom: var(--pd-4);
+  color: var(--tw-black);
+  font-size: var(--text-16);
+  font-weight: var(--font-500);
+}
+
+.transaction-block-amount {
+  color: black;
+  text-align: right;
+}
+
+.transaction-block-amount > div:last-child {
+  padding-top: var(--pd-4);
+  padding-right: var(--pd-8);
+}
+
+.summary {
+  display: flex;
+  margin: 0;
+  padding: var(--pd-24) 0;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px dashed var(--tw-gray-40);
+}
+
+.merchant-logo {
+  margin-bottom: var(--pd-16);
+}
+
+.previews {
+  display: flex;
+  margin: var(--pd-16) 0 var(--pd-32);
+  flex-wrap: wrap;
+  gap: var(--pd-8);
+}
+
+.preview-wrap {
+  position: relative;
+}

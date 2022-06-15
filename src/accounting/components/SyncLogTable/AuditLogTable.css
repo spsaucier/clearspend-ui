@@ -8,6 +8,7 @@
   font-size: var(--text-12);
 }
 
-.accent-text {
+.link-text {
   color: var(--tw-accent-50);
+  cursor: pointer;
 }

@@ -1,1 +1,0 @@
-export { TransactionsTableAmount } from './TransactionsTableAmount';

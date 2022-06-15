@@ -35,7 +35,7 @@ import { activityToLedger } from 'transactions/utils/convertTypes';
 import { useTransactionsFilters } from '../../utils/useTransactionsFilters';
 import { ActivityDate } from '../ActivityDate';
 import { MerchantLogo } from '../MerchantLogo';
-import { TransactionsTableAmount } from '../TransactionsTableAmount';
+import { TransactionsAmountDisplay } from '../TransactionsAmountDisplay';
 import { TransactionFilterDrawer } from '../TransactionFilterDrawer';
 import { MERCHANT_CATEGORIES } from '../../constants';
 import { MissingDetails } from '../MissingDetails';
@@ -172,7 +172,7 @@ export function TransactionsTable(props: Readonly<TransactionsTableProps>) {
       name: 'amount',
       title: <Text message="Amount • Status" />,
       render: (item) => (
-        <TransactionsTableAmount
+        <TransactionsAmountDisplay
           status={item.status}
           type={item.type}
           amount={item.amount}

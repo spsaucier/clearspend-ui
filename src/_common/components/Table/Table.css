@@ -64,7 +64,7 @@
 
 .td {
   padding: 20px var(--pd-12);
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 /* DARK MODE - TABLE STYLING */

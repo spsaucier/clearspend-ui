@@ -8,7 +8,7 @@ import { STATUS_ICONS } from '../../constants';
 import type { ActivityStatus } from '../../types';
 import { ActivityAmount } from '../ActivityAmount';
 
-import css from './TransactionsTableAmount.css';
+import css from './TransactionsAmountDisplay.css';
 
 const STATUS_COLORS: Record<ActivityStatus | 'NETWORK_REFUND', string | undefined> = {
   APPROVED: css.approved,
@@ -20,19 +20,20 @@ const STATUS_COLORS: Record<ActivityStatus | 'NETWORK_REFUND', string | undefine
   NETWORK_REFUND: undefined,
 };
 
-interface TransactionsTableAmountProps {
+interface TransactionsAmountDisplayProps {
   status: AccountActivityResponse['status'];
   amount: Readonly<Amount> | undefined;
   type?: AccountActivityResponse['type'];
   requestedAmount: Readonly<Amount> | undefined;
+  showAsPill?: boolean;
 }
 
-export function TransactionsTableAmount(props: Readonly<TransactionsTableAmountProps>) {
+export function TransactionsAmountDisplay(props: Readonly<TransactionsAmountDisplayProps>) {
   const actingStatus = props.type === 'NETWORK_REFUND' ? 'NETWORK_REFUND' : props.status!;
   return (
-    <div class={css.root}>
+    <div class={join(css.root, props.showAsPill && css.pill, props.showAsPill && STATUS_COLORS[actingStatus])}>
       <Show when={props.status}>
-        <div class={join(css.status, STATUS_COLORS[actingStatus])}>
+        <div class={join(css.status, props.showAsPill && css.plainStatus, STATUS_COLORS[actingStatus])}>
           <Icon name={STATUS_ICONS[actingStatus]} size="sm" />
         </div>
       </Show>

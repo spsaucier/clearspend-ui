@@ -1,55 +1,28 @@
 import { Text } from 'solid-i18n';
+import { Show } from 'solid-js';
 
 import { Table, TableColumn } from '_common/components/Table';
 import type { AuditLogDisplayValue } from 'generated/capital';
+import { formatAMPM } from 'accounting/pages/AccountingTabs/utils';
 
 import css from './AuditLogTable.css';
 
 interface AuditLogTableProps {
   auditLogs: Readonly<AuditLogDisplayValue[]> | null;
-  onViewTransactionDetails: (transactionId: string) => void;
+  onViewTransactionDetails: (auditLogDisplayValue: AuditLogDisplayValue) => void;
 }
 
 export function AuditLogTable(props: AuditLogTableProps) {
-  const formatDate = (datestring: string | undefined) => {
-    if (datestring === undefined) {
-      return <></>;
-    }
-    const date = new Date(datestring);
-    const formattedDate = date.toString().split(' ');
-    return (
-      <div class={css.detailContainer}>
-        <Text message={`${formattedDate[1]} ${formattedDate[2]}, ${formattedDate[3]}`} />
-        <div class={css.subtext}>
-          <Text message={`${formattedDate[4]}`} />
-        </div>
-      </div>
-    );
-  };
-
-  const formatUser = (log: AuditLogDisplayValue) => {
-    return (
-      <div class={css.detailContainer}>
-        <div class={css.accentText}>
-          <Text message={`${log.firstName} ${log.lastName}`} />
-        </div>
-        <div class={css.subtext}>
-          <Text message={`${log.email}`} />
-        </div>
-      </div>
-    );
-  };
-
   const columns: readonly Readonly<TableColumn<AuditLogDisplayValue>>[] = [
     {
       name: 'time',
       title: 'Date & Time',
-      render: (item) => formatDate(item.auditTime),
+      render: (item) => renderFormattedDate(item.auditTime),
     },
     {
       name: 'user',
       title: 'User',
-      render: (item) => formatUser(item),
+      render: (item) => renderFormattedUser(item),
     },
     {
       name: 'event',
@@ -61,15 +34,54 @@ export function AuditLogTable(props: AuditLogTableProps) {
       title: 'Details',
       render: (item) => (
         <div
-          class={css.accentText}
+          class={css.linkText}
           onClick={() => {
-            props.onViewTransactionDetails(item.transactionId!);
+            props.onViewTransactionDetails(item);
           }}
         >
-          <Text message="View Transaction" />
+          <Show when={item.groupSyncActivityIds}>
+            <Text message="View Transactions" />
+          </Show>
+          <Show when={!item.groupSyncActivityIds}>
+            <Text message="View Transaction" />
+          </Show>
         </div>
       ),
     },
   ];
   return <div>{props.auditLogs && <Table columns={columns} data={props.auditLogs}></Table>}</div>;
 }
+
+export const renderFormattedUser = (log: AuditLogDisplayValue) => {
+  return (
+    <div class={css.detailContainer}>
+      <div class={css.linkText}>
+        <Text message={`${log.firstName} ${log.lastName}`} />
+      </div>
+      <div class={css.subtext}>
+        <Text message={`${log.email}`} />
+      </div>
+    </div>
+  );
+};
+
+export const renderFormattedDate = (datestring: string | undefined, excludeTime?: boolean, excludeDate?: boolean) => {
+  if (datestring === undefined) {
+    return <></>;
+  }
+  const date = new Date(datestring);
+  const formattedDate = date.toString().split(' ');
+  const formattedAMPM = formatAMPM(date);
+  return (
+    <div class={css.detailContainer}>
+      <Show when={!excludeDate}>
+        <Text message={`${formattedDate[1]} ${formattedDate[2]}, ${formattedDate[3]}`} />
+      </Show>
+      <Show when={!excludeTime}>
+        <div class={css.subtext}>
+          <Text message={`${formattedAMPM}`} />
+        </div>
+      </Show>
+    </div>
+  );
+};
