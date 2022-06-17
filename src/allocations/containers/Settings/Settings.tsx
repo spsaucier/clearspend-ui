@@ -32,7 +32,8 @@ import { Loading } from 'app/components/Loading';
 import { Switch } from '_common/components/Switch';
 import { InputCurrency } from '_common/components/InputCurrency';
 import { join } from '_common/utils/join';
-import { InputDate } from '_common/components/InputDate';
+import { Checkbox } from '_common/components/Checkbox';
+import { DateFormat } from '_common/api/intl/types';
 
 import { AllocationRole } from '../../components/AllocationRole';
 import {
@@ -302,6 +303,47 @@ export function Settings(props: Readonly<SettingsProps>) {
   const isDisabled = createMemo(() => props.allocation.archived);
   const isRoot = createMemo(() => !props.allocation.parentAllocationId);
 
+  const getNextDepositDate = (): number => {
+    let nextDepositDateDay: number = new Date().setDate(autoTopUpMonthlyDate()!);
+    let nextDepositDate = new Date(nextDepositDateDay);
+
+    const now = new Date();
+
+    // Check if needs to be next month
+    if (now >= nextDepositDate) {
+      nextDepositDateDay = nextDepositDate.setMonth(nextDepositDate.getMonth() + 1);
+      nextDepositDate = new Date(nextDepositDateDay);
+    }
+
+    // Check if weekend
+    nextDepositDateDay = offsetDepositDateIfWeekend(nextDepositDateDay);
+
+    return nextDepositDateDay;
+  };
+
+  const offsetDepositDateIfWeekend = (depositDateDay: number): number => {
+    let nextDepositDateDay = depositDateDay;
+    let nextDepositDate = new Date(nextDepositDateDay);
+    const dayOfWeek = new Date(depositDateDay).getDay();
+
+    const saturdayDayOfWeek = 6;
+    const sundayDayOfWeek = 0;
+
+    if (dayOfWeek === saturdayDayOfWeek) {
+      nextDepositDateDay = nextDepositDate.setDate(nextDepositDate.getDate() - 1);
+      nextDepositDate = new Date(nextDepositDateDay);
+    } else if (dayOfWeek === sundayDayOfWeek) {
+      nextDepositDateDay = nextDepositDate.setDate(nextDepositDate.getDate() - 1 - 1);
+      nextDepositDate = new Date(nextDepositDateDay);
+    }
+
+    if (nextDepositDateDay < 1) {
+      nextDepositDateDay = offsetDepositDateIfWeekend(MAX_RECURRING_DEPOSIT_MONTH_DAY);
+    }
+
+    return nextDepositDateDay;
+  };
+
   return (
     <Form>
       <Show when={canManageFunds(props.permissions)}>
@@ -426,7 +468,7 @@ export function Settings(props: Readonly<SettingsProps>) {
       </Show>
       <Show when={isRoot() && (isCustomerService(props.permissions) || canManageFunds(props.permissions))}>
         <Section
-          class={css.borderedSection}
+          class={join(css.borderedSection, !autoTopUpConfigEnabled() && css.closedSection)}
           title={<Text message="Recurring deposit" />}
           description={
             <>
@@ -446,30 +488,47 @@ export function Settings(props: Readonly<SettingsProps>) {
               <Text message="Recurring monthly deposit" />
             </Switch>
           </FormItem>
-          <FormItem label={<Text message="Amount:" />} class={join(css.field, css.leftOffsetField)}>
-            <InputCurrency
-              name="recurring-monthly-deposit-amount"
-              placeholder={'0.00'}
-              value={`${autoTopUpAmount() ?? 0}`}
-              onChange={(amount) => updateAutoTopUpConfig({ amount: +amount })}
-              disabled={!autoTopUpConfigEnabled()}
-            />
-          </FormItem>
-          <FormItem
-            label={<Text message="Start deposits on:" />}
-            extra={
-              <Text message="Payments that fall on a weekend or holiday will be changed to previous business day." />
-            }
-            class={join(css.field, css.leftOffsetField)}
-          >
-            <InputDate
-              name="recurring-monthly-deposit-date"
-              placeholder={String(i18n.t('Select a date'))}
-              value={autoTopUpMonthlyDate() ? new Date().setDate(autoTopUpMonthlyDate()!) : undefined}
-              onChange={(day) => updateAutoTopUpConfig({ monthlyDate: day?.getDate() })}
-              disabled={!autoTopUpConfigEnabled()}
-            />
-          </FormItem>
+          <Show when={autoTopUpConfigEnabled()}>
+            <FormItem label={<Text message="Amount:" />} class={join(css.field, css.leftOffsetField)}>
+              <InputCurrency
+                name="recurring-monthly-deposit-amount"
+                placeholder={'0.00'}
+                value={`${autoTopUpAmount() ?? 0}`}
+                onChange={(amount) => updateAutoTopUpConfig({ amount: +amount })}
+                disabled={!autoTopUpConfigEnabled()}
+              />
+            </FormItem>
+            <FormItem
+              label={<Text message="Start deposits on:" />}
+              extra={
+                <Text message="Deposits initiated on a weekend or bank holiday will be processed on the next banking day." />
+              }
+              class={join(css.field, css.leftOffsetField)}
+            >
+              <Select
+                value={autoTopUpMonthlyDate() ? `${autoTopUpMonthlyDate()}` : undefined}
+                onChange={(day) => updateAutoTopUpConfig({ monthlyDate: +day })}
+                name="recurring-monthly-deposit-day"
+                placeholder={String(i18n.t('Select a date'))}
+                autoComplete={'false'}
+              >
+                <Option value="1">1</Option>
+                <Option value="5">5</Option>
+                <Option value="10">10</Option>
+                <Option value="15">15</Option>
+                <Option value="20">20</Option>
+                <Option value="25">25</Option>
+              </Select>
+            </FormItem>
+            <Show when={autoTopUpMonthlyDate()}>
+              <div class={css.nextSkipRow}>
+                <Text message={`Next deposit: ${i18n.formatDateTime(getNextDepositDate(), DateFormat.date)}`} />
+                <div>
+                  <Checkbox checked={true} /> <Text message="Skip next deposit" />
+                </div>
+              </div>
+            </Show>
+          </Show>
         </Section>
       </Show>
       <Show

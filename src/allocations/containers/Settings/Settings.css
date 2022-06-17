@@ -28,6 +28,29 @@
   border-radius: var(--radius-10);
 }
 
+.closed-section > div {
+  min-width: min(50%, 492px);
+  height: 70px;
+}
+
 .left-offset-field {
   margin-left: var(--pd-42);
+}
+
+.next-skip-row {
+  display: flex;
+  margin-left: 40px;
+  padding-top: var(--pd-24);
+  justify-content: space-between;
+  border-top: 1px solid lightgray;
+}
+
+.next-skip-row > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.next-skip-row label {
+  margin-right: var(--pd-8);
 }
